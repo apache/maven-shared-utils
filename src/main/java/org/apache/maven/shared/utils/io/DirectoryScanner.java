@@ -121,42 +121,49 @@ public class DirectoryScanner
      */
     public static final String[] DEFAULTEXCLUDES = {
         // Miscellaneous typical temporary files
-        "**/*~",
-        "**/#*#",
-        "**/.#*",
-        "**/%*%",
-        "**/._*",
+        "**/*~", "**/#*#", "**/.#*", "**/%*%", "**/._*",
 
         // CVS
-        "**/CVS",
-        "**/CVS/**",
-        "**/.cvsignore",
+        "**/CVS", "**/CVS/**", "**/.cvsignore",
+
+        // RCS
+        "**/RCS", "**/RCS/**",
 
         // SCCS
-        "**/SCCS",
-        "**/SCCS/**",
+        "**/SCCS", "**/SCCS/**",
 
         // Visual SourceSafe
         "**/vssver.scc",
 
         // Subversion
-        "**/.svn",
-        "**/.svn/**",
+        "**/.svn", "**/.svn/**",
 
         // Arch
-        "**/.arch-ids",
-        "**/.arch-ids/**",
+        "**/.arch-ids", "**/.arch-ids/**",
 
         //Bazaar
-        "**/.bzr",
-        "**/.bzr/**",
+        "**/.bzr", "**/.bzr/**",
 
         //SurroundSCM
         "**/.MySCMServerInfo",
 
         // Mac
-        "**/.DS_Store"
-    };
+        "**/.DS_Store",
+
+        // Serena Dimensions Version 10
+        "**/.metadata", "**/.metadata/**",
+
+        // Mercurial
+        "**/.hg", "**/.hg/**",
+
+        // git
+        "**/.git", "**/.git/**",
+
+        // BitKeeper
+        "**/BitKeeper", "**/BitKeeper/**", "**/ChangeSet", "**/ChangeSet/**",
+
+        // darcs
+        "**/_darcs", "**/_darcs/**", "**/.darcsrepo", "**/.darcsrepo/**", "**/-darcs-backup*", "**/.darcs-temp-mail" };
 
     /** The base directory to be scanned. */
     protected File basedir;
