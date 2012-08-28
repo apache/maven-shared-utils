@@ -30,7 +30,7 @@ import java.util.Set;
  * <p>Condition that tests the OS type.</p>
  *
  * <p>This class got copied over from Apache ANT.
- * Even the 'original' version from plexus-utils was
+ * Even the version from plexus-utils was
  * only an ANT fork!<br/>
  * The last time it got copied was on 2011-08-12</p>
  *
