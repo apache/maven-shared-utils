@@ -105,6 +105,8 @@ import java.util.Vector;
  * </pre>
  * This will scan a directory called test for .class files, but excludes all
  * files in all proper subdirectories of a directory called "modules"
+ * <p>
+ * This class must not be used from multiple Threads concurrently!
  *
  * @author Arnout J. Kuiper
  * <a href="mailto:ajkuiper@wxs.nl">ajkuiper@wxs.nl</a>
@@ -230,6 +232,17 @@ public class DirectoryScanner
 
     /** Whether or not everything tested so far has been included. */
     protected boolean everythingIncluded = true;
+
+    /**
+     * A {@link ScanConductor} an control the scanning process.
+     */
+    protected ScanConductor scanConductor = null;
+
+    /**
+     * The last ScanAction. We need to store this in the instance
+     * as the scan() method doesn't return
+     */
+    private ScanConductor.ScanAction scanAction = null;
 
     /**
      * Sole constructor.
@@ -491,6 +504,11 @@ public class DirectoryScanner
         }
     }
 
+    public void setScanConductor( ScanConductor scanConductor )
+    {
+        this.scanConductor = scanConductor;
+    }
+
     /**
      * Returns whether or not the scanner has included all the files or
      * directories it has come across so far.
@@ -548,6 +566,7 @@ public class DirectoryScanner
         dirsNotIncluded = new Vector();
         dirsExcluded = new Vector();
         dirsDeselected = new Vector();
+        scanAction = ScanConductor.ScanAction.CONTINUE;
 
         if ( isIncluded( "" ) )
         {
@@ -555,6 +574,19 @@ public class DirectoryScanner
             {
                 if ( isSelected( "", basedir ) )
                 {
+                    if ( scanConductor != null )
+                    {
+                        scanAction = scanConductor.visitDirectory( "", basedir );
+
+                        if ( ScanConductor.ScanAction.ABORT.equals( scanAction ) ||
+                             ScanConductor.ScanAction.ABORT_DIRECTORY.equals( scanAction ) ||
+                             ScanConductor.ScanAction.NO_RECURSE.equals( scanAction ) )
+                        {
+                            return;
+                        }
+                    }
+
+
                     dirsIncluded.addElement( "" );
                 }
                 else
@@ -715,11 +747,31 @@ public class DirectoryScanner
                     {
                         if ( isSelected( name, file ) )
                         {
-                            dirsIncluded.addElement( name );
-                            if ( fast )
+                            if ( scanConductor != null )
                             {
-                                scandir( file, name + File.separator, fast );
+                                scanAction = scanConductor.visitDirectory( name, file );
+
+                                if ( ScanConductor.ScanAction.ABORT.equals( scanAction ) ||
+                                     ScanConductor.ScanAction.ABORT_DIRECTORY.equals( scanAction ) )
+                                {
+                                    return;
+                                }
                             }
+
+                            if ( !ScanConductor.ScanAction.NO_RECURSE.equals( scanAction ) )
+                            {
+                                dirsIncluded.addElement( name );
+                                if ( fast )
+                                {
+                                    scandir( file, name + File.separator, fast );
+
+                                    if ( ScanConductor.ScanAction.ABORT.equals( scanAction ) )
+                                    {
+                                        return;
+                                    }
+                                }
+                            }
+                            scanAction = null;
                         }
                         else
                         {
@@ -728,6 +780,11 @@ public class DirectoryScanner
                             if ( fast && couldHoldIncluded( name ) )
                             {
                                 scandir( file, name + File.separator, fast );
+                                if ( ScanConductor.ScanAction.ABORT.equals( scanAction ) )
+                                {
+                                    return;
+                                }
+                                scanAction = null;
                             }
                         }
 
@@ -739,21 +796,50 @@ public class DirectoryScanner
                         if ( fast && couldHoldIncluded( name ) )
                         {
                             scandir( file, name + File.separator, fast );
+                            if ( ScanConductor.ScanAction.ABORT.equals( scanAction ) )
+                            {
+                                return;
+                            }
+                            scanAction = null;
                         }
                     }
                 }
                 else
                 {
                     everythingIncluded = false;
-                    dirsNotIncluded.addElement( name );
                     if ( fast && couldHoldIncluded( name ) )
                     {
-                        scandir( file, name + File.separator, fast );
+                        if ( scanConductor != null )
+                        {
+                            scanAction = scanConductor.visitDirectory( name, file );
+
+                            if ( ScanConductor.ScanAction.ABORT.equals( scanAction ) ||
+                                    ScanConductor.ScanAction.ABORT_DIRECTORY.equals( scanAction ) )
+                            {
+                                return;
+                            }
+                        }
+                        if ( !ScanConductor.ScanAction.NO_RECURSE.equals( scanAction ) )
+                        {
+                            dirsNotIncluded.addElement( name );
+
+                            scandir( file, name + File.separator, fast );
+                            if ( ScanConductor.ScanAction.ABORT.equals( scanAction ) )
+                            {
+                                return;
+                            }
+                        }
+                        scanAction = null;
                     }
                 }
                 if ( !fast )
                 {
                     scandir( file, name + File.separator, fast );
+                    if ( ScanConductor.ScanAction.ABORT.equals( scanAction ) )
+                    {
+                        return;
+                    }
+                    scanAction = null;
                 }
             }
             else if ( file.isFile() )
@@ -764,6 +850,17 @@ public class DirectoryScanner
                     {
                         if ( isSelected( name, file ) )
                         {
+                            if ( scanConductor != null )
+                            {
+                                scanAction = scanConductor.visitFile( name, file );
+                            }
+
+                            if ( ScanConductor.ScanAction.ABORT.equals( scanAction ) ||
+                                 ScanConductor.ScanAction.ABORT_DIRECTORY.equals( scanAction ) )
+                            {
+                                return;
+                            }
+
                             filesIncluded.addElement( name );
                         }
                         else

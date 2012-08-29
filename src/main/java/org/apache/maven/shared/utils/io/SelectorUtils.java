@@ -20,6 +20,8 @@ package org.apache.maven.shared.utils.io;
  */
 
 
+import org.apache.maven.shared.utils.StringUtils;
+
 import java.io.File;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -643,7 +645,7 @@ public final class SelectorUtils
      *
      * @param src the original file
      * @param target the file being compared against
-     * @param granularity the amount in seconds of slack we will give in
+     * @param granularity the amount in milliseconds of slack we will give in
      *        determining out of dateness
      * @return whether the target is out of date
      */

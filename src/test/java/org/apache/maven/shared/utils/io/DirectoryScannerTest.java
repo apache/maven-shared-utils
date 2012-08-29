@@ -28,7 +28,9 @@ import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class DirectoryScannerTest
 {
@@ -51,6 +53,11 @@ public class DirectoryScannerTest
 
         FileTestHelper.generateTestFile( new File( folder1, "file4.txt" ), 14 );
         FileTestHelper.generateTestFile( new File( folder1, "file5.dat" ), 15 );
+
+        File folder2 = new File( folder1, "ignorefolder" );
+        folder2.mkdirs();
+        FileTestHelper.generateTestFile( new File( folder2, "file7.txt" ), 17 );
+
     }
 
     @Test
@@ -169,6 +176,10 @@ public class DirectoryScannerTest
             ds.setExcludes( excludes );
         }
 
+        TestScanConductor scanConductor =  new TestScanConductor();
+
+        ds.setScanConductor( scanConductor );
+
         ds.scan();
 
         checkFiles( "expectedIncludedFiles", expectedIncludedFiles, ds.getIncludedFiles() );
@@ -177,6 +188,8 @@ public class DirectoryScannerTest
         checkFiles( "expectedNotIncludedDirectories", expectedNotIncludedDirectories, ds.getNotIncludedDirectories() );
         checkFiles( "expectedExcludedFiles", expectedExcludedFiles, ds.getExcludedFiles() );
         checkFiles( "expectedExcludedDirectories", expectedExcludedDirectories, ds.getExcludedDirectories() );
+
+        checkFiles( "visitedFiles", expectedIncludedFiles, scanConductor.visitedFiles.toArray( new String[ 0 ] ) );
     }
 
     /**
@@ -199,6 +212,30 @@ public class DirectoryScannerTest
             {
                 Assert.assertEquals( msg, expectedFiles[ i ], resolvedFiles[ i ].replace( "\\", "/" ) );
             }
+        }
+    }
+
+    private static class TestScanConductor implements ScanConductor
+    {
+        List<String> visitedFiles = new ArrayList<String>();
+
+        public ScanConductor.ScanAction visitDirectory( String name, File directory )
+        {
+            Assert.assertTrue( directory.isDirectory() );
+
+            if ( directory.getName().equals( "ignorefolder" ) )
+            {
+                return ScanAction.NO_RECURSE;
+            }
+
+            return ScanAction.CONTINUE;
+        }
+
+        public ScanConductor.ScanAction visitFile( String name, File file )
+        {
+            Assert.assertTrue( file.isFile() );
+            visitedFiles.add( name );
+            return ScanAction.CONTINUE;
         }
     }
 }
