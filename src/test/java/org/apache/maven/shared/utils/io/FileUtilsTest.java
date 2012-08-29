@@ -1172,7 +1172,7 @@ public class FileUtilsTest
     public void getDefaultExcludesAsList()
         throws Exception
     {
-        assertThat( (List<String>) FileUtils.getDefaultExcludesAsList(), hasItems( MINIMUM_DEFAULT_EXCLUDES ) );
+        assertThat( FileUtils.getDefaultExcludesAsList(), hasItems( MINIMUM_DEFAULT_EXCLUDES ) );
     }
 
 

@@ -32,6 +32,8 @@ import java.util.Arrays;
 
 public class DirectoryScannerTest
 {
+    private static final String[] NONE = new String[0];
+
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
 
@@ -56,41 +58,147 @@ public class DirectoryScannerTest
     {
         createTestData();
 
-        DirectoryScanner ds = new DirectoryScanner();
-        ds.setBasedir( tempFolder.getRoot() );
-        ds.setCaseSensitive( true );
-        ds.scan();
+        fitScanTest( true, true, true,
+                /* includes */        null,
+                /* excludes */        null,
+                /* expInclFiles */    new String[]{ "file1.txt", "file2.txt", "file3.dat", "folder1/file4.txt", "folder1/file5.dat" },
+                /* expInclDirs */     new String[]{ "", "folder1" },
+                /* expNotInclFiles */ NONE,
+                /* expNotInclDirs  */ NONE,
+                /* expNotExclFiles */ NONE,
+                /* expNotExclDirs  */ NONE );
 
-        String[] files = ds.getIncludedFiles();
-        Assert.assertNotNull( files );
-        Assert.assertEquals( files.length, 5 );
-
-        Arrays.sort(files);
-        Assert.assertEquals( "file1.txt", files[0] );
-        Assert.assertEquals( "file2.txt", files[1] );
-        Assert.assertEquals( "file3.dat", files[2] );
-        Assert.assertEquals( "folder1/file4.txt", files[3].replace( "\\", "/" ) );
-        Assert.assertEquals( "folder1/file5.dat", files[4].replace( "\\", "/" ) );
+        // same without followSymlinks
+        fitScanTest( true, false, true,
+                /* includes */        null,
+                /* excludes */        null,
+                /* expInclFiles */    new String[]{ "file1.txt", "file2.txt", "file3.dat", "folder1/file4.txt", "folder1/file5.dat" },
+                /* expInclDirs */     new String[]{ "", "folder1" },
+                /* expNotInclFiles */ NONE,
+                /* expNotInclDirs  */ NONE,
+                /* expNotExclFiles */ NONE,
+                /* expNotExclDirs  */ NONE );
     }
 
     @Test
-    public void testFilteredScan() throws Exception
+    public void testSimpleIncludes() throws Exception
     {
         createTestData();
 
+        fitScanTest( true, true, true,
+                /* includes        */ new String[]{ "**/*.dat", "*.somethingelse" },
+                /* excludes        */ null,
+                /* expInclFiles    */ new String[]{ "file3.dat", "folder1/file5.dat" },
+                /* expInclDirs     */ NONE,
+                /* expNotInclFiles */ new String[]{ "file1.txt", "file2.txt", "folder1/file4.txt" },
+                /* expNotInclDirs  */ new String[]{ "", "folder1" },
+                /* expExclFiles    */ NONE,
+                /* expExclDirs     */ NONE );
+
+        // same without followSymlinks
+        fitScanTest( true, false, true,
+                /* includes        */ new String[]{ "**/*.dat", "*.somethingelse" },
+                /* excludes        */ null,
+                /* expInclFiles    */ new String[]{ "file3.dat", "folder1/file5.dat" },
+                /* expInclDirs     */ NONE,
+                /* expNotInclFiles */ new String[]{ "file1.txt", "file2.txt", "folder1/file4.txt" },
+                /* expNotInclDirs  */ new String[]{ "", "folder1" },
+                /* expExclFiles    */ NONE,
+                /* expExclDirs     */ NONE );
+    }
+
+    @Test
+    public void testSimpleExcludes() throws Exception
+    {
+        createTestData();
+
+        fitScanTest( true, true, true,
+                /* includes        */ null,
+                /* excludes        */ new String[]{ "**/*.dat", "*.somethingelse" },
+                /* expInclFiles    */ new String[]{ "file1.txt", "file2.txt", "folder1/file4.txt" },
+                /* expInclDirs     */ new String[]{ "", "folder1" },
+                /* expNotInclFiles */ NONE,
+                /* expNotInclDirs  */ NONE,
+                /* expExclFiles    */ new String[]{ "file3.dat", "folder1/file5.dat" },
+                /* expExclDirs     */ NONE );
+
+        // same without followSymlinks
+        fitScanTest( true, false, true,
+                /* includes        */ null,
+                /* excludes        */ new String[]{ "**/*.dat", "*.somethingelse" },
+                /* expInclFiles    */ new String[]{ "file1.txt", "file2.txt", "folder1/file4.txt" },
+                /* expInclDirs     */ new String[]{ "", "folder1" },
+                /* expNotInclFiles */ NONE,
+                /* expNotInclDirs  */ NONE,
+                /* expExclFiles    */ new String[]{ "file3.dat", "folder1/file5.dat" },
+                /* expExclDirs     */ NONE );
+    }
+
+
+    /**
+     * Performs a scan and test for the given parameters if not null.
+     */
+    private void fitScanTest( boolean caseSensitive,
+                              boolean followSymLinks,
+                              boolean addDefaultExcludes,
+                              String[] includes, String[] excludes,
+                              String[] expectedIncludedFiles,
+                              String[] expectedIncludedDirectories,
+                              String[] expectedNotIncludedFiles,
+                              String[] expectedNotIncludedDirectories,
+                              String[] expectedExcludedFiles,
+                              String[] expectedExcludedDirectories )
+            throws Exception
+    {
         DirectoryScanner ds = new DirectoryScanner();
         ds.setBasedir( tempFolder.getRoot() );
-        ds.setCaseSensitive( true );
-        ds.setIncludes( new String[] {"**/*.dat", "*.somethingelse"} );
+
+        ds.setCaseSensitive( caseSensitive );
+        ds.setFollowSymlinks( followSymLinks );
+
+        if ( addDefaultExcludes )
+        {
+            ds.addDefaultExcludes();
+        }
+        if ( includes != null )
+        {
+            ds.setIncludes( includes );
+        }
+        if ( excludes != null )
+        {
+            ds.setExcludes( excludes );
+        }
+
         ds.scan();
 
-        String[] files = ds.getIncludedFiles();
-        Assert.assertNotNull( files );
-        Assert.assertEquals( files.length, 2 );
+        checkFiles( "expectedIncludedFiles", expectedIncludedFiles, ds.getIncludedFiles() );
+        checkFiles( "expectedIncludedDirectories", expectedIncludedDirectories, ds.getIncludedDirectories() );
+        checkFiles( "expectedNotIncludedFiles", expectedNotIncludedFiles, ds.getNotIncludedFiles() );
+        checkFiles( "expectedNotIncludedDirectories", expectedNotIncludedDirectories, ds.getNotIncludedDirectories() );
+        checkFiles( "expectedExcludedFiles", expectedExcludedFiles, ds.getExcludedFiles() );
+        checkFiles( "expectedExcludedDirectories", expectedExcludedDirectories, ds.getExcludedDirectories() );
+    }
 
-        Arrays.sort(files);
+    /**
+     * Check if the resolved files match the rules of the expected files.
+     * @param expectedFiles
+     * @param resolvedFiles
+     */
+    private void checkFiles( String category, String[] expectedFiles, String[] resolvedFiles )
+    {
+        if ( expectedFiles != null )
+        {
+            String msg = category + " expected: " + Arrays.toString( expectedFiles ) + " but got: " + Arrays.toString( resolvedFiles );
+            Assert.assertNotNull( msg, resolvedFiles );
+            Assert.assertEquals( msg, expectedFiles.length, resolvedFiles.length );
 
-        Assert.assertEquals( "file3.dat", files[0] );
-        Assert.assertEquals( "folder1/file5.dat", files[1].replace( "\\", "/" ) );
+            Arrays.sort( expectedFiles );
+            Arrays.sort( resolvedFiles );
+
+            for ( int i = 0; i < resolvedFiles.length; i++ )
+            {
+                Assert.assertEquals( msg, expectedFiles[ i ], resolvedFiles[ i ].replace( "\\", "/" ) );
+            }
+        }
     }
 }
