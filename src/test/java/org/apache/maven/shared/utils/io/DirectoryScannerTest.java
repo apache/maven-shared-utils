@@ -20,15 +20,14 @@ package org.apache.maven.shared.utils.io;
  */
 
 
+import org.apache.maven.shared.utils.testhelpers.FileTestHelper;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.Assert;
 import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Arrays;
 
 public class DirectoryScannerTest
@@ -37,21 +36,6 @@ public class DirectoryScannerTest
     public TemporaryFolder tempFolder = new TemporaryFolder();
 
 
-    private void writeTestData( OutputStream outputStream, int size ) throws IOException
-    {
-        for ( int i = 0; i < size; i++ )
-        {
-            outputStream.write( 0x30 +  ( i % 10 ) );
-        }
-    }
-
-    private void createTestFile( File testfile, int size ) throws IOException
-    {
-        OutputStream os = new FileOutputStream( testfile );
-        writeTestData( os, size );
-        os.flush();
-        os.close();
-    }
 
     private void createTestData() throws IOException
     {
@@ -59,12 +43,12 @@ public class DirectoryScannerTest
         File folder1 = new File( rootDir, "folder1" );
         folder1.mkdirs();
 
-        createTestFile( new File( rootDir, "file1.txt" ), 11 );
-        createTestFile( new File( rootDir, "file2.txt" ), 12 );
-        createTestFile( new File( rootDir, "file3.dat" ), 13 );
+        FileTestHelper.generateTestFile( new File( rootDir, "file1.txt" ), 11 );
+        FileTestHelper.generateTestFile( new File( rootDir, "file2.txt" ), 12 );
+        FileTestHelper.generateTestFile( new File( rootDir, "file3.dat" ), 13 );
 
-        createTestFile( new File( folder1, "file4.txt" ), 14 );
-        createTestFile( new File( folder1, "file5.dat" ), 15 );
+        FileTestHelper.generateTestFile( new File( folder1, "file4.txt" ), 14 );
+        FileTestHelper.generateTestFile( new File( folder1, "file5.dat" ), 15 );
     }
 
     @Test

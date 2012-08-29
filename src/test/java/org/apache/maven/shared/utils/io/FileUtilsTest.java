@@ -21,6 +21,7 @@ package org.apache.maven.shared.utils.io;
 
 
 import junit.framework.AssertionFailedError;
+import org.apache.maven.shared.utils.testhelpers.FileTestHelper;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -30,7 +31,6 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.rules.TestName;
 
 import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -38,8 +38,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.URL;
@@ -70,7 +68,7 @@ public class FileUtilsTest
     // Test data
 
     @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
+    public TemporaryFolder tempFolder = new TemporaryFolder();
 
     @Rule
     public TestName name = new TestName();
@@ -100,17 +98,17 @@ public class FileUtilsTest
     public void setUp()
         throws Exception
     {
-        testFile1 = folder.newFile( "file1-test.txt" );
-        testFile2 = folder.newFile( "file1a-test.txt" );
+        testFile1 = tempFolder.newFile( "file1-test.txt" );
+        testFile2 = tempFolder.newFile( "file1a-test.txt" );
 
         testFile1Size = (int) testFile1.length();
         testFile2Size = (int) testFile2.length();
 
-        folder.getRoot().mkdirs();
+        tempFolder.getRoot().mkdirs();
         createFile( testFile1, testFile1Size );
         createFile( testFile2, testFile2Size );
-        FileUtils.deleteDirectory( folder.getRoot() );
-        folder.getRoot().mkdirs();
+        FileUtils.deleteDirectory( tempFolder.getRoot() );
+        tempFolder.getRoot().mkdirs();
         createFile( testFile1, testFile1Size );
         createFile( testFile2, testFile2Size );
     }
@@ -125,7 +123,7 @@ public class FileUtilsTest
         BufferedOutputStream output = new BufferedOutputStream( new java.io.FileOutputStream( file ) );
         try
         {
-            generateTestData( output, size );
+            FileTestHelper.generateTestData( output, size );
         }
         finally
         {
@@ -133,67 +131,7 @@ public class FileUtilsTest
         }
     }
 
-    protected byte[] generateTestData( long size )
-    {
-        try
-        {
-            ByteArrayOutputStream baout = new ByteArrayOutputStream();
-            generateTestData( baout, size );
-            return baout.toByteArray();
-        }
-        catch ( IOException ioe )
-        {
-            throw new RuntimeException( "This should never happen: " + ioe.getMessage() );
-        }
-    }
 
-    protected void generateTestData( OutputStream out, long size )
-        throws IOException
-    {
-        for ( int i = 0; i < size; i++ )
-        {
-            //output.write((byte)'X');
-
-            // nice varied byte pattern compatible with Readers and Writers
-            out.write( (byte) ( ( i % 127 ) + 1 ) );
-        }
-    }
-
-    protected void createLineBasedFile( File file, String[] data )
-        throws IOException
-    {
-        if ( file.getParentFile() != null && !file.getParentFile().exists() )
-        {
-            throw new IOException( "Cannot create file " + file + " as the parent directory does not exist" );
-        }
-        PrintWriter output = new PrintWriter( new OutputStreamWriter( new FileOutputStream( file ), "UTF-8" ) );
-        try
-        {
-            for ( int i = 0; i < data.length; i++ )
-            {
-                output.println( data[i] );
-            }
-        }
-        finally
-        {
-            IOUtil.close( output );
-        }
-    }
-
-    protected File newFile( String filename )
-        throws IOException
-    {
-        File destination = folder.newFile( filename );
-        /*
-        assertTrue( filename + "Test output data file shouldn't previously exist",
-                    !destination.exists() );
-        */
-        if ( destination.exists() )
-        {
-            FileUtils.forceDelete( destination );
-        }
-        return destination;
-    }
 
     protected void checkFile( File file, File referenceFile )
         throws Exception
@@ -414,8 +352,8 @@ public class FileUtilsTest
     public void toURLs1()
         throws Exception
     {
-        File[] files = new File[]{ new File( folder.getRoot(), "file1.txt" ), new File( folder.getRoot(), "file2.txt" ),
-            new File( folder.getRoot(), "test file.txt" ), };
+        File[] files = new File[]{ new File( tempFolder.getRoot(), "file1.txt" ), new File( tempFolder.getRoot(), "file2.txt" ),
+            new File( tempFolder.getRoot(), "test file.txt" ), };
         URL[] urls = FileUtils.toURLs( files );
 
         assertThat( urls.length, is( files.length ) );
@@ -456,8 +394,8 @@ public class FileUtilsTest
         throws Exception
     {
         // Non-existent files
-        File file = new File( folder.getRoot(), name.getMethodName() );
-        File file2 = new File( folder.getRoot(), name.getMethodName() + "2" );
+        File file = new File( tempFolder.getRoot(), name.getMethodName() );
+        File file2 = new File( tempFolder.getRoot(), name.getMethodName() + "2" );
         // both don't  exist
         assertThat( FileUtils.contentEquals( file, file ), is( true ) );
         assertThat( FileUtils.contentEquals( file, file2 ), is( true ) );
@@ -465,18 +403,18 @@ public class FileUtilsTest
         assertThat( FileUtils.contentEquals( file2, file ), is( true ) );
 
         // Directories
-        FileUtils.contentEquals( folder.getRoot(), folder.getRoot() );
+        FileUtils.contentEquals( tempFolder.getRoot(), tempFolder.getRoot() );
 
         // Different files
-        File objFile1 = new File( folder.getRoot(), name.getMethodName() + ".object" );
+        File objFile1 = new File( tempFolder.getRoot(), name.getMethodName() + ".object" );
         objFile1.deleteOnExit();
         FileUtils.copyURLToFile( getClass().getResource( "/java/lang/Object.class" ), objFile1 );
 
-        File objFile1b = new File( folder.getRoot(), name.getMethodName() + ".object2" );
+        File objFile1b = new File( tempFolder.getRoot(), name.getMethodName() + ".object2" );
         objFile1.deleteOnExit();
         FileUtils.copyURLToFile( getClass().getResource( "/java/lang/Object.class" ), objFile1b );
 
-        File objFile2 = new File( folder.getRoot(), name.getMethodName() + ".collection" );
+        File objFile2 = new File( tempFolder.getRoot(), name.getMethodName() + ".collection" );
         objFile2.deleteOnExit();
         FileUtils.copyURLToFile( getClass().getResource( "/java/util/Collection.class" ), objFile2 );
 
@@ -502,7 +440,7 @@ public class FileUtilsTest
         throws Exception
     {
         // Creates file
-        File file = new File( folder.getRoot(), name.getMethodName() );
+        File file = new File( tempFolder.getRoot(), name.getMethodName() );
         file.deleteOnExit();
 
         // Loads resource
@@ -530,10 +468,10 @@ public class FileUtilsTest
         throws Exception
     {
         // Tests with existing directory
-        FileUtils.forceMkdir( folder.getRoot() );
+        FileUtils.forceMkdir( tempFolder.getRoot() );
 
         // Creates test file
-        File testFile = new File( folder.getRoot(), name.getMethodName() );
+        File testFile = new File( tempFolder.getRoot(), name.getMethodName() );
         testFile.deleteOnExit();
         testFile.createNewFile();
         assertThat( "Test file does not exist.", testFile.exists(), is( true ) );
@@ -561,7 +499,7 @@ public class FileUtilsTest
     public void sizeOfDirectory()
         throws Exception
     {
-        File file = new File( folder.getRoot(), name.getMethodName() );
+        File file = new File( tempFolder.getRoot(), name.getMethodName() );
 
         // Non-existent file
         try
@@ -600,7 +538,7 @@ public class FileUtilsTest
     public void copyFile1()
         throws Exception
     {
-        File destination = new File( folder.getRoot(), "copy1.txt" );
+        File destination = new File( tempFolder.getRoot(), "copy1.txt" );
 
         //Thread.sleep(LAST_MODIFIED_DELAY);
         //This is to slow things down so we can catch if
@@ -618,8 +556,8 @@ public class FileUtilsTest
         throws Exception
     {
 
-        File largeFile = new File( folder.getRoot(), "large.txt" );
-        File destination = new File( folder.getRoot(), "copylarge.txt" );
+        File largeFile = new File( tempFolder.getRoot(), "large.txt" );
+        File destination = new File( tempFolder.getRoot(), "copylarge.txt" );
 
         System.out.println( "START:   " + new java.util.Date() );
         createFile( largeFile, FileUtils.ONE_GB );
@@ -635,7 +573,7 @@ public class FileUtilsTest
     public void copyFile2()
         throws Exception
     {
-        File destination = new File( folder.getRoot(), "copy2.txt" );
+        File destination = new File( tempFolder.getRoot(), "copy2.txt" );
 
         //Thread.sleep(LAST_MODIFIED_DELAY);
         //This is to slow things down so we can catch if
@@ -654,7 +592,7 @@ public class FileUtilsTest
     public void copyToSelf()
         throws Exception
     {
-        File destination = new File( folder.getRoot(), "copy3.txt" );
+        File destination = new File( tempFolder.getRoot(), "copy3.txt" );
         //Prepare a test file
         FileUtils.copyFile( testFile1, destination );
 
@@ -668,7 +606,7 @@ public class FileUtilsTest
     {
         createFile( testFile1, 1234 );
         createFile( testFile2, 4321 );
-        File srcDir = folder.getRoot();
+        File srcDir = tempFolder.getRoot();
         File subDir = new File( srcDir, "sub" );
         subDir.mkdir();
         File subFile = new File( subDir, "A.txt" );
@@ -694,7 +632,7 @@ public class FileUtilsTest
     {
         createFile( testFile1, 1234 );
         createFile( testFile2, 4321 );
-        File srcDir = folder.getRoot();
+        File srcDir = tempFolder.getRoot();
         File subDir = new File( srcDir, "sub" );
         subDir.mkdir();
         File subFile = new File( subDir, "A.txt" );
@@ -717,7 +655,7 @@ public class FileUtilsTest
     {
         createFile( testFile1, 1234 );
         createFile( testFile2, 4321 );
-        File srcDir = folder.getRoot();
+        File srcDir = tempFolder.getRoot();
         File subDir = new File( srcDir, "sub" );
         subDir.mkdir();
         File subFile = new File( subDir, "A.txt" );
@@ -740,7 +678,7 @@ public class FileUtilsTest
     public void copyDirectoryToChild()
         throws Exception
     {
-        File grandParentDir = new File( folder.getRoot(), "grandparent" );
+        File grandParentDir = new File( tempFolder.getRoot(), "grandparent" );
         File parentDir = new File( grandParentDir, "parent" );
         File childDir = new File( parentDir, "child" );
         createFilesForTestCopyDirectory( grandParentDir, parentDir, childDir );
@@ -764,7 +702,7 @@ public class FileUtilsTest
     public void copyDirectoryToGrandChild()
         throws Exception
     {
-        File grandParentDir = new File( folder.getRoot(), "grandparent" );
+        File grandParentDir = new File( tempFolder.getRoot(), "grandparent" );
         File parentDir = new File( grandParentDir, "parent" );
         File childDir = new File( parentDir, "child" );
         createFilesForTestCopyDirectory( grandParentDir, parentDir, childDir );
@@ -786,7 +724,7 @@ public class FileUtilsTest
     public void copyDirectoryToItself()
         throws Exception
     {
-        File dir = new File( folder.getRoot(), "itself" );
+        File dir = new File( tempFolder.getRoot(), "itself" );
         dir.mkdirs();
         FileUtils.copyDirectory( dir, dir );
         assertThat( FileUtils.getFileAndDirectoryNames( dir, null, null, true, true, true, true ).size(), is( 1 ) );
@@ -862,7 +800,7 @@ public class FileUtilsTest
         }
         try
         {
-            FileUtils.copyDirectory( folder.getRoot(), testFile1 );
+            FileUtils.copyDirectory( tempFolder.getRoot(), testFile1 );
             fail();
         }
         catch ( IOException ex )
@@ -870,7 +808,7 @@ public class FileUtilsTest
         }
         try
         {
-            FileUtils.copyDirectory( folder.getRoot(), folder.getRoot() );
+            FileUtils.copyDirectory( tempFolder.getRoot(), tempFolder.getRoot() );
             fail();
         }
         catch ( IOException ex )
@@ -884,7 +822,7 @@ public class FileUtilsTest
     public void forceDeleteAFile1()
         throws Exception
     {
-        File destination = new File( folder.getRoot(), "copy1.txt" );
+        File destination = new File( tempFolder.getRoot(), "copy1.txt" );
         destination.createNewFile();
         assertThat( "Copy1.txt doesn't exist to delete", destination.exists(), is( true ) );
         FileUtils.forceDelete( destination );
@@ -895,7 +833,7 @@ public class FileUtilsTest
     public void forceDeleteAFile2()
         throws Exception
     {
-        File destination = new File( folder.getRoot(), "copy2.txt" );
+        File destination = new File( tempFolder.getRoot(), "copy2.txt" );
         destination.createNewFile();
         assertThat( "Copy2.txt doesn't exist to delete", destination.exists(), is( true ) );
         FileUtils.forceDelete( destination );
@@ -907,7 +845,7 @@ public class FileUtilsTest
     public void forceDeleteAFile3()
         throws Exception
     {
-        File destination = new File( folder.getRoot(), "no_such_file" );
+        File destination = new File( tempFolder.getRoot(), "no_such_file" );
         assertThat( "Check No Exist", !destination.exists(), is( true ) );
         try
         {
@@ -926,7 +864,7 @@ public class FileUtilsTest
     public void copyFile1ToDir()
         throws Exception
     {
-        File directory = new File( folder.getRoot(), "subdir" );
+        File directory = new File( tempFolder.getRoot(), "subdir" );
         if ( !directory.exists() )
         {
             directory.mkdirs();
@@ -959,7 +897,7 @@ public class FileUtilsTest
     public void copyFile2ToDir()
         throws Exception
     {
-        File directory = new File( folder.getRoot(), "subdir" );
+        File directory = new File( tempFolder.getRoot(), "subdir" );
         if ( !directory.exists() )
         {
             directory.mkdirs();
@@ -984,7 +922,7 @@ public class FileUtilsTest
     public void forceDeleteDir()
         throws Exception
     {
-        File testDirectory = folder.newFolder( name.getMethodName() );
+        File testDirectory = tempFolder.newFolder( name.getMethodName() );
         FileUtils.forceDelete( testDirectory.getParentFile() );
         assertThat( "Check No Exist", !testDirectory.getParentFile().exists(), is( true ) );
     }
@@ -997,7 +935,7 @@ public class FileUtilsTest
         throws Exception
     {
         // Loads file from classpath
-        File file1 = new File( folder.getRoot(), "test.txt" );
+        File file1 = new File( tempFolder.getRoot(), "test.txt" );
         String filename = file1.getAbsolutePath();
 
         //Create test file on-the-fly (used to be in CVS)
@@ -1011,7 +949,7 @@ public class FileUtilsTest
             out.close();
         }
 
-        File file2 = new File( folder.getRoot(), "test2.txt" );
+        File file2 = new File( tempFolder.getRoot(), "test2.txt" );
 
         FileUtils.fileWrite( file2, "UTF-8", filename );
         assertThat( file2.exists(), is( true ) );
@@ -1031,7 +969,7 @@ public class FileUtilsTest
     public void fileReadWithDefaultEncoding()
         throws Exception
     {
-        File file = new File( folder.getRoot(), "read.obj" );
+        File file = new File( tempFolder.getRoot(), "read.obj" );
         FileOutputStream out = new FileOutputStream( file );
         byte[] text = "Hello /u1234".getBytes();
         out.write( text );
@@ -1045,7 +983,7 @@ public class FileUtilsTest
     public void fileReadWithEncoding()
         throws Exception
     {
-        File file = new File( folder.getRoot(), "read.obj" );
+        File file = new File( tempFolder.getRoot(), "read.obj" );
         FileOutputStream out = new FileOutputStream( file );
         byte[] text = "Hello /u1234".getBytes( "UTF8" );
         out.write( text );
@@ -1060,11 +998,11 @@ public class FileUtilsTest
     public void readLines()
         throws Exception
     {
-        File file = newFile( "lines.txt" );
+        File file = FileTestHelper.newFile( tempFolder, "lines.txt" );
         try
         {
             String[] data = new String[]{ "hello", "/u1234", "", "this is", "some text" };
-            createLineBasedFile( file, data );
+            FileTestHelper.createLineBasedFile( file, data );
 
             List<String> lines = FileUtils.loadFile( file );
             assertThat( lines, is( Arrays.asList( data ) ) );
@@ -1079,7 +1017,7 @@ public class FileUtilsTest
     public void writeStringToFile1()
         throws Exception
     {
-        File file = new File( folder.getRoot(), "write.txt" );
+        File file = new File( tempFolder.getRoot(), "write.txt" );
         FileUtils.fileWrite( file, "UTF8", "Hello /u1234" );
         byte[] text = "Hello /u1234".getBytes( "UTF8" );
         assertEqualContent( text, file );
@@ -1089,7 +1027,7 @@ public class FileUtilsTest
     public void writeStringToFile2()
         throws Exception
     {
-        File file = new File( folder.getRoot(), "write.txt" );
+        File file = new File( tempFolder.getRoot(), "write.txt" );
         FileUtils.fileWrite( file, null, "Hello /u1234" );
         byte[] text = "Hello /u1234".getBytes();
         assertEqualContent( text, file );
@@ -1099,7 +1037,7 @@ public class FileUtilsTest
     public void writeCharSequence1()
         throws Exception
     {
-        File file = new File( folder.getRoot(), "write.txt" );
+        File file = new File( tempFolder.getRoot(), "write.txt" );
         FileUtils.fileWrite( file, "UTF8", "Hello /u1234" );
         byte[] text = "Hello /u1234".getBytes( "UTF8" );
         assertEqualContent( text, file );
@@ -1109,7 +1047,7 @@ public class FileUtilsTest
     public void writeCharSequence2()
         throws Exception
     {
-        File file = new File( folder.getRoot(), "write.txt" );
+        File file = new File( tempFolder.getRoot(), "write.txt" );
         FileUtils.fileWrite( file, null, "Hello /u1234" );
         byte[] text = "Hello /u1234".getBytes();
         assertEqualContent( text, file );
@@ -1119,7 +1057,7 @@ public class FileUtilsTest
     public void writeStringToFileWithEncoding_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines()
         throws Exception
     {
-        File file = newFile( "lines.txt" );
+        File file = FileTestHelper.newFile( tempFolder, "lines.txt" );
         FileUtils.fileWrite( file, "This line was there before you..." );
 
         FileUtils.fileAppend( file.getAbsolutePath(), "this is brand new data" );
@@ -1133,7 +1071,7 @@ public class FileUtilsTest
     public void writeStringToFile_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines()
         throws Exception
     {
-        File file = newFile( "lines.txt" );
+        File file = FileTestHelper.newFile( tempFolder, "lines.txt" );
         FileUtils.fileWrite( file, "This line was there before you..." );
 
         FileUtils.fileAppend( file.getAbsolutePath(), "this is brand new data" );
@@ -1147,7 +1085,7 @@ public class FileUtilsTest
     public void writeWithEncoding_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines()
         throws Exception
     {
-        File file = newFile( "lines.txt" );
+        File file = FileTestHelper.newFile( tempFolder, "lines.txt" );
         FileUtils.fileWrite( file, "UTF-8", "This line was there before you..." );
 
         FileUtils.fileAppend( file.getAbsolutePath(), "UTF-8", "this is brand new data" );
@@ -1161,7 +1099,7 @@ public class FileUtilsTest
     public void write_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines()
         throws Exception
     {
-        File file = newFile( "lines.txt" );
+        File file = FileTestHelper.newFile( tempFolder, "lines.txt" );
         FileUtils.fileWrite( file, "This line was there before you..." );
 
         FileUtils.fileAppend( file.getAbsolutePath(), "this is brand new data" );
@@ -1182,7 +1120,7 @@ public class FileUtilsTest
     public void deleteQuietlyDir()
         throws IOException
     {
-        File testDirectory = new File( folder.getRoot(), "testDeleteQuietlyDir" );
+        File testDirectory = new File( tempFolder.getRoot(), "testDeleteQuietlyDir" );
         File testFile = new File( testDirectory, "testDeleteQuietlyFile" );
         testDirectory.mkdirs();
         createFile( testFile, 0 );
@@ -1198,7 +1136,7 @@ public class FileUtilsTest
     public void deleteQuietlyFile()
         throws IOException
     {
-        File testFile = new File( folder.getRoot(), "testDeleteQuietlyFile" );
+        File testFile = new File( tempFolder.getRoot(), "testDeleteQuietlyFile" );
         createFile( testFile, 0 );
 
         assertThat( testFile.exists(), is( true ) );
@@ -1210,7 +1148,7 @@ public class FileUtilsTest
     public void deleteQuietlyNonExistent()
         throws IOException
     {
-        File testFile = new File( folder.getRoot(), "testDeleteQuietlyNonExistent" );
+        File testFile = new File( tempFolder.getRoot(), "testDeleteQuietlyNonExistent" );
         assertThat( testFile.exists(), is( false ) );
 
         FileUtils.deleteDirectory( testFile );
