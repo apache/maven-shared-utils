@@ -15,8 +15,8 @@ package org.apache.maven.shared.utils.cli.shell;
  * the License.
  */
 
-import org.codehaus.plexus.util.StringUtils;
-import org.codehaus.plexus.util.cli.Commandline;
+import org.apache.maven.shared.utils.StringUtils;
+import org.apache.maven.shared.utils.cli.Commandline;
 
 import java.util.Arrays;
 import java.util.List;
