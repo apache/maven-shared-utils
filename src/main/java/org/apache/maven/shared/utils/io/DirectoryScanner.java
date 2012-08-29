@@ -22,7 +22,6 @@ package org.apache.maven.shared.utils.io;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -550,11 +549,9 @@ public class DirectoryScanner
             return;
         }
 
-        final String[] excl = new String[dirsExcluded.size()];
-        dirsExcluded.addAll( Arrays.asList( excl ) );
+        final String[] excl = dirsExcluded.toArray( new String[] {} );
 
-        final String[] notIncl = new String[dirsNotIncluded.size()];
-        dirsNotIncluded.addAll( Arrays.asList( notIncl ) );
+        final String[] notIncl = dirsNotIncluded.toArray( new String[] {} );
 
         for ( int i = 0; i < excl.length; i++ )
         {
@@ -648,8 +645,7 @@ public class DirectoryScanner
                     noLinks.add( newfile );
                 }
             }
-            newfiles = new String[noLinks.size()];
-            noLinks.addAll( Arrays.asList( newfiles ) );
+            newfiles = noLinks.toArray( new String[] {} );
         }
 
         for ( final String newfile : newfiles )
@@ -880,8 +876,7 @@ public class DirectoryScanner
      */
     public String[] getIncludedFiles()
     {
-        final String[] files = new String[filesIncluded.size()];
-        filesIncluded.addAll( Arrays.asList( files ) );
+        final String[] files = filesIncluded.toArray( new String[] {} );
         return files;
     }
 
@@ -895,8 +890,7 @@ public class DirectoryScanner
     public String[] getNotIncludedFiles()
     {
         slowScan();
-        final String[] files = new String[filesNotIncluded.size()];
-        filesNotIncluded.addAll( Arrays.asList( files ) );
+        final String[] files = filesNotIncluded.toArray( new String[] {} );
         return files;
     }
 
@@ -912,8 +906,7 @@ public class DirectoryScanner
     public String[] getExcludedFiles()
     {
         slowScan();
-        final String[] files = new String[filesExcluded.size()];
-        filesExcluded.addAll( Arrays.asList( files ) );
+        final String[] files = filesExcluded.toArray( new String[] {} );
         return files;
     }
 
@@ -932,8 +925,7 @@ public class DirectoryScanner
     public String[] getDeselectedFiles()
     {
         slowScan();
-        final String[] files = new String[filesDeselected.size()];
-        filesDeselected.addAll( Arrays.asList( files ) );
+        final String[] files = filesDeselected.toArray( new String[] {} );
         return files;
     }
 
@@ -946,8 +938,7 @@ public class DirectoryScanner
      */
     public String[] getIncludedDirectories()
     {
-        final String[] directories = new String[dirsIncluded.size()];
-        dirsIncluded.addAll( Arrays.asList( directories ) );
+        final String[] directories = dirsIncluded.toArray( new String[] {} );
         return directories;
     }
 
@@ -961,8 +952,7 @@ public class DirectoryScanner
     public String[] getNotIncludedDirectories()
     {
         slowScan();
-        final String[] directories = new String[dirsNotIncluded.size()];
-        dirsNotIncluded.addAll( Arrays.asList( directories ) );
+        final String[] directories = dirsNotIncluded.toArray( new String[] {} );
         return directories;
     }
 
@@ -978,8 +968,7 @@ public class DirectoryScanner
     public String[] getExcludedDirectories()
     {
         slowScan();
-        final String[] directories = new String[dirsExcluded.size()];
-        dirsExcluded.addAll( Arrays.asList( directories ) );
+        final String[] directories = dirsExcluded.toArray( new String[] {} );
         return directories;
     }
 
@@ -998,8 +987,7 @@ public class DirectoryScanner
     public String[] getDeselectedDirectories()
     {
         slowScan();
-        final String[] directories = new String[dirsDeselected.size()];
-        dirsDeselected.addAll( Arrays.asList( directories ) );
+        final String[] directories = dirsDeselected.toArray( new String[] {} );
         return directories;
     }
 
