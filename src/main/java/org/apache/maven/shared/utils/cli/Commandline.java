@@ -78,20 +78,21 @@ package org.apache.maven.shared.utils.cli;
  * ====================================================================
  */
 
+import org.apache.maven.shared.utils.Os;
+import org.apache.maven.shared.utils.StringUtils;
+import org.apache.maven.shared.utils.cli.shell.BourneShell;
 import org.apache.maven.shared.utils.cli.shell.CommandShell;
 import org.apache.maven.shared.utils.cli.shell.CmdShell;
 import org.apache.maven.shared.utils.cli.shell.Shell;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Properties;
-import java.util.StringTokenizer;
 import java.util.Vector;
-import java.util.Hashtable;
 
 /**
  * <p/>
@@ -122,23 +123,66 @@ import java.util.Hashtable;
  * @author <a href="mailto:stefan.bodewig@epost.de">Stefan Bodewig</a>
  */
 public class Commandline
-    implements Cloneable
+        implements Cloneable
 {
-    protected static final String OS_NAME = "os.name";
-
-    protected static final String WINDOWS = "Windows";
-
-    protected String executable = null;
-
     protected Vector arguments = new Vector();
 
-    protected Hashtable envVars = new Hashtable();
-
-    private File workingDir = null;
+    //protected Vector envVars = new Vector();
+    // synchronized added to preserve synchronize of Vector class
+    protected Map envVars = Collections.synchronizedMap( new LinkedHashMap() );
 
     private long pid = -1;
 
     private Shell shell;
+
+    /**
+     * @deprecated Use {@link Commandline#setExecutable(String)} instead.
+     */
+    protected String executable;
+
+    /**
+     * @deprecated Use {@link Commandline#setWorkingDirectory(File)} or
+     * {@link Commandline#setWorkingDirectory(String)} instead.
+     */
+    private File workingDir;
+
+    /**
+     * Create a new command line object.
+     * Shell is autodetected from operating system
+     *
+     * @param toProcess
+     */
+    public Commandline( String toProcess, Shell shell )
+    {
+        this.shell = shell;
+
+        String[] tmp = new String[0];
+        try
+        {
+            tmp = CommandLineUtils.translateCommandline( toProcess );
+        }
+        catch ( Exception e )
+        {
+            System.err.println( "Error translating Commandline." );
+        }
+        if ( ( tmp != null ) && ( tmp.length > 0 ) )
+        {
+            setExecutable( tmp[0] );
+            for ( int i = 1; i < tmp.length; i++ )
+            {
+                createArgument().setValue( tmp[i] );
+            }
+        }
+    }
+
+    /**
+     * Create a new command line object.
+     * Shell is autodetected from operating system
+     */
+    public Commandline( Shell shell )
+    {
+        this.shell = shell;
+    }
 
     /**
      * Create a new command line object.
@@ -148,18 +192,17 @@ public class Commandline
      */
     public Commandline( String toProcess )
     {
-        super();
         setDefaultShell();
         String[] tmp = new String[0];
         try
         {
-            tmp = translateCommandline( toProcess );
+            tmp = CommandLineUtils.translateCommandline( toProcess );
         }
         catch ( Exception e )
         {
             System.err.println( "Error translating Commandline." );
         }
-        if ( tmp != null && tmp.length > 0 )
+        if ( ( tmp != null ) && ( tmp.length > 0 ) )
         {
             setExecutable( tmp[0] );
             for ( int i = 1; i < tmp.length; i++ )
@@ -175,7 +218,6 @@ public class Commandline
      */
     public Commandline()
     {
-        super();
         setDefaultShell();
     }
 
@@ -192,68 +234,6 @@ public class Commandline
     public void setPid( long pid )
     {
         this.pid = pid;
-    }
-
-    /**
-     * Used for nested xml command line definitions.
-     */
-    public static class Argument
-    {
-
-        private String[] parts;
-
-        /**
-         * Sets a single commandline argument.
-         *
-         * @param value a single commandline argument.
-         */
-        public void setValue( String value )
-        {
-            if ( value != null )
-            {
-                parts = new String[]{value};
-            }
-        }
-
-        /**
-         * Line to split into several commandline arguments.
-         *
-         * @param line line to split into several commandline arguments
-         */
-        public void setLine( String line )
-        {
-            if ( line == null )
-            {
-                return;
-            }
-            try
-            {
-                parts = translateCommandline( line );
-            }
-            catch ( Exception e )
-            {
-                System.err.println( "Error translating Commandline." );
-            }
-        }
-
-        /**
-         * Sets a single commandline argument to the absolute filename
-         * of the given file.
-         *
-         * @param value a single commandline argument.
-         */
-        public void setFile( File value )
-        {
-            parts = new String[]{value.getAbsolutePath()};
-        }
-
-        /**
-         * Returns the parts this Argument consists of.
-         */
-        public String[] getParts()
-        {
-            return parts;
-        }
     }
 
     /**
@@ -284,10 +264,10 @@ public class Commandline
         {
             if ( realPos == -1 )
             {
-                realPos = ( executable == null ? 0 : 1 );
+                realPos = ( getExecutable() == null ? 0 : 1 );
                 for ( int i = 0; i < position; i++ )
                 {
-                    Argument arg = (Argument) arguments.elementAt( i );
+                    Arg arg = (Arg) arguments.elementAt( i );
                     realPos += arg.getParts().length;
                 }
             }
@@ -295,19 +275,16 @@ public class Commandline
         }
     }
 
-
     /**
      * <p>Sets the shell or command-line interpretor for the detected operating system,
      * and the shell arguments.</p>
      */
     private void setDefaultShell()
     {
-        String os = System.getProperty( OS_NAME );
-
         //If this is windows set the shell to command.com or cmd.exe with correct arguments.
-        if ( os.indexOf( WINDOWS ) > -1 )
+        if ( Os.isFamily( Os.FAMILY_WINDOWS ) )
         {
-            if ( os.indexOf( "95" ) > -1 || os.indexOf( "98" ) > -1 || os.indexOf( "Me" ) > -1 )
+            if ( Os.isFamily( Os.FAMILY_WIN9X ) )
             {
                 setShell( new CommandShell() );
             }
@@ -315,6 +292,10 @@ public class Commandline
             {
                 setShell( new CmdShell() );
             }
+        }
+        else
+        {
+            setShell( new BourneShell() );
         }
     }
 
@@ -327,6 +308,7 @@ public class Commandline
      *
      * @return the argument object.
      * @see #createArgument(boolean)
+     * @deprecated Use {@link Commandline#createArg()} instead
      */
     public Argument createArgument()
     {
@@ -341,6 +323,7 @@ public class Commandline
      *
      * @param insertAtStart if true, the argument is inserted at the
      *                      beginning of the list of args, otherwise it is appended.
+     * @deprecated Use {@link Commandline#createArg(boolean)} instead
      */
     public Argument createArgument( boolean insertAtStart )
     {
@@ -357,20 +340,91 @@ public class Commandline
     }
 
     /**
+     * Creates an argument object.
+     * <p/>
+     * <p>Each commandline object has at most one instance of the
+     * argument class.  This method calls
+     * <code>this.createArgument(false)</code>.</p>
+     *
+     * @return the argument object.
+     * @see #createArgument(boolean)
+     */
+    public Arg createArg()
+    {
+        return this.createArg( false );
+    }
+
+    /**
+     * Creates an argument object and adds it to our list of args.
+     * <p/>
+     * <p>Each commandline object has at most one instance of the
+     * argument class.</p>
+     *
+     * @param insertAtStart if true, the argument is inserted at the
+     *                      beginning of the list of args, otherwise it is appended.
+     */
+    public Arg createArg( boolean insertAtStart )
+    {
+        Arg argument = new Argument();
+        if ( insertAtStart )
+        {
+            arguments.insertElementAt( argument, 0 );
+        }
+        else
+        {
+            arguments.addElement( argument );
+        }
+        return argument;
+    }
+
+    /**
+     * Adds an argument object to our list of args.
+     *
+     * @return the argument object.
+     * @see #addArg(Arg,boolean)
+     */
+    public void addArg( Arg argument )
+    {
+        this.addArg( argument, false );
+    }
+
+    /**
+     * Adds an argument object to our list of args.
+     *
+     * @param insertAtStart if true, the argument is inserted at the
+     *                      beginning of the list of args, otherwise it is appended.
+     */
+    public void addArg( Arg argument, boolean insertAtStart )
+    {
+        if ( insertAtStart )
+        {
+            arguments.insertElementAt( argument, 0 );
+        }
+        else
+        {
+            arguments.addElement( argument );
+        }
+    }
+
+    /**
      * Sets the executable to run.
      */
     public void setExecutable( String executable )
     {
-        if ( executable == null || executable.length() == 0 )
-        {
-            return;
-        }
-        this.executable = executable.replace( '/', File.separatorChar ).replace( '\\', File.separatorChar );
+        shell.setExecutable( executable );
+        this.executable = executable;
     }
 
     public String getExecutable()
     {
-        return executable;
+        String exec = shell.getExecutable();
+
+        if ( exec == null )
+        {
+            exec = executable;
+        }
+
+        return exec;
     }
 
     public void addArguments( String[] line )
@@ -384,27 +438,26 @@ public class Commandline
     /**
      * Add an environment variable
      */
-    public void addEnvironment( String name,
-                                String value )
+    public void addEnvironment( String name, String value )
     {
-        envVars.put( name, name + "=" + value );
+        //envVars.add( name + "=" + value );
+        envVars.put( name, value );
     }
 
     /**
      * Add system environment variables
      */
     public void addSystemEnvironment()
-        throws Exception
+            throws Exception
     {
-        Properties envVars = CommandLineUtils.getSystemEnvVars();
+        Properties systemEnvVars = CommandLineUtils.getSystemEnvVars();
 
-        for ( Iterator i = envVars.keySet().iterator(); i.hasNext(); )
+        for ( Iterator i = systemEnvVars.keySet().iterator(); i.hasNext(); )
         {
             String key = (String) i.next();
-
-            if ( !this.envVars.containsKey( key ) )
+            if ( !envVars.containsKey( key ) )
             {
-                this.envVars.put( key, key + "=" + envVars.getProperty( key ) );
+                addEnvironment( key, systemEnvVars.getProperty( key ) );
             }
         }
     }
@@ -413,7 +466,7 @@ public class Commandline
      * Return the list of environment variables
      */
     public String[] getEnvironmentVariables()
-        throws CommandLineException
+            throws CommandLineException
     {
         try
         {
@@ -423,8 +476,16 @@ public class Commandline
         {
             throw new CommandLineException( "Error setting up environmental variables", e );
         }
-
-        return (String[]) envVars.values().toArray( new String[envVars.size()] );
+        String[] environmentVars = new String[envVars.size()];
+        int i = 0;
+        for ( Iterator iterator = envVars.keySet().iterator(); iterator.hasNext(); )
+        {
+            String name = (String) iterator.next();
+            String value = (String) envVars.get( name );
+            environmentVars[i] = name + "=" + value;
+            i++;
+        }
+        return environmentVars;
     }
 
     /**
@@ -433,6 +494,8 @@ public class Commandline
     public String[] getCommandline()
     {
         final String[] args = getArguments();
+        String executable = getExecutable();
+
         if ( executable == null )
         {
             return args;
@@ -448,26 +511,10 @@ public class Commandline
      */
     public String[] getShellCommandline()
     {
+        // TODO: Provided only for backward compat. with <= 1.4
+        verifyShellState();
 
-        if ( getShell() == null )
-        {
-            if ( executable != null )
-            {
-                List commandLine = new ArrayList();
-                commandLine.add( executable );
-                commandLine.addAll( Arrays.asList( getArguments() ) );
-                return (String[]) commandLine.toArray( new String[0] );
-            }
-            else
-            {
-                return getArguments();
-            }
-
-        }
-        else
-        {
-            return (String[]) getShell().getShellCommandLine( executable, getArguments() ).toArray( new String[0] );
-        }
+        return (String[]) getShell().getShellCommandLine( getArguments() ).toArray( new String[0] );
     }
 
     /**
@@ -497,163 +544,7 @@ public class Commandline
 
     public String toString()
     {
-        return toString( getCommandline() );
-    }
-
-    /**
-     * <p>Put quotes around the given String if necessary.</p>
-     * <p>If the argument doesn't include spaces or quotes, return it
-     * as is. If it contains double quotes, use single quotes - else
-     * surround the argument by double quotes.</p>
-     *
-     * @throws CommandLineException if the argument contains both, single
-     *                              and double quotes.
-     */
-    public static String quoteArgument( String argument )
-        throws CommandLineException
-    {
-        if ( argument.indexOf( '\"' ) > -1 )
-        {
-            if ( argument.indexOf( '\'' ) > -1 )
-            {
-                throw new CommandLineException( "Can't handle single and double quotes in same argument" );
-            }
-            else
-            {
-                return '\'' + argument + '\'';
-            }
-        }
-        else if ( containsAny( argument, "'<>&|*? " ) )
-        {
-            return '\"' + argument + '\"';
-        }
-        else
-        {
-            return argument;
-        }
-    }
-
-    private static boolean containsAny( String argument, String chars )
-    {
-        for ( int i = chars.length() - 1; i >= 0; i-- )
-        {
-            if ( argument.indexOf( chars.charAt( i ) ) >= 0 )
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static String toString( String[] line )
-    {
-        // empty path return empty string
-        if ( line == null || line.length == 0 )
-        {
-            return "";
-        }
-
-        // path containing one or more elements
-        final StringBuffer result = new StringBuffer();
-        for ( int i = 0; i < line.length; i++ )
-        {
-            if ( i > 0 )
-            {
-                result.append( ' ' );
-            }
-            try
-            {
-                result.append( quoteArgument( line[i] ) );
-            }
-            catch ( Exception e )
-            {
-                System.err.println( "Error quoting argument." );
-            }
-        }
-        return result.toString();
-    }
-
-    public static String[] translateCommandline( String toProcess )
-        throws Exception
-    {
-        if ( toProcess == null || toProcess.length() == 0 )
-        {
-            return new String[0];
-        }
-
-        // parse with a simple finite state machine
-
-        final int normal = 0;
-        final int inQuote = 1;
-        final int inDoubleQuote = 2;
-        int state = normal;
-        StringTokenizer tok = new StringTokenizer( toProcess, "\"\' ", true );
-        Vector v = new Vector();
-        StringBuffer current = new StringBuffer();
-
-        while ( tok.hasMoreTokens() )
-        {
-            String nextTok = tok.nextToken();
-            switch ( state )
-            {
-                case inQuote:
-                    if ( "\'".equals( nextTok ) )
-                    {
-                        state = normal;
-                    }
-                    else
-                    {
-                        current.append( nextTok );
-                    }
-                    break;
-                case inDoubleQuote:
-                    if ( "\"".equals( nextTok ) )
-                    {
-                        state = normal;
-                    }
-                    else
-                    {
-                        current.append( nextTok );
-                    }
-                    break;
-                default:
-                    if ( "\'".equals( nextTok ) )
-                    {
-                        state = inQuote;
-                    }
-                    else if ( "\"".equals( nextTok ) )
-                    {
-                        state = inDoubleQuote;
-                    }
-                    else if ( " ".equals( nextTok ) )
-                    {
-                        if ( current.length() != 0 )
-                        {
-                            v.addElement( current.toString() );
-                            current.setLength( 0 );
-                        }
-                    }
-                    else
-                    {
-                        current.append( nextTok );
-                    }
-                    break;
-            }
-        }
-
-        if ( current.length() != 0 )
-        {
-            v.addElement( current.toString() );
-        }
-
-        if ( state == inQuote || state == inDoubleQuote )
-        {
-            throw new CommandLineException( "unbalanced quotes in " + toProcess );
-        }
-
-        String[] args = new String[v.size()];
-        v.copyInto( args );
-        return args;
+        return StringUtils.join( getShellCommandline(), " " );
     }
 
     public int size()
@@ -663,8 +554,9 @@ public class Commandline
 
     public Object clone()
     {
-        Commandline c = new Commandline();
-        c.setExecutable( executable );
+        Commandline c = new Commandline( (Shell) shell.clone() );
+        c.executable = executable;
+        c.workingDir = workingDir;
         c.addArguments( getArguments() );
         return c;
     }
@@ -675,6 +567,9 @@ public class Commandline
     public void clear()
     {
         executable = null;
+        workingDir = null;
+        shell.setExecutable( null );
+        shell.clearArguments();
         arguments.removeAllElements();
     }
 
@@ -703,28 +598,47 @@ public class Commandline
      */
     public void setWorkingDirectory( String path )
     {
-        if ( path != null )
-        {
-            workingDir = new File( path );
-        }
+        shell.setWorkingDirectory( path );
+        workingDir = new File( path );
+    }
+
+    /**
+     * Sets execution directory.
+     */
+    public void setWorkingDirectory( File workingDirectory )
+    {
+        shell.setWorkingDirectory( workingDirectory );
+        workingDir = workingDirectory;
     }
 
     public File getWorkingDirectory()
     {
-        return workingDir;
+        File workDir = shell.getWorkingDirectory();
+
+        if ( workDir == null )
+        {
+            workDir = workingDir;
+        }
+
+        return workDir;
     }
 
     /**
      * Executes the command.
      */
     public Process execute()
-        throws CommandLineException
+            throws CommandLineException
     {
+        // TODO: Provided only for backward compat. with <= 1.4
+        verifyShellState();
+
         Process process;
 
         //addEnvironment( "MAVEN_TEST_ENVAR", "MAVEN_TEST_ENVAR_VALUE" );
 
         String[] environment = getEnvironmentVariables();
+
+        File workingDir = shell.getWorkingDirectory();
 
         try
         {
@@ -736,13 +650,13 @@ public class Commandline
             {
                 if ( !workingDir.exists() )
                 {
-                    throw new CommandLineException(
-                        "Working directory \"" + workingDir.getPath() + "\" does not exist!" );
+                    throw new CommandLineException( "Working directory \"" + workingDir.getPath()
+                            + "\" does not exist!" );
                 }
                 else if ( !workingDir.isDirectory() )
                 {
-                    throw new CommandLineException(
-                        "Path \"" + workingDir.getPath() + "\" does not specify a directory." );
+                    throw new CommandLineException( "Path \"" + workingDir.getPath()
+                            + "\" does not specify a directory." );
                 }
 
                 process = Runtime.getRuntime().exec( getShellCommandline(), environment, workingDir );
@@ -756,8 +670,24 @@ public class Commandline
         return process;
     }
 
+    /**
+     * @deprecated Remove once backward compat with plexus-utils <= 1.4 is no longer a consideration
+     */
+    private void verifyShellState()
+    {
+        if ( shell.getWorkingDirectory() == null )
+        {
+            shell.setWorkingDirectory( workingDir );
+        }
+
+        if ( shell.getExecutable() == null )
+        {
+            shell.setExecutable( executable );
+        }
+    }
+
     public Properties getSystemEnvVars()
-        throws Exception
+            throws Exception
     {
         return CommandLineUtils.getSystemEnvVars();
     }
@@ -781,5 +711,83 @@ public class Commandline
     public Shell getShell()
     {
         return shell;
+    }
+
+    /**
+     * @deprecated Use {@link CommandLineUtils#translateCommandline(String)} instead.
+     */
+    public static String[] translateCommandline( String toProcess )
+            throws Exception
+    {
+        return CommandLineUtils.translateCommandline( toProcess );
+    }
+
+    /**
+     * @deprecated Use {@link CommandLineUtils#quote(String)} instead.
+     */
+    public static String quoteArgument( String argument )
+            throws CommandLineException
+    {
+        return CommandLineUtils.quote( argument );
+    }
+
+    /**
+     * @deprecated Use {@link CommandLineUtils#toString(String[])} instead.
+     */
+    public static String toString( String[] line )
+    {
+        return CommandLineUtils.toString( line );
+    }
+
+    public static class Argument
+            implements Arg
+    {
+        private String[] parts;
+
+        /* (non-Javadoc)
+         * @see org.codehaus.plexus.util.cli.Argumnt#setValue(java.lang.String)
+         */
+        public void setValue( String value )
+        {
+            if ( value != null )
+            {
+                parts = new String[] { value };
+            }
+        }
+
+        /* (non-Javadoc)
+         * @see org.codehaus.plexus.util.cli.Argumnt#setLine(java.lang.String)
+         */
+        public void setLine( String line )
+        {
+            if ( line == null )
+            {
+                return;
+            }
+            try
+            {
+                parts = CommandLineUtils.translateCommandline( line );
+            }
+            catch ( Exception e )
+            {
+                System.err.println( "Error translating Commandline." );
+            }
+        }
+
+        /* (non-Javadoc)
+         * @see org.codehaus.plexus.util.cli.Argumnt#setFile(java.io.File)
+         */
+        public void setFile( File value )
+        {
+            parts = new String[] { value.getAbsolutePath() };
+        }
+
+        /* (non-Javadoc)
+         * @see org.codehaus.plexus.util.cli.Argumnt#getParts()
+         */
+        public String[] getParts()
+        {
+            return parts;
+        }
     }
 }

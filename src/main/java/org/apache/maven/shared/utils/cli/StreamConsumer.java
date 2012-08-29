@@ -66,6 +66,9 @@ package org.apache.maven.shared.utils.cli;
  * allow implementations to gain access to the lines being
  * "Pumped".
  *
+ * Please note that implementations of this interface can be expected to be
+ * called from arbitrary threads and must therefore be threadsafe.
+ *
  * @author <a href="mailto:fvancea@maxiq.com">Florin Vancea</a>
  * @author <a href="mailto:pj@thoughtworks.com">Paul Julius</a>
  */

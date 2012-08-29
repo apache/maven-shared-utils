@@ -34,14 +34,11 @@ import java.io.OutputStream;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class StreamFeeder
-    extends Thread
-{
+public class StreamFeeder extends AbstractStreamHandler {
     private InputStream input;
 
     private OutputStream output;
 
-    private boolean done;
 
     /**
      * Create a new StreamFeeder
@@ -74,10 +71,10 @@ public class StreamFeeder
         {
             close();
 
-            done = true;
-
             synchronized ( this )
             {
+                setDone();
+
                 this.notifyAll();
             }
         }
@@ -124,28 +121,27 @@ public class StreamFeeder
         }
     }
 
-    public boolean isDone()
-    {
-        return done;
-    }
-
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
 
     private void feed()
-        throws IOException
+            throws IOException
     {
         int data = input.read();
 
-        while ( !done && data != -1 )
+        while ( !isDone() && data != -1 )
         {
             synchronized ( output )
             {
-                output.write( data );
+                if ( !isDisabled())
+                {
+                    output.write( data );
+                }
 
                 data = input.read();
             }
         }
     }
+
 }

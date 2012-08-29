@@ -81,6 +81,7 @@ package org.apache.maven.shared.utils.cli;
 import org.apache.maven.shared.utils.io.IOUtil;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -94,7 +95,7 @@ import java.io.PrintWriter;
  * @since June 11, 2001
  */
 public class StreamPumper
-    extends Thread
+    extends AbstractStreamHandler
 {
     private BufferedReader in;
 
@@ -102,32 +103,28 @@ public class StreamPumper
 
     private PrintWriter out = null;
 
-    private static final int SIZE = 1024;
+    private volatile Exception exception = null;
 
-    boolean done;
+    private static final int SIZE = 1024;
 
     public StreamPumper( InputStream in )
     {
-        this.in = new BufferedReader( new InputStreamReader( in ), SIZE );
+        this( in, (StreamConsumer) null );
     }
 
     public StreamPumper( InputStream in, StreamConsumer consumer )
     {
-        this( in );
-
-        this.consumer = consumer;
+        this( in, null, consumer );
     }
 
     public StreamPumper( InputStream in, PrintWriter writer )
     {
-        this( in );
-
-        out = writer;
+        this( in, writer, null );
     }
 
     public StreamPumper( InputStream in, PrintWriter writer, StreamConsumer consumer )
     {
-        this( in );
+        this.in = new BufferedReader( new InputStreamReader( in ), SIZE );
         this.out = writer;
         this.consumer = consumer;
     }
@@ -136,25 +133,32 @@ public class StreamPumper
     {
         try
         {
-            String s = in.readLine();
-
-            while ( s != null )
+            for ( String line = in.readLine(); line != null; line = in.readLine() )
             {
-                consumeLine( s );
+                try
+                {
+                    if ( exception == null )
+                    {
+                        consumeLine( line );
+                    }
+                }
+                catch ( Exception t )
+                {
+                    exception = t;
+                }
 
                 if ( out != null )
                 {
-                    out.println( s );
+                    out.println( line );
 
                     out.flush();
                 }
 
-                s = in.readLine();
             }
         }
-        catch ( Throwable e )
+        catch ( IOException e )
         {
-            // Catched everything so the streams will be closed and flagged as done.
+            exception = e;
         }
         finally
         {
@@ -162,7 +166,7 @@ public class StreamPumper
 
             synchronized ( this )
             {
-                done = true;
+                setDone();
 
                 this.notifyAll();
             }
@@ -182,14 +186,14 @@ public class StreamPumper
         IOUtil.close( out );
     }
 
-    public boolean isDone()
+    public Exception getException()
     {
-        return done;
+        return exception;
     }
 
     private void consumeLine( String line )
     {
-        if ( consumer != null )
+        if ( consumer != null && !isDisabled() )
         {
             consumer.consumeLine( line );
         }
