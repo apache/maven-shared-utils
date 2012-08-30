@@ -35,6 +35,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.security.AccessControlException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -174,76 +175,97 @@ public abstract class CommandLineUtils
 
         final ProcessHook processHook = new ProcessHook( p );
 
-        ShutdownHookUtils.addShutDownHook( processHook );
+        try
+        {
+            Runtime.getRuntime().addShutdownHook( processHook );
+        }
+        catch ( IllegalStateException ignore )
+        {
+        }
+        catch ( AccessControlException ignore )
+        {
+        }
 
         return new CommandLineCallable()
         {
             public Integer call()
                 throws CommandLineException
             {
-        try
-        {
+                try
+                {
                     int returnValue;
                     if ( timeoutInSeconds <= 0 )
-            {
+                    {
                         returnValue = p.waitFor();
                     }
                     else
-                {
+                    {
                         long now = System.currentTimeMillis();
                         long timeoutInMillis = 1000L * timeoutInSeconds;
                         long finish = now + timeoutInMillis;
                         while ( isAlive( p ) && ( System.currentTimeMillis() < finish ) )
-                    {
+                        {
                             Thread.sleep( 10 );
-                    }
+                        }
                         if ( isAlive( p ) )
                         {
                             throw new InterruptedException( "Process timeout out after " + timeoutInSeconds + " seconds" );
-                }
+                        }
+
                         returnValue = p.exitValue();
-            }
+                    }
 
                     waitForAllPumpers( inputFeeder, outputPumper, errorPumper );
 
                     if ( outputPumper.getException() != null )
-            {
-                throw new CommandLineException( "Error inside systemOut parser", outputPumper.getException() );
-            }
+                    {
+                        throw new CommandLineException( "Error inside systemOut parser", outputPumper.getException() );
+                    }
 
                     if ( errorPumper.getException() != null )
-            {
+                    {
                         throw new CommandLineException( "Error inside systemErr parser", errorPumper.getException() );
-            }
+                    }
 
-            return returnValue;
-        }
-        catch ( InterruptedException ex )
-        {
+                    return returnValue;
+                }
+                catch ( InterruptedException ex )
+                {
                     if ( inputFeeder != null )
                     {
                         inputFeeder.disable();
-        }
+                    }
+
                     outputPumper.disable();
                     errorPumper.disable();
                     throw new CommandLineTimeOutException( "Error while executing external command, process killed.", ex );
                 }
-        finally
-        {
-                    ShutdownHookUtils.removeShutdownHook( processHook );
+                finally
+                {
+                    try
+                    {
+                        Runtime.getRuntime().removeShutdownHook( processHook );
+                    }
+                    catch ( IllegalStateException ignore )
+                    {
+                        //
+                    }
+                    catch ( AccessControlException ignore )
+                    {
+                    }
 
                     processHook.run();
 
-            if ( inputFeeder != null )
-            {
-                inputFeeder.close();
+                    if ( inputFeeder != null )
+                    {
+                        inputFeeder.close();
+                    }
+
+                    outputPumper.close();
+
+                    errorPumper.close();
+                }
             }
-
-            outputPumper.close();
-
-            errorPumper.close();
-        }
-    }
         };
     }
 
@@ -318,68 +340,68 @@ public abstract class CommandLineUtils
 
         try
         {
-        Properties envVars = new Properties();
+            Properties envVars = new Properties();
 
-        Runtime r = Runtime.getRuntime();
+            Runtime r = Runtime.getRuntime();
 
-         //If this is windows set the shell to command.com or cmd.exe with correct arguments.
+             //If this is windows set the shell to command.com or cmd.exe with correct arguments.
             boolean overriddenEncoding = false;
             if ( Os.isFamily( Os.FAMILY_WINDOWS ) )
-        {
+            {
                 if ( Os.isFamily( Os.FAMILY_WIN9X ) )
-            {
-                p = r.exec( "command.com /c set" );
-            }
-            else
-            {
+                {
+                    p = r.exec( "command.com /c set" );
+                }
+                else
+                {
                     overriddenEncoding = true;
                     // /U = change stdout encoding to UTF-16LE to avoid encoding inconsistency
                     // between command-line/DOS and GUI/Windows, see PLXUTILS-124
                     p = r.exec( "cmd.exe /U /c set" );
+                }
             }
-        }
-        else
-        {
-            p = r.exec( "env" );
-        }
+            else
+            {
+                p = r.exec( "env" );
+            }
 
             Reader reader = overriddenEncoding
                 ? new InputStreamReader( p.getInputStream(), UTF_16LE )
                 : new InputStreamReader( p.getInputStream() );
             BufferedReader br = new BufferedReader( reader );
 
-        String line;
+            String line;
 
-        String lastKey = null;
-        String lastVal = null;
+            String lastKey = null;
+            String lastVal = null;
 
-        while ( ( line = br.readLine() ) != null )
-        {
-            int idx = line.indexOf( '=' );
+            while ( ( line = br.readLine() ) != null )
+            {
+                int idx = line.indexOf( '=' );
 
                 if ( idx > 0 )
-            {
-                lastKey = line.substring( 0, idx );
-
-                if ( !caseSensitive )
                 {
+                    lastKey = line.substring( 0, idx );
+
+                    if ( !caseSensitive )
+                    {
                         lastKey = lastKey.toUpperCase( Locale.ENGLISH );
+                    }
+
+                    lastVal = line.substring( idx + 1 );
+
+                    envVars.setProperty( lastKey, lastVal );
                 }
+                else if ( lastKey != null )
+                {
+                    lastVal += "\n" + line;
 
-                lastVal = line.substring( idx + 1 );
-
-                envVars.setProperty( lastKey, lastVal );
+                    envVars.setProperty( lastKey, lastVal );
+                }
             }
-            else if ( lastKey != null )
-            {
-                lastVal += "\n" + line;
 
-                envVars.setProperty( lastKey, lastVal );
-            }
+            return envVars;
         }
-
-        return envVars;
-    }
         finally
         {
             if ( p != null )
@@ -548,16 +570,16 @@ public abstract class CommandLineUtils
             {
                 throw new CommandLineException( "Can't handle single and double quotes in same argument" );
             }
-        else
-        {
+            else
+            {
                 if ( escapeSingleQuotes )
                 {
                     return "\\\'" + argument + "\\\'";
-        }
+                }
                 else if ( wrapExistingQuotes )
                 {
                     return '\'' + argument + '\'';
-    }
+                }
             }
         }
         else if ( argument.contains( "\'" ) )
@@ -592,7 +614,7 @@ public abstract class CommandLineUtils
         if ( ( line == null ) || ( line.length == 0 ) )
         {
             return "";
-    }
+        }
 
         // path containing one or more elements
         final StringBuilder result = new StringBuilder();
