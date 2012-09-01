@@ -54,7 +54,7 @@ class ReflectorTestHelper
 
     public ReflectorTestHelper( String throwMessage )
     {
-        if ( throwMessage != null && !throwMessage.isEmpty() )
+        if ( throwMessage != null && throwMessage.length() > 0  )
         {
             throw new HelperException( throwMessage );
         }

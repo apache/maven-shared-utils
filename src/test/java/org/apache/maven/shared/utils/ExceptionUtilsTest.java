@@ -29,7 +29,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
-import java.sql.SQLException;
 import java.util.logging.Logger;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -80,11 +79,10 @@ public class ExceptionUtilsTest extends Assert
         }
 
         {
-            SQLException sqlException1 = new SQLException();
-            SQLException sqlException2 = new SQLException();
-            sqlException1.setNextException(sqlException2);
+            RuntimeException sqlException2 = new RuntimeException();
+            RuntimeException sqlException1 = new RuntimeException(sqlException2);
 
-            assertThat( "getCause for SQLException"
+            assertThat( "getCause for RuntimeException"
                       , ExceptionUtils.getCause( sqlException1 )
                       , equalTo( (Throwable) sqlException2 ) );
         }
@@ -153,8 +151,8 @@ public class ExceptionUtilsTest extends Assert
                   , fullStackTrace
                   , JUnitMatchers.containsString( fullStackTraceStart ) );
 
-        SQLException sqlException = new SQLException( npe );
-        fullStackTrace = ExceptionUtils.getFullStackTrace( sqlException );
+        RuntimeException rtException = new RuntimeException( npe );
+        fullStackTrace = ExceptionUtils.getFullStackTrace( rtException );
                 assertThat( "getFullStackTrace start with"
                           , fullStackTrace
                           , JUnitMatchers.containsString( fullStackTraceStart ) );
@@ -165,11 +163,11 @@ public class ExceptionUtilsTest extends Assert
     public void testGetThrowables()
     {
         NullPointerException npe = new NullPointerException( "dooh just a random, nullpointer" );
-        SQLException sqlException = new SQLException( npe );
+        RuntimeException rtException = new RuntimeException( npe );
         TestException testException =  new TestException();
-        testException.setSourceException( sqlException );
+        testException.setSourceException( rtException );
 
-        Throwable[] expectedExceptions = new Throwable[] { testException, sqlException, npe };
+        Throwable[] expectedExceptions = new Throwable[] { testException, rtException, npe };
 
         assertThat( "getThrowables"
                   , ExceptionUtils.getThrowables( testException )
@@ -188,16 +186,16 @@ public class ExceptionUtilsTest extends Assert
     public void testGetRootCause()
     {
         NullPointerException npe = new NullPointerException( "dooh just a random, nullpointer" );
-        SQLException sqlException = new SQLException( npe );
+        RuntimeException rtException = new RuntimeException( npe );
         TestException testException =  new TestException();
-        testException.setSourceException( sqlException );
+        testException.setSourceException( rtException );
 
         assertThat( "getRootCause"
                   , ExceptionUtils.getRootCause(testException)
                   , equalTo( (Throwable) npe ) );
 
         assertThat( "getRootCause"
-                  , ExceptionUtils.getRootCause( sqlException )
+                  , ExceptionUtils.getRootCause( rtException )
                   , equalTo( (Throwable) npe ) );
 
         assertThat("getRootCause"
@@ -229,11 +227,11 @@ public class ExceptionUtilsTest extends Assert
                     stackTrace.startsWith( "java.lang.NullPointerException: dooh just a random, nullpointer\n" +
                         "\tat org.apache.maven.shared.utils.ExceptionUtilsTest.testGetStackTrace(ExceptionUtilsTest.java" ));
 
-        SQLException sqlException = new SQLException( npe );
-        stackTrace = ExceptionUtils.getStackTrace( sqlException );
+        RuntimeException rtException = new RuntimeException( npe );
+        stackTrace = ExceptionUtils.getStackTrace( rtException );
         assertNotNull( stackTrace );
         assertTrue( "wrong stacktrace: " + stackTrace,
-                    stackTrace.startsWith( "java.sql.SQLException: java.lang.NullPointerException: "
+                    stackTrace.startsWith( "java.lang.RuntimeException: java.lang.NullPointerException: "
                       + "dooh just a random, nullpointer\n"
                       + "\tat org.apache.maven.shared.utils.ExceptionUtilsTest.testGetStackTrace(ExceptionUtilsTest.java" ));
 
@@ -285,16 +283,16 @@ public class ExceptionUtilsTest extends Assert
     public void testGetThrowableCount()
     {
         NullPointerException npe = new NullPointerException( "dooh just a random, nullpointer" );
-        SQLException sqlException = new SQLException( npe );
+        RuntimeException rtException = new RuntimeException( npe );
         TestException testException =  new TestException();
-        testException.setSourceException( sqlException );
+        testException.setSourceException( rtException );
 
         assertThat( "getThrowableCount"
                   , ExceptionUtils.getThrowableCount( npe )
                   , is( 1 ));
 
         assertThat( "getThrowableCount"
-                  , ExceptionUtils.getThrowableCount( sqlException )
+                  , ExceptionUtils.getThrowableCount( rtException )
                   , is( 2 ));
 
         assertThat( "getThrowableCount"
@@ -314,16 +312,16 @@ public class ExceptionUtilsTest extends Assert
     public void testIndexOfThrowable()
     {
         NullPointerException npe = new NullPointerException( "dooh just a random, nullpointer" );
-        SQLException sqlException = new SQLException( npe );
+        RuntimeException rtException = new RuntimeException( npe );
         TestException testException =  new TestException();
-        testException.setSourceException( sqlException );
+        testException.setSourceException( rtException );
 
         assertThat("indexOfThrowable"
                 , ExceptionUtils.indexOfThrowable(npe, NullPointerException.class)
                 , is(0));
 
         assertThat( "indexOfThrowable for non contained Exception type"
-                  , ExceptionUtils.indexOfThrowable( npe, SQLException.class )
+                  , ExceptionUtils.indexOfThrowable( npe, RuntimeException.class )
                   , is( -1 ));
 
 
@@ -332,7 +330,7 @@ public class ExceptionUtilsTest extends Assert
                   , is( 2 ));
 
         assertThat( "indexOfThrowable for non contained Exception type"
-                  , ExceptionUtils.indexOfThrowable( testException, SQLException.class )
+                  , ExceptionUtils.indexOfThrowable( testException, RuntimeException.class )
                   , is( 1 ));
 
         assertThat( "indexOfThrowable"
@@ -346,7 +344,7 @@ public class ExceptionUtilsTest extends Assert
                   , is( 2 ));
 
         assertThat( "indexOfThrowable"
-                  , ExceptionUtils.indexOfThrowable( testException, SQLException.class, 2 )
+                  , ExceptionUtils.indexOfThrowable( testException, RuntimeException.class, 2 )
                   , is( -1 ));
 
         try
@@ -395,9 +393,9 @@ public class ExceptionUtilsTest extends Assert
     public void testIsNestedThrowable()
     {
         NullPointerException npe = new NullPointerException( "dooh just a random, nullpointer" );
-        SQLException sqlException = new SQLException( npe );
+        RuntimeException rtException = new RuntimeException( npe );
         TestException testException =  new TestException();
-        testException.setSourceException( sqlException );
+        testException.setSourceException( rtException );
 
         assertThat( "isNestedThrowable"
                   , ExceptionUtils.isNestedThrowable( null )
@@ -408,7 +406,7 @@ public class ExceptionUtilsTest extends Assert
                 , is(true));
 
         assertThat( "isNestedThrowable"
-                  , ExceptionUtils.isNestedThrowable( sqlException )
+                  , ExceptionUtils.isNestedThrowable( rtException )
                   , is( true ) );
 
         assertThat( "isNestedThrowable"
@@ -437,9 +435,9 @@ public class ExceptionUtilsTest extends Assert
     public void testPrintRootCauseStackTrace()
     {
         NullPointerException npe = new NullPointerException( "dooh just a random, nullpointer" );
-        SQLException sqlException = new SQLException( npe );
+        RuntimeException rtException = new RuntimeException( npe );
         TestException testException =  new TestException();
-        testException.setSourceException( sqlException );
+        testException.setSourceException( rtException );
 
         ByteArrayOutputStream bao = new ByteArrayOutputStream();
         PrintStream outStream = new PrintStream( bao );
@@ -456,7 +454,7 @@ public class ExceptionUtilsTest extends Assert
                                                       + "\n\tat org.apache.maven.shared.utils.ExceptionUtilsTest."
                                                       + "testPrintRootCauseStackTrace(ExceptionUtilsTest.java:" ) );
             bao.reset();
-            ExceptionUtils.printRootCauseStackTrace( sqlException );
+            ExceptionUtils.printRootCauseStackTrace( rtException );
             assertThat( "stackFrames"
                       , bao.toString()
                       , JUnitMatchers.containsString( "java.lang.NullPointerException: dooh just a random, nullpointer"
@@ -467,7 +465,7 @@ public class ExceptionUtilsTest extends Assert
             System.setErr( originalErr );
 
             bao.reset();
-            ExceptionUtils.printRootCauseStackTrace( sqlException, outStream );
+            ExceptionUtils.printRootCauseStackTrace( rtException, outStream );
             assertThat("stackFrames"
                     , bao.toString()
                     , JUnitMatchers.containsString("java.lang.NullPointerException: dooh just a random, nullpointer"
@@ -478,7 +476,7 @@ public class ExceptionUtilsTest extends Assert
             bao.reset();
             outStream = new PrintStream( bao );
             PrintWriter printWriter = new PrintWriter( outStream );
-            ExceptionUtils.printRootCauseStackTrace( sqlException, printWriter );
+            ExceptionUtils.printRootCauseStackTrace( rtException, printWriter );
             assertThat( "stackFrames"
                       , bao.toString()
                       , JUnitMatchers.containsString( "java.lang.NullPointerException: dooh just a random, nullpointer"
