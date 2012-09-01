@@ -3,7 +3,6 @@ package org.apache.maven.shared.utils.reflection;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
  * regarding copyright ownership.  The ASF licenses this file
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
@@ -85,7 +84,7 @@ class ReflectorTestHelper
 
     public static ReflectorTestHelper getInstance( String throwMessage )
     {
-        if ( throwMessage != null && !throwMessage.isEmpty() )
+        if ( throwMessage != null && throwMessage.length() > 0 )
         {
             throw new HelperException( throwMessage );
         }
