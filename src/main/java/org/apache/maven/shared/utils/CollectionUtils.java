@@ -21,6 +21,7 @@ package org.apache.maven.shared.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -28,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * @author <a href="mailto:olamy@codehaus.org">olamy</a>
@@ -227,6 +229,52 @@ public class CollectionUtils
         }
 
         return list;
+    }
+
+    /**
+     * Take an array of type T and convert it into a HashSet of type T.
+     * If <code>null</code> or an empty array gets passed, an empty Set will be returned.
+     *
+     * @param array
+     * @return the filled HashSet of type T
+     */
+    public static <T> Set<T> arrayAsHashSet( T[] array )
+    {
+        if ( array == null || array.length == 0)
+        {
+            return Collections.EMPTY_SET;
+        }
+
+        Set<T> set = new HashSet<T>( array.length );
+        for ( T element : array )
+        {
+            set.add( element );
+        }
+
+        return set;
+    }
+
+    /**
+     * Take an array of type T and convert it into a TreeSet of type T.
+     * If <code>null</code> or an empty array gets passed, an empty Set will be returned.
+     *
+     * @param array
+     * @return the filled TreeSet of type T
+     */
+    public static <T> Set<T> arrayAsTreeSet( T[] array )
+    {
+        if ( array == null || array.length == 0)
+        {
+            return Collections.EMPTY_SET;
+        }
+
+        Set<T> set = new TreeSet<T>();
+        for ( T element : array )
+        {
+            set.add( element );
+        }
+
+        return set;
     }
 
     // ----------------------------------------------------------------------

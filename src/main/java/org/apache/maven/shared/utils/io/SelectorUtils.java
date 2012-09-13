@@ -20,8 +20,6 @@ package org.apache.maven.shared.utils.io;
  */
 
 
-import org.apache.maven.shared.utils.StringUtils;
-
 import java.io.File;
 import java.util.StringTokenizer;
 import java.util.Vector;

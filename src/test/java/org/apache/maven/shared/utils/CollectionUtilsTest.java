@@ -23,11 +23,16 @@ package org.apache.maven.shared.utils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.*;
+
 
 
 public class CollectionUtilsTest
@@ -233,5 +238,34 @@ public class CollectionUtilsTest
         @SuppressWarnings( "unchecked" )
         List<String> actual = CollectionUtils.iteratorToList( c1.iterator() );
         assertEquals( expected, actual );
+    }
+
+    @Test
+    public void testArrayAsHashSet()
+    {
+        String[] array = { "a", "b", "c", "b" }; // 'b' is contained twice!
+
+        Set<String> set = CollectionUtils.arrayAsHashSet( array );
+        assertNotNull( set );
+
+        assertThat( "set is of size 3", set.size(), is( array.length - 1 ) );
+    }
+
+    @Test
+    public void testArrayAsTreeSet()
+    {
+        String[] array = { "a", "c", "b", "c" }; // 'c' is contained twice!
+
+        Set<String> set = CollectionUtils.arrayAsTreeSet( array );
+        assertNotNull( set );
+
+        assertThat( "set is of size 3", set.size(), is( array.length - 1 ) );
+
+        Iterator<String> it = set.iterator();
+        assertNotNull( it );
+        assertEquals( "a", it.next() );
+        assertEquals( "b", it.next() );
+        assertEquals( "c", it.next() );
+        assertFalse( it.hasNext() );
     }
 }
