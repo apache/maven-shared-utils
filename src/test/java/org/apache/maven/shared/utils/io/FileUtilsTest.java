@@ -552,7 +552,7 @@ public class FileUtilsTest
             testFile1.lastModified() == destination.lastModified());*/
     }
 
-    public void IGNOREtestCopyFileLarge()
+    public void testCopyFileLarge()
         throws Exception
     {
 

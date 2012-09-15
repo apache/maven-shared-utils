@@ -37,6 +37,7 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.URL;
+import java.nio.channels.FileChannel;
 import java.security.SecureRandom;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -102,6 +103,11 @@ public class FileUtils
      * The number of bytes in a gigabyte.
      */
     public static final int ONE_GB = ONE_KB * ONE_MB;
+
+    /**
+     * The file copy buffer size (30 MB)
+     */
+    private static final long FILE_COPY_BUFFER_SIZE = ONE_MB * 30;
 
     /** The vm line separator */
     public static String FS = System.getProperty( "file.separator" );
@@ -1005,12 +1011,54 @@ public class FileUtils
             return;
         }
 
-        copyStreamToFile( new FileInputStream( source ), destination);
+        mkdirsFor( destination );
+
+        doCopyFile( source, destination );
 
         if ( source.length() != destination.length() )
         {
             final String message = "Failed to copy full contents from " + source + " to " + destination;
             throw new IOException( message );
+        }
+    }
+
+    private static void mkdirsFor( File destination )
+    {
+        //does destination directory exist ?
+        if ( destination.getParentFile() != null && !destination.getParentFile().exists() )
+        {
+            destination.getParentFile().mkdirs();
+        }
+    }
+
+    private static void doCopyFile( File source, File destination )
+        throws IOException
+    {
+        FileInputStream fis = null;
+        FileOutputStream fos = null;
+        FileChannel input = null;
+        FileChannel output = null;
+        try
+        {
+            fis = new FileInputStream( source );
+            fos = new FileOutputStream( destination );
+            input = fis.getChannel();
+            output = fos.getChannel();
+            long size = input.size();
+            long pos = 0;
+            long count = 0;
+            while ( pos < size )
+            {
+                count = size - pos > FILE_COPY_BUFFER_SIZE ? FILE_COPY_BUFFER_SIZE : size - pos;
+                pos += output.transferFrom( input, pos, count );
+            }
+        }
+        finally
+        {
+            IOUtil.close( output );
+            IOUtil.close( fos );
+            IOUtil.close( input );
+            IOUtil.close( fis );
         }
     }
 
