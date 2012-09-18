@@ -21,6 +21,7 @@ package org.apache.maven.shared.utils.io;
 
 
 import org.apache.maven.shared.utils.testhelpers.FileTestHelper;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.Assert;
@@ -238,4 +239,107 @@ public class DirectoryScannerTest
             return ScanAction.CONTINUE;
         }
     }
+
+
+    private void removeAndAddSomeFiles() throws IOException
+    {
+        File rootDir = tempFolder.getRoot();
+        File file2 = new File( rootDir, "file2.txt" );
+        file2.delete();
+
+        FileTestHelper.generateTestFile( new File( rootDir, "folder1/file9.txt" ), 15 );
+
+        File folder2 = new File( rootDir, "folder1/ignorefolder" );
+        FileUtils.deleteDirectory( folder2 );
+    }
+
+    @Test
+    public void testScanDiff() throws Exception
+    {
+        createTestData();
+
+        DirectoryScanner dss = new DirectoryScanner();
+        dss.setBasedir( tempFolder.getRoot() );
+        Assert.assertNotNull( dss );
+
+        // we take the initial snapshot
+        dss.scan();
+        String[] oldFiles = dss.getIncludedFiles();
+
+        // now we change 3 files. add one and remove
+        removeAndAddSomeFiles();
+
+        dss.scan();
+
+        DirectoryScanResult dsr = dss.diffIncludedFiles( oldFiles );
+
+        String[] addedFiles = dsr.getFilesAdded();
+        String[] removedFiles = dsr.getFilesRemoved();
+        Assert.assertNotNull( addedFiles );
+        Assert.assertNotNull( removedFiles );
+        Assert.assertEquals( 1, addedFiles.length );
+        Assert.assertEquals(2, removedFiles.length );
+    }
+
+
+
+    @Ignore("Enable this test to run performance checks")
+    @Test
+    public void performanceTest() throws Exception {
+
+        File rootFolder = tempFolder.getRoot();
+
+        // do some warmup
+        for ( int i = 1; i < 200; i++ )
+        {
+            createTestData();
+            removeAndAddSomeFiles();
+            FileUtils.deleteDirectory( rootFolder );
+        }
+
+        int cycles = 2000;
+
+        // and now we take the time _without_
+        long startTime = System.nanoTime();
+        for ( int i = 1; i < cycles; i++ )
+        {
+            createTestData();
+            removeAndAddSomeFiles();
+            FileUtils.deleteDirectory( rootFolder );
+            rootFolder.mkdir();
+        }
+        long endTime = System.nanoTime();
+
+        long durationEmptyRun = endTime - startTime;
+        System.out.println( "durationEmptyRun            [ns]: " + durationEmptyRun);
+
+        startTime = System.nanoTime();
+        for ( int i = 1; i < cycles; i++ )
+        {
+            createTestData();
+            DirectoryScanner directoryScanner = new DirectoryScanner();
+            directoryScanner.setBasedir( rootFolder );
+            directoryScanner.scan();
+            String[] oldFiles = directoryScanner.getIncludedFiles();
+
+            removeAndAddSomeFiles();
+
+            directoryScanner.scan();
+
+            DirectoryScanResult directoryScanResult = directoryScanner.diffIncludedFiles( oldFiles );
+            Assert.assertNotNull( directoryScanResult );
+
+            FileUtils.deleteDirectory( rootFolder );
+            rootFolder.mkdir();
+        }
+        endTime = System.nanoTime();
+
+        long durationWithSnapshotScanner = endTime - startTime;
+        System.out.println( "durationWithSnapshotScanner [ns]: " + durationWithSnapshotScanner);
+
+        long dirScannerOverhead = durationWithSnapshotScanner - durationEmptyRun;
+
+        System.out.println( "Overhead for n cycles [ns]: " + dirScannerOverhead);
+    }
+
 }

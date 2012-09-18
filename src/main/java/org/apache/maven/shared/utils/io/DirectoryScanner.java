@@ -19,10 +19,14 @@ package org.apache.maven.shared.utils.io;
  * under the License.
  */
 
+import org.apache.maven.shared.utils.CollectionUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Class for scanning a directory for files/directories which match certain criteria.
@@ -533,6 +537,57 @@ public class DirectoryScanner
             dirsNotIncluded.add( "" );
         }
         scandir( basedir, "", true );
+    }
+
+    /**
+     * Determine the file differences between the currently included files and
+     * a previously captured list of files.
+     * This method will not look for a changed in content but sole in the
+     * list of files given.
+     *
+     * The method will compare the given array of file Strings with the result
+     * of the last directory scan. It will execute a {@link #scan()} if no
+     * result of a previous scan could be found.
+     *
+     * The result of the diff can be queried by the methods
+     * {@link DirectoryScanResult#getFilesAdded()} and {@link DirectoryScanResult#getFilesRemoved()}
+     *
+     * @param oldFiles the list of previously captured files names.
+     */
+    public DirectoryScanResult diffIncludedFiles( String[] oldFiles )
+    {
+        if ( filesIncluded == null )
+        {
+            // perform a scan if the directory didn't got scanned yet
+            scan();
+        }
+
+        Set<String> oldFileSet = CollectionUtils.arrayAsHashSet( oldFiles );
+        Set<String> newFileSet = new HashSet<String>( filesIncluded );
+
+        List<String> added = new ArrayList<String>();
+        List<String> removed = new ArrayList<String>();
+
+        for ( String oldFile : oldFileSet )
+        {
+            if ( !newFileSet.contains( oldFile ) )
+            {
+                removed.add( oldFile );
+            }
+        }
+
+        for ( String newFile : newFileSet )
+        {
+            if ( !oldFileSet.contains( newFile ) )
+            {
+                added.add( newFile );
+            }
+        }
+
+        String[] filesAdded = added.toArray( new String[ added.size() ] );
+        String[] filesRemoved = removed.toArray( new String[ removed.size() ] );
+
+        return new DirectoryScanResult( filesAdded, filesRemoved );
     }
 
     /**
