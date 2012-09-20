@@ -32,7 +32,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * @author <a href="mailto:olamy@codehaus.org">olamy</a>
+ * @author Olivier Lamy
  * @version $Id: CollectionUtils.java 8055 2009-01-16 12:45:08Z vsiveton $
  */
 @SuppressWarnings( { "rawtypes", "unchecked" } )

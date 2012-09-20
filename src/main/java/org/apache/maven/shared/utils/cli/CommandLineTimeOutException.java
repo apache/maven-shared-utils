@@ -21,7 +21,7 @@ package org.apache.maven.shared.utils.cli;
 
 /**
  * 
- * @author <a href="mailto:olamy@apache.org">olamy</a>
+ * @author Olivier Lamy
  * @since 1.5.9
  * @version $Id$
  */
