@@ -89,6 +89,11 @@ import java.util.Random;
  */
 public class FileUtils
 {
+    private FileUtils()
+    {
+        // This is a utility class. We add a private ct to prevent initialisation
+    }
+
     /**
      * The number of bytes in a kilobyte.
      */
@@ -366,6 +371,20 @@ public class FileUtils
     }
 
     /**
+     * @param file the file path
+     * @return the file content lines as String[] using the systems default encoding.
+     *         An empty List if the file didn't exist.
+     * @throws IOException
+     */
+    public static String[] fileReadArray( File file )
+            throws IOException
+    {
+        List<String> files = loadFile( file );
+
+        return files.toArray( new String[ files.size() ] );
+    }
+
+    /**
      * Appends data to a file. The file will be created if it does not exist.
      * Note: the data is written with platform encoding
      *
@@ -479,6 +498,63 @@ public class FileUtils
                 writer = new OutputStreamWriter( out );
             }
             writer.write( data );
+        }
+        finally
+        {
+            IOUtil.close( writer );
+        }
+    }
+
+    /**
+     * Writes String array data to a file in the systems default encoding.
+     * The file will be created if it does not exist.
+     *
+     * @param file The path of the file to write.
+     * @param data The content to write to the file.
+     * @throws IOException if any
+     *
+     * @since 1.0
+     */
+    public static void fileWriteArray( File file, String[] data )
+            throws IOException
+    {
+        fileWriteArray( file, null, data );
+    }
+
+    /**
+     * Writes String array data to a file. The file will be created if it does not exist.
+     *
+     * @param file The path of the file to write.
+     * @param encoding The encoding of the file.
+     * @param data The content to write to the file.
+     * @throws IOException if any
+     *
+     * @since 1.0
+     */
+    public static void fileWriteArray( File file, String encoding, String[] data )
+            throws IOException
+    {
+        Writer writer = null;
+        try
+        {
+            OutputStream out = new FileOutputStream( file );
+            if ( encoding != null )
+            {
+                writer = new OutputStreamWriter( out, encoding );
+            }
+            else
+            {
+                writer = new OutputStreamWriter( out );
+            }
+
+            for ( int i = 0; data != null && i < data.length; i++ )
+            {
+                writer.write( data[ i ] );
+                if ( i < data.length )
+                {
+                    writer.write( "\n" );
+                }
+            }
         }
         finally
         {

@@ -1082,6 +1082,29 @@ public class FileUtilsTest
     }
 
     @Test
+    public void writeStringArrayToFile()
+            throws Exception
+    {
+        File file = new File( tempFolder.getRoot(), "writeArray.txt" );
+        FileUtils.fileWriteArray( file, new String[]{"line1", "line2", "line3"} );
+
+        byte[] text = "line1\nline2\nline3".getBytes( "UTF8" );
+        assertEqualContent( text, file );
+    }
+
+    @Test
+    public void writeStringArrayToFileWithEncoding()
+            throws Exception
+    {
+        File file = new File( tempFolder.getRoot(), "writeArray.txt" );
+        FileUtils.fileWriteArray( file, "UTF8", new String[]{"line1", "line2", "line3"} );
+
+        byte[] text = "line1\nline2\nline3".getBytes( "UTF8" );
+        assertEqualContent( text, file );
+    }
+
+
+    @Test
     public void writeWithEncoding_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines()
         throws Exception
     {
