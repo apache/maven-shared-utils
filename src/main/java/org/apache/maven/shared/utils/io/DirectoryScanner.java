@@ -19,6 +19,7 @@ package org.apache.maven.shared.utils.io;
  * under the License.
  */
 
+import org.apache.maven.shared.utils.ArrayUtils;
 import org.apache.maven.shared.utils.CollectionUtils;
 
 import java.io.File;
@@ -562,8 +563,13 @@ public class DirectoryScanner
             scan();
         }
 
+        return diffFiles( oldFiles, filesIncluded.toArray( new String[ filesIncluded.size() ] ) );
+    }
+
+    public static DirectoryScanResult diffFiles( String[] oldFiles, String[] newFiles )
+    {
         Set<String> oldFileSet = CollectionUtils.arrayAsHashSet( oldFiles );
-        Set<String> newFileSet = new HashSet<String>( filesIncluded );
+        Set<String> newFileSet = CollectionUtils.arrayAsHashSet( newFiles );
 
         List<String> added = new ArrayList<String>();
         List<String> removed = new ArrayList<String>();
@@ -931,6 +937,10 @@ public class DirectoryScanner
      */
     public String[] getIncludedFiles()
     {
+        if ( filesIncluded == null )
+        {
+            return ArrayUtils.EMPTY_STRING_ARRAY;
+        }
         final String[] files = filesIncluded.toArray( new String[] {} );
         return files;
     }
