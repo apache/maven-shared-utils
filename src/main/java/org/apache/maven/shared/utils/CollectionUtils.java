@@ -46,18 +46,18 @@ public class CollectionUtils
      * Take a dominant and recessive Map and merge the key:value
      * pairs where the recessive Map may add key:value pairs to the dominant
      * Map but may not override any existing key:value pairs.
-     *
+     * <p/>
      * If we have two Maps, a dominant and recessive, and
      * their respective keys are as follows:
-     *
-     *  dominantMapKeys = { a, b, c, d, e, f }
+     * <p/>
+     * dominantMapKeys = { a, b, c, d, e, f }
      * recessiveMapKeys = { a, b, c, x, y, z }
-     *
+     * <p/>
      * Then the result should be the following:
-     *
+     * <p/>
      * resultantKeys = { a, b, c, d, e, f, x, y, z }
      *
-     * @param dominantMap Dominant Map.
+     * @param dominantMap  Dominant Map.
      * @param recessiveMap Recessive Map.
      * @return The result map with combined dominant and recessive values.
      */
@@ -88,9 +88,9 @@ public class CollectionUtils
         // Create the set of keys that will be contributed by the
         // recessive Map by subtracting the intersection of keys
         // from the recessive Map's keys.
-        Collection contributingRecessiveKeys =
-            CollectionUtils.subtract( recessiveMapKeys,
-                                      CollectionUtils.intersection( dominantMapKeys, recessiveMapKeys ) );
+        Collection contributingRecessiveKeys = CollectionUtils.subtract( recessiveMapKeys,
+                                                                         CollectionUtils.intersection( dominantMapKeys,
+                                                                                                       recessiveMapKeys ) );
 
         result.putAll( dominantMap );
 
@@ -141,7 +141,7 @@ public class CollectionUtils
     /**
      * Returns a {@link Collection} containing the intersection
      * of the given {@link Collection}s.
-     * <p>
+     * <p/>
      * The cardinality of each element in the returned {@link Collection}
      * will be equal to the minimum of the cardinality of that element
      * in the two given {@link Collection}s.
@@ -155,11 +155,9 @@ public class CollectionUtils
         Map mapb = getCardinalityMap( b );
         Set elts = new HashSet( a );
         elts.addAll( b );
-        Iterator it = elts.iterator();
-        while ( it.hasNext() )
+        for ( Object obj : elts )
         {
-            Object obj = it.next();
-            for ( int i = 0,m = Math.min( getFreq( obj, mapa ), getFreq( obj, mapb ) ); i < m; i++ )
+            for ( int i = 0, m = Math.min( getFreq( obj, mapa ), getFreq( obj, mapb ) ); i < m; i++ )
             {
                 list.add( obj );
             }
@@ -240,7 +238,7 @@ public class CollectionUtils
      */
     public static <T> Set<T> arrayAsHashSet( T[] array )
     {
-        if ( array == null || array.length == 0)
+        if ( array == null || array.length == 0 )
         {
             return Collections.EMPTY_SET;
         }
@@ -263,7 +261,7 @@ public class CollectionUtils
      */
     public static <T> Set<T> arrayAsTreeSet( T[] array )
     {
-        if ( array == null || array.length == 0)
+        if ( array == null || array.length == 0 )
         {
             return Collections.EMPTY_SET;
         }

@@ -4,13 +4,19 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WalkCollector implements DirectoryWalkListener
+public class WalkCollector
+    implements DirectoryWalkListener
 {
     protected List steps;
+
     protected File startingDir;
+
     protected int startCount;
+
     protected int finishCount;
+
     protected int percentageLow;
+
     protected int percentageHigh;
 
     public WalkCollector()

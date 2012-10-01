@@ -17,6 +17,7 @@ package org.apache.maven.shared.utils.io;
  * specific language governing permissions and limitations
  * under the License.
  */
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ public class MatchPatterns
 {
     private final MatchPattern[] patterns;
 
-    private MatchPatterns(MatchPattern[] patterns)
+    private MatchPatterns( MatchPattern[] patterns )
     {
         this.patterns = patterns;
     }

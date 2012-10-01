@@ -19,8 +19,6 @@ package org.apache.maven.shared.utils;
  * under the License.
  */
 
-import org.apache.maven.shared.utils.xml.XmlStreamReader;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -32,6 +30,7 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import org.apache.maven.shared.utils.xml.XmlStreamReader;
 
 
 /**
@@ -48,6 +47,7 @@ public class ReaderFactory
     /**
      * ISO Latin Alphabet #1, also known as ISO-LATIN-1.
      * Every implementation of the Java platform is required to support this character encoding.
+     *
      * @see Charset
      */
     public static final String ISO_8859_1 = "ISO-8859-1";
@@ -55,6 +55,7 @@ public class ReaderFactory
     /**
      * Seven-bit ASCII, also known as ISO646-US, also known as the Basic Latin block of the Unicode character set.
      * Every implementation of the Java platform is required to support this character encoding.
+     *
      * @see Charset
      */
     public static final String US_ASCII = "US-ASCII";
@@ -63,6 +64,7 @@ public class ReaderFactory
      * Sixteen-bit Unicode Transformation Format, byte order specified by a mandatory initial byte-order mark (either
      * order accepted on input, big-endian used on output).
      * Every implementation of the Java platform is required to support this character encoding.
+     *
      * @see Charset
      */
     public static final String UTF_16 = "UTF-16";
@@ -70,6 +72,7 @@ public class ReaderFactory
     /**
      * Sixteen-bit Unicode Transformation Format, big-endian byte order.
      * Every implementation of the Java platform is required to support this character encoding.
+     *
      * @see Charset
      */
     public static final String UTF_16BE = "UTF-16BE";
@@ -77,6 +80,7 @@ public class ReaderFactory
     /**
      * Sixteen-bit Unicode Transformation Format, little-endian byte order.
      * Every implementation of the Java platform is required to support this character encoding.
+     *
      * @see Charset
      */
     public static final String UTF_16LE = "UTF-16LE";
@@ -84,6 +88,7 @@ public class ReaderFactory
     /**
      * Eight-bit Unicode Transformation Format.
      * Every implementation of the Java platform is required to support this character encoding.
+     *
      * @see Charset
      */
     public static final String UTF_8 = "UTF-8";
@@ -178,7 +183,7 @@ public class ReaderFactory
     /**
      * Create a new Reader with specified encoding.
      *
-     * @param in not null input stream.
+     * @param in       not null input stream.
      * @param encoding not null supported encoding.
      * @return a reader instance for the input stream using the given encoding.
      * @throws UnsupportedEncodingException if any.
@@ -193,23 +198,23 @@ public class ReaderFactory
     /**
      * Create a new Reader with specified encoding.
      *
-     * @param file not null file.
+     * @param file     not null file.
      * @param encoding not null supported encoding.
      * @return a reader instance for the input file using the given encoding.
-     * @throws FileNotFoundException if any.
+     * @throws FileNotFoundException        if any.
      * @throws UnsupportedEncodingException if any.
      * @see <a href="http://java.sun.com/j2se/1.4.2/docs/guide/intl/encoding.doc.html">Supported encodings</a>
      */
     public static Reader newReader( File file, String encoding )
         throws FileNotFoundException, UnsupportedEncodingException
     {
-        return new InputStreamReader( new FileInputStream(file), encoding );
+        return new InputStreamReader( new FileInputStream( file ), encoding );
     }
 
     /**
      * Create a new Reader with specified encoding.
      *
-     * @param url not null url.
+     * @param url      not null url.
      * @param encoding not null supported encoding.
      * @return a reader instance for the input url using the given encoding.
      * @throws IOException if any.

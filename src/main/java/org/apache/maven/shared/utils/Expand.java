@@ -19,8 +19,6 @@ package org.apache.maven.shared.utils;
  * under the License.
  */
 
-import org.apache.maven.shared.utils.io.FileUtils;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -29,6 +27,7 @@ import java.io.InputStream;
 import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import org.apache.maven.shared.utils.io.FileUtils;
 
 /**
  * Expand will unpack the given zip archive.
@@ -51,6 +50,7 @@ public class Expand
      * if the unpackaging should get performed if the destination already exists.
      */
     private boolean overwrite = false;
+
     private static final int BUFFER_SIZE = 2 ^ 16;
 
 
@@ -80,6 +80,7 @@ public class Expand
      * If the destination directory should get overwritten if the content
      * already exists. If <code>false</code> we will only overwrite if the local
      * file or directory is older than the one in the archive.
+     *
      * @param overwrite
      */
     public void setOverwrite( boolean overwrite )
@@ -94,14 +95,14 @@ public class Expand
      * @throws Exception
      */
     public void execute()
-            throws Exception
+        throws Exception
     {
         expandFile( source, dest );
     }
 
     /**
      * <p>It is intended to be overwritten when implementing an own unarchiver</p>
-     *
+     * <p/>
      * <p><b>Note:</b> we kept this protected method for the sake of backward compatibility!</p>
      *
      * @param srcFile
@@ -109,9 +110,9 @@ public class Expand
      * @throws Exception
      */
     protected void expandFile( File srcFile, File dest )
-            throws Exception
+        throws Exception
     {
-        if (source == null)
+        if ( source == null )
         {
             throw new NullPointerException( "Source Archive must not be null!" );
         }
@@ -129,10 +130,10 @@ public class Expand
 
             ZipEntry zipEntry;
 
-            while( (zipEntry = zipInputStream.getNextEntry()) != null )
+            while ( ( zipEntry = zipInputStream.getNextEntry() ) != null )
             {
                 String zipEntryName = zipEntry.getName();
-                Date zipEntryDate   = new Date( zipEntry.getTime() );
+                Date zipEntryDate = new Date( zipEntry.getTime() );
 
                 extractFile( source, destDir, zipInputStream, zipEntryName, zipEntryDate, zipEntry.isDirectory() );
             }
@@ -143,7 +144,7 @@ public class Expand
             {
                 fileInputStream.close();
             }
-            catch( IOException ioe )
+            catch ( IOException ioe )
             {
                 // no worries, all is ok ...
             }
@@ -152,24 +153,20 @@ public class Expand
 
     /**
      * Extract a single ZipEntry.
-     *
+     * <p/>
      * <p><b>Note:</b> we kept this protected method for the sake of backward compatibility!</p>
      *
-     * @param archive the archive to unpack
-     * @param destDir the destination dirctory
+     * @param archive               the archive to unpack
+     * @param destDir               the destination dirctory
      * @param compressedInputStream
      * @param entryName
      * @param entryDate
      * @param isDirectory
      * @throws Exception
      */
-    protected void extractFile( File archive
-                              , File destDir
-                              , InputStream compressedInputStream
-                              , String entryName
-                              , Date entryDate
-                              , boolean isDirectory )
-            throws Exception
+    protected void extractFile( File archive, File destDir, InputStream compressedInputStream, String entryName,
+                                Date entryDate, boolean isDirectory )
+        throws Exception
     {
         File targetFile = new File( destDir, entryName );
 
@@ -181,8 +178,8 @@ public class Expand
         }
 
         if ( !targetFile.exists() ||
-             overwrite            ||
-             targetFile.lastModified() <= entryDate.getTime() )
+            overwrite ||
+            targetFile.lastModified() <= entryDate.getTime() )
         {
             if ( isDirectory )
             {
@@ -190,12 +187,12 @@ public class Expand
             }
             else
             {
-                byte[] buffer = new byte[ BUFFER_SIZE ];
+                byte[] buffer = new byte[BUFFER_SIZE];
                 FileOutputStream fileOutputStream = new FileOutputStream( targetFile );
                 try
                 {
                     int len;
-                    while( (len = compressedInputStream.read( buffer ) ) > 0)
+                    while ( ( len = compressedInputStream.read( buffer ) ) > 0 )
                     {
                         fileOutputStream.write( buffer, 0, len );
                     }
@@ -208,7 +205,7 @@ public class Expand
                     {
                         fileOutputStream.close();
                     }
-                    catch( IOException ioe )
+                    catch ( IOException ioe )
                     {
                         // no worries, all is ok ...
                     }
@@ -224,7 +221,7 @@ public class Expand
      * @throws IOException
      */
     private void deleteFileOrDir( File targetFile )
-            throws IOException
+        throws IOException
     {
         if ( targetFile.isDirectory() )
         {

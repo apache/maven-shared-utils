@@ -16,23 +16,22 @@ package org.apache.maven.shared.utils.introspection;
  * limitations under the License.
  */
 
-import org.apache.maven.shared.utils.StringUtils;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
-import java.util.WeakHashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.WeakHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.maven.shared.utils.StringUtils;
 
 
 /**
  * <p>Using simple dotted expressions to extract the values from an Object instance,
  * For example we might want to extract a value like: <code>project.build.sourceDirectory</code></p>
- *
+ * <p/>
  * <p>The implementation supports indexed, nested and mapped properties similar to the JSP way.</p>
  *
  * @author <a href="mailto:jason@maven.org">Jason van Zyl </a>
@@ -69,7 +68,7 @@ public class ReflectionValueExtractor
 
     /**
      * <p>The implementation supports indexed, nested and mapped properties.</p>
-     *
+     * <p/>
      * <ul>
      * <li>nested properties should be defined by a dot, i.e. "user.address.street"</li>
      * <li>indexed properties (java.util.List or array instance) should be contains <code>(\\w+)\\[(\\d+)\\]</code>
@@ -78,19 +77,19 @@ public class ReflectionValueExtractor
      * <ul>
      *
      * @param expression not null expression
-     * @param root not null object
+     * @param root       not null object
      * @return the object defined by the expression
      * @throws Exception if any
      */
     public static Object evaluate( String expression, Object root )
-            throws Exception
+        throws Exception
     {
         return evaluate( expression, root, true );
     }
 
     /**
      * <p>The implementation supports indexed, nested and mapped properties.</p>
-     *
+     * <p/>
      * <ul>
      * <li>nested properties should be defined by a dot, i.e. "user.address.street"</li>
      * <li>indexed properties (java.util.List or array instance) should be contains <code>(\\w+)\\[(\\d+)\\]</code>
@@ -99,13 +98,13 @@ public class ReflectionValueExtractor
      * <ul>
      *
      * @param expression not null expression
-     * @param root not null object
+     * @param root       not null object
      * @return the object defined by the expression
      * @throws Exception if any
      */
     // TODO: don't throw Exception
     public static Object evaluate( String expression, Object root, boolean trimRootToken )
-            throws Exception
+        throws Exception
     {
         // if the root token refers to the supplied root object parameter, remove it.
         if ( trimRootToken )
@@ -163,8 +162,8 @@ public class ReflectionValueExtractor
                 else
                 {
                     throw new Exception( "The token '" + token
-                            + "' refers to a java.util.List or an array, but the value seems is an instance of '"
-                            + value.getClass() + "'." );
+                                             + "' refers to a java.util.List or an array, but the value seems is an instance of '"
+                                             + value.getClass() + "'." );
                 }
             }
             else
@@ -189,8 +188,8 @@ public class ReflectionValueExtractor
                     else
                     {
                         throw new Exception( "The token '" + token
-                                + "' refers to a java.util.Map, but the value seems is an instance of '"
-                                + value.getClass() + "'." );
+                                                 + "' refers to a java.util.Map, but the value seems is an instance of '"
+                                                 + value.getClass() + "'." );
                     }
                 }
                 else

@@ -24,10 +24,6 @@ package org.apache.maven.shared.utils.cli;
  * SOFTWARE.
  */
 
-import org.apache.maven.shared.utils.Os;
-import org.apache.maven.shared.utils.StringUtils;
-import org.apache.maven.shared.utils.io.IOUtil;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,6 +38,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
+import org.apache.maven.shared.utils.Os;
+import org.apache.maven.shared.utils.StringUtils;
+import org.apache.maven.shared.utils.io.IOUtil;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l </a>
@@ -52,6 +51,7 @@ public abstract class CommandLineUtils
     /**
      * Sixteen-bit Unicode Transformation Format, little-endian byte order.
      * Every implementation of the Java platform is required to support this character encoding.
+     *
      * @see java.nio.charset.Charset
      */
     public static final String UTF_16LE = "UTF-16LE";
@@ -75,14 +75,16 @@ public abstract class CommandLineUtils
         }
     }
 
-    private static class ProcessHook extends Thread {
+    private static class ProcessHook
+        extends Thread
+    {
         private final Process process;
 
         private ProcessHook( Process process )
         {
-            super("CommandlineUtils process shutdown hook");
+            super( "CommandlineUtils process shutdown hook" );
             this.process = process;
-            this.setContextClassLoader(  null );
+            this.setContextClassLoader( null );
         }
 
         public void run()
@@ -133,6 +135,7 @@ public abstract class CommandLineUtils
 
     /**
      * Immediately forks a process, returns a callable that will block until process is complete.
+     *
      * @param cl               The command line to execute
      * @param systemIn         The input to read from, must be thread safe
      * @param systemOut        A consumer that receives output, must be thread safe
@@ -145,9 +148,9 @@ public abstract class CommandLineUtils
      * @noinspection ThrowableResultOfMethodCallIgnored
      */
     public static CommandLineCallable executeCommandLineAsCallable( final Commandline cl, final InputStream systemIn,
-                                                                  final StreamConsumer systemOut,
-                                                                  final StreamConsumer systemErr,
-                                                                  final int timeoutInSeconds )
+                                                                    final StreamConsumer systemOut,
+                                                                    final StreamConsumer systemErr,
+                                                                    final int timeoutInSeconds )
         throws CommandLineException
     {
         if ( cl == null )
@@ -157,8 +160,7 @@ public abstract class CommandLineUtils
 
         final Process p = cl.execute();
 
-        final StreamFeeder inputFeeder = systemIn != null ?
-             new StreamFeeder( systemIn, p.getOutputStream() ) : null;
+        final StreamFeeder inputFeeder = systemIn != null ? new StreamFeeder( systemIn, p.getOutputStream() ) : null;
 
         final StreamPumper outputPumper = new StreamPumper( p.getInputStream(), systemOut );
 
@@ -209,7 +211,8 @@ public abstract class CommandLineUtils
                         }
                         if ( isAlive( p ) )
                         {
-                            throw new InterruptedException( "Process timeout out after " + timeoutInSeconds + " seconds" );
+                            throw new InterruptedException(
+                                "Process timeout out after " + timeoutInSeconds + " seconds" );
                         }
 
                         returnValue = p.exitValue();
@@ -238,7 +241,8 @@ public abstract class CommandLineUtils
 
                     outputPumper.disable();
                     errorPumper.disable();
-                    throw new CommandLineTimeOutException( "Error while executing external command, process killed.", ex );
+                    throw new CommandLineTimeOutException( "Error while executing external command, process killed.",
+                                                           ex );
                 }
                 finally
                 {
@@ -344,7 +348,7 @@ public abstract class CommandLineUtils
 
             Runtime r = Runtime.getRuntime();
 
-             //If this is windows set the shell to command.com or cmd.exe with correct arguments.
+            //If this is windows set the shell to command.com or cmd.exe with correct arguments.
             boolean overriddenEncoding = false;
             if ( Os.isFamily( Os.FAMILY_WINDOWS ) )
             {
@@ -550,9 +554,9 @@ public abstract class CommandLineUtils
     @SuppressWarnings( { "JavaDoc", "UnusedDeclaration", "deprecation" } )
     public static String quote( String argument, boolean wrapExistingQuotes )
         throws CommandLineException
-        {
+    {
         return quote( argument, false, false, wrapExistingQuotes );
-        }
+    }
 
     /**
      * @deprecated Use {@link StringUtils#quoteAndEscape(String, char, char[], char[], char, boolean)},
@@ -640,7 +644,7 @@ public abstract class CommandLineUtils
     {
         try
         {
-            return System.class.getMethod( "getenv");
+            return System.class.getMethod( "getenv" );
         }
         catch ( NoSuchMethodException e )
         {

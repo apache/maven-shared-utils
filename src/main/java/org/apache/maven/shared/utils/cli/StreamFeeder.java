@@ -34,7 +34,9 @@ import java.io.OutputStream;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class StreamFeeder extends AbstractStreamHandler {
+public class StreamFeeder
+    extends AbstractStreamHandler
+{
     private InputStream input;
 
     private OutputStream output;
@@ -126,7 +128,7 @@ public class StreamFeeder extends AbstractStreamHandler {
     // ----------------------------------------------------------------------
 
     private void feed()
-            throws IOException
+        throws IOException
     {
         int data = input.read();
 
@@ -134,7 +136,7 @@ public class StreamFeeder extends AbstractStreamHandler {
         {
             synchronized ( output )
             {
-                if ( !isDisabled())
+                if ( !isDisabled() )
                 {
                     output.write( data );
                 }

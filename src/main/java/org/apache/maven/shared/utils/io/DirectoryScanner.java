@@ -19,67 +19,65 @@ package org.apache.maven.shared.utils.io;
  * under the License.
  */
 
-import org.apache.maven.shared.utils.ArrayUtils;
-import org.apache.maven.shared.utils.CollectionUtils;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.apache.maven.shared.utils.ArrayUtils;
+import org.apache.maven.shared.utils.CollectionUtils;
 
 /**
  * Class for scanning a directory for files/directories which match certain criteria.
- * <p>
+ * <p/>
  * These criteria consist of selectors and patterns which have been specified. With the selectors you can select which
  * files you want to have included. Files which are not selected are excluded. With patterns you can include or exclude
  * files based on their filename.
- * <p>
+ * <p/>
  * The idea is simple. A given directory is recursively scanned for all files and directories. Each file/directory is
  * matched against a set of selectors, including special support for matching against filenames with include and and
  * exclude patterns. Only files/directories which match at least one pattern of the include pattern list or other file
  * selector, and don't match any pattern of the exclude pattern list or fail to match against a required selector will
  * be placed in the list of files/directories found.
- * <p>
+ * <p/>
  * When no list of include patterns is supplied, "**" will be used, which means that everything will be matched. When no
  * list of exclude patterns is supplied, an empty list is used, such that nothing will be excluded. When no selectors
  * are supplied, none are applied.
- * <p>
+ * <p/>
  * The filename pattern matching is done as follows: The name to be matched is split up in path segments. A path segment
  * is the name of a directory or file, which is bounded by <code>File.separator</code> ('/' under UNIX, '\' under
  * Windows). For example, "abc/def/ghi/xyz.java" is split up in the segments "abc", "def","ghi" and "xyz.java". The same
  * is done for the pattern against which should be matched.
- * <p>
+ * <p/>
  * The segments of the name and the pattern are then matched against each other. When '**' is used for a path segment in
  * the pattern, it matches zero or more path segments of the name.
- * <p>
+ * <p/>
  * There is a special case regarding the use of <code>File.separator</code>s at the beginning of the pattern and the
  * string to match:<br>
  * When a pattern starts with a <code>File.separator</code>, the string to match must also start with a
  * <code>File.separator</code>. When a pattern does not start with a <code>File.separator</code>, the string to match
  * may not start with a <code>File.separator</code>. When one of these rules is not obeyed, the string will not match.
- * <p>
+ * <p/>
  * When a name path segment is matched against a pattern path segment, the following special characters can be used:<br>
  * '*' matches zero or more characters<br>
  * '?' matches one character.
- * <p>
+ * <p/>
  * Examples:
- * <p>
+ * <p/>
  * "**\*.class" matches all .class files/dirs in a directory tree.
- * <p>
+ * <p/>
  * "test\a??.java" matches all files/dirs which start with an 'a', then two more characters and then ".java", in a
  * directory called test.
- * <p>
+ * <p/>
  * "**" matches everything in a directory tree.
- * <p>
+ * <p/>
  * "**\test\**\XYZ*" matches all files/dirs which start with "XYZ" and where there is a parent directory called test
  * (e.g. "abc\test\def\ghi\XYZ123").
- * <p>
+ * <p/>
  * Case sensitivity may be turned off if necessary. By default, it is turned on.
- * <p>
+ * <p/>
  * Example of usage:
- *
+ * <p/>
  * <pre>
  * String[] includes = { &quot;**\\*.class&quot; };
  * String[] excludes = { &quot;modules\\*\\**&quot; };
@@ -96,10 +94,10 @@ import java.util.Set;
  *     System.out.println( files[i] );
  * }
  * </pre>
- *
+ * <p/>
  * This will scan a directory called test for .class files, but excludes all files in all proper subdirectories of a
  * directory called "modules"
- * <p>
+ * <p/>
  * This class must not be used from multiple Threads concurrently!
  *
  * @author Arnout J. Kuiper <a href="mailto:ajkuiper@wxs.nl">ajkuiper@wxs.nl</a>
@@ -160,13 +158,19 @@ public class DirectoryScanner
         // darcs
         "**/_darcs", "**/_darcs/**", "**/.darcsrepo", "**/.darcsrepo/**", "**/-darcs-backup*", "**/.darcs-temp-mail" };
 
-    /** The base directory to be scanned. */
+    /**
+     * The base directory to be scanned.
+     */
     protected File basedir;
 
-    /** The patterns for the files to be included. */
+    /**
+     * The patterns for the files to be included.
+     */
     protected String[] includes;
 
-    /** The patterns for the files to be excluded. */
+    /**
+     * The patterns for the files to be excluded.
+     */
     protected String[] excludes;
 
     private MatchPatterns excludesPatterns;
@@ -179,7 +183,9 @@ public class DirectoryScanner
      */
     protected List<String> filesIncluded;
 
-    /** The files which did not match any includes or selectors. */
+    /**
+     * The files which did not match any includes or selectors.
+     */
     protected List<String> filesNotIncluded;
 
     /**
@@ -192,7 +198,9 @@ public class DirectoryScanner
      */
     protected List<String> dirsIncluded;
 
-    /** The directories which were found and did not match any includes. */
+    /**
+     * The directories which were found and did not match any includes.
+     */
     protected List<String> dirsNotIncluded;
 
     /**
@@ -210,7 +218,9 @@ public class DirectoryScanner
      */
     protected List<String> dirsDeselected;
 
-    /** Whether or not our results were built by a slow scan. */
+    /**
+     * Whether or not our results were built by a slow scan.
+     */
     protected boolean haveSlowResults = false;
 
     /**
@@ -225,7 +235,9 @@ public class DirectoryScanner
      */
     private boolean followSymlinks = true;
 
-    /** Whether or not everything tested so far has been included. */
+    /**
+     * Whether or not everything tested so far has been included.
+     */
     protected boolean everythingIncluded = true;
 
     /**
@@ -247,12 +259,12 @@ public class DirectoryScanner
 
     /**
      * Tests whether or not a given path matches the start of a given pattern up to the first "**".
-     * <p>
+     * <p/>
      * This is not a general purpose test and should only be used if you can live with false positives. For example,
      * <code>pattern=**\a</code> and <code>str=b</code> will yield <code>true</code>.
      *
      * @param pattern The pattern to match against. Must not be <code>null</code>.
-     * @param str The path to match, as a String. Must not be <code>null</code>.
+     * @param str     The path to match, as a String. Must not be <code>null</code>.
      * @return whether or not a given path matches the start of a given pattern up to the first "**".
      */
     protected static boolean matchPatternStart( final String pattern, final String str )
@@ -262,12 +274,12 @@ public class DirectoryScanner
 
     /**
      * Tests whether or not a given path matches the start of a given pattern up to the first "**".
-     * <p>
+     * <p/>
      * This is not a general purpose test and should only be used if you can live with false positives. For example,
      * <code>pattern=**\a</code> and <code>str=b</code> will yield <code>true</code>.
      *
-     * @param pattern The pattern to match against. Must not be <code>null</code>.
-     * @param str The path to match, as a String. Must not be <code>null</code>.
+     * @param pattern         The pattern to match against. Must not be <code>null</code>.
+     * @param str             The path to match, as a String. Must not be <code>null</code>.
      * @param isCaseSensitive Whether or not matching should be performed case sensitively.
      * @return whether or not a given path matches the start of a given pattern up to the first "**".
      */
@@ -280,7 +292,7 @@ public class DirectoryScanner
      * Tests whether or not a given path matches a given pattern.
      *
      * @param pattern The pattern to match against. Must not be <code>null</code>.
-     * @param str The path to match, as a String. Must not be <code>null</code>.
+     * @param str     The path to match, as a String. Must not be <code>null</code>.
      * @return <code>true</code> if the pattern matches against the string, or <code>false</code> otherwise.
      */
     protected static boolean matchPath( final String pattern, final String str )
@@ -291,8 +303,8 @@ public class DirectoryScanner
     /**
      * Tests whether or not a given path matches a given pattern.
      *
-     * @param pattern The pattern to match against. Must not be <code>null</code>.
-     * @param str The path to match, as a String. Must not be <code>null</code>.
+     * @param pattern         The pattern to match against. Must not be <code>null</code>.
+     * @param str             The path to match, as a String. Must not be <code>null</code>.
      * @param isCaseSensitive Whether or not matching should be performed case sensitively.
      * @return <code>true</code> if the pattern matches against the string, or <code>false</code> otherwise.
      */
@@ -307,7 +319,7 @@ public class DirectoryScanner
      * '?' means one and only one character
      *
      * @param pattern The pattern to match against. Must not be <code>null</code>.
-     * @param str The string which must be matched against the pattern. Must not be <code>null</code>.
+     * @param str     The string which must be matched against the pattern. Must not be <code>null</code>.
      * @return <code>true</code> if the string matches against the pattern, or <code>false</code> otherwise.
      */
     public static boolean match( final String pattern, final String str )
@@ -320,8 +332,8 @@ public class DirectoryScanner
      * '*' means zero or more characters<br>
      * '?' means one and only one character
      *
-     * @param pattern The pattern to match against. Must not be <code>null</code>.
-     * @param str The string which must be matched against the pattern. Must not be <code>null</code>.
+     * @param pattern         The pattern to match against. Must not be <code>null</code>.
+     * @param str             The string which must be matched against the pattern. Must not be <code>null</code>.
      * @param isCaseSensitive Whether or not matching should be performed case sensitively.
      * @return <code>true</code> if the string matches against the pattern, or <code>false</code> otherwise.
      */
@@ -339,8 +351,7 @@ public class DirectoryScanner
      */
     public void setBasedir( final String basedir )
     {
-        setBasedir( new File( basedir.replace( '/', File.separatorChar )
-                                     .replace( '\\', File.separatorChar ) ) );
+        setBasedir( new File( basedir.replace( '/', File.separatorChar ).replace( '\\', File.separatorChar ) ) );
     }
 
     /**
@@ -386,11 +397,11 @@ public class DirectoryScanner
     /**
      * Sets the list of include patterns to use. All '/' and '\' characters are replaced by
      * <code>File.separatorChar</code>, so the separator used need not match <code>File.separatorChar</code>.
-     * <p>
+     * <p/>
      * When a pattern ends with a '/' or '\', "**" is appended.
      *
      * @param includes A list of include patterns. May be <code>null</code>, indicating that all files should be
-     *            included. If a non-<code>null</code> list is given, all elements must be non-<code>null</code>.
+     *                 included. If a non-<code>null</code> list is given, all elements must be non-<code>null</code>.
      */
     public void setIncludes( final String[] includes )
     {
@@ -404,9 +415,7 @@ public class DirectoryScanner
             for ( int i = 0; i < includes.length; i++ )
             {
                 String pattern;
-                pattern = includes[i].trim()
-                                     .replace( '/', File.separatorChar )
-                                     .replace( '\\', File.separatorChar );
+                pattern = includes[i].trim().replace( '/', File.separatorChar ).replace( '\\', File.separatorChar );
                 if ( pattern.endsWith( File.separator ) )
                 {
                     pattern += "**";
@@ -419,11 +428,11 @@ public class DirectoryScanner
     /**
      * Sets the list of exclude patterns to use. All '/' and '\' characters are replaced by
      * <code>File.separatorChar</code>, so the separator used need not match <code>File.separatorChar</code>.
-     * <p>
+     * <p/>
      * When a pattern ends with a '/' or '\', "**" is appended.
      *
      * @param excludes A list of exclude patterns. May be <code>null</code>, indicating that no files should be
-     *            excluded. If a non-<code>null</code> list is given, all elements must be non-<code>null</code>.
+     *                 excluded. If a non-<code>null</code> list is given, all elements must be non-<code>null</code>.
      */
     public void setExcludes( final String[] excludes )
     {
@@ -437,9 +446,7 @@ public class DirectoryScanner
             for ( int i = 0; i < excludes.length; i++ )
             {
                 String pattern;
-                pattern = excludes[i].trim()
-                                     .replace( '/', File.separatorChar )
-                                     .replace( '\\', File.separatorChar );
+                pattern = excludes[i].trim().replace( '/', File.separatorChar ).replace( '\\', File.separatorChar );
                 if ( pattern.endsWith( File.separator ) )
                 {
                     pattern += "**";
@@ -468,8 +475,8 @@ public class DirectoryScanner
      * Scans the base directory for files which match at least one include pattern and don't match any exclude patterns.
      * If there are selectors then the files must pass muster there, as well.
      *
-     * @exception IllegalStateException if the base directory was set incorrectly (i.e. if it is <code>null</code>,
-     *                doesn't exist, or isn't a directory).
+     * @throws IllegalStateException if the base directory was set incorrectly (i.e. if it is <code>null</code>,
+     *                               doesn't exist, or isn't a directory).
      */
     public void scan()
         throws IllegalStateException
@@ -542,11 +549,11 @@ public class DirectoryScanner
      * a previously captured list of files.
      * This method will not look for a changed in content but sole in the
      * list of files given.
-     *
+     * <p/>
      * The method will compare the given array of file Strings with the result
      * of the last directory scan. It will execute a {@link #scan()} if no
      * result of a previous scan could be found.
-     *
+     * <p/>
      * The result of the diff can be queried by the methods
      * {@link DirectoryScanResult#getFilesAdded()} and {@link DirectoryScanResult#getFilesRemoved()}
      *
@@ -560,7 +567,7 @@ public class DirectoryScanner
             scan();
         }
 
-        return diffFiles( oldFiles, filesIncluded.toArray( new String[ filesIncluded.size() ] ) );
+        return diffFiles( oldFiles, filesIncluded.toArray( new String[filesIncluded.size()] ) );
     }
 
     public static DirectoryScanResult diffFiles( String[] oldFiles, String[] newFiles )
@@ -587,8 +594,8 @@ public class DirectoryScanner
             }
         }
 
-        String[] filesAdded = added.toArray( new String[ added.size() ] );
-        String[] filesRemoved = removed.toArray( new String[ removed.size() ] );
+        String[] filesAdded = added.toArray( new String[added.size()] );
+        String[] filesRemoved = removed.toArray( new String[removed.size()] );
 
         return new DirectoryScanResult( filesAdded, filesRemoved );
     }
@@ -597,7 +604,7 @@ public class DirectoryScanner
      * Top level invocation for a slow scan. A slow scan builds up a full list of excluded/included files/directories,
      * whereas a fast scan will only have full results for included files, as it ignores directories which can't
      * possibly hold any included files/directories.
-     * <p>
+     * <p/>
      * Returns immediately if a slow scan has already been completed.
      */
     protected void slowScan()
@@ -607,20 +614,23 @@ public class DirectoryScanner
             return;
         }
 
-        final String[] excl = dirsExcluded.toArray( new String[] {} );
+        final String[] excl = dirsExcluded.toArray( new String[]{ } );
 
-        final String[] notIncl = dirsNotIncluded.toArray( new String[] {} );
+        final String[] notIncl = dirsNotIncluded.toArray( new String[]{ } );
 
-        for (String anExcl : excl) {
-            if (!couldHoldIncluded(anExcl)) {
-                scandir(new File(basedir, anExcl), anExcl + File.separator, false);
+        for ( String anExcl : excl )
+        {
+            if ( !couldHoldIncluded( anExcl ) )
+            {
+                scandir( new File( basedir, anExcl ), anExcl + File.separator, false );
             }
         }
 
-        for (String aNotIncl : notIncl)
+        for ( String aNotIncl : notIncl )
         {
-            if (!couldHoldIncluded(aNotIncl)) {
-                scandir(new File(basedir, aNotIncl), aNotIncl + File.separator, false);
+            if ( !couldHoldIncluded( aNotIncl ) )
+            {
+                scandir( new File( basedir, aNotIncl ), aNotIncl + File.separator, false );
             }
         }
 
@@ -632,10 +642,10 @@ public class DirectoryScanner
      * collections, based on the matching of includes, excludes, and the selectors. When a directory is found, it is
      * scanned recursively.
      *
-     * @param dir The directory to scan. Must not be <code>null</code>.
+     * @param dir   The directory to scan. Must not be <code>null</code>.
      * @param vpath The path relative to the base directory (needed to prevent problems with an absolute path when using
-     *            dir). Must not be <code>null</code>.
-     * @param fast Whether or not this call is part of a fast scan.
+     *              dir). Must not be <code>null</code>.
+     * @param fast  Whether or not this call is part of a fast scan.
      * @throws IOException
      * @see #filesIncluded
      * @see #filesNotIncluded
@@ -700,7 +710,7 @@ public class DirectoryScanner
                     noLinks.add( newfile );
                 }
             }
-            newfiles = noLinks.toArray( new String[] {} );
+            newfiles = noLinks.toArray( new String[]{ } );
         }
 
         for ( final String newfile : newfiles )
@@ -873,7 +883,7 @@ public class DirectoryScanner
      */
     protected boolean couldHoldIncluded( final String name )
     {
-        return includesPatterns.matchesPatternStart(name, isCaseSensitive);
+        return includesPatterns.matchesPatternStart( name, isCaseSensitive );
     }
 
     /**
@@ -885,7 +895,7 @@ public class DirectoryScanner
      */
     protected boolean isExcluded( final String name )
     {
-        return excludesPatterns.matches(name, isCaseSensitive);
+        return excludesPatterns.matches( name, isCaseSensitive );
     }
 
     /**
@@ -914,7 +924,7 @@ public class DirectoryScanner
         {
             return ArrayUtils.EMPTY_STRING_ARRAY;
         }
-        final String[] files = filesIncluded.toArray( new String[] {} );
+        final String[] files = filesIncluded.toArray( new String[]{ } );
         return files;
     }
 
@@ -928,7 +938,7 @@ public class DirectoryScanner
     public String[] getNotIncludedFiles()
     {
         slowScan();
-        final String[] files = filesNotIncluded.toArray( new String[] {} );
+        final String[] files = filesNotIncluded.toArray( new String[]{ } );
         return files;
     }
 
@@ -944,7 +954,7 @@ public class DirectoryScanner
     public String[] getExcludedFiles()
     {
         slowScan();
-        final String[] files = filesExcluded.toArray( new String[] {} );
+        final String[] files = filesExcluded.toArray( new String[]{ } );
         return files;
     }
 
@@ -963,7 +973,7 @@ public class DirectoryScanner
     public String[] getDeselectedFiles()
     {
         slowScan();
-        final String[] files = filesDeselected.toArray( new String[] {} );
+        final String[] files = filesDeselected.toArray( new String[]{ } );
         return files;
     }
 
@@ -976,7 +986,7 @@ public class DirectoryScanner
      */
     public String[] getIncludedDirectories()
     {
-        final String[] directories = dirsIncluded.toArray( new String[] {} );
+        final String[] directories = dirsIncluded.toArray( new String[]{ } );
         return directories;
     }
 
@@ -990,7 +1000,7 @@ public class DirectoryScanner
     public String[] getNotIncludedDirectories()
     {
         slowScan();
-        final String[] directories = dirsNotIncluded.toArray( new String[] {} );
+        final String[] directories = dirsNotIncluded.toArray( new String[]{ } );
         return directories;
     }
 
@@ -1006,7 +1016,7 @@ public class DirectoryScanner
     public String[] getExcludedDirectories()
     {
         slowScan();
-        final String[] directories = dirsExcluded.toArray( new String[] {} );
+        final String[] directories = dirsExcluded.toArray( new String[]{ } );
         return directories;
     }
 
@@ -1025,7 +1035,7 @@ public class DirectoryScanner
     public String[] getDeselectedDirectories()
     {
         slowScan();
-        final String[] directories = dirsDeselected.toArray( new String[] {} );
+        final String[] directories = dirsDeselected.toArray( new String[]{ } );
         return directories;
     }
 
@@ -1043,8 +1053,8 @@ public class DirectoryScanner
         }
         for ( int i = 0; i < DEFAULTEXCLUDES.length; i++ )
         {
-            newExcludes[i + excludesLength] = DEFAULTEXCLUDES[i].replace( '/', File.separatorChar )
-                                                                .replace( '\\', File.separatorChar );
+            newExcludes[i + excludesLength] =
+                DEFAULTEXCLUDES[i].replace( '/', File.separatorChar ).replace( '\\', File.separatorChar );
         }
         excludes = newExcludes;
     }
@@ -1057,7 +1067,7 @@ public class DirectoryScanner
      * </p>
      *
      * @param parent the parent directory of the file to test
-     * @param name the name of the file to test.
+     * @param name   the name of the file to test.
      * @since Ant 1.5
      */
     public boolean isSymbolicLink( final File parent, final String name )
@@ -1065,11 +1075,11 @@ public class DirectoryScanner
     {
         final File resolvedParent = new File( parent.getCanonicalPath() );
         final File toTest = new File( resolvedParent, name );
-        return !toTest.getAbsolutePath()
-                      .equals( toTest.getCanonicalPath() );
+        return !toTest.getAbsolutePath().equals( toTest.getCanonicalPath() );
     }
 
-    private void setupDefaultFilters() {
+    private void setupDefaultFilters()
+    {
         if ( includes == null )
         {
             // No includes supplied, so set it to 'matches all'

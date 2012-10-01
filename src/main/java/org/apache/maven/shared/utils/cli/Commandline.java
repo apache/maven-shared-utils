@@ -78,13 +78,6 @@ package org.apache.maven.shared.utils.cli;
  * ====================================================================
  */
 
-import org.apache.maven.shared.utils.Os;
-import org.apache.maven.shared.utils.StringUtils;
-import org.apache.maven.shared.utils.cli.shell.BourneShell;
-import org.apache.maven.shared.utils.cli.shell.CommandShell;
-import org.apache.maven.shared.utils.cli.shell.CmdShell;
-import org.apache.maven.shared.utils.cli.shell.Shell;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
@@ -93,6 +86,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Vector;
+import org.apache.maven.shared.utils.Os;
+import org.apache.maven.shared.utils.StringUtils;
+import org.apache.maven.shared.utils.cli.shell.BourneShell;
+import org.apache.maven.shared.utils.cli.shell.CmdShell;
+import org.apache.maven.shared.utils.cli.shell.CommandShell;
+import org.apache.maven.shared.utils.cli.shell.Shell;
 
 /**
  * <p/>
@@ -123,7 +122,7 @@ import java.util.Vector;
  * @author <a href="mailto:stefan.bodewig@epost.de">Stefan Bodewig</a>
  */
 public class Commandline
-        implements Cloneable
+    implements Cloneable
 {
     protected Vector arguments = new Vector();
 
@@ -142,7 +141,7 @@ public class Commandline
 
     /**
      * @deprecated Use {@link Commandline#setWorkingDirectory(File)} or
-     * {@link Commandline#setWorkingDirectory(String)} instead.
+     *             {@link Commandline#setWorkingDirectory(String)} instead.
      */
     private File workingDir;
 
@@ -381,7 +380,7 @@ public class Commandline
      * Adds an argument object to our list of args.
      *
      * @return the argument object.
-     * @see #addArg(Arg,boolean)
+     * @see #addArg(Arg, boolean)
      */
     public void addArg( Arg argument )
     {
@@ -448,7 +447,7 @@ public class Commandline
      * Add system environment variables
      */
     public void addSystemEnvironment()
-            throws Exception
+        throws Exception
     {
         Properties systemEnvVars = CommandLineUtils.getSystemEnvVars();
 
@@ -466,7 +465,7 @@ public class Commandline
      * Return the list of environment variables
      */
     public String[] getEnvironmentVariables()
-            throws CommandLineException
+        throws CommandLineException
     {
         try
         {
@@ -627,7 +626,7 @@ public class Commandline
      * Executes the command.
      */
     public Process execute()
-            throws CommandLineException
+        throws CommandLineException
     {
         // TODO: Provided only for backward compat. with <= 1.4
         verifyShellState();
@@ -650,13 +649,13 @@ public class Commandline
             {
                 if ( !workingDir.exists() )
                 {
-                    throw new CommandLineException( "Working directory \"" + workingDir.getPath()
-                            + "\" does not exist!" );
+                    throw new CommandLineException(
+                        "Working directory \"" + workingDir.getPath() + "\" does not exist!" );
                 }
                 else if ( !workingDir.isDirectory() )
                 {
-                    throw new CommandLineException( "Path \"" + workingDir.getPath()
-                            + "\" does not specify a directory." );
+                    throw new CommandLineException(
+                        "Path \"" + workingDir.getPath() + "\" does not specify a directory." );
                 }
 
                 process = Runtime.getRuntime().exec( getShellCommandline(), environment, workingDir );
@@ -687,7 +686,7 @@ public class Commandline
     }
 
     public Properties getSystemEnvVars()
-            throws Exception
+        throws Exception
     {
         return CommandLineUtils.getSystemEnvVars();
     }
@@ -717,7 +716,7 @@ public class Commandline
      * @deprecated Use {@link CommandLineUtils#translateCommandline(String)} instead.
      */
     public static String[] translateCommandline( String toProcess )
-            throws Exception
+        throws Exception
     {
         return CommandLineUtils.translateCommandline( toProcess );
     }
@@ -726,7 +725,7 @@ public class Commandline
      * @deprecated Use {@link CommandLineUtils#quote(String)} instead.
      */
     public static String quoteArgument( String argument )
-            throws CommandLineException
+        throws CommandLineException
     {
         return CommandLineUtils.quote( argument );
     }
@@ -740,7 +739,7 @@ public class Commandline
     }
 
     public static class Argument
-            implements Arg
+        implements Arg
     {
         private String[] parts;
 
@@ -751,7 +750,7 @@ public class Commandline
         {
             if ( value != null )
             {
-                parts = new String[] { value };
+                parts = new String[]{ value };
             }
         }
 
@@ -779,7 +778,7 @@ public class Commandline
          */
         public void setFile( File value )
         {
-            parts = new String[] { value.getAbsolutePath() };
+            parts = new String[]{ value.getAbsolutePath() };
         }
 
         /* (non-Javadoc)

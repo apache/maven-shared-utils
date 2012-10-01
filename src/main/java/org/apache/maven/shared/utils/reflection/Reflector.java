@@ -23,7 +23,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,7 +40,9 @@ public final class Reflector
 
     private HashMap classMaps = new HashMap();
 
-    /** Ensure no instances of Reflector are created...this is a utility. */
+    /**
+     * Ensure no instances of Reflector are created...this is a utility.
+     */
     public Reflector()
     {
     }
@@ -51,13 +52,10 @@ public final class Reflector
      * constructor caching to find a constructor that matches the parameter
      * types, either specifically (first choice) or abstractly...
      *
-     * @param theClass
-     *            The class to instantiate
-     * @param params
-     *            The parameters to pass to the constructor
+     * @param theClass The class to instantiate
+     * @param params   The parameters to pass to the constructor
      * @return The instantiated object
-     * @throws ReflectorException
-     *             In case anything goes wrong here...
+     * @throws ReflectorException In case anything goes wrong here...
      */
     public Object newInstance( Class theClass, Object[] params )
         throws ReflectorException
@@ -118,13 +116,10 @@ public final class Reflector
      * parameters... Uses constructor caching to find a constructor that matches
      * the parameter types, either specifically (first choice) or abstractly...
      *
-     * @param theClass
-     *            The class to retrieve the singleton of
-     * @param initParams
-     *            The parameters to pass to the constructor
+     * @param theClass   The class to retrieve the singleton of
+     * @param initParams The parameters to pass to the constructor
      * @return The singleton object
-     * @throws ReflectorException
-     *             In case anything goes wrong here...
+     * @throws ReflectorException In case anything goes wrong here...
      */
     public Object getSingleton( Class theClass, Object[] initParams )
         throws ReflectorException
@@ -156,15 +151,11 @@ public final class Reflector
      * Invoke the specified method on the specified target with the specified
      * params...
      *
-     * @param target
-     *            The target of the invocation
-     * @param methodName
-     *            The method name to invoke
-     * @param params
-     *            The parameters to pass to the method invocation
+     * @param target     The target of the invocation
+     * @param methodName The method name to invoke
+     * @param params     The parameters to pass to the method invocation
      * @return The result of the method call
-     * @throws ReflectorException
-     *             In case of an error looking up or invoking the method.
+     * @throws ReflectorException In case of an error looking up or invoking the method.
      */
     public Object invoke( Object target, String methodName, Object[] params )
         throws ReflectorException
@@ -189,8 +180,8 @@ public final class Reflector
             {
                 StringBuffer buffer = new StringBuffer();
 
-                buffer.append( "Singleton-producing method named '" ).append( methodName )
-                      .append( "' not found with specified parameter classes: " );
+                buffer.append( "Singleton-producing method named '" ).append( methodName ).append(
+                    "' not found with specified parameter classes: " );
 
                 for ( int i = 0; i < paramTypes.length; i++ )
                 {
@@ -281,7 +272,9 @@ public final class Reflector
             catch ( NoSuchFieldException e )
             {
                 if ( targetClass == Object.class )
+                {
                     throw new ReflectorException( e );
+                }
                 targetClass = targetClass.getSuperclass();
             }
             catch ( IllegalAccessException e )
@@ -296,15 +289,11 @@ public final class Reflector
     /**
      * Invoke the specified static method with the specified params...
      *
-     * @param targetClass
-     *            The target class of the invocation
-     * @param methodName
-     *            The method name to invoke
-     * @param params
-     *            The parameters to pass to the method invocation
+     * @param targetClass The target class of the invocation
+     * @param methodName  The method name to invoke
+     * @param params      The parameters to pass to the method invocation
      * @return The result of the method call
-     * @throws ReflectorException
-     *             In case of an error looking up or invoking the method.
+     * @throws ReflectorException In case of an error looking up or invoking the method.
      */
     public Object invokeStatic( Class targetClass, String methodName, Object[] params )
         throws ReflectorException
@@ -330,7 +319,7 @@ public final class Reflector
                 StringBuffer buffer = new StringBuffer();
 
                 buffer.append( "Singleton-producing method named \'" + methodName
-                    + "\' not found with specified parameter classes: " );
+                                   + "\' not found with specified parameter classes: " );
 
                 for ( int i = 0; i < paramTypes.length; i++ )
                 {
@@ -359,14 +348,11 @@ public final class Reflector
      * Return the constructor, checking the cache first and storing in cache if
      * not already there..
      *
-     * @param targetClass
-     *            The class to get the constructor from
-     * @param params
-     *            The classes of the parameters which the constructor should
-     *            match.
+     * @param targetClass The class to get the constructor from
+     * @param params      The classes of the parameters which the constructor should
+     *                    match.
      * @return the Constructor object that matches.
-     * @throws ReflectorException
-     *             In case we can't retrieve the proper constructor.
+     * @throws ReflectorException In case we can't retrieve the proper constructor.
      */
     public Constructor getConstructor( Class targetClass, Class[] params )
         throws ReflectorException
@@ -428,8 +414,8 @@ public final class Reflector
 
         if ( constructor == null )
         {
-            throw new ReflectorException( "Error retrieving constructor object for: " + targetClass.getName()
-                + paramKey );
+            throw new ReflectorException(
+                "Error retrieving constructor object for: " + targetClass.getName() + paramKey );
         }
 
         return constructor;
@@ -452,7 +438,7 @@ public final class Reflector
         }
 
         Class targetClass = target.getClass();
-        Class[] emptyParams = {};
+        Class[] emptyParams = { };
 
         Method method = _getMethod( targetClass, beanAccessor, emptyParams );
         if ( method == null )
@@ -463,17 +449,17 @@ public final class Reflector
         {
             try
             {
-                returnValue = method.invoke( target, new Object[] {} );
+                returnValue = method.invoke( target, new Object[]{ } );
             }
             catch ( IllegalAccessException e )
             {
-                throw new ReflectorException( "Error retrieving property \'" + propertyName + "\' from \'"
-                    + targetClass + "\'", e );
+                throw new ReflectorException(
+                    "Error retrieving property \'" + propertyName + "\' from \'" + targetClass + "\'", e );
             }
             catch ( InvocationTargetException e )
             {
-                throw new ReflectorException( "Error retrieving property \'" + propertyName + "\' from \'"
-                    + targetClass + "\'", e );
+                throw new ReflectorException(
+                    "Error retrieving property \'" + propertyName + "\' from \'" + targetClass + "\'", e );
             }
         }
 
@@ -481,17 +467,17 @@ public final class Reflector
         {
             try
             {
-                returnValue = method.invoke( target, new Object[] {} );
+                returnValue = method.invoke( target, new Object[]{ } );
             }
             catch ( IllegalAccessException e )
             {
-                throw new ReflectorException( "Error retrieving property \'" + propertyName + "\' from \'"
-                    + targetClass + "\'", e );
+                throw new ReflectorException(
+                    "Error retrieving property \'" + propertyName + "\' from \'" + targetClass + "\'", e );
             }
             catch ( InvocationTargetException e )
             {
-                throw new ReflectorException( "Error retrieving property \'" + propertyName + "\' from \'"
-                    + targetClass + "\'", e );
+                throw new ReflectorException(
+                    "Error retrieving property \'" + propertyName + "\' from \'" + targetClass + "\'", e );
             }
         }
         else
@@ -500,9 +486,10 @@ public final class Reflector
             if ( method == null && returnValue == null )
             {
                 // TODO: Check if exception is the right action! Field exists, but contains null
-                throw new ReflectorException( "Neither method: \'" + propertyName + "\' nor bean accessor: \'"
-                    + beanAccessor + "\' can be found for class: \'" + targetClass
-                    + "\', and retrieval of field: \'" + propertyName + "\' returned null as value." );
+                throw new ReflectorException(
+                    "Neither method: \'" + propertyName + "\' nor bean accessor: \'" + beanAccessor
+                        + "\' can be found for class: \'" + targetClass + "\', and retrieval of field: \'"
+                        + propertyName + "\' returned null as value." );
             }
         }
 
@@ -513,13 +500,10 @@ public final class Reflector
      * Return the method, checking the cache first and storing in cache if not
      * already there..
      *
-     * @param targetClass
-     *            The class to get the method from
-     * @param params
-     *            The classes of the parameters which the method should match.
+     * @param targetClass The class to get the method from
+     * @param params      The classes of the parameters which the method should match.
      * @return the Method object that matches.
-     * @throws ReflectorException
-     *             In case we can't retrieve the proper method.
+     * @throws ReflectorException In case we can't retrieve the proper method.
      */
     public Method getMethod( Class targetClass, String methodName, Class[] params )
         throws ReflectorException
@@ -528,8 +512,8 @@ public final class Reflector
 
         if ( method == null )
         {
-            throw new ReflectorException( "Method: \'" + methodName + "\' not found in class: \'" + targetClass
-                + "\'" );
+            throw new ReflectorException(
+                "Method: \'" + methodName + "\' not found in class: \'" + targetClass + "\'" );
         }
 
         return method;
@@ -601,11 +585,9 @@ public final class Reflector
     /**
      * Retrieve the cache of constructors for the specified class.
      *
-     * @param theClass
-     *            the class to lookup.
+     * @param theClass the class to lookup.
      * @return The cache of constructors.
-     * @throws ReflectorException
-     *             in case of a lookup error.
+     * @throws ReflectorException in case of a lookup error.
      */
     private Map getConstructorMap( Class theClass )
         throws ReflectorException
@@ -616,13 +598,10 @@ public final class Reflector
     /**
      * Retrieve the cache of methods for the specified class and method name.
      *
-     * @param theClass
-     *            the class to lookup.
-     * @param methodName
-     *            The name of the method to lookup.
+     * @param theClass   the class to lookup.
+     * @param methodName The name of the method to lookup.
      * @return The cache of constructors.
-     * @throws ReflectorException
-     *             in case of a lookup error.
+     * @throws ReflectorException in case of a lookup error.
      */
     private Map getMethodMap( Class theClass, String methodName )
         throws ReflectorException

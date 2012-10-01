@@ -29,6 +29,7 @@ public class DirectoryScanResult
     private final static String[] NO_FILES = new String[0];
 
     private String[] filesAdded;
+
     private String[] filesRemoved;
 
     public DirectoryScanResult( String[] filesAdded, String[] filesRemoved )

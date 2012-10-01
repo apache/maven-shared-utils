@@ -24,12 +24,12 @@ import java.io.File;
 
 /**
  * <p>Visitor pattern for the DirectoryScanner. A ScanConductor controls the scanning process.</p>
- *
+ * <p/>
  * <p>Create an instance and pass it to
  * {@link org.apache.maven.shared.utils.io.DirectoryScanner#setScanConductor(ScanConductor)}.
  * You will get notified about every visited directory and file. You can use the {@link ScanAction}
  * to control what should happen next.</p>
- *
+ * <p/>
  * <p>A ScanConductor might also store own information but users must make sure that the state gets
  * cleaned between two scan() invocations.</p>
  *
@@ -68,7 +68,7 @@ public interface ScanConductor
     /**
      * This method will get invoked for every detected directory.
      *
-     * @param name the directory name (contains parent folders up to the pwd)
+     * @param name      the directory name (contains parent folders up to the pwd)
      * @param directory
      * @return the ScanAction to control how to proceed with the scanning
      */

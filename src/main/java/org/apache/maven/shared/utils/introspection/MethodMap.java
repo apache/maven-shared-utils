@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
  * @author <a href="mailto:bob@werken.com">Bob McWhirter</a>
  * @author <a href="mailto:Christoph.Reck@dlr.de">Christoph Reck</a>
@@ -36,7 +35,9 @@ import java.util.Map;
 public class MethodMap
 {
     private static final int MORE_SPECIFIC = 0;
+
     private static final int LESS_SPECIFIC = 1;
+
     private static final int INCOMPARABLE = 2;
 
     /**
@@ -48,21 +49,22 @@ public class MethodMap
      * Add a method to a list of methods by name.
      * For a particular class we are keeping track
      * of all the methods with the same name.
+     *
      * @param method The method
      */
-    public void add(Method method)
+    public void add( Method method )
     {
         String methodName = method.getName();
 
         List<Method> l = get( methodName );
 
-        if ( l == null)
+        if ( l == null )
         {
             l = new ArrayList<Method>();
-            methodByNameMap.put(methodName, l);
+            methodByNameMap.put( methodName, l );
         }
 
-        l.add(method);
+        l.add( method );
     }
 
     /**
@@ -71,45 +73,45 @@ public class MethodMap
      * @param key The name of the method.
      * @return List list of methods
      */
-    public List<Method> get(String key)
+    public List<Method> get( String key )
     {
-        return methodByNameMap.get(key);
+        return methodByNameMap.get( key );
     }
 
     /**
-     *  <p>
-     *  Find a method.  Attempts to find the
-     *  most specific applicable method using the
-     *  algorithm described in the JLS section
-     *  15.12.2 (with the exception that it can't
-     *  distinguish a primitive type argument from
-     *  an object type argument, since in reflection
-     *  primitive type arguments are represented by
-     *  their object counterparts, so for an argument of
-     *  type (say) java.lang.Integer, it will not be able
-     *  to decide between a method that takes int and a
-     *  method that takes java.lang.Integer as a parameter.
-     *  </p>
+     * <p>
+     * Find a method.  Attempts to find the
+     * most specific applicable method using the
+     * algorithm described in the JLS section
+     * 15.12.2 (with the exception that it can't
+     * distinguish a primitive type argument from
+     * an object type argument, since in reflection
+     * primitive type arguments are represented by
+     * their object counterparts, so for an argument of
+     * type (say) java.lang.Integer, it will not be able
+     * to decide between a method that takes int and a
+     * method that takes java.lang.Integer as a parameter.
+     * </p>
+     * <p/>
+     * <p>
+     * This turns out to be a relatively rare case
+     * where this is needed - however, functionality
+     * like this is needed.
+     * </p>
      *
-     *  <p>
-     *  This turns out to be a relatively rare case
-     *  where this is needed - however, functionality
-     *  like this is needed.
-     *  </p>
-     *
-     *  @param methodName name of method
-     *  @param args the actual arguments with which the method is called
-     *  @return the most specific applicable method, or null if no
-     *  method is applicable.
-     *  @throws AmbiguousException if there is more than one maximally
-     *  specific applicable method
+     * @param methodName name of method
+     * @param args       the actual arguments with which the method is called
+     * @return the most specific applicable method, or null if no
+     *         method is applicable.
+     * @throws AmbiguousException if there is more than one maximally
+     *                            specific applicable method
      */
-    public Method find(String methodName, Object[] args)
+    public Method find( String methodName, Object[] args )
         throws AmbiguousException
     {
-        List methodList = get(methodName);
+        List methodList = get( methodName );
 
-        if (methodList == null)
+        if ( methodList == null )
         {
             return null;
         }
@@ -117,7 +119,7 @@ public class MethodMap
         int l = args.length;
         Class[] classes = new Class[l];
 
-        for(int i = 0; i < l; ++i)
+        for ( int i = 0; i < l; ++i )
         {
             Object arg = args[i];
 
@@ -125,33 +127,33 @@ public class MethodMap
              * if we are careful down below, a null argument goes in there
              * so we can know that the null was passed to the method
              */
-            classes[i] =
-                    arg == null ? null : arg.getClass();
+            classes[i] = arg == null ? null : arg.getClass();
         }
 
-        return getMostSpecific(methodList, classes);
+        return getMostSpecific( methodList, classes );
     }
 
     /**
-     *  simple distinguishable exception, used when
-     *  we run across ambiguous overloading
+     * simple distinguishable exception, used when
+     * we run across ambiguous overloading
      */
-    public static class AmbiguousException extends Exception
+    public static class AmbiguousException
+        extends Exception
     {
     }
 
 
-    private static Method getMostSpecific(List methods, Class[] classes)
+    private static Method getMostSpecific( List methods, Class[] classes )
         throws AmbiguousException
     {
-        LinkedList<Method> applicables = getApplicables(methods, classes);
+        LinkedList<Method> applicables = getApplicables( methods, classes );
 
-        if(applicables.isEmpty())
+        if ( applicables.isEmpty() )
         {
             return null;
         }
 
-        if(applicables.size() == 1)
+        if ( applicables.size() == 1 )
         {
             return applicables.getFirst();
         }
@@ -207,7 +209,7 @@ public class MethodMap
             }
         }
 
-        if(maximals.size() > 1)
+        if ( maximals.size() > 1 )
         {
             // We have more than one maximally specific method
             throw new AmbiguousException();
@@ -219,32 +221,29 @@ public class MethodMap
     /**
      * Determines which method signature (represented by a class array) is more
      * specific. This defines a partial ordering on the method signatures.
+     *
      * @param c1 first signature to compare
      * @param c2 second signature to compare
      * @return MORE_SPECIFIC if c1 is more specific than c2, LESS_SPECIFIC if
-     * c1 is less specific than c2, INCOMPARABLE if they are incomparable.
+     *         c1 is less specific than c2, INCOMPARABLE if they are incomparable.
      */
-    private static int moreSpecific(Class[] c1, Class[] c2)
+    private static int moreSpecific( Class[] c1, Class[] c2 )
     {
         boolean c1MoreSpecific = false;
         boolean c2MoreSpecific = false;
 
-        for(int i = 0; i < c1.length; ++i)
+        for ( int i = 0; i < c1.length; ++i )
         {
-            if(c1[i] != c2[i])
+            if ( c1[i] != c2[i] )
             {
-                c1MoreSpecific =
-                    c1MoreSpecific ||
-                    isStrictMethodInvocationConvertible(c2[i], c1[i]);
-                c2MoreSpecific =
-                    c2MoreSpecific ||
-                    isStrictMethodInvocationConvertible(c1[i], c2[i]);
+                c1MoreSpecific = c1MoreSpecific || isStrictMethodInvocationConvertible( c2[i], c1[i] );
+                c2MoreSpecific = c2MoreSpecific || isStrictMethodInvocationConvertible( c1[i], c2[i] );
             }
         }
 
-        if(c1MoreSpecific)
+        if ( c1MoreSpecific )
         {
-            if(c2MoreSpecific)
+            if ( c2MoreSpecific )
             {
                 /*
                  *  Incomparable due to cross-assignable arguments (i.e.
@@ -257,7 +256,7 @@ public class MethodMap
             return MORE_SPECIFIC;
         }
 
-        if(c2MoreSpecific)
+        if ( c2MoreSpecific )
         {
             return LESS_SPECIFIC;
         }
@@ -272,13 +271,14 @@ public class MethodMap
 
     /**
      * Returns all methods that are applicable to actual argument types.
+     *
      * @param methods list of all candidate methods
      * @param classes the actual types of the arguments
      * @return a list that contains only applicable methods (number of
-     * formal and actual arguments matches, and argument types are assignable
-     * to formal types through a method invocation conversion).
+     *         formal and actual arguments matches, and argument types are assignable
+     *         to formal types through a method invocation conversion).
      */
-    private static LinkedList<Method> getApplicables(List methods, Class[] classes)
+    private static LinkedList<Method> getApplicables( List methods, Class[] classes )
     {
         LinkedList<Method> list = new LinkedList<Method>();
 
@@ -298,22 +298,23 @@ public class MethodMap
     /**
      * Returns true if the supplied method is applicable to actual
      * argument types.
-     * @param method The method to check for applicability
+     *
+     * @param method  The method to check for applicability
      * @param classes The arguments
      * @return true if the method applies to the parameter types
      */
-    private static boolean isApplicable(Method method, Class[] classes)
+    private static boolean isApplicable( Method method, Class[] classes )
     {
         Class[] methodArgs = method.getParameterTypes();
 
-        if(methodArgs.length != classes.length)
+        if ( methodArgs.length != classes.length )
         {
             return false;
         }
 
-        for(int i = 0; i < classes.length; ++i)
+        for ( int i = 0; i < classes.length; ++i )
         {
-            if(!isMethodInvocationConvertible(methodArgs[i], classes[i]))
+            if ( !isMethodInvocationConvertible( methodArgs[i], classes[i] ) )
             {
                 return false;
             }
@@ -333,20 +334,19 @@ public class MethodMap
      * their object duals in reflective method calls.
      *
      * @param formal the formal parameter type to which the actual
-     * parameter type should be convertible
+     *               parameter type should be convertible
      * @param actual the actual parameter type.
      * @return true if either formal type is assignable from actual type,
-     * or formal is a primitive type and actual is its corresponding object
-     * type or an object type of a primitive type that can be converted to
-     * the formal type.
+     *         or formal is a primitive type and actual is its corresponding object
+     *         type or an object type of a primitive type that can be converted to
+     *         the formal type.
      */
-    private static boolean isMethodInvocationConvertible(Class formal,
-                                                         Class actual)
+    private static boolean isMethodInvocationConvertible( Class formal, Class actual )
     {
         /*
          * if it's a null, it means the arg was null
          */
-        if (actual == null && !formal.isPrimitive())
+        if ( actual == null && !formal.isPrimitive() )
         {
             return true;
         }
@@ -355,7 +355,7 @@ public class MethodMap
          *  Check for identity or widening reference conversion
          */
 
-        if (actual != null && formal.isAssignableFrom(actual))
+        if ( actual != null && formal.isAssignableFrom( actual ) )
         {
             return true;
         }
@@ -365,35 +365,46 @@ public class MethodMap
          * actual parameters are never primitives.
          */
 
-        if (formal.isPrimitive())
+        if ( formal.isPrimitive() )
         {
-            if(formal == Boolean.TYPE && actual == Boolean.class)
+            if ( formal == Boolean.TYPE && actual == Boolean.class )
+            {
                 return true;
-            if(formal == Character.TYPE && actual == Character.class)
+            }
+            if ( formal == Character.TYPE && actual == Character.class )
+            {
                 return true;
-            if(formal == Byte.TYPE && actual == Byte.class)
+            }
+            if ( formal == Byte.TYPE && actual == Byte.class )
+            {
                 return true;
-            if(formal == Short.TYPE &&
-               (actual == Short.class || actual == Byte.class))
+            }
+            if ( formal == Short.TYPE && ( actual == Short.class || actual == Byte.class ) )
+            {
                 return true;
-            if(formal == Integer.TYPE &&
-               (actual == Integer.class || actual == Short.class ||
-                actual == Byte.class))
+            }
+            if ( formal == Integer.TYPE && ( actual == Integer.class || actual == Short.class ||
+                actual == Byte.class ) )
+            {
                 return true;
-            if(formal == Long.TYPE &&
-               (actual == Long.class || actual == Integer.class ||
-                actual == Short.class || actual == Byte.class))
+            }
+            if ( formal == Long.TYPE && ( actual == Long.class || actual == Integer.class ||
+                actual == Short.class || actual == Byte.class ) )
+            {
                 return true;
-            if(formal == Float.TYPE &&
-               (actual == Float.class || actual == Long.class ||
+            }
+            if ( formal == Float.TYPE && ( actual == Float.class || actual == Long.class ||
                 actual == Integer.class || actual == Short.class ||
-                actual == Byte.class))
+                actual == Byte.class ) )
+            {
                 return true;
-            if(formal == Double.TYPE &&
-               (actual == Double.class || actual == Float.class ||
+            }
+            if ( formal == Double.TYPE && ( actual == Double.class || actual == Float.class ||
                 actual == Long.class || actual == Integer.class ||
-                actual == Short.class || actual == Byte.class))
+                actual == Short.class || actual == Byte.class ) )
+            {
                 return true;
+            }
         }
 
         return false;
@@ -407,19 +418,18 @@ public class MethodMap
      * comparing signatures of methods.
      *
      * @param formal the formal parameter type to which the actual
-     * parameter type should be convertible
+     *               parameter type should be convertible
      * @param actual the actual parameter type.
      * @return true if either formal type is assignable from actual type,
-     * or formal and actual are both primitive types and actual can be
-     * subject to widening conversion to formal.
+     *         or formal and actual are both primitive types and actual can be
+     *         subject to widening conversion to formal.
      */
-    private static boolean isStrictMethodInvocationConvertible(Class formal,
-                                                               Class actual)
+    private static boolean isStrictMethodInvocationConvertible( Class formal, Class actual )
     {
         /*
          * we shouldn't get a null into, but if so
          */
-        if (actual == null && !formal.isPrimitive())
+        if ( actual == null && !formal.isPrimitive() )
         {
             return true;
         }
@@ -428,7 +438,7 @@ public class MethodMap
          *  Check for identity or widening reference conversion
          */
 
-        if(formal.isAssignableFrom(actual))
+        if ( formal.isAssignableFrom( actual ) )
         {
             return true;
         }
@@ -437,26 +447,32 @@ public class MethodMap
          *  Check for widening primitive conversion.
          */
 
-        if(formal.isPrimitive())
+        if ( formal.isPrimitive() )
         {
-            if(formal == Short.TYPE && (actual == Byte.TYPE))
+            if ( formal == Short.TYPE && ( actual == Byte.TYPE ) )
+            {
                 return true;
-            if(formal == Integer.TYPE &&
-               (actual == Short.TYPE || actual == Byte.TYPE))
+            }
+            if ( formal == Integer.TYPE && ( actual == Short.TYPE || actual == Byte.TYPE ) )
+            {
                 return true;
-            if(formal == Long.TYPE &&
-               (actual == Integer.TYPE || actual == Short.TYPE ||
-                actual == Byte.TYPE))
+            }
+            if ( formal == Long.TYPE && ( actual == Integer.TYPE || actual == Short.TYPE ||
+                actual == Byte.TYPE ) )
+            {
                 return true;
-            if(formal == Float.TYPE &&
-               (actual == Long.TYPE || actual == Integer.TYPE ||
-                actual == Short.TYPE || actual == Byte.TYPE))
+            }
+            if ( formal == Float.TYPE && ( actual == Long.TYPE || actual == Integer.TYPE ||
+                actual == Short.TYPE || actual == Byte.TYPE ) )
+            {
                 return true;
-            if(formal == Double.TYPE &&
-               (actual == Float.TYPE || actual == Long.TYPE ||
+            }
+            if ( formal == Double.TYPE && ( actual == Float.TYPE || actual == Long.TYPE ||
                 actual == Integer.TYPE || actual == Short.TYPE ||
-                actual == Byte.TYPE))
+                actual == Byte.TYPE ) )
+            {
                 return true;
+            }
         }
         return false;
     }

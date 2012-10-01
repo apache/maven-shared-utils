@@ -20,11 +20,10 @@ package org.apache.maven.shared.utils.cli.shell;
  */
 
 
-import org.apache.maven.shared.utils.Os;
-import org.apache.maven.shared.utils.StringUtils;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.maven.shared.utils.Os;
+import org.apache.maven.shared.utils.StringUtils;
 
 /**
  * @author Jason van Zyl
@@ -32,23 +31,8 @@ import java.util.List;
 public class BourneShell
     extends Shell
 {
-    private static final char[] BASH_QUOTING_TRIGGER_CHARS = {
-        ' ',
-        '$',
-        ';',
-        '&',
-        '|',
-        '<',
-        '>',
-        '*',
-        '?',
-        '(',
-        ')',
-        '[',
-        ']',
-        '{',
-        '}',
-        '`' };
+    private static final char[] BASH_QUOTING_TRIGGER_CHARS =
+        { ' ', '$', ';', '&', '|', '<', '>', '*', '?', '(', ')', '[', ']', '{', '}', '`' };
 
     public BourneShell()
     {
@@ -70,7 +54,9 @@ public class BourneShell
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public String getExecutable()
     {
         if ( Os.isFamily( Os.FAMILY_WINDOWS ) )
@@ -78,7 +64,7 @@ public class BourneShell
             return super.getExecutable();
         }
 
-        return unifyQuotes( super.getExecutable());
+        return unifyQuotes( super.getExecutable() );
     }
 
     public List<String> getShellArgsList()
@@ -141,7 +127,7 @@ public class BourneShell
 
     /**
      * <p>Unify quotes in a path for the Bourne Shell.</p>
-     *
+     * <p/>
      * <pre>
      * BourneShell.unifyQuotes(null)                       = null
      * BourneShell.unifyQuotes("")                         = (empty)

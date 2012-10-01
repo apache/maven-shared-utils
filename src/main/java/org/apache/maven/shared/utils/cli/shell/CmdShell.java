@@ -39,7 +39,7 @@ public class CmdShell
     {
         setShellCommand( "cmd.exe" );
         setQuotedExecutableEnabled( true );
-        setShellArgs( new String[]{"/X", "/C"} );
+        setShellArgs( new String[]{ "/X", "/C" } );
     }
 
     /**
@@ -52,7 +52,7 @@ public class CmdShell
      * <p>
      * From cmd.exe /? output:
      * </p>
-     *
+     * <p/>
      * <pre>
      *      If /C or /K is specified, then the remainder of the command line after
      *      the switch is processed as a command line, where the following logic is
@@ -75,8 +75,8 @@ public class CmdShell
      *      remove the last quote character on the command line, preserving
      *      any text after the last quote character.
      * </pre>
-     *
-     *<p>
+     * <p/>
+     * <p>
      * Always quoting the entire command line, regardless of these conditions
      * appears to make Windows processes invoke successfully.
      * </p>
@@ -88,7 +88,7 @@ public class CmdShell
         sb.append( super.getCommandLine( executable, arguments ).get( 0 ) );
         sb.append( "\"" );
 
-        return Arrays.asList( new String[]{sb.toString()} );
+        return Arrays.asList( new String[]{ sb.toString() } );
     }
 
 }

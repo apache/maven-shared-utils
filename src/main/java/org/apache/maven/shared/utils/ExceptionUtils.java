@@ -49,6 +49,7 @@ public class ExceptionUtils
     private static final int MAX_ROOT_CAUSE_DEPTH = 20;
 
     private static CopyOnWriteArrayList<String> specialCauseMethodNames = new CopyOnWriteArrayList<String>();
+
     static
     {
         specialCauseMethodNames.add( "getException" );
@@ -71,25 +72,24 @@ public class ExceptionUtils
     @Deprecated
     public static void addCauseMethodName( String methodName )
     {
-        specialCauseMethodNames.add(methodName);
+        specialCauseMethodNames.add( methodName );
     }
 
     /**
      * The {@link Throwable#getCause()} of the given Throwable.
      *
      * @param throwable
-     *
      * @return the cause of the given Throwable, <code>null</code> if no cause exists.
      */
     public static Throwable getCause( Throwable throwable )
     {
         Throwable retVal = throwable.getCause();
 
-        if ( retVal == null)
+        if ( retVal == null )
         {
 
-            retVal = getCause( throwable
-                             , specialCauseMethodNames.toArray( new String[ specialCauseMethodNames.size() ] ) );
+            retVal =
+                getCause( throwable, specialCauseMethodNames.toArray( new String[specialCauseMethodNames.size()] ) );
         }
 
         return retVal;
@@ -109,12 +109,12 @@ public class ExceptionUtils
         // first try a few standard Exception types we already know
         if ( retVal == null && throwable instanceof SQLException )
         {
-            retVal = ((SQLException) throwable).getNextException();
+            retVal = ( (SQLException) throwable ).getNextException();
         }
 
-        if ( retVal == null && throwable instanceof InvocationTargetException)
+        if ( retVal == null && throwable instanceof InvocationTargetException )
         {
-            retVal = ((InvocationTargetException) throwable).getTargetException();
+            retVal = ( (InvocationTargetException) throwable ).getTargetException();
         }
 
         if ( retVal == null )
@@ -151,11 +151,11 @@ public class ExceptionUtils
         {
             method = throwable.getClass().getMethod( methodName, null );
         }
-        catch (NoSuchMethodException e)
+        catch ( NoSuchMethodException e )
         {
             return null;
         }
-        catch (SecurityException e)
+        catch ( SecurityException e )
         {
             return null;
         }
@@ -169,11 +169,11 @@ public class ExceptionUtils
         {
             return (Throwable) method.invoke( throwable );
         }
-        catch (IllegalAccessException e)
+        catch ( IllegalAccessException e )
         {
             return null;
         }
-        catch (InvocationTargetException e)
+        catch ( InvocationTargetException e )
         {
             return null;
         }
@@ -186,7 +186,6 @@ public class ExceptionUtils
      * the recursively deepest Throwable in the chain.
      *
      * @param throwable
-     *
      * @return the original cause of the Throwable
      */
     public static Throwable getRootCause( Throwable throwable )
@@ -231,6 +230,7 @@ public class ExceptionUtils
     /**
      * Determine the number of causale Throwables. That is the amount of
      * all Throwables in the exception chain.
+     *
      * @param throwable
      * @return the amount of Throwables in the exception chain.
      */
@@ -257,7 +257,6 @@ public class ExceptionUtils
     {
         ArrayList<Throwable> throwables = new ArrayList<Throwable>();
 
-
         Throwable rootCause = throwable;
         int depth = 0;
 
@@ -282,17 +281,17 @@ public class ExceptionUtils
             depth++;
         }
 
-        return throwables.toArray( new Throwable[ throwables.size() ] );
+        return throwables.toArray( new Throwable[throwables.size()] );
 
     }
 
     /**
      * Determines all the nested Throwables and calculate the index of the
      * Throwable with the given type
+     *
      * @param throwable
      * @param type
      * @return the index of the type in the Throwable chain, or <code>-1</code> if it isn't contained.
-     *
      * @see #indexOfThrowable(Throwable, Class, int)
      */
     public static int indexOfThrowable( Throwable throwable, Class<? extends Throwable> type )
@@ -303,11 +302,11 @@ public class ExceptionUtils
     /**
      * Determines all the nested Throwables and calculate the index of the
      * Throwable with the given type starting with the given fromIndex
+     *
      * @param throwable
      * @param type
      * @param fromIndex the index to start with
      * @return the index of the type in the Throwable chain, or <code>-1</code> if it isn't contained.
-     *
      * @see #indexOfThrowable(Throwable, Class)
      */
     public static int indexOfThrowable( Throwable throwable, Class<? extends Throwable> type, int fromIndex )
@@ -323,7 +322,7 @@ public class ExceptionUtils
             throw new IndexOutOfBoundsException( "fromIndex must be > 0 but was: " + fromIndex );
         }
 
-        if ( type != null)
+        if ( type != null )
         {
             Throwable[] throwables = getThrowables( throwable );
 
@@ -334,7 +333,7 @@ public class ExceptionUtils
 
             for ( int i = fromIndex; i < throwables.length; i++ )
             {
-                Throwable t = throwables[ i ];
+                Throwable t = throwables[i];
 
                 if ( t.getClass().equals( type ) )
                 {
@@ -348,6 +347,7 @@ public class ExceptionUtils
 
     /**
      * Print the stacktrace of root cause of the given Throwable to System.err
+     *
      * @param throwable
      * @see #getCause(Throwable)
      */
@@ -369,6 +369,7 @@ public class ExceptionUtils
 
     /**
      * Print the stacktrace of root cause of the given Throwable to the PrintStream
+     *
      * @param throwable
      * @see #getCause(Throwable)
      */
@@ -379,11 +380,12 @@ public class ExceptionUtils
         {
             rootCause = throwable;
         }
-        rootCause.printStackTrace(stream);
+        rootCause.printStackTrace( stream );
     }
 
     /**
      * Print the stacktrace of root cause of the given Throwable to the PrintWriter
+     *
      * @param throwable
      * @see #getCause(Throwable)
      */
@@ -400,6 +402,7 @@ public class ExceptionUtils
 
     /**
      * The stacktrace frames for the root cause of the given Throwable
+     *
      * @param throwable
      * @return String with the Stacktrace of the Throwable
      * @see #getCause(Throwable)
@@ -417,6 +420,7 @@ public class ExceptionUtils
 
     /**
      * The stacktrace for the given Throwable
+     *
      * @param throwable
      * @return String with the Stacktrace of the Throwable
      */
@@ -432,6 +436,7 @@ public class ExceptionUtils
 
     /**
      * The stacktrace for the given Throwable
+     *
      * @param throwable
      * @return String with the Stacktrace of the Throwable
      */
@@ -439,7 +444,7 @@ public class ExceptionUtils
     {
         // nowadays this is the same...
 
-        return getStackTrace(throwable);
+        return getStackTrace( throwable );
     }
 
     /**
@@ -461,6 +466,7 @@ public class ExceptionUtils
 
     /**
      * Get all the separate single lines of the stacktrace for the Throwable
+     *
      * @param throwable
      * @return the lines of the stack trace for the throwable
      */
@@ -468,9 +474,9 @@ public class ExceptionUtils
     {
         StackTraceElement[] stackTraceElements = throwable.getStackTrace();
 
-        String[] retVal = new String[ stackTraceElements.length + 1 ];
+        String[] retVal = new String[stackTraceElements.length + 1];
 
-        retVal[ 0 ] = throwable.getClass().getName() + ": " + throwable.getMessage();
+        retVal[0] = throwable.getClass().getName() + ": " + throwable.getMessage();
 
         int i = 1;
 
@@ -481,9 +487,9 @@ public class ExceptionUtils
             sb.append( "." );
             sb.append( stackTraceElement.getMethodName() );
             sb.append( "(" ).append( stackTraceElement.getFileName() ).append( "):" );
-            sb.append(stackTraceElement.getLineNumber());
+            sb.append( stackTraceElement.getLineNumber() );
 
-            retVal[ i++ ] = sb.toString();
+            retVal[i++] = sb.toString();
         }
 
         return retVal;

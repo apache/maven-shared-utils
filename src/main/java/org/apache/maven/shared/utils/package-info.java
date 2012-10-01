@@ -1,7 +1,7 @@
 /**
- * 
+ *
  * The following classes have not been implemented because they are easy to get other where:
- * 
+ *
  * <dl>
  *   <dt>Base64</dt>
  *   <dd>commons-io has a much better maintained version than plexus-utils had. Commons / jakarta is also the original source.</dd>

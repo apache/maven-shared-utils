@@ -39,8 +39,7 @@ public class ReflectorException
     /**
      * Create a new ReflectorException with the specified message.
      *
-     * @param msg
-     *            The message.
+     * @param msg The message.
      */
     public ReflectorException( String msg )
     {
@@ -50,8 +49,7 @@ public class ReflectorException
     /**
      * Create a new ReflectorException with the specified root cause.
      *
-     * @param root
-     *            The root cause.
+     * @param root The root cause.
      */
     public ReflectorException( Throwable root )
     {
@@ -62,10 +60,8 @@ public class ReflectorException
      * Create a new ReflectorException with the specified message and root
      * cause.
      *
-     * @param msg
-     *            The message.
-     * @param root
-     *            The root cause.
+     * @param msg  The message.
+     * @param root The root cause.
      */
     public ReflectorException( String msg, Throwable root )
     {

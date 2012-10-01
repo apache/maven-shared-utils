@@ -40,20 +40,19 @@ public class MatchPattern
 
     private final String[] tokenized;
 
-    private MatchPattern(String source, String separator)
+    private MatchPattern( String source, String separator )
     {
         regexPattern = SelectorUtils.isRegexPrefixedPattern( source ) ? source.substring(
             SelectorUtils.REGEX_HANDLER_PREFIX.length(),
             source.length() - SelectorUtils.PATTERN_HANDLER_SUFFIX.length() ) : null;
         this.source =
-            SelectorUtils.isAntPrefixedPattern( source )
-                ? source.substring( SelectorUtils.ANT_HANDLER_PREFIX.length(), source.length()
-                - SelectorUtils.PATTERN_HANDLER_SUFFIX.length() )
+            SelectorUtils.isAntPrefixedPattern( source ) ? source.substring( SelectorUtils.ANT_HANDLER_PREFIX.length(),
+                                                                             source.length()
+                                                                                 - SelectorUtils.PATTERN_HANDLER_SUFFIX.length() )
                 : source;
         this.separator = separator;
         tokenized = tokenizePathToString( this.source, separator );
     }
-
 
 
     public boolean matchPath( String str, boolean isCaseSensitive )

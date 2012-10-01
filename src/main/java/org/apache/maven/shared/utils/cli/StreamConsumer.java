@@ -65,7 +65,7 @@ package org.apache.maven.shared.utils.cli;
  * Works in concert with the StreamPumper class to
  * allow implementations to gain access to the lines being
  * "Pumped".
- *
+ * <p/>
  * Please note that implementations of this interface can be expected to be
  * called from arbitrary threads and must therefore be threadsafe.
  *

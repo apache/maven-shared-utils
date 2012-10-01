@@ -24,6 +24,7 @@ import java.util.Stack;
 
 /**
  * DirectoryWalker
+ *
  * @version $Id$
  */
 public class DirectoryWalker
@@ -61,7 +62,7 @@ public class DirectoryWalker
         /**
          * Create a DirStackEntry.
          *
-         * @param d the directory to track
+         * @param d      the directory to track
          * @param length the length of entries in the directory.
          */
         public DirStackEntry( File d, int length )
@@ -107,9 +108,9 @@ public class DirectoryWalker
         public String toString()
         {
             return "DirStackEntry[" + "dir=" + dir.getAbsolutePath() + ",count=" + count + ",index=" + index
-                    + ",percentageOffset=" + percentageOffset + ",percentageSize=" + percentageSize + ",percentage()="
-                    + getPercentage() + ",getNextPercentageOffset()=" + getNextPercentageOffset()
-                    + ",getNextPercentageSize()=" + getNextPercentageSize() + "]";
+                + ",percentageOffset=" + percentageOffset + ",percentageSize=" + percentageSize + ",percentage()="
+                + getPercentage() + ",getNextPercentageOffset()=" + getNextPercentageOffset()
+                + ",getNextPercentageSize()=" + getNextPercentageSize() + "]";
         }
     }
 

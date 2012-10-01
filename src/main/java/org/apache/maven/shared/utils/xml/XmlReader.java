@@ -87,10 +87,10 @@ public class XmlReader
     public XmlReader( InputStream is, String httpContentType, boolean lenient, String defaultEncoding )
         throws IOException, XmlStreamReaderException
     {
-        reader =
-            new org.apache.commons.io.input.XmlStreamReader( is, httpContentType, lenient,
-                                                             ( defaultEncoding == null ) ? _staticDefaultEncoding
-                                                                             : defaultEncoding );
+        reader = new org.apache.commons.io.input.XmlStreamReader( is, httpContentType, lenient,
+                                                                  ( defaultEncoding == null )
+                                                                      ? _staticDefaultEncoding
+                                                                      : defaultEncoding );
     }
 
     public XmlReader( InputStream is, String httpContentType, boolean lenient )

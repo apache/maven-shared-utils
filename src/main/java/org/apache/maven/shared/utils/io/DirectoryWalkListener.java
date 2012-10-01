@@ -20,6 +20,7 @@ import java.io.File;
 
 /**
  * DirectoryWalkListener
+ *
  * @version $Id$
  */
 public interface DirectoryWalkListener
@@ -35,7 +36,7 @@ public interface DirectoryWalkListener
      * The included entry that was encountered.
      *
      * @param percentage rough percentage of the walk completed. (inaccurate)
-     * @param file the file that was included.
+     * @param file       the file that was included.
      */
     void directoryWalkStep( int percentage, File file );
 

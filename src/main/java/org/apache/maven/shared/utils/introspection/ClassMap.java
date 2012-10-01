@@ -39,6 +39,7 @@ public class ClassMap
     }
 
     private static final CacheMiss CACHE_MISS = new CacheMiss();
+
     private static final Object OBJECT = new Object();
 
     /**
@@ -100,8 +101,7 @@ public class ClassMap
         {
             try
             {
-                cacheEntry = methodMap.find( name,
-                                             params );
+                cacheEntry = methodMap.find( name, params );
             }
             catch ( MethodMap.AmbiguousException ae )
             {
@@ -109,21 +109,18 @@ public class ClassMap
                  *  that's a miss :)
                  */
 
-                methodCache.put( methodKey,
-                                 CACHE_MISS );
+                methodCache.put( methodKey, CACHE_MISS );
 
                 throw ae;
             }
 
             if ( cacheEntry == null )
             {
-                methodCache.put( methodKey,
-                                 CACHE_MISS );
+                methodCache.put( methodKey, CACHE_MISS );
             }
             else
             {
-                methodCache.put( methodKey,
-                                 cacheEntry );
+                methodCache.put( methodKey, cacheEntry );
             }
         }
 
@@ -200,21 +197,37 @@ public class ClassMap
             if ( parameterTypes[j].isPrimitive() )
             {
                 if ( parameterTypes[j].equals( Boolean.TYPE ) )
+                {
                     methodKey.append( "java.lang.Boolean" );
+                }
                 else if ( parameterTypes[j].equals( Byte.TYPE ) )
+                {
                     methodKey.append( "java.lang.Byte" );
+                }
                 else if ( parameterTypes[j].equals( Character.TYPE ) )
+                {
                     methodKey.append( "java.lang.Character" );
+                }
                 else if ( parameterTypes[j].equals( Double.TYPE ) )
+                {
                     methodKey.append( "java.lang.Double" );
+                }
                 else if ( parameterTypes[j].equals( Float.TYPE ) )
+                {
                     methodKey.append( "java.lang.Float" );
+                }
                 else if ( parameterTypes[j].equals( Integer.TYPE ) )
+                {
                     methodKey.append( "java.lang.Integer" );
+                }
                 else if ( parameterTypes[j].equals( Long.TYPE ) )
+                {
                     methodKey.append( "java.lang.Long" );
+                }
                 else if ( parameterTypes[j].equals( Short.TYPE ) )
+                {
                     methodKey.append( "java.lang.Short" );
+                }
             }
             else
             {
@@ -457,7 +470,6 @@ public class ClassMap
          *  try the superclass
          */
 
-
         Class superclazz = clazz.getSuperclass();
 
         if ( superclazz != null )
@@ -495,8 +507,11 @@ public class ClassMap
     private static final class MethodInfo
     {
         Method method;
+
         String name;
+
         Class[] parameterTypes;
+
         boolean upcast;
 
         MethodInfo( Method method )

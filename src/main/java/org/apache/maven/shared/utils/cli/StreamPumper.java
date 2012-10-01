@@ -78,13 +78,12 @@ package org.apache.maven.shared.utils.cli;
  * ====================================================================
  */
 
-import org.apache.maven.shared.utils.io.IOUtil;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import org.apache.maven.shared.utils.io.IOUtil;
 
 /**
  * Class to pump the error stream during Process's runtime. Copied from the Ant

@@ -20,13 +20,11 @@ package org.apache.maven.shared.utils.cli.shell;
  */
 
 
-
-import org.apache.maven.shared.utils.StringUtils;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.apache.maven.shared.utils.StringUtils;
 
 /**
  * <p>
@@ -112,7 +110,7 @@ public class Shell
         if ( ( shellArgs == null ) || shellArgs.isEmpty() )
         {
             return null;
-    }
+        }
         else
         {
             return (String[]) shellArgs.toArray( new String[shellArgs.size()] );
@@ -132,12 +130,12 @@ public class Shell
     }
 
     protected List<String> getRawCommandLine( String executable, String[] arguments )
-        {
+    {
         List<String> commandLine = new ArrayList<String>();
-            StringBuffer sb = new StringBuffer();
+        StringBuffer sb = new StringBuffer();
 
-            if ( executable != null )
-            {
+        if ( executable != null )
+        {
             String preamble = getExecutionPreamble();
             if ( preamble != null )
             {
@@ -146,17 +144,19 @@ public class Shell
 
             if ( isQuotedExecutableEnabled() )
             {
-                char[] escapeChars = getEscapeChars( isSingleQuotedExecutableEscaped(), isDoubleQuotedExecutableEscaped() );
+                char[] escapeChars =
+                    getEscapeChars( isSingleQuotedExecutableEscaped(), isDoubleQuotedExecutableEscaped() );
 
-                sb.append( StringUtils.quoteAndEscape( getExecutable(), getExecutableQuoteDelimiter(), escapeChars, getQuotingTriggerChars(), '\\', false ) );
+                sb.append( StringUtils.quoteAndEscape( getExecutable(), getExecutableQuoteDelimiter(), escapeChars,
+                                                       getQuotingTriggerChars(), '\\', false ) );
             }
             else
             {
                 sb.append( getExecutable() );
             }
         }
-            for ( int i = 0; i < arguments.length; i++ )
-            {
+        for ( int i = 0; i < arguments.length; i++ )
+        {
             if ( sb.length() > 0 )
             {
                 sb.append( " " );
@@ -164,14 +164,16 @@ public class Shell
 
             if ( isQuotedArgumentsEnabled() )
             {
-                char[] escapeChars = getEscapeChars( isSingleQuotedExecutableEscaped(), isDoubleQuotedExecutableEscaped() );
+                char[] escapeChars =
+                    getEscapeChars( isSingleQuotedExecutableEscaped(), isDoubleQuotedExecutableEscaped() );
 
-                sb.append( StringUtils.quoteAndEscape( arguments[i], getArgumentQuoteDelimiter(), escapeChars, getQuotingTriggerChars(), '\\', false ) );
-        }
+                sb.append( StringUtils.quoteAndEscape( arguments[i], getArgumentQuoteDelimiter(), escapeChars,
+                                                       getQuotingTriggerChars(), '\\', false ) );
+            }
             else
-        {
+            {
                 sb.append( arguments[i] );
-        }
+            }
         }
 
         commandLine.add( sb.toString() );
@@ -252,7 +254,7 @@ public class Shell
      * Get the full command line to execute, including shell command, shell arguments,
      * executable and executable arguments
      *
-     * @param arguments  arguments for the executable, not the shell
+     * @param arguments arguments for the executable, not the shell
      * @return List of String objects, whose array version is suitable to be used as argument
      *         of Runtime.getRuntime().exec()
      */
