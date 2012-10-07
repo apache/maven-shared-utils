@@ -842,7 +842,7 @@ public class FileUtils
 
         for ( int i = 0; i < urls.length; i++ )
         {
-            urls[i] = files[i].toURL();
+            urls[i] = files[i].toURI().toURL();
         }
 
         return urls;
