@@ -140,8 +140,8 @@ public final class SelectorUtils
             return false;
         }
 
-        Vector patDirs = tokenizePath( pattern, separator );
-        Vector strDirs = tokenizePath( str, separator );
+        List<String> patDirs = tokenizePath( pattern, separator );
+        List<String> strDirs = tokenizePath( str, separator );
 
         int patIdxStart = 0;
         int patIdxEnd = patDirs.size() - 1;
@@ -151,12 +151,12 @@ public final class SelectorUtils
         // up to first '**'
         while ( patIdxStart <= patIdxEnd && strIdxStart <= strIdxEnd )
         {
-            String patDir = (String) patDirs.elementAt( patIdxStart );
-            if ( patDir.equals( "**" ) )
+            String patDir = patDirs.get( patIdxStart );
+            if ( "**".equals( patDir ) )
             {
                 break;
             }
-            if ( !match( patDir, (String) strDirs.elementAt( strIdxStart ), isCaseSensitive ) )
+            if ( !match( patDir, strDirs.get( strIdxStart ), isCaseSensitive ) )
             {
                 return false;
             }
@@ -243,8 +243,8 @@ public final class SelectorUtils
             return false;
         }
 
-        Vector patDirs = tokenizePath( pattern, File.separator );
-        Vector strDirs = tokenizePath( str, File.separator );
+        List<String> patDirs = tokenizePath( pattern, File.separator );
+        List<String> strDirs = tokenizePath( str, File.separator );
 
         int patIdxStart = 0;
         int patIdxEnd = patDirs.size() - 1;
@@ -254,12 +254,12 @@ public final class SelectorUtils
         // up to first '**'
         while ( patIdxStart <= patIdxEnd && strIdxStart <= strIdxEnd )
         {
-            String patDir = (String) patDirs.elementAt( patIdxStart );
-            if ( patDir.equals( "**" ) )
+            String patDir = patDirs.get( patIdxStart );
+            if ( "**".equals( patDir ) )
             {
                 break;
             }
-            if ( !match( patDir, (String) strDirs.elementAt( strIdxStart ), isCaseSensitive ) )
+            if ( !match( patDir, strDirs.get( strIdxStart ), isCaseSensitive ) )
             {
                 patDirs = null;
                 strDirs = null;
@@ -273,7 +273,7 @@ public final class SelectorUtils
             // String is exhausted
             for ( int i = patIdxStart; i <= patIdxEnd; i++ )
             {
-                if ( !patDirs.elementAt( i ).equals( "**" ) )
+                if ( !"**".equals( patDirs.get( i ) ) )
                 {
                     patDirs = null;
                     strDirs = null;
@@ -296,12 +296,12 @@ public final class SelectorUtils
         // up to last '**'
         while ( patIdxStart <= patIdxEnd && strIdxStart <= strIdxEnd )
         {
-            String patDir = (String) patDirs.elementAt( patIdxEnd );
-            if ( patDir.equals( "**" ) )
+            String patDir = patDirs.get( patIdxEnd );
+            if ( "**".equals( patDir ) )
             {
                 break;
             }
-            if ( !match( patDir, (String) strDirs.elementAt( strIdxEnd ), isCaseSensitive ) )
+            if ( !match( patDir, strDirs.get( strIdxEnd ), isCaseSensitive ) )
             {
                 patDirs = null;
                 strDirs = null;
@@ -315,7 +315,7 @@ public final class SelectorUtils
             // String is exhausted
             for ( int i = patIdxStart; i <= patIdxEnd; i++ )
             {
-                if ( !patDirs.elementAt( i ).equals( "**" ) )
+                if ( !"**".equals( patDirs.get( i ) ) )
                 {
                     patDirs = null;
                     strDirs = null;
@@ -330,7 +330,7 @@ public final class SelectorUtils
             int patIdxTmp = -1;
             for ( int i = patIdxStart + 1; i <= patIdxEnd; i++ )
             {
-                if ( patDirs.elementAt( i ).equals( "**" ) )
+                if ( "**".equals( patDirs.get( i ) ) )
                 {
                     patIdxTmp = i;
                     break;
@@ -352,8 +352,8 @@ public final class SelectorUtils
             {
                 for ( int j = 0; j < patLength; j++ )
                 {
-                    String subPat = (String) patDirs.elementAt( patIdxStart + j + 1 );
-                    String subStr = (String) strDirs.elementAt( strIdxStart + i + j );
+                    String subPat = patDirs.get( patIdxStart + j + 1 );
+                    String subStr = strDirs.get( strIdxStart + i + j );
                     if ( !match( subPat, subStr, isCaseSensitive ) )
                     {
                         continue strLoop;
@@ -377,7 +377,7 @@ public final class SelectorUtils
 
         for ( int i = patIdxStart; i <= patIdxEnd; i++ )
         {
-            if ( !patDirs.elementAt( i ).equals( "**" ) )
+            if ( !"**".equals( patDirs.get( i ) ) )
             {
                 patDirs = null;
                 strDirs = null;
