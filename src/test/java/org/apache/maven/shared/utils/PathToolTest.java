@@ -20,6 +20,7 @@ package org.apache.maven.shared.utils;
  */
 
 import org.hamcrest.CoreMatchers;
+import org.junit.Assume;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.Assert;
@@ -82,6 +83,8 @@ public class PathToolTest extends Assert
     // Keep in sync with testGetRelativeFilePath_Windows()
     public void testGetRelativeFilePath_NonWindows()
     {
+        Assume.assumeThat( File.separatorChar, is( '/' ) );
+
         assertThat( PathTool.getRelativeFilePath( null, null )
                   , is( "" ) );
 
@@ -117,6 +120,8 @@ public class PathToolTest extends Assert
     // Keep in sync with testGetRelativeFilePath_NonWindows()
     public void testGetRelativeFilePath_Windows()
     {
+        Assume.assumeThat( File.separatorChar, is( '\\' ) );
+
         assertThat( PathTool.getRelativeFilePath( null, null )
                   , is( "" ) );
 
