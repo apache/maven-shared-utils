@@ -2095,15 +2095,13 @@ public class StringUtils
      * @param namespace
      * @return the interpolated text.
      */
-    public static String interpolate( String text, Map namespace )
+    public static String interpolate( String text, Map<?, ?> namespace )
     {
-        Iterator<?> keys = namespace.keySet().iterator();
-
-        while ( keys.hasNext() )
+        for ( Map.Entry<?, ?> entry : namespace.entrySet() )
         {
-            String key = keys.next().toString();
+            String key = entry.getKey().toString();
 
-            Object obj = namespace.get( key );
+            Object obj = entry.getValue();
 
             if ( obj == null )
             {
@@ -2147,7 +2145,7 @@ public class StringUtils
 
         while ( st.hasMoreTokens() )
         {
-            String element = (String) st.nextElement();
+            String element = st.nextToken();
 
             out.append( capitalizeFirstLetter( element ) );
         }
