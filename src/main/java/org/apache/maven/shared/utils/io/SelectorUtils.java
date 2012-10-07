@@ -121,10 +121,10 @@ public final class SelectorUtils
                                              pattern.length() - PATTERN_HANDLER_SUFFIX.length() );
             }
 
+            String altPattern = pattern.replace( '\\', '/' );
             String altStr = str.replace( '\\', '/' );
 
-            return matchAntPathPatternStart( pattern, str, File.separator, isCaseSensitive )
-                || matchAntPathPatternStart( pattern, altStr, "/", isCaseSensitive );
+            return matchAntPathPatternStart( altPattern, altStr, "/", isCaseSensitive );
         }
     }
 

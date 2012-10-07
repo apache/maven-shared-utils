@@ -56,14 +56,15 @@ public class SelectorUtilsTest
     @Test
     public void testAntPatternStrings()
     {
-        assertAntDoesNotMatch(File.separator + "aaa", "");
-        assertAntMatch("aaa", "");
-        assertAntMatch("/aaa/bbb", "/aaa/bbb");
-        assertAntMatch("/aaa/**",  "/aaa/bbb");
-        assertAntDoesNotMatch("/aaa/**", "/ccc/bbb");
-        assertAntMatch( "/aaa/**", "\\aaa\\bbb");
-        assertAntDoesNotMatch("/aaa/**", "\\ccc\\bbb");
-        assertAntDoesNotMatch("/aaa/",   "\\aaa\\bbb");
+        assertAntDoesNotMatch( "/aaa", "" );
+        assertAntDoesNotMatch( "\\aaa", "" );
+        assertAntMatch( "aaa", "" );
+        assertAntMatch( "/aaa/bbb", "/aaa/bbb" );
+        assertAntMatch( "/aaa/**", "/aaa/bbb" );
+        assertAntDoesNotMatch( "/aaa/**", "/ccc/bbb" );
+        assertAntMatch( "/aaa/**", "\\aaa\\bbb" );
+        assertAntDoesNotMatch( "/aaa/**", "\\ccc\\bbb" );
+        assertAntDoesNotMatch( "/aaa/", "\\aaa\\bbb" );
     }
 
 
