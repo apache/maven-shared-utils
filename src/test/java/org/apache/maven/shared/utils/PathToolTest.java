@@ -79,7 +79,8 @@ public class PathToolTest extends Assert
     }
 
     @Test
-    public void testGetRelativeFilePath()
+    // Keep in sync with testGetRelativeFilePath_Windows()
+    public void testGetRelativeFilePath_NonWindows()
     {
         assertThat( PathTool.getRelativeFilePath( null, null )
                   , is( "" ) );
@@ -110,6 +111,41 @@ public class PathToolTest extends Assert
 
         assertThat( PathTool.getRelativeFilePath( "/bin", "/usr/local/" )
                   , is( "../usr/local/" ) );
+    }
+    
+    @Test
+    // Keep in sync with testGetRelativeFilePath_NonWindows()
+    public void testGetRelativeFilePath_Windows()
+    {
+        assertThat( PathTool.getRelativeFilePath( null, null )
+                  , is( "" ) );
+
+        assertThat( PathTool.getRelativeFilePath( null, "c:\\usr\\local\\java\\bin" )
+                  , is( "" ) );
+
+        assertThat( PathTool.getRelativeFilePath( "c:\\usr\\local", null )
+                  , is( "" ) );
+
+        assertThat( PathTool.getRelativeFilePath( "c:\\usr\\local", "c:\\usr\\local\\java\\bin" )
+                  , is( "java\\bin" ) );
+
+        assertThat( PathTool.getRelativeFilePath( "c:\\usr\\local", "c:\\usr\\local\\java\\bin\\" )
+                  , is( "java\\bin\\" ) );
+
+        assertThat( PathTool.getRelativeFilePath( "c:\\usr\\local\\java\\bin", "c:\\usr\\local\\" )
+                  , is( "..\\..\\" ) );
+
+        assertThat( PathTool.getRelativeFilePath( "c:\\usr\\local\\", "c:\\usr\\local\\java\\bin\\java.sh" )
+                  , is( "java\\bin\\java.sh" ) );
+
+        assertThat( PathTool.getRelativeFilePath( "c:\\usr\\local\\java\\bin\\java.sh", "c:\\usr\\local\\" )
+                  , is( "..\\..\\..\\" ) );
+
+        assertThat( PathTool.getRelativeFilePath( "c:\\usr\\local\\", "c:\\bin" )
+                  , is( "..\\..\\bin" ) );
+
+        assertThat( PathTool.getRelativeFilePath( "c:\\bin", "c:\\usr\\local\\" )
+                  , is( "..\\usr\\local\\" ) );
     }
 
     @Test
