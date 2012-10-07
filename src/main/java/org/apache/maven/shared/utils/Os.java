@@ -22,7 +22,6 @@ package org.apache.maven.shared.utils;
 
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
 
@@ -57,7 +56,7 @@ public class Os
     public static final String OS_FAMILY = getOsFamily();
 
     // store the valid families
-    private static final Set validFamilies = getValidFamilies();
+    private static final Set<String> validFamilies = getValidFamilies();
 
 
     /**
@@ -152,14 +151,14 @@ public class Os
     /**
      * Initializes the set of valid families.
      */
-    public static Set getValidFamilies()
+    public static Set<String> getValidFamilies()
     {
         if ( validFamilies != null )
         {
             return validFamilies;
         }
 
-        Set valid = new HashSet();
+        Set<String> valid = new HashSet<String>();
         valid.add( FAMILY_DOS );
         valid.add( FAMILY_MAC );
         valid.add( FAMILY_NETWARE );
@@ -432,12 +431,10 @@ public class Os
      */
     private static String getOsFamily()
     {
-        Set families = getValidFamilies();
+        Set<String> families = getValidFamilies();
 
-        Iterator iter = families.iterator();
-        while ( iter.hasNext() )
+        for ( String fam : families )
         {
-            String fam = (String) iter.next();
             if ( Os.isFamily( fam ) )
             {
                 return fam;
@@ -456,6 +453,5 @@ public class Os
     {
         return validFamilies.contains( family );
     }
-
 
 }
