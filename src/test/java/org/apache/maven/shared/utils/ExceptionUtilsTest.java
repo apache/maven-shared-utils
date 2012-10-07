@@ -19,19 +19,20 @@ package org.apache.maven.shared.utils;
  * under the License.
  */
 
-import org.apache.maven.shared.utils.exceptionutils.TestException;
-import org.apache.maven.shared.utils.exceptionutils.TestExceptionWithDetail;
-import org.junit.Test;
-import org.junit.Assert;
-import org.junit.matchers.JUnitMatchers;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
-import java.util.logging.Logger;
 
-import static org.hamcrest.CoreMatchers.*;
+import org.apache.maven.shared.utils.exceptionutils.TestException;
+import org.apache.maven.shared.utils.exceptionutils.TestExceptionWithDetail;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.matchers.JUnitMatchers;
 
 
 /**
@@ -41,7 +42,7 @@ import static org.hamcrest.CoreMatchers.*;
  */
 public class ExceptionUtilsTest extends Assert
 {
-    private static Logger logger = Logger.getLogger(ExceptionUtilsTest.class.getName());
+    private final String LS = System.getProperty( "line.separator" );
 
     protected static StackTraceElement[] STACKTRACE_WO_SPECIAL_METHODS =
         {
@@ -143,7 +144,7 @@ public class ExceptionUtilsTest extends Assert
     {
         NullPointerException npe = new NullPointerException( "dooh just a random, nullpointer" );
 
-        String fullStackTraceStart = "java.lang.NullPointerException: dooh just a random, nullpointer\n"
+        String fullStackTraceStart = "java.lang.NullPointerException: dooh just a random, nullpointer" + LS 
                      + "\tat org.apache.maven.shared.utils.ExceptionUtilsTest.testGetFullStackTrace(ExceptionUtilsTest.java";
 
         String fullStackTrace = ExceptionUtils.getFullStackTrace( npe );
@@ -224,7 +225,7 @@ public class ExceptionUtilsTest extends Assert
         String stackTrace = ExceptionUtils.getStackTrace( npe );
         assertNotNull( stackTrace );
         assertTrue( "wrong stacktrace: " + stackTrace,
-                    stackTrace.startsWith( "java.lang.NullPointerException: dooh just a random, nullpointer\n" +
+                    stackTrace.startsWith( "java.lang.NullPointerException: dooh just a random, nullpointer" + LS +
                         "\tat org.apache.maven.shared.utils.ExceptionUtilsTest.testGetStackTrace(ExceptionUtilsTest.java" ));
 
         RuntimeException rtException = new RuntimeException( npe );
@@ -232,7 +233,7 @@ public class ExceptionUtilsTest extends Assert
         assertNotNull( stackTrace );
         assertTrue( "wrong stacktrace: " + stackTrace,
                     stackTrace.startsWith( "java.lang.RuntimeException: java.lang.NullPointerException: "
-                      + "dooh just a random, nullpointer\n"
+                      + "dooh just a random, nullpointer" + LS
                       + "\tat org.apache.maven.shared.utils.ExceptionUtilsTest.testGetStackTrace(ExceptionUtilsTest.java" ));
 
         // NPE safe test
@@ -451,14 +452,14 @@ public class ExceptionUtilsTest extends Assert
             assertThat( "stackFrames"
                       , bao.toString()
                       , JUnitMatchers.containsString( "java.lang.NullPointerException: dooh just a random, nullpointer"
-                                                      + "\n\tat org.apache.maven.shared.utils.ExceptionUtilsTest."
+                                                      + LS + "\tat org.apache.maven.shared.utils.ExceptionUtilsTest."
                                                       + "testPrintRootCauseStackTrace(ExceptionUtilsTest.java:" ) );
             bao.reset();
             ExceptionUtils.printRootCauseStackTrace( rtException );
             assertThat( "stackFrames"
                       , bao.toString()
                       , JUnitMatchers.containsString( "java.lang.NullPointerException: dooh just a random, nullpointer"
-                                                      + "\n\tat org.apache.maven.shared.utils.ExceptionUtilsTest."
+                                                      + LS +"\tat org.apache.maven.shared.utils.ExceptionUtilsTest."
                                                       + "testPrintRootCauseStackTrace(ExceptionUtilsTest.java:" ) );
 
             // moving back to the original stdout and using the PrintStream directly
@@ -469,7 +470,7 @@ public class ExceptionUtilsTest extends Assert
             assertThat("stackFrames"
                     , bao.toString()
                     , JUnitMatchers.containsString("java.lang.NullPointerException: dooh just a random, nullpointer"
-                    + "\n\tat org.apache.maven.shared.utils.ExceptionUtilsTest."
+                    + LS + "\tat org.apache.maven.shared.utils.ExceptionUtilsTest."
                     + "testPrintRootCauseStackTrace(ExceptionUtilsTest.java:"));
             outStream.close();
 
@@ -480,7 +481,7 @@ public class ExceptionUtilsTest extends Assert
             assertThat( "stackFrames"
                       , bao.toString()
                       , JUnitMatchers.containsString( "java.lang.NullPointerException: dooh just a random, nullpointer"
-                                                      + "\n\tat org.apache.maven.shared.utils.ExceptionUtilsTest."
+                                                      + LS + "\tat org.apache.maven.shared.utils.ExceptionUtilsTest."
                                                       + "testPrintRootCauseStackTrace(ExceptionUtilsTest.java:" ) );
         }
         finally
