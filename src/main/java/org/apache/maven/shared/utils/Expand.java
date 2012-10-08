@@ -196,8 +196,6 @@ public class Expand
                     {
                         fileOutputStream.write( buffer, 0, len );
                     }
-
-                    targetFile.setLastModified( entryDate.getTime() );
                 }
                 finally
                 {
@@ -210,6 +208,7 @@ public class Expand
                         // no worries, all is ok ...
                     }
                 }
+                targetFile.setLastModified( entryDate.getTime() );
             }
         }
     }
