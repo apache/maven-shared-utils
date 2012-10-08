@@ -173,16 +173,7 @@ public abstract class CommandLineUtils
 
         final ProcessHook processHook = new ProcessHook( p );
 
-        try
-        {
-            Runtime.getRuntime().addShutdownHook( processHook );
-        }
-        catch ( IllegalStateException ignore )
-        {
-        }
-        catch ( AccessControlException ignore )
-        {
-        }
+        ShutdownHookUtils.addShutDownHook( processHook);
 
         return new CommandLineCallable()
         {
@@ -242,17 +233,7 @@ public abstract class CommandLineUtils
                 }
                 finally
                 {
-                    try
-                    {
-                        Runtime.getRuntime().removeShutdownHook( processHook );
-                    }
-                    catch ( IllegalStateException ignore )
-                    {
-                        //
-                    }
-                    catch ( AccessControlException ignore )
-                    {
-                    }
+                    ShutdownHookUtils.removeShutdownHook( processHook );
 
                     processHook.run();
 
