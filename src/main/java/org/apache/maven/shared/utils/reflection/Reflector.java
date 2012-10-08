@@ -22,6 +22,7 @@ package org.apache.maven.shared.utils.reflection;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +39,8 @@ public final class Reflector
 
     private static final String GET_INSTANCE_METHOD_NAME = "getInstance";
 
-    private HashMap classMaps = new HashMap();
+    private Map<String, Map<String, Map<String, Member>>> classMaps =
+        new HashMap<String, Map<String, Map<String, Member>>>();
 
     /**
      * Ensure no instances of Reflector are created...this is a utility.
@@ -78,7 +80,7 @@ public final class Reflector
 
             if ( con == null )
             {
-                StringBuffer buffer = new StringBuffer();
+                StringBuilder buffer = new StringBuilder();
 
                 buffer.append( "Constructor not found for class: " );
                 buffer.append( theClass.getName() );
@@ -178,7 +180,7 @@ public final class Reflector
 
             if ( method == null )
             {
-                StringBuffer buffer = new StringBuffer();
+                StringBuilder buffer = new StringBuilder();
 
                 buffer.append( "Singleton-producing method named '" ).append( methodName ).append(
                     "' not found with specified parameter classes: " );
@@ -316,7 +318,7 @@ public final class Reflector
 
             if ( method == null )
             {
-                StringBuffer buffer = new StringBuffer();
+                StringBuilder buffer = new StringBuilder();
 
                 buffer.append( "Singleton-producing method named \'" + methodName
                                    + "\' not found with specified parameter classes: " );
@@ -354,12 +356,12 @@ public final class Reflector
      * @return the Constructor object that matches.
      * @throws ReflectorException In case we can't retrieve the proper constructor.
      */
-    public Constructor getConstructor( Class targetClass, Class[] params )
+    public Constructor<?> getConstructor( Class targetClass, Class[] params )
         throws ReflectorException
     {
-        Map constructorMap = getConstructorMap( targetClass );
+        Map<String, Member> constructorMap = getConstructorMap( targetClass );
 
-        StringBuffer key = new StringBuffer( 200 );
+        StringBuilder key = new StringBuilder( 200 );
 
         key.append( "(" );
 
@@ -437,8 +439,8 @@ public final class Reflector
             beanAccessor += propertyName.substring( 1 ).trim();
         }
 
-        Class targetClass = target.getClass();
-        Class[] emptyParams = { };
+        Class<?> targetClass = target.getClass();
+        Class<?>[] emptyParams = { };
 
         Method method = _getMethod( targetClass, beanAccessor, emptyParams );
         if ( method == null )
@@ -505,7 +507,7 @@ public final class Reflector
      * @return the Method object that matches.
      * @throws ReflectorException In case we can't retrieve the proper method.
      */
-    public Method getMethod( Class targetClass, String methodName, Class[] params )
+    public Method getMethod( Class<?> targetClass, String methodName, Class<?>[] params )
         throws ReflectorException
     {
         Method method = _getMethod( targetClass, methodName, params );
@@ -519,12 +521,12 @@ public final class Reflector
         return method;
     }
 
-    private Method _getMethod( Class targetClass, String methodName, Class[] params )
+    private Method _getMethod( Class<?> targetClass, String methodName, Class<?>[] params )
         throws ReflectorException
     {
-        Map methodMap = getMethodMap( targetClass, methodName );
+        Map<String, Member> methodMap = getMethodMap( targetClass, methodName );
 
-        StringBuffer key = new StringBuffer( 200 );
+        StringBuilder key = new StringBuilder( 200 );
 
         key.append( "(" );
 
@@ -557,7 +559,7 @@ public final class Reflector
                         continue;
                     }
 
-                    Class[] types = cands[i].getParameterTypes();
+                    Class<?>[] types = cands[i].getParameterTypes();
 
                     if ( params.length != types.length )
                     {
@@ -589,7 +591,7 @@ public final class Reflector
      * @return The cache of constructors.
      * @throws ReflectorException in case of a lookup error.
      */
-    private Map getConstructorMap( Class theClass )
+    private Map<String, Member> getConstructorMap( Class<?> theClass )
         throws ReflectorException
     {
         return getMethodMap( theClass, CONSTRUCTOR_METHOD_NAME );
@@ -603,10 +605,10 @@ public final class Reflector
      * @return The cache of constructors.
      * @throws ReflectorException in case of a lookup error.
      */
-    private Map getMethodMap( Class theClass, String methodName )
+    private Map<String, Member> getMethodMap( Class<?> theClass, String methodName )
         throws ReflectorException
     {
-        Map methodMap = null;
+        Map<String, Member> methodMap = null;
 
         if ( theClass == null )
         {
@@ -617,12 +619,12 @@ public final class Reflector
 
         synchronized ( className.intern() )
         {
-            Map classMethods = (Map) classMaps.get( className );
+            Map<String, Map<String, Member>> classMethods = classMaps.get( className );
 
             if ( classMethods == null )
             {
-                classMethods = new HashMap();
-                methodMap = new HashMap();
+                classMethods = new HashMap<String, Map<String, Member>>();
+                methodMap = new HashMap<String, Member>();
                 classMethods.put( methodName, methodMap );
 
                 classMaps.put( className, classMethods );
@@ -633,11 +635,11 @@ public final class Reflector
 
                 synchronized ( key.intern() )
                 {
-                    methodMap = (Map) classMethods.get( methodName );
+                    methodMap = classMethods.get( methodName );
 
                     if ( methodMap == null )
                     {
-                        methodMap = new HashMap();
+                        methodMap = new HashMap<String, Member>();
                         classMethods.put( methodName, methodMap );
                     }
                 }
