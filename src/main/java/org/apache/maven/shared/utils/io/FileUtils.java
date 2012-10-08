@@ -835,6 +835,7 @@ public class FileUtils
      * @return the array of URLs
      * @throws IOException if an error occurs
      */
+    @SuppressWarnings( "deprecation" )
     public static URL[] toURLs( final File[] files )
         throws IOException
     {
@@ -842,7 +843,8 @@ public class FileUtils
 
         for ( int i = 0; i < urls.length; i++ )
         {
-            urls[i] = files[i].toURI().toURL();
+            // Although this method is deprecated, it is still the most solid way to translate a File to URL
+            urls[i] = files[i].toURL();
         }
 
         return urls;
