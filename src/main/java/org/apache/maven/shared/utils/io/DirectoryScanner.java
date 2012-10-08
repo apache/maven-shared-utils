@@ -403,7 +403,7 @@ public class DirectoryScanner
      * @param includes A list of include patterns. May be <code>null</code>, indicating that all files should be
      *                 included. If a non-<code>null</code> list is given, all elements must be non-<code>null</code>.
      */
-    public void setIncludes( final String[] includes )
+    public void setIncludes( final String... includes )
     {
         if ( includes == null )
         {
@@ -434,7 +434,7 @@ public class DirectoryScanner
      * @param excludes A list of exclude patterns. May be <code>null</code>, indicating that no files should be
      *                 excluded. If a non-<code>null</code> list is given, all elements must be non-<code>null</code>.
      */
-    public void setExcludes( final String[] excludes )
+    public void setExcludes( final String... excludes )
     {
         if ( excludes == null )
         {
@@ -559,7 +559,7 @@ public class DirectoryScanner
      *
      * @param oldFiles the list of previously captured files names.
      */
-    public DirectoryScanResult diffIncludedFiles( String[] oldFiles )
+    public DirectoryScanResult diffIncludedFiles( String... oldFiles )
     {
         if ( filesIncluded == null )
         {

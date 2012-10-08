@@ -31,7 +31,7 @@ public class MatchPatterns
 {
     private final MatchPattern[] patterns;
 
-    private MatchPatterns( MatchPattern[] patterns )
+    private MatchPatterns( MatchPattern... patterns )
     {
         this.patterns = patterns;
     }
