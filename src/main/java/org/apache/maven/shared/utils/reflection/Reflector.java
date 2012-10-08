@@ -59,7 +59,7 @@ public final class Reflector
      * @return The instantiated object
      * @throws ReflectorException In case anything goes wrong here...
      */
-    public Object newInstance( Class theClass, Object[] params )
+    public Object newInstance( Class theClass, Object... params )
         throws ReflectorException
     {
         if ( params == null )
@@ -123,7 +123,7 @@ public final class Reflector
      * @return The singleton object
      * @throws ReflectorException In case anything goes wrong here...
      */
-    public Object getSingleton( Class theClass, Object[] initParams )
+    public Object getSingleton( Class theClass, Object... initParams )
         throws ReflectorException
     {
         Class[] paramTypes = new Class[initParams.length];
@@ -159,7 +159,7 @@ public final class Reflector
      * @return The result of the method call
      * @throws ReflectorException In case of an error looking up or invoking the method.
      */
-    public Object invoke( Object target, String methodName, Object[] params )
+    public Object invoke( Object target, String methodName, Object... params )
         throws ReflectorException
     {
         if ( params == null )
@@ -297,7 +297,7 @@ public final class Reflector
      * @return The result of the method call
      * @throws ReflectorException In case of an error looking up or invoking the method.
      */
-    public Object invokeStatic( Class targetClass, String methodName, Object[] params )
+    public Object invokeStatic( Class targetClass, String methodName, Object... params )
         throws ReflectorException
     {
         if ( params == null )
@@ -356,7 +356,7 @@ public final class Reflector
      * @return the Constructor object that matches.
      * @throws ReflectorException In case we can't retrieve the proper constructor.
      */
-    public Constructor<?> getConstructor( Class targetClass, Class[] params )
+    public Constructor<?> getConstructor( Class targetClass, Class... params )
         throws ReflectorException
     {
         Map<String, Member> constructorMap = getConstructorMap( targetClass );
@@ -507,7 +507,7 @@ public final class Reflector
      * @return the Method object that matches.
      * @throws ReflectorException In case we can't retrieve the proper method.
      */
-    public Method getMethod( Class<?> targetClass, String methodName, Class<?>[] params )
+    public Method getMethod( Class<?> targetClass, String methodName, Class<?>... params )
         throws ReflectorException
     {
         Method method = _getMethod( targetClass, methodName, params );
@@ -521,7 +521,7 @@ public final class Reflector
         return method;
     }
 
-    private Method _getMethod( Class<?> targetClass, String methodName, Class<?>[] params )
+    private Method _getMethod( Class<?> targetClass, String methodName, Class<?>... params )
         throws ReflectorException
     {
         Map<String, Member> methodMap = getMethodMap( targetClass, methodName );
