@@ -224,7 +224,7 @@ public class ExpandTest extends Assert
         }
 
         // turn the clock back 10 seconds
-        long time = System.currentTimeMillis() - 120000L;
+        long time = System.currentTimeMillis() - 10000L;
 
         // round down to 1s;
         time = time - time % 1000L;
