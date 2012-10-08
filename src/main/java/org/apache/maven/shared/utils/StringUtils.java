@@ -250,7 +250,7 @@ public class StringUtils
      * @return the first index of any of the searchStrs in str
      * @throws NullPointerException if any of searchStrs[i] is <code>null</code>
      */
-    public static int indexOfAny( String str, String[] searchStrs )
+    public static int indexOfAny( String str, String... searchStrs )
     {
         if ( ( str == null ) || ( searchStrs == null ) )
         {
@@ -289,7 +289,7 @@ public class StringUtils
      * @return the last index of any of the Strings
      * @throws NullPointerException if any of searchStrs[i] is <code>null</code>
      */
-    public static int lastIndexOfAny( String str, String[] searchStrs )
+    public static int lastIndexOfAny( String str, String... searchStrs )
     {
         if ( ( str == null ) || ( searchStrs == null ) )
         {
@@ -598,7 +598,7 @@ public class StringUtils
      * @param array the array of values to concatenate.
      * @return the concatenated string.
      */
-    public static String concatenate( Object[] array )
+    public static String concatenate( Object... array )
     {
         return join( array, "" );
     }
@@ -1282,7 +1282,7 @@ public class StringUtils
      * @param strs the Strings to remove whitespace from
      * @return the stripped Strings
      */
-    public static String[] stripAll( String[] strs )
+    public static String[] stripAll( String... strs )
     {
         return stripAll( strs, null );
     }
@@ -1958,7 +1958,7 @@ public class StringUtils
      *
      * @param array the array to reverse
      */
-    private static void reverseArray( Object[] array )
+    private static void reverseArray( Object... array )
     {
         int i = 0;
         int j = array.length - 1;
