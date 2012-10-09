@@ -27,7 +27,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.security.AccessControlException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -50,15 +49,15 @@ public abstract class CommandLineUtils
      *
      * @see java.nio.charset.Charset
      */
-    public static final String UTF_16LE = "UTF-16LE";
+    private static final String UTF_16LE = "UTF-16LE";
 
 
     public static class StringStreamConsumer
         implements StreamConsumer
     {
-        private StringBuffer string = new StringBuffer();
+        private final StringBuffer string = new StringBuffer();
 
-        private String ls = System.getProperty( "line.separator" );
+        private final String ls = System.getProperty( "line.separator" );
 
         public void consumeLine( String line )
         {
@@ -120,7 +119,7 @@ public abstract class CommandLineUtils
      * @throws CommandLineException or CommandLineTimeOutException if time out occurs
      * @noinspection ThrowableResultOfMethodCallIgnored
      */
-    public static int executeCommandLine( Commandline cl, InputStream systemIn, StreamConsumer systemOut,
+    private static int executeCommandLine( Commandline cl, InputStream systemIn, StreamConsumer systemOut,
                                           StreamConsumer systemErr, int timeoutInSeconds )
         throws CommandLineException
     {
@@ -143,7 +142,7 @@ public abstract class CommandLineUtils
      * @throws CommandLineException or CommandLineTimeOutException if time out occurs
      * @noinspection ThrowableResultOfMethodCallIgnored
      */
-    public static CommandLineCallable executeCommandLineAsCallable( final Commandline cl, final InputStream systemIn,
+    private static CommandLineCallable executeCommandLineAsCallable( final Commandline cl, final InputStream systemIn,
                                                                     final StreamConsumer systemOut,
                                                                     final StreamConsumer systemErr,
                                                                     final int timeoutInSeconds )
@@ -396,7 +395,7 @@ public abstract class CommandLineUtils
         }
     }
 
-    public static boolean isAlive( Process p )
+    private static boolean isAlive( Process p )
     {
         if ( p == null )
         {
@@ -492,101 +491,7 @@ public abstract class CommandLineUtils
             throw new CommandLineException( "unbalanced quotes in " + toProcess );
         }
 
-        String[] args = tokens.toArray( new String[tokens.size()] );
-
-        return args;
-    }
-
-    /**
-     * <p>Put quotes around the given String if necessary.</p>
-     * <p>If the argument doesn't include spaces or quotes, return it
-     * as is. If it contains double quotes, use single quotes - else
-     * surround the argument by double quotes.</p>
-     *
-     * @throws CommandLineException if the argument contains both, single
-     *                              and double quotes.
-     * @deprecated Use {@link StringUtils#quoteAndEscape(String, char, char[], char[], char, boolean)},
-     *             {@link StringUtils#quoteAndEscape(String, char, char[], char, boolean)}, or
-     *             {@link StringUtils#quoteAndEscape(String, char)} instead.
-     */
-    @SuppressWarnings( { "JavaDoc", "deprecation" } )
-    public static String quote( String argument )
-        throws CommandLineException
-    {
-        return quote( argument, false, false, true );
-    }
-
-    /**
-     * <p>Put quotes around the given String if necessary.</p>
-     * <p>If the argument doesn't include spaces or quotes, return it
-     * as is. If it contains double quotes, use single quotes - else
-     * surround the argument by double quotes.</p>
-     *
-     * @throws CommandLineException if the argument contains both, single
-     *                              and double quotes.
-     * @deprecated Use {@link StringUtils#quoteAndEscape(String, char, char[], char[], char, boolean)},
-     *             {@link StringUtils#quoteAndEscape(String, char, char[], char, boolean)}, or
-     *             {@link StringUtils#quoteAndEscape(String, char)} instead.
-     */
-    @SuppressWarnings( { "JavaDoc", "UnusedDeclaration", "deprecation" } )
-    public static String quote( String argument, boolean wrapExistingQuotes )
-        throws CommandLineException
-    {
-        return quote( argument, false, false, wrapExistingQuotes );
-    }
-
-    /**
-     * @deprecated Use {@link StringUtils#quoteAndEscape(String, char, char[], char[], char, boolean)},
-     *             {@link StringUtils#quoteAndEscape(String, char, char[], char, boolean)}, or
-     *             {@link StringUtils#quoteAndEscape(String, char)} instead.
-     */
-    @SuppressWarnings( { "JavaDoc" } )
-    public static String quote( String argument, boolean escapeSingleQuotes, boolean escapeDoubleQuotes,
-                                boolean wrapExistingQuotes )
-        throws CommandLineException
-    {
-        if ( argument.contains( "\"" ) )
-        {
-            if ( argument.contains( "\'" ) )
-            {
-                throw new CommandLineException( "Can't handle single and double quotes in same argument" );
-            }
-            else
-            {
-                if ( escapeSingleQuotes )
-                {
-                    return "\\\'" + argument + "\\\'";
-                }
-                else if ( wrapExistingQuotes )
-                {
-                    return '\'' + argument + '\'';
-                }
-            }
-        }
-        else if ( argument.contains( "\'" ) )
-        {
-            if ( escapeDoubleQuotes )
-            {
-                return "\\\"" + argument + "\\\"";
-            }
-            else if ( wrapExistingQuotes )
-            {
-                return '\"' + argument + '\"';
-            }
-        }
-        else if ( argument.contains( " " ) )
-        {
-            if ( escapeDoubleQuotes )
-            {
-                return "\\\"" + argument + "\\\"";
-            }
-            else
-            {
-                return '\"' + argument + '\"';
-            }
-        }
-
-        return argument;
+        return tokens.toArray( new String[tokens.size()] );
     }
 
     public static String toString( String[] line )

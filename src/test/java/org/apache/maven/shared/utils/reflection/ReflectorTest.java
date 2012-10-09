@@ -34,7 +34,7 @@ import static org.apache.maven.shared.utils.testhelpers.ExceptionHelper.*;
  */
 public class ReflectorTest
 {
-    private Reflector reflector = new Reflector();
+    private final Reflector reflector = new Reflector();
 
     //// newInstance( Class, Object[] )
 
@@ -929,7 +929,7 @@ public class ReflectorTest
     public void getConstructorObjectEmpty()
         throws Exception
     {
-        assertThat( reflector.getConstructor( Object.class, new Class[0] ),
+        assertThat( reflector.getConstructor( Object.class),
                     is( (Constructor) Object.class.getDeclaredConstructor() ) );
     }
 
@@ -938,7 +938,7 @@ public class ReflectorTest
     public void getConstructorPrivate()
         throws Exception
     {
-        assertThat( reflector.getConstructor( ReflectorTestHelper.class, new Class[0] ),
+        assertThat( reflector.getConstructor( ReflectorTestHelper.class),
                     is( (Constructor) ReflectorTestHelper.class.getDeclaredConstructor() ) );
     }
 
@@ -946,7 +946,7 @@ public class ReflectorTest
     public void getConstructorPackage()
         throws Exception
     {
-        assertThat( reflector.getConstructor( ReflectorTestHelper.class, new Class[]{ Boolean.class } ),
+        assertThat( reflector.getConstructor( ReflectorTestHelper.class, Boolean.class),
                     not( is( (Constructor) ReflectorTestHelper.class.getDeclaredConstructor( Boolean.class ) ) ) );
     }
 
@@ -954,7 +954,7 @@ public class ReflectorTest
     public void getConstructorProtected()
         throws Exception
     {
-        assertThat( reflector.getConstructor( ReflectorTestHelper.class, new Class[]{ Integer.class } ),
+        assertThat( reflector.getConstructor( ReflectorTestHelper.class, Integer.class),
                     not( is( (Constructor) ReflectorTestHelper.class.getDeclaredConstructor( Integer.class ) ) ) );
     }
 
@@ -962,7 +962,7 @@ public class ReflectorTest
     public void getConstructorPublic()
         throws Exception
     {
-        assertThat( reflector.getConstructor( ReflectorTestHelper.class, new Class[]{ String.class } ),
+        assertThat( reflector.getConstructor( ReflectorTestHelper.class, String.class),
                     is( (Constructor) ReflectorTestHelper.class.getDeclaredConstructor( String.class ) ) );
     }
 
@@ -1049,7 +1049,7 @@ public class ReflectorTest
     {
         class CoT
         {
-            private int _value = 42;
+            private final int _value = 42;
 
             private int getValue()
             {
@@ -1065,7 +1065,7 @@ public class ReflectorTest
     {
         class CoT
         {
-            private int _value = 42;
+            private final int _value = 42;
 
             int getValue()
             {
@@ -1081,7 +1081,7 @@ public class ReflectorTest
     {
         class CoT
         {
-            private int _value = 42;
+            private final int _value = 42;
 
             protected int getValue()
             {
@@ -1097,7 +1097,7 @@ public class ReflectorTest
     {
         class CoT
         {
-            private int _value = 42;
+            private final int _value = 42;
 
             public int getValue()
             {

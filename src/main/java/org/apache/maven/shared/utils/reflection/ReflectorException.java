@@ -26,7 +26,7 @@ package org.apache.maven.shared.utils.reflection;
  *
  * @author John Casey
  */
-public class ReflectorException
+class ReflectorException
     extends Exception
 {
     /**

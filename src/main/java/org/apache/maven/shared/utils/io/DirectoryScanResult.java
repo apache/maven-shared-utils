@@ -26,11 +26,9 @@ package org.apache.maven.shared.utils.io;
  */
 public class DirectoryScanResult
 {
-    private final static String[] NO_FILES = new String[0];
+    private final String[] filesAdded;
 
-    private String[] filesAdded;
-
-    private String[] filesRemoved;
+    private final String[] filesRemoved;
 
     public DirectoryScanResult( String[] filesAdded, String[] filesRemoved )
     {

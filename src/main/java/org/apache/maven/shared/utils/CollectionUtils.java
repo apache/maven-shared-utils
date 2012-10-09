@@ -244,10 +244,7 @@ public class CollectionUtils
         }
 
         Set<T> set = new HashSet<T>( array.length );
-        for ( T element : array )
-        {
-            set.add( element );
-        }
+        Collections.addAll(set, array);
 
         return set;
     }
@@ -267,10 +264,7 @@ public class CollectionUtils
         }
 
         Set<T> set = new TreeSet<T>();
-        for ( T element : array )
-        {
-            set.add( element );
-        }
+        Collections.addAll(set, array);
 
         return set;
     }
@@ -279,7 +273,7 @@ public class CollectionUtils
     //
     // ----------------------------------------------------------------------
 
-    private static final int getFreq( final Object obj, final Map freqMap )
+    private static int getFreq( final Object obj, final Map freqMap )
     {
         try
         {

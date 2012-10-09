@@ -62,7 +62,7 @@ public class PathTool
      *         the base directory, <code>basedir</code> is null or zero-length,
      *         or <code>filename</code> is null or zero-length.
      */
-    public static final String getRelativePath( String basedir, String filename )
+    public static String getRelativePath( String basedir, String filename )
     {
         basedir = uppercaseDrive( basedir );
         filename = uppercaseDrive( filename );
@@ -114,7 +114,7 @@ public class PathTool
      *         returned if: <code>filename</code> is null or zero-length.
      * @see #getRelativeFilePath(String, String)
      */
-    public static final String getRelativePath( String filename )
+    public static String getRelativePath( String filename )
     {
         filename = uppercaseDrive( filename );
 
@@ -160,7 +160,7 @@ public class PathTool
      *         the filename does not contain a directory component, "." is
      *         returned.
      */
-    public static final String getDirectoryComponent( String filename )
+    public static String getDirectoryComponent( String filename )
     {
         if ( filename == null || filename.length() == 0 )
         {
@@ -193,7 +193,7 @@ public class PathTool
      * @param relativePath
      * @return String
      */
-    public static final String calculateLink( String link, String relativePath )
+    public static String calculateLink( String link, String relativePath )
     {
         //This must be some historical feature
         if ( link.startsWith( "/site/" ) )
@@ -255,7 +255,7 @@ public class PathTool
      * @param newPath
      * @return a relative web path from <code>oldPath</code>.
      */
-    public static final String getRelativeWebPath( final String oldPath, final String newPath )
+    public static String getRelativeWebPath( final String oldPath, final String newPath )
     {
         if ( StringUtils.isEmpty( oldPath ) || StringUtils.isEmpty( newPath ) )
         {
@@ -293,7 +293,7 @@ public class PathTool
      * @param newPath
      * @return a relative file path from <code>oldPath</code>.
      */
-    public static final String getRelativeFilePath( final String oldPath, final String newPath )
+    public static String getRelativeFilePath( final String oldPath, final String newPath )
     {
         if ( StringUtils.isEmpty( oldPath ) || StringUtils.isEmpty( newPath ) )
         {
@@ -367,7 +367,7 @@ public class PathTool
      *         terminated with a forward slash.  A zero-length string is
      *         returned if: the filename is zero-length.
      */
-    private static final String determineRelativePath( String filename, String separator )
+    private static String determineRelativePath( String filename, String separator )
     {
         if ( filename.length() == 0 )
         {
@@ -413,7 +413,7 @@ public class PathTool
      * @return The file separator used within <code>filename</code>.
      *         This value is either a forward or backward slash.
      */
-    private static final String determineSeparator( String filename )
+    private static String determineSeparator( String filename )
     {
         int forwardCount = StringUtils.countMatches( filename, "/" );
         int backwardCount = StringUtils.countMatches( filename, "\\" );
@@ -427,7 +427,7 @@ public class PathTool
      * @param path
      * @return String
      */
-    static final String uppercaseDrive( String path )
+    static String uppercaseDrive( String path )
     {
         if ( path == null )
         {
@@ -440,7 +440,7 @@ public class PathTool
         return path;
     }
 
-    private static final String buildRelativePath( String toPath, String fromPath, final char separatorChar )
+    private static String buildRelativePath( String toPath, String fromPath, final char separatorChar )
     {
         // use tokeniser to traverse paths and for lazy checking
         StringTokenizer toTokeniser = new StringTokenizer( toPath, String.valueOf( separatorChar ) );

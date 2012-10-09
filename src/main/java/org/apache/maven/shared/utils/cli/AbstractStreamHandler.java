@@ -22,14 +22,14 @@ package org.apache.maven.shared.utils.cli;
 /**
  * @author <a href="mailto:kristian.rosenvold@gmail.com">Kristian Rosenvold</a>
  */
-public class AbstractStreamHandler
+class AbstractStreamHandler
     extends Thread
 {
     private boolean done;
 
     private volatile boolean disabled;
 
-    public boolean isDone()
+    boolean isDone()
     {
         return done;
     }
@@ -44,7 +44,7 @@ public class AbstractStreamHandler
     }
 
 
-    protected boolean isDisabled()
+    boolean isDisabled()
     {
         return disabled;
     }
@@ -54,7 +54,7 @@ public class AbstractStreamHandler
         disabled = true;
     }
 
-    public void setDone()
+    void setDone()
     {
         done = true;
     }

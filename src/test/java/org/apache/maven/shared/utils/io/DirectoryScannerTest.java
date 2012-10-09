@@ -156,7 +156,6 @@ public class DirectoryScannerTest
                               String[] expectedNotIncludedDirectories,
                               String[] expectedExcludedFiles,
                               String[] expectedExcludedDirectories )
-            throws Exception
     {
         DirectoryScanner ds = new DirectoryScanner();
         ds.setBasedir( tempFolder.getRoot() );
@@ -190,7 +189,7 @@ public class DirectoryScannerTest
         checkFiles( "expectedExcludedFiles", expectedExcludedFiles, ds.getExcludedFiles() );
         checkFiles( "expectedExcludedDirectories", expectedExcludedDirectories, ds.getExcludedDirectories() );
 
-        checkFiles( "visitedFiles", expectedIncludedFiles, scanConductor.visitedFiles.toArray( new String[ 0 ] ) );
+        checkFiles( "visitedFiles", expectedIncludedFiles, scanConductor.visitedFiles.toArray(new String[scanConductor.visitedFiles.size()]));
     }
 
     /**
@@ -218,7 +217,7 @@ public class DirectoryScannerTest
 
     private static class TestScanConductor implements ScanConductor
     {
-        List<String> visitedFiles = new ArrayList<String>();
+        final List<String> visitedFiles = new ArrayList<String>();
 
         public ScanConductor.ScanAction visitDirectory( String name, File directory )
         {

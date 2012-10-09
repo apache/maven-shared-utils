@@ -643,28 +643,28 @@ public class IOUtilTest
     public void copyNullByteArrayNullOutputStreamNegBufSz()
         throws Exception
     {
-        IOUtil.copy( nullByteArray(), nullOutputStream(), -1 );
+        IOUtil.copy( nullByteArray(), nullOutputStream());
     }
 
     @Test( expected = NullPointerException.class )
     public void copyNullByteArrayValidOutputStreamNegBufSz()
         throws Exception
     {
-        IOUtil.copy( nullByteArray(), new DontCloseByteArrayOutputStream(), -1 );
+        IOUtil.copy( nullByteArray(), new DontCloseByteArrayOutputStream());
     }
 
     @Test( expected = NullPointerException.class )
     public void copyEmptyByteArrayNullOutputStreamNegBufSz()
         throws Exception
     {
-        IOUtil.copy( emptyByteArray(), nullOutputStream(), -1 );
+        IOUtil.copy( emptyByteArray(), nullOutputStream());
     }
 
     @Test
     public void copyEmptyByteArrayValidOutputStreamNegBufSz()
         throws Exception
     {
-        IOUtil.copy( emptyByteArray(), new DontCloseByteArrayOutputStream(), -1 );
+        IOUtil.copy( emptyByteArray(), new DontCloseByteArrayOutputStream());
     }
 
     @Test
@@ -673,7 +673,7 @@ public class IOUtilTest
     {
         ByteArrayOutputStream outputStream = new DontCloseByteArrayOutputStream();
         byte[] input = { 1, 2, 3, 4, 5, 6 };
-        IOUtil.copy( input, outputStream, -1 );
+        IOUtil.copy( input, outputStream);
         assertThat( outputStream.toByteArray(), is( input ) );
     }
 
@@ -681,28 +681,28 @@ public class IOUtilTest
     public void copyNullByteArrayNullOutputStreamZeroBufSz()
         throws Exception
     {
-        IOUtil.copy( nullByteArray(), nullOutputStream(), 0 );
+        IOUtil.copy( nullByteArray(), nullOutputStream());
     }
 
     @Test( expected = NullPointerException.class, timeout = INFINITE_LOOP_TIMEOUT )
     public void copyNullByteArrayValidOutputStreamZeroBufSz()
         throws Exception
     {
-        IOUtil.copy( nullByteArray(), new DontCloseByteArrayOutputStream(), 0 );
+        IOUtil.copy( nullByteArray(), new DontCloseByteArrayOutputStream());
     }
 
     @Test( expected = NullPointerException.class, timeout = INFINITE_LOOP_TIMEOUT )
     public void copyEmptyByteArrayNullOutputStreamZeroBufSz()
         throws Exception
     {
-        IOUtil.copy( emptyByteArray(), nullOutputStream(), 0 );
+        IOUtil.copy( emptyByteArray(), nullOutputStream());
     }
 
     @Test( timeout = INFINITE_LOOP_TIMEOUT )
     public void copyEmptyByteArrayValidOutputStreamZeroBufSz()
         throws Exception
     {
-        IOUtil.copy( emptyByteArray(), new DontCloseByteArrayOutputStream(), 0 );
+        IOUtil.copy( emptyByteArray(), new DontCloseByteArrayOutputStream());
     }
 
     @Test( timeout = INFINITE_LOOP_TIMEOUT )
@@ -711,7 +711,7 @@ public class IOUtilTest
     {
         ByteArrayOutputStream outputStream = new DontCloseByteArrayOutputStream();
         byte[] input = { 1, 2, 3, 4, 5, 6 };
-        IOUtil.copy( input, outputStream, 0 );
+        IOUtil.copy( input, outputStream);
         assertThat( outputStream.toByteArray(), is( input ) );
     }
 
@@ -719,28 +719,28 @@ public class IOUtilTest
     public void copyNullByteArrayNullOutputStreamPosBufSz()
         throws Exception
     {
-        IOUtil.copy( nullByteArray(), nullOutputStream(), 1 );
+        IOUtil.copy( nullByteArray(), nullOutputStream());
     }
 
     @Test( expected = NullPointerException.class, timeout = INFINITE_LOOP_TIMEOUT )
     public void copyNullByteArrayValidOutputStreamPosBufSz()
         throws Exception
     {
-        IOUtil.copy( nullByteArray(), new DontCloseByteArrayOutputStream(), 1 );
+        IOUtil.copy( nullByteArray(), new DontCloseByteArrayOutputStream());
     }
 
     @Test( expected = NullPointerException.class, timeout = INFINITE_LOOP_TIMEOUT )
     public void copyEmptyByteArrayNullOutputStreamPosBufSz()
         throws Exception
     {
-        IOUtil.copy( emptyByteArray(), nullOutputStream(), 1 );
+        IOUtil.copy( emptyByteArray(), nullOutputStream());
     }
 
     @Test( timeout = INFINITE_LOOP_TIMEOUT )
     public void copyEmptyByteArrayValidOutputStreamPosBufSz()
         throws Exception
     {
-        IOUtil.copy( emptyByteArray(), new DontCloseByteArrayOutputStream(), 1 );
+        IOUtil.copy( emptyByteArray(), new DontCloseByteArrayOutputStream());
     }
 
     @Test( timeout = INFINITE_LOOP_TIMEOUT )
@@ -749,7 +749,7 @@ public class IOUtilTest
     {
         ByteArrayOutputStream outputStream = new DontCloseByteArrayOutputStream();
         byte[] input = { 1, 2, 3, 4, 5, 6 };
-        IOUtil.copy( input, outputStream, 1 );
+        IOUtil.copy( input, outputStream);
         assertThat( outputStream.toByteArray(), is( input ) );
     }
 

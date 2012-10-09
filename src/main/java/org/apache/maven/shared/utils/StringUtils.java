@@ -795,8 +795,8 @@ public class StringUtils
      */
     public static String overlayString( String text, String overlay, int start, int end )
     {
-        return new StringBuffer( start + overlay.length() + text.length() - end + 1 ).append(
-            text.substring( 0, start ) ).append( overlay ).append( text.substring( end ) ).toString();
+        if (overlay == null) throw new NullPointerException("overlay is null");
+        return text.substring(0, start) + overlay + text.substring(end);
     }
 
     // Centering
@@ -1070,7 +1070,7 @@ public class StringUtils
         // improved with code from  cybertiger@cyberiantiger.org
         // unicode from him, and defaul for < 32's.
         int sz = str.length();
-        StringBuffer buffer = new StringBuffer( 2 * sz );
+        StringBuilder buffer = new StringBuilder( 2 * sz );
         for ( int i = 0; i < sz; i++ )
         {
             char ch = str.charAt( i );
@@ -1078,15 +1078,15 @@ public class StringUtils
             // handle unicode
             if ( ch > 0xfff )
             {
-                buffer.append( "\\u" + Integer.toHexString( ch ) );
+                buffer.append("\\u").append(Integer.toHexString(ch));
             }
             else if ( ch > 0xff )
             {
-                buffer.append( "\\u0" + Integer.toHexString( ch ) );
+                buffer.append("\\u0").append(Integer.toHexString(ch));
             }
             else if ( ch > 0x7f )
             {
-                buffer.append( "\\u00" + Integer.toHexString( ch ) );
+                buffer.append("\\u00").append(Integer.toHexString(ch));
             }
             else if ( ch < 32 )
             {
@@ -1115,11 +1115,11 @@ public class StringUtils
                     default:
                         if ( ch > 0xf )
                         {
-                            buffer.append( "\\u00" + Integer.toHexString( ch ) );
+                            buffer.append("\\u00").append(Integer.toHexString(ch));
                         }
                         else
                         {
-                            buffer.append( "\\u000" + Integer.toHexString( ch ) );
+                            buffer.append("\\u000").append(Integer.toHexString(ch));
                         }
                         break;
                 }
@@ -1439,8 +1439,7 @@ public class StringUtils
         }
         else
         {
-            return new StringBuffer( str.length() ).append( Character.toLowerCase( str.charAt( 0 ) ) ).append(
-                str.substring( 1 ) ).toString();
+            return String.valueOf(Character.toLowerCase(str.charAt(0))) + str.substring(1);
         }
     }
 
@@ -1465,8 +1464,7 @@ public class StringUtils
         }
         else
         {
-            return new StringBuffer( str.length() ).append( Character.toTitleCase( str.charAt( 0 ) ) ).append(
-                str.substring( 1 ) ).toString();
+            return String.valueOf(Character.toTitleCase(str.charAt(0))) + str.substring(1);
         }
     }
 
@@ -1707,7 +1705,7 @@ public class StringUtils
         int sz = str.length();
         for ( int i = 0; i < sz; i++ )
         {
-            if ( Character.isLetter( str.charAt( i ) ) == false )
+            if (!Character.isLetter( str.charAt( i ) ))
             {
                 return false;
             }
@@ -1733,7 +1731,7 @@ public class StringUtils
         int sz = str.length();
         for ( int i = 0; i < sz; i++ )
         {
-            if ( ( Character.isWhitespace( str.charAt( i ) ) == false ) )
+            if ((!Character.isWhitespace(str.charAt(i))))
             {
                 return false;
             }
@@ -1761,7 +1759,7 @@ public class StringUtils
         int sz = str.length();
         for ( int i = 0; i < sz; i++ )
         {
-            if ( ( Character.isLetter( str.charAt( i ) ) == false ) && ( str.charAt( i ) != ' ' ) )
+            if ((!Character.isLetter(str.charAt(i))) && (str.charAt(i) != ' '))
             {
                 return false;
             }
@@ -1788,7 +1786,7 @@ public class StringUtils
         int sz = str.length();
         for ( int i = 0; i < sz; i++ )
         {
-            if ( Character.isLetterOrDigit( str.charAt( i ) ) == false )
+            if (!Character.isLetterOrDigit( str.charAt( i ) ))
             {
                 return false;
             }
@@ -1816,7 +1814,7 @@ public class StringUtils
         int sz = str.length();
         for ( int i = 0; i < sz; i++ )
         {
-            if ( ( Character.isLetterOrDigit( str.charAt( i ) ) == false ) && ( str.charAt( i ) != ' ' ) )
+            if ((!Character.isLetterOrDigit(str.charAt(i))) && (str.charAt(i) != ' '))
             {
                 return false;
             }
@@ -1842,35 +1840,7 @@ public class StringUtils
         int sz = str.length();
         for ( int i = 0; i < sz; i++ )
         {
-            if ( Character.isDigit( str.charAt( i ) ) == false )
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * <p>Checks if the String contains only unicode digits or space
-     * (<code>' '</code>).</p>
-     * <p/>
-     * <p><code>null</code> will return <code>false</code>. An empty
-     * String will return <code>true</code>.</p>
-     *
-     * @param str the String to check
-     * @return <code>true</code> if only contains digits or space,
-     *         and is non-null
-     */
-    public static boolean isNumericSpace( String str )
-    {
-        if ( str == null )
-        {
-            return false;
-        }
-        int sz = str.length();
-        for ( int i = 0; i < sz; i++ )
-        {
-            if ( ( Character.isDigit( str.charAt( i ) ) == false ) && ( str.charAt( i ) != ' ' ) )
+            if (!Character.isDigit( str.charAt( i ) ))
             {
                 return false;
             }

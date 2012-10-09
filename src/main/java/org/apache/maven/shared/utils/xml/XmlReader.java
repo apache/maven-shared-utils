@@ -48,43 +48,43 @@ public class XmlReader
         return _staticDefaultEncoding;
     }
 
-    public XmlReader( File file )
+    XmlReader( File file )
         throws IOException
     {
         this( new FileInputStream( file ) );
     }
 
-    public XmlReader( InputStream is )
+    XmlReader( InputStream is )
         throws IOException
     {
         this( is, true );
     }
 
-    public XmlReader( InputStream is, boolean lenient )
+    XmlReader( InputStream is, boolean lenient )
         throws IOException, XmlStreamReaderException
     {
         reader = new org.apache.commons.io.input.XmlStreamReader( is, lenient, _staticDefaultEncoding );
     }
 
-    public XmlReader( URL url )
+    XmlReader( URL url )
         throws IOException
     {
         this( url.openConnection() );
     }
 
-    public XmlReader( URLConnection conn )
+    XmlReader( URLConnection conn )
         throws IOException
     {
         reader = new org.apache.commons.io.input.XmlStreamReader( conn, _staticDefaultEncoding );
     }
 
-    public XmlReader( InputStream is, String httpContentType )
+    XmlReader( InputStream is, String httpContentType )
         throws IOException
     {
         this( is, httpContentType, true );
     }
 
-    public XmlReader( InputStream is, String httpContentType, boolean lenient, String defaultEncoding )
+    XmlReader( InputStream is, String httpContentType, boolean lenient, String defaultEncoding )
         throws IOException, XmlStreamReaderException
     {
         reader = new org.apache.commons.io.input.XmlStreamReader( is, httpContentType, lenient,
@@ -93,7 +93,7 @@ public class XmlReader
                                                                       : defaultEncoding );
     }
 
-    public XmlReader( InputStream is, String httpContentType, boolean lenient )
+    XmlReader( InputStream is, String httpContentType, boolean lenient )
         throws IOException, XmlStreamReaderException
     {
         this( is, httpContentType, lenient, null );

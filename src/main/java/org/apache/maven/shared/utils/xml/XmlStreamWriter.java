@@ -24,7 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.OutputStream;
 
 @Deprecated
-public class XmlStreamWriter
+class XmlStreamWriter
     extends org.apache.commons.io.output.XmlStreamWriter
 {
     public XmlStreamWriter( OutputStream out )

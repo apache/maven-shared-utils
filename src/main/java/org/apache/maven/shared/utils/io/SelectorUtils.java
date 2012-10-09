@@ -24,7 +24,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 /**
  * <p>This is a utility class used by selectors and DirectoryScanner. The
@@ -43,7 +42,7 @@ import java.util.Vector;
 public final class SelectorUtils
 {
 
-    public static final String PATTERN_HANDLER_PREFIX = "[";
+    private static final String PATTERN_HANDLER_PREFIX = "[";
 
     public static final String PATTERN_HANDLER_SUFFIX = "]";
 
@@ -51,21 +50,11 @@ public final class SelectorUtils
 
     public static final String ANT_HANDLER_PREFIX = "%ant" + PATTERN_HANDLER_PREFIX;
 
-    private static SelectorUtils instance = new SelectorUtils();
-
     /**
      * Private Constructor
      */
     private SelectorUtils()
     {
-    }
-
-    /**
-     * Retrieves the manager of the Singleton.
-     */
-    public static SelectorUtils getInstance()
-    {
-        return instance;
     }
 
     /**
@@ -105,7 +94,7 @@ public final class SelectorUtils
      * @return whether or not a given path matches the start of a given
      *         pattern up to the first "**".
      */
-    public static boolean matchPatternStart( String pattern, String str, boolean isCaseSensitive )
+    private static boolean matchPatternStart( String pattern, String str, boolean isCaseSensitive )
     {
         if ( isRegexPrefixedPattern( pattern ) )
         {
@@ -164,22 +153,7 @@ public final class SelectorUtils
             strIdxStart++;
         }
 
-        if ( strIdxStart > strIdxEnd )
-        {
-            // String is exhausted
-            return true;
-        }
-        else if ( patIdxStart > patIdxEnd )
-        {
-            // String not exhausted, but pattern is. Failure.
-            return false;
-        }
-        else
-        {
-            // pattern now holds ** while string is not exhausted
-            // this will generate false positives but we can live with that.
-            return true;
-        }
+        return strIdxStart > strIdxEnd || patIdxStart <= patIdxEnd;
     }
 
     /**
@@ -261,8 +235,6 @@ public final class SelectorUtils
             }
             if ( !match( patDir, strDirs.get( strIdxStart ), isCaseSensitive ) )
             {
-                patDirs = null;
-                strDirs = null;
                 return false;
             }
             patIdxStart++;
@@ -275,8 +247,6 @@ public final class SelectorUtils
             {
                 if ( !"**".equals( patDirs.get( i ) ) )
                 {
-                    patDirs = null;
-                    strDirs = null;
                     return false;
                 }
             }
@@ -287,8 +257,6 @@ public final class SelectorUtils
             if ( patIdxStart > patIdxEnd )
             {
                 // String not exhausted, but pattern is. Failure.
-                patDirs = null;
-                strDirs = null;
                 return false;
             }
         }
@@ -303,8 +271,6 @@ public final class SelectorUtils
             }
             if ( !match( patDir, strDirs.get( strIdxEnd ), isCaseSensitive ) )
             {
-                patDirs = null;
-                strDirs = null;
                 return false;
             }
             patIdxEnd--;
@@ -317,8 +283,6 @@ public final class SelectorUtils
             {
                 if ( !"**".equals( patDirs.get( i ) ) )
                 {
-                    patDirs = null;
-                    strDirs = null;
                     return false;
                 }
             }
@@ -366,8 +330,6 @@ public final class SelectorUtils
 
             if ( foundIdx == -1 )
             {
-                patDirs = null;
-                strDirs = null;
                 return false;
             }
 
@@ -379,8 +341,6 @@ public final class SelectorUtils
         {
             if ( !"**".equals( patDirs.get( i ) ) )
             {
-                patDirs = null;
-                strDirs = null;
                 return false;
             }
         }
@@ -421,7 +381,7 @@ public final class SelectorUtils
      * @return <code>true</code> if the string matches against the pattern,
      *         or <code>false</code> otherwise.
      */
-    public static boolean match( String pattern, String str, boolean isCaseSensitive )
+    private static boolean match( String pattern, String str, boolean isCaseSensitive )
     {
         char[] patArr = pattern.toCharArray();
         char[] strArr = str.toCharArray();
@@ -432,10 +392,8 @@ public final class SelectorUtils
         char ch;
 
         boolean containsStar = false;
-        for ( int i = 0; i < patArr.length; i++ )
-        {
-            if ( patArr[i] == '*' )
-            {
+        for (char aPatArr : patArr) {
+            if (aPatArr == '*') {
                 containsStar = true;
                 break;
             }
@@ -595,82 +553,26 @@ public final class SelectorUtils
     }
 
     /**
-     * Breaks a path up into a Vector of path elements, tokenizing on
+     * Breaks a path up into a List of path elements, tokenizing on
      * <code>File.separator</code>.
      *
      * @param path Path to tokenize. Must not be <code>null</code>.
+     * @param separator The separator to use
      * @return a Vector of path elements from the tokenized path
      */
-    public static Vector tokenizePath( String path )
+    private static List<String> tokenizePath( String path, String separator )
     {
-        return tokenizePath( path, File.separator );
-    }
-
-    public static Vector tokenizePath( String path, String separator )
-    {
-        Vector ret = new Vector();
+        List<String> ret = new ArrayList<String>();
         StringTokenizer st = new StringTokenizer( path, separator );
         while ( st.hasMoreTokens() )
         {
-            ret.addElement( st.nextToken() );
+            ret.add(st.nextToken());
         }
         return ret;
     }
 
 
-    /**
-     * Returns dependency information on these two files. If src has been
-     * modified later than target, it returns true. If target doesn't exist,
-     * it likewise returns true. Otherwise, target is newer than src and
-     * is not out of date, thus the method returns false. It also returns
-     * false if the src file doesn't even exist, since how could the
-     * target then be out of date.
-     *
-     * @param src         the original file
-     * @param target      the file being compared against
-     * @param granularity the amount in milliseconds of slack we will give in
-     *                    determining out of dateness
-     * @return whether the target is out of date
-     */
-    public static boolean isOutOfDate( File src, File target, int granularity )
-    {
-        if ( !src.exists() )
-        {
-            return false;
-        }
-        if ( !target.exists() )
-        {
-            return true;
-        }
-        if ( ( src.lastModified() - granularity ) > target.lastModified() )
-        {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * "Flattens" a string by removing all whitespace (space, tab, linefeed,
-     * carriage return, and formfeed). This uses StringTokenizer and the
-     * default set of tokens as documented in the single arguement constructor.
-     *
-     * @param input a String to remove all whitespace.
-     * @return a String that has had all whitespace removed.
-     */
-    public static String removeWhitespace( String input )
-    {
-        StringBuffer result = new StringBuffer();
-        if ( input != null )
-        {
-            StringTokenizer st = new StringTokenizer( input );
-            while ( st.hasMoreTokens() )
-            {
-                result.append( st.nextToken() );
-            }
-        }
-        return result.toString();
-    }
-
+    @SuppressWarnings("SimplifiableIfStatement")
     static boolean matchAntPathPatternStart( MatchPattern pattern, String str, String separator,
                                              boolean isCaseSensitive )
     {
@@ -693,7 +595,7 @@ public final class SelectorUtils
         return ret.toArray( new String[ret.size()] );
     }
 
-    static boolean matchAntPathPatternStart( String[] patDirs, String str, String separator, boolean isCaseSensitive )
+    private static boolean matchAntPathPatternStart( String[] patDirs, String str, String separator, boolean isCaseSensitive )
     {
         String[] strDirs = tokenizePathToString( str, separator );
 

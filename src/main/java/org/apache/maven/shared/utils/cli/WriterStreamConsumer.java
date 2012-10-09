@@ -31,7 +31,7 @@ public class WriterStreamConsumer
     implements StreamConsumer
 {
 
-    private PrintWriter writer;
+    private final PrintWriter writer;
 
     public WriterStreamConsumer( Writer writer )
     {

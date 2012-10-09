@@ -30,20 +30,20 @@ import java.io.InputStream;
  * @author Alejandro Abdelnur
  * @version revision 1.1 taken on 26/06/2007 from Rome (see https://rome.dev.java.net/source/browse/rome/src/java/com/sun/syndication/io/XmlReaderException.java)
  */
-public class XmlReaderException
+class XmlReaderException
     extends IOException
 {
-    private String _bomEncoding;
+    private final String _bomEncoding;
 
-    private String _xmlGuessEncoding;
+    private final String _xmlGuessEncoding;
 
-    private String _xmlEncoding;
+    private final String _xmlEncoding;
 
-    private String _contentTypeMime;
+    private final String _contentTypeMime;
 
-    private String _contentTypeEncoding;
+    private final String _contentTypeEncoding;
 
-    private InputStream _is;
+    private final InputStream _is;
 
     /**
      * Creates an exception instance if the charset encoding could not be determined.
@@ -57,7 +57,7 @@ public class XmlReaderException
      * @param xmlEnc      XML prolog encoding.
      * @param is          the unconsumed InputStream.
      */
-    public XmlReaderException( String msg, String bomEnc, String xmlGuessEnc, String xmlEnc, InputStream is )
+    XmlReaderException( String msg, String bomEnc, String xmlGuessEnc, String xmlEnc, InputStream is )
     {
         this( msg, null, null, bomEnc, xmlGuessEnc, xmlEnc, is );
     }
@@ -76,7 +76,7 @@ public class XmlReaderException
      * @param xmlEnc      XML prolog encoding.
      * @param is          the unconsumed InputStream.
      */
-    public XmlReaderException( String msg, String ctMime, String ctEnc, String bomEnc, String xmlGuessEnc,
+    XmlReaderException( String msg, String ctMime, String ctEnc, String bomEnc, String xmlGuessEnc,
                                String xmlEnc, InputStream is )
     {
         super( msg );

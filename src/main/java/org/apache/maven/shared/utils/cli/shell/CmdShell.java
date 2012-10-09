@@ -83,12 +83,12 @@ public class CmdShell
      */
     public List<String> getCommandLine( String executable, String[] arguments )
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append( "\"" );
         sb.append( super.getCommandLine( executable, arguments ).get( 0 ) );
         sb.append( "\"" );
 
-        return Arrays.asList( new String[]{ sb.toString() } );
+        return Arrays.asList(sb.toString());
     }
 
 }

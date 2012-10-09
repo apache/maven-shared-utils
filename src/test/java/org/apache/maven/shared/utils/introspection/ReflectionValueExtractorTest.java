@@ -154,7 +154,7 @@ public class ReflectionValueExtractorTest
 
         private Scm scm;
 
-        private List dependencies = new ArrayList();
+        private final List dependencies = new ArrayList();
 
         private Build build;
 
@@ -246,7 +246,8 @@ public class ReflectionValueExtractorTest
 
         public Dependency[] getDependenciesAsArray()
         {
-            return (Dependency[]) getDependencies().toArray( new Dependency[0]);
+            List list = getDependencies();
+            return (Dependency[]) list.toArray(new Dependency[list.size()]);
         }
 
         public Map getDependenciesAsMap()

@@ -32,7 +32,7 @@ import java.util.Map;
  * @author <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
  * @version $Id$
  */
-public class ClassMap
+class ClassMap
 {
     private static final class CacheMiss
     {
@@ -53,7 +53,7 @@ public class ClassMap
      * Cache of Methods, or CACHE_MISS, keyed by method
      * name and actual arguments used to find it.
      */
-    private Map methodCache = new Hashtable();
+    private final Map<String, Object> methodCache = new Hashtable<String, Object>();
 
     private MethodMap methodMap = new MethodMap();
 
@@ -136,7 +136,6 @@ public class ClassMap
      */
     private void populateMethodCache()
     {
-        StringBuffer methodKey;
 
         /*
          *  get all publicly accessible methods
@@ -148,10 +147,8 @@ public class ClassMap
          * map and cache them
          */
 
-        for ( int i = 0; i < methods.length; i++ )
+        for ( Method method : methods )
         {
-            Method method = methods[i];
-
             /*
              *  now get the 'public method', the method declared by a
              *  public interface or class. (because the actual implementing
@@ -184,9 +181,9 @@ public class ClassMap
     {
         Class[] parameterTypes = method.getParameterTypes();
 
-        StringBuffer methodKey = new StringBuffer( method.getName() );
+        StringBuilder methodKey = new StringBuilder( method.getName() );
 
-        for ( int j = 0; j < parameterTypes.length; j++ )
+        for ( Class parameterType : parameterTypes )
         {
             /*
              * If the argument type is primitive then we want
@@ -194,44 +191,44 @@ public class ClassMap
              * corresponding Object type so introspection for
              * methods with primitive types will work correctly.
              */
-            if ( parameterTypes[j].isPrimitive() )
+            if ( parameterType.isPrimitive() )
             {
-                if ( parameterTypes[j].equals( Boolean.TYPE ) )
+                if ( parameterType.equals( Boolean.TYPE ) )
                 {
                     methodKey.append( "java.lang.Boolean" );
                 }
-                else if ( parameterTypes[j].equals( Byte.TYPE ) )
+                else if ( parameterType.equals( Byte.TYPE ) )
                 {
                     methodKey.append( "java.lang.Byte" );
                 }
-                else if ( parameterTypes[j].equals( Character.TYPE ) )
+                else if ( parameterType.equals( Character.TYPE ) )
                 {
                     methodKey.append( "java.lang.Character" );
                 }
-                else if ( parameterTypes[j].equals( Double.TYPE ) )
+                else if ( parameterType.equals( Double.TYPE ) )
                 {
                     methodKey.append( "java.lang.Double" );
                 }
-                else if ( parameterTypes[j].equals( Float.TYPE ) )
+                else if ( parameterType.equals( Float.TYPE ) )
                 {
                     methodKey.append( "java.lang.Float" );
                 }
-                else if ( parameterTypes[j].equals( Integer.TYPE ) )
+                else if ( parameterType.equals( Integer.TYPE ) )
                 {
                     methodKey.append( "java.lang.Integer" );
                 }
-                else if ( parameterTypes[j].equals( Long.TYPE ) )
+                else if ( parameterType.equals( Long.TYPE ) )
                 {
                     methodKey.append( "java.lang.Long" );
                 }
-                else if ( parameterTypes[j].equals( Short.TYPE ) )
+                else if ( parameterType.equals( Short.TYPE ) )
                 {
                     methodKey.append( "java.lang.Short" );
                 }
             }
             else
             {
-                methodKey.append( parameterTypes[j].getName() );
+                methodKey.append( parameterType.getName() );
             }
         }
 
@@ -240,11 +237,11 @@ public class ClassMap
 
     private static String makeMethodKey( String method, Object[] params )
     {
-        StringBuffer methodKey = new StringBuffer().append( method );
+        StringBuilder methodKey = new StringBuilder().append( method );
 
-        for ( int j = 0; j < params.length; j++ )
+        for ( Object param : params )
         {
-            Object arg = params[j];
+            Object arg = param;
 
             if ( arg == null )
             {
@@ -300,9 +297,8 @@ public class ClassMap
         }
 
         int j = 0;
-        for ( int i = 0; i < methodInfos.length; ++i )
+        for ( MethodInfo methodInfo : methodInfos )
         {
-            MethodInfo methodInfo = methodInfos[i];
             if ( methodInfo.upcast )
             {
                 methods[j++] = methodInfo.method;
@@ -418,7 +414,7 @@ public class ClassMap
      *         method is itself declared by a public class, this method is an identity
      *         function.
      */
-    public static Method getPublicMethod( Method method )
+    private static Method getPublicMethod( Method method )
     {
         Class clazz = method.getDeclaringClass();
 
@@ -488,9 +484,9 @@ public class ClassMap
 
         Class[] interfaces = clazz.getInterfaces();
 
-        for ( int i = 0; i < interfaces.length; ++i )
+        for ( Class anInterface : interfaces )
         {
-            Method interfaceMethod = getPublicMethod( interfaces[i], name, paramTypes );
+            Method interfaceMethod = getPublicMethod( anInterface, name, paramTypes );
 
             if ( interfaceMethod != null )
             {

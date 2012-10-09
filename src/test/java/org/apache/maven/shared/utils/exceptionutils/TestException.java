@@ -40,11 +40,13 @@ public class TestException extends Exception
         this.cause = cause;
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public Throwable getSourceException()
     {
         return cause;
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public Throwable getSpecialCause()
     {
         return specialCause;

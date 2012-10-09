@@ -24,13 +24,7 @@ import org.apache.maven.shared.utils.io.FileUtils;
 import org.apache.maven.shared.utils.io.IOUtil;
 import org.junit.rules.TemporaryFolder;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.*;
 
 /**
  * A few utility methods for file based tests
@@ -41,20 +35,6 @@ public final class FileTestHelper
     private FileTestHelper()
     {
         // utility function doesn't need a public ct
-    }
-
-    public static byte[] generateTestData( long size )
-    {
-        try
-        {
-            ByteArrayOutputStream baout = new ByteArrayOutputStream();
-            generateTestData( baout, size );
-            return baout.toByteArray();
-        }
-        catch ( IOException ioe )
-        {
-            throw new RuntimeException( "This should never happen: " + ioe.getMessage() );
-        }
     }
 
     public static void generateTestData( OutputStream out, long size )
@@ -71,6 +51,7 @@ public final class FileTestHelper
     {
         if ( testfile.exists() )
         {
+            //noinspection ResultOfMethodCallIgnored
             testfile.delete();
         }
 
@@ -92,9 +73,8 @@ public final class FileTestHelper
         PrintWriter output = new PrintWriter( new OutputStreamWriter( new FileOutputStream( file ), "UTF-8" ) );
         try
         {
-            for ( int i = 0; i < data.length; i++ )
-            {
-                output.println( data[i] );
+            for (String aData : data) {
+                output.println(aData);
             }
         }
         finally

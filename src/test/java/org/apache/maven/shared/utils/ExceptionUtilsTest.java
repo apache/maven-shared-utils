@@ -44,7 +44,7 @@ public class ExceptionUtilsTest extends Assert
 {
     private final String LS = System.getProperty( "line.separator" );
 
-    protected static StackTraceElement[] STACKTRACE_WO_SPECIAL_METHODS =
+    private static final StackTraceElement[] STACKTRACE_WO_SPECIAL_METHODS =
         {
             new StackTraceElement("org.apache.maven.test.Class1", "method1", null, 101),
             new StackTraceElement("org.apache.maven.test.Class2", "method2", null, 101),
@@ -239,7 +239,7 @@ public class ExceptionUtilsTest extends Assert
         // NPE safe test
         try
         {
-            ExceptionUtils.getStackTrace((Throwable) null);
+            ExceptionUtils.getStackTrace(null);
             fail( "getStackTrace(null) NPE expected" );
         }
         catch ( NullPointerException e )
@@ -268,7 +268,7 @@ public class ExceptionUtilsTest extends Assert
         // NPE safe test
         try
         {
-            ExceptionUtils.getStackFrames((Throwable) null);
+            ExceptionUtils.getStackFrames(null);
             fail( "getStackFrames(null) NPE expected" );
         }
         catch ( NullPointerException e )

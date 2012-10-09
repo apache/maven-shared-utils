@@ -34,35 +34,25 @@ import org.apache.maven.shared.utils.io.IOUtil;
  * @author <a href="mailto:pj@thoughtworks.com">Paul Julius </a>
  * @since June 11, 2001
  */
-public class StreamPumper
+class StreamPumper
     extends AbstractStreamHandler
 {
-    private BufferedReader in;
+    private final BufferedReader in;
 
-    private StreamConsumer consumer = null;
+    private final StreamConsumer consumer;
 
-    private PrintWriter out = null;
+    private final PrintWriter out;
 
     private volatile Exception exception = null;
 
     private static final int SIZE = 1024;
-
-    public StreamPumper( InputStream in )
-    {
-        this( in, (StreamConsumer) null );
-    }
 
     public StreamPumper( InputStream in, StreamConsumer consumer )
     {
         this( in, null, consumer );
     }
 
-    public StreamPumper( InputStream in, PrintWriter writer )
-    {
-        this( in, writer, null );
-    }
-
-    public StreamPumper( InputStream in, PrintWriter writer, StreamConsumer consumer )
+    private StreamPumper( InputStream in, PrintWriter writer, StreamConsumer consumer )
     {
         this.in = new BufferedReader( new InputStreamReader( in ), SIZE );
         this.out = writer;

@@ -47,11 +47,11 @@ public class Os
 {
     public static final String OS_NAME = System.getProperty( "os.name" ).toLowerCase( Locale.ENGLISH );
 
-    public static final String OS_ARCH = System.getProperty( "os.arch" ).toLowerCase( Locale.ENGLISH );
+    public static final String OS_ARCH = System.getProperty( "os.arch" ).toLowerCase(Locale.ENGLISH);
 
-    public static final String OS_VERSION = System.getProperty( "os.version" ).toLowerCase( Locale.ENGLISH );
+    public static final String OS_VERSION = System.getProperty( "os.version" ).toLowerCase(Locale.ENGLISH);
 
-    public static final String PATH_SEP = System.getProperty( "path.separator" );
+    public static final String PATH_SEP = System.getProperty("path.separator");
 
     public static final String OS_FAMILY = getOsFamily();
 
@@ -217,36 +217,6 @@ public class Os
     }
 
     /**
-     * Sets the desired OS name
-     *
-     * @param name The OS name
-     */
-    public void setName( String name )
-    {
-        this.name = name.toLowerCase( Locale.ENGLISH );
-    }
-
-    /**
-     * Sets the desired OS architecture
-     *
-     * @param arch The OS architecture
-     */
-    public void setArch( String arch )
-    {
-        this.arch = arch.toLowerCase( Locale.ENGLISH );
-    }
-
-    /**
-     * Sets the desired OS version
-     *
-     * @param version The OS version
-     */
-    public void setVersion( String version )
-    {
-        this.version = version.toLowerCase( Locale.ENGLISH );
-    }
-
-    /**
      * Determines if the OS on which Ant is executing matches the type of
      * that set in setFamily.
      *
@@ -254,8 +224,7 @@ public class Os
      * @throws Exception if there is an error.
      * @see Os#setFamily(String)
      */
-    public boolean eval()
-        throws Exception
+    boolean eval()
     {
         return isOs( family, name, arch, version );
     }
@@ -323,7 +292,7 @@ public class Os
      * @return true if the OS matches
      * @since 1.7
      */
-    public static boolean isOs( String family, String name, String arch, String version )
+    private static boolean isOs( String family, String name, String arch, String version )
     {
         boolean retValue = false;
 

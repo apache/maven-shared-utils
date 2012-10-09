@@ -72,11 +72,10 @@ public class ExpandTest extends Assert
      *
      * @return
      */
-    private File getTestTargetDir() throws IOException
+    private File getTestTargetDir()
     {
-        File targetDir = tempFolder.newFolder( TEST_ZIP_TARGET_FOLDER );
 
-        return targetDir;
+        return tempFolder.newFolder( TEST_ZIP_TARGET_FOLDER );
     }
 
     @Test
@@ -317,7 +316,7 @@ public class ExpandTest extends Assert
         return expandedFile;
     }
 
-    private File verifyExpandedFileAndContent( File targetDir, String expectedContent )
+    private void verifyExpandedFileAndContent( File targetDir, String expectedContent )
             throws FileNotFoundException
     {
         File expandedFile = verifyExpandedFile( targetDir );
@@ -330,8 +329,6 @@ public class ExpandTest extends Assert
         assertThat( "expanded file content must match"
                   , text
                   , is( expectedContent) );
-
-        return expandedFile;
     }
 
 

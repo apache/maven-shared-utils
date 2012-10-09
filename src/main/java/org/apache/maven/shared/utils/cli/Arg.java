@@ -29,5 +29,4 @@ public interface Arg
 
     void setFile( File value );
 
-    String[] getParts();
 }

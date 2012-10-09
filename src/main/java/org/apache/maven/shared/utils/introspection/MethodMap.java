@@ -43,7 +43,7 @@ public class MethodMap
     /**
      * Keep track of all methods with the same name.
      */
-    Map<String, List<Method>> methodByNameMap = new Hashtable<String, List<Method>>();
+    private final Map<String, List<Method>> methodByNameMap = new Hashtable<String, List<Method>>();
 
     /**
      * Add a method to a list of methods by name.

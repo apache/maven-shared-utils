@@ -7,21 +7,21 @@ import java.util.List;
 public class WalkCollector
     implements DirectoryWalkListener
 {
-    protected List steps;
+    final List<File> steps;
 
-    protected File startingDir;
+    File startingDir;
 
-    protected int startCount;
+    int startCount;
 
-    protected int finishCount;
+    int finishCount;
 
-    protected int percentageLow;
+    int percentageLow;
 
-    protected int percentageHigh;
+    int percentageHigh;
 
     public WalkCollector()
     {
-        steps = new ArrayList();
+        steps = new ArrayList<File>();
         startCount = 0;
         finishCount = 0;
         percentageLow = 0;
@@ -49,36 +49,5 @@ public class WalkCollector
     public void directoryWalkFinished()
     {
         finishCount++;
-    }
-
-
-    public int getFinishCount()
-    {
-        return finishCount;
-    }
-
-    public int getPercentageHigh()
-    {
-        return percentageHigh;
-    }
-
-    public int getPercentageLow()
-    {
-        return percentageLow;
-    }
-
-    public int getStartCount()
-    {
-        return startCount;
-    }
-
-    public File getStartingDir()
-    {
-        return startingDir;
-    }
-
-    public List getSteps()
-    {
-        return steps;
     }
 }

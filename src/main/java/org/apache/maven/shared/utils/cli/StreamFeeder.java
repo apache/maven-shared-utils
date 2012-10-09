@@ -29,7 +29,7 @@ import java.io.OutputStream;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-public class StreamFeeder
+class StreamFeeder
     extends AbstractStreamHandler
 {
     private InputStream input;

@@ -37,10 +37,8 @@ import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.security.SecureRandom;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+
 import org.apache.maven.shared.utils.Os;
 import org.apache.maven.shared.utils.StringUtils;
 
@@ -52,19 +50,14 @@ import org.apache.maven.shared.utils.StringUtils;
  * <p>Methods exist to retrieve the components of a typical file path. For example
  * <code>/www/hosted/mysite/index.html</code>, can be broken into:
  * <ul>
- * <li><code>/www/hosted/mysite/</code> -- retrievable through {@link #getPath}</li>
- * <li><code>index.html</code> -- retrievable through {@link #removePath}</li>
  * <li><code>/www/hosted/mysite/index</code> -- retrievable through {@link #removeExtension}</li>
  * <li><code>html</code> -- retrievable through {@link #getExtension}</li>
  * </ul>
- * There are also methods to {@link #catPath concatenate two paths}, {@link #resolveFile resolve a
- * path relative to a File} and {@link #normalize} a path.
  * </p>
  * <p/>
  * <h3>File-related methods</h3>
  * <p/>
  * There are methods to  create a {@link #toFile File from a URL}, copy a
- * {@link #copyFileToDirectory File to a directory},
  * copy a {@link #copyFile File to another File},
  * copy a {@link #copyURLToFile URL's contents to a File},
  * as well as methods to {@link #deleteDirectory(File) delete} and {@link #cleanDirectory(File)
@@ -88,25 +81,25 @@ import org.apache.maven.shared.utils.StringUtils;
  */
 public class FileUtils
 {
-    private FileUtils()
+    protected FileUtils()
     {
-        // This is a utility class. We add a private ct to prevent initialisation
+        // This is a utility class.  Normally dont instantiate
     }
 
     /**
      * The number of bytes in a kilobyte.
      */
-    public static final int ONE_KB = 1024;
+    private static final int ONE_KB = 1024;
 
     /**
      * The number of bytes in a megabyte.
      */
-    public static final int ONE_MB = ONE_KB * ONE_KB;
+    private static final int ONE_MB = ONE_KB * ONE_KB;
 
     /**
      * The number of bytes in a gigabyte.
      */
-    public static final int ONE_GB = ONE_KB * ONE_MB;
+    private static final int ONE_GB = ONE_KB * ONE_MB;
 
     /**
      * The file copy buffer size (30 MB)
@@ -116,7 +109,7 @@ public class FileUtils
     /**
      * The vm line separator
      */
-    public static String FS = System.getProperty( "file.separator" );
+    private static final String FS = System.getProperty( "file.separator" );
 
     /**
      * Non-valid Characters for naming files, folders under Windows: <code>":", "*", "?", "\"", "<", ">", "|"</code>
@@ -230,7 +223,7 @@ public class FileUtils
      * @param suffix   the file suffix
      * @return the basename of the file
      */
-    public static String basename( String filename, String suffix )
+    private static String basename( String filename, String suffix )
     {
         int i = filename.lastIndexOf( File.separator ) + 1;
         int lastDot = ( ( suffix != null ) && ( suffix.length() > 0 ) ) ? filename.lastIndexOf( suffix ) : -1;
@@ -314,7 +307,7 @@ public class FileUtils
      * @return the file content using the specified encoding.
      * @throws IOException if any
      */
-    public static String fileRead( String file, String encoding )
+    private static String fileRead( String file, String encoding )
         throws IOException
     {
         return fileRead( new File( file ), encoding );
@@ -342,7 +335,7 @@ public class FileUtils
     public static String fileRead( File file, String encoding )
         throws IOException
     {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
 
         Reader reader = null;
 
@@ -568,63 +561,8 @@ public class FileUtils
     public static void fileDelete( String fileName )
     {
         File file = new File( fileName );
+        //noinspection ResultOfMethodCallIgnored
         file.delete();
-    }
-
-    /**
-     * Waits for NFS to propagate a file creation, imposing a timeout.
-     *
-     * @param fileName The path of the file.
-     * @param seconds  The maximum time in seconds to wait.
-     * @return True if file exists.
-     */
-    public static boolean waitFor( String fileName, int seconds )
-    {
-        return waitFor( new File( fileName ), seconds );
-    }
-
-    /**
-     * Waits for NFS to propagate a file creation, imposing a timeout.
-     *
-     * @param file    The file.
-     * @param seconds The maximum time in seconds to wait.
-     * @return True if file exists.
-     */
-    public static boolean waitFor( File file, int seconds )
-    {
-        int timeout = 0;
-        int tick = 0;
-        while ( !file.exists() )
-        {
-            if ( tick++ >= 10 )
-            {
-                tick = 0;
-                if ( timeout++ > seconds )
-                {
-                    return false;
-                }
-            }
-            try
-            {
-                Thread.sleep( 100 );
-            }
-            catch ( InterruptedException ignore )
-            {
-                // nop
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Creates a file handle.
-     *
-     * @param fileName The path of the file.
-     * @return A <code>File</code> manager.
-     */
-    public static File getFile( String fileName )
-    {
-        return new File( fileName );
     }
 
     /**
@@ -652,33 +590,27 @@ public class FileUtils
             return new String[0];
         }
 
-        for ( int i = 0; i < unknownFiles.length; ++i )
-        {
-            String currentFileName = directory + System.getProperty( "file.separator" ) + unknownFiles[i];
-            File currentFile = new File( currentFileName );
+        for (String unknownFile : unknownFiles) {
+            String currentFileName = directory + System.getProperty("file.separator") + unknownFile;
+            File currentFile = new File(currentFileName);
 
-            if ( currentFile.isDirectory() )
-            {
+            if (currentFile.isDirectory()) {
                 //ignore all CVS directories...
-                if ( currentFile.getName().equals( "CVS" ) )
-                {
+                if (currentFile.getName().equals("CVS")) {
                     continue;
                 }
 
                 //ok... transverse into this directory and get all the files... then combine
                 //them with the current list.
 
-                String[] fetchFiles = getFilesFromExtension( currentFileName, extensions );
-                files = blendFilesToVector( files, fetchFiles );
-            }
-            else
-            {
+                String[] fetchFiles = getFilesFromExtension(currentFileName, extensions);
+                files = blendFilesToVector(files, fetchFiles);
+            } else {
                 //ok... add the file
 
                 String add = currentFile.getAbsolutePath();
-                if ( isValidFile( add, extensions ) )
-                {
-                    files.add( add );
+                if (isValidFile(add, extensions)) {
+                    files.add(add);
                 }
             }
         }
@@ -695,10 +627,7 @@ public class FileUtils
      */
     private static List<String> blendFilesToVector( List<String> v, String[] files )
     {
-        for ( int i = 0; i < files.length; ++i )
-        {
-            v.add( files[i] );
-        }
+        Collections.addAll(v, files);
 
         return v;
     }
@@ -719,10 +648,8 @@ public class FileUtils
         //ok.. now that we have the "extension" go through the current know
         //excepted extensions and determine if this one is OK.
 
-        for ( int i = 0; i < extensions.length; ++i )
-        {
-            if ( extensions[i].equals( extension ) )
-            {
+        for (String extension1 : extensions) {
+            if (extension1.equals(extension)) {
                 return true;
             }
         }
@@ -751,6 +678,7 @@ public class FileUtils
 
         if ( !file.exists() )
         {
+            //noinspection ResultOfMethodCallIgnored
             file.mkdirs();
         }
     }
@@ -893,122 +821,6 @@ public class FileUtils
     }
 
     /**
-     * Remove path from filename. Equivalent to the unix command <code>basename</code>
-     * ie.
-     * <pre>
-     * a/b/c.txt --> c.txt
-     * a.txt     --> a.txt
-     * </pre>
-     *
-     * @param filepath the path of the file
-     * @return the filename minus path
-     */
-    public static String removePath( final String filepath )
-    {
-        return removePath( filepath, File.separatorChar );
-    }
-
-    /**
-     * Remove path from filename.
-     * ie.
-     * <pre>
-     * a/b/c.txt --> c.txt
-     * a.txt     --> a.txt
-     * </pre>
-     *
-     * @param filepath          the path of the file
-     * @param fileSeparatorChar the file separator character like <b>/</b> on Unix plateforms.
-     * @return the filename minus path
-     */
-    public static String removePath( final String filepath, final char fileSeparatorChar )
-    {
-        final int index = filepath.lastIndexOf( fileSeparatorChar );
-
-        if ( -1 == index )
-        {
-            return filepath;
-        }
-
-        return filepath.substring( index + 1 );
-    }
-
-    /**
-     * Get path from filename. Roughly equivalent to the unix command <code>dirname</code>.
-     * ie.
-     * <pre>
-     * a/b/c.txt --> a/b
-     * a.txt     --> ""
-     * </pre>
-     *
-     * @param filepath the filepath
-     * @return the filename minus path
-     */
-    public static String getPath( final String filepath )
-    {
-        return getPath( filepath, File.separatorChar );
-    }
-
-    /**
-     * Get path from filename.
-     * ie.
-     * <pre>
-     * a/b/c.txt --> a/b
-     * a.txt     --> ""
-     * </pre>
-     *
-     * @param filepath          the filepath
-     * @param fileSeparatorChar the file separator character like <b>/</b> on Unix plateforms.
-     * @return the filename minus path
-     */
-    public static String getPath( final String filepath, final char fileSeparatorChar )
-    {
-        final int index = filepath.lastIndexOf( fileSeparatorChar );
-        if ( -1 == index )
-        {
-            return "";
-        }
-
-        return filepath.substring( 0, index );
-    }
-
-    /**
-     * Copy file from source to destination. If <code>destinationDirectory</code> does not exist, it
-     * (and any parent directories) will be created. If a file <code>source</code> in
-     * <code>destinationDirectory</code> exists, it will be overwritten.
-     *
-     * @param source               An existing <code>File</code> to copy.
-     * @param destinationDirectory A directory to copy <code>source</code> into.
-     * @throws java.io.FileNotFoundException if <code>source</code> isn't a normal file.
-     * @throws IllegalArgumentException      if <code>destinationDirectory</code> isn't a directory.
-     * @throws IOException                   if <code>source</code> does not exist, the file in
-     *                                       <code>destinationDirectory</code> cannot be written to, or an IO error occurs during copying.
-     */
-    public static void copyFileToDirectory( final String source, final String destinationDirectory )
-        throws IOException
-    {
-        copyFileToDirectory( new File( source ), new File( destinationDirectory ) );
-    }
-
-    /**
-     * Copy file from source to destination only if source is newer than the target file.
-     * If <code>destinationDirectory</code> does not exist, it
-     * (and any parent directories) will be created. If a file <code>source</code> in
-     * <code>destinationDirectory</code> exists, it will be overwritten.
-     *
-     * @param source               An existing <code>File</code> to copy.
-     * @param destinationDirectory A directory to copy <code>source</code> into.
-     * @throws java.io.FileNotFoundException if <code>source</code> isn't a normal file.
-     * @throws IllegalArgumentException      if <code>destinationDirectory</code> isn't a directory.
-     * @throws IOException                   if <code>source</code> does not exist, the file in
-     *                                       <code>destinationDirectory</code> cannot be written to, or an IO error occurs during copying.
-     */
-    public static void copyFileToDirectoryIfModified( final String source, final String destinationDirectory )
-        throws IOException
-    {
-        copyFileToDirectoryIfModified( new File( source ), new File( destinationDirectory ) );
-    }
-
-    /**
      * Copy file from source to destination. If <code>destinationDirectory</code> does not exist, it
      * (and any parent directories) will be created. If a file <code>source</code> in
      * <code>destinationDirectory</code> exists, it will be overwritten.
@@ -1044,7 +856,7 @@ public class FileUtils
      * @throws IOException                   if <code>source</code> does not exist, the file in
      *                                       <code>destinationDirectory</code> cannot be written to, or an IO error occurs during copying.
      */
-    public static void copyFileToDirectoryIfModified( final File source, final File destinationDirectory )
+    private static void copyFileToDirectoryIfModified( final File source, final File destinationDirectory )
         throws IOException
     {
         if ( destinationDirectory.exists() && !destinationDirectory.isDirectory() )
@@ -1067,7 +879,7 @@ public class FileUtils
      * @throws IOException                   if <code>source</code> does not exist, <code>destination</code> cannot be
      *                                       written to, or an IO error occurs during copying.
      * @throws java.io.FileNotFoundException if <code>destination</code> is a directory
-     *                                       (use {@link #copyFileToDirectory}).
+     *
      */
     public static void copyFile( final File source, final File destination )
         throws IOException
@@ -1102,6 +914,7 @@ public class FileUtils
         //does destination directory exist ?
         if ( destination.getParentFile() != null && !destination.getParentFile().exists() )
         {
+            //noinspection ResultOfMethodCallIgnored
             destination.getParentFile().mkdirs();
         }
     }
@@ -1121,7 +934,7 @@ public class FileUtils
             output = fos.getChannel();
             long size = input.size();
             long pos = 0;
-            long count = 0;
+            long count;
             while ( pos < size )
             {
                 count = size - pos > FILE_COPY_BUFFER_SIZE ? FILE_COPY_BUFFER_SIZE : size - pos;
@@ -1149,7 +962,7 @@ public class FileUtils
      * @throws IOException if <code>source</code> does not exist, <code>destination</code> cannot be
      *                     written to, or an IO error occurs during copying.
      */
-    public static boolean copyFileIfModified( final File source, final File destination )
+    private static boolean copyFileIfModified( final File source, final File destination )
         throws IOException
     {
         if ( destination.lastModified() < source.lastModified() )
@@ -1199,12 +1012,13 @@ public class FileUtils
      *                     <li>an IO error occurs during copying</li>
      *                     </ul>
      */
-    public static void copyStreamToFile( final InputStream source, final File destination )
+    private static void copyStreamToFile( final InputStream source, final File destination )
         throws IOException
     {
         //does destination directory exist ?
         if ( destination.getParentFile() != null && !destination.getParentFile().exists() )
         {
+            //noinspection ResultOfMethodCallIgnored
             destination.getParentFile().mkdirs();
         }
 
@@ -1228,204 +1042,6 @@ public class FileUtils
             IOUtil.close( input );
             IOUtil.close( output );
         }
-    }
-
-    /**
-     * Normalize a path.
-     * Eliminates "/../" and "/./" in a string. Returns <code>null</code> if the ..'s went past the
-     * root.
-     * Eg:
-     * <pre>
-     * /foo//               -->     /foo/
-     * /foo/./              -->     /foo/
-     * /foo/../bar          -->     /bar
-     * /foo/../bar/         -->     /bar/
-     * /foo/../bar/../baz   -->     /baz
-     * //foo//./bar         -->     /foo/bar
-     * /../                 -->     null
-     * </pre>
-     *
-     * @param path the path to normalize
-     * @return the normalized String, or <code>null</code> if too many ..'s.
-     */
-    public static String normalize( final String path )
-    {
-        String normalized = path;
-        // Resolve occurrences of "//" in the normalized path
-        while ( true )
-        {
-            int index = normalized.indexOf( "//" );
-            if ( index < 0 )
-            {
-                break;
-            }
-            normalized = normalized.substring( 0, index ) + normalized.substring( index + 1 );
-        }
-
-        // Resolve occurrences of "/./" in the normalized path
-        while ( true )
-        {
-            int index = normalized.indexOf( "/./" );
-            if ( index < 0 )
-            {
-                break;
-            }
-            normalized = normalized.substring( 0, index ) + normalized.substring( index + 2 );
-        }
-
-        // Resolve occurrences of "/../" in the normalized path
-        while ( true )
-        {
-            int index = normalized.indexOf( "/../" );
-            if ( index < 0 )
-            {
-                break;
-            }
-            if ( index == 0 )
-            {
-                return null;  // Trying to go outside our context
-            }
-            int index2 = normalized.lastIndexOf( '/', index - 1 );
-            normalized = normalized.substring( 0, index2 ) + normalized.substring( index + 3 );
-        }
-
-        // Return the normalized path that we have completed
-        return normalized;
-    }
-
-    /**
-     * Will concatenate 2 paths.  Paths with <code>..</code> will be
-     * properly handled.
-     * <p>Eg.,<br />
-     * <code>/a/b/c</code> + <code>d</code> = <code>/a/b/d</code><br />
-     * <code>/a/b/c</code> + <code>../d</code> = <code>/a/d</code><br />
-     * </p>
-     * <p/>
-     * Thieved from Tomcat sources...
-     *
-     * @param lookupPath a path
-     * @param path       the path to concatenate
-     * @return The concatenated paths, or null if error occurs
-     */
-    public static String catPath( final String lookupPath, final String path )
-    {
-        // Cut off the last slash and everything beyond
-        int index = lookupPath.lastIndexOf( "/" );
-        String lookup = lookupPath.substring( 0, index );
-        String pth = path;
-
-        // Deal with .. by chopping dirs off the lookup path
-        while ( pth.startsWith( "../" ) )
-        {
-            if ( lookup.length() > 0 )
-            {
-                index = lookup.lastIndexOf( "/" );
-                lookup = lookup.substring( 0, index );
-            }
-            else
-            {
-                // More ..'s than dirs, return null
-                return null;
-            }
-
-            index = pth.indexOf( "../" ) + 3;
-            pth = pth.substring( index );
-        }
-
-        return new StringBuffer( lookup ).append( "/" ).append( pth ).toString();
-    }
-
-    /**
-     * Resolve a file <code>filename</code> to it's canonical form. If <code>filename</code> is
-     * relative (doesn't start with <code>/</code>), it will be resolved relative to
-     * <code>baseFile</code>, otherwise it is treated as a normal root-relative path.
-     *
-     * @param baseFile Where to resolve <code>filename</code> from, if <code>filename</code> is
-     *                 relative.
-     * @param filename Absolute or relative file path to resolve.
-     * @return The canonical <code>File</code> of <code>filename</code>.
-     */
-    public static File resolveFile( final File baseFile, String filename )
-    {
-        String filenm = filename;
-        if ( '/' != File.separatorChar )
-        {
-            filenm = filename.replace( '/', File.separatorChar );
-        }
-
-        if ( '\\' != File.separatorChar )
-        {
-            filenm = filename.replace( '\\', File.separatorChar );
-        }
-
-        // deal with absolute files
-        if ( filenm.startsWith( File.separator ) || ( Os.isFamily( Os.FAMILY_WINDOWS ) && filenm.indexOf( ":" ) > 0 ) )
-        {
-            File file = new File( filenm );
-
-            try
-            {
-                file = file.getCanonicalFile();
-            }
-            catch ( final IOException ioe )
-            {
-                // nop
-            }
-
-            return file;
-        }
-        // FIXME: I'm almost certain this // removal is unnecessary, as getAbsoluteFile() strips
-        // them. However, I'm not sure about this UNC stuff. (JT)
-        final char[] chars = filename.toCharArray();
-        final StringBuffer sb = new StringBuffer();
-
-        //remove duplicate file separators in succession - except
-        //on win32 at start of filename as UNC filenames can
-        //be \\AComputer\AShare\myfile.txt
-        int start = 0;
-        if ( '\\' == File.separatorChar )
-        {
-            sb.append( filenm.charAt( 0 ) );
-            start++;
-        }
-
-        for ( int i = start; i < chars.length; i++ )
-        {
-            final boolean doubleSeparator = File.separatorChar == chars[i] && File.separatorChar == chars[i - 1];
-
-            if ( !doubleSeparator )
-            {
-                sb.append( chars[i] );
-            }
-        }
-
-        filenm = sb.toString();
-
-        //must be relative
-        File file = ( new File( baseFile, filenm ) ).getAbsoluteFile();
-
-        try
-        {
-            file = file.getCanonicalFile();
-        }
-        catch ( final IOException ioe )
-        {
-            // nop
-        }
-
-        return file;
-    }
-
-    /**
-     * Delete a file. If file is directory delete it and all sub-directories.
-     *
-     * @param file the file path
-     * @throws IOException if any
-     */
-    public static void forceDelete( final String file )
-        throws IOException
-    {
-        forceDelete( new File( file ) );
     }
 
     /**
@@ -1494,92 +1110,6 @@ public class FileUtils
         return true;
     }
 
-    /**
-     * Schedule a file to be deleted when JVM exits.
-     * If file is directory delete it and all sub-directories.
-     *
-     * @param file a file
-     * @throws IOException if any
-     */
-    public static void forceDeleteOnExit( final File file )
-        throws IOException
-    {
-        if ( !file.exists() )
-        {
-            return;
-        }
-
-        if ( file.isDirectory() )
-        {
-            deleteDirectoryOnExit( file );
-        }
-        else
-        {
-            file.deleteOnExit();
-        }
-    }
-
-    /**
-     * Recursively schedule directory for deletion on JVM exit.
-     *
-     * @param directory a directory
-     * @throws IOException if any
-     */
-    private static void deleteDirectoryOnExit( final File directory )
-        throws IOException
-    {
-        if ( !directory.exists() )
-        {
-            return;
-        }
-
-        cleanDirectoryOnExit( directory );
-        directory.deleteOnExit();
-    }
-
-    /**
-     * Clean a directory without deleting it.
-     *
-     * @param directory a directory
-     * @throws IOException if any
-     */
-    private static void cleanDirectoryOnExit( final File directory )
-        throws IOException
-    {
-        if ( !directory.exists() )
-        {
-            final String message = directory + " does not exist";
-            throw new IllegalArgumentException( message );
-        }
-
-        if ( !directory.isDirectory() )
-        {
-            final String message = directory + " is not a directory";
-            throw new IllegalArgumentException( message );
-        }
-
-        IOException exception = null;
-
-        final File[] files = directory.listFiles();
-        for ( int i = 0; i < files.length; i++ )
-        {
-            final File file = files[i];
-            try
-            {
-                forceDeleteOnExit( file );
-            }
-            catch ( final IOException ioe )
-            {
-                exception = ioe;
-            }
-        }
-
-        if ( null != exception )
-        {
-            throw exception;
-        }
-    }
-
 
     /**
      * Make a directory.
@@ -1611,7 +1141,7 @@ public class FileUtils
         }
         else
         {
-            if ( false == file.mkdirs() )
+            if (!file.mkdirs())
             {
                 final String message = "Unable to create directory " + file;
                 throw new IOException( message );
@@ -1667,18 +1197,6 @@ public class FileUtils
      * @param directory a directory
      * @throws IOException if any
      */
-    public static void cleanDirectory( final String directory )
-        throws IOException
-    {
-        cleanDirectory( new File( directory ) );
-    }
-
-    /**
-     * Clean a directory without deleting it.
-     *
-     * @param directory a directory
-     * @throws IOException if any
-     */
     public static void cleanDirectory( final File directory )
         throws IOException
     {
@@ -1703,15 +1221,10 @@ public class FileUtils
             return;
         }
 
-        for ( int i = 0; i < files.length; i++ )
-        {
-            final File file = files[i];
-            try
-            {
-                forceDelete( file );
-            }
-            catch ( final IOException ioe )
-            {
+        for (final File file : files) {
+            try {
+                forceDelete(file);
+            } catch (final IOException ioe) {
                 exception = ioe;
             }
         }
@@ -1756,16 +1269,10 @@ public class FileUtils
         long size = 0;
 
         final File[] files = directory.listFiles();
-        for ( int i = 0; i < files.length; i++ )
-        {
-            final File file = files[i];
-
-            if ( file.isDirectory() )
-            {
-                size += sizeOfDirectory( file );
-            }
-            else
-            {
+        for (final File file : files) {
+            if (file.isDirectory()) {
+                size += sizeOfDirectory(file);
+            } else {
                 size += file.length();
             }
         }
@@ -1844,7 +1351,7 @@ public class FileUtils
      * @return a list of files as String
      * @throws IOException
      */
-    public static List<String> getFileNames( File directory, String includes, String excludes, boolean includeBasedir,
+    private static List<String> getFileNames( File directory, String includes, String excludes, boolean includeBasedir,
                                              boolean isCaseSensitive )
         throws IOException
     {
@@ -1898,12 +1405,10 @@ public class FileUtils
      * @param getFiles        true if get files
      * @param getDirectories  true if get directories
      * @return a list of files as String
-     * @throws IOException
      */
     public static List<String> getFileAndDirectoryNames( File directory, String includes, String excludes,
                                                          boolean includeBasedir, boolean isCaseSensitive,
                                                          boolean getFiles, boolean getDirectories )
-        throws IOException
     {
         DirectoryScanner scanner = new DirectoryScanner();
 
@@ -1929,15 +1434,11 @@ public class FileUtils
         {
             String[] files = scanner.getIncludedFiles();
 
-            for ( int i = 0; i < files.length; i++ )
-            {
-                if ( includeBasedir )
-                {
-                    list.add( directory + FileUtils.FS + files[i] );
-                }
-                else
-                {
-                    list.add( files[i] );
+            for (String file : files) {
+                if (includeBasedir) {
+                    list.add(directory + FileUtils.FS + file);
+                } else {
+                    list.add(file);
                 }
             }
         }
@@ -1946,15 +1447,11 @@ public class FileUtils
         {
             String[] directories = scanner.getIncludedDirectories();
 
-            for ( int i = 0; i < directories.length; i++ )
-            {
-                if ( includeBasedir )
-                {
-                    list.add( directory + FileUtils.FS + directories[i] );
-                }
-                else
-                {
-                    list.add( directories[i] );
+            for (String directory1 : directories) {
+                if (includeBasedir) {
+                    list.add(directory + FileUtils.FS + directory1);
+                } else {
+                    list.add(directory1);
                 }
             }
         }
@@ -2003,82 +1500,6 @@ public class FileUtils
     }
 
     /**
-     * Copies a entire directory layout : no files will be copied only directories
-     * <p/>
-     * Note:
-     * <ul>
-     * <li>It will include empty directories.
-     * <li>The <code>sourceDirectory</code> must exists.
-     * </ul>
-     *
-     * @param sourceDirectory      the source dir
-     * @param destinationDirectory the target dir
-     * @param includes             include pattern
-     * @param excludes             exlucde pattern
-     * @throws IOException if any
-     * @since 1.5.7
-     */
-    public static void copyDirectoryLayout( File sourceDirectory, File destinationDirectory, String[] includes,
-                                            String[] excludes )
-        throws IOException
-    {
-        if ( sourceDirectory == null )
-        {
-            throw new IOException( "source directory can't be null." );
-        }
-
-        if ( destinationDirectory == null )
-        {
-            throw new IOException( "destination directory can't be null." );
-        }
-
-        if ( sourceDirectory.equals( destinationDirectory ) )
-        {
-            throw new IOException( "source and destination are the same directory." );
-        }
-
-        if ( !sourceDirectory.exists() )
-        {
-            throw new IOException( "Source directory doesn't exists (" + sourceDirectory.getAbsolutePath() + ")." );
-        }
-
-        DirectoryScanner scanner = new DirectoryScanner();
-
-        scanner.setBasedir( sourceDirectory );
-
-        if ( includes != null && includes.length >= 1 )
-        {
-            scanner.setIncludes( includes );
-        }
-        else
-        {
-            scanner.setIncludes( new String[]{ "**" } );
-        }
-
-        if ( excludes != null && excludes.length >= 1 )
-        {
-            scanner.setExcludes( excludes );
-        }
-
-        scanner.addDefaultExcludes();
-        scanner.scan();
-        List<String> includedDirectories = Arrays.asList( scanner.getIncludedDirectories() );
-
-        for ( String name : includedDirectories )
-        {
-            File source = new File( sourceDirectory, name );
-
-            if ( source.equals( sourceDirectory ) )
-            {
-                continue;
-            }
-
-            File destination = new File( destinationDirectory, name );
-            destination.mkdirs();
-        }
-    }
-
-    /**
      * Copies a entire directory structure.
      * <p/>
      * Note:
@@ -2095,25 +1516,6 @@ public class FileUtils
         throws IOException
     {
         copyDirectoryStructure( sourceDirectory, destinationDirectory, destinationDirectory, false );
-    }
-
-    /**
-     * Copies an entire directory structure but only source files with timestamp later than the destinations'.
-     * <p/>
-     * Note:
-     * <ul>
-     * <li>It will include empty directories.
-     * <li>The <code>sourceDirectory</code> must exists.
-     * </ul>
-     *
-     * @param sourceDirectory      the source dir
-     * @param destinationDirectory the target dir
-     * @throws IOException if any
-     */
-    public static void copyDirectoryStructureIfModified( File sourceDirectory, File destinationDirectory )
-        throws IOException
-    {
-        copyDirectoryStructure( sourceDirectory, destinationDirectory, destinationDirectory, true );
     }
 
     private static void copyDirectoryStructure( File sourceDirectory, File destinationDirectory,
@@ -2144,48 +1546,35 @@ public class FileUtils
 
         String sourcePath = sourceDirectory.getAbsolutePath();
 
-        for ( int i = 0; i < files.length; i++ )
-        {
-            File file = files[i];
-
-            if ( file.equals( rootDestinationDirectory ) )
-            {
+        for (File file : files) {
+            if (file.equals(rootDestinationDirectory)) {
                 // We don't copy the destination directory in itself
                 continue;
             }
 
             String dest = file.getAbsolutePath();
 
-            dest = dest.substring( sourcePath.length() + 1 );
+            dest = dest.substring(sourcePath.length() + 1);
 
-            File destination = new File( destinationDirectory, dest );
+            File destination = new File(destinationDirectory, dest);
 
-            if ( file.isFile() )
-            {
+            if (file.isFile()) {
                 destination = destination.getParentFile();
 
-                if ( onlyModifiedFiles )
-                {
-                    copyFileToDirectoryIfModified( file, destination );
+                if (onlyModifiedFiles) {
+                    copyFileToDirectoryIfModified(file, destination);
+                } else {
+                    copyFileToDirectory(file, destination);
                 }
-                else
-                {
-                    copyFileToDirectory( file, destination );
-                }
-            }
-            else if ( file.isDirectory() )
-            {
-                if ( !destination.exists() && !destination.mkdirs() )
-                {
+            } else if (file.isDirectory()) {
+                if (!destination.exists() && !destination.mkdirs()) {
                     throw new IOException(
-                        "Could not create destination directory '" + destination.getAbsolutePath() + "'." );
+                            "Could not create destination directory '" + destination.getAbsolutePath() + "'.");
                 }
 
-                copyDirectoryStructure( file, destination, rootDestinationDirectory, onlyModifiedFiles );
-            }
-            else
-            {
-                throw new IOException( "Unknown file type: " + file.getAbsolutePath() );
+                copyDirectoryStructure(file, destination, rootDestinationDirectory, onlyModifiedFiles);
+            } else {
+                throw new IOException("Unknown file type: " + file.getAbsolutePath());
             }
         }
     }
@@ -2252,7 +1641,7 @@ public class FileUtils
      */
     public static File createTempFile( String prefix, String suffix, File parentDir )
     {
-        File result = null;
+        File result;
         String parent = System.getProperty( "java.io.tmpdir" );
         if ( parentDir != null )
         {
@@ -2333,10 +1722,8 @@ public class FileUtils
                 }
 
                 Reader reader = fileReader;
-                for ( int i = 0; i < wrappers.length; i++ )
-                {
-                    FilterWrapper wrapper = wrappers[i];
-                    reader = wrapper.getReader( reader );
+                for (FilterWrapper wrapper : wrappers) {
+                    reader = wrapper.getReader(reader);
                 }
 
                 IOUtil.copy( reader, fileWriter );
@@ -2401,7 +1788,7 @@ public class FileUtils
      * @see #INVALID_CHARACTERS_FOR_WINDOWS_FILE_NAME
      * @since 1.5.2
      */
-    public static boolean isValidWindowsFileName( File f )
+    private static boolean isValidWindowsFileName( File f )
     {
         if ( Os.isFamily( Os.FAMILY_WINDOWS ) )
         {

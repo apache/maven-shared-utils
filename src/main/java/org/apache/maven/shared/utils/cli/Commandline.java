@@ -21,12 +21,8 @@ package org.apache.maven.shared.utils.cli;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Vector;
+import java.util.*;
+
 import org.apache.maven.shared.utils.Os;
 import org.apache.maven.shared.utils.StringUtils;
 import org.apache.maven.shared.utils.cli.shell.BourneShell;
@@ -65,55 +61,13 @@ import org.apache.maven.shared.utils.cli.shell.Shell;
 public class Commandline
     implements Cloneable
 {
-    protected Vector arguments = new Vector();
+    private final List<Arg> arguments = new Vector<Arg>();
 
     //protected Vector envVars = new Vector();
     // synchronized added to preserve synchronize of Vector class
-    protected Map envVars = Collections.synchronizedMap( new LinkedHashMap() );
-
-    private long pid = -1;
+    private final Map<String,String> envVars = Collections.synchronizedMap( new LinkedHashMap<String,String>() );
 
     private Shell shell;
-
-    /**
-     * @deprecated Use {@link Commandline#setExecutable(String)} instead.
-     */
-    protected String executable;
-
-    /**
-     * @deprecated Use {@link Commandline#setWorkingDirectory(File)} or
-     *             {@link Commandline#setWorkingDirectory(String)} instead.
-     */
-    private File workingDir;
-
-    /**
-     * Create a new command line object.
-     * Shell is autodetected from operating system
-     *
-     * @param toProcess
-     */
-    public Commandline( String toProcess, Shell shell )
-    {
-        this.shell = shell;
-
-        String[] tmp = new String[0];
-        try
-        {
-            tmp = CommandLineUtils.translateCommandline( toProcess );
-        }
-        catch ( Exception e )
-        {
-            System.err.println( "Error translating Commandline." );
-        }
-        if ( ( tmp != null ) && ( tmp.length > 0 ) )
-        {
-            setExecutable( tmp[0] );
-            for ( int i = 1; i < tmp.length; i++ )
-            {
-                createArgument().setValue( tmp[i] );
-            }
-        }
-    }
 
     /**
      * Create a new command line object.
@@ -128,7 +82,7 @@ public class Commandline
      * Create a new command line object.
      * Shell is autodetected from operating system
      *
-     * @param toProcess
+     * @param toProcess  The command to process
      */
     public Commandline( String toProcess )
     {
@@ -147,7 +101,7 @@ public class Commandline
             setExecutable( tmp[0] );
             for ( int i = 1; i < tmp.length; i++ )
             {
-                createArgument().setValue( tmp[i] );
+                createArg().setValue( tmp[i] );
             }
         }
     }
@@ -159,60 +113,6 @@ public class Commandline
     public Commandline()
     {
         setDefaultShell();
-    }
-
-    public long getPid()
-    {
-        if ( pid == -1 )
-        {
-            pid = Long.parseLong( String.valueOf( System.currentTimeMillis() ) );
-        }
-
-        return pid;
-    }
-
-    public void setPid( long pid )
-    {
-        this.pid = pid;
-    }
-
-    /**
-     * Class to keep track of the position of an Argument.
-     */
-    // <p>This class is there to support the srcfile and targetfile
-    // elements of &lt;execon&gt; and &lt;transform&gt; - don't know
-    // whether there might be additional use cases.</p> --SB
-    public class Marker
-    {
-
-        private int position;
-
-        private int realPos = -1;
-
-        Marker( int position )
-        {
-            this.position = position;
-        }
-
-        /**
-         * Return the number of arguments that preceeded this marker.
-         * <p/>
-         * <p>The name of the executable - if set - is counted as the
-         * very first argument.</p>
-         */
-        public int getPosition()
-        {
-            if ( realPos == -1 )
-            {
-                realPos = ( getExecutable() == null ? 0 : 1 );
-                for ( int i = 0; i < position; i++ )
-                {
-                    Arg arg = (Arg) arguments.elementAt( i );
-                    realPos += arg.getParts().length;
-                }
-            }
-            return realPos;
-        }
     }
 
     /**
@@ -247,47 +147,6 @@ public class Commandline
      * <code>this.createArgument(false)</code>.</p>
      *
      * @return the argument object.
-     * @see #createArgument(boolean)
-     * @deprecated Use {@link Commandline#createArg()} instead
-     */
-    public Argument createArgument()
-    {
-        return this.createArgument( false );
-    }
-
-    /**
-     * Creates an argument object and adds it to our list of args.
-     * <p/>
-     * <p>Each commandline object has at most one instance of the
-     * argument class.</p>
-     *
-     * @param insertAtStart if true, the argument is inserted at the
-     *                      beginning of the list of args, otherwise it is appended.
-     * @deprecated Use {@link Commandline#createArg(boolean)} instead
-     */
-    public Argument createArgument( boolean insertAtStart )
-    {
-        Argument argument = new Argument();
-        if ( insertAtStart )
-        {
-            arguments.insertElementAt( argument, 0 );
-        }
-        else
-        {
-            arguments.addElement( argument );
-        }
-        return argument;
-    }
-
-    /**
-     * Creates an argument object.
-     * <p/>
-     * <p>Each commandline object has at most one instance of the
-     * argument class.  This method calls
-     * <code>this.createArgument(false)</code>.</p>
-     *
-     * @return the argument object.
-     * @see #createArgument(boolean)
      */
     public Arg createArg()
     {
@@ -308,42 +167,13 @@ public class Commandline
         Arg argument = new Argument();
         if ( insertAtStart )
         {
-            arguments.insertElementAt( argument, 0 );
+            arguments.add(0, argument);
         }
         else
         {
-            arguments.addElement( argument );
+            arguments.add(argument);
         }
         return argument;
-    }
-
-    /**
-     * Adds an argument object to our list of args.
-     *
-     * @return the argument object.
-     * @see #addArg(Arg, boolean)
-     */
-    public void addArg( Arg argument )
-    {
-        this.addArg( argument, false );
-    }
-
-    /**
-     * Adds an argument object to our list of args.
-     *
-     * @param insertAtStart if true, the argument is inserted at the
-     *                      beginning of the list of args, otherwise it is appended.
-     */
-    public void addArg( Arg argument, boolean insertAtStart )
-    {
-        if ( insertAtStart )
-        {
-            arguments.insertElementAt( argument, 0 );
-        }
-        else
-        {
-            arguments.addElement( argument );
-        }
     }
 
     /**
@@ -352,26 +182,18 @@ public class Commandline
     public void setExecutable( String executable )
     {
         shell.setExecutable( executable );
-        this.executable = executable;
     }
 
     public String getExecutable()
     {
-        String exec = shell.getExecutable();
 
-        if ( exec == null )
-        {
-            exec = executable;
-        }
-
-        return exec;
+        return shell.getExecutable();
     }
 
     public void addArguments( String[] line )
     {
-        for ( int i = 0; i < line.length; i++ )
-        {
-            createArgument().setValue( line[i] );
+        for (String aLine : line) {
+            createArg().setValue(aLine);
         }
     }
 
@@ -392,12 +214,10 @@ public class Commandline
     {
         Properties systemEnvVars = CommandLineUtils.getSystemEnvVars();
 
-        for ( Iterator i = systemEnvVars.keySet().iterator(); i.hasNext(); )
-        {
-            String key = (String) i.next();
-            if ( !envVars.containsKey( key ) )
-            {
-                addEnvironment( key, systemEnvVars.getProperty( key ) );
+        for (Object o : systemEnvVars.keySet()) {
+            String key = (String) o;
+            if (!envVars.containsKey(key)) {
+                addEnvironment(key, systemEnvVars.getProperty(key));
             }
         }
     }
@@ -418,10 +238,8 @@ public class Commandline
         }
         String[] environmentVars = new String[envVars.size()];
         int i = 0;
-        for ( Iterator iterator = envVars.keySet().iterator(); iterator.hasNext(); )
-        {
-            String name = (String) iterator.next();
-            String value = (String) envVars.get( name );
+        for (String name : envVars.keySet()) {
+            String value = envVars.get(name);
             environmentVars[i] = name + "=" + value;
             i++;
         }
@@ -452,9 +270,9 @@ public class Commandline
     public String[] getShellCommandline()
     {
         // TODO: Provided only for backward compat. with <= 1.4
-        verifyShellState();
 
-        return (String[]) getShell().getShellCommandLine( getArguments() ).toArray( new String[0] );
+        List<String> shellCommandLine = getShell().getShellCommandLine(getArguments());
+        return shellCommandLine.toArray(new String[shellCommandLine.size()]);
     }
 
     /**
@@ -463,23 +281,16 @@ public class Commandline
      */
     public String[] getArguments()
     {
-        Vector result = new Vector( arguments.size() * 2 );
-        for ( int i = 0; i < arguments.size(); i++ )
-        {
-            Argument arg = (Argument) arguments.elementAt( i );
+        List<String> result = new ArrayList<String>( arguments.size() * 2 );
+        for (Arg argument : arguments) {
+            Argument arg = (Argument) argument;
             String[] s = arg.getParts();
-            if ( s != null )
-            {
-                for ( int j = 0; j < s.length; j++ )
-                {
-                    result.addElement( s[j] );
-                }
+            if (s != null) {
+                Collections.addAll(result, s);
             }
         }
 
-        String[] res = new String[result.size()];
-        result.copyInto( res );
-        return res;
+        return result.toArray(new String[result.size()]);
     }
 
     public String toString()
@@ -487,50 +298,12 @@ public class Commandline
         return StringUtils.join( getShellCommandline(), " " );
     }
 
-    public int size()
-    {
-        return getCommandline().length;
-    }
 
     public Object clone()
     {
         Commandline c = new Commandline( (Shell) shell.clone() );
-        c.executable = executable;
-        c.workingDir = workingDir;
         c.addArguments( getArguments() );
         return c;
-    }
-
-    /**
-     * Clear out the whole command line.
-     */
-    public void clear()
-    {
-        executable = null;
-        workingDir = null;
-        shell.setExecutable( null );
-        shell.clearArguments();
-        arguments.removeAllElements();
-    }
-
-    /**
-     * Clear out the arguments but leave the executable in place for another operation.
-     */
-    public void clearArgs()
-    {
-        arguments.removeAllElements();
-    }
-
-    /**
-     * Return a marker.
-     * <p/>
-     * <p>This marker can be used to locate a position on the
-     * commandline - to insert something for example - when all
-     * parameters have been set.</p>
-     */
-    public Marker createMarker()
-    {
-        return new Marker( arguments.size() );
     }
 
     /**
@@ -539,7 +312,6 @@ public class Commandline
     public void setWorkingDirectory( String path )
     {
         shell.setWorkingDirectory( path );
-        workingDir = new File( path );
     }
 
     /**
@@ -548,19 +320,11 @@ public class Commandline
     public void setWorkingDirectory( File workingDirectory )
     {
         shell.setWorkingDirectory( workingDirectory );
-        workingDir = workingDirectory;
     }
 
     public File getWorkingDirectory()
     {
-        File workDir = shell.getWorkingDirectory();
-
-        if ( workDir == null )
-        {
-            workDir = workingDir;
-        }
-
-        return workDir;
+        return shell.getWorkingDirectory();
     }
 
     /**
@@ -570,7 +334,6 @@ public class Commandline
         throws CommandLineException
     {
         // TODO: Provided only for backward compat. with <= 1.4
-        verifyShellState();
 
         Process process;
 
@@ -611,34 +374,12 @@ public class Commandline
     }
 
     /**
-     * @deprecated Remove once backward compat with plexus-utils <= 1.4 is no longer a consideration
-     */
-    private void verifyShellState()
-    {
-        if ( shell.getWorkingDirectory() == null )
-        {
-            shell.setWorkingDirectory( workingDir );
-        }
-
-        if ( shell.getExecutable() == null )
-        {
-            shell.setExecutable( executable );
-        }
-    }
-
-    public Properties getSystemEnvVars()
-        throws Exception
-    {
-        return CommandLineUtils.getSystemEnvVars();
-    }
-
-    /**
      * Allows to set the shell to be used in this command line.
      *
-     * @param shell
+     * @param shell the shell
      * @since 1.2
      */
-    public void setShell( Shell shell )
+    void setShell( Shell shell )
     {
         this.shell = shell;
     }
@@ -660,15 +401,6 @@ public class Commandline
         throws Exception
     {
         return CommandLineUtils.translateCommandline( toProcess );
-    }
-
-    /**
-     * @deprecated Use {@link CommandLineUtils#quote(String)} instead.
-     */
-    public static String quoteArgument( String argument )
-        throws CommandLineException
-    {
-        return CommandLineUtils.quote( argument );
     }
 
     /**
@@ -725,7 +457,7 @@ public class Commandline
         /* (non-Javadoc)
          * @see org.apache.maven.shared.utils.cli.Argumnt#getParts()
          */
-        public String[] getParts()
+        private String[] getParts()
         {
             return parts;
         }

@@ -37,18 +37,17 @@ import java.util.concurrent.CopyOnWriteArrayList;
  *
  * @author <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
-public class ExceptionUtils
+class ExceptionUtils
 {
     /**
      * The maximum level of nestings evaluated when searching for a root cause.
      * We do this to prevent stack overflows!
      *
      * @see #getRootCause(Throwable)
-     * @see #getRootCauseStackTrace(Throwable)
      */
     private static final int MAX_ROOT_CAUSE_DEPTH = 20;
 
-    private static CopyOnWriteArrayList<String> specialCauseMethodNames = new CopyOnWriteArrayList<String>();
+    private static final CopyOnWriteArrayList<String> specialCauseMethodNames = new CopyOnWriteArrayList<String>();
 
     static
     {
@@ -401,24 +400,6 @@ public class ExceptionUtils
     }
 
     /**
-     * The stacktrace frames for the root cause of the given Throwable
-     *
-     * @param throwable
-     * @return String with the Stacktrace of the Throwable
-     * @see #getCause(Throwable)
-     */
-    public static String[] getRootCauseStackTrace( Throwable throwable )
-    {
-        Throwable rootCause = getRootCause( throwable );
-        if ( rootCause == null )
-        {
-            rootCause = throwable;
-        }
-
-        return getStackFrames( rootCause );
-    }
-
-    /**
      * The stacktrace for the given Throwable
      *
      * @param throwable
@@ -456,12 +437,8 @@ public class ExceptionUtils
      */
     public static boolean isNestedThrowable( Throwable throwable )
     {
-        if ( throwable == null )
-        {
-            return false;
-        }
+        return throwable != null;
 
-        return true;
     }
 
     /**

@@ -29,7 +29,7 @@ import java.io.InputStream;
  * @author Alejandro Abdelnur
  * @version revision 1.1 taken on 26/06/2007 from Rome (see https://rome.dev.java.net/source/browse/rome/src/java/com/sun/syndication/io/XmlReaderException.java)
  */
-public class XmlStreamReaderException
+class XmlStreamReaderException
     extends XmlReaderException
 {
     /**

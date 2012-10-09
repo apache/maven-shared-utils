@@ -30,14 +30,6 @@ public class CommandLineTimeOutException
 
     /**
      * @param message
-     */
-    public CommandLineTimeOutException( String message )
-    {
-        super( message );
-    }
-
-    /**
-     * @param message
      * @param cause
      */
     public CommandLineTimeOutException( String message, Throwable cause )

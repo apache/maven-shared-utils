@@ -18,7 +18,6 @@ package org.apache.maven.shared.utils.io;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
@@ -27,7 +26,7 @@ import java.util.Stack;
  *
  * @version $Id$
  */
-public class DirectoryWalker
+class DirectoryWalker
 {
     /**
      * DirStackEntry is an Item on the {@link DirectoryWalker#dirStack}
@@ -37,12 +36,12 @@ public class DirectoryWalker
         /**
          * Count of files in the directory.
          */
-        public int count;
+        public final int count;
 
         /**
          * Current Directory.
          */
-        public File dir;
+        public final File dir;
 
         /**
          * Index (or offset) within the directory count.
@@ -118,23 +117,19 @@ public class DirectoryWalker
 
     private int baseDirOffset;
 
-    private Stack dirStack;
+    private Stack<DirStackEntry> dirStack;
 
-    private List excludes;
+    private final List<String> excludes;
 
-    private List includes;
+    private final List<String> includes;
 
-    private boolean isCaseSensitive = true;
-
-    private List listeners;
-
-    private boolean debugEnabled = false;
+    private final List<DirectoryWalkListener> listeners;
 
     public DirectoryWalker()
     {
-        this.includes = new ArrayList();
-        this.excludes = new ArrayList();
-        this.listeners = new ArrayList();
+        this.includes = new ArrayList<String>();
+        this.excludes = new ArrayList<String>();
+        this.listeners = new ArrayList<DirectoryWalkListener>();
     }
 
     public void addDirectoryWalkListener( DirectoryWalkListener listener )
@@ -142,12 +137,12 @@ public class DirectoryWalker
         this.listeners.add( listener );
     }
 
-    public void addExclude( String exclude )
+    void addExclude( String exclude )
     {
         this.excludes.add( fixPattern( exclude ) );
     }
 
-    public void addInclude( String include )
+    void addInclude( String include )
     {
         this.includes.add( fixPattern( include ) );
     }
@@ -158,51 +153,41 @@ public class DirectoryWalker
     public void addSCMExcludes()
     {
         String scmexcludes[] = DirectoryScanner.DEFAULTEXCLUDES;
-        for ( int i = 0; i < scmexcludes.length; i++ )
-        {
-            addExclude( scmexcludes[i] );
+        for (String scmexclude : scmexcludes) {
+            addExclude(scmexclude);
         }
     }
 
     private void fireStep( File file )
     {
-        DirStackEntry dsEntry = (DirStackEntry) dirStack.peek();
+        DirStackEntry dsEntry = dirStack.peek();
         int percentage = dsEntry.getPercentage();
-        Iterator it = this.listeners.iterator();
-        while ( it.hasNext() )
-        {
-            DirectoryWalkListener listener = (DirectoryWalkListener) it.next();
-            listener.directoryWalkStep( percentage, file );
+        for (DirectoryWalkListener listener : this.listeners) {
+            listener.directoryWalkStep(percentage, file);
         }
     }
 
     private void fireWalkFinished()
     {
-        Iterator it = this.listeners.iterator();
-        while ( it.hasNext() )
-        {
-            DirectoryWalkListener listener = (DirectoryWalkListener) it.next();
+        for (Object listener1 : this.listeners) {
+            DirectoryWalkListener listener = (DirectoryWalkListener) listener1;
             listener.directoryWalkFinished();
         }
     }
 
     private void fireWalkStarting()
     {
-        Iterator it = this.listeners.iterator();
-        while ( it.hasNext() )
-        {
-            DirectoryWalkListener listener = (DirectoryWalkListener) it.next();
-            listener.directoryWalkStarting( this.baseDir );
+        for (Object listener1 : this.listeners) {
+            DirectoryWalkListener listener = (DirectoryWalkListener) listener1;
+            listener.directoryWalkStarting(this.baseDir);
         }
     }
 
     private void fireDebugMessage( String message )
     {
-        Iterator it = this.listeners.iterator();
-        while ( it.hasNext() )
-        {
-            DirectoryWalkListener listener = (DirectoryWalkListener) it.next();
-            listener.debug( message );
+        for (Object listener1 : this.listeners) {
+            DirectoryWalkListener listener = (DirectoryWalkListener) listener1;
+            listener.debug(message);
         }
     }
 
@@ -223,35 +208,6 @@ public class DirectoryWalker
         return cleanPattern;
     }
 
-    public void setDebugMode( boolean debugEnabled )
-    {
-        this.debugEnabled = debugEnabled;
-    }
-
-    /**
-     * @return Returns the baseDir.
-     */
-    public File getBaseDir()
-    {
-        return baseDir;
-    }
-
-    /**
-     * @return Returns the excludes.
-     */
-    public List getExcludes()
-    {
-        return excludes;
-    }
-
-    /**
-     * @return Returns the includes.
-     */
-    public List getIncludes()
-    {
-        return includes;
-    }
-
     private boolean isExcluded( String name )
     {
         return isMatch( this.excludes, name );
@@ -264,12 +220,10 @@ public class DirectoryWalker
 
     private boolean isMatch( List patterns, String name )
     {
-        Iterator it = patterns.iterator();
-        while ( it.hasNext() )
-        {
-            String pattern = (String) it.next();
-            if ( SelectorUtils.matchPath( pattern, name, isCaseSensitive ) )
-            {
+        for (Object pattern1 : patterns) {
+            String pattern = (String) pattern1;
+            boolean caseSensitive = true;
+            if (SelectorUtils.matchPath(pattern, name, caseSensitive)) {
                 return true;
             }
         }
@@ -280,16 +234,6 @@ public class DirectoryWalker
     private String relativeToBaseDir( File file )
     {
         return file.getAbsolutePath().substring( baseDirOffset + 1 );
-    }
-
-    /**
-     * Removes a DirectoryWalkListener.
-     *
-     * @param listener the listener to remove.
-     */
-    public void removeDirectoryWalkListener( DirectoryWalkListener listener )
-    {
-        this.listeners.remove( listener );
     }
 
     /**
@@ -318,31 +262,8 @@ public class DirectoryWalker
             addInclude( "**" );
         }
 
-        if ( debugEnabled )
-        {
-            Iterator it;
-            StringBuffer dbg = new StringBuffer();
-            dbg.append( "DirectoryWalker Scan" );
-            dbg.append( "\n  Base Dir: " ).append( this.baseDir.getAbsolutePath() );
-            dbg.append( "\n  Includes: " );
-            it = this.includes.iterator();
-            while ( it.hasNext() )
-            {
-                String include = (String) it.next();
-                dbg.append( "\n    - \"" ).append( include ).append( "\"" );
-            }
-            dbg.append( "\n  Excludes: " );
-            it = this.excludes.iterator();
-            while ( it.hasNext() )
-            {
-                String exclude = (String) it.next();
-                dbg.append( "\n    - \"" ).append( exclude ).append( "\"" );
-            }
-            fireDebugMessage( dbg.toString() );
-        }
-
         fireWalkStarting();
-        dirStack = new Stack();
+        dirStack = new Stack<DirStackEntry>();
         scanDir( this.baseDir );
         fireWalkFinished();
     }
@@ -364,7 +285,7 @@ public class DirectoryWalker
         }
         else
         {
-            DirStackEntry previousStackEntry = (DirStackEntry) dirStack.peek();
+            DirStackEntry previousStackEntry = dirStack.peek();
             curStackEntry.percentageOffset = previousStackEntry.getNextPercentageOffset();
             curStackEntry.percentageSize = previousStackEntry.getNextPercentageSize();
         }
@@ -405,40 +326,6 @@ public class DirectoryWalker
     {
         this.baseDir = baseDir;
         this.baseDirOffset = baseDir.getAbsolutePath().length();
-    }
-
-    /**
-     * @param entries The excludes to set.
-     */
-    public void setExcludes( List entries )
-    {
-        this.excludes.clear();
-        if ( entries != null )
-        {
-            Iterator it = entries.iterator();
-            while ( it.hasNext() )
-            {
-                String pattern = (String) it.next();
-                this.excludes.add( fixPattern( pattern ) );
-            }
-        }
-    }
-
-    /**
-     * @param entries The includes to set.
-     */
-    public void setIncludes( List entries )
-    {
-        this.includes.clear();
-        if ( entries != null )
-        {
-            Iterator it = entries.iterator();
-            while ( it.hasNext() )
-            {
-                String pattern = (String) it.next();
-                this.includes.add( fixPattern( pattern ) );
-            }
-        }
     }
 
 }

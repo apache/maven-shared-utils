@@ -19,8 +19,6 @@ package org.apache.maven.shared.utils.io;
  */
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A list of patterns to be matched
@@ -79,21 +77,6 @@ public class MatchPatterns
             result[i] = MatchPattern.fromString( sources[i] );
         }
         return new MatchPatterns( result );
-    }
-
-    public static MatchPatterns from( Iterable<String> strings )
-    {
-        return new MatchPatterns( getMatchPatterns( strings ) );
-    }
-
-    private static MatchPattern[] getMatchPatterns( Iterable<String> items )
-    {
-        List<MatchPattern> result = new ArrayList<MatchPattern>();
-        for ( String string : items )
-        {
-            result.add( MatchPattern.fromString( string ) );
-        }
-        return result.toArray( new MatchPattern[result.size()] );
     }
 
 }

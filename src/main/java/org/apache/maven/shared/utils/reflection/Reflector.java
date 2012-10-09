@@ -33,13 +33,13 @@ import java.util.Map;
  *
  * @author John Casey
  */
-public final class Reflector
+final class Reflector
 {
     private static final String CONSTRUCTOR_METHOD_NAME = "$$CONSTRUCTOR$$";
 
     private static final String GET_INSTANCE_METHOD_NAME = "getInstance";
 
-    private Map<String, Map<String, Map<String, Member>>> classMaps =
+    private final Map<String, Map<String, Map<String, Member>>> classMaps =
         new HashMap<String, Map<String, Map<String, Member>>>();
 
     /**
@@ -86,10 +86,9 @@ public final class Reflector
                 buffer.append( theClass.getName() );
                 buffer.append( " with specified or ancestor parameter classes: " );
 
-                for ( int i = 0; i < paramTypes.length; i++ )
-                {
-                    buffer.append( paramTypes[i].getName() );
-                    buffer.append( ',' );
+                for (Class paramType : paramTypes) {
+                    buffer.append(paramType.getName());
+                    buffer.append(',');
                 }
 
                 buffer.setLength( buffer.length() - 1 );
@@ -185,10 +184,9 @@ public final class Reflector
                 buffer.append( "Singleton-producing method named '" ).append( methodName ).append(
                     "' not found with specified parameter classes: " );
 
-                for ( int i = 0; i < paramTypes.length; i++ )
-                {
-                    buffer.append( paramTypes[i].getName() );
-                    buffer.append( ',' );
+                for (Class paramType : paramTypes) {
+                    buffer.append(paramType.getName());
+                    buffer.append(',');
                 }
 
                 buffer.setLength( buffer.length() - 1 );
@@ -320,13 +318,11 @@ public final class Reflector
             {
                 StringBuilder buffer = new StringBuilder();
 
-                buffer.append( "Singleton-producing method named \'" + methodName
-                                   + "\' not found with specified parameter classes: " );
+                buffer.append("Singleton-producing method named \'").append(methodName).append("\' not found with specified parameter classes: ");
 
-                for ( int i = 0; i < paramTypes.length; i++ )
-                {
-                    buffer.append( paramTypes[i].getName() );
-                    buffer.append( ',' );
+                for (Class paramType : paramTypes) {
+                    buffer.append(paramType.getName());
+                    buffer.append(',');
                 }
 
                 buffer.setLength( buffer.length() - 1 );
@@ -365,10 +361,9 @@ public final class Reflector
 
         key.append( "(" );
 
-        for ( int i = 0, len = params.length; i < len; i++ )
-        {
-            key.append( params[i].getName() );
-            key.append( "," );
+        for (Class param : params) {
+            key.append(param.getName());
+            key.append(",");
         }
 
         if ( params.length > 0 )
@@ -378,7 +373,7 @@ public final class Reflector
 
         key.append( ")" );
 
-        Constructor constructor = null;
+        Constructor constructor;
 
         String paramKey = key.toString();
 
@@ -390,26 +385,22 @@ public final class Reflector
             {
                 Constructor[] cands = targetClass.getConstructors();
 
-                for ( int i = 0, len = cands.length; i < len; i++ )
-                {
-                    Class[] types = cands[i].getParameterTypes();
+                for (Constructor cand : cands) {
+                    Class[] types = cand.getParameterTypes();
 
-                    if ( params.length != types.length )
-                    {
+                    if (params.length != types.length) {
                         continue;
                     }
 
-                    for ( int j = 0, len2 = params.length; j < len2; j++ )
-                    {
-                        if ( !types[j].isAssignableFrom( params[j] ) )
-                        {
+                    for (int j = 0, len2 = params.length; j < len2; j++) {
+                        if (!types[j].isAssignableFrom(params[j])) {
                             continue;
                         }
                     }
 
                     // we got it, so store it!
-                    constructor = cands[i];
-                    constructorMap.put( paramKey, constructor );
+                    constructor = cand;
+                    constructorMap.put(paramKey, constructor);
                 }
             }
         }
@@ -426,7 +417,7 @@ public final class Reflector
     public Object getObjectProperty( Object target, String propertyName )
         throws ReflectorException
     {
-        Object returnValue = null;
+        Object returnValue;
 
         if ( propertyName == null || propertyName.trim().length() < 1 )
         {
@@ -485,7 +476,7 @@ public final class Reflector
         else
         {
             returnValue = getField( target, propertyName, true );
-            if ( method == null && returnValue == null )
+            if (returnValue == null)
             {
                 // TODO: Check if exception is the right action! Field exists, but contains null
                 throw new ReflectorException(
@@ -530,15 +521,14 @@ public final class Reflector
 
         key.append( "(" );
 
-        for ( int i = 0, len = params.length; i < len; i++ )
-        {
-            key.append( params[i].getName() );
-            key.append( "," );
+        for (Class<?> param : params) {
+            key.append(param.getName());
+            key.append(",");
         }
 
         key.append( ")" );
 
-        Method method = null;
+        Method method;
 
         String paramKey = key.toString();
 
@@ -550,33 +540,28 @@ public final class Reflector
             {
                 Method[] cands = targetClass.getMethods();
 
-                for ( int i = 0, len = cands.length; i < len; i++ )
-                {
-                    String name = cands[i].getName();
+                for (Method cand : cands) {
+                    String name = cand.getName();
 
-                    if ( !methodName.equals( name ) )
-                    {
+                    if (!methodName.equals(name)) {
                         continue;
                     }
 
-                    Class<?>[] types = cands[i].getParameterTypes();
+                    Class<?>[] types = cand.getParameterTypes();
 
-                    if ( params.length != types.length )
-                    {
+                    if (params.length != types.length) {
                         continue;
                     }
 
-                    for ( int j = 0, len2 = params.length; j < len2; j++ )
-                    {
-                        if ( !types[j].isAssignableFrom( params[j] ) )
-                        {
+                    for (int j = 0, len2 = params.length; j < len2; j++) {
+                        if (!types[j].isAssignableFrom(params[j])) {
                             continue;
                         }
                     }
 
                     // we got it, so store it!
-                    method = cands[i];
-                    methodMap.put( paramKey, method );
+                    method = cand;
+                    methodMap.put(paramKey, method);
                 }
             }
         }
@@ -603,12 +588,10 @@ public final class Reflector
      * @param theClass   the class to lookup.
      * @param methodName The name of the method to lookup.
      * @return The cache of constructors.
-     * @throws ReflectorException in case of a lookup error.
      */
     private Map<String, Member> getMethodMap( Class<?> theClass, String methodName )
-        throws ReflectorException
     {
-        Map<String, Member> methodMap = null;
+        Map<String, Member> methodMap;
 
         if ( theClass == null )
         {

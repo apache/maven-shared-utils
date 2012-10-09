@@ -27,7 +27,7 @@ public class BourneShellTest
     extends TestCase
 {
 
-    protected Shell newShell()
+    Shell newShell()
     {
         return new BourneShell();
     }

@@ -65,8 +65,7 @@ public class XmlStreamReaderTest
         {
             xmlDecl = "<?xml version=\"1.0\" encoding=\"" + encoding + "\"?>";
         }
-        String xml = xmlDecl + "\n<text>" + text + "</text>";
-        return xml;
+        return xmlDecl + "\n<text>" + text + "</text>";
     }
 
     private static void checkXmlContent( String xml, String encoding )

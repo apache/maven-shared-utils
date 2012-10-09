@@ -630,18 +630,7 @@ public final class IOUtil
     /**
      * Copy bytes from a <code>byte[]</code> to an <code>OutputStream</code>.
      */
-    public static void copy( final byte[] input, final OutputStream output )
-        throws IOException
-    {
-        copy( input, output, DEFAULT_BUFFER_SIZE );
-    }
-
-    /**
-     * Copy bytes from a <code>byte[]</code> to an <code>OutputStream</code>.
-     *
-     * @param bufferSize Size of internal buffer to use.
-     */
-    public static void copy( final byte[] input, final OutputStream output, final int bufferSize )
+    public static void copy(final byte[] input, final OutputStream output)
         throws IOException
     {
         output.write( input );
@@ -672,14 +661,7 @@ public final class IOUtil
         }
 
         final int ch2 = bufferedInput2.read();
-        if ( -1 != ch2 )
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        return -1 == ch2;
     }
 
     // ----------------------------------------------------------------------
@@ -777,7 +759,7 @@ public final class IOUtil
     /**
      * Closes the writer. The writer can be null and any IOException's will be swallowed.
      *
-     * @param wrtier The writer to close.
+     * @param writer The writer to close.
      */
     public static void close( Writer writer )
     {

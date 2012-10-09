@@ -36,22 +36,12 @@ public class BourneShell
 
     public BourneShell()
     {
-        this( false );
-    }
-
-    public BourneShell( boolean isLoginShell )
-    {
         setShellCommand( "/bin/sh" );
         setArgumentQuoteDelimiter( '\'' );
         setExecutableQuoteDelimiter( '\"' );
         setSingleQuotedArgumentEscaped( true );
         setSingleQuotedExecutableEscaped( false );
         setQuotedExecutableEnabled( true );
-
-        if ( isLoginShell )
-        {
-            addShellArg( "-l" );
-        }
     }
 
     /**
@@ -142,7 +132,7 @@ public class BourneShell
      * @param path not null path.
      * @return the path unified correctly for the Bourne shell.
      */
-    protected static String unifyQuotes( String path )
+    private static String unifyQuotes( String path )
     {
         if ( path == null )
         {

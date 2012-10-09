@@ -34,7 +34,7 @@ import org.apache.maven.shared.utils.io.FileUtils;
  *
  * @author <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
-public class Expand
+class Expand
 {
     /**
      * Source file which should get expanded
@@ -109,7 +109,7 @@ public class Expand
      * @param dest
      * @throws Exception
      */
-    protected void expandFile( File srcFile, File dest )
+    void expandFile( File srcFile, File dest )
         throws Exception
     {
         if ( source == null )
@@ -164,7 +164,7 @@ public class Expand
      * @param isDirectory
      * @throws Exception
      */
-    protected void extractFile( File archive, File destDir, InputStream compressedInputStream, String entryName,
+    void extractFile( File archive, File destDir, InputStream compressedInputStream, String entryName,
                                 Date entryDate, boolean isDirectory )
         throws Exception
     {
