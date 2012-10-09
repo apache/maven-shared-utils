@@ -328,6 +328,14 @@ public class Commandline
     }
 
     /**
+     * Clear out the arguments but leave the executable in place for another operation.
+     */
+    public void clearArgs()
+    {
+        arguments.clear();
+    }
+
+    /**
      * Executes the command.
      */
     public Process execute()
