@@ -309,17 +309,17 @@ public class Os
 
                 //windows probing logic relies on the word 'windows' in
                 //the OS
-                boolean isWindows = OS_NAME.indexOf( FAMILY_WINDOWS ) > -1;
+                boolean isWindows = OS_NAME.contains( FAMILY_WINDOWS );
                 boolean is9x = false;
                 boolean isNT = false;
                 if ( isWindows )
                 {
                     //there are only four 9x platforms that we look for
                     is9x =
-                        ( OS_NAME.indexOf( "95" ) >= 0 || OS_NAME.indexOf( "98" ) >= 0 || OS_NAME.indexOf( "me" ) >= 0
+                        ( OS_NAME.contains( "95" ) || OS_NAME.contains( "98" ) || OS_NAME.contains( "me" )
                             //wince isn't really 9x, but crippled enough to
                             //be a muchness. Ant doesnt run on CE, anyway.
-                            || OS_NAME.indexOf( "ce" ) >= 0 );
+                            || OS_NAME.contains( "ce" ) );
                     isNT = !is9x;
                 }
                 if ( family.equals( FAMILY_WINDOWS ) )
@@ -336,11 +336,11 @@ public class Os
                 }
                 else if ( family.equals( FAMILY_OS2 ) )
                 {
-                    isFamily = OS_NAME.indexOf( FAMILY_OS2 ) > -1;
+                    isFamily = OS_NAME.contains( FAMILY_OS2 );
                 }
                 else if ( family.equals( FAMILY_NETWARE ) )
                 {
-                    isFamily = OS_NAME.indexOf( FAMILY_NETWARE ) > -1;
+                    isFamily = OS_NAME.contains( FAMILY_NETWARE );
                 }
                 else if ( family.equals( FAMILY_DOS ) )
                 {
@@ -348,28 +348,28 @@ public class Os
                 }
                 else if ( family.equals( FAMILY_MAC ) )
                 {
-                    isFamily = OS_NAME.indexOf( FAMILY_MAC ) > -1 || OS_NAME.indexOf( DARWIN ) > -1;
+                    isFamily = OS_NAME.contains( FAMILY_MAC ) || OS_NAME.contains( DARWIN );
                 }
                 else if ( family.equals( FAMILY_TANDEM ) )
                 {
-                    isFamily = OS_NAME.indexOf( "nonstop_kernel" ) > -1;
+                    isFamily = OS_NAME.contains( "nonstop_kernel" );
                 }
                 else if ( family.equals( FAMILY_UNIX ) )
                 {
                     isFamily = PATH_SEP.equals( ":" ) && !isFamily( FAMILY_OPENVMS ) && ( !isFamily( FAMILY_MAC )
-                        || OS_NAME.endsWith( "x" ) || OS_NAME.indexOf( DARWIN ) > -1 );
+                        || OS_NAME.endsWith( "x" ) || OS_NAME.contains( DARWIN ) );
                 }
                 else if ( family.equals( FAMILY_ZOS ) )
                 {
-                    isFamily = OS_NAME.indexOf( FAMILY_ZOS ) > -1 || OS_NAME.indexOf( "os/390" ) > -1;
+                    isFamily = OS_NAME.contains( FAMILY_ZOS ) || OS_NAME.contains( "os/390" );
                 }
                 else if ( family.equals( FAMILY_OS400 ) )
                 {
-                    isFamily = OS_NAME.indexOf( FAMILY_OS400 ) > -1;
+                    isFamily = OS_NAME.contains( FAMILY_OS400 );
                 }
                 else if ( family.equals( FAMILY_OPENVMS ) )
                 {
-                    isFamily = OS_NAME.indexOf( FAMILY_OPENVMS ) > -1;
+                    isFamily = OS_NAME.contains( FAMILY_OPENVMS );
                 }
                 else
                 {

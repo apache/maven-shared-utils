@@ -365,20 +365,6 @@ public class FileUtils
     }
 
     /**
-     * @param file the file path
-     * @return the file content lines as String[] using the systems default encoding.
-     *         An empty List if the file didn't exist.
-     * @throws IOException
-     */
-    public static String[] fileReadArray( File file )
-        throws IOException
-    {
-        List<String> files = loadFile( file );
-
-        return files.toArray( new String[files.size()] );
-    }
-
-    /**
      * Appends data to a file. The file will be created if it does not exist.
      * Note: the data is written with platform encoding
      *
@@ -1149,7 +1135,7 @@ public class FileUtils
         // FIXME: I'm almost certain this // removal is unnecessary, as getAbsoluteFile() strips
         // them. However, I'm not sure about this UNC stuff. (JT)
         final char[] chars = filename.toCharArray();
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
 
         //remove duplicate file separators in succession - except
         //on win32 at start of filename as UNC filenames can

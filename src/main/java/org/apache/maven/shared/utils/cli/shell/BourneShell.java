@@ -101,7 +101,7 @@ public class BourneShell
         }
 
         String dir = getWorkingDirectoryAsString();
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append( "cd " );
 
         sb.append( unifyQuotes( dir ) );

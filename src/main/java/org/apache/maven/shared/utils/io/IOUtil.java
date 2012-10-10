@@ -149,7 +149,7 @@ public final class IOUtil
         throws IOException
     {
         final byte[] buffer = new byte[bufferSize];
-        int n = 0;
+        int n;
         while ( -1 != ( n = input.read( buffer ) ) )
         {
             output.write( buffer, 0, n );
@@ -174,7 +174,7 @@ public final class IOUtil
         throws IOException
     {
         final char[] buffer = new char[bufferSize];
-        int n = 0;
+        int n;
         while ( -1 != ( n = input.read( buffer ) ) )
         {
             output.write( buffer, 0, n );
