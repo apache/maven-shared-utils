@@ -763,7 +763,7 @@ public class StringUtilsTest extends Assert
     @Test
     public void testInterpolate()
     {
-        Map variables = new HashMap<String,String>();
+        Map<String,String> variables = new HashMap<String,String>();
         assertThat( StringUtils.interpolate( "This ${text} will get replaced", variables )
                   , is( "This ${text} will get replaced" ) );
 
@@ -1052,7 +1052,7 @@ public class StringUtilsTest extends Assert
     @Test
     public void testJoin_Iterator()
     {
-        ArrayList list = new ArrayList();
+        ArrayList<String> list = new ArrayList<String>();
 
         assertThat( StringUtils.join( list.iterator(), null )
                   , is( "" ) );

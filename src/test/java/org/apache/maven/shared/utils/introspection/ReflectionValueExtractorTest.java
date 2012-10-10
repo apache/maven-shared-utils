@@ -16,14 +16,13 @@ package org.apache.maven.shared.utils.introspection;
  * limitations under the License.
  */
 
-import junit.framework.Assert;
-import junit.framework.TestCase;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import junit.framework.Assert;
+import junit.framework.TestCase;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -154,7 +153,7 @@ public class ReflectionValueExtractorTest
 
         private Scm scm;
 
-        private final List dependencies = new ArrayList();
+        private final List<Dependency> dependencies = new ArrayList<Dependency>();
 
         private Build build;
 
@@ -219,7 +218,7 @@ public class ReflectionValueExtractorTest
             return groupId;
         }
 
-        public List getDependencies()
+        public List<Dependency> getDependencies()
         {
             return dependencies;
         }
@@ -246,13 +245,13 @@ public class ReflectionValueExtractorTest
 
         public Dependency[] getDependenciesAsArray()
         {
-            List list = getDependencies();
-            return (Dependency[]) list.toArray(new Dependency[list.size()]);
+            List<Dependency> list = getDependencies();
+            return list.toArray(new Dependency[list.size()]);
         }
 
-        public Map getDependenciesAsMap()
+        public Map<String, Dependency> getDependenciesAsMap()
         {
-            Map ret = new HashMap();
+            Map<String, Dependency> ret = new HashMap<String, Dependency>();
             for ( Object o : getDependencies() )
             {
                 Dependency dep = (Dependency) o;

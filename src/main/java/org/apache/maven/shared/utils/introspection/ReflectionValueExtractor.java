@@ -50,7 +50,7 @@ public class ReflectionValueExtractor
      * This approach prevents permgen space overflows due to retention of discarded
      * classloaders.
      */
-    private static final Map classMaps = new WeakHashMap();
+    private static final Map<Class,ClassMap> classMaps = new WeakHashMap<Class,ClassMap>();
 
     /**
      * Indexed properties pattern, ie <code>(\\w+)\\[(\\d+)\\]</code>
@@ -234,7 +234,7 @@ public class ReflectionValueExtractor
 
     private static ClassMap getClassMap( Class clazz )
     {
-        ClassMap classMap = (ClassMap) classMaps.get( clazz );
+        ClassMap classMap = classMaps.get( clazz );
 
         if ( classMap == null )
         {

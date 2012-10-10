@@ -365,6 +365,20 @@ public class FileUtils
     }
 
     /**
+     * @param file the file path
+     * @return the file content lines as String[] using the systems default encoding.
+     *         An empty List if the file didn't exist.
+     * @throws IOException
+     */
+    public static String[] fileReadArray( File file )
+        throws IOException
+    {
+        List<String> files = loadFile( file );
+
+        return files.toArray( new String[files.size()] );
+    }
+
+    /**
      * Appends data to a file. The file will be created if it does not exist.
      * Note: the data is written with platform encoding
      *
