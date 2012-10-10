@@ -558,7 +558,7 @@ public final class SelectorUtils
      *
      * @param path Path to tokenize. Must not be <code>null</code>.
      * @param separator The separator to use
-     * @return a Vector of path elements from the tokenized path
+     * @return a List of path elements from the tokenized path
      */
     private static List<String> tokenizePath( String path, String separator )
     {

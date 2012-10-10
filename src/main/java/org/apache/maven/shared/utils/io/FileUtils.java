@@ -507,7 +507,7 @@ public class FileUtils
      * @throws IOException if any
      * @since 1.0
      */
-    public static void fileWriteArray( File file, String[] data )
+    public static void fileWriteArray( File file, String... data )
         throws IOException
     {
         fileWriteArray( file, null, data );
@@ -522,7 +522,7 @@ public class FileUtils
      * @throws IOException if any
      * @since 1.0
      */
-    public static void fileWriteArray( File file, String encoding, String[] data )
+    public static void fileWriteArray( File file, String encoding, String... data )
         throws IOException
     {
         Writer writer = null;
@@ -577,7 +577,7 @@ public class FileUtils
      * @param extensions an array of expected extensions.
      * @return An array of files for the wanted extensions.
      */
-    public static String[] getFilesFromExtension( String directory, String[] extensions )
+    public static String[] getFilesFromExtension( String directory, String... extensions )
     {
         List<String> files = new ArrayList<String>();
 
@@ -604,7 +604,7 @@ public class FileUtils
                 //them with the current list.
 
                 String[] fetchFiles = getFilesFromExtension(currentFileName, extensions);
-                files = blendFilesToVector(files, fetchFiles);
+                files = blendFilesToList(files, fetchFiles);
             } else {
                 //ok... add the file
 
@@ -625,7 +625,7 @@ public class FileUtils
     /**
      * Private helper method for getFilesFromExtension()
      */
-    private static List<String> blendFilesToVector( List<String> v, String[] files )
+    private static List<String> blendFilesToList( List<String> v, String... files )
     {
         Collections.addAll(v, files);
 
@@ -637,7 +637,7 @@ public class FileUtils
      * Note that if the file does not have an extension, an empty string
      * (&quot;&quot;) is matched for.
      */
-    private static boolean isValidFile( String file, String[] extensions )
+    private static boolean isValidFile( String file, String... extensions )
     {
         String extension = extension( file );
         if ( extension == null )
@@ -764,7 +764,7 @@ public class FileUtils
      * @throws IOException if an error occurs
      */
     @SuppressWarnings( "deprecation" )
-    public static URL[] toURLs( final File[] files )
+    public static URL[] toURLs( final File... files )
         throws IOException
     {
         final URL[] urls = new URL[files.length];
@@ -1828,7 +1828,7 @@ public class FileUtils
      * @param wrappers array of {@link FilterWrapper}
      * @throws IOException if an IO error occurs during copying or filtering
      */
-    public static void copyFile( File from, File to, String encoding, FilterWrapper[] wrappers )
+    public static void copyFile( File from, File to, String encoding, FilterWrapper... wrappers )
         throws IOException
     {
         copyFile( from, to, encoding, wrappers, false );

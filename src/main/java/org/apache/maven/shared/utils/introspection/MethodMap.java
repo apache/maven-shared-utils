@@ -106,10 +106,10 @@ public class MethodMap
      * @throws AmbiguousException if there is more than one maximally
      *                            specific applicable method
      */
-    public Method find( String methodName, Object[] args )
+    public Method find( String methodName, Object... args )
         throws AmbiguousException
     {
-        List methodList = get( methodName );
+        List<Method> methodList = get( methodName );
 
         if ( methodList == null )
         {
@@ -117,7 +117,7 @@ public class MethodMap
         }
 
         int l = args.length;
-        Class[] classes = new Class[l];
+        Class<?>[] classes = new Class[l];
 
         for ( int i = 0; i < l; ++i )
         {
@@ -143,7 +143,7 @@ public class MethodMap
     }
 
 
-    private static Method getMostSpecific( List methods, Class[] classes )
+    private static Method getMostSpecific( List<Method> methods, Class<?>... classes )
         throws AmbiguousException
     {
         LinkedList<Method> applicables = getApplicables( methods, classes );
@@ -168,10 +168,10 @@ public class MethodMap
 
         for ( Method app : applicables )
         {
-            Class[] appArgs = app.getParameterTypes();
+            Class<?>[] appArgs = app.getParameterTypes();
             boolean lessSpecific = false;
 
-            for ( Iterator maximal = maximals.iterator(); !lessSpecific && maximal.hasNext(); )
+            for ( Iterator<Method> maximal = maximals.iterator(); !lessSpecific && maximal.hasNext(); )
             {
                 Method max = (Method) maximal.next();
 
@@ -227,7 +227,7 @@ public class MethodMap
      * @return MORE_SPECIFIC if c1 is more specific than c2, LESS_SPECIFIC if
      *         c1 is less specific than c2, INCOMPARABLE if they are incomparable.
      */
-    private static int moreSpecific( Class[] c1, Class[] c2 )
+    private static int moreSpecific( Class<?>[] c1, Class<?>[] c2 )
     {
         boolean c1MoreSpecific = false;
         boolean c2MoreSpecific = false;
@@ -278,19 +278,16 @@ public class MethodMap
      *         formal and actual arguments matches, and argument types are assignable
      *         to formal types through a method invocation conversion).
      */
-    private static LinkedList<Method> getApplicables( List methods, Class[] classes )
+    private static LinkedList<Method> getApplicables( List<Method> methods, Class<?>... classes )
     {
         LinkedList<Method> list = new LinkedList<Method>();
 
-        for ( Object method1 : methods )
+        for ( Method method : methods )
         {
-            Method method = (Method) method1;
-
             if ( isApplicable( method, classes ) )
             {
                 list.add( method );
             }
-
         }
         return list;
     }
@@ -303,9 +300,9 @@ public class MethodMap
      * @param classes The arguments
      * @return true if the method applies to the parameter types
      */
-    private static boolean isApplicable( Method method, Class[] classes )
+    private static boolean isApplicable( Method method, Class<?>... classes )
     {
-        Class[] methodArgs = method.getParameterTypes();
+        Class<?>[] methodArgs = method.getParameterTypes();
 
         if ( methodArgs.length != classes.length )
         {
@@ -341,7 +338,7 @@ public class MethodMap
      *         type or an object type of a primitive type that can be converted to
      *         the formal type.
      */
-    private static boolean isMethodInvocationConvertible( Class formal, Class actual )
+    private static boolean isMethodInvocationConvertible( Class<?> formal, Class<?> actual )
     {
         /*
          * if it's a null, it means the arg was null
@@ -424,7 +421,7 @@ public class MethodMap
      *         or formal and actual are both primitive types and actual can be
      *         subject to widening conversion to formal.
      */
-    private static boolean isStrictMethodInvocationConvertible( Class formal, Class actual )
+    private static boolean isStrictMethodInvocationConvertible( Class<?> formal, Class<?> actual )
     {
         /*
          * we shouldn't get a null into, but if so
