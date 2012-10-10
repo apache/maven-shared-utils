@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.util.Properties;
 import org.apache.maven.shared.utils.io.IOUtil;
 
-class PropertyUtils
+public class PropertyUtils
 {
 
     public PropertyUtils()

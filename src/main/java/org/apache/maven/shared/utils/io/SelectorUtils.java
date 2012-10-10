@@ -94,7 +94,7 @@ public final class SelectorUtils
      * @return whether or not a given path matches the start of a given
      *         pattern up to the first "**".
      */
-    private static boolean matchPatternStart( String pattern, String str, boolean isCaseSensitive )
+    public static boolean matchPatternStart( String pattern, String str, boolean isCaseSensitive )
     {
         if ( isRegexPrefixedPattern( pattern ) )
         {
@@ -381,7 +381,7 @@ public final class SelectorUtils
      * @return <code>true</code> if the string matches against the pattern,
      *         or <code>false</code> otherwise.
      */
-    private static boolean match( String pattern, String str, boolean isCaseSensitive )
+    public static boolean match( String pattern, String str, boolean isCaseSensitive )
     {
         char[] patArr = pattern.toCharArray();
         char[] strArr = str.toCharArray();
