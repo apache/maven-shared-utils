@@ -106,7 +106,7 @@ public class ReaderFactory
      * @throws IOException if any.
      * @see XmlStreamReader
      */
-    public static XmlStreamReader newXmlReader( InputStream in )
+    public static Reader newXmlReader( InputStream in )
         throws IOException
     {
         return new XmlStreamReader( in );
@@ -120,7 +120,7 @@ public class ReaderFactory
      * @throws IOException if any.
      * @see XmlStreamReader
      */
-    public static XmlStreamReader newXmlReader( File file )
+    public static Reader newXmlReader( File file )
         throws IOException
     {
         return new XmlStreamReader( file );
@@ -134,7 +134,7 @@ public class ReaderFactory
      * @throws IOException if any.
      * @see XmlStreamReader
      */
-    public static XmlStreamReader newXmlReader( URL url )
+    public static Reader newXmlReader( URL url )
         throws IOException
     {
         return new XmlStreamReader( url );
