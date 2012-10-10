@@ -438,23 +438,6 @@ final class Reflector
         {
             method = _getMethod( targetClass, propertyName, emptyParams );
         }
-        if ( method != null )
-        {
-            try
-            {
-                returnValue = method.invoke( target, new Object[]{ } );
-            }
-            catch ( IllegalAccessException e )
-            {
-                throw new ReflectorException(
-                    "Error retrieving property \'" + propertyName + "\' from \'" + targetClass + "\'", e );
-            }
-            catch ( InvocationTargetException e )
-            {
-                throw new ReflectorException(
-                    "Error retrieving property \'" + propertyName + "\' from \'" + targetClass + "\'", e );
-            }
-        }
 
         if ( method != null )
         {
