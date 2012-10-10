@@ -30,7 +30,7 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.nio.charset.Charset;
-import org.apache.maven.shared.utils.xml.XmlStreamReader;
+import org.apache.commons.io.input.XmlStreamReader;
 
 
 /**
@@ -143,18 +143,6 @@ public class ReaderFactory
     /**
      * Create a new Reader with default plaform encoding.
      *
-     * @param in not null input stream.
-     * @return a reader instance for the input stream using the default platform charset.
-     * @see Charset#defaultCharset()
-     */
-    public static Reader newPlatformReader( InputStream in )
-    {
-        return new InputStreamReader( in );
-    }
-
-    /**
-     * Create a new Reader with default plaform encoding.
-     *
      * @param file not null file.
      * @return a reader instance for the input file using the default platform charset.
      * @throws FileNotFoundException if any.
@@ -164,20 +152,6 @@ public class ReaderFactory
         throws FileNotFoundException
     {
         return new FileReader( file );
-    }
-
-    /**
-     * Create a new Reader with default plaform encoding.
-     *
-     * @param url not null url.
-     * @return a reader instance for the input url using the default platform charset.
-     * @throws IOException if any.
-     * @see Charset#defaultCharset()
-     */
-    public static Reader newPlatformReader( URL url )
-        throws IOException
-    {
-        return new InputStreamReader( url.openStream() );
     }
 
     /**

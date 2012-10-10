@@ -74,7 +74,7 @@ public class CollectionUtils
             return dominantMap;
         }
 
-        if ( dominantMap == null && recessiveMap != null )
+        if ( dominantMap == null )
         {
             return recessiveMap;
         }
@@ -96,9 +96,8 @@ public class CollectionUtils
 
         // Now take the keys we just found and extract the values from
         // the recessiveMap and put the key:value pairs into the dominantMap.
-        for ( Iterator i = contributingRecessiveKeys.iterator(); i.hasNext(); )
+        for ( Object key : contributingRecessiveKeys )
         {
-            Object key = i.next();
             result.put( key, recessiveMap.get( key ) );
         }
 
@@ -115,7 +114,7 @@ public class CollectionUtils
      */
     public static Map mergeMaps( Map[] maps )
     {
-        Map result = null;
+        Map result;
 
         if ( maps.length == 0 )
         {
@@ -176,10 +175,9 @@ public class CollectionUtils
     public static Collection subtract( final Collection a, final Collection b )
     {
         ArrayList list = new ArrayList( a );
-        Iterator it = b.iterator();
-        while ( it.hasNext() )
+        for ( Object aB : b )
         {
-            list.remove( it.next() );
+            list.remove( aB );
         }
         return list;
     }
@@ -195,18 +193,16 @@ public class CollectionUtils
     public static Map getCardinalityMap( final Collection col )
     {
         HashMap count = new HashMap();
-        Iterator it = col.iterator();
-        while ( it.hasNext() )
+        for ( Object obj : col )
         {
-            Object obj = it.next();
             Integer c = (Integer) ( count.get( obj ) );
             if ( null == c )
             {
-                count.put( obj, new Integer( 1 ) );
+                count.put( obj, 1 );
             }
             else
             {
-                count.put( obj, new Integer( c.intValue() + 1 ) );
+                count.put( obj, c + 1 );
             }
         }
         return count;
@@ -233,7 +229,7 @@ public class CollectionUtils
      * Take an array of type T and convert it into a HashSet of type T.
      * If <code>null</code> or an empty array gets passed, an empty Set will be returned.
      *
-     * @param array
+     * @param array  The array
      * @return the filled HashSet of type T
      */
     public static <T> Set<T> arrayAsHashSet( T[] array )
@@ -253,7 +249,7 @@ public class CollectionUtils
      * Take an array of type T and convert it into a TreeSet of type T.
      * If <code>null</code> or an empty array gets passed, an empty Set will be returned.
      *
-     * @param array
+     * @param array The array
      * @return the filled TreeSet of type T
      */
     public static <T> Set<T> arrayAsTreeSet( T[] array )
@@ -280,7 +276,7 @@ public class CollectionUtils
             Object o = freqMap.get( obj );
             if ( o != null )  // minimize NullPointerExceptions
             {
-                return ( (Integer) o ).intValue();
+                return (Integer) o;
             }
         }
         catch ( NullPointerException e )
