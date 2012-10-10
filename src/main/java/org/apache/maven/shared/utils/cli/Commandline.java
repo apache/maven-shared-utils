@@ -190,7 +190,7 @@ public class Commandline
         return shell.getExecutable();
     }
 
-    public void addArguments( String[] line )
+    public void addArguments( String... line )
     {
         for (String aLine : line) {
             createArg().setValue(aLine);

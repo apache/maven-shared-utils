@@ -494,7 +494,7 @@ public abstract class CommandLineUtils
         return tokens.toArray( new String[tokens.size()] );
     }
 
-    public static String toString( String[] line )
+    public static String toString( String... line )
     {
         // empty path return empty string
         if ( ( line == null ) || ( line.length == 0 ) )
