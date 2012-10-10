@@ -1187,6 +1187,19 @@ public class FileUtils
 
         return file;
     }
+
+    /**
+     * Delete a file. If file is directory delete it and all sub-directories.
+     *
+     * @param file the file path
+     * @throws IOException if any
+     */
+    public static void forceDelete( final String file )
+        throws IOException
+    {
+        forceDelete( new File( file ) );
+    }
+
     /**
      * Delete a file. If file is directory delete it and all sub-directories.
      *
