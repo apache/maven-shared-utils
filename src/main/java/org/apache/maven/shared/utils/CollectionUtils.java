@@ -35,7 +35,6 @@ import java.util.TreeSet;
  * @author Olivier Lamy
  * @version $Id: CollectionUtils.java 8055 2009-01-16 12:45:08Z vsiveton $
  */
-@SuppressWarnings( { "rawtypes", "unchecked" } )
 public class CollectionUtils
 {
     // ----------------------------------------------------------------------
@@ -61,7 +60,7 @@ public class CollectionUtils
      * @param recessiveMap Recessive Map.
      * @return The result map with combined dominant and recessive values.
      */
-    public static Map mergeMaps( Map dominantMap, Map recessiveMap )
+    public static <K,V> Map<K,V> mergeMaps( Map<K,V> dominantMap, Map<K,V> recessiveMap )
     {
 
         if ( dominantMap == null && recessiveMap == null )
@@ -79,16 +78,16 @@ public class CollectionUtils
             return recessiveMap;
         }
 
-        Map result = new HashMap();
+        Map<K,V> result = new HashMap<K,V>();
 
         // Grab the keys from the dominant and recessive maps.
-        Set dominantMapKeys = dominantMap.keySet();
-        Set recessiveMapKeys = recessiveMap.keySet();
+        Set<K> dominantMapKeys = dominantMap.keySet();
+        Set<K> recessiveMapKeys = recessiveMap.keySet();
 
         // Create the set of keys that will be contributed by the
         // recessive Map by subtracting the intersection of keys
         // from the recessive Map's keys.
-        Collection contributingRecessiveKeys = CollectionUtils.subtract( recessiveMapKeys,
+        Collection<K> contributingRecessiveKeys = CollectionUtils.subtract( recessiveMapKeys,
                                                                          CollectionUtils.intersection( dominantMapKeys,
                                                                                                        recessiveMapKeys ) );
 
@@ -96,7 +95,7 @@ public class CollectionUtils
 
         // Now take the keys we just found and extract the values from
         // the recessiveMap and put the key:value pairs into the dominantMap.
-        for ( Object key : contributingRecessiveKeys )
+        for ( K key : contributingRecessiveKeys )
         {
             result.put( key, recessiveMap.get( key ) );
         }
@@ -112,9 +111,9 @@ public class CollectionUtils
      * @param maps An array of Maps to merge.
      * @return Map The result Map produced after the merging process.
      */
-    public static Map mergeMaps( Map[] maps )
+    public static <K,V> Map<K,V> mergeMaps( Map<K,V>[] maps )
     {
-        Map result;
+        Map<K,V> result;
 
         if ( maps.length == 0 )
         {
@@ -147,14 +146,14 @@ public class CollectionUtils
      *
      * @see Collection#retainAll
      */
-    public static Collection intersection( final Collection a, final Collection b )
+    public static <T> Collection<T> intersection( final Collection<T> a, final Collection<T> b )
     {
-        ArrayList list = new ArrayList();
-        Map mapa = getCardinalityMap( a );
-        Map mapb = getCardinalityMap( b );
-        Set elts = new HashSet( a );
+        List<T> list = new ArrayList<T>();
+        Map<T, Integer> mapa = getCardinalityMap( a );
+        Map<T, Integer> mapb = getCardinalityMap( b );
+        Set<T> elts = new HashSet<T>( a );
         elts.addAll( b );
-        for ( Object obj : elts )
+        for ( T obj : elts )
         {
             for ( int i = 0, m = Math.min( getFreq( obj, mapa ), getFreq( obj, mapb ) ); i < m; i++ )
             {
@@ -172,9 +171,9 @@ public class CollectionUtils
      *
      * @see Collection#removeAll
      */
-    public static Collection subtract( final Collection a, final Collection b )
+    public static <T> Collection<T> subtract( final Collection<T> a, final Collection<T> b )
     {
-        ArrayList list = new ArrayList( a );
+        List<T> list = new ArrayList<T>( a );
         for ( Object aB : b )
         {
             list.remove( aB );
@@ -190,10 +189,10 @@ public class CollectionUtils
      * An entry that maps to <tt>null</tt> indicates that the
      * element does not appear in the given {@link Collection}.
      */
-    public static Map getCardinalityMap( final Collection col )
+    public static <T> Map<T,Integer> getCardinalityMap( final Collection<T> col )
     {
-        HashMap count = new HashMap();
-        for ( Object obj : col )
+        Map<T,Integer> count = new HashMap<T,Integer>();
+        for ( T obj : col )
         {
             Integer c = (Integer) ( count.get( obj ) );
             if ( null == c )
@@ -208,14 +207,14 @@ public class CollectionUtils
         return count;
     }
 
-    public static List iteratorToList( Iterator it )
+    public static <T> List<T> iteratorToList( Iterator<T> it )
     {
         if ( it == null )
         {
             throw new NullPointerException( "it cannot be null." );
         }
 
-        List list = new ArrayList();
+        List<T> list = new ArrayList<T>();
 
         while ( it.hasNext() )
         {
@@ -236,7 +235,7 @@ public class CollectionUtils
     {
         if ( array == null || array.length == 0 )
         {
-            return Collections.EMPTY_SET;
+            return Collections.emptySet();
         }
 
         Set<T> set = new HashSet<T>( array.length );
@@ -256,7 +255,7 @@ public class CollectionUtils
     {
         if ( array == null || array.length == 0 )
         {
-            return Collections.EMPTY_SET;
+            return Collections.emptySet();
         }
 
         Set<T> set = new TreeSet<T>();
@@ -269,14 +268,14 @@ public class CollectionUtils
     //
     // ----------------------------------------------------------------------
 
-    private static int getFreq( final Object obj, final Map freqMap )
+    private static <T> int getFreq( final Object obj, final Map<T, Integer> freqMap )
     {
         try
         {
-            Object o = freqMap.get( obj );
+            Integer o = freqMap.get( obj );
             if ( o != null )  // minimize NullPointerExceptions
             {
-                return (Integer) o;
+                return o;
             }
         }
         catch ( NullPointerException e )
