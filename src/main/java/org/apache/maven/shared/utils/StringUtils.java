@@ -1926,11 +1926,11 @@ public class StringUtils
      *
      * @param array the array to reverse
      */
-    private static void reverseArray( Object... array )
+    private static void reverseArray( String... array )
     {
         int i = 0;
         int j = array.length - 1;
-        Object tmp;
+        String tmp;
 
         while ( j > i )
         {
