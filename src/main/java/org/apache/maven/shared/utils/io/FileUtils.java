@@ -1045,6 +1045,149 @@ public class FileUtils
     }
 
     /**
+     * Normalize a path.
+     * Eliminates "/../" and "/./" in a string. Returns <code>null</code> if the ..'s went past the
+     * root.
+     * Eg:
+     * <pre>
+     * /foo//               -->     /foo/
+     * /foo/./              -->     /foo/
+     * /foo/../bar          -->     /bar
+     * /foo/../bar/         -->     /bar/
+     * /foo/../bar/../baz   -->     /baz
+     * //foo//./bar         -->     /foo/bar
+     * /../                 -->     null
+     * </pre>
+     *
+     * @param path the path to normalize
+     * @return the normalized String, or <code>null</code> if too many ..'s.
+     */
+    public static String normalize( final String path )
+    {
+        String normalized = path;
+        // Resolve occurrences of "//" in the normalized path
+        while ( true )
+        {
+            int index = normalized.indexOf( "//" );
+            if ( index < 0 )
+            {
+                break;
+            }
+            normalized = normalized.substring( 0, index ) + normalized.substring( index + 1 );
+        }
+
+        // Resolve occurrences of "/./" in the normalized path
+        while ( true )
+        {
+            int index = normalized.indexOf( "/./" );
+            if ( index < 0 )
+            {
+                break;
+            }
+            normalized = normalized.substring( 0, index ) + normalized.substring( index + 2 );
+        }
+
+        // Resolve occurrences of "/../" in the normalized path
+        while ( true )
+        {
+            int index = normalized.indexOf( "/../" );
+            if ( index < 0 )
+            {
+                break;
+            }
+            if ( index == 0 )
+            {
+                return null;  // Trying to go outside our context
+            }
+            int index2 = normalized.lastIndexOf( '/', index - 1 );
+            normalized = normalized.substring( 0, index2 ) + normalized.substring( index + 3 );
+        }
+
+        // Return the normalized path that we have completed
+        return normalized;
+    }
+
+    /**
+     * Resolve a file <code>filename</code> to it's canonical form. If <code>filename</code> is
+     * relative (doesn't start with <code>/</code>), it will be resolved relative to
+     * <code>baseFile</code>, otherwise it is treated as a normal root-relative path.
+     *
+     * @param baseFile Where to resolve <code>filename</code> from, if <code>filename</code> is
+     *                 relative.
+     * @param filename Absolute or relative file path to resolve.
+     * @return The canonical <code>File</code> of <code>filename</code>.
+     */
+    public static File resolveFile( final File baseFile, String filename )
+    {
+        String filenm = filename;
+        if ( '/' != File.separatorChar )
+        {
+            filenm = filename.replace( '/', File.separatorChar );
+        }
+
+        if ( '\\' != File.separatorChar )
+        {
+            filenm = filename.replace( '\\', File.separatorChar );
+        }
+
+        // deal with absolute files
+        if ( filenm.startsWith( File.separator ) || ( Os.isFamily( Os.FAMILY_WINDOWS ) && filenm.indexOf( ":" ) > 0 ) )
+        {
+            File file = new File( filenm );
+
+            try
+            {
+                file = file.getCanonicalFile();
+            }
+            catch ( final IOException ioe )
+            {
+                // nop
+            }
+
+            return file;
+        }
+        // FIXME: I'm almost certain this // removal is unnecessary, as getAbsoluteFile() strips
+        // them. However, I'm not sure about this UNC stuff. (JT)
+        final char[] chars = filename.toCharArray();
+        final StringBuffer sb = new StringBuffer();
+
+        //remove duplicate file separators in succession - except
+        //on win32 at start of filename as UNC filenames can
+        //be \\AComputer\AShare\myfile.txt
+        int start = 0;
+        if ( '\\' == File.separatorChar )
+        {
+            sb.append( filenm.charAt( 0 ) );
+            start++;
+        }
+
+        for ( int i = start; i < chars.length; i++ )
+        {
+            final boolean doubleSeparator = File.separatorChar == chars[i] && File.separatorChar == chars[i - 1];
+
+            if ( !doubleSeparator )
+            {
+                sb.append( chars[i] );
+            }
+        }
+
+        filenm = sb.toString();
+
+        //must be relative
+        File file = ( new File( baseFile, filenm ) ).getAbsoluteFile();
+
+        try
+        {
+            file = file.getCanonicalFile();
+        }
+        catch ( final IOException ioe )
+        {
+            // nop
+        }
+
+        return file;
+    }
+    /**
      * Delete a file. If file is directory delete it and all sub-directories.
      *
      * @param file a file
