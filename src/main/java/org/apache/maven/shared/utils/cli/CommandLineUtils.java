@@ -56,11 +56,11 @@ public abstract class CommandLineUtils
     {
         private final StringBuffer string = new StringBuffer();
 
-        private final String ls = System.getProperty( "line.separator" );
+        private static final String LS = System.getProperty( "line.separator" );
 
         public void consumeLine( String line )
         {
-            string.append( line ).append( ls );
+            string.append( line ).append( LS );
         }
 
         public String getOutput()
