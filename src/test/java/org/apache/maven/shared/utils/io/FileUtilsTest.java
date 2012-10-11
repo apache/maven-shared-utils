@@ -240,7 +240,7 @@ public class FileUtilsTest
 
         assertThat( urls.length, is( files.length ) );
         assertThat( urls[0].toExternalForm().startsWith( "file:" ), is( true ) );
-        assertThat( urls[0].toExternalForm().indexOf( "file1.txt" ) >= 0, is( true ) );
+        assertThat( urls[0].toExternalForm().contains( "file1.txt" ), is( true ) );
         assertThat( urls[1].toExternalForm().startsWith( "file:" ), is( true ) );
         assertThat( urls[1].toExternalForm(), containsString( "file2.txt" ) );
 
