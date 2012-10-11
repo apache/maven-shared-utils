@@ -19,11 +19,8 @@ package org.apache.maven.shared.utils.cli;
  * under the License.
  */
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -32,9 +29,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
+
 import org.apache.maven.shared.utils.Os;
 import org.apache.maven.shared.utils.StringUtils;
-import org.apache.maven.shared.utils.io.IOUtil;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l </a>
