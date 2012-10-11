@@ -19,7 +19,6 @@ package org.apache.maven.shared.utils.cli;
  * under the License.
  */
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -350,11 +349,11 @@ public abstract class CommandLineUtils
                 : new InputStreamReader( p.getInputStream() );
             br = new BufferedReader( reader );
 
-            return readEnvVars(caseSensitive, br);
+            return readEnvVars( caseSensitive, br );
         }
         finally
         {
-            IOUtil.close(br);
+            IOUtil.close( br );
             if ( p != null )
             {
                 IOUtil.close( p.getOutputStream() );
@@ -366,7 +365,9 @@ public abstract class CommandLineUtils
         }
     }
 
-    private static Properties readEnvVars(boolean caseSensitive, BufferedReader br) throws IOException {
+    private static Properties readEnvVars( boolean caseSensitive, BufferedReader br )
+        throws IOException
+    {
         String line;
         Properties envVars = new Properties();
         String lastKey = null;
@@ -549,7 +550,7 @@ public abstract class CommandLineUtils
         @SuppressWarnings( { "unchecked" } ) Map<String, String> envs = (Map<String, String>) method.invoke( null );
         for ( Map.Entry<String, String> entry : envs.entrySet() )
         {
-            envVars.put(!caseSensitive ? entry.getKey().toUpperCase(Locale.ENGLISH) : entry, entry.getValue());
+            envVars.put( !caseSensitive ? entry.getKey().toUpperCase( Locale.ENGLISH ) : entry, entry.getValue() );
         }
         return envVars;
     }
