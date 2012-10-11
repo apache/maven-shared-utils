@@ -294,110 +294,23 @@ public abstract class CommandLineUtils
 
         // check if it's 1.5+ run
 
-        Method getenvMethod = getEnvMethod();
-        if ( getenvMethod != null )
-        {
-            try
-            {
-                return getEnvFromSystem( getenvMethod, caseSensitive );
-            }
-            catch ( IllegalAccessException e )
-            {
-                throw new IOException( e.getMessage() );
-            }
-            catch ( IllegalArgumentException e )
-            {
-                throw new IOException( e.getMessage() );
-            }
-            catch ( InvocationTargetException e )
-            {
-                throw new IOException( e.getMessage() );
-            }
-        }
-
-        Process p = null;
-        BufferedReader br = null;
-
         try
         {
-
-            Runtime r = Runtime.getRuntime();
-
-            //If this is windows set the shell to command.com or cmd.exe with correct arguments.
-            boolean overriddenEncoding = false;
-            if ( Os.isFamily( Os.FAMILY_WINDOWS ) )
-            {
-                if ( Os.isFamily( Os.FAMILY_WIN9X ) )
-                {
-                    p = r.exec( "command.com /c set" );
-                }
-                else
-                {
-                    overriddenEncoding = true;
-                    // /U = change stdout encoding to UTF-16LE to avoid encoding inconsistency
-                    // between command-line/DOS and GUI/Windows, see PLXUTILS-124
-                    p = r.exec( "cmd.exe /U /c set" );
-                }
-            }
-            else
-            {
-                p = r.exec( "env" );
-            }
-
-            Reader reader = overriddenEncoding
-                ? new InputStreamReader( p.getInputStream(), UTF_16LE )
-                : new InputStreamReader( p.getInputStream() );
-            br = new BufferedReader( reader );
-
-            return readEnvVars( caseSensitive, br );
+            Map<String, String> envs = System.getenv();
+            return ensureCaseSensitivity( envs, caseSensitive );
         }
-        finally
+        catch ( IllegalAccessException e )
         {
-            IOUtil.close( br );
-            if ( p != null )
-            {
-                IOUtil.close( p.getOutputStream() );
-                IOUtil.close( p.getErrorStream() );
-                IOUtil.close( p.getInputStream() );
-
-                p.destroy();
-            }
+            throw new IOException( e.getMessage() );
         }
-    }
-
-    private static Properties readEnvVars( boolean caseSensitive, BufferedReader br )
-        throws IOException
-    {
-        String line;
-        Properties envVars = new Properties();
-        String lastKey = null;
-        String lastVal = null;
-
-        while ( ( line = br.readLine() ) != null )
+        catch ( IllegalArgumentException e )
         {
-            int idx = line.indexOf( '=' );
-
-            if ( idx > 0 )
-            {
-                lastKey = line.substring( 0, idx );
-
-                if ( !caseSensitive )
-                {
-                    lastKey = lastKey.toUpperCase( Locale.ENGLISH );
-                }
-
-                lastVal = line.substring( idx + 1 );
-
-                envVars.setProperty( lastKey, lastVal );
-            }
-            else if ( lastKey != null )
-            {
-                lastVal += "\n" + line;
-
-                envVars.setProperty( lastKey, lastVal );
-            }
+            throw new IOException( e.getMessage() );
         }
-        return envVars;
+        catch ( InvocationTargetException e )
+        {
+            throw new IOException( e.getMessage() );
+        }
     }
 
     private static boolean isAlive( Process p )
@@ -543,14 +456,13 @@ public abstract class CommandLineUtils
         }
     }
 
-    private static Properties getEnvFromSystem( Method method, boolean caseSensitive )
+    static Properties ensureCaseSensitivity( Map<String, String> envs, boolean preserveKeyCase )
         throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
     {
         Properties envVars = new Properties();
-        @SuppressWarnings( { "unchecked" } ) Map<String, String> envs = (Map<String, String>) method.invoke( null );
         for ( Map.Entry<String, String> entry : envs.entrySet() )
         {
-            envVars.put( !caseSensitive ? entry.getKey().toUpperCase( Locale.ENGLISH ) : entry.getValue(), entry.getValue() );
+            envVars.put( !preserveKeyCase ? entry.getKey().toUpperCase( Locale.ENGLISH ) : entry.getKey(), entry.getValue() );
         }
         return envVars;
     }

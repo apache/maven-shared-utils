@@ -20,12 +20,14 @@ package org.apache.maven.shared.utils.cli;
  */
 
 
-import junit.framework.TestCase;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
 import org.apache.maven.shared.utils.Os;
 
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.Properties;
+import junit.framework.TestCase;
 
 @SuppressWarnings( { "JavaDoc", "deprecation" } )
 public class CommandLineUtilsTest
@@ -45,6 +47,15 @@ public class CommandLineUtilsTest
             String variable = (String) o;
             assertEquals( variable.toUpperCase( Locale.ENGLISH ), variable );
         }
+    }
+
+    public void testEnsureCaseSensitivity()
+        throws Exception
+    {
+        Map<String, String> data = new HashMap<String, String>(  );
+        data.put( "abz", "cool" );
+        assertTrue( CommandLineUtils.ensureCaseSensitivity( data, false ).containsKey( "ABZ" ) );
+        assertTrue( CommandLineUtils.ensureCaseSensitivity( data, true ).containsKey( "abz" ) );
     }
 
     /**
