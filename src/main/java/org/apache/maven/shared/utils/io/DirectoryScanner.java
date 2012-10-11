@@ -27,6 +27,8 @@ import java.util.Set;
 import org.apache.maven.shared.utils.ArrayUtils;
 import org.apache.maven.shared.utils.CollectionUtils;
 
+import javax.annotation.Nonnull;
+
 /**
  * Class for scanning a directory for files/directories which match certain criteria.
  * <p/>
@@ -260,7 +262,7 @@ public class DirectoryScanner
      *
      * @param basedir The base directory for scanning. Should not be <code>null</code>.
      */
-    public void setBasedir( final File basedir )
+    public void setBasedir( final @Nonnull File basedir )
     {
         this.basedir = basedir;
     }

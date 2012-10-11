@@ -19,6 +19,7 @@ package org.apache.maven.shared.utils.io;
  * under the License.
  */
 
+import javax.annotation.Nonnull;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
@@ -145,7 +146,7 @@ public final class IOUtil
      *
      * @param bufferSize Size of internal buffer to use.
      */
-    public static void copy( final InputStream input, final OutputStream output, final int bufferSize )
+    public static void copy( final @Nonnull InputStream input, final @Nonnull OutputStream output, final int bufferSize )
         throws IOException
     {
         final byte[] buffer = new byte[bufferSize];

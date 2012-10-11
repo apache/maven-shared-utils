@@ -20,7 +20,6 @@ package org.apache.maven.shared.utils.io;
  */
 
 
-import junit.framework.AssertionFailedError;
 import org.apache.maven.shared.utils.testhelpers.FileTestHelper;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
@@ -30,22 +29,14 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.rules.TestName;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Reader;
-import java.io.Writer;
+import java.io.*;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.junit.Assume.assumeThat;
@@ -62,6 +53,7 @@ import static org.junit.matchers.JUnitMatchers.hasItems;
  * @version $Id: FileUtilsTestCase.java 1081025 2011-03-13 00:45:10Z niallp $
  * @see FileUtils
  */
+@SuppressWarnings({"ResultOfMethodCallIgnored", "ConstantConditions"})
 public class FileUtilsTest
 {
 
@@ -926,6 +918,7 @@ public class FileUtilsTest
         assertEqualContent( text, file );
     }
 
+
     @Test
     public void writeStringToFileWithEncoding_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines()
         throws Exception
@@ -1005,8 +998,9 @@ public class FileUtilsTest
         assertThat( actual, is( expected ) );
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test( expected = NullPointerException.class )
-    public void deleteQuietlyForNull()
+    public void blowUpOnNull()
         throws IOException
     {
         FileUtils.deleteDirectory( (File) null );
@@ -1086,8 +1080,9 @@ public class FileUtilsTest
 
     //// dirname(String)
 
+    @SuppressWarnings("ConstantConditions")
     @Test( expected = NullPointerException.class )
-    public void dirnameNull()
+    public void nlowUpOnDirnameNull()
         throws Exception
     {
         FileUtils.dirname( null );
@@ -1177,8 +1172,9 @@ public class FileUtilsTest
 
     //// filename(String)
 
+    @SuppressWarnings("ConstantConditions")
     @Test( expected = NullPointerException.class )
-    public void filenameNull()
+    public void blowUpOnFilenameNull()
         throws Exception
     {
         FileUtils.filename( null );
@@ -1268,8 +1264,9 @@ public class FileUtilsTest
 
     //// basename(String)
 
+    @SuppressWarnings("ConstantConditions")
     @Test( expected = NullPointerException.class )
-    public void basenameNull()
+    public void blowUpOnbasenameNull()
         throws Exception
     {
         FileUtils.basename( null );
@@ -1366,8 +1363,9 @@ public class FileUtilsTest
 
     //// extension(String)
 
+    @SuppressWarnings("ConstantConditions")
     @Test( expected = NullPointerException.class )
-    public void extensionNull()
+    public void blowUpOnNullExtension()
         throws Exception
     {
         FileUtils.extension( null );

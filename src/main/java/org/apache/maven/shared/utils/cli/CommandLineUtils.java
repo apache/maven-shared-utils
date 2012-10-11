@@ -317,10 +317,10 @@ public abstract class CommandLineUtils
         }
 
         Process p = null;
+        BufferedReader br = null;
 
         try
         {
-            Properties envVars = new Properties();
 
             Runtime r = Runtime.getRuntime();
 
@@ -348,42 +348,13 @@ public abstract class CommandLineUtils
             Reader reader = overriddenEncoding
                 ? new InputStreamReader( p.getInputStream(), UTF_16LE )
                 : new InputStreamReader( p.getInputStream() );
-            BufferedReader br = new BufferedReader( reader );
+            br = new BufferedReader( reader );
 
-            String line;
-
-            String lastKey = null;
-            String lastVal = null;
-
-            while ( ( line = br.readLine() ) != null )
-            {
-                int idx = line.indexOf( '=' );
-
-                if ( idx > 0 )
-                {
-                    lastKey = line.substring( 0, idx );
-
-                    if ( !caseSensitive )
-                    {
-                        lastKey = lastKey.toUpperCase( Locale.ENGLISH );
-                    }
-
-                    lastVal = line.substring( idx + 1 );
-
-                    envVars.setProperty( lastKey, lastVal );
-                }
-                else if ( lastKey != null )
-                {
-                    lastVal += "\n" + line;
-
-                    envVars.setProperty( lastKey, lastVal );
-                }
-            }
-
-            return envVars;
+            return readEnvVars(caseSensitive, br);
         }
         finally
         {
+            IOUtil.close(br);
             if ( p != null )
             {
                 IOUtil.close( p.getOutputStream() );
@@ -393,6 +364,39 @@ public abstract class CommandLineUtils
                 p.destroy();
             }
         }
+    }
+
+    private static Properties readEnvVars(boolean caseSensitive, BufferedReader br) throws IOException {
+        String line;
+        Properties envVars = new Properties();
+        String lastKey = null;
+        String lastVal = null;
+
+        while ( ( line = br.readLine() ) != null )
+        {
+            int idx = line.indexOf( '=' );
+
+            if ( idx > 0 )
+            {
+                lastKey = line.substring( 0, idx );
+
+                if ( !caseSensitive )
+                {
+                    lastKey = lastKey.toUpperCase( Locale.ENGLISH );
+                }
+
+                lastVal = line.substring( idx + 1 );
+
+                envVars.setProperty( lastKey, lastVal );
+            }
+            else if ( lastKey != null )
+            {
+                lastVal += "\n" + line;
+
+                envVars.setProperty( lastKey, lastVal );
+            }
+        }
+        return envVars;
     }
 
     private static boolean isAlive( Process p )
@@ -543,14 +547,9 @@ public abstract class CommandLineUtils
     {
         Properties envVars = new Properties();
         @SuppressWarnings( { "unchecked" } ) Map<String, String> envs = (Map<String, String>) method.invoke( null );
-        for ( String key : envs.keySet() )
+        for ( Map.Entry<String, String> entry : envs.entrySet() )
         {
-            String value = envs.get( key );
-            if ( !caseSensitive )
-            {
-                key = key.toUpperCase( Locale.ENGLISH );
-            }
-            envVars.put( key, value );
+            envVars.put(!caseSensitive ? entry.getKey().toUpperCase(Locale.ENGLISH) : entry, entry.getValue());
         }
         return envVars;
     }
