@@ -45,41 +45,6 @@ public class PathToolTest extends Assert
     public TemporaryFolder tempFolder = new TemporaryFolder();
 
     @Test
-    public void testCalculateLink()
-    {
-        assertThat( PathTool.calculateLink( "/index.html", "../.." )
-                  , is( "../../index.html" ) );
-
-        assertThat( PathTool.calculateLink( "http://plexus.codehaus.org/plexus-utils/index.html", "../.." )
-                  , is( "http://plexus.codehaus.org/plexus-utils/index.html" ) );
-
-        assertThat( PathTool.calculateLink( "/usr/local/java/bin/java.sh", "../.." )
-                  , is( "../../usr/local/java/bin/java.sh" ) );
-
-        assertThat( PathTool.calculateLink( "../index.html", "/usr/local/java/bin" )
-                  , is( "/usr/local/java/bin/../index.html" ) );
-
-        assertThat( PathTool.calculateLink( "../index.html", "http://plexus.codehaus.org/plexus-utils" )
-                  , is( "http://plexus.codehaus.org/plexus-utils/../index.html" ) );
-    }
-
-    @Test
-    public void testGetDirectoryComponent()
-    {
-        assertThat( PathTool.getDirectoryComponent( null )
-                  , is( "" ) );
-
-        assertThat( PathTool.getDirectoryComponent( "/usr/local/java/bin" )
-                  , is( "/usr/local/java" ) );
-
-        assertThat( PathTool.getDirectoryComponent( "/usr/local/java/bin/" )
-                  , is( "/usr/local/java/bin" ) );
-
-        assertThat( PathTool.getDirectoryComponent( "/usr/local/java/bin/java.sh" )
-                  , is( "/usr/local/java/bin" ) );
-    }
-
-    @Test
     // Keep in sync with testGetRelativeFilePath_Windows()
     public void testGetRelativeFilePath_NonWindows()
     {
@@ -173,44 +138,6 @@ public class PathToolTest extends Assert
 
         assertThat( PathTool.getRelativePath( "/usr/local/java/bin/java.sh", "/usr/local/" )
                   , is( "" ) );
-    }
-
-    @Test
-    public void testGetRelativePath_1parm()
-    {
-        assertThat( PathTool.getRelativePath( null )
-                  , is( "" ) );
-
-        File baseFolder = tempFolder.newFolder( "pathtooltest" );
-
-        String folderName = "anotherFolders";
-        File newDir = new File( baseFolder, folderName );
-        newDir.mkdirs();
-
-
-        assertThat( PathTool.getRelativePath( folderName )
-                  , is( "." ) );
-    }
-
-    @Test
-    public void testGetRelativeWebPath()
-    {
-        assertThat( PathTool.getRelativeWebPath( null, null )
-                  , is( "" ) );
-
-        assertThat( PathTool.getRelativeWebPath( null, "http://plexus.codehaus.org/" )
-                  , is( "" ) );
-
-        assertThat( PathTool.getRelativeWebPath( "http://plexus.codehaus.org/", null )
-                  , is( "" ) );
-
-        assertThat( PathTool.getRelativeWebPath( "http://plexus.codehaus.org/"
-                                               , "http://plexus.codehaus.org/plexus-utils/index.html" )
-                  , is( "plexus-utils/index.html" ) );
-
-        assertThat( PathTool.getRelativeWebPath( "http://plexus.codehaus.org/plexus-utils/index.html"
-                                               , "http://plexus.codehaus.org/" )
-                  , is( "../../" ) );
     }
 
     @Test

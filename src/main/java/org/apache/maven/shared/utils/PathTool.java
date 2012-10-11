@@ -97,182 +97,6 @@ public class PathTool
     }
 
     /**
-     * Determines the relative path of a filename.  This method is
-     * useful in building relative links within pages of a web site.  It
-     * provides similar functionality to Anakia's
-     * <code>$relativePath</code> context variable.  The argument to
-     * this method may contain either forward or backward slashes as
-     * file separators.  The relative path returned is formed using
-     * forward slashes as it is expected this path is to be used as a
-     * link in a web page (again mimicking Anakia's behavior).
-     * <p/>
-     * This method is thread-safe.
-     *
-     * @param filename The filename to be parsed.
-     * @return The relative path of the filename. This value is not
-     *         terminated with a forward slash.  A zero-length string is
-     *         returned if: <code>filename</code> is null or zero-length.
-     * @see #getRelativeFilePath(String, String)
-     */
-    public static String getRelativePath( String filename )
-    {
-        filename = uppercaseDrive( filename );
-
-        if ( filename == null || filename.length() == 0 )
-        {
-            return "";
-        }
-
-        /*
-         * Normalize the argument.  First, determine the file separator
-         * that is being used, then strip that off the end of the
-         * filename.  Then, if the filename doesn't begin with a
-         * separator, add one.
-         */
-
-        String separator = determineSeparator( filename );
-        filename = StringUtils.chompLast( filename, separator );
-        if ( !filename.startsWith( separator ) )
-        {
-            filename = separator + filename;
-        }
-
-        return determineRelativePath( filename, separator );
-    }
-
-    /**
-     * Determines the directory component of a filename.  This is useful
-     * within DVSL templates when used in conjunction with the DVSL's
-     * <code>$context.getAppValue("infilename")</code> to get the
-     * current directory that is currently being processed.
-     * <p/>
-     * This method is thread-safe.
-     * <br/>
-     * <pre>
-     * PathTool.getDirectoryComponent( null )                                   = ""
-     * PathTool.getDirectoryComponent( "/usr/local/java/bin" )                  = "/usr/local/java"
-     * PathTool.getDirectoryComponent( "/usr/local/java/bin/" )                 = "/usr/local/java/bin"
-     * PathTool.getDirectoryComponent( "/usr/local/java/bin/java.sh" )          = "/usr/local/java/bin"
-     * </pre>
-     *
-     * @param filename The filename to be parsed.
-     * @return The directory portion of the <code>filename</code>.  If
-     *         the filename does not contain a directory component, "." is
-     *         returned.
-     */
-    public static String getDirectoryComponent( String filename )
-    {
-        if ( filename == null || filename.length() == 0 )
-        {
-            return "";
-        }
-
-        String separator = determineSeparator( filename );
-        String directory = StringUtils.chomp( filename, separator );
-
-        if ( filename.equals( directory ) )
-        {
-            return ".";
-        }
-
-        return directory;
-    }
-
-    /**
-     * Calculates the appropriate link given the preferred link and the relativePath of the document.
-     * <br/>
-     * <pre>
-     * PathTool.calculateLink( "/index.html", "../.." )                                        = "../../index.html"
-     * PathTool.calculateLink( "http://plexus.codehaus.org/plexus-utils/index.html", "../.." ) = "http://plexus.codehaus.org/plexus-utils/index.html"
-     * PathTool.calculateLink( "/usr/local/java/bin/java.sh", "../.." )                        = "../../usr/local/java/bin/java.sh"
-     * PathTool.calculateLink( "../index.html", "/usr/local/java/bin" )                        = "/usr/local/java/bin/../index.html"
-     * PathTool.calculateLink( "../index.html", "http://plexus.codehaus.org/plexus-utils" )    = "http://plexus.codehaus.org/plexus-utils/../index.html"
-     * </pre>
-     *
-     * @param link
-     * @param relativePath
-     * @return String
-     */
-    public static String calculateLink( String link, String relativePath )
-    {
-        //This must be some historical feature
-        if ( link.startsWith( "/site/" ) )
-        {
-            return link.substring( 5 );
-        }
-
-        //Allows absolute links in nav-bars etc
-        if ( link.startsWith( "/absolute/" ) )
-        {
-            return link.substring( 10 );
-        }
-
-        // This traps urls like http://
-        if ( link.indexOf( ":" ) >= 0 )
-        {
-            return link;
-        }
-
-        //If relativepath is current directory, just pass the link through
-        if ( relativePath.equals( "." ) )
-        {
-            if ( link.startsWith( "/" ) )
-            {
-                return link.substring( 1 );
-            }
-
-            return link;
-        }
-
-        //If we don't do this, you can end up with ..//bob.html rather than ../bob.html
-        if ( relativePath.endsWith( "/" ) && link.startsWith( "/" ) )
-        {
-            return relativePath + "." + link.substring( 1 );
-        }
-
-        if ( relativePath.endsWith( "/" ) || link.startsWith( "/" ) )
-        {
-            return relativePath + link;
-        }
-
-        return relativePath + "/" + link;
-    }
-
-    /**
-     * This method can calculate the relative path between two pathes on a web site.
-     * <br/>
-     * <pre>
-     * PathTool.getRelativeWebPath( null, null )                                          = ""
-     * PathTool.getRelativeWebPath( null, "http://plexus.codehaus.org/" )                 = ""
-     * PathTool.getRelativeWebPath( "http://plexus.codehaus.org/", null )                 = ""
-     * PathTool.getRelativeWebPath( "http://plexus.codehaus.org/",
-     *                      "http://plexus.codehaus.org/plexus-utils/index.html" )        = "plexus-utils/index.html"
-     * PathTool.getRelativeWebPath( "http://plexus.codehaus.org/plexus-utils/index.html",
-     *                      "http://plexus.codehaus.org/"                                 = "../../"
-     * </pre>
-     *
-     * @param oldPath
-     * @param newPath
-     * @return a relative web path from <code>oldPath</code>.
-     */
-    public static String getRelativeWebPath( final String oldPath, final String newPath )
-    {
-        if ( StringUtils.isEmpty( oldPath ) || StringUtils.isEmpty( newPath ) )
-        {
-            return "";
-        }
-
-        String resultPath = buildRelativePath( newPath, oldPath, '/' );
-
-        if ( newPath.endsWith( "/" ) && !resultPath.endsWith( "/" ) )
-        {
-            return resultPath + "/";
-        }
-
-        return resultPath;
-    }
-
-    /**
      * This method can calculate the relative path between two pathes on a file system.
      * <br/>
      * <pre>
@@ -289,8 +113,8 @@ public class PathTool
      * </pre>
      * Note: On Windows based system, the <code>/</code> character should be replaced by <code>\</code> character.
      *
-     * @param oldPath
-     * @param newPath
+     * @param oldPath old path
+     * @param newPath new path
      * @return a relative file path from <code>oldPath</code>.
      */
     public static String getRelativeFilePath( final String oldPath, final String newPath )
@@ -424,7 +248,7 @@ public class PathTool
     /**
      * Cygwin prefers lowercase drive letters, but other parts of maven use uppercase
      *
-     * @param path
+     * @param path old path
      * @return String
      */
     static String uppercaseDrive( String path )

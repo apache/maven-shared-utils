@@ -173,7 +173,7 @@ public class MethodMap
 
             for ( Iterator<Method> maximal = maximals.iterator(); !lessSpecific && maximal.hasNext(); )
             {
-                Method max = (Method) maximal.next();
+                Method max = maximal.next();
 
                 switch ( moreSpecific( appArgs, max.getParameterTypes() ) )
                 {

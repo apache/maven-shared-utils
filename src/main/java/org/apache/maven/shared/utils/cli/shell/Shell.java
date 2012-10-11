@@ -362,16 +362,6 @@ public class Shell
         return shell;
     }
 
-    public String getOriginalExecutable()
-    {
-        return executable;
-    }
-
-    public List<String> getOriginalCommandLine( String executable, String[] arguments )
-    {
-        return getRawCommandLine( executable, arguments );
-    }
-
     protected void setDoubleQuotedArgumentEscaped( boolean doubleQuotedArgumentEscaped )
     {
         this.doubleQuotedArgumentEscaped = doubleQuotedArgumentEscaped;

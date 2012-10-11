@@ -160,16 +160,6 @@ public class FileUtilsTest
         }
     }
 
-    //-----------------------------------------------------------------------
-    // byteCountToDisplaySize
-    @Test
-    public void byteCountToDisplaySize()
-    {
-        assertThat( "0 bytes", is( FileUtils.byteCountToDisplaySize( 0 ) ) );
-        assertThat( "1 KB", is( FileUtils.byteCountToDisplaySize( 1024 ) ) );
-        assertThat( "1 MB", is( FileUtils.byteCountToDisplaySize( 1024 * 1024 ) ) );
-        assertThat( "1 GB", is( FileUtils.byteCountToDisplaySize( 1024 * 1024 * 1024 ) ) );
-    }
 
     //-----------------------------------------------------------------------
     @Test
@@ -924,7 +914,7 @@ public class FileUtilsTest
         throws Exception
     {
         File file = FileTestHelper.newFile( tempFolder, "lines.txt" );
-        FileUtils.fileWrite( file, "This line was there before you..." );
+        FileUtils.fileWrite( file, null, "This line was there before you..." );
 
         FileUtils.fileAppend( file.getAbsolutePath(), "this is brand new data" );
 
@@ -938,7 +928,7 @@ public class FileUtilsTest
         throws Exception
     {
         File file = FileTestHelper.newFile( tempFolder, "lines.txt" );
-        FileUtils.fileWrite( file, "This line was there before you..." );
+        FileUtils.fileWrite( file, null, "This line was there before you..." );
 
         FileUtils.fileAppend( file.getAbsolutePath(), "this is brand new data" );
 
@@ -989,7 +979,7 @@ public class FileUtilsTest
         throws Exception
     {
         File file = FileTestHelper.newFile( tempFolder, "lines.txt" );
-        FileUtils.fileWrite( file, "This line was there before you..." );
+        FileUtils.fileWrite( file, null, "This line was there before you..." );
 
         FileUtils.fileAppend( file.getAbsolutePath(), "this is brand new data" );
 
@@ -1260,105 +1250,6 @@ public class FileUtilsTest
     {
         assumeThat( File.separatorChar, is( '/' ) );
         assertThat( FileUtils.filename( "/test/foo.bar.txt" ), is( "foo.bar.txt" ) );
-    }
-
-    //// basename(String)
-
-    @SuppressWarnings("ConstantConditions")
-    @Test( expected = NullPointerException.class )
-    public void blowUpOnbasenameNull()
-        throws Exception
-    {
-        FileUtils.basename( null );
-    }
-
-    @Test
-    public void basenameEmpty()
-        throws Exception
-    {
-        assertThat( FileUtils.basename( "" ), is( "" ) );
-    }
-
-    @Test
-    public void basenameFilename()
-        throws Exception
-    {
-        assertThat( FileUtils.basename( "foo.bar.txt" ), is( "foo.bar." ) );
-    }
-
-    @Test
-    public void basenameFilenameNoExtension()
-        throws Exception
-    {
-        assertThat( FileUtils.basename( "foo_bar_txt" ), is( "foo_bar_txt" ) );
-    }
-
-    @Test
-    //X @ReproducesPlexusBug( "assumes that the path is a local path" )
-    public void basenameWindowsRootPathOnUnix()
-        throws Exception
-    {
-        assumeThat( File.separatorChar, is( '/' ) );
-        assertThat( FileUtils.basename( "C:\\foo.bar.txt" ), is( "C:\\foo.bar." ) );
-    }
-
-    @Test
-    //X @ReproducesPlexusBug( "assumes that the path is a local path" )
-    public void basenameWindowsNonRootPathOnUnix()
-        throws Exception
-    {
-        assumeThat( File.separatorChar, is( '/' ) );
-        assertThat( FileUtils.basename( "C:\\test\\foo.bar.txt" ), is( "C:\\test\\foo.bar." ) );
-    }
-
-    @Test
-    //X @ReproducesPlexusBug( "assumes that the path is a local path" )
-    public void basenameUnixRootPathOnWindows()
-        throws Exception
-    {
-        assumeThat( File.separatorChar, is( '\\' ) );
-        assertThat( FileUtils.basename( "/foo.bar.txt" ), is( "/foo.bar." ) );
-    }
-
-    @Test
-    //X @ReproducesPlexusBug( "assumes that the path is a local path" )
-    public void basenameUnixNonRootPathOnWindows()
-        throws Exception
-    {
-        assumeThat( File.separatorChar, is( '\\' ) );
-        assertThat( FileUtils.basename( "/test/foo.bar.txt" ), is( "/test/foo.bar." ) );
-    }
-
-    @Test
-    public void basenameWindowsRootPathOnWindows()
-        throws Exception
-    {
-        assumeThat( File.separatorChar, is( '\\' ) );
-        assertThat( FileUtils.basename( "C:\\foo.bar.txt" ), is( "foo.bar." ) );
-    }
-
-    @Test
-    public void basenameWindowsNonRootPathOnWindows()
-        throws Exception
-    {
-        assumeThat( File.separatorChar, is( '\\' ) );
-        assertThat( FileUtils.basename( "C:\\test\\foo.bar.txt" ), is( "foo.bar." ) );
-    }
-
-    @Test
-    public void basenameUnixRootPathOnUnix()
-        throws Exception
-    {
-        assumeThat( File.separatorChar, is( '/' ) );
-        assertThat( FileUtils.basename( "/foo.bar.txt" ), is( "foo.bar." ) );
-    }
-
-    @Test
-    public void basenameUnixNonRootPathOnUnix()
-        throws Exception
-    {
-        assumeThat( File.separatorChar, is( '/' ) );
-        assertThat( FileUtils.basename( "/test/foo.bar.txt" ), is( "foo.bar." ) );
     }
 
     //// extension(String)

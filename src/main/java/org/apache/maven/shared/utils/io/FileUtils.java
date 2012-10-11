@@ -153,37 +153,6 @@ public class FileUtils
     }
 
     /**
-     * Returns a human-readable version of the file size (original is in
-     * bytes).
-     *
-     * @param size The number of bytes.
-     * @return A human-readable display value (includes units).
-     */
-    public static @Nonnull String byteCountToDisplaySize( int size )
-    {
-        String displaySize;
-
-        if ( size / ONE_GB > 0 )
-        {
-            displaySize = String.valueOf( size / ONE_GB ) + " GB";
-        }
-        else if ( size / ONE_MB > 0 )
-        {
-            displaySize = String.valueOf( size / ONE_MB ) + " MB";
-        }
-        else if ( size / ONE_KB > 0 )
-        {
-            displaySize = String.valueOf( size / ONE_KB ) + " KB";
-        }
-        else
-        {
-            displaySize = String.valueOf( size ) + " bytes";
-        }
-
-        return displaySize;
-    }
-
-    /**
      * Returns the directory path portion of a file specification string.
      * Matches the equally named unix command.
      *
@@ -206,45 +175,6 @@ public class FileUtils
     {
         int i = filename.lastIndexOf( File.separator );
         return ( i >= 0 ? filename.substring( i + 1 ) : filename );
-    }
-
-    /**
-     * Returns the filename portion of a file specification string.
-     * Matches the equally named unix command.
-     *
-     * @param filename the file path
-     * @return The filename string without extension.
-     */
-    public static @Nonnull String basename( @Nonnull String filename )
-    {
-        return basename( filename, extension( filename ) );
-    }
-
-    /**
-     * Returns the filename portion of a file specification string.
-     * Matches the equally named unix command.
-     *
-     * @param filename the file path
-     * @param suffix   the file suffix
-     * @return the basename of the file
-     */
-    private static @Nonnull String basename( @Nonnull String filename, @Nullable String suffix )
-    {
-        int i = filename.lastIndexOf( File.separator ) + 1;
-        int lastDot = ( ( suffix != null ) && ( suffix.length() > 0 ) ) ? filename.lastIndexOf( suffix ) : -1;
-
-        if ( lastDot >= 0 )
-        {
-            return filename.substring( i, lastDot );
-        }
-        else if ( i > 0 )
-        {
-            return filename.substring( i );
-        }
-        else
-        {
-            return filename; // else returns all (no path and no extension)
-        }
     }
 
     /**
@@ -454,21 +384,6 @@ public class FileUtils
     {
         File file = new File( fileName );
         fileWrite( file, encoding, data );
-    }
-
-    /**
-     * Writes data to a file. The file will be created if it does not exist.
-     * Note: the data is written with platform encoding
-     *
-     * @param file The path of the file to write.
-     * @param data The content to write to the file.
-     * @throws IOException if any
-     * @since 2.0.6
-     */
-    public static void fileWrite( @Nonnull File file, @Nonnull String data )
-        throws IOException
-    {
-        fileWrite( file, null, data );
     }
 
     /**
