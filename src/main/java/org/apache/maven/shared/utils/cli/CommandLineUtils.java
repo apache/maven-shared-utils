@@ -550,7 +550,7 @@ public abstract class CommandLineUtils
         @SuppressWarnings( { "unchecked" } ) Map<String, String> envs = (Map<String, String>) method.invoke( null );
         for ( Map.Entry<String, String> entry : envs.entrySet() )
         {
-            envVars.put( !caseSensitive ? entry.getKey().toUpperCase( Locale.ENGLISH ) : entry, entry.getValue() );
+            envVars.put( !caseSensitive ? entry.getKey().toUpperCase( Locale.ENGLISH ) : entry.getValue(), entry.getValue() );
         }
         return envVars;
     }
