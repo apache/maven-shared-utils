@@ -139,7 +139,7 @@ public class BourneShell
             return null;
         }
 
-        if ( path.indexOf( " " ) == -1 && path.indexOf( "'" ) != -1 && path.indexOf( "\"" ) == -1 )
+        if ( path.indexOf( ' ' ) == -1 && path.indexOf( '\'' ) != -1 && path.indexOf( '"' ) == -1 )
         {
             return StringUtils.escape( path );
         }

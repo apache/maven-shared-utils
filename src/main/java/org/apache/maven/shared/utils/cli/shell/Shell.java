@@ -124,12 +124,12 @@ public class Shell
      * @param arguments  arguments for the executable, not the shell
      * @return List with one String object with executable and arguments quoted as needed
      */
-    List<String> getCommandLine( String executable, String[] arguments )
+    List<String> getCommandLine( String executable, String... arguments )
     {
         return getRawCommandLine( executable, arguments );
     }
 
-    List<String> getRawCommandLine( String executable, String[] arguments )
+    List<String> getRawCommandLine( String executable, String... arguments )
     {
         List<String> commandLine = new ArrayList<String>();
         StringBuilder sb = new StringBuilder();
@@ -155,19 +155,23 @@ public class Shell
                 sb.append( getExecutable() );
             }
         }
-        for (String argument : arguments) {
-            if (sb.length() > 0) {
-                sb.append(" ");
+        for ( String argument : arguments )
+        {
+            if ( sb.length() > 0 )
+            {
+                sb.append( ' ' );
             }
 
-            if (isQuotedArgumentsEnabled()) {
-                char[] escapeChars =
-                        getEscapeChars(isSingleQuotedArgumentEscaped(), isDoubleQuotedArgumentEscaped());
+            if ( isQuotedArgumentsEnabled() )
+            {
+                char[] escapeChars = getEscapeChars( isSingleQuotedArgumentEscaped(), isDoubleQuotedArgumentEscaped() );
 
-                sb.append(StringUtils.quoteAndEscape(argument, getArgumentQuoteDelimiter(), escapeChars,
-                        getQuotingTriggerChars(), '\\', false));
-            } else {
-                sb.append(argument);
+                sb.append( StringUtils.quoteAndEscape( argument, getArgumentQuoteDelimiter(), escapeChars,
+                                                       getQuotingTriggerChars(), '\\', false ) );
+            }
+            else
+            {
+                sb.append( argument );
             }
         }
 
@@ -253,7 +257,7 @@ public class Shell
      * @return List of String objects, whose array version is suitable to be used as argument
      *         of Runtime.getRuntime().exec()
      */
-    public List<String> getShellCommandLine( String[] arguments )
+    public List<String> getShellCommandLine( String... arguments )
     {
 
         List<String> commandLine = new ArrayList<String>();

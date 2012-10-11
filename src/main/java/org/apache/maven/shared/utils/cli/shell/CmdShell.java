@@ -81,12 +81,12 @@ public class CmdShell
      * appears to make Windows processes invoke successfully.
      * </p>
      */
-    public List<String> getCommandLine( String executable, String[] arguments )
+    public List<String> getCommandLine( String executable, String... arguments )
     {
         StringBuilder sb = new StringBuilder();
-        sb.append( "\"" );
+        sb.append( '"' );
         sb.append( super.getCommandLine( executable, arguments ).get( 0 ) );
-        sb.append( "\"" );
+        sb.append( '"' );
 
         return Arrays.asList(sb.toString());
     }
