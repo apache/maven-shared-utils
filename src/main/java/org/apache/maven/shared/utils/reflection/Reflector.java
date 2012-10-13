@@ -28,9 +28,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Utility class used to instantiate an object using reflection. This utility
- * hides many of the gory details needed to do this.
- *
+ * Utility class used to instantiate an object using reflection. This utility hides many of the gory details needed to
+ * do this.
+ * 
  * @author John Casey
  */
 final class Reflector
@@ -50,12 +50,11 @@ final class Reflector
     }
 
     /**
-     * Create a new instance of a class, given the array of parameters... Uses
-     * constructor caching to find a constructor that matches the parameter
-     * types, either specifically (first choice) or abstractly...
-     *
+     * Create a new instance of a class, given the array of parameters... Uses constructor caching to find a constructor
+     * that matches the parameter types, either specifically (first choice) or abstractly...
+     * 
      * @param theClass The class to instantiate
-     * @param params   The parameters to pass to the constructor
+     * @param params The parameters to pass to the constructor
      * @return The instantiated object
      * @throws ReflectorException In case anything goes wrong here...
      */
@@ -86,9 +85,10 @@ final class Reflector
                 buffer.append( theClass.getName() );
                 buffer.append( " with specified or ancestor parameter classes: " );
 
-                for (Class paramType : paramTypes) {
-                    buffer.append(paramType.getName());
-                    buffer.append(',');
+                for ( Class paramType : paramTypes )
+                {
+                    buffer.append( paramType.getName() );
+                    buffer.append( ',' );
                 }
 
                 buffer.setLength( buffer.length() - 1 );
@@ -113,11 +113,10 @@ final class Reflector
     }
 
     /**
-     * Retrieve the singleton instance of a class, given the array of
-     * parameters... Uses constructor caching to find a constructor that matches
-     * the parameter types, either specifically (first choice) or abstractly...
-     *
-     * @param theClass   The class to retrieve the singleton of
+     * Retrieve the singleton instance of a class, given the array of parameters... Uses constructor caching to find a
+     * constructor that matches the parameter types, either specifically (first choice) or abstractly...
+     * 
+     * @param theClass The class to retrieve the singleton of
      * @param initParams The parameters to pass to the constructor
      * @return The singleton object
      * @throws ReflectorException In case anything goes wrong here...
@@ -149,12 +148,11 @@ final class Reflector
     }
 
     /**
-     * Invoke the specified method on the specified target with the specified
-     * params...
-     *
-     * @param target     The target of the invocation
+     * Invoke the specified method on the specified target with the specified params...
+     * 
+     * @param target The target of the invocation
      * @param methodName The method name to invoke
-     * @param params     The parameters to pass to the method invocation
+     * @param params The parameters to pass to the method invocation
      * @return The result of the method call
      * @throws ReflectorException In case of an error looking up or invoking the method.
      */
@@ -181,12 +179,12 @@ final class Reflector
             {
                 StringBuilder buffer = new StringBuilder();
 
-                buffer.append( "Singleton-producing method named '" ).append( methodName ).append(
-                    "' not found with specified parameter classes: " );
+                buffer.append( "Singleton-producing method named '" ).append( methodName ).append( "' not found with specified parameter classes: " );
 
-                for (Class paramType : paramTypes) {
-                    buffer.append(paramType.getName());
-                    buffer.append(',');
+                for ( Class paramType : paramTypes )
+                {
+                    buffer.append( paramType.getName() );
+                    buffer.append( ',' );
                 }
 
                 buffer.setLength( buffer.length() - 1 );
@@ -288,10 +286,10 @@ final class Reflector
 
     /**
      * Invoke the specified static method with the specified params...
-     *
+     * 
      * @param targetClass The target class of the invocation
-     * @param methodName  The method name to invoke
-     * @param params      The parameters to pass to the method invocation
+     * @param methodName The method name to invoke
+     * @param params The parameters to pass to the method invocation
      * @return The result of the method call
      * @throws ReflectorException In case of an error looking up or invoking the method.
      */
@@ -318,11 +316,12 @@ final class Reflector
             {
                 StringBuilder buffer = new StringBuilder();
 
-                buffer.append("Singleton-producing method named \'").append(methodName).append("\' not found with specified parameter classes: ");
+                buffer.append( "Singleton-producing method named \'" ).append( methodName ).append( "\' not found with specified parameter classes: " );
 
-                for (Class paramType : paramTypes) {
-                    buffer.append(paramType.getName());
-                    buffer.append(',');
+                for ( Class paramType : paramTypes )
+                {
+                    buffer.append( paramType.getName() );
+                    buffer.append( ',' );
                 }
 
                 buffer.setLength( buffer.length() - 1 );
@@ -343,12 +342,10 @@ final class Reflector
     }
 
     /**
-     * Return the constructor, checking the cache first and storing in cache if
-     * not already there..
-     *
+     * Return the constructor, checking the cache first and storing in cache if not already there..
+     * 
      * @param targetClass The class to get the constructor from
-     * @param params      The classes of the parameters which the constructor should
-     *                    match.
+     * @param params The classes of the parameters which the constructor should match.
      * @return the Constructor object that matches.
      * @throws ReflectorException In case we can't retrieve the proper constructor.
      */
@@ -361,9 +358,10 @@ final class Reflector
 
         key.append( "(" );
 
-        for (Class param : params) {
-            key.append(param.getName());
-            key.append(",");
+        for ( Class param : params )
+        {
+            key.append( param.getName() );
+            key.append( "," );
         }
 
         if ( params.length > 0 )
@@ -385,30 +383,34 @@ final class Reflector
             {
                 Constructor[] cands = targetClass.getConstructors();
 
-                for (Constructor cand : cands) {
+                for ( Constructor cand : cands )
+                {
                     Class[] types = cand.getParameterTypes();
 
-                    if (params.length != types.length) {
+                    if ( params.length != types.length )
+                    {
                         continue;
                     }
 
-                    for (int j = 0, len2 = params.length; j < len2; j++) {
-                        if (!types[j].isAssignableFrom(params[j])) {
+                    for ( int j = 0, len2 = params.length; j < len2; j++ )
+                    {
+                        if ( !types[j].isAssignableFrom( params[j] ) )
+                        {
                             continue;
                         }
                     }
 
                     // we got it, so store it!
                     constructor = cand;
-                    constructorMap.put(paramKey, constructor);
+                    constructorMap.put( paramKey, constructor );
                 }
             }
         }
 
         if ( constructor == null )
         {
-            throw new ReflectorException(
-                "Error retrieving constructor object for: " + targetClass.getName() + paramKey );
+            throw new ReflectorException( "Error retrieving constructor object for: " + targetClass.getName()
+                + paramKey );
         }
 
         return constructor;
@@ -431,7 +433,7 @@ final class Reflector
         }
 
         Class<?> targetClass = target.getClass();
-        Class<?>[] emptyParams = { };
+        Class<?>[] emptyParams = {};
 
         Method method = _getMethod( targetClass, beanAccessor, emptyParams );
         if ( method == null )
@@ -443,29 +445,28 @@ final class Reflector
         {
             try
             {
-                returnValue = method.invoke( target, new Object[]{ } );
+                returnValue = method.invoke( target, new Object[] {} );
             }
             catch ( IllegalAccessException e )
             {
-                throw new ReflectorException(
-                    "Error retrieving property \'" + propertyName + "\' from \'" + targetClass + "\'", e );
+                throw new ReflectorException( "Error retrieving property \'" + propertyName + "\' from \'"
+                    + targetClass + "\'", e );
             }
             catch ( InvocationTargetException e )
             {
-                throw new ReflectorException(
-                    "Error retrieving property \'" + propertyName + "\' from \'" + targetClass + "\'", e );
+                throw new ReflectorException( "Error retrieving property \'" + propertyName + "\' from \'"
+                    + targetClass + "\'", e );
             }
         }
         else
         {
             returnValue = getField( target, propertyName, true );
-            if (returnValue == null)
+            if ( returnValue == null )
             {
                 // TODO: Check if exception is the right action! Field exists, but contains null
-                throw new ReflectorException(
-                    "Neither method: \'" + propertyName + "\' nor bean accessor: \'" + beanAccessor
-                        + "\' can be found for class: \'" + targetClass + "\', and retrieval of field: \'"
-                        + propertyName + "\' returned null as value." );
+                throw new ReflectorException( "Neither method: \'" + propertyName + "\' nor bean accessor: \'"
+                    + beanAccessor + "\' can be found for class: \'" + targetClass + "\', and retrieval of field: \'"
+                    + propertyName + "\' returned null as value." );
             }
         }
 
@@ -473,11 +474,10 @@ final class Reflector
     }
 
     /**
-     * Return the method, checking the cache first and storing in cache if not
-     * already there..
-     *
+     * Return the method, checking the cache first and storing in cache if not already there..
+     * 
      * @param targetClass The class to get the method from
-     * @param params      The classes of the parameters which the method should match.
+     * @param params The classes of the parameters which the method should match.
      * @return the Method object that matches.
      * @throws ReflectorException In case we can't retrieve the proper method.
      */
@@ -488,8 +488,7 @@ final class Reflector
 
         if ( method == null )
         {
-            throw new ReflectorException(
-                "Method: \'" + methodName + "\' not found in class: \'" + targetClass + "\'" );
+            throw new ReflectorException( "Method: \'" + methodName + "\' not found in class: \'" + targetClass + "\'" );
         }
 
         return method;
@@ -504,9 +503,10 @@ final class Reflector
 
         key.append( "(" );
 
-        for (Class<?> param : params) {
-            key.append(param.getName());
-            key.append(",");
+        for ( Class<?> param : params )
+        {
+            key.append( param.getName() );
+            key.append( "," );
         }
 
         key.append( ")" );
@@ -523,28 +523,33 @@ final class Reflector
             {
                 Method[] cands = targetClass.getMethods();
 
-                for (Method cand : cands) {
+                for ( Method cand : cands )
+                {
                     String name = cand.getName();
 
-                    if (!methodName.equals(name)) {
+                    if ( !methodName.equals( name ) )
+                    {
                         continue;
                     }
 
                     Class<?>[] types = cand.getParameterTypes();
 
-                    if (params.length != types.length) {
+                    if ( params.length != types.length )
+                    {
                         continue;
                     }
 
-                    for (int j = 0, len2 = params.length; j < len2; j++) {
-                        if (!types[j].isAssignableFrom(params[j])) {
+                    for ( int j = 0, len2 = params.length; j < len2; j++ )
+                    {
+                        if ( !types[j].isAssignableFrom( params[j] ) )
+                        {
                             continue;
                         }
                     }
 
                     // we got it, so store it!
                     method = cand;
-                    methodMap.put(paramKey, method);
+                    methodMap.put( paramKey, method );
                 }
             }
         }
@@ -554,7 +559,7 @@ final class Reflector
 
     /**
      * Retrieve the cache of constructors for the specified class.
-     *
+     * 
      * @param theClass the class to lookup.
      * @return The cache of constructors.
      * @throws ReflectorException in case of a lookup error.
@@ -567,8 +572,8 @@ final class Reflector
 
     /**
      * Retrieve the cache of methods for the specified class and method name.
-     *
-     * @param theClass   the class to lookup.
+     * 
+     * @param theClass the class to lookup.
      * @param methodName The name of the method to lookup.
      * @return The cache of constructors.
      */
