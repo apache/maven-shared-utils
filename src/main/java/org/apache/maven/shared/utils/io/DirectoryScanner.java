@@ -22,10 +22,11 @@ package org.apache.maven.shared.utils.io;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.apache.maven.shared.utils.ArrayUtils;
-import org.apache.maven.shared.utils.CollectionUtils;
 
 import javax.annotation.Nonnull;
 
@@ -455,8 +456,8 @@ public class DirectoryScanner
 
     public static DirectoryScanResult diffFiles( String[] oldFiles, String[] newFiles )
     {
-        Set<String> oldFileSet = CollectionUtils.arrayAsHashSet( oldFiles );
-        Set<String> newFileSet = CollectionUtils.arrayAsHashSet( newFiles );
+        Set<String> oldFileSet = arrayAsHashSet( oldFiles );
+        Set<String> newFileSet = arrayAsHashSet( newFiles );
 
         List<String> added = new ArrayList<String>();
         List<String> removed = new ArrayList<String>();
@@ -481,6 +482,27 @@ public class DirectoryScanner
         String[] filesRemoved = removed.toArray( new String[removed.size()] );
 
         return new DirectoryScanResult( filesAdded, filesRemoved );
+    }
+
+
+    /**
+     * Take an array of type T and convert it into a HashSet of type T.
+     * If <code>null</code> or an empty array gets passed, an empty Set will be returned.
+     *
+     * @param array  The array
+     * @return the filled HashSet of type T
+     */
+    private static <T> Set<T> arrayAsHashSet( T[] array )
+    {
+        if ( array == null || array.length == 0 )
+        {
+            return Collections.emptySet();
+        }
+
+        Set<T> set = new HashSet<T>( array.length );
+        Collections.addAll(set, array);
+
+        return set;
     }
 
     /**
