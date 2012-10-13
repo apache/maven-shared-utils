@@ -23,7 +23,7 @@ import java.util.Stack;
 
 /**
  * DirectoryWalker
- *
+ * 
  * @version $Id$
  */
 class DirectoryWalker
@@ -60,8 +60,8 @@ class DirectoryWalker
 
         /**
          * Create a DirStackEntry.
-         *
-         * @param d      the directory to track
+         * 
+         * @param d the directory to track
          * @param length the length of entries in the directory.
          */
         public DirStackEntry( File d, int length )
@@ -71,9 +71,8 @@ class DirectoryWalker
         }
 
         /**
-         * Calculate the next percentage offset.
-         * Used by the next DirStackEntry.
-         *
+         * Calculate the next percentage offset. Used by the next DirStackEntry.
+         * 
          * @return the value for the next percentage offset.
          */
         public double getNextPercentageOffset()
@@ -82,9 +81,8 @@ class DirectoryWalker
         }
 
         /**
-         * Calculate the next percentage size.
-         * Used by the next DirStackEntry.
-         *
+         * Calculate the next percentage size. Used by the next DirStackEntry.
+         * 
          * @return the value for the next percentage size.
          */
         public double getNextPercentageSize()
@@ -93,9 +91,8 @@ class DirectoryWalker
         }
 
         /**
-         * The percentage of the DirStackEntry right now.
-         * Based on count, index, percentageOffset, and percentageSize.
-         *
+         * The percentage of the DirStackEntry right now. Based on count, index, percentageOffset, and percentageSize.
+         * 
          * @return the percentage right now.
          */
         public int getPercentage()
@@ -153,8 +150,9 @@ class DirectoryWalker
     public void addSCMExcludes()
     {
         String scmexcludes[] = DirectoryScanner.DEFAULTEXCLUDES;
-        for (String scmexclude : scmexcludes) {
-            addExclude(scmexclude);
+        for ( String scmexclude : scmexcludes )
+        {
+            addExclude( scmexclude );
         }
     }
 
@@ -162,14 +160,16 @@ class DirectoryWalker
     {
         DirStackEntry dsEntry = dirStack.peek();
         int percentage = dsEntry.getPercentage();
-        for (DirectoryWalkListener listener : this.listeners) {
-            listener.directoryWalkStep(percentage, file);
+        for ( DirectoryWalkListener listener : this.listeners )
+        {
+            listener.directoryWalkStep( percentage, file );
         }
     }
 
     private void fireWalkFinished()
     {
-        for (Object listener1 : this.listeners) {
+        for ( Object listener1 : this.listeners )
+        {
             DirectoryWalkListener listener = (DirectoryWalkListener) listener1;
             listener.directoryWalkFinished();
         }
@@ -177,17 +177,19 @@ class DirectoryWalker
 
     private void fireWalkStarting()
     {
-        for (Object listener1 : this.listeners) {
+        for ( Object listener1 : this.listeners )
+        {
             DirectoryWalkListener listener = (DirectoryWalkListener) listener1;
-            listener.directoryWalkStarting(this.baseDir);
+            listener.directoryWalkStarting( this.baseDir );
         }
     }
 
     private void fireDebugMessage( String message )
     {
-        for (Object listener1 : this.listeners) {
+        for ( Object listener1 : this.listeners )
+        {
             DirectoryWalkListener listener = (DirectoryWalkListener) listener1;
-            listener.debug(message);
+            listener.debug( message );
         }
     }
 
@@ -218,12 +220,13 @@ class DirectoryWalker
         return isMatch( this.includes, name );
     }
 
-    private boolean isMatch( List patterns, String name )
+    private boolean isMatch( List<String> patterns, String name )
     {
-        for (Object pattern1 : patterns) {
-            String pattern = (String) pattern1;
+        for ( String pattern : patterns )
+        {
             boolean caseSensitive = true;
-            if (SelectorUtils.matchPath(pattern, name, caseSensitive)) {
+            if ( SelectorUtils.matchPath( pattern, name, caseSensitive ) )
+            {
                 return true;
             }
         }
