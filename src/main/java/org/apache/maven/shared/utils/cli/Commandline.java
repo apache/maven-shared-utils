@@ -301,9 +301,10 @@ public class Commandline
 
     public Object clone()
     {
-        Commandline c = new Commandline( (Shell) shell.clone() );
-        c.addArguments( getArguments() );
-        return c;
+        throw new RuntimeException( "Do we ever clone a commandline?" );
+/*        Commandline c = new Commandline( (Shell) shell.clone() );
+       c.addArguments( getArguments() );
+        return c;*/
     }
 
     /**

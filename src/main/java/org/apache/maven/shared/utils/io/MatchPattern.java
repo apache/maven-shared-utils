@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import javax.annotation.Nonnull;
+
 /**
  * Describes a match target for SelectorUtils.
  * <p/>
@@ -40,7 +42,7 @@ public class MatchPattern
 
     private final String[] tokenized;
 
-    private MatchPattern( String source, String separator )
+    private MatchPattern( @Nonnull String source, @Nonnull String separator )
     {
         regexPattern = SelectorUtils.isRegexPrefixedPattern( source ) ? source.substring(
             SelectorUtils.REGEX_HANDLER_PREFIX.length(),
@@ -79,7 +81,7 @@ public class MatchPattern
         }
     }
 
-    public boolean matchPatternStart( String str, boolean isCaseSensitive )
+    public boolean matchPatternStart( @Nonnull String str, boolean isCaseSensitive )
     {
         if ( regexPattern != null )
         {
@@ -108,7 +110,7 @@ public class MatchPattern
     }
 
 
-    static String[] tokenizePathToString( String path, String separator )
+    static String[] tokenizePathToString( @Nonnull String path, @Nonnull String separator )
     {
         List<String> ret = new ArrayList<String>();
         StringTokenizer st = new StringTokenizer( path, separator );

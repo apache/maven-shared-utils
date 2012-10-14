@@ -19,19 +19,9 @@ package org.apache.maven.shared.utils.introspection;
  * under the License.
  */
 
-public class IntrospectionException
+class IntrospectionException
     extends Exception
 {
-
-    public IntrospectionException()
-    {
-        super();
-    }
-
-    public IntrospectionException( String message, Throwable cause )
-    {
-        super( message, cause );
-    }
 
     public IntrospectionException( String message )
     {

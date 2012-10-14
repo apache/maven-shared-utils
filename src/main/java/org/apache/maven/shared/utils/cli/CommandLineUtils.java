@@ -22,14 +22,12 @@ package org.apache.maven.shared.utils.cli;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
-
 import org.apache.maven.shared.utils.Os;
 import org.apache.maven.shared.utils.StringUtils;
 
@@ -39,13 +37,6 @@ import org.apache.maven.shared.utils.StringUtils;
  */
 public abstract class CommandLineUtils
 {
-    /**
-     * Sixteen-bit Unicode Transformation Format, little-endian byte order.
-     * Every implementation of the Java platform is required to support this character encoding.
-     *
-     * @see java.nio.charset.Charset
-     */
-    private static final String UTF_16LE = "UTF-16LE";
 
 
     public static class StringStreamConsumer
@@ -435,22 +426,6 @@ public abstract class CommandLineUtils
             }
         }
         return result.toString();
-    }
-
-    private static Method getEnvMethod()
-    {
-        try
-        {
-            return System.class.getMethod( "getenv" );
-        }
-        catch ( NoSuchMethodException e )
-        {
-            return null;
-        }
-        catch ( SecurityException e )
-        {
-            return null;
-        }
     }
 
     static Properties ensureCaseSensitivity( Map<String, String> envs, boolean preserveKeyCase )

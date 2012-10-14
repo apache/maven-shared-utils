@@ -29,6 +29,7 @@ import java.util.Set;
 import org.apache.maven.shared.utils.ArrayUtils;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Class for scanning a directory for files/directories which match certain criteria.
@@ -454,7 +455,7 @@ public class DirectoryScanner
         return diffFiles( oldFiles, filesIncluded.toArray( new String[filesIncluded.size()] ) );
     }
 
-    public static DirectoryScanResult diffFiles( String[] oldFiles, String[] newFiles )
+    public static DirectoryScanResult diffFiles( @Nullable String[] oldFiles, @Nullable  String[] newFiles )
     {
         Set<String> oldFileSet = arrayAsHashSet( oldFiles );
         Set<String> newFileSet = arrayAsHashSet( newFiles );
@@ -492,7 +493,7 @@ public class DirectoryScanner
      * @param array  The array
      * @return the filled HashSet of type T
      */
-    private static <T> Set<T> arrayAsHashSet( T[] array )
+    private static <T> Set<T> arrayAsHashSet( @Nullable T[] array )
     {
         if ( array == null || array.length == 0 )
         {
@@ -559,7 +560,7 @@ public class DirectoryScanner
      * @see #dirsExcluded
      * @see #slowScan
      */
-    void scandir( final File dir, final String vpath, final boolean fast )
+    void scandir( @Nonnull final File dir, @Nonnull final String vpath, final boolean fast )
     {
         String[] newfiles = dir.list();
 
@@ -755,7 +756,7 @@ public class DirectoryScanner
      * @return <code>true</code> when the name matches against the start of at least one include pattern, or
      *         <code>false</code> otherwise.
      */
-    boolean couldHoldIncluded( final String name )
+    boolean couldHoldIncluded( @Nonnull final String name )
     {
         return includesPatterns.matchesPatternStart( name, isCaseSensitive );
     }
@@ -767,7 +768,7 @@ public class DirectoryScanner
      * @return <code>true</code> when the name matches against at least one exclude pattern, or <code>false</code>
      *         otherwise.
      */
-    boolean isExcluded( final String name )
+    boolean isExcluded( @Nonnull final String name )
     {
         return excludesPatterns.matches( name, isCaseSensitive );
     }

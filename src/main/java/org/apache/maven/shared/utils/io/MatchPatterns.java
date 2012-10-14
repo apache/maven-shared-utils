@@ -20,6 +20,8 @@ package org.apache.maven.shared.utils.io;
 
 import java.io.File;
 
+import javax.annotation.Nonnull;
+
 /**
  * A list of patterns to be matched
  *
@@ -29,7 +31,7 @@ public class MatchPatterns
 {
     private final MatchPattern[] patterns;
 
-    private MatchPatterns( MatchPattern... patterns )
+    private MatchPatterns( @Nonnull MatchPattern... patterns )
     {
         this.patterns = patterns;
     }
@@ -43,7 +45,7 @@ public class MatchPatterns
      * @param isCaseSensitive If the comparison is case sensitive
      * @return true if any of the supplied patterns match
      */
-    public boolean matches( String name, boolean isCaseSensitive )
+    public boolean matches( @Nonnull String name, boolean isCaseSensitive )
     {
         String[] tokenized = MatchPattern.tokenizePathToString( name, File.separator );
         for ( MatchPattern pattern : patterns )
@@ -56,7 +58,7 @@ public class MatchPatterns
         return false;
     }
 
-    public boolean matchesPatternStart( String name, boolean isCaseSensitive )
+    public boolean matchesPatternStart( @Nonnull String name, boolean isCaseSensitive )
     {
         for ( MatchPattern includesPattern : patterns )
         {
@@ -68,7 +70,7 @@ public class MatchPatterns
         return false;
     }
 
-    public static MatchPatterns from( String... sources )
+    public static MatchPatterns from( @Nonnull String... sources )
     {
         final int length = sources.length;
         MatchPattern[] result = new MatchPattern[length];

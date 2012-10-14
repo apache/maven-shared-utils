@@ -211,7 +211,7 @@ public class Os
      *          <li>os/400</li>
      *          </ul>
      */
-    public void setFamily( String f )
+    private void setFamily( String f )
     {
         family = f.toLowerCase( Locale.ENGLISH );
     }

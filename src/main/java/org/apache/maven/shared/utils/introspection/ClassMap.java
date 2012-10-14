@@ -32,7 +32,7 @@ import java.util.Map;
  * @author <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
  * @version $Id$
  */
-class ClassMap
+public class ClassMap
 {
     private static final class CacheMiss
     {

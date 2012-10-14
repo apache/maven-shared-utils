@@ -56,11 +56,7 @@ public class Shell
 
     private boolean quotedExecutableEnabled = true;
 
-    private boolean doubleQuotedArgumentEscaped = false;
-
     private boolean singleQuotedArgumentEscaped = false;
-
-    private boolean doubleQuotedExecutableEscaped = false;
 
     private boolean singleQuotedExecutableEscaped = false;
 
@@ -71,7 +67,7 @@ public class Shell
     /**
      * Set the command to execute the shell (eg. COMMAND.COM, /bin/bash,...)
      *
-     * @param shellCommand
+     * @param shellCommand The command
      */
     void setShellCommand( String shellCommand )
     {
@@ -81,7 +77,7 @@ public class Shell
     /**
      * Get the command to execute the shell
      *
-     * @return
+     * @return  The command
      */
     String getShellCommand()
     {
@@ -103,7 +99,7 @@ public class Shell
     /**
      * Get the shell arguments
      *
-     * @return
+     * @return  The arguments
      */
     String[] getShellArgs()
     {
@@ -211,7 +207,7 @@ public class Shell
 
     protected boolean isDoubleQuotedArgumentEscaped()
     {
-        return doubleQuotedArgumentEscaped;
+        return false;
     }
 
     protected boolean isSingleQuotedArgumentEscaped()
@@ -221,7 +217,7 @@ public class Shell
 
     boolean isDoubleQuotedExecutableEscaped()
     {
-        return doubleQuotedExecutableEscaped;
+        return false;
     }
 
     boolean isSingleQuotedExecutableEscaped()
@@ -281,11 +277,6 @@ public class Shell
     List<String> getShellArgsList()
     {
         return shellArgs;
-    }
-
-    void addShellArg( String arg )
-    {
-        shellArgs.add( arg );
     }
 
     public void setQuotedArgumentsEnabled( boolean quotedArgumentsEnabled )
@@ -359,21 +350,12 @@ public class Shell
 
     public Object clone()
     {
-        Shell shell = new Shell();
+        throw new RuntimeException( "Do we ever clone this?" );
+/*        Shell shell = new Shell();
         shell.setExecutable( getExecutable() );
         shell.setWorkingDirectory( getWorkingDirectory() );
         shell.setShellArgs( getShellArgs() );
-        return shell;
-    }
-
-    protected void setDoubleQuotedArgumentEscaped( boolean doubleQuotedArgumentEscaped )
-    {
-        this.doubleQuotedArgumentEscaped = doubleQuotedArgumentEscaped;
-    }
-
-    protected void setDoubleQuotedExecutableEscaped( boolean doubleQuotedExecutableEscaped )
-    {
-        this.doubleQuotedExecutableEscaped = doubleQuotedExecutableEscaped;
+        return shell;*/
     }
 
     void setSingleQuotedArgumentEscaped( boolean singleQuotedArgumentEscaped )

@@ -32,7 +32,7 @@ import java.util.Map;
  * @author <a href="mailto:szegedia@freemail.hu">Attila Szegedi</a>
  * @version $Id$
  */
-public class MethodMap
+class MethodMap
 {
     private static final int MORE_SPECIFIC = 0;
 
@@ -52,7 +52,7 @@ public class MethodMap
      *
      * @param method The method
      */
-    public void add( Method method )
+    void add( Method method )
     {
         String methodName = method.getName();
 
@@ -73,7 +73,7 @@ public class MethodMap
      * @param key The name of the method.
      * @return List list of methods
      */
-    public List<Method> get( String key )
+    List<Method> get( String key )
     {
         return methodByNameMap.get( key );
     }
@@ -106,7 +106,7 @@ public class MethodMap
      * @throws AmbiguousException if there is more than one maximally
      *                            specific applicable method
      */
-    public Method find( String methodName, Object... args )
+    Method find( String methodName, Object... args )
         throws AmbiguousException
     {
         List<Method> methodList = get( methodName );
@@ -137,7 +137,7 @@ public class MethodMap
      * simple distinguishable exception, used when
      * we run across ambiguous overloading
      */
-    public static class AmbiguousException
+    static class AmbiguousException
         extends Exception
     {
     }
