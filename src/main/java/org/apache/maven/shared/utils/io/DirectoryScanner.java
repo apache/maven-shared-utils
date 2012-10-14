@@ -501,7 +501,7 @@ public class DirectoryScanner
         }
 
         Set<T> set = new HashSet<T>( array.length );
-        Collections.addAll(set, array);
+        Collections.addAll( set, array );
 
         return set;
     }

@@ -21,7 +21,13 @@ package org.apache.maven.shared.utils.cli;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Vector;
 
 import org.apache.maven.shared.utils.Os;
 import org.apache.maven.shared.utils.StringUtils;
@@ -167,11 +173,11 @@ public class Commandline
         Arg argument = new Argument();
         if ( insertAtStart )
         {
-            arguments.add(0, argument);
+            arguments.add( 0, argument );
         }
         else
         {
-            arguments.add(argument);
+            arguments.add( argument );
         }
         return argument;
     }
@@ -192,8 +198,9 @@ public class Commandline
 
     public void addArguments( String... line )
     {
-        for (String aLine : line) {
-            createArg().setValue(aLine);
+        for ( String aLine : line )
+        {
+            createArg().setValue( aLine );
         }
     }
 
@@ -214,10 +221,12 @@ public class Commandline
     {
         Properties systemEnvVars = CommandLineUtils.getSystemEnvVars();
 
-        for (Object o : systemEnvVars.keySet()) {
+        for ( Object o : systemEnvVars.keySet() )
+        {
             String key = (String) o;
-            if (!envVars.containsKey(key)) {
-                addEnvironment(key, systemEnvVars.getProperty(key));
+            if ( !envVars.containsKey( key ) )
+            {
+                addEnvironment( key, systemEnvVars.getProperty( key ) );
             }
         }
     }
@@ -238,8 +247,9 @@ public class Commandline
         }
         String[] environmentVars = new String[envVars.size()];
         int i = 0;
-        for (String name : envVars.keySet()) {
-            String value = envVars.get(name);
+        for ( String name : envVars.keySet() )
+        {
+            String value = envVars.get( name );
             environmentVars[i] = name + "=" + value;
             i++;
         }
@@ -271,8 +281,8 @@ public class Commandline
     {
         // TODO: Provided only for backward compat. with <= 1.4
 
-        List<String> shellCommandLine = getShell().getShellCommandLine(getArguments());
-        return shellCommandLine.toArray(new String[shellCommandLine.size()]);
+        List<String> shellCommandLine = getShell().getShellCommandLine( getArguments() );
+        return shellCommandLine.toArray( new String[shellCommandLine.size()] );
     }
 
     /**
@@ -282,15 +292,17 @@ public class Commandline
     public String[] getArguments()
     {
         List<String> result = new ArrayList<String>( arguments.size() * 2 );
-        for (Arg argument : arguments) {
+        for ( Arg argument : arguments )
+        {
             Argument arg = (Argument) argument;
             String[] s = arg.getParts();
-            if (s != null) {
-                Collections.addAll(result, s);
+            if ( s != null )
+            {
+                Collections.addAll( result, s );
             }
         }
 
-        return result.toArray(new String[result.size()]);
+        return result.toArray( new String[result.size()] );
     }
 
     public String toString()

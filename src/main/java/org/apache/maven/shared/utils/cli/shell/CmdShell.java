@@ -19,10 +19,8 @@ package org.apache.maven.shared.utils.cli.shell;
  * under the License.
  */
 
-
 import java.util.Arrays;
 import java.util.List;
-
 
 /**
  * <p>
@@ -88,7 +86,7 @@ public class CmdShell
         sb.append( super.getCommandLine( executable, arguments ).get( 0 ) );
         sb.append( '"' );
 
-        return Arrays.asList(sb.toString());
+        return Arrays.asList( sb.toString() );
     }
 
 }

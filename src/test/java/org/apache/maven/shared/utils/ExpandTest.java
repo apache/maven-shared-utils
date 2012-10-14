@@ -89,7 +89,7 @@ public class ExpandTest extends Assert
     public void testSetSrc_No_NPE()
     {
         Expand expand = new Expand();
-        expand.setSrc(null);
+        expand.setSrc( null );
     }
 
     @Test
@@ -105,7 +105,7 @@ public class ExpandTest extends Assert
 
         expand.execute();
 
-        verifyExpandedFileAndContent(targetDir, TEST_UNZIPPED_CONTENT);
+        verifyExpandedFileAndContent( targetDir, TEST_UNZIPPED_CONTENT );
     }
 
     @Test
@@ -127,7 +127,7 @@ public class ExpandTest extends Assert
 
         expand.execute();
 
-        verifyExpandedFileAndContent(nonexisingDir, TEST_UNZIPPED_CONTENT);
+        verifyExpandedFileAndContent( nonexisingDir, TEST_UNZIPPED_CONTENT );
     }
 
     @Test
@@ -193,7 +193,7 @@ public class ExpandTest extends Assert
 
             expand.execute();
 
-            verifyExpandedFileAndContent(targetDir, TEST_UNZIPPED_CONTENT);
+            verifyExpandedFileAndContent( targetDir, TEST_UNZIPPED_CONTENT );
         }
         finally
         {
@@ -275,8 +275,8 @@ public class ExpandTest extends Assert
         // turn the clock back a loooong time!
         time = 100000000L;
 
-        expandedFile.setLastModified(time);
-        assertEquals(time, expandedFile.lastModified());
+        expandedFile.setLastModified( time );
+        assertEquals( time, expandedFile.lastModified() );
 
         {
             // part3: expand in overwrite mode but local file is now older than the one in the archive
@@ -311,7 +311,7 @@ public class ExpandTest extends Assert
 
         assertThat( "expanded file must exist: " + expandedFile.getAbsolutePath()
                   , expandedFile.exists()
-                  , is( true) );
+                  , is( true ) );
 
         return expandedFile;
     }
@@ -323,7 +323,7 @@ public class ExpandTest extends Assert
 
         assertNotNull(expandedFile);
 
-        java.util.Scanner scanner = new java.util.Scanner( expandedFile ).useDelimiter("\n");
+        java.util.Scanner scanner = new java.util.Scanner( expandedFile ).useDelimiter( "\n" );
         String text = scanner.next();
 
         assertThat( "expanded file content must match"

@@ -797,8 +797,11 @@ public class StringUtils
     @SuppressWarnings( "ConstantConditions" )
     public static @Nonnull String overlayString( @Nonnull String text, @Nonnull String overlay, int start, int end )
     {
-        if (overlay == null) throw new NullPointerException("overlay is null");
-        return text.substring(0, start) + overlay + text.substring(end);
+        if ( overlay == null )
+        {
+            throw new NullPointerException( "overlay is null" );
+        }
+        return text.substring( 0, start ) + overlay + text.substring( end );
     }
 
     // Centering
@@ -1080,15 +1083,15 @@ public class StringUtils
             // handle unicode
             if ( ch > 0xfff )
             {
-                buffer.append("\\u").append(Integer.toHexString(ch));
+                buffer.append( "\\u" ).append( Integer.toHexString( ch ) );
             }
             else if ( ch > 0xff )
             {
-                buffer.append("\\u0").append(Integer.toHexString(ch));
+                buffer.append( "\\u0" ).append( Integer.toHexString( ch ) );
             }
             else if ( ch > 0x7f )
             {
-                buffer.append("\\u00").append(Integer.toHexString(ch));
+                buffer.append( "\\u00" ).append( Integer.toHexString( ch ) );
             }
             else if ( ch < 32 )
             {
@@ -1117,11 +1120,11 @@ public class StringUtils
                     default:
                         if ( ch > 0xf )
                         {
-                            buffer.append("\\u00").append(Integer.toHexString(ch));
+                            buffer.append( "\\u00" ).append( Integer.toHexString( ch ) );
                         }
                         else
                         {
-                            buffer.append("\\u000").append(Integer.toHexString(ch));
+                            buffer.append( "\\u000" ).append( Integer.toHexString( ch ) );
                         }
                         break;
                 }
@@ -1441,7 +1444,7 @@ public class StringUtils
         }
         else
         {
-            return String.valueOf(Character.toLowerCase(str.charAt(0))) + str.substring(1);
+            return String.valueOf( Character.toLowerCase( str.charAt( 0 ) ) ) + str.substring( 1 );
         }
     }
 
@@ -1466,7 +1469,7 @@ public class StringUtils
         }
         else
         {
-            return String.valueOf(Character.toTitleCase(str.charAt(0))) + str.substring(1);
+            return String.valueOf( Character.toTitleCase( str.charAt( 0 ) ) ) + str.substring( 1 );
         }
     }
 
@@ -1707,7 +1710,7 @@ public class StringUtils
         int sz = str.length();
         for ( int i = 0; i < sz; i++ )
         {
-            if (!Character.isLetter( str.charAt( i ) ))
+            if ( !Character.isLetter( str.charAt( i ) ) )
             {
                 return false;
             }
@@ -1733,7 +1736,7 @@ public class StringUtils
         int sz = str.length();
         for ( int i = 0; i < sz; i++ )
         {
-            if ((!Character.isWhitespace(str.charAt(i))))
+            if ( ( !Character.isWhitespace( str.charAt( i ) ) ) )
             {
                 return false;
             }
@@ -1761,7 +1764,7 @@ public class StringUtils
         int sz = str.length();
         for ( int i = 0; i < sz; i++ )
         {
-            if ((!Character.isLetter(str.charAt(i))) && (str.charAt(i) != ' '))
+            if ( ( !Character.isLetter( str.charAt( i ) ) ) && ( str.charAt( i ) != ' ' ) )
             {
                 return false;
             }
@@ -1788,7 +1791,7 @@ public class StringUtils
         int sz = str.length();
         for ( int i = 0; i < sz; i++ )
         {
-            if (!Character.isLetterOrDigit( str.charAt( i ) ))
+            if ( !Character.isLetterOrDigit( str.charAt( i ) ) )
             {
                 return false;
             }
@@ -1816,7 +1819,7 @@ public class StringUtils
         int sz = str.length();
         for ( int i = 0; i < sz; i++ )
         {
-            if ((!Character.isLetterOrDigit(str.charAt(i))) && (str.charAt(i) != ' '))
+            if ( ( !Character.isLetterOrDigit( str.charAt( i ) ) ) && ( str.charAt( i ) != ' ' ) )
             {
                 return false;
             }
@@ -1842,7 +1845,7 @@ public class StringUtils
         int sz = str.length();
         for ( int i = 0; i < sz; i++ )
         {
-            if (!Character.isDigit( str.charAt( i ) ))
+            if ( !Character.isDigit( str.charAt( i ) ) )
             {
                 return false;
             }

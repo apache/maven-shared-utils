@@ -159,7 +159,7 @@ public abstract class CommandLineUtils
 
         final ProcessHook processHook = new ProcessHook( p );
 
-        ShutdownHookUtils.addShutDownHook( processHook);
+        ShutdownHookUtils.addShutDownHook( processHook );
 
         return new CommandLineCallable()
         {
@@ -434,7 +434,8 @@ public abstract class CommandLineUtils
         Properties envVars = new Properties();
         for ( Map.Entry<String, String> entry : envs.entrySet() )
         {
-            envVars.put( !preserveKeyCase ? entry.getKey().toUpperCase( Locale.ENGLISH ) : entry.getKey(), entry.getValue() );
+            envVars.put( !preserveKeyCase ? entry.getKey().toUpperCase( Locale.ENGLISH ) : entry.getKey(),
+                         entry.getValue() );
         }
         return envVars;
     }

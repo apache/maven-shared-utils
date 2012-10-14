@@ -633,7 +633,7 @@ public final class IOUtil
     /**
      * Copy bytes from a <code>byte[]</code> to an <code>OutputStream</code>.
      */
-    public static void copy(@Nonnull final byte[] input, @Nonnull final OutputStream output)
+    public static void copy( @Nonnull final byte[] input, @Nonnull final OutputStream output )
         throws IOException
     {
         output.write( input );

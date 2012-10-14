@@ -19,7 +19,6 @@ package org.apache.maven.shared.utils;
  * under the License.
  */
 
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Locale;
@@ -47,16 +46,16 @@ public class Os
 {
     public static final String OS_NAME = System.getProperty( "os.name" ).toLowerCase( Locale.ENGLISH );
 
-    public static final String OS_ARCH = System.getProperty( "os.arch" ).toLowerCase(Locale.ENGLISH);
+    public static final String OS_ARCH = System.getProperty( "os.arch" ).toLowerCase( Locale.ENGLISH );
 
-    public static final String OS_VERSION = System.getProperty( "os.version" ).toLowerCase(Locale.ENGLISH);
+    public static final String OS_VERSION = System.getProperty( "os.version" ).toLowerCase( Locale.ENGLISH );
 
-    public static final String PATH_SEP = System.getProperty("path.separator");
+    public static final String PATH_SEP = System.getProperty( "path.separator" );
 
     public static final String OS_FAMILY = getOsFamily();
 
     // store the valid families
-    private static final Set<String> validFamilies = getValidFamilies();
+    private static final Set<String> VALID_FAMILIES = getValidFamilies();
 
 
     /**
@@ -149,13 +148,14 @@ public class Os
 
 
     /**
-     * Initializes the set of valid families.
+     * The set of valid families. This methods initializes the set until
+     * VALID_FAMILIES constant is set.
      */
     public static Set<String> getValidFamilies()
     {
-        if ( validFamilies != null )
+        if ( VALID_FAMILIES != null )
         {
-            return validFamilies;
+            return VALID_FAMILIES;
         }
 
         Set<String> valid = new HashSet<String>();
@@ -416,11 +416,11 @@ public class Os
      * Test if the given family String represents a valid Family
      *
      * @param family
-     * @return <code>true</code> if 'family' represents a valid OS-Familiy, <code>false</code> otherwise.
+     * @return <code>true</code> if 'family' represents a valid OS-Family, <code>false</code> otherwise.
      */
     public static boolean isValidFamily( String family )
     {
-        return validFamilies.contains( family );
+        return VALID_FAMILIES.contains( family );
     }
 
 }

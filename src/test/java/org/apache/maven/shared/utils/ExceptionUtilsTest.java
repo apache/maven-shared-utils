@@ -46,10 +46,10 @@ public class ExceptionUtilsTest extends Assert
 
     private static final StackTraceElement[] STACKTRACE_WO_SPECIAL_METHODS =
         {
-            new StackTraceElement("org.apache.maven.test.Class1", "method1", null, 101),
-            new StackTraceElement("org.apache.maven.test.Class2", "method2", null, 101),
-            new StackTraceElement("org.apache.maven.test.Class3", "method3", null, 101),
-            new StackTraceElement("org.apache.maven.test.Class4", "method4", null, 101),
+            new StackTraceElement( "org.apache.maven.test.Class1", "method1", null, 101 ),
+            new StackTraceElement( "org.apache.maven.test.Class2", "method2", null, 101 ),
+            new StackTraceElement( "org.apache.maven.test.Class3", "method3", null, 101 ),
+            new StackTraceElement( "org.apache.maven.test.Class4", "method4", null, 101 ),
         };
 
 
@@ -73,7 +73,7 @@ public class ExceptionUtilsTest extends Assert
 
         {
             Exception exception = new Exception( npe );
-            exception.setStackTrace(STACKTRACE_WO_SPECIAL_METHODS);
+            exception.setStackTrace( STACKTRACE_WO_SPECIAL_METHODS );
             assertThat( "getCause for custom Exception is the same as before"
                       , ExceptionUtils.getCause( exception )
                       , equalTo( (Throwable) npe ) );
@@ -81,7 +81,7 @@ public class ExceptionUtilsTest extends Assert
 
         {
             RuntimeException sqlException2 = new RuntimeException();
-            RuntimeException sqlException1 = new RuntimeException(sqlException2);
+            RuntimeException sqlException1 = new RuntimeException( sqlException2 );
 
             assertThat( "getCause for RuntimeException"
                       , ExceptionUtils.getCause( sqlException1 )
@@ -226,7 +226,7 @@ public class ExceptionUtilsTest extends Assert
         assertNotNull( stackTrace );
         assertTrue( "wrong stacktrace: " + stackTrace,
                     stackTrace.startsWith( "java.lang.NullPointerException: dooh just a random, nullpointer" + LS +
-                        "\tat org.apache.maven.shared.utils.ExceptionUtilsTest.testGetStackTrace(ExceptionUtilsTest.java" ));
+                        "\tat org.apache.maven.shared.utils.ExceptionUtilsTest.testGetStackTrace(ExceptionUtilsTest.java" ) );
 
         RuntimeException rtException = new RuntimeException( npe );
         stackTrace = ExceptionUtils.getStackTrace( rtException );
@@ -234,12 +234,12 @@ public class ExceptionUtilsTest extends Assert
         assertTrue( "wrong stacktrace: " + stackTrace,
                     stackTrace.startsWith( "java.lang.RuntimeException: java.lang.NullPointerException: "
                       + "dooh just a random, nullpointer" + LS
-                      + "\tat org.apache.maven.shared.utils.ExceptionUtilsTest.testGetStackTrace(ExceptionUtilsTest.java" ));
+                      + "\tat org.apache.maven.shared.utils.ExceptionUtilsTest.testGetStackTrace(ExceptionUtilsTest.java" ) );
 
         // NPE safe test
         try
         {
-            ExceptionUtils.getStackTrace(null);
+            ExceptionUtils.getStackTrace( null );
             fail( "getStackTrace(null) NPE expected" );
         }
         catch ( NullPointerException e )
@@ -268,7 +268,7 @@ public class ExceptionUtilsTest extends Assert
         // NPE safe test
         try
         {
-            ExceptionUtils.getStackFrames(null);
+            ExceptionUtils.getStackFrames( null );
             fail( "getStackFrames(null) NPE expected" );
         }
         catch ( NullPointerException e )
@@ -292,7 +292,7 @@ public class ExceptionUtilsTest extends Assert
                   , ExceptionUtils.getThrowableCount( npe )
                   , is( 1 ));
 
-        assertThat( "getThrowableCount"
+        assertThat( "getThrowableCount" 
                   , ExceptionUtils.getThrowableCount( rtException )
                   , is( 2 ));
 
@@ -318,7 +318,7 @@ public class ExceptionUtilsTest extends Assert
         testException.setSourceException( rtException );
 
         assertThat("indexOfThrowable"
-                , ExceptionUtils.indexOfThrowable(npe, NullPointerException.class)
+                , ExceptionUtils.indexOfThrowable( npe, NullPointerException.class )
                 , is(0));
 
         assertThat( "indexOfThrowable for non contained Exception type"
@@ -379,8 +379,8 @@ public class ExceptionUtilsTest extends Assert
             //nothing to do, Exception was expected
         }
         assertThat( "indexOfThrowable for null Exception type"
-                  , ExceptionUtils.indexOfThrowable(npe, null)
-                  , is(-1));
+                  , ExceptionUtils.indexOfThrowable( npe, null )
+                  , is( -1 ) );
     }
 
     /**
@@ -404,7 +404,7 @@ public class ExceptionUtilsTest extends Assert
 
         assertThat("isNestedThrowable"
                 , ExceptionUtils.isNestedThrowable(npe)
-                , is(true));
+                , is( true ) );
 
         assertThat( "isNestedThrowable"
                   , ExceptionUtils.isNestedThrowable( rtException )
@@ -467,11 +467,11 @@ public class ExceptionUtilsTest extends Assert
 
             bao.reset();
             ExceptionUtils.printRootCauseStackTrace( rtException, outStream );
-            assertThat("stackFrames"
+            assertThat( "stackFrames"
                     , bao.toString()
                     , JUnitMatchers.containsString("java.lang.NullPointerException: dooh just a random, nullpointer"
                     + LS + "\tat org.apache.maven.shared.utils.ExceptionUtilsTest."
-                    + "testPrintRootCauseStackTrace(ExceptionUtilsTest.java:"));
+                    + "testPrintRootCauseStackTrace(ExceptionUtilsTest.java:" ) );
             outStream.close();
 
             bao.reset();
@@ -486,13 +486,13 @@ public class ExceptionUtilsTest extends Assert
         }
         finally
         {
-            System.setErr(originalErr);
+            System.setErr( originalErr );
         }
 
         try
         {
             ExceptionUtils.printRootCauseStackTrace( null );
-            fail("printRootCauseStackTrace(null) IndexOutOfBoundsException expected");
+            fail( "printRootCauseStackTrace(null) IndexOutOfBoundsException expected" );
         }
         catch ( IndexOutOfBoundsException e )
         {
@@ -502,7 +502,7 @@ public class ExceptionUtilsTest extends Assert
         try
         {
             ExceptionUtils.printRootCauseStackTrace( npe, (PrintStream) null );
-            fail("printRootCauseStackTrace( x, null) NPE expected");
+            fail( "printRootCauseStackTrace( x, null) NPE expected" );
         }
         catch ( NullPointerException e )
         {
@@ -512,7 +512,7 @@ public class ExceptionUtilsTest extends Assert
         try
         {
             ExceptionUtils.printRootCauseStackTrace( npe, (PrintWriter) null );
-            fail("printRootCauseStackTrace( x, null) NPE expected");
+            fail( "printRootCauseStackTrace( x, null) NPE expected" );
         }
         catch ( NullPointerException e )
         {

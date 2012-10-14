@@ -19,7 +19,6 @@ package org.apache.maven.shared.utils.io;
  * under the License.
  */
 
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -394,8 +393,10 @@ public final class SelectorUtils
         char ch;
 
         boolean containsStar = false;
-        for (char aPatArr : patArr) {
-            if (aPatArr == '*') {
+        for ( char aPatArr : patArr )
+        {
+            if ( aPatArr == '*' )
+            {
                 containsStar = true;
                 break;
             }
@@ -568,7 +569,7 @@ public final class SelectorUtils
         StringTokenizer st = new StringTokenizer( path, separator );
         while ( st.hasMoreTokens() )
         {
-            ret.add(st.nextToken());
+            ret.add( st.nextToken() );
         }
         return ret;
     }

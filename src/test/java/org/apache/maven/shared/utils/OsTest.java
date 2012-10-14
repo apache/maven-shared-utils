@@ -51,7 +51,7 @@ public class OsTest extends Assert
     {
         origOsName = System.getProperty( "os.name" );
         origOsArch = System.getProperty( "os.arch" );
-        origOsVersion = System.getProperty("os.version");
+        origOsVersion = System.getProperty( "os.version" );
         origOsFamily = Os.OS_FAMILY;
 
         // and now set some special settings ;)
@@ -62,8 +62,8 @@ public class OsTest extends Assert
         // blow away the originally loaded values
         setStaticOsField( "OS_NAME", "os/2" );
         setStaticOsField( "OS_FAMILY", "os/2" );
-        setStaticOsField("OS_ARCH", "i386");
-        setStaticOsField("OS_VERSION", "2.1.32");
+        setStaticOsField( "OS_ARCH", "i386" );
+        setStaticOsField( "OS_VERSION", "2.1.32" );
     }
 
     @After
@@ -105,7 +105,7 @@ public class OsTest extends Assert
 
         os = new Os( "unknown" );
 
-        assertTrue(Os.isName(Os.FAMILY_OS2));
+        assertTrue( Os.isName( Os.FAMILY_OS2 ) );
 
         assertFalse( Os.isName( Os.FAMILY_DOS ) );
         assertFalse( Os.isName( Os.FAMILY_MAC ) );
@@ -116,7 +116,7 @@ public class OsTest extends Assert
         assertFalse( Os.isName( Os.FAMILY_UNIX ) );
         assertFalse( Os.isName( Os.FAMILY_WIN9X ) );
         assertFalse( Os.isName( Os.FAMILY_WINDOWS ) );
-        assertFalse( Os.isName(Os.FAMILY_ZOS ) );
+        assertFalse( Os.isName( Os.FAMILY_ZOS ) );
     }
 
     @Test

@@ -1,6 +1,5 @@
 package org.apache.maven.shared.utils.cli;
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -41,12 +40,12 @@ class ShutdownHookUtils
         }
         catch ( IllegalStateException ignore )
         {
+            // ignore
         }
         catch ( AccessControlException ignore )
         {
+            // ignore
         }
-
-
     }
 
     public static void removeShutdownHook( Thread hook )
@@ -57,9 +56,11 @@ class ShutdownHookUtils
         }
         catch ( IllegalStateException ignore )
         {
+            // ignore
         }
         catch ( AccessControlException ignore )
         {
+            // ignore
         }
     }
 

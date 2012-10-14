@@ -19,7 +19,6 @@ package org.apache.maven.shared.utils.io;
  * under the License.
  */
 
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,7 +36,11 @@ import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.security.SecureRandom;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 import org.apache.maven.shared.utils.Os;
 import org.apache.maven.shared.utils.StringUtils;
@@ -83,7 +86,6 @@ import javax.annotation.WillClose;
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @version $Id$
  */
-@SuppressWarnings("UnusedDeclaration")
 public class FileUtils
 {
     protected FileUtils()
@@ -510,32 +512,38 @@ public class FileUtils
             return new String[0];
         }
 
-        for (String unknownFile : unknownFiles) {
-            String currentFileName = directory + System.getProperty("file.separator") + unknownFile;
-            File currentFile = new File(currentFileName);
+        for ( String unknownFile : unknownFiles )
+        {
+            String currentFileName = directory + System.getProperty( "file.separator" ) + unknownFile;
+            File currentFile = new File( currentFileName );
 
-            if (currentFile.isDirectory()) {
-                //ignore all CVS directories...
-                if (currentFile.getName().equals("CVS")) {
+            if ( currentFile.isDirectory() )
+            {
+                // ignore all CVS directories...
+                if ( currentFile.getName().equals( "CVS" ) )
+                {
                     continue;
                 }
 
-                //ok... transverse into this directory and get all the files... then combine
-                //them with the current list.
+                // ok... transverse into this directory and get all the files... then combine
+                // them with the current list.
 
-                String[] fetchFiles = getFilesFromExtension(currentFileName, extensions);
-                files = blendFilesToList(files, fetchFiles);
-            } else {
-                //ok... add the file
+                String[] fetchFiles = getFilesFromExtension( currentFileName, extensions );
+                files = blendFilesToList( files, fetchFiles );
+            }
+            else
+            {
+                // ok... add the file
 
                 String add = currentFile.getAbsolutePath();
-                if (isValidFile(add, extensions)) {
-                    files.add(add);
+                if ( isValidFile( add, extensions ) )
+                {
+                    files.add( add );
                 }
             }
         }
 
-        //ok... move the Vector into the files list...
+        // ok... move the Vector into the files list...
         String[] foundFiles = new String[files.size()];
         files.toArray( foundFiles );
 
@@ -547,7 +555,7 @@ public class FileUtils
      */
     private static @Nonnull List<String> blendFilesToList( @Nonnull List<String> v, @Nonnull String...files )
     {
-        Collections.addAll(v, files);
+        Collections.addAll( v, files );
 
         return v;
     }
@@ -561,11 +569,13 @@ public class FileUtils
     {
         String extension = extension( file );
 
-        //ok.. now that we have the "extension" go through the current know
-        //excepted extensions and determine if this one is OK.
+        // ok.. now that we have the "extension" go through the current know
+        // excepted extensions and determine if this one is OK.
 
-        for (String extension1 : extensions) {
-            if (extension1.equals(extension)) {
+        for ( String extension1 : extensions )
+        {
+            if ( extension1.equals( extension ) )
+            {
                 return true;
             }
         }
@@ -679,7 +689,6 @@ public class FileUtils
      * @return the array of URLs
      * @throws IOException if an error occurs
      */
-    @SuppressWarnings( "deprecation" )
     public static @Nonnull URL[] toURLs( final @Nonnull File... files )
         throws IOException
     {
@@ -1213,7 +1222,7 @@ public class FileUtils
         }
         else
         {
-            if (!file.mkdirs())
+            if ( !file.mkdirs() )
             {
                 final String message = "Unable to create directory " + file;
                 throw new IOException( message );
@@ -1293,10 +1302,14 @@ public class FileUtils
             return;
         }
 
-        for (final File file : files) {
-            try {
-                forceDelete(file);
-            } catch (final IOException ioe) {
+        for ( final File file : files )
+        {
+            try
+            {
+                forceDelete( file );
+            }
+            catch ( final IOException ioe )
+            {
                 exception = ioe;
             }
         }
@@ -1341,15 +1354,19 @@ public class FileUtils
         long size = 0;
 
         final File[] files = directory.listFiles();
-        if (files == null)
+        if ( files == null )
         {
-            throw new IllegalArgumentException("Problems reading directory");
+            throw new IllegalArgumentException( "Problems reading directory" );
         }
 
-        for (final File file : files) {
-            if (file.isDirectory()) {
-                size += sizeOfDirectory(file);
-            } else {
+        for ( final File file : files )
+        {
+            if ( file.isDirectory() )
+            {
+                size += sizeOfDirectory( file );
+            }
+            else
+            {
                 size += file.length();
             }
         }
@@ -1511,11 +1528,15 @@ public class FileUtils
         {
             String[] files = scanner.getIncludedFiles();
 
-            for (String file : files) {
-                if (includeBasedir) {
-                    list.add(directory + FileUtils.FS + file);
-                } else {
-                    list.add(file);
+            for ( String file : files )
+            {
+                if ( includeBasedir )
+                {
+                    list.add( directory + FileUtils.FS + file );
+                }
+                else
+                {
+                    list.add( file );
                 }
             }
         }
@@ -1524,11 +1545,15 @@ public class FileUtils
         {
             String[] directories = scanner.getIncludedDirectories();
 
-            for (String directory1 : directories) {
-                if (includeBasedir) {
-                    list.add(directory + FileUtils.FS + directory1);
-                } else {
-                    list.add(directory1);
+            for ( String directory1 : directories )
+            {
+                if ( includeBasedir )
+                {
+                    list.add( directory + FileUtils.FS + directory1 );
+                }
+                else
+                {
+                    list.add( directory1 );
                 }
             }
         }
@@ -1630,35 +1655,46 @@ public class FileUtils
 
         String sourcePath = sourceDirectory.getAbsolutePath();
 
-        for (File file : files) {
-            if (file.equals(rootDestinationDirectory)) {
+        for ( File file : files )
+        {
+            if ( file.equals( rootDestinationDirectory ) )
+            {
                 // We don't copy the destination directory in itself
                 continue;
             }
 
             String dest = file.getAbsolutePath();
 
-            dest = dest.substring(sourcePath.length() + 1);
+            dest = dest.substring( sourcePath.length() + 1 );
 
-            File destination = new File(destinationDirectory, dest);
+            File destination = new File( destinationDirectory, dest );
 
-            if (file.isFile()) {
+            if ( file.isFile() )
+            {
                 destination = destination.getParentFile();
 
-                if (onlyModifiedFiles) {
-                    copyFileToDirectoryIfModified(file, destination);
-                } else {
-                    copyFileToDirectory(file, destination);
+                if ( onlyModifiedFiles )
+                {
+                    copyFileToDirectoryIfModified( file, destination );
                 }
-            } else if (file.isDirectory()) {
-                if (!destination.exists() && !destination.mkdirs()) {
-                    throw new IOException(
-                            "Could not create destination directory '" + destination.getAbsolutePath() + "'.");
+                else
+                {
+                    copyFileToDirectory( file, destination );
+                }
+            }
+            else if ( file.isDirectory() )
+            {
+                if ( !destination.exists() && !destination.mkdirs() )
+                {
+                    throw new IOException( "Could not create destination directory '" + destination.getAbsolutePath()
+                        + "'." );
                 }
 
-                copyDirectoryStructure(file, destination, rootDestinationDirectory, onlyModifiedFiles);
-            } else {
-                throw new IOException("Unknown file type: " + file.getAbsolutePath());
+                copyDirectoryStructure( file, destination, rootDestinationDirectory, onlyModifiedFiles );
+            }
+            else
+            {
+                throw new IOException( "Unknown file type: " + file.getAbsolutePath() );
             }
         }
     }
@@ -1803,8 +1839,9 @@ public class FileUtils
                 }
 
                 Reader reader = fileReader;
-                for (FilterWrapper wrapper : wrappers) {
-                    reader = wrapper.getReader(reader);
+                for ( FilterWrapper wrapper : wrappers )
+                {
+                    reader = wrapper.getReader( reader );
                 }
 
                 IOUtil.copy( reader, fileWriter );

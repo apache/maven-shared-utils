@@ -177,9 +177,7 @@ class Expand
             deleteFileOrDir( targetFile );
         }
 
-        if ( !targetFile.exists() ||
-            overwrite ||
-            targetFile.lastModified() <= entryDate.getTime() )
+        if ( !targetFile.exists() || overwrite || targetFile.lastModified() <= entryDate.getTime() )
         {
             if ( isDirectory )
             {
