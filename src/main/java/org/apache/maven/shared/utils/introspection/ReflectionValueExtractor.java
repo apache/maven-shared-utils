@@ -26,6 +26,7 @@ import java.util.WeakHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.maven.shared.utils.StringUtils;
+import org.apache.maven.shared.utils.introspection.MethodMap.AmbiguousException;
 
 
 /**
@@ -41,7 +42,7 @@ import org.apache.maven.shared.utils.StringUtils;
  */
 public class ReflectionValueExtractor
 {
-    private static final Class[] CLASS_ARGS = new Class[0];
+    private static final Class<?>[] CLASS_ARGS = new Class[0];
 
     private static final Object[] OBJECT_ARGS = new Object[0];
 
@@ -79,10 +80,10 @@ public class ReflectionValueExtractor
      * @param expression not null expression
      * @param root       not null object
      * @return the object defined by the expression
-     * @throws Exception if any
+     * @throws IntrospectionException if any
      */
     public static Object evaluate( String expression, Object root )
-        throws Exception
+        throws IntrospectionException
     {
         return evaluate( expression, root, true );
     }
@@ -100,11 +101,10 @@ public class ReflectionValueExtractor
      * @param expression not null expression
      * @param root       not null object
      * @return the object defined by the expression
-     * @throws Exception if any
+     * @throws IntrospectionException if any
      */
-    // TODO: don't throw Exception
     public static Object evaluate( String expression, Object root, boolean trimRootToken )
-        throws Exception
+        throws IntrospectionException
     {
         // if the root token refers to the supplied root object parameter, remove it.
         if ( trimRootToken )
@@ -142,8 +142,32 @@ public class ReflectionValueExtractor
             {
                 String methodBase = StringUtils.capitalizeFirstLetter( matcher.group( 1 ) );
                 String methodName = "get" + methodBase;
-                method = classMap.findMethod( methodName, CLASS_ARGS );
-                value = method.invoke( value, OBJECT_ARGS );
+                try
+                {
+                    method = classMap.findMethod( methodName, CLASS_ARGS );
+                }
+                catch ( AmbiguousException e )
+                {
+                    throw new IntrospectionException( e );
+                }
+                
+                try
+                {
+                    value = method.invoke( value, OBJECT_ARGS );
+                }
+                catch ( IllegalArgumentException e )
+                {
+                    throw new IntrospectionException( e );
+                }
+                catch ( IllegalAccessException e )
+                {
+                    throw new IntrospectionException( e );
+                }
+                catch ( InvocationTargetException e )
+                {
+                    throw new IntrospectionException( e );
+                }                
+                
                 classMap = getClassMap( value.getClass() );
 
                 if ( classMap.getCachedClass().isArray() )
@@ -157,11 +181,18 @@ public class ReflectionValueExtractor
                     // use get method on List interface
                     localParams = new Object[1];
                     localParams[0] = Integer.valueOf( matcher.group( 2 ) );
-                    method = classMap.findMethod( "get", localParams );
+                    try
+                    {
+                        method = classMap.findMethod( "get", localParams );
+                    }
+                    catch ( AmbiguousException e )
+                    {
+                        throw new IntrospectionException( e );
+                    }
                 }
                 else
                 {
-                    throw new Exception( "The token '" + token
+                    throw new IntrospectionException( "The token '" + token
                                              + "' refers to a java.util.List or an array, but the value seems is an instance of '"
                                              + value.getClass() + "'." );
                 }
@@ -174,8 +205,31 @@ public class ReflectionValueExtractor
                 {
                     String methodBase = StringUtils.capitalizeFirstLetter( matcher.group( 1 ) );
                     String methodName = "get" + methodBase;
-                    method = classMap.findMethod( methodName, CLASS_ARGS );
-                    value = method.invoke( value, OBJECT_ARGS );
+                    try
+                    {
+                        method = classMap.findMethod( methodName, CLASS_ARGS );
+                    }
+                    catch ( AmbiguousException e )
+                    {
+                        throw new IntrospectionException( e );
+                    }
+                    
+                    try
+                    {
+                        value = method.invoke( value, OBJECT_ARGS );
+                    }
+                    catch ( IllegalArgumentException e )
+                    {
+                        throw new IntrospectionException( e );
+                    }
+                    catch ( IllegalAccessException e )
+                    {
+                        throw new IntrospectionException( e );
+                    }
+                    catch ( InvocationTargetException e )
+                    {
+                        throw new IntrospectionException( e );
+                    }
                     classMap = getClassMap( value.getClass() );
 
                     if ( value instanceof Map )
@@ -183,11 +237,18 @@ public class ReflectionValueExtractor
                         // use get method on List interface
                         localParams = new Object[1];
                         localParams[0] = matcher.group( 2 );
-                        method = classMap.findMethod( "get", localParams );
+                        try
+                        {
+                            method = classMap.findMethod( "get", localParams );
+                        }
+                        catch ( AmbiguousException e )
+                        {
+                            throw new IntrospectionException( e );
+                        }
                     }
                     else
                     {
-                        throw new Exception( "The token '" + token
+                        throw new IntrospectionException( "The token '" + token
                                                  + "' refers to a java.util.Map, but the value seems is an instance of '"
                                                  + value.getClass() + "'." );
                     }
@@ -196,14 +257,28 @@ public class ReflectionValueExtractor
                 {
                     String methodBase = StringUtils.capitalizeFirstLetter( token );
                     String methodName = "get" + methodBase;
-                    method = classMap.findMethod( methodName, CLASS_ARGS );
+                    try
+                    {
+                        method = classMap.findMethod( methodName, CLASS_ARGS );
+                    }
+                    catch ( AmbiguousException e )
+                    {
+                        throw new IntrospectionException( e );
+                    }
 
                     if ( method == null )
                     {
                         // perhaps this is a boolean property??
                         methodName = "is" + methodBase;
 
-                        method = classMap.findMethod( methodName, CLASS_ARGS );
+                        try
+                        {
+                            method = classMap.findMethod( methodName, CLASS_ARGS );
+                        }
+                        catch ( AmbiguousException e )
+                        {
+                            throw new IntrospectionException( e );
+                        }
                     }
                 }
             }
@@ -225,7 +300,15 @@ public class ReflectionValueExtractor
                     return null;
                 }
 
-                throw e;
+                throw new IntrospectionException( e );
+            }
+            catch ( IllegalArgumentException e )
+            {
+                throw new IntrospectionException( e );
+            }
+            catch ( IllegalAccessException e )
+            {
+                throw new IntrospectionException( e );
             }
         }
 
