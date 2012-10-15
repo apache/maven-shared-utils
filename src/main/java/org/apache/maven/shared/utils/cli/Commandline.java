@@ -354,8 +354,6 @@ public class Commandline
     public Process execute()
         throws CommandLineException
     {
-        // TODO: Provided only for backward compat. with <= 1.4
-
         Process process;
 
         //addEnvironment( "MAVEN_TEST_ENVAR", "MAVEN_TEST_ENVAR_VALUE" );
