@@ -1669,7 +1669,7 @@ public class StringUtils
      * @return the number of occurances, 0 if the String is <code>null</code>
      * @throws NullPointerException if sub is <code>null</code>
      */
-    public static int countMatches( String str, @Nonnull String sub )
+    public static int countMatches( @Nullable String str, @Nonnull String sub )
     {
         if ( sub.equals( "" ) )
         {

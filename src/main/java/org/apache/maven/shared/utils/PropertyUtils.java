@@ -25,6 +25,9 @@ import java.io.IOException;
 import java.util.Properties;
 import org.apache.maven.shared.utils.io.IOUtil;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public class PropertyUtils
 {
 
@@ -33,7 +36,7 @@ public class PropertyUtils
         // should throw new IllegalAccessError( "Utility class" );
     }
 
-    public static java.util.Properties loadProperties( java.net.URL url )
+    public static java.util.Properties loadProperties( @Nonnull java.net.URL url )
     {
         try
         {
@@ -46,7 +49,7 @@ public class PropertyUtils
         return null;
     }
 
-    public static java.util.Properties loadProperties( java.io.File file )
+    public static java.util.Properties loadProperties( @Nonnull java.io.File file )
     {
         try
         {
@@ -59,7 +62,7 @@ public class PropertyUtils
         return null;
     }
 
-    public static java.util.Properties loadProperties( java.io.InputStream is )
+    public static java.util.Properties loadProperties( @Nullable java.io.InputStream is )
     {
         try
         {

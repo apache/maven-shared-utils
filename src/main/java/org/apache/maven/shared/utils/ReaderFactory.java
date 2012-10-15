@@ -32,6 +32,8 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import org.apache.commons.io.input.XmlStreamReader;
 
+import javax.annotation.Nonnull;
+
 
 /**
  * Utility to create Readers from streams, with explicit encoding choice: platform default,
@@ -106,7 +108,7 @@ public class ReaderFactory
      * @throws IOException if any.
      * @see XmlStreamReader
      */
-    public static Reader newXmlReader( InputStream in )
+    public static Reader newXmlReader( @Nonnull InputStream in )
         throws IOException
     {
         return new XmlStreamReader( in );
@@ -120,7 +122,7 @@ public class ReaderFactory
      * @throws IOException if any.
      * @see XmlStreamReader
      */
-    public static Reader newXmlReader( File file )
+    public static Reader newXmlReader( @Nonnull File file )
         throws IOException
     {
         return new XmlStreamReader( file );
@@ -134,7 +136,7 @@ public class ReaderFactory
      * @throws IOException if any.
      * @see XmlStreamReader
      */
-    public static Reader newXmlReader( URL url )
+    public static Reader newXmlReader( @Nonnull URL url )
         throws IOException
     {
         return new XmlStreamReader( url );
@@ -148,7 +150,7 @@ public class ReaderFactory
      * @throws FileNotFoundException if any.
      * @see Charset#defaultCharset()
      */
-    public static Reader newPlatformReader( File file )
+    public static Reader newPlatformReader( @Nonnull File file )
         throws FileNotFoundException
     {
         return new FileReader( file );
@@ -163,7 +165,7 @@ public class ReaderFactory
      * @throws UnsupportedEncodingException if any.
      * @see <a href="http://java.sun.com/j2se/1.4.2/docs/guide/intl/encoding.doc.html">Supported encodings</a>
      */
-    public static Reader newReader( InputStream in, String encoding )
+    public static Reader newReader( @Nonnull InputStream in, @Nonnull String encoding )
         throws UnsupportedEncodingException
     {
         return new InputStreamReader( in, encoding );
@@ -179,7 +181,7 @@ public class ReaderFactory
      * @throws UnsupportedEncodingException if any.
      * @see <a href="http://java.sun.com/j2se/1.4.2/docs/guide/intl/encoding.doc.html">Supported encodings</a>
      */
-    public static Reader newReader( File file, String encoding )
+    public static Reader newReader( @Nonnull File file, @Nonnull String encoding )
         throws FileNotFoundException, UnsupportedEncodingException
     {
         return new InputStreamReader( new FileInputStream( file ), encoding );
@@ -194,7 +196,7 @@ public class ReaderFactory
      * @throws IOException if any.
      * @see <a href="http://java.sun.com/j2se/1.4.2/docs/guide/intl/encoding.doc.html">Supported encodings</a>
      */
-    public static Reader newReader( URL url, String encoding )
+    public static Reader newReader( @Nonnull URL url, @Nonnull String encoding )
         throws IOException
     {
         return new InputStreamReader( url.openStream(), encoding );

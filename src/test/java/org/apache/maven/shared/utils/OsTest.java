@@ -103,8 +103,6 @@ public class OsTest extends Assert
         Os os  = new Os();
         os.eval();
 
-        os = new Os( "unknown" );
-
         assertTrue( Os.isName( Os.FAMILY_OS2 ) );
 
         assertFalse( Os.isName( Os.FAMILY_DOS ) );

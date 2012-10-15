@@ -64,21 +64,6 @@ public class Os
     private String family;
 
     /**
-     * Name of OS
-     */
-    private String name;
-
-    /**
-     * version of OS
-     */
-    private String version;
-
-    /**
-     * OS architecture
-     */
-    private String arch;
-
-    /**
      * OS family that can be tested for. {@value}
      */
     public static final String FAMILY_WINDOWS = "windows";
@@ -225,7 +210,7 @@ public class Os
      */
     boolean eval()
     {
-        return isOs( family, name, arch, version );
+        return isOs( family, null, null, null);
     }
 
     /**

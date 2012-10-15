@@ -32,6 +32,8 @@ import java.nio.charset.Charset;
 
 import org.apache.commons.io.output.XmlStreamWriter;
 
+import javax.annotation.Nonnull;
+
 /**
  * Utility to create Writers, with explicit encoding choice: platform default,
  * XML, or specified.
@@ -99,7 +101,7 @@ public class WriterFactory
      * @throws IOException if any.
      * @see XmlStreamWriter
      */
-    public static XmlStreamWriter newXmlWriter( OutputStream out )
+    public static XmlStreamWriter newXmlWriter( @Nonnull OutputStream out )
         throws IOException
     {
         return new XmlStreamWriter( out );
@@ -113,7 +115,7 @@ public class WriterFactory
      * @throws IOException if any.
      * @see XmlStreamWriter
      */
-    public static XmlStreamWriter newXmlWriter( File file )
+    public static XmlStreamWriter newXmlWriter( @Nonnull File file )
         throws IOException
     {
         return new XmlStreamWriter( file );
@@ -126,7 +128,7 @@ public class WriterFactory
      * @return a writer instance for the output stream using the default platform charset.
      * @see Charset#defaultCharset()
      */
-    public static Writer newPlatformWriter( OutputStream out )
+    public static Writer newPlatformWriter( @Nonnull OutputStream out )
     {
         return new OutputStreamWriter( out );
     }
@@ -139,7 +141,7 @@ public class WriterFactory
      * @throws IOException if any.
      * @see Charset#defaultCharset()
      */
-    public static Writer newPlatformWriter( File file )
+    public static Writer newPlatformWriter( @Nonnull File file )
         throws IOException
     {
         return new FileWriter( file );
@@ -154,7 +156,7 @@ public class WriterFactory
      * @throws UnsupportedEncodingException if any.
      * @see <a href="http://java.sun.com/j2se/1.4.2/docs/guide/intl/encoding.doc.html">Supported encodings</a>
      */
-    public static Writer newWriter( OutputStream out, String encoding )
+    public static Writer newWriter( @Nonnull OutputStream out, @Nonnull String encoding )
         throws UnsupportedEncodingException
     {
         return new OutputStreamWriter( out, encoding );
@@ -170,7 +172,7 @@ public class WriterFactory
      * @throws FileNotFoundException if any.
      * @see <a href="http://java.sun.com/j2se/1.4.2/docs/guide/intl/encoding.doc.html">Supported encodings</a>
      */
-    public static Writer newWriter( File file, String encoding )
+    public static Writer newWriter( @Nonnull File file, @Nonnull String encoding )
         throws UnsupportedEncodingException, FileNotFoundException
     {
         return newWriter( new FileOutputStream( file ), encoding );

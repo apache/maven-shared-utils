@@ -22,6 +22,9 @@ package org.apache.maven.shared.utils;
 import java.io.File;
 import java.util.StringTokenizer;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * Path tool contains static methods to assist in determining path-related
  * information such as relative paths.
@@ -62,7 +65,7 @@ public class PathTool
      *         the base directory, <code>basedir</code> is null or zero-length,
      *         or <code>filename</code> is null or zero-length.
      */
-    public static String getRelativePath( String basedir, String filename )
+    public static String getRelativePath( @Nullable String basedir, @Nullable String filename )
     {
         basedir = uppercaseDrive( basedir );
         filename = uppercaseDrive( filename );
@@ -191,7 +194,7 @@ public class PathTool
      *         terminated with a forward slash.  A zero-length string is
      *         returned if: the filename is zero-length.
      */
-    private static String determineRelativePath( String filename, String separator )
+    private static @Nonnull String determineRelativePath( @Nonnull String filename, @Nonnull String separator )
     {
         if ( filename.length() == 0 )
         {
@@ -251,7 +254,7 @@ public class PathTool
      * @param path old path
      * @return String
      */
-    static String uppercaseDrive( String path )
+    static String uppercaseDrive( @Nullable String path )
     {
         if ( path == null )
         {
@@ -264,7 +267,7 @@ public class PathTool
         return path;
     }
 
-    private static String buildRelativePath( String toPath, String fromPath, final char separatorChar )
+    private static String buildRelativePath( @Nonnull String toPath, @Nonnull String fromPath, final char separatorChar )
     {
         // use tokeniser to traverse paths and for lazy checking
         StringTokenizer toTokeniser = new StringTokenizer( toPath, String.valueOf( separatorChar ) );
