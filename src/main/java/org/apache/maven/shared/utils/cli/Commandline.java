@@ -277,10 +277,8 @@ public class Commandline
     /**
      * Returns the shell, executable and all defined arguments.
      */
-    public String[] getShellCommandline()
+    private String[] getShellCommandline()
     {
-        // TODO: Provided only for backward compat. with <= 1.4
-
         List<String> shellCommandLine = getShell().getShellCommandLine( getArguments() );
         return shellCommandLine.toArray( new String[shellCommandLine.size()] );
     }
