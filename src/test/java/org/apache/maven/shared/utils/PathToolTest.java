@@ -31,7 +31,6 @@ import java.io.File;
 
 import static org.hamcrest.CoreMatchers.is;
 
-
 /**
  * Test the {@link PathTool} class.
  *

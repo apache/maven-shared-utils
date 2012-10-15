@@ -18,7 +18,6 @@ package org.apache.maven.shared.utils.reflection;
  * under the License.
  */
 
-
 /**
  *
  * @author stephenc
@@ -32,7 +31,6 @@ class ReflectorTestHelper
 
     private ReflectorTestHelper()
     {
-
     }
 
     ReflectorTestHelper( Boolean throwSomething )
@@ -61,7 +59,7 @@ class ReflectorTestHelper
 
     private static ReflectorTestHelper getInstance()
     {
-        return new ReflectorTestHelper(  );
+        return new ReflectorTestHelper();
     }
 
     static ReflectorTestHelper getInstance( Boolean throwSomething )
@@ -70,7 +68,7 @@ class ReflectorTestHelper
         {
             throw new HelperException( "Something" );
         }
-        return new ReflectorTestHelper(  );
+        return new ReflectorTestHelper();
     }
 
     protected static ReflectorTestHelper getInstance( Integer throwCount )
@@ -79,7 +77,7 @@ class ReflectorTestHelper
         {
             throw new HelperException( "Something" );
         }
-        return new ReflectorTestHelper(  );
+        return new ReflectorTestHelper();
     }
 
     public static ReflectorTestHelper getInstance( String throwMessage )
@@ -88,15 +86,17 @@ class ReflectorTestHelper
         {
             throw new HelperException( throwMessage );
         }
-        return new ReflectorTestHelper(  );
+        return new ReflectorTestHelper();
     }
 
-    public ReflectorTestHelper getInstance(String aString, Boolean aBoolean) {
-        return new ReflectorTestHelper(  );
+    public ReflectorTestHelper getInstance( String aString, Boolean aBoolean )
+    {
+        return new ReflectorTestHelper();
     }
 
     public static class HelperException
-        extends RuntimeException {
+        extends RuntimeException
+    {
         public HelperException()
         {
             super();    //To change body of overridden methods use File | Settings | File Templates.

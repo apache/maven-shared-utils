@@ -103,7 +103,7 @@ public class XmlStreamReaderTest
         checkXmlStreamReader( text, encoding, encoding, null );
     }
 
-    private static void checkXmlStreamReader( String text, String encoding, byte[] bom  )
+    private static void checkXmlStreamReader( String text, String encoding, byte[] bom )
     throws IOException
     {
         checkXmlStreamReader( text, encoding, encoding, bom );

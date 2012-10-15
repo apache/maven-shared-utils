@@ -19,7 +19,6 @@ package org.apache.maven.shared.utils.testhelpers;
  * under the License.
  */
 
-
 import org.apache.maven.shared.utils.io.FileUtils;
 import org.apache.maven.shared.utils.io.IOUtil;
 import org.junit.rules.TemporaryFolder;
@@ -38,7 +37,7 @@ public final class FileTestHelper
     }
 
     public static void generateTestData( OutputStream out, long size )
-            throws IOException
+        throws IOException
     {
         for ( int i = 0; i < size; i++ )
         {
@@ -47,7 +46,8 @@ public final class FileTestHelper
         }
     }
 
-    public static void generateTestFile( File testfile, int size ) throws IOException
+    public static void generateTestFile( File testfile, int size )
+        throws IOException
     {
         if ( testfile.exists() )
         {
@@ -64,7 +64,7 @@ public final class FileTestHelper
 
 
     public static void createLineBasedFile( File file, String[] data )
-            throws IOException
+        throws IOException
     {
         if ( file.getParentFile() != null && !file.getParentFile().exists() )
         {
@@ -73,8 +73,9 @@ public final class FileTestHelper
         PrintWriter output = new PrintWriter( new OutputStreamWriter( new FileOutputStream( file ), "UTF-8" ) );
         try
         {
-            for (String aData : data) {
-                output.println(aData);
+            for ( String aData : data )
+            {
+                output.println( aData );
             }
         }
         finally

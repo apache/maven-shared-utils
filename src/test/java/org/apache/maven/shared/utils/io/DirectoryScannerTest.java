@@ -19,7 +19,6 @@ package org.apache.maven.shared.utils.io;
  * under the License.
  */
 
-
 import org.apache.maven.shared.utils.testhelpers.FileTestHelper;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -40,9 +39,8 @@ public class DirectoryScannerTest
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
 
-
-
-    private void createTestData() throws IOException
+    private void createTestData()
+        throws IOException
     {
         File rootDir = tempFolder.getRoot();
         File folder1 = new File( rootDir, "folder1" );
@@ -58,11 +56,11 @@ public class DirectoryScannerTest
         File folder2 = new File( folder1, "ignorefolder" );
         folder2.mkdirs();
         FileTestHelper.generateTestFile( new File( folder2, "file7.txt" ), 17 );
-
     }
 
     @Test
-    public void testSimpleScan() throws Exception
+    public void testSimpleScan()
+        throws Exception
     {
         createTestData();
 
@@ -89,7 +87,8 @@ public class DirectoryScannerTest
     }
 
     @Test
-    public void testSimpleIncludes() throws Exception
+    public void testSimpleIncludes()
+        throws Exception
     {
         createTestData();
 
@@ -116,7 +115,8 @@ public class DirectoryScannerTest
     }
 
     @Test
-    public void testSimpleExcludes() throws Exception
+    public void testSimpleExcludes()
+        throws Exception
     {
         createTestData();
 
@@ -145,7 +145,7 @@ public class DirectoryScannerTest
     public void testIsSymLin()
         throws IOException
     {
-        File file = new File( ".");
+        File file = new File( "." );
         DirectoryScanner ds = new DirectoryScanner();
         ds.isSymbolicLink( file, "abc" );
     }
@@ -196,7 +196,8 @@ public class DirectoryScannerTest
         checkFiles( "expectedExcludedFiles", expectedExcludedFiles, ds.getExcludedFiles() );
         checkFiles( "expectedExcludedDirectories", expectedExcludedDirectories, ds.getExcludedDirectories() );
 
-        checkFiles( "visitedFiles", expectedIncludedFiles, scanConductor.visitedFiles.toArray(new String[scanConductor.visitedFiles.size()]));
+        checkFiles( "visitedFiles", expectedIncludedFiles,
+                    scanConductor.visitedFiles.toArray( new String[scanConductor.visitedFiles.size()] ) );
     }
 
     /**
@@ -217,12 +218,13 @@ public class DirectoryScannerTest
 
             for ( int i = 0; i < resolvedFiles.length; i++ )
             {
-                Assert.assertEquals( msg, expectedFiles[ i ], resolvedFiles[ i ].replace( "\\", "/" ) );
+                Assert.assertEquals( msg, expectedFiles[i], resolvedFiles[i].replace( "\\", "/" ) );
             }
         }
     }
 
-    private static class TestScanConductor implements ScanConductor
+    private static class TestScanConductor
+        implements ScanConductor
     {
         final List<String> visitedFiles = new ArrayList<String>();
 
@@ -246,8 +248,8 @@ public class DirectoryScannerTest
         }
     }
 
-
-    private void removeAndAddSomeFiles() throws IOException
+    private void removeAndAddSomeFiles()
+        throws IOException
     {
         File rootDir = tempFolder.getRoot();
         File file2 = new File( rootDir, "file2.txt" );
@@ -260,7 +262,8 @@ public class DirectoryScannerTest
     }
 
     @Test
-    public void testScanDiff() throws Exception
+    public void testScanDiff()
+        throws Exception
     {
         createTestData();
 
@@ -284,14 +287,14 @@ public class DirectoryScannerTest
         Assert.assertNotNull( addedFiles );
         Assert.assertNotNull( removedFiles );
         Assert.assertEquals( 1, addedFiles.length );
-        Assert.assertEquals(2, removedFiles.length );
+        Assert.assertEquals( 2, removedFiles.length );
     }
-
-
 
     @Ignore("Enable this test to run performance checks")
     @Test
-    public void performanceTest() throws Exception {
+    public void performanceTest()
+        throws Exception
+    {
 
         File rootFolder = tempFolder.getRoot();
 
@@ -317,7 +320,7 @@ public class DirectoryScannerTest
         long endTime = System.nanoTime();
 
         long durationEmptyRun = endTime - startTime;
-        System.out.println( "durationEmptyRun            [ns]: " + durationEmptyRun);
+        System.out.println( "durationEmptyRun            [ns]: " + durationEmptyRun );
 
         startTime = System.nanoTime();
         for ( int i = 1; i < cycles; i++ )
@@ -341,11 +344,11 @@ public class DirectoryScannerTest
         endTime = System.nanoTime();
 
         long durationWithSnapshotScanner = endTime - startTime;
-        System.out.println( "durationWithSnapshotScanner [ns]: " + durationWithSnapshotScanner);
+        System.out.println( "durationWithSnapshotScanner [ns]: " + durationWithSnapshotScanner );
 
         long dirScannerOverhead = durationWithSnapshotScanner - durationEmptyRun;
 
-        System.out.println( "Overhead for n cycles [ns]: " + dirScannerOverhead);
+        System.out.println( "Overhead for n cycles [ns]: " + dirScannerOverhead );
     }
 
 }

@@ -19,7 +19,6 @@ package org.apache.maven.shared.utils.cli;
  * under the License.
  */
 
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
@@ -52,7 +51,7 @@ public class CommandLineUtilsTest
     public void testEnsureCaseSensitivity()
         throws Exception
     {
-        Map<String, String> data = new HashMap<String, String>(  );
+        Map<String, String> data = new HashMap<String, String>();
         data.put( "abz", "cool" );
         assertTrue( CommandLineUtils.ensureCaseSensitivity( data, false ).containsKey( "ABZ" ) );
         assertTrue( CommandLineUtils.ensureCaseSensitivity( data, true ).containsKey( "abz" ) );

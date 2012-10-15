@@ -30,14 +30,14 @@ import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.*;
 
-
 /**
  * This class will test the 'Os' class which evaluates
  * operation system specific settings.
  *
  * @author <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
-public class OsTest extends Assert
+public class OsTest
+    extends Assert
 {
     private String origOsName;
     private String origOsFamily;
@@ -47,7 +47,7 @@ public class OsTest extends Assert
 
     @Before
     public void setUp()
-            throws Exception
+        throws Exception
     {
         origOsName = System.getProperty( "os.name" );
         origOsArch = System.getProperty( "os.arch" );
@@ -68,7 +68,7 @@ public class OsTest extends Assert
 
     @After
     public void tearDown()
-            throws Exception
+        throws Exception
     {
         // set the original OS settings again
         System.setProperty( "os.name"   , origOsName );
@@ -83,7 +83,7 @@ public class OsTest extends Assert
     }
 
     private void setStaticOsField( String variableName, Object value )
-            throws NoSuchFieldException, IllegalAccessException
+        throws NoSuchFieldException, IllegalAccessException
     {
         Field field = Os.class.getField( variableName );
 
@@ -98,7 +98,7 @@ public class OsTest extends Assert
 
     @Test
     public void testConstructor()
-            throws Exception
+        throws Exception
     {
         Os os  = new Os();
         os.eval();

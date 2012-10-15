@@ -32,28 +32,28 @@ import org.junit.rules.TemporaryFolder;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 
-
 /**
  * Test the {@link StringUtils} class.
  *
  * We don't need to test this
  * @author <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
-public class StringUtilsTest extends Assert
+public class StringUtilsTest
+    extends Assert
 {
 
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
 
 
-    @Test(expected = NullPointerException.class)
+    @Test( expected = NullPointerException.class )
     public void testAbbreviate_NPE()
     {
         assertThat( StringUtils.abbreviate( null, 10 )
                 , nullValue() );
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test( expected = IllegalArgumentException.class )
     public void testAbbreviate_MinLength()
     {
         assertThat( StringUtils.abbreviate( "This is a longtext", 3 )
@@ -70,14 +70,14 @@ public class StringUtilsTest extends Assert
                   , is( "This is a longtext" ) );
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test( expected = NullPointerException.class )
     public void testAbbreviate_Offset_NPE()
     {
         assertThat( StringUtils.abbreviate( null, 10, 20 )
                 , nullValue() );
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test( expected = IllegalArgumentException.class )
     public void testAbbreviate_Offset_MinLength()
     {
         assertThat( StringUtils.abbreviate( "This is a longtext", 10, 3 )
@@ -616,15 +616,15 @@ public class StringUtilsTest extends Assert
         assertThat( StringUtils.escape( null, null, '#' )
                   , nullValue() );
 
-        assertThat( StringUtils.escape( "dings", new char[]{'\t','\b'}, '+' )
+        assertThat( StringUtils.escape( "dings", new char[]{ '\t', '\b' }, '+' )
                   , is( "dings" ) );
 
-        assertThat( StringUtils.escape( "dings\tbums", new char[]{'\t','\b'}, '+' )
+        assertThat( StringUtils.escape( "dings\tbums", new char[]{ '\t', '\b' }, '+' )
                   , is( "dings+\tbums" ) );
 
-        assertThat( StringUtils.escape( "dings\nbums", new char[]{'\t','\b'}, '+' )
+        assertThat( StringUtils.escape( "dings\nbums", new char[]{ '\t', '\b' }, '+' )
                   , is( "dings\nbums" ) );
-        assertThat( StringUtils.escape( "dings\bbums", new char[]{'\t','\b'}, '+' )
+        assertThat( StringUtils.escape( "dings\bbums", new char[]{ '\t', '\b' }, '+' )
                   , is( "dings+\bbums" ) );
     }
 
@@ -740,7 +740,7 @@ public class StringUtilsTest extends Assert
         assertThat( StringUtils.indexOfAny( "dings", null )
                   , is( -1 ) );
 
-        assertThat( StringUtils.indexOfAny( null, new String[]{ } )
+        assertThat( StringUtils.indexOfAny( null, new String[]{} )
                   , is( -1 ) );
 
         assertThat( StringUtils.indexOfAny( "dings bums dongs", new String[]{ "knuff", "bums" } )
@@ -762,7 +762,7 @@ public class StringUtilsTest extends Assert
     @Test
     public void testInterpolate()
     {
-        Map<String,String> variables = new HashMap<String,String>();
+        Map<String, String> variables = new HashMap<String, String>();
         assertThat( StringUtils.interpolate( "This ${text} will get replaced", variables )
                   , is( "This ${text} will get replaced" ) );
 
@@ -1035,17 +1035,17 @@ public class StringUtilsTest extends Assert
         assertThat( StringUtils.join( new Object[0], null )
                   , is( "" ) );
 
-        assertThat( StringUtils.join( new Object[]{ "a", "b", "c"}, null )
+        assertThat( StringUtils.join( new Object[]{ "a", "b", "c" }, null )
                   , is( "abc" ) );
 
-        assertThat( StringUtils.join( new Object[]{ "a", "b", "c"}, "__" )
+        assertThat( StringUtils.join( new Object[]{ "a", "b", "c" }, "__" )
                   , is( "a__b__c" ) );
     }
 
     @Test( expected = NullPointerException.class )
     public void testJoin_Iterator_NPE()
     {
-        StringUtils.join( (Iterator) null, null );
+        StringUtils.join( (Iterator<?>) null, null );
     }
 
     @Test
@@ -1076,10 +1076,10 @@ public class StringUtilsTest extends Assert
         assertThat( StringUtils.lastIndexOfAny( "dings", null )
                   , is( -1 ) );
 
-        assertThat( StringUtils.lastIndexOfAny( "dings bums boms", new String[] {"ms", " b"} )
+        assertThat( StringUtils.lastIndexOfAny( "dings bums boms", new String[] { "ms", " b" } )
                   , is( 13 ) );
 
-        assertThat( StringUtils.lastIndexOfAny( "dings bums boms", new String[] {"nix", "da"} )
+        assertThat( StringUtils.lastIndexOfAny( "dings bums boms", new String[] { "nix", "da" } )
                   , is( -1 ) );
     }
 
@@ -1729,10 +1729,10 @@ public class StringUtilsTest extends Assert
     public void testSplit1()
     {
         assertThat( StringUtils.split( "dings" )
-                  , is( new String[]{"dings"} )  );
+                  , is( new String[]{ "dings" } ) );
 
         assertThat( StringUtils.split( "dings bums" )
-                  , is( new String[]{"dings", "bums"} )  );
+                  , is( new String[]{ "dings", "bums" } ) );
     }
 
     @Test( expected = NullPointerException.class )
@@ -1751,16 +1751,16 @@ public class StringUtilsTest extends Assert
     public void testSplit2()
     {
         assertThat( StringUtils.split( "dings", null )
-                  , is( new String[]{"dings"} )  );
+                  , is( new String[]{ "dings" } ) );
 
         assertThat( StringUtils.split( "dings bums", null )
-                  , is( new String[]{"dings", "bums"} )  );
+                  , is( new String[]{ "dings", "bums" } ) );
 
         assertThat( StringUtils.split( "dings", "+" )
-                  , is( new String[]{"dings"} )  );
+                  , is( new String[]{ "dings" } ) );
 
         assertThat( StringUtils.split( "dings+bums", "+" )
-                  , is( new String[]{"dings", "bums"} )  );
+                  , is( new String[]{ "dings", "bums" } ) );
     }
 
     @Test( expected = NullPointerException.class )
@@ -1779,25 +1779,25 @@ public class StringUtilsTest extends Assert
     public void testSplit3()
     {
         assertThat( StringUtils.split( "dings", null, 3 )
-                  , is( new String[]{"dings"} )  );
+                  , is( new String[]{ "dings" } ) );
 
         assertThat( StringUtils.split( "dings bums", null, 3 )
-                  , is( new String[]{"dings", "bums"} )  );
+                  , is( new String[]{ "dings", "bums" } ) );
 
         assertThat( StringUtils.split( "dings", "+", 3 )
-                  , is( new String[]{"dings"} )  );
+                  , is( new String[]{ "dings" } )  );
 
         assertThat( StringUtils.split( "dings+bums", "+", 3 )
-                  , is( new String[]{"dings", "bums"} )  );
+                  , is( new String[]{ "dings", "bums" } ) );
 
         assertThat( StringUtils.split( "dings+bums", "+", 1 )
-                  , is( new String[]{"dings+bums"} )  );
+                  , is( new String[]{ "dings+bums" } )  );
 
         assertThat( StringUtils.split( "dings+bums", "+", 0 )
-                  , is( new String[]{"dings", "bums"} )  );
+                  , is( new String[]{ "dings", "bums" } ) );
 
         assertThat( StringUtils.split( "dings+bums", "+", -5 )
-                  , is( new String[]{"dings", "bums"} )  );
+                  , is( new String[]{ "dings", "bums" } ) );
 
     }
 
@@ -1840,11 +1840,11 @@ public class StringUtilsTest extends Assert
         assertThat( StringUtils.stripAll( new String[]{} )
                   , is( new String[]{} ) );
 
-        assertThat( StringUtils.stripAll( new String[]{"dings"} )
-                  , is( new String[]{"dings"} ) );
+        assertThat( StringUtils.stripAll( new String[]{ "dings" } )
+                  , is( new String[]{ "dings" } ) );
 
-        assertThat( StringUtils.stripAll( new String[]{" dings ", "  bums \t  "} )
-                  , is( new String[]{"dings", "bums"} ) );
+        assertThat( StringUtils.stripAll( new String[]{ " dings ", "  bums \t  " } )
+                  , is( new String[]{ "dings", "bums" } ) );
     }
 
     @Test
@@ -1856,11 +1856,11 @@ public class StringUtilsTest extends Assert
         assertThat( StringUtils.stripAll( new String[]{}, " " )
                   , is( new String[]{} ) );
 
-        assertThat( StringUtils.stripAll( new String[]{"dings"}, " " )
-                  , is( new String[]{"dings"} ) );
+        assertThat( StringUtils.stripAll( new String[]{ "dings" }, " " )
+                  , is( new String[]{ "dings" } ) );
 
-        assertThat( StringUtils.stripAll( new String[]{" dings ", "  bums \t  "}, " " )
-                  , is( new String[]{"dings", "bums \t"} ) );
+        assertThat( StringUtils.stripAll( new String[]{ " dings ", "  bums \t  " }, " " )
+                  , is( new String[]{ "dings", "bums \t" } ) );
     }
 
     @Test
@@ -1928,7 +1928,7 @@ public class StringUtilsTest extends Assert
     @Test
     public void testSubstring2()
     {
-        assertThat( StringUtils.substring( null, 0, 2)
+        assertThat( StringUtils.substring( null, 0, 2 )
                   , nullValue() );
 
         assertThat( StringUtils.substring( null, -3, 0 )
@@ -2043,7 +2043,7 @@ public class StringUtilsTest extends Assert
                   , is( "   " ) );
 
         assertThat( StringUtils.unifyLineSeparators( "dings\nbums\r\ndongs", "\n" )
-                  , is( "dings\nbums\ndongs") );
+                  , is( "dings\nbums\ndongs" ) );
     }
 
     @Test

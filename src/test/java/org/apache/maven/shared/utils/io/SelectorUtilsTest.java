@@ -25,7 +25,6 @@ import java.io.File;
 
 import org.junit.Test;
 
-
 /**
  * Test the {@link SelectorUtils} class.
  *
@@ -33,7 +32,7 @@ import org.junit.Test;
 public class SelectorUtilsTest
 {
 
-    @Test(expected=NullPointerException.class)
+    @Test( expected = NullPointerException.class )
     public void testMatchPatternStart()
     {
         SelectorUtils.matchPatternStart( null, null );
@@ -42,16 +41,17 @@ public class SelectorUtilsTest
     @Test
     public void testEmptyStrings()
     {
-        assertTrue(SelectorUtils.matchPatternStart("", ""));
+        assertTrue( SelectorUtils.matchPatternStart( "", "" ) );
     }
 
     @Test
-    public void testRegexPrefix() throws Exception
+    public void testRegexPrefix()
+        throws Exception
     {
-        assertEquals(true, SelectorUtils.matchPatternStart(SelectorUtils.REGEX_HANDLER_PREFIX + File.separator +
-                                                           "aaa" + SelectorUtils.PATTERN_HANDLER_SUFFIX, ""));
+        assertEquals( true,
+                      SelectorUtils.matchPatternStart( SelectorUtils.REGEX_HANDLER_PREFIX + File.separator + "aaa"
+                          + SelectorUtils.PATTERN_HANDLER_SUFFIX, "" ) );
     }
-
 
     @Test
     public void testAntPatternStrings()
@@ -68,20 +68,18 @@ public class SelectorUtilsTest
     }
 
 
-    private void assertAntDoesNotMatch(String pattern, String target)
+    private void assertAntDoesNotMatch( String pattern, String target )
     {
-        assertEquals(false, SelectorUtils.matchPatternStart(wrapWithAntHandler(pattern), target));
+        assertEquals( false, SelectorUtils.matchPatternStart( wrapWithAntHandler( pattern ), target ) );
     }
 
-    private void assertAntMatch(String pattern, String target)
+    private void assertAntMatch( String pattern, String target )
     {
-        assertEquals(true, SelectorUtils.matchPatternStart(wrapWithAntHandler(pattern), target));
+        assertEquals( true, SelectorUtils.matchPatternStart( wrapWithAntHandler( pattern ), target ) );
     }
 
-
-    private String wrapWithAntHandler(String val)
+    private String wrapWithAntHandler( String val )
     {
         return SelectorUtils.ANT_HANDLER_PREFIX + val + SelectorUtils.PATTERN_HANDLER_SUFFIX;
     }
-
 }

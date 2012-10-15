@@ -32,7 +32,6 @@ import java.net.URL;
 
 import static org.hamcrest.CoreMatchers.*;
 
-
 /**
  * This will test the plexus utility class {@link Expand}.
  *
@@ -44,7 +43,8 @@ import static org.hamcrest.CoreMatchers.*;
  *
  * @author <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
-public class ExpandTest extends Assert
+public class ExpandTest
+    extends Assert
 {
 
     private static final String TEST_ZIP_LOCATION = "/expand/expand_test.zip";
@@ -74,7 +74,6 @@ public class ExpandTest extends Assert
      */
     private File getTestTargetDir()
     {
-
         return tempFolder.newFolder( TEST_ZIP_TARGET_FOLDER );
     }
 
@@ -93,7 +92,8 @@ public class ExpandTest extends Assert
     }
 
     @Test
-    public void testExecute() throws Exception
+    public void testExecute()
+        throws Exception
     {
         Expand expand = new Expand();
 
@@ -109,7 +109,8 @@ public class ExpandTest extends Assert
     }
 
     @Test
-    public void testExecuteIntoNonexistingDirectory() throws Exception
+    public void testExecuteIntoNonexistingDirectory()
+        throws Exception
     {
         Expand expand = new Expand();
 
@@ -131,7 +132,8 @@ public class ExpandTest extends Assert
     }
 
     @Test
-    public void testExecuteNonexistingSource() throws Exception
+    public void testExecuteNonexistingSource()
+        throws Exception
     {
         Expand expand = new Expand();
 
@@ -143,7 +145,6 @@ public class ExpandTest extends Assert
 
         try
         {
-
             expand.execute();
             fail( "expand with notexiting source must throw Exception!" );
         }
@@ -162,7 +163,7 @@ public class ExpandTest extends Assert
 
     @Test( expected = NullPointerException.class )
     public void testExecute_NullSource()
-            throws Exception
+        throws Exception
     {
         Expand expand = new Expand();
         expand.setSrc( null );
@@ -175,7 +176,7 @@ public class ExpandTest extends Assert
 
     @Test
     public void testExecute_NullDest()
-            throws Exception
+        throws Exception
     {
         Expand expand = new Expand();
         expand.setSrc( getSourceFile() );
@@ -202,7 +203,8 @@ public class ExpandTest extends Assert
     }
 
     @Test
-    public void testExecute_Overwrite() throws Exception
+    public void testExecute_Overwrite()
+        throws Exception
     {
         File targetDir = getTestTargetDir();
         File expandedFile = null;
@@ -305,7 +307,7 @@ public class ExpandTest extends Assert
     {
         assertThat( "target directory must exist"
                   , targetDir.exists()
-                  , is( true) );
+                  , is( true ) );
 
         File expandedFile = new File( targetDir, TEST_UNZIPPED_FILE );
 
@@ -321,16 +323,13 @@ public class ExpandTest extends Assert
     {
         File expandedFile = verifyExpandedFile( targetDir );
 
-        assertNotNull(expandedFile);
+        assertNotNull( expandedFile );
 
         java.util.Scanner scanner = new java.util.Scanner( expandedFile ).useDelimiter( "\n" );
         String text = scanner.next();
 
         assertThat( "expanded file content must match"
                   , text
-                  , is( expectedContent) );
+                  , is( expectedContent ) );
     }
-
-
-
 }

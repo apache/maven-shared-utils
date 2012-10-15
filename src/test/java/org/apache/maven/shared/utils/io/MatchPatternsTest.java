@@ -1,4 +1,5 @@
 package org.apache.maven.shared.utils.io;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,6 +18,7 @@ package org.apache.maven.shared.utils.io;
  * specific language governing permissions and limitations
  * under the License.
  */
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -24,15 +26,15 @@ import static org.junit.Assert.*;
 /**
  * @author Kristian Rosenvold
  */
-public class MatchPatternsTest {
+public class MatchPatternsTest
+{
     @Test
     public void matches()
-            throws Exception
+        throws Exception
     {
         MatchPatterns from = MatchPatterns.from( "ABC**", "CDE**" );
         assertTrue( from.matches( "ABCDE", true ) );
         assertTrue( from.matches( "CDEF", true ) );
         assertFalse( from.matches( "XYZ", true ) );
-
     }
 }

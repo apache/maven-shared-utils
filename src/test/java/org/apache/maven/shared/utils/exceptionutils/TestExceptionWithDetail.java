@@ -19,14 +19,13 @@ package org.apache.maven.shared.utils.exceptionutils;
  * under the License.
  */
 
-
-
 /**
  * This test exception has a 'detail' field.
  *
  * @author <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
-public class TestExceptionWithDetail extends Exception
+public class TestExceptionWithDetail
+    extends Exception
 {
     private Throwable detail;
 

@@ -19,13 +19,12 @@ package org.apache.maven.shared.utils.exceptionutils;
  * under the License.
  */
 
-
-
 /**
  *
  * @author <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
-public class TestException extends Exception
+public class TestException
+    extends Exception
 {
     private Throwable cause;
     private Throwable specialCause;
@@ -40,13 +39,11 @@ public class TestException extends Exception
         this.cause = cause;
     }
 
-    @SuppressWarnings("UnusedDeclaration")
     public Throwable getSourceException()
     {
         return cause;
     }
 
-    @SuppressWarnings("UnusedDeclaration")
     public Throwable getSpecialCause()
     {
         return specialCause;

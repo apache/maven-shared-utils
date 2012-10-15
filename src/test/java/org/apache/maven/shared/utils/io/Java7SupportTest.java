@@ -1,11 +1,5 @@
 package org.apache.maven.shared.utils.io;
 
-import java.io.File;
-
-import org.junit.Test;
-
-import static org.junit.Assert.assertFalse;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -24,6 +18,12 @@ import static org.junit.Assert.assertFalse;
  * specific language governing permissions and limitations
  * under the License.
  */
+
+import java.io.File;
+
+import org.junit.Test;
+
+import static org.junit.Assert.assertFalse;
 
 public class Java7SupportTest
 {

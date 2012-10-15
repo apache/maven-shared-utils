@@ -19,7 +19,6 @@ package org.apache.maven.shared.utils.io;
  * under the License.
  */
 
-
 import org.apache.maven.shared.utils.testhelpers.FileTestHelper;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
@@ -53,7 +52,6 @@ import static org.junit.matchers.JUnitMatchers.hasItems;
  * @version $Id: FileUtilsTestCase.java 1081025 2011-03-13 00:45:10Z niallp $
  * @see FileUtils
  */
-@SuppressWarnings({"ResultOfMethodCallIgnored", "ConstantConditions"})
 public class FileUtilsTest
 {
 
@@ -112,7 +110,7 @@ public class FileUtilsTest
         {
             throw new IOException( "Cannot create file " + file + " as the parent directory does not exist" );
         }
-        BufferedOutputStream output = new BufferedOutputStream( new java.io.FileOutputStream( file ) );
+        BufferedOutputStream output = new BufferedOutputStream( new FileOutputStream( file ) );
         try
         {
             FileTestHelper.generateTestData( output, size );
@@ -184,8 +182,8 @@ public class FileUtilsTest
     public void toFile3()
         throws Exception
     {
-        assertThat( FileUtils.toFile(null), CoreMatchers.<File>nullValue() );
-        assertThat( FileUtils.toFile( new URL( "http://jakarta.apache.org" ) ), CoreMatchers.<File>nullValue() );
+        assertThat( FileUtils.toFile( null ), CoreMatchers.<File> nullValue() );
+        assertThat( FileUtils.toFile( new URL( "http://jakarta.apache.org" ) ), CoreMatchers.<File> nullValue() );
     }
 
     @Test( expected = NumberFormatException.class )

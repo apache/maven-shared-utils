@@ -1,18 +1,22 @@
 package org.apache.maven.shared.utils.cli.shell;
 
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more contributor license
- * agreements. See the NOTICE file distributed with this work for additional information regarding
- * copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance with the License. You may obtain a
- * copy of the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software distributed under the License
- * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
- * or implied. See the License for the specific language governing permissions and limitations under
- * the License.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import org.apache.maven.shared.utils.StringUtils;
@@ -77,7 +81,7 @@ public class BourneShellTest
 
         String[] args = { "\'some arg with spaces\'" };
 
-        List shellCommandLine = sh.getShellCommandLine( args );
+        List<String> shellCommandLine = sh.getShellCommandLine( args );
 
         String cli = StringUtils.join( shellCommandLine.iterator(), " " );
         System.out.println( cli );
@@ -93,7 +97,7 @@ public class BourneShellTest
 
         String[] args = { "some arg with spaces" };
 
-        List shellCommandLine = sh.getShellCommandLine( args );
+        List<String> shellCommandLine = sh.getShellCommandLine( args );
 
         String cli = StringUtils.join( shellCommandLine.iterator(), " " );
         System.out.println( cli );
@@ -112,7 +116,7 @@ public class BourneShellTest
 
         String[] args = { ";some&argwithunix$chars" };
 
-        List shellCommandLine = sh.getShellCommandLine( args );
+        List<String> shellCommandLine = sh.getShellCommandLine( args );
 
         String cli = StringUtils.join( shellCommandLine.iterator(), " " );
         System.out.println( cli );
@@ -129,7 +133,7 @@ public class BourneShellTest
 
         assertEquals( "/bin/sh", lines.get( 0 ) );
         assertEquals( "-c", lines.get( 1 ) );
-        assertEquals( "chmod --password ';password'", lines.get( 2) );
+        assertEquals( "chmod --password ';password'", lines.get( 2 ) );
 
         commandline = new Commandline( newShell() );
         commandline.setExecutable( "chmod" );
@@ -150,10 +154,10 @@ public class BourneShellTest
         lines = commandline.getShell().getShellCommandLine( commandline.getArguments() );
         System.out.println( Arrays.asList( lines ) );
 
-        assertEquals( "cmd.exe", lines.get( 0) );
-        assertEquals( "/X", lines.get( 1 ));
-        assertEquals( "/C", lines.get( 2 ));
-        assertEquals( "\"--password ;password\"", lines.get( 3) );
+        assertEquals( "cmd.exe", lines.get( 0 ) );
+        assertEquals( "/X", lines.get( 1 ) );
+        assertEquals( "/C", lines.get( 2 ) );
+        assertEquals( "\"--password ;password\"", lines.get( 3 ) );
     }
 
     public void testBourneShellQuotingCharacters()
@@ -187,11 +191,10 @@ public class BourneShellTest
         List<String> lines = commandline.getShell().getShellCommandLine( commandline.getArguments() );
         System.out.println( lines  );
 
-        assertEquals( "/bin/sh", lines.get( 0 ));
-        assertEquals( "-c", lines.get( 1 ));
+        assertEquals( "/bin/sh", lines.get( 0 ) );
+        assertEquals( "-c", lines.get( 1 ) );
         assertEquals( "chmod ' ' '|' '&&' '||' ';' ';;' '&' '()' '<' '<<' '>' '>>' '*' '?' '[' ']' '{' '}' '`'",
-                      lines.get(  2 ) );
-
+                      lines.get( 2 ) );
     }
 
 }

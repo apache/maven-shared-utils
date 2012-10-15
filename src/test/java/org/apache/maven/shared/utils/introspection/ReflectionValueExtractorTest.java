@@ -1,19 +1,22 @@
 package org.apache.maven.shared.utils.introspection;
 
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import java.util.ArrayList;
@@ -39,9 +42,9 @@ public class ReflectionValueExtractorTest
         super.setUp();
 
         Dependency dependency1 = new Dependency();
-        dependency1.setArtifactId("dep1");
+        dependency1.setArtifactId( "dep1" );
         Dependency dependency2 = new Dependency();
-        dependency2.setArtifactId("dep2");
+        dependency2.setArtifactId( "dep2" );
 
         project = new Project();
         project.setModelVersion( "4.0.0" );
@@ -94,39 +97,39 @@ public class ReflectionValueExtractorTest
         // ----------------------------------------------------------------------
 
         // List
-        Dependency dependency = (Dependency)ReflectionValueExtractor.evaluate( "project.dependencies[0]", project );
+        Dependency dependency = (Dependency) ReflectionValueExtractor.evaluate( "project.dependencies[0]", project );
 
         Assert.assertNotNull( dependency );
 
-        Assert.assertTrue( "dep1".equals(dependency.getArtifactId()) );
+        Assert.assertTrue( "dep1".equals( dependency.getArtifactId() ) );
 
-        String artifactId = (String)ReflectionValueExtractor.evaluate( "project.dependencies[1].artifactId", project );
+        String artifactId = (String) ReflectionValueExtractor.evaluate( "project.dependencies[1].artifactId", project );
 
-        Assert.assertTrue( "dep2".equals(artifactId) );
+        Assert.assertTrue( "dep2".equals( artifactId ) );
 
         // Array
 
-        dependency = (Dependency)ReflectionValueExtractor.evaluate( "project.dependenciesAsArray[0]", project );
+        dependency = (Dependency) ReflectionValueExtractor.evaluate( "project.dependenciesAsArray[0]", project );
 
         Assert.assertNotNull( dependency );
 
-        Assert.assertTrue( "dep1".equals(dependency.getArtifactId()) );
+        Assert.assertTrue( "dep1".equals( dependency.getArtifactId() ) );
 
-        artifactId = (String)ReflectionValueExtractor.evaluate( "project.dependenciesAsArray[1].artifactId", project );
+        artifactId = (String) ReflectionValueExtractor.evaluate( "project.dependenciesAsArray[1].artifactId", project );
 
-        Assert.assertTrue( "dep2".equals(artifactId) );
+        Assert.assertTrue( "dep2".equals( artifactId ) );
 
         // Map
 
-        dependency = (Dependency)ReflectionValueExtractor.evaluate( "project.dependenciesAsMap(dep1)", project );
+        dependency = (Dependency) ReflectionValueExtractor.evaluate( "project.dependenciesAsMap(dep1)", project );
 
         Assert.assertNotNull( dependency );
 
-        Assert.assertTrue( "dep1".equals(dependency.getArtifactId()) );
+        Assert.assertTrue( "dep1".equals( dependency.getArtifactId() ) );
 
-        artifactId = (String)ReflectionValueExtractor.evaluate( "project.dependenciesAsMap(dep2).artifactId", project );
+        artifactId = (String) ReflectionValueExtractor.evaluate( "project.dependenciesAsMap(dep2).artifactId", project );
 
-        Assert.assertTrue( "dep2".equals(artifactId) );
+        Assert.assertTrue( "dep2".equals( artifactId ) );
 
         // ----------------------------------------------------------------------
         // Build
@@ -246,7 +249,7 @@ public class ReflectionValueExtractorTest
         public Dependency[] getDependenciesAsArray()
         {
             List<Dependency> list = getDependencies();
-            return list.toArray(new Dependency[list.size()]);
+            return list.toArray( new Dependency[list.size()] );
         }
 
         public Map<String, Dependency> getDependenciesAsMap()
@@ -275,7 +278,7 @@ public class ReflectionValueExtractorTest
             return artifactId;
         }
 
-        public void setArtifactId(String id)
+        public void setArtifactId( String id )
         {
             artifactId = id;
         }
