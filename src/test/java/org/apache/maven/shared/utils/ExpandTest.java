@@ -19,6 +19,7 @@ package org.apache.maven.shared.utils;
  * under the License.
  */
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.maven.shared.utils.io.FileUtils;
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,7 +28,6 @@ import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.URL;
 
 import static org.hamcrest.CoreMatchers.*;

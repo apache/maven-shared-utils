@@ -64,7 +64,13 @@
       <version>2.2</version> <!-- attention: this is the last version supporting java-1.5!-->
       <optional>true</optional>
     </dependency>
-      <dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.1</version> <!-- attention: this is the last version supporting java-1.5!-->
+      <scope>test</scope>
+    </dependency>
+    <dependency>
           <groupId>com.google.code.findbugs</groupId>
           <artifactId>jsr305</artifactId>
           <version>2.0.1</version>

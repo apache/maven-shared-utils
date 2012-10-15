@@ -221,7 +221,6 @@ public class Os
      * that set in setFamily.
      *
      * @return true if the os matches.
-     * @throws Exception if there is an error.
      * @see Os#setFamily(String)
      */
     boolean eval()
@@ -415,7 +414,7 @@ public class Os
     /**
      * Test if the given family String represents a valid Family
      *
-     * @param family
+     * @param family the os family
      * @return <code>true</code> if 'family' represents a valid OS-Family, <code>false</code> otherwise.
      */
     public static boolean isValidFamily( String family )
