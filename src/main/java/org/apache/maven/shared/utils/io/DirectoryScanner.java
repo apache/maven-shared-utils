@@ -26,7 +26,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.apache.maven.shared.utils.ArrayUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -784,7 +783,7 @@ public class DirectoryScanner
     {
         if ( filesIncluded == null )
         {
-            return ArrayUtils.EMPTY_STRING_ARRAY;
+            return new String[0];
         }
         return filesIncluded.toArray( new String[filesIncluded.size()] );
     }
