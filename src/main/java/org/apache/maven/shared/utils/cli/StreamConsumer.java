@@ -30,7 +30,7 @@ package org.apache.maven.shared.utils.cli;
  * @author <a href="mailto:fvancea@maxiq.com">Florin Vancea</a>
  * @author <a href="mailto:pj@thoughtworks.com">Paul Julius</a>
  */
-interface StreamConsumer
+public interface StreamConsumer
 {
     /**
      * Called when the StreamPumper pumps a line from the Stream.
