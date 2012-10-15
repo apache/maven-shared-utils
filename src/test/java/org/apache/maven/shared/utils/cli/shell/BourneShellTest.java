@@ -124,36 +124,36 @@ public class BourneShellTest
         commandline.createArg().setValue( "--password" );
         commandline.createArg().setValue( ";password" );
 
-        String[] lines = commandline.getShellCommandline();
-        System.out.println( Arrays.asList( lines ) );
+        List<String> lines = commandline.getShell().getShellCommandLine( commandline.getArguments() );
+        System.out.println( lines  );
 
-        assertEquals( "/bin/sh", lines[0] );
-        assertEquals( "-c", lines[1] );
-        assertEquals( "chmod --password ';password'", lines[2] );
+        assertEquals( "/bin/sh", lines.get( 0 ) );
+        assertEquals( "-c", lines.get( 1 ) );
+        assertEquals( "chmod --password ';password'", lines.get( 2) );
 
         commandline = new Commandline( newShell() );
         commandline.setExecutable( "chmod" );
         commandline.getShell().setQuotedArgumentsEnabled( true );
         commandline.createArg().setValue( "--password" );
         commandline.createArg().setValue( ";password" );
-        lines = commandline.getShellCommandline();
+        lines = commandline.getShell().getShellCommandLine( commandline.getArguments() );
         System.out.println( Arrays.asList( lines ) );
 
-        assertEquals( "/bin/sh", lines[0] );
-        assertEquals( "-c", lines[1] );
-        assertEquals( "chmod --password ';password'", lines[2] );
+        assertEquals( "/bin/sh", lines.get( 0) );
+        assertEquals( "-c", lines.get( 1 ) );
+        assertEquals( "chmod --password ';password'", lines.get( 2 ) );
 
         commandline = new Commandline( new CmdShell() );
         commandline.getShell().setQuotedArgumentsEnabled( true );
         commandline.createArg().setValue( "--password" );
         commandline.createArg().setValue( ";password" );
-        lines = commandline.getShellCommandline();
+        lines = commandline.getShell().getShellCommandLine( commandline.getArguments() );
         System.out.println( Arrays.asList( lines ) );
 
-        assertEquals( "cmd.exe", lines[0] );
-        assertEquals( "/X", lines[1] );
-        assertEquals( "/C", lines[2] );
-        assertEquals( "\"--password ;password\"", lines[3] );
+        assertEquals( "cmd.exe", lines.get( 0) );
+        assertEquals( "/X", lines.get( 1 ));
+        assertEquals( "/C", lines.get( 2 ));
+        assertEquals( "\"--password ;password\"", lines.get( 3) );
     }
 
     public void testBourneShellQuotingCharacters()
@@ -184,13 +184,13 @@ public class BourneShellTest
         commandline.createArg().setValue( "}" );
         commandline.createArg().setValue( "`" );
 
-        String[] lines = commandline.getShellCommandline();
-        System.out.println( Arrays.asList( lines ) );
+        List<String> lines = commandline.getShell().getShellCommandLine( commandline.getArguments() );
+        System.out.println( lines  );
 
-        assertEquals( "/bin/sh", lines[0] );
-        assertEquals( "-c", lines[1] );
+        assertEquals( "/bin/sh", lines.get( 0 ));
+        assertEquals( "-c", lines.get( 1 ));
         assertEquals( "chmod ' ' '|' '&&' '||' ';' ';;' '&' '()' '<' '<<' '>' '>>' '*' '?' '[' ']' '{' '}' '`'",
-                      lines[2] );
+                      lines.get(  2 ) );
 
     }
 
