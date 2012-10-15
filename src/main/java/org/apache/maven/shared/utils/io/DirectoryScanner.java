@@ -891,6 +891,10 @@ public class DirectoryScanner
     boolean isSymbolicLink( final File parent, final String name )
         throws IOException
     {
+        if ( Java7Support.isJava7())
+        {
+            return Java7Support.isSymLink( parent );
+        }
         final File resolvedParent = new File( parent.getCanonicalPath() );
         final File toTest = new File( resolvedParent, name );
         return !toTest.getAbsolutePath().equals( toTest.getCanonicalPath() );

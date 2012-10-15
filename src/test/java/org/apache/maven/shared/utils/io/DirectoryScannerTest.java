@@ -142,6 +142,13 @@ public class DirectoryScannerTest
                 /* expExclDirs     */ NONE );
     }
 
+    public void testIsSymLin()
+        throws IOException
+    {
+        File file = new File( ".");
+        DirectoryScanner ds = new DirectoryScanner();
+        ds.isSymbolicLink( file, "abc" );
+    }
 
     /**
      * Performs a scan and test for the given parameters if not null.
