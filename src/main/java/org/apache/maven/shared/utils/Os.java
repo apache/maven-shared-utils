@@ -357,7 +357,7 @@ public class Os
                 }
                 else
                 {
-                    throw new RuntimeException( "Don\'t know how to detect os family \"" + family + "\"" );
+                    isFamily = OS_NAME.contains( family.toLowerCase( Locale.US ) );
                 }
             }
             if ( name != null )
