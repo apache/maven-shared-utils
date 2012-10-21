@@ -52,6 +52,11 @@ public class Os
 
     public static final String PATH_SEP = System.getProperty( "path.separator" );
 
+    /**
+     * system line separator , e.g. &quot;\n&quot; on unixoid systems and &quot;\r\n&quot; on Windows
+     */
+    public static final String LINE_SEP = System.getProperty( "line.separator" );
+
     public static final String OS_FAMILY = getOsFamily();
 
     // store the valid families
