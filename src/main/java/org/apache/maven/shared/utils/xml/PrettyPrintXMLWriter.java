@@ -300,6 +300,8 @@ public class PrettyPrintXMLWriter
 
         writer.write( "?>" );
 
+        newLine();
+
         if ( docType != null )
         {
             newLine();
