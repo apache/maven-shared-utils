@@ -19,25 +19,26 @@ package org.apache.maven.shared.utils.xml;
  * under the License.
  */
 
-
-import org.apache.maven.shared.utils.Os;
-
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.LinkedList;
 
+import org.apache.maven.shared.utils.Os;
 
 /**
  * XMLWriter with nice indention
  */
-public class PrettyPrintXMLWriter implements XMLWriter
+public class PrettyPrintXMLWriter
+    implements XMLWriter
 {
     private PrintWriter writer;
 
-    private LinkedList elementStack = new LinkedList();
+    private LinkedList<String> elementStack = new LinkedList<String>();
 
     private boolean processingElement = false;
+
     private boolean documentStarted = false;
+
     private boolean endOnSameLine = false;
 
     private int depth = 0;
@@ -49,8 +50,6 @@ public class PrettyPrintXMLWriter implements XMLWriter
     private String encoding;
 
     private String docType;
-
-
 
     /**
      * @param writer not null
@@ -135,7 +134,8 @@ public class PrettyPrintXMLWriter implements XMLWriter
      * @param encoding could be null or the encoding to use.
      * @param doctype could be null.
      */
-    public PrettyPrintXMLWriter( PrintWriter writer, String lineIndent, String lineSeparator, String encoding, String doctype )
+    public PrettyPrintXMLWriter( PrintWriter writer, String lineIndent, String lineSeparator, String encoding,
+                                 String doctype )
     {
         this.writer = writer;
         this.lineIndent = lineIndent;
@@ -153,15 +153,15 @@ public class PrettyPrintXMLWriter implements XMLWriter
             throw new IllegalStateException( "currently processing no element" );
         }
 
-        writer.write( " " );
+        writer.write( ' ' );
         writer.write( key );
-        writer.write( "=" );
+        writer.write( '=' );
         writer.write( XMLEncode.xmlEncodeTextForAttribute( value, '"' ) );
     }
 
     public void setEncoding( String encoding )
     {
-        if (documentStarted)
+        if ( documentStarted )
         {
             throw new IllegalStateException( "Document headers already written!" );
         }
@@ -171,7 +171,7 @@ public class PrettyPrintXMLWriter implements XMLWriter
 
     public void setDocType( String docType )
     {
-        if (documentStarted)
+        if ( documentStarted )
         {
             throw new IllegalStateException( "Document headers already written!" );
         }
@@ -181,7 +181,7 @@ public class PrettyPrintXMLWriter implements XMLWriter
 
     public void setLineSeparator( String lineSeparator )
     {
-        if (documentStarted)
+        if ( documentStarted )
         {
             throw new IllegalStateException( "Document headers already written!" );
         }
@@ -191,7 +191,7 @@ public class PrettyPrintXMLWriter implements XMLWriter
 
     public void setLineIndenter( String lineIndent )
     {
-        if (documentStarted)
+        if ( documentStarted )
         {
             throw new IllegalStateException( "Document headers already written!" );
         }
@@ -199,19 +199,18 @@ public class PrettyPrintXMLWriter implements XMLWriter
         this.lineIndent = lineIndent;
     }
 
-
     public void startElement( String elementName )
     {
         boolean firstLine = ensureDocumentStarted();
 
         completePreviouslyOpenedElement();
 
-        if ( !firstLine)
+        if ( !firstLine )
         {
             newLine();
         }
 
-        writer.write( "<" );
+        writer.write( '<' );
         writer.write( elementName );
 
         processingElement = true;
@@ -219,7 +218,6 @@ public class PrettyPrintXMLWriter implements XMLWriter
 
         elementStack.addLast( elementName );
     }
-
 
     public void writeText( String text )
     {
@@ -271,11 +269,12 @@ public class PrettyPrintXMLWriter implements XMLWriter
 
     /**
      * Write the documents if not already done.
+     * 
      * @return <code>true</code> if the document headers have freshly been written.
      */
     private boolean ensureDocumentStarted()
     {
-        if (!documentStarted)
+        if ( !documentStarted )
         {
             if ( docType != null || encoding != null )
             {
@@ -322,10 +321,9 @@ public class PrettyPrintXMLWriter implements XMLWriter
     {
         if ( processingElement )
         {
-            writer.write( ">" );
+            writer.write( '>' );
             processingElement = false;
         }
     }
-
 
 }
