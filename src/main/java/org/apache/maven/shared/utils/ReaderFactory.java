@@ -41,7 +41,7 @@ import javax.annotation.Nonnull;
  *
  * @author <a href="mailto:hboutemy@apache.org">Hervé Boutemy</a>
  * @see Charset
- * @see <a href="http://java.sun.com/j2se/1.4.2/docs/guide/intl/encoding.doc.html">Supported encodings</a>
+ * @see <a href="http://docs.oracle.com/javase/1.5.0/docs/guide/intl/encoding.doc.html">Supported encodings</a>
  * @since 1.4.3
  */
 public class ReaderFactory
@@ -163,7 +163,7 @@ public class ReaderFactory
      * @param encoding not null supported encoding.
      * @return a reader instance for the input stream using the given encoding.
      * @throws UnsupportedEncodingException if any.
-     * @see <a href="http://java.sun.com/j2se/1.4.2/docs/guide/intl/encoding.doc.html">Supported encodings</a>
+     * @see <a href="http://docs.oracle.com/javase/1.5.0/docs/guide/intl/encoding.doc.html">Supported encodings</a>
      */
     public static Reader newReader( @Nonnull InputStream in, @Nonnull String encoding )
         throws UnsupportedEncodingException
@@ -179,7 +179,7 @@ public class ReaderFactory
      * @return a reader instance for the input file using the given encoding.
      * @throws FileNotFoundException        if any.
      * @throws UnsupportedEncodingException if any.
-     * @see <a href="http://java.sun.com/j2se/1.4.2/docs/guide/intl/encoding.doc.html">Supported encodings</a>
+     * @see <a href="http://docs.oracle.com/javase/1.5.0/docs/guide/intl/encoding.doc.html">Supported encodings</a>
      */
     public static Reader newReader( @Nonnull File file, @Nonnull String encoding )
         throws FileNotFoundException, UnsupportedEncodingException
@@ -194,7 +194,7 @@ public class ReaderFactory
      * @param encoding not null supported encoding.
      * @return a reader instance for the input url using the given encoding.
      * @throws IOException if any.
-     * @see <a href="http://java.sun.com/j2se/1.4.2/docs/guide/intl/encoding.doc.html">Supported encodings</a>
+     * @see <a href="http://docs.oracle.com/javase/1.5.0/docs/guide/intl/encoding.doc.html">Supported encodings</a>
      */
     public static Reader newReader( @Nonnull URL url, @Nonnull String encoding )
         throws IOException

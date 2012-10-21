@@ -40,7 +40,7 @@ import javax.annotation.Nonnull;
  *
  * @author Hervé Boutemy
  * @see Charset
- * @see <a href="http://java.sun.com/j2se/1.4.2/docs/guide/intl/encoding.doc.html">Supported encodings</a>
+ * @see <a href="http://docs.oracle.com/javase/1.5.0/docs/guide/intl/encoding.doc.html">Supported encodings</a>
  * @version $Id$
  */
 public class WriterFactory
@@ -154,7 +154,7 @@ public class WriterFactory
      * @param encoding not null supported encoding.
      * @return a writer instance for the output stream using the given encoding.
      * @throws UnsupportedEncodingException if any.
-     * @see <a href="http://java.sun.com/j2se/1.4.2/docs/guide/intl/encoding.doc.html">Supported encodings</a>
+     * @see <a href="http://docs.oracle.com/javase/1.5.0/docs/guide/intl/encoding.doc.html">Supported encodings</a>
      */
     public static Writer newWriter( @Nonnull OutputStream out, @Nonnull String encoding )
         throws UnsupportedEncodingException
@@ -170,7 +170,7 @@ public class WriterFactory
      * @return a writer instance for the output file using the given encoding.
      * @throws UnsupportedEncodingException if any.
      * @throws FileNotFoundException if any.
-     * @see <a href="http://java.sun.com/j2se/1.4.2/docs/guide/intl/encoding.doc.html">Supported encodings</a>
+     * @see <a href="http://docs.oracle.com/javase/1.5.0/docs/guide/intl/encoding.doc.html">Supported encodings</a>
      */
     public static Writer newWriter( @Nonnull File file, @Nonnull String encoding )
         throws UnsupportedEncodingException, FileNotFoundException
