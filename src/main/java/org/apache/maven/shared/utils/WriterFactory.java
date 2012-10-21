@@ -29,8 +29,8 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import org.apache.maven.shared.utils.xml.XmlStreamWriter;
 
-import org.apache.commons.io.output.XmlStreamWriter;
 
 import javax.annotation.Nonnull;
 

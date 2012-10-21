@@ -23,8 +23,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.OutputStream;
 
-@Deprecated
-class XmlStreamWriter
+/**
+ * We just wrap the commons StreamWriter to not get into troubles
+ * by exposing shaded commons-io packages
+ */
+public class XmlStreamWriter
     extends org.apache.commons.io.output.XmlStreamWriter
 {
     public XmlStreamWriter( OutputStream out )
