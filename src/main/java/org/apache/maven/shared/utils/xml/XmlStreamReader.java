@@ -20,60 +20,99 @@ package org.apache.maven.shared.utils.xml;
  */
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.regex.Pattern;
 
-@Deprecated
 public class XmlStreamReader
-    extends XmlReader
+        extends Reader
 {
-    public XmlStreamReader( File file )
-        throws IOException
+    private final org.apache.commons.io.input.XmlStreamReader reader;
+
+    private static String _staticDefaultEncoding = null;
+
+    public static void setDefaultEncoding( String encoding )
     {
-        super( file );
+        _staticDefaultEncoding = encoding;
+    }
+
+    public static String getDefaultEncoding()
+    {
+        return _staticDefaultEncoding;
+    }
+
+    public XmlStreamReader( File file )
+            throws IOException
+    {
+        this( new FileInputStream( file ) );
     }
 
     public XmlStreamReader( InputStream is )
-        throws IOException
+            throws IOException
     {
-        super( is );
+        this( is, true );
     }
 
     public XmlStreamReader( InputStream is, boolean lenient )
-        throws IOException, XmlStreamReaderException
+            throws IOException, XmlStreamReaderException
     {
-        super( is, lenient );
+        reader = new org.apache.commons.io.input.XmlStreamReader( is, lenient, _staticDefaultEncoding );
     }
 
     public XmlStreamReader( URL url )
-        throws IOException
+            throws IOException
     {
-        super( url );
+        this( url.openConnection() );
     }
 
     public XmlStreamReader( URLConnection conn )
-        throws IOException
+            throws IOException
     {
-        super( conn );
+        reader = new org.apache.commons.io.input.XmlStreamReader( conn, _staticDefaultEncoding );
     }
 
     public XmlStreamReader( InputStream is, String httpContentType )
-        throws IOException
+            throws IOException
     {
-        super( is, httpContentType );
+        this( is, httpContentType, true );
     }
 
     public XmlStreamReader( InputStream is, String httpContentType, boolean lenient, String defaultEncoding )
-        throws IOException, XmlStreamReaderException
+            throws IOException, XmlStreamReaderException
     {
-        super( is, httpContentType, lenient, defaultEncoding );
+        reader = new org.apache.commons.io.input.XmlStreamReader( is, httpContentType, lenient,
+                ( defaultEncoding == null )
+                        ? _staticDefaultEncoding
+                        : defaultEncoding );
     }
 
     public XmlStreamReader( InputStream is, String httpContentType, boolean lenient )
-        throws IOException, XmlStreamReaderException
+            throws IOException, XmlStreamReaderException
     {
-        super( is, httpContentType, lenient );
+        this( is, httpContentType, lenient, null );
     }
+
+    public String getEncoding()
+    {
+        return reader.getEncoding();
+    }
+
+    public int read( char[] buf, int offset, int len )
+            throws IOException
+    {
+        return reader.read( buf, offset, len );
+    }
+
+    public void close()
+            throws IOException
+    {
+        reader.close();
+    }
+
+    static final Pattern ENCODING_PATTERN =
+            Pattern.compile( "<\\?xml.*encoding[\\s]*=[\\s]*((?:\".[^\"]*\")|(?:'.[^']*'))", Pattern.MULTILINE );
 }
