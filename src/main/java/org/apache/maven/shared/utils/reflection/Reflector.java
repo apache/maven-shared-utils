@@ -77,25 +77,6 @@ final class Reflector
         {
             Constructor con = getConstructor( theClass, paramTypes );
 
-            if ( con == null )
-            {
-                StringBuilder buffer = new StringBuilder();
-
-                buffer.append( "Constructor not found for class: " );
-                buffer.append( theClass.getName() );
-                buffer.append( " with specified or ancestor parameter classes: " );
-
-                for ( Class paramType : paramTypes )
-                {
-                    buffer.append( paramType.getName() );
-                    buffer.append( ',' );
-                }
-
-                buffer.setLength( buffer.length() - 1 );
-
-                throw new ReflectorException( buffer.toString() );
-            }
-
             return con.newInstance( params );
         }
         catch ( InstantiationException ex )
@@ -174,23 +155,6 @@ final class Reflector
         try
         {
             Method method = getMethod( target.getClass(), methodName, paramTypes );
-
-            if ( method == null )
-            {
-                StringBuilder buffer = new StringBuilder();
-
-                buffer.append( "Singleton-producing method named '" ).append( methodName ).append( "' not found with specified parameter classes: " );
-
-                for ( Class paramType : paramTypes )
-                {
-                    buffer.append( paramType.getName() );
-                    buffer.append( ',' );
-                }
-
-                buffer.setLength( buffer.length() - 1 );
-
-                throw new ReflectorException( buffer.toString() );
-            }
 
             return method.invoke( target, params );
         }
@@ -312,23 +276,6 @@ final class Reflector
         {
             Method method = getMethod( targetClass, methodName, paramTypes );
 
-            if ( method == null )
-            {
-                StringBuilder buffer = new StringBuilder();
-
-                buffer.append( "Singleton-producing method named \'" ).append( methodName ).append( "\' not found with specified parameter classes: " );
-
-                for ( Class paramType : paramTypes )
-                {
-                    buffer.append( paramType.getName() );
-                    buffer.append( ',' );
-                }
-
-                buffer.setLength( buffer.length() - 1 );
-
-                throw new ReflectorException( buffer.toString() );
-            }
-
             return method.invoke( null, params );
         }
         catch ( InvocationTargetException ex )
@@ -346,7 +293,7 @@ final class Reflector
      * 
      * @param targetClass The class to get the constructor from
      * @param params The classes of the parameters which the constructor should match.
-     * @return the Constructor object that matches.
+     * @return the Constructor object that matches, never {@code null}
      * @throws ReflectorException In case we can't retrieve the proper constructor.
      */
     public Constructor<?> getConstructor( Class targetClass, Class... params )
@@ -478,7 +425,7 @@ final class Reflector
      * 
      * @param targetClass The class to get the method from
      * @param params The classes of the parameters which the method should match.
-     * @return the Method object that matches.
+     * @return the Method object that matches, never {@code null}
      * @throws ReflectorException In case we can't retrieve the proper method.
      */
     public Method getMethod( Class<?> targetClass, String methodName, Class<?>... params )
