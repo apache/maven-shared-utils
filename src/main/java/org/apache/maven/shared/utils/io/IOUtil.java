@@ -256,7 +256,7 @@ public final class IOUtil
      * Get the contents of an <code>InputStream</code> as a String.
      * The platform's default encoding is used for the byte-to-char conversion.
      */
-    public static @Nonnull String toString( @Nonnull final InputStream input )
+    public @Nonnull static String toString( @Nonnull final InputStream input )
         throws IOException
     {
         return toString( input, DEFAULT_BUFFER_SIZE );
@@ -268,7 +268,7 @@ public final class IOUtil
      *
      * @param bufferSize Size of internal buffer to use.
      */
-    public static @Nonnull String toString( @Nonnull final InputStream input, final int bufferSize )
+    public @Nonnull static String toString( @Nonnull final InputStream input, final int bufferSize )
         throws IOException
     {
         final StringWriter sw = new StringWriter();
@@ -283,7 +283,7 @@ public final class IOUtil
      *                 <a href="http://www.iana.org/assignments/character-sets">IANA
      *                 Charset Registry</a> for a list of valid encoding types.
      */
-    public static @Nonnull String toString( @Nonnull final InputStream input, @Nonnull final String encoding )
+    public @Nonnull static String toString( @Nonnull final InputStream input, @Nonnull final String encoding )
         throws IOException
     {
         return toString( input, encoding, DEFAULT_BUFFER_SIZE );
@@ -297,7 +297,7 @@ public final class IOUtil
      *                   Charset Registry</a> for a list of valid encoding types.
      * @param bufferSize Size of internal buffer to use.
      */
-    public static @Nonnull String toString( @Nonnull final InputStream input, @Nonnull final String encoding, final int bufferSize )
+    public @Nonnull static String toString( @Nonnull final InputStream input, @Nonnull final String encoding, final int bufferSize )
         throws IOException
     {
         final StringWriter sw = new StringWriter();
@@ -311,7 +311,7 @@ public final class IOUtil
     /**
      * Get the contents of an <code>InputStream</code> as a <code>byte[]</code>.
      */
-    public static @Nonnull byte[] toByteArray( @Nonnull final InputStream input )
+    public @Nonnull static byte[] toByteArray( @Nonnull final InputStream input )
         throws IOException
     {
         return toByteArray( input, DEFAULT_BUFFER_SIZE );
@@ -322,7 +322,7 @@ public final class IOUtil
      *
      * @param bufferSize Size of internal buffer to use.
      */
-    public static @Nonnull byte[] toByteArray( @Nonnull final InputStream input, final int bufferSize )
+    public @Nonnull static byte[] toByteArray( @Nonnull final InputStream input, final int bufferSize )
         throws IOException
     {
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -370,7 +370,7 @@ public final class IOUtil
     /**
      * Get the contents of a <code>Reader</code> as a String.
      */
-    public static @Nonnull String toString( @Nonnull final Reader input )
+    public @Nonnull static String toString( @Nonnull final Reader input )
         throws IOException
     {
         return toString( input, DEFAULT_BUFFER_SIZE );
@@ -381,7 +381,7 @@ public final class IOUtil
      *
      * @param bufferSize Size of internal buffer to use.
      */
-    public static @Nonnull String toString( @Nonnull final Reader input, final int bufferSize )
+    public @Nonnull static String toString( @Nonnull final Reader input, final int bufferSize )
         throws IOException
     {
         final StringWriter sw = new StringWriter();
@@ -395,7 +395,7 @@ public final class IOUtil
     /**
      * Get the contents of a <code>Reader</code> as a <code>byte[]</code>.
      */
-    public static @Nonnull byte[] toByteArray( @Nonnull final Reader input )
+    public @Nonnull static byte[] toByteArray( @Nonnull final Reader input )
         throws IOException
     {
         return toByteArray( input, DEFAULT_BUFFER_SIZE );
@@ -406,7 +406,7 @@ public final class IOUtil
      *
      * @param bufferSize Size of internal buffer to use.
      */
-    public static @Nonnull byte[] toByteArray( @Nonnull final Reader input, final int bufferSize )
+    public @Nonnull static byte[] toByteArray( @Nonnull final Reader input, final int bufferSize )
         throws IOException
     {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -488,7 +488,7 @@ public final class IOUtil
     /**
      * Get the contents of a <code>String</code> as a <code>byte[]</code>.
      */
-    public static @Nonnull byte[] toByteArray( @Nonnull final String input )
+    public @Nonnull static byte[] toByteArray( @Nonnull final String input )
         throws IOException
     {
         return toByteArray( input, DEFAULT_BUFFER_SIZE );
@@ -499,7 +499,7 @@ public final class IOUtil
      *
      * @param bufferSize Size of internal buffer to use.
      */
-    public static @Nonnull byte[] toByteArray( @Nonnull final String input, final int bufferSize )
+    public @Nonnull static byte[] toByteArray( @Nonnull final String input, final int bufferSize )
         throws IOException
     {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -578,7 +578,7 @@ public final class IOUtil
      * Get the contents of a <code>byte[]</code> as a String.
      * The platform's default encoding is used for the byte-to-char conversion.
      */
-    public static @Nonnull String toString( @Nonnull final byte[] input )
+    public @Nonnull static String toString( @Nonnull final byte[] input )
         throws IOException
     {
         return toString( input, DEFAULT_BUFFER_SIZE );
@@ -590,7 +590,7 @@ public final class IOUtil
      *
      * @param bufferSize Size of internal buffer to use.
      */
-    public static @Nonnull String toString( @Nonnull final byte[] input, final int bufferSize )
+    public @Nonnull static String toString( @Nonnull final byte[] input, final int bufferSize )
         throws IOException
     {
         final StringWriter sw = new StringWriter();
@@ -605,7 +605,7 @@ public final class IOUtil
      *                 <a href="http://www.iana.org/assignments/character-sets">IANA
      *                 Charset Registry</a> for a list of valid encoding types.
      */
-    public static @Nonnull String toString( @Nonnull final byte[] input, @Nonnull final String encoding )
+    public @Nonnull static String toString( @Nonnull final byte[] input, @Nonnull final String encoding )
         throws IOException
     {
         return toString( input, encoding, DEFAULT_BUFFER_SIZE );
@@ -619,7 +619,7 @@ public final class IOUtil
      *                   Charset Registry</a> for a list of valid encoding types.
      * @param bufferSize Size of internal buffer to use.
      */
-    public static @Nonnull String toString( @Nonnull final byte[] input, @Nonnull final String encoding, final int bufferSize )
+    public @Nonnull static String toString( @Nonnull final byte[] input, @Nonnull final String encoding, final int bufferSize )
         throws IOException
     {
         final StringWriter sw = new StringWriter();

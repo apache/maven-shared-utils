@@ -194,7 +194,7 @@ public class PathTool
      *         terminated with a forward slash.  A zero-length string is
      *         returned if: the filename is zero-length.
      */
-    private static @Nonnull String determineRelativePath( @Nonnull String filename, @Nonnull String separator )
+    private @Nonnull static String determineRelativePath( @Nonnull String filename, @Nonnull String separator )
     {
         if ( filename.length() == 0 )
         {
