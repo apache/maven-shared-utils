@@ -1874,22 +1874,28 @@ public class FileUtils
 
         if ( file.exists() )
         {
-            BufferedReader reader = new BufferedReader( new FileReader( file ) );
-
-            String line = reader.readLine();
-
-            while ( line != null )
+            FileReader fileReader = new FileReader(file);
+            try
             {
-                line = line.trim();
+                BufferedReader reader = new BufferedReader(fileReader);
 
-                if ( !line.startsWith( "#" ) && line.length() != 0 )
+                String line = reader.readLine();
+
+                while ( line != null )
                 {
-                    lines.add( line );
-                }
-                line = reader.readLine();
-            }
+                    line = line.trim();
 
-            reader.close();
+                    if ( !line.startsWith( "#" ) && line.length() != 0 )
+                    {
+                        lines.add( line );
+                    }
+                    line = reader.readLine();
+                }
+
+                reader.close();
+            } finally {
+                fileReader.close();
+            }
         }
 
         return lines;
