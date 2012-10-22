@@ -2313,7 +2313,7 @@ public class StringUtils
      * @return the String escaped
      * @since 1.5.1
      */
-    public static String escape( @Nullable String source, final @Nonnull char[] escapedChars, char escapeChar )
+    public static String escape( @Nullable String source, @Nonnull final char[] escapedChars, char escapeChar )
     {
         if ( source == null )
         {

@@ -148,7 +148,7 @@ public final class IOUtil
      *
      * @param bufferSize Size of internal buffer to use.
      */
-    public static void copy( final @Nonnull InputStream input, final @Nonnull OutputStream output, final int bufferSize )
+    public static void copy( @Nonnull final InputStream input, @Nonnull final OutputStream output, final int bufferSize )
         throws IOException
     {
         final byte[] buffer = new byte[bufferSize];

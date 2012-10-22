@@ -130,7 +130,7 @@ public class FileUtils
      * @return the default excludes pattern
      * @see DirectoryScanner#DEFAULTEXCLUDES
      */
-    public static @Nonnull String[] getDefaultExcludes()
+    public @Nonnull static String[] getDefaultExcludes()
     {
         return DirectoryScanner.DEFAULTEXCLUDES;
     }
@@ -139,7 +139,7 @@ public class FileUtils
      * @return the default excludes pattern as list.
      * @see #getDefaultExcludes()
      */
-    public static @Nonnull List<String> getDefaultExcludesAsList()
+    public @Nonnull static List<String> getDefaultExcludesAsList()
     {
         return Arrays.asList( getDefaultExcludes() );
     }
@@ -149,7 +149,7 @@ public class FileUtils
      * @see DirectoryScanner#DEFAULTEXCLUDES
      * @see StringUtils#join(Object[], String)
      */
-    public static @Nonnull String getDefaultExcludesAsString()
+    public @Nonnull static String getDefaultExcludesAsString()
     {
         return StringUtils.join( DirectoryScanner.DEFAULTEXCLUDES, "," );
     }
@@ -161,7 +161,7 @@ public class FileUtils
      * @param filename the file path
      * @return The directory portion excluding the ending file separator.
      */
-    public static @Nonnull String dirname( @Nonnull String filename )
+    public @Nonnull static String dirname( @Nonnull String filename )
     {
         int i = filename.lastIndexOf( File.separator );
         return ( i >= 0 ? filename.substring( 0, i ) : "" );
@@ -173,7 +173,7 @@ public class FileUtils
      * @param filename the file path
      * @return The filename string with extension.
      */
-    public static @Nonnull String filename( @Nonnull String filename )
+    public @Nonnull static String filename( @Nonnull String filename )
     {
         int i = filename.lastIndexOf( File.separator );
         return ( i >= 0 ? filename.substring( i + 1 ) : filename );
@@ -187,7 +187,7 @@ public class FileUtils
      * @param filename the file path
      * @return the extension of the file
      */
-    public static @Nonnull String extension( @Nonnull String filename )
+    public @Nonnull static String extension( @Nonnull String filename )
     {
         // Ensure the last dot is after the last file separator
         int lastSep = filename.lastIndexOf( File.separatorChar );
@@ -232,7 +232,7 @@ public class FileUtils
      * @return the file content using the platform encoding.
      * @throws IOException if any
      */
-    public static @Nonnull String fileRead( @Nonnull String file )
+    public @Nonnull static String fileRead( @Nonnull String file )
         throws IOException
     {
         return fileRead( file, null );
@@ -244,7 +244,7 @@ public class FileUtils
      * @return the file content using the specified encoding.
      * @throws IOException if any
      */
-    private static @Nonnull String fileRead( @Nonnull String file, @Nullable String encoding )
+    private @Nonnull static String fileRead( @Nonnull String file, @Nullable String encoding )
         throws IOException
     {
         return fileRead( new File( file ), encoding );
@@ -257,7 +257,7 @@ public class FileUtils
      * @return the file content using the platform encoding.
      * @throws IOException if any
      */
-    public static @Nonnull String fileRead( @Nonnull File file )
+    public @Nonnull static String fileRead( @Nonnull File file )
         throws IOException
     {
         return fileRead( file, null );
@@ -269,7 +269,7 @@ public class FileUtils
      * @return the file content using the specified encoding.
      * @throws IOException if any
      */
-    public static @Nonnull String fileRead( @Nonnull File file, @Nullable String encoding )
+    public @Nonnull static String fileRead( @Nonnull File file, @Nullable String encoding )
         throws IOException
     {
         StringBuilder buf = new StringBuilder();
@@ -307,7 +307,7 @@ public class FileUtils
      *         An empty List if the file didn't exist.
      * @throws IOException
      */
-    public static String[] fileReadArray( @Nonnull File file )
+    public @Nonnull static String[] fileReadArray( @Nonnull File file )
         throws IOException
     {
         List<String> files = loadFile( file );
@@ -553,7 +553,7 @@ public class FileUtils
     /**
      * Private helper method for getFilesFromExtension()
      */
-    private static @Nonnull List<String> blendFilesToList( @Nonnull List<String> v, @Nonnull String...files )
+    private @Nonnull static List<String> blendFilesToList( @Nonnull List<String> v, @Nonnull String...files )
     {
         Collections.addAll( v, files );
 
@@ -617,7 +617,7 @@ public class FileUtils
      * @return true if the content of the files are equal or they both don't exist, false otherwise
      * @throws IOException if any
      */
-    public static boolean contentEquals( final @Nonnull File file1, final @Nonnull File file2 )
+    public static boolean contentEquals( @Nonnull final File file1, @Nonnull final File file2 )
         throws IOException
     {
         final boolean file1Exists = file1.exists();
@@ -661,7 +661,7 @@ public class FileUtils
      * @return The equivalent <code>File</code> object, or <code>null</code> if the URL's protocol
      *         is not <code>file</code>
      */
-    public static @Nullable File toFile( final @Nullable URL url )
+    public @Nullable static File toFile( final @Nullable URL url )
     {
         if ( url == null || !url.getProtocol().equalsIgnoreCase( "file" ) )
         {
@@ -689,7 +689,7 @@ public class FileUtils
      * @return the array of URLs
      * @throws IOException if an error occurs
      */
-    public static @Nonnull URL[] toURLs( final @Nonnull File... files )
+    public @Nonnull static URL[] toURLs( @Nonnull final File... files )
         throws IOException
     {
         final URL[] urls = new URL[files.length];
@@ -697,6 +697,7 @@ public class FileUtils
         for ( int i = 0; i < urls.length; i++ )
         {
             // Although this method is deprecated, it is still the most solid way to translate a File to URL
+            //noinspection deprecation
             urls[i] = files[i].toURL();
         }
 
@@ -715,7 +716,7 @@ public class FileUtils
      * @param filename the path of the file
      * @return the filename minus extension
      */
-    public static @Nonnull String removeExtension( final @Nonnull String filename )
+    public @Nonnull static String removeExtension( @Nonnull final String filename )
     {
         String ext = extension( filename );
 
@@ -740,7 +741,7 @@ public class FileUtils
      * @param filename the path of the file
      * @return the extension of filename or "" if none
      */
-    public static @Nonnull String getExtension( final @Nonnull String filename )
+    public @Nonnull static String getExtension( @Nonnull final String filename )
     {
         return extension( filename );
     }
@@ -757,7 +758,7 @@ public class FileUtils
      * @throws IOException                   if <code>source</code> does not exist, the file in
      *                                       <code>destinationDirectory</code> cannot be written to, or an IO error occurs during copying.
      */
-    public static void copyFileToDirectory( final @Nonnull File source, final @Nonnull File destinationDirectory )
+    public static void copyFileToDirectory( @Nonnull final File source, @Nonnull final File destinationDirectory )
         throws IOException
     {
         if ( destinationDirectory.exists() && !destinationDirectory.isDirectory() )
@@ -781,7 +782,7 @@ public class FileUtils
      * @throws IOException                   if <code>source</code> does not exist, the file in
      *                                       <code>destinationDirectory</code> cannot be written to, or an IO error occurs during copying.
      */
-    private static void copyFileToDirectoryIfModified( final @Nonnull File source, final @Nonnull File destinationDirectory )
+    private static void copyFileToDirectoryIfModified( @Nonnull final File source, @Nonnull final File destinationDirectory )
         throws IOException
     {
         if ( destinationDirectory.exists() && !destinationDirectory.isDirectory() )
@@ -806,7 +807,7 @@ public class FileUtils
      * @throws java.io.FileNotFoundException if <code>destination</code> is a directory
      *
      */
-    public static void copyFile( final @Nonnull File source, final @Nonnull File destination )
+    public static void copyFile( @Nonnull final File source, @Nonnull final File destination )
         throws IOException
     {
         //check source exists
@@ -887,7 +888,7 @@ public class FileUtils
      * @throws IOException if <code>source</code> does not exist, <code>destination</code> cannot be
      *                     written to, or an IO error occurs during copying.
      */
-    private static boolean copyFileIfModified( final @Nonnull File source, final @Nonnull File destination )
+    private static boolean copyFileIfModified( @Nonnull final File source, @Nonnull final File destination )
         throws IOException
     {
         if ( destination.lastModified() < source.lastModified() )
@@ -915,7 +916,7 @@ public class FileUtils
      *                     <li>an IO error occurs during copying</li>
      *                     </ul>
      */
-    public static void copyURLToFile( final @Nonnull URL source, final @Nonnull File destination )
+    public static void copyURLToFile( @Nonnull final URL source, @Nonnull final File destination )
         throws IOException
     {
         copyStreamToFile( source.openStream(), destination );
@@ -937,7 +938,7 @@ public class FileUtils
      *                     <li>an IO error occurs during copying</li>
      *                     </ul>
      */
-    private static void copyStreamToFile( final @Nonnull @WillClose InputStream source, final @Nonnull File destination )
+    private static void copyStreamToFile( @Nonnull final @WillClose InputStream source, @Nonnull final File destination )
         throws IOException
     {
         //does destination directory exist ?
@@ -1131,7 +1132,7 @@ public class FileUtils
      * @param file a file
      * @throws IOException if any
      */
-    public static void forceDelete( final @Nonnull File file )
+    public static void forceDelete( @Nonnull final File file )
         throws IOException
     {
         if ( file.isDirectory() )
@@ -1201,7 +1202,7 @@ public class FileUtils
      * @throws IllegalArgumentException if the file contains illegal Windows characters under Windows OS.
      * @see #INVALID_CHARACTERS_FOR_WINDOWS_FILE_NAME
      */
-    public static void forceMkdir( final @Nonnull File file )
+    public static void forceMkdir( @Nonnull final File file )
         throws IOException
     {
         if ( Os.isFamily( Os.FAMILY_WINDOWS ) && !isValidWindowsFileName( file ) )
@@ -1236,7 +1237,7 @@ public class FileUtils
      * @param directory a directory
      * @throws IOException if any
      */
-    public static void deleteDirectory( final @Nonnull String directory )
+    public static void deleteDirectory( @Nonnull final String directory )
         throws IOException
     {
         deleteDirectory( new File( directory ) );
@@ -1248,7 +1249,7 @@ public class FileUtils
      * @param directory a directory
      * @throws IOException if any
      */
-    public static void deleteDirectory( final @Nonnull File directory )
+    public static void deleteDirectory( @Nonnull final File directory )
         throws IOException
     {
         if ( !directory.exists() )
@@ -1278,7 +1279,7 @@ public class FileUtils
      * @param directory a directory
      * @throws IOException if any
      */
-    public static void cleanDirectory( final @Nonnull File directory )
+    public static void cleanDirectory( @Nonnull final File directory )
         throws IOException
     {
         if ( !directory.exists() )
@@ -1326,7 +1327,7 @@ public class FileUtils
      * @param directory a directory
      * @return size of directory in bytes.
      */
-    public static long sizeOfDirectory( final @Nonnull String directory )
+    public static long sizeOfDirectory( @Nonnull final String directory )
     {
         return sizeOfDirectory( new File( directory ) );
     }
@@ -1337,7 +1338,7 @@ public class FileUtils
      * @param directory a directory
      * @return size of directory in bytes.
      */
-    public static long sizeOfDirectory( final @Nonnull File directory )
+    public static long sizeOfDirectory( @Nonnull final File directory )
     {
         if ( !directory.exists() )
         {
@@ -1385,7 +1386,7 @@ public class FileUtils
      * @throws IOException
      * @see #getFileNames(File, String, String, boolean)
      */
-    public static List<File> getFiles( @Nonnull File directory, @Nullable String includes, @Nullable String excludes )
+    public @Nonnull static List<File> getFiles( @Nonnull File directory, @Nullable String includes, @Nullable String excludes )
         throws IOException
     {
         return getFiles( directory, includes, excludes, true );
@@ -1402,7 +1403,7 @@ public class FileUtils
      * @throws IOException
      * @see #getFileNames(File, String, String, boolean)
      */
-    public static List<File> getFiles( @Nonnull File directory, @Nullable String includes, @Nullable  String excludes, boolean includeBasedir )
+    public @Nonnull static List<File> getFiles( @Nonnull File directory, @Nullable String includes, @Nullable  String excludes, boolean includeBasedir )
         throws IOException
     {
         List<String> fileNames = getFileNames( directory, includes, excludes, includeBasedir );
@@ -1428,7 +1429,7 @@ public class FileUtils
      * @return a list of files as String
      * @throws IOException
      */
-    public static List<String> getFileNames( @Nonnull File directory, @Nullable String includes, @Nullable  String excludes, boolean includeBasedir )
+    public @Nonnull static List<String> getFileNames( @Nonnull File directory, @Nullable String includes, @Nullable  String excludes, boolean includeBasedir )
         throws IOException
     {
         return getFileNames( directory, includes, excludes, includeBasedir, true );
@@ -1445,7 +1446,7 @@ public class FileUtils
      * @return a list of files as String
      * @throws IOException
      */
-    private static List<String> getFileNames( @Nonnull File directory, @Nullable String includes, @Nullable  String excludes, boolean includeBasedir,
+    private @Nonnull static List<String> getFileNames( @Nonnull File directory, @Nullable String includes, @Nullable  String excludes, boolean includeBasedir,
                                              boolean isCaseSensitive )
         throws IOException
     {
@@ -1463,7 +1464,7 @@ public class FileUtils
      * @return a list of directories as String
      * @throws IOException
      */
-    public static List<String> getDirectoryNames( @Nonnull File directory, @Nullable String includes, @Nullable String excludes,
+    public @Nonnull static List<String> getDirectoryNames( @Nonnull File directory, @Nullable String includes, @Nullable String excludes,
                                                   boolean includeBasedir )
         throws IOException
     {
@@ -1481,7 +1482,7 @@ public class FileUtils
      * @return a list of directories as String
      * @throws IOException
      */
-    public static List<String> getDirectoryNames( @Nonnull File directory, @Nullable String includes, @Nullable String excludes,
+    public @Nonnull static List<String> getDirectoryNames( @Nonnull File directory, @Nullable String includes, @Nullable String excludes,
                                                   boolean includeBasedir, boolean isCaseSensitive )
         throws IOException
     {
@@ -1500,7 +1501,7 @@ public class FileUtils
      * @param getDirectories  true if get directories
      * @return a list of files as String
      */
-    public static List<String> getFileAndDirectoryNames( File directory, @Nullable String includes, @Nullable String excludes,
+    public @Nonnull static List<String> getFileAndDirectoryNames( File directory, @Nullable String includes, @Nullable String excludes,
                                                          boolean includeBasedir, boolean isCaseSensitive,
                                                          boolean getFiles, boolean getDirectories )
     {
@@ -1868,7 +1869,7 @@ public class FileUtils
      * @return a List containing every every line not starting with # and not empty
      * @throws IOException if any
      */
-    public static @Nonnull List<String> loadFile( @Nonnull File file )
+    public @Nonnull static List<String> loadFile( @Nonnull File file )
         throws IOException
     {
         List<String> lines = new ArrayList<String>();

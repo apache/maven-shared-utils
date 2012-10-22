@@ -263,7 +263,7 @@ public class DirectoryScanner
      *
      * @param basedir The base directory for scanning. Should not be <code>null</code>.
      */
-    public void setBasedir( final @Nonnull File basedir )
+    public void setBasedir( @Nonnull final File basedir )
     {
         this.basedir = basedir;
     }
