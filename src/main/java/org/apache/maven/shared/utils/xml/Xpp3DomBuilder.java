@@ -175,7 +175,7 @@ public class Xpp3DomBuilder
             {
                 if ( accumulatedValue == null )
                 {
-                    finishedConfiguration.setValue( null );
+                    finishedConfiguration.setValue( "" ); // null in xpp3dom, but we dont do that around here
                 }
                 else
                 {
