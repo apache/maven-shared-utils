@@ -941,31 +941,29 @@ public class FileUtils
     private static void copyStreamToFile( @Nonnull final @WillClose InputStream source, @Nonnull final File destination )
         throws IOException
     {
-        //does destination directory exist ?
-        if ( destination.getParentFile() != null && !destination.getParentFile().exists() )
-        {
-            //noinspection ResultOfMethodCallIgnored
-            destination.getParentFile().mkdirs();
-        }
-
-        //make sure we can write to destination
-        if ( destination.exists() && !destination.canWrite() )
-        {
-            final String message = "Unable to open file " + destination + " for writing.";
-            throw new IOException( message );
-        }
-
-        InputStream input = null;
         FileOutputStream output = null;
         try
         {
-            input = source;
+            //does destination directory exist ?
+            if ( destination.getParentFile() != null && !destination.getParentFile().exists() )
+            {
+                //noinspection ResultOfMethodCallIgnored
+                destination.getParentFile().mkdirs();
+            }
+
+            //make sure we can write to destination
+            if ( destination.exists() && !destination.canWrite() )
+            {
+                final String message = "Unable to open file " + destination + " for writing.";
+                throw new IOException( message );
+            }
+
             output = new FileOutputStream( destination );
-            IOUtil.copy( input, output );
+            IOUtil.copy( source, output );
         }
         finally
         {
-            IOUtil.close( input );
+            IOUtil.close( source );
             IOUtil.close( output );
         }
     }
