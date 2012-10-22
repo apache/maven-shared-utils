@@ -25,7 +25,7 @@ package org.apache.maven.shared.utils.xml;
  * This is all about the special characters &amp; and &lt;, and for attributes
  * &quot; and &apos;. These must be encoded/decoded from/to XML.
  */
-public final class XMLEncode
+final class XMLEncode
 {
 
     private final static int CDATA_BLOCK_THRESHOLD_LENGTH = 12;
@@ -35,17 +35,12 @@ public final class XMLEncode
      * Checks if this text purely consists of the white space characters
      * ' ',  TAB, NEWLINE.
      */
-    public final static boolean isWhiteSpace( String text )
+    public static boolean isWhiteSpace( String text )
     {
         for( int i = 0; i < text.length(); i++ )
         {
             char c = text.charAt( i );
-            if( Character.isWhitespace( c ) )
-            {
-                continue;
-            }
-            else
-            {
+            if (!Character.isWhitespace( c )) {
                 return false;
             }
         }
@@ -55,7 +50,7 @@ public final class XMLEncode
     /**
      * Makes any text fit into XML attributes.
      */
-    public final static String xmlEncodeTextForAttribute( String text, char quoteChar )
+    public static String xmlEncodeTextForAttribute( String text, char quoteChar )
     {
         if( text == null )
         {
@@ -67,7 +62,7 @@ public final class XMLEncode
     /**
      * Encodes text as XML in the most suitable way, either CDATA block or PCDATA.
      */
-    public final static String xmlEncodeText( String text )
+    public static String xmlEncodeText( String text )
     {
         if( text == null )
         {
@@ -96,7 +91,7 @@ public final class XMLEncode
     /**
      * Encodes any text as PCDATA.
      */
-    public final static String xmlEncodeTextAsPCDATA( String text )
+    public static String xmlEncodeTextAsPCDATA( String text )
     {
         if( text == null )
         {
@@ -111,7 +106,7 @@ public final class XMLEncode
      * @param forAttribute if you want
      *                     quotes and apostrophes specially treated for attributes
      */
-    public final static String xmlEncodeTextAsPCDATA( String text, boolean forAttribute )
+    public static String xmlEncodeTextAsPCDATA( String text, boolean forAttribute )
     {
         return xmlEncodeTextAsPCDATA( text, forAttribute, DEFAULT_QUOTE_CHAR );
     }
@@ -123,14 +118,14 @@ public final class XMLEncode
      *                     quotes and apostrophes specially treated for attributes
      * @param quoteChar    if this is for attributes this <code>char</code> is used to quote the attribute value
      */
-    public final static String xmlEncodeTextAsPCDATA( String text, boolean forAttribute, char quoteChar )
+    public static String xmlEncodeTextAsPCDATA( String text, boolean forAttribute, char quoteChar )
     {
         if( text == null )
         {
             return null;
         }
         char c;
-        StringBuffer n = new StringBuffer( text.length() * 2 );
+        StringBuilder n = new StringBuilder( text.length() * 2 );
         for( int i = 0; i < text.length(); i++ )
         {
             c = text.charAt( i );
@@ -208,7 +203,7 @@ public final class XMLEncode
     /**
      * Returns string as CDATA block if possible, otherwise null.
      */
-    public final static String xmlEncodeTextAsCDATABlock( String text )
+    public static String xmlEncodeTextAsCDATABlock( String text )
     {
         if( text == null )
         {
@@ -227,7 +222,7 @@ public final class XMLEncode
     /**
      * Checks if this text needs encoding in order to be represented in XML.
      */
-    public final static boolean needsEncoding( String text )
+    public static boolean needsEncoding( String text )
     {
         return needsEncoding( text, false );
     }
@@ -238,7 +233,7 @@ public final class XMLEncode
      * Set <code>checkForAttr</code> if you want to check for storability in
      * an attribute.
      */
-    public final static boolean needsEncoding( String data, boolean checkForAttr )
+    public static boolean needsEncoding( String data, boolean checkForAttr )
     {
         if( data == null )
         {
@@ -259,27 +254,23 @@ public final class XMLEncode
     /**
      * Can this text be stored into a CDATA block?
      */
-    public final static boolean isCompatibleWithCDATABlock( String text )
+    public static boolean isCompatibleWithCDATABlock( String text )
     {
-        if( text == null )
-        {
-            return false;
-        }
-        return (text.indexOf( "]]>" ) == -1);
+        return text != null && (!text.contains("]]>"));
     }
 
     /**
      * Make CDATA out of possibly encoded PCDATA. <br>
      * E.g. make '&amp;' out of '&amp;amp;'
      */
-    public final static String xmlDecodeTextToCDATA( String pcdata )
+    public static String xmlDecodeTextToCDATA( String pcdata )
     {
         if( pcdata == null )
         {
             return null;
         }
         char c, c1, c2, c3, c4, c5;
-        StringBuffer n = new StringBuffer( pcdata.length() );
+        StringBuilder n = new StringBuilder( pcdata.length() );
         for( int i = 0; i < pcdata.length(); i++ )
         {
             c = pcdata.charAt( i );
@@ -329,7 +320,7 @@ public final class XMLEncode
         return n.toString();
     }
 
-    private final static char lookAhead( int la, int offset, String data )
+    private static char lookAhead( int la, int offset, String data )
     {
         try
         {
@@ -342,7 +333,7 @@ public final class XMLEncode
     }
 
     // combine multiple checks in one methods for speed
-    private final static boolean contains( String text, char[] chars )
+    private static boolean contains( String text, char[] chars )
     {
         if( text == null || chars == null || chars.length == 0 )
         {
@@ -351,10 +342,8 @@ public final class XMLEncode
         for( int i = 0; i < text.length(); i++ )
         {
             char c = text.charAt( i );
-            for( int j = 0; j < chars.length; j++ )
-            {
-                if( chars[j] == c )
-                {
+            for (char aChar : chars) {
+                if (aChar == c) {
                     return true;
                 }
             }
