@@ -597,9 +597,9 @@ public class FileUtils
 
         if ( Os.isFamily( Os.FAMILY_WINDOWS ) && !isValidWindowsFileName( file ) )
         {
-            throw new IllegalArgumentException(
-                "The file (" + dir + ") cannot contain any of the following characters: \n" + StringUtils.join(
-                    INVALID_CHARACTERS_FOR_WINDOWS_FILE_NAME, " " ) );
+            throw new IllegalArgumentException( "The file (" + dir
+                + ") cannot contain any of the following characters: \n"
+                + StringUtils.join( INVALID_CHARACTERS_FOR_WINDOWS_FILE_NAME, " " ) );
         }
 
         if ( !file.exists() )
@@ -1647,7 +1647,7 @@ public class FileUtils
 
         File[] files = sourceDirectory.listFiles();
 
-        if (files == null)
+        if ( files == null )
         {
             return;
         }
@@ -1772,19 +1772,21 @@ public class FileUtils
         Random rand = new Random( secureInitializer + Runtime.getRuntime().freeMemory() );
         do
         {
-            result = new File( parent, prefix + fmt.format(positiveRandom(rand)) + suffix );
+            result = new File( parent, prefix + fmt.format( positiveRandom( rand ) ) + suffix );
         }
         while ( result.exists() );
 
         return result;
     }
 
-    private static int positiveRandom(Random rand) {
+    private static int positiveRandom( Random rand )
+    {
         int a = rand.nextInt();
-        while (a==Integer.MIN_VALUE){
+        while ( a == Integer.MIN_VALUE )
+        {
             a = rand.nextInt();
         }
-        return Math.abs(a);
+        return Math.abs( a );
     }
 
     /**
@@ -1882,10 +1884,10 @@ public class FileUtils
 
         if ( file.exists() )
         {
-            FileReader fileReader = new FileReader(file);
+            FileReader fileReader = new FileReader( file );
             try
             {
-                BufferedReader reader = new BufferedReader(fileReader);
+                BufferedReader reader = new BufferedReader( fileReader );
 
                 String line = reader.readLine();
 
@@ -1901,7 +1903,9 @@ public class FileUtils
                 }
 
                 reader.close();
-            } finally {
+            }
+            finally
+            {
                 fileReader.close();
             }
         }

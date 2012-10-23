@@ -153,16 +153,16 @@ public class PathTool
 
         // check for the presence of windows drives. No relative way of
         // traversing from one to the other.
-        if ( ( toPath.startsWith( ":", 1 ) && fromPath.startsWith( ":", 1 ) ) && ( !toPath.substring( 0, 1 ).equals(
-            fromPath.substring( 0, 1 ) ) ) )
+        if ( ( toPath.startsWith( ":", 1 ) && fromPath.startsWith( ":", 1 ) )
+            && ( !toPath.substring( 0, 1 ).equals( fromPath.substring( 0, 1 ) ) ) )
         {
             // they both have drive path element but they dont match, no
             // relative path
             return null;
         }
 
-        if ( ( toPath.startsWith( ":", 1 ) && !fromPath.startsWith( ":", 1 ) ) || ( !toPath.startsWith( ":", 1 )
-            && fromPath.startsWith( ":", 1 ) ) )
+        if ( ( toPath.startsWith( ":", 1 ) && !fromPath.startsWith( ":", 1 ) )
+            || ( !toPath.startsWith( ":", 1 ) && fromPath.startsWith( ":", 1 ) ) )
         {
             // one has a drive path element and the other doesnt, no relative
             // path.
@@ -315,27 +315,27 @@ public class PathTool
         {
             fromTokeniser.nextToken();
 
-            relativePath.append("..");
+            relativePath.append( ".." );
 
             if ( fromTokeniser.hasMoreTokens() )
             {
-                relativePath.append( separatorChar);
+                relativePath.append( separatorChar );
             }
         }
 
         if ( relativePath.length() != 0 && toTokeniser.hasMoreTokens() )
         {
-            relativePath.append(separatorChar);
+            relativePath.append( separatorChar );
         }
 
         // add fwd fills for whatevers left of newPath.
         while ( toTokeniser.hasMoreTokens() )
         {
-            relativePath.append(toTokeniser.nextToken());
+            relativePath.append( toTokeniser.nextToken() );
 
             if ( toTokeniser.hasMoreTokens() )
             {
-                relativePath.append( separatorChar);
+                relativePath.append( separatorChar );
             }
         }
         return relativePath.toString();
