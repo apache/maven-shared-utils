@@ -1,0 +1,65 @@
+<FindBugsFilter>
+    <Match>
+        <Class name="org.apache.maven.shared.utils.cli.CommandLineUtils.*"/>
+        <Bug pattern="RUN_INVOKE_RUN"/>
+    </Match>
+    <Match>
+        <Class name="org.apache.maven.shared.utils.io.WalkCollector"/>
+        <Method name="directoryWalkStarting"/>
+        <Bug pattern="URF_UNREAD_FIELD"/>
+    </Match>
+    <Match>
+        <Class name="org.apache.maven.shared.utils.introspection.MethodMap"/>
+        <Method name="getMostSpecific"/>
+        <Bug pattern="SF_SWITCH_NO_DEFAULT"/>
+    </Match>
+    <Match>
+        <Class name="org.apache.maven.shared.utils.xml.XmlStreamWriter"/>
+        <Bug pattern="NM_SAME_SIMPLE_NAME_AS_SUPERCLASS"/>
+    </Match>
+    <Match>
+        <Class name="org.apache.maven.shared.utils.ReaderFactory"/>
+        <Method name="newPlatformReader"/>
+        <Bug pattern="DM_DEFAULT_ENCODING"/>
+    </Match>
+    <Match>
+        <Class name="org.apache.maven.shared.utils.WriterFactory"/>
+        <Or>
+          <Method name="newPlatformWriter" params="java.io.OutputStream" returns="java.io.Writer"/>
+          <Method name="newPlatformWriter" params="java.io.File" returns="java.io.Writer"/>
+        </Or>
+        <Bug pattern="DM_DEFAULT_ENCODING"/>
+    </Match>
+    <Match>
+        <Class name="org.apache.maven.shared.utils.io.FileUtils"/>
+        <Or>
+          <Method name="loadFile" params="java.io.File" returns="java.util.List"/>
+          <Method name="copyFile" params="java.ioFile, java.io.File, java.lang.String,org.apache.maven.shared.utils.io.FileUtils.FilterWrapper\[\], boolean" returns="void"/>
+          <Method name="copyFile" params=".*" returns="void"/>
+          <Method name="fileAppend"/>
+          <Method name="fileRead" params="java.io.File, java.lang.String" returns="java.lang.String"/>
+          <Method name="fileWrite"/>
+          <Method name="fileWriteArray" params="java.io.File, java.lang.String, java.lang.String[]" returns="void"/>
+        </Or>
+        <Bug pattern="DM_DEFAULT_ENCODING"/>
+    </Match>
+    <Match>
+        <Class name="org.apache.maven.shared.utils.io.FileUtils"/>
+        <Method name="deleteFile"/>
+        <Bug pattern="DM_GC"/>
+    </Match>
+    <Match>
+        <Class name="org.apache.maven.shared.utils.io.IOUtil"/>
+        <Or>
+           <Method name="copy" params="java.io.InputStream, java.io.Writer, int" returns="void"/>
+           <Method name="copy" params="java.io.Reader, java.io.OutputStream, int" returns="void"/>
+           <Method name="copy" params="java.lang.String, java.io.OutputStream, int" returns="void"/>
+        </Or>
+        <Bug pattern="DM_DEFAULT_ENCODING"/>
+    </Match>
+    <Match>
+        <Class name="org.apache.maven.shared.utils.cli.StreamPumper"/>
+        <Bug pattern="DM_DEFAULT_ENCODING"/>
+    </Match>
+
+</FindBugsFilter>

@@ -139,7 +139,7 @@ public class FileUtils
      * @return the default excludes pattern as list.
      * @see #getDefaultExcludes()
      */
-    public @Nonnull static List<String> getDefaultExcludesAsList()
+    @Nonnull public static List<String>  getDefaultExcludesAsList()
     {
         return Arrays.asList( getDefaultExcludes() );
     }
@@ -1772,11 +1772,19 @@ public class FileUtils
         Random rand = new Random( secureInitializer + Runtime.getRuntime().freeMemory() );
         do
         {
-            result = new File( parent, prefix + fmt.format( Math.abs( rand.nextInt() ) ) + suffix );
+            result = new File( parent, prefix + fmt.format(positiveRandom(rand)) + suffix );
         }
         while ( result.exists() );
 
         return result;
+    }
+
+    private static int positiveRandom(Random rand) {
+        int a = rand.nextInt();
+        while (a==Integer.MIN_VALUE){
+            a = rand.nextInt();
+        }
+        return Math.abs(a);
     }
 
     /**

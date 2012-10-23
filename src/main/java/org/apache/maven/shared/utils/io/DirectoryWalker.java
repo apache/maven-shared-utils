@@ -34,7 +34,7 @@ class DirectoryWalker
     /**
      * DirStackEntry is an Item on the {@link DirectoryWalker#dirStack}
      */
-    class DirStackEntry
+    static class DirStackEntry
     {
         /**
          * Count of files in the directory.

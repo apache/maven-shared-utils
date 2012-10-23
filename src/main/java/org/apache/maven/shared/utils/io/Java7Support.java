@@ -46,8 +46,10 @@ public class Java7Support
             Class<?> path = Class.forName( "java.nio.file.Path" );
             isSymbolicLink = files.getMethod( "isSymbolicLink", path );
             toPath = File.class.getMethod( "toPath" );
-        }
-        catch ( Exception e )
+        } catch (ClassNotFoundException e)
+        {
+            isJava7x = false;
+        } catch (NoSuchMethodException e)
         {
             isJava7x = false;
         }
