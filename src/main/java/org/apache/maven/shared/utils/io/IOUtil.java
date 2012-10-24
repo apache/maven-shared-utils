@@ -461,27 +461,6 @@ public final class IOUtil
         output.write( input );
     }
 
-    /**
-     * Copy bytes from an <code>InputStream</code> to an
-     * <code>OutputStream</code>, with buffering.
-     * This is equivalent to passing a
-     * {@link java.io.BufferedInputStream} and
-     * {@link java.io.BufferedOutputStream} to {@link #copy(InputStream, OutputStream)},
-     * and flushing the output stream afterwards. The streams are not closed
-     * after the copy.
-     *
-     * @deprecated Buffering streams is actively harmful! See the class description as to why. Use
-     *             {@link #copy(InputStream, OutputStream)} instead.
-     */
-    public static void bufferedCopy( @Nonnull final InputStream input, @Nonnull final OutputStream output )
-        throws IOException
-    {
-        final BufferedInputStream in = new BufferedInputStream( input );
-        final BufferedOutputStream out = new BufferedOutputStream( output );
-        copy( in, out );
-        out.flush();
-    }
-
     ///////////////////////////////////////////////////////////////
     // String -> byte[]
 

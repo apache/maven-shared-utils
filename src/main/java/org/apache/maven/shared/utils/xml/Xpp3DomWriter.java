@@ -39,12 +39,12 @@ public class Xpp3DomWriter
         write( new PrettyPrintXMLWriter( writer ), dom );
     }
 
-    public static void write( PrettyPrintXMLWriter xmlWriter, Xpp3Dom dom )
+    public static void write( XMLWriter xmlWriter, Xpp3Dom dom )
     {
         write( xmlWriter, dom, true );
     }
 
-    public static void write( PrettyPrintXMLWriter xmlWriter, Xpp3Dom dom, boolean escape )
+    public static void write( XMLWriter xmlWriter, Xpp3Dom dom, boolean escape )
     {
         xmlWriter.startElement( dom.getName() );
         String[] attributeNames = dom.getAttributeNames();

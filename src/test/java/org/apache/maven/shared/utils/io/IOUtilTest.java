@@ -1162,45 +1162,6 @@ public class IOUtilTest
         IOUtil.toString( nullInputStream(), "utf-16", 0 );
     }
 
-    @Test( expected = IOException.class )
-    public void bufferedCopyNullInputStreamNullOutputStream()
-        throws Exception
-    {
-        IOUtil.bufferedCopy( nullInputStream(), nullOutputStream() );
-    }
-
-    @Test( expected = IOException.class )
-    public void bufferedCopyNullInputStreamValidOutputStream()
-        throws Exception
-    {
-        IOUtil.bufferedCopy( nullInputStream(), new DontCloseByteArrayOutputStream() );
-    }
-
-    @Test( expected = NullPointerException.class )
-    public void bufferedCopyEmptyInputStreamNullOutputStream()
-        throws Exception
-    {
-        IOUtil.bufferedCopy( new DontCloseByteArrayInputStream( emptyByteArray() ), nullOutputStream() );
-    }
-
-    @Test
-    public void bufferedCopyEmptyInputStreamValidOutputStream()
-        throws Exception
-    {
-        IOUtil.bufferedCopy( new DontCloseByteArrayInputStream( emptyByteArray() ),
-                             new DontCloseByteArrayOutputStream() );
-    }
-
-    @Test
-    public void bufferedCopyInputStreamValidOutputStream()
-        throws Exception
-    {
-        ByteArrayOutputStream outputStream = new DontCloseByteArrayOutputStream();
-        byte[] input = { 1, 2, 3, 4, 5, 6 };
-        IOUtil.bufferedCopy( new DontCloseByteArrayInputStream( input ), outputStream );
-        assertThat( outputStream.toByteArray(), is( input ) );
-    }
-
     /*
      * copy(InputStream,Writer)
      */

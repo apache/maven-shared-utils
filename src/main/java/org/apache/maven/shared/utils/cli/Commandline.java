@@ -411,23 +411,6 @@ public class Commandline
         return shell;
     }
 
-    /**
-     * @deprecated Use {@link CommandLineUtils#translateCommandline(String)} instead.
-     */
-    public static String[] translateCommandline( String toProcess )
-        throws Exception
-    {
-        return CommandLineUtils.translateCommandline( toProcess );
-    }
-
-    /**
-     * @deprecated Use {@link CommandLineUtils#toString(String[])} instead.
-     */
-    public static String toString( String[] line )
-    {
-        return CommandLineUtils.toString( line );
-    }
-
     public static class Argument
         implements Arg
     {

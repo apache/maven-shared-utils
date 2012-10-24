@@ -32,5 +32,10 @@ public class XmlPullParserException extends RuntimeException {
     public XmlPullParserException(SAXException e) {
         super(e);
     }
+
+    public XmlPullParserException( String message )
+    {
+        super(message);
+    }
 }
 
