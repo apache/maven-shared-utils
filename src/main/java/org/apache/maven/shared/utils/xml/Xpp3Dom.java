@@ -1,4 +1,4 @@
-package org.apache.maven.shared.utils.xml.pull;
+package org.apache.maven.shared.utils.xml;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -26,8 +26,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.apache.maven.shared.utils.xml.PrettyPrintXMLWriter;
-import org.apache.maven.shared.utils.xml.Xpp3DomWriter;
 
 import javax.annotation.Nonnull;
 

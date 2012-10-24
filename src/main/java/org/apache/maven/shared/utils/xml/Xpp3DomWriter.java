@@ -19,8 +19,6 @@ package org.apache.maven.shared.utils.xml;
  * under the License.
  */
 
-import org.apache.maven.shared.utils.xml.pull.Xpp3Dom;
-
 import java.io.PrintWriter;
 import java.io.Writer;
 

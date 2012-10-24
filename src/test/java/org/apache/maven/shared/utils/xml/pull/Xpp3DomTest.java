@@ -21,11 +21,12 @@ package org.apache.maven.shared.utils.xml.pull;
 
 import java.io.IOException;
 import java.io.StringReader;
+import org.apache.maven.shared.utils.xml.Xpp3Dom;
 import org.apache.maven.shared.utils.xml.Xpp3DomBuilder;
 
 import org.junit.Test;
 
-import static org.apache.maven.shared.utils.xml.pull.Xpp3Dom.mergeXpp3Dom;
+import static org.apache.maven.shared.utils.xml.Xpp3Dom.mergeXpp3Dom;
 import static org.junit.Assert.*;
 
 /**

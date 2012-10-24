@@ -21,7 +21,7 @@ package org.apache.maven.shared.utils.xml;
 
 import org.apache.maven.shared.utils.io.IOUtil;
 import org.apache.maven.shared.utils.xml.pull.XmlPullParserException;
-import org.apache.maven.shared.utils.xml.pull.Xpp3Dom;
+
 import org.xml.sax.*;
 import org.xml.sax.helpers.DefaultHandler;
 
