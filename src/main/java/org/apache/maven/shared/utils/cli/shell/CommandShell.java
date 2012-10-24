@@ -26,7 +26,7 @@ package org.apache.maven.shared.utils.cli.shell;
  * </p>
  *
  * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
- * @since 1.2
+ * 
  */
 public class CommandShell
     extends Shell

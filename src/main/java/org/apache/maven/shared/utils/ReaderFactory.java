@@ -42,7 +42,7 @@ import javax.annotation.Nonnull;
  * @author <a href="mailto:hboutemy@apache.org">Hervé Boutemy</a>
  * @see Charset
  * @see <a href="http://docs.oracle.com/javase/1.5.0/docs/guide/intl/encoding.doc.html">Supported encodings</a>
- * @since 1.4.3
+ * 
  */
 public class ReaderFactory
 {

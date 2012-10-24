@@ -85,7 +85,7 @@ import java.nio.channels.Channel;
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @version CVS $Revision$ $Date$
- * @since 4.0
+ * 
  */
 
 /*

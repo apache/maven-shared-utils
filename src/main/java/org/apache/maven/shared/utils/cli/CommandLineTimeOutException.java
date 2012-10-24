@@ -22,7 +22,7 @@ package org.apache.maven.shared.utils.cli;
 /**
  * @author Olivier Lamy
  * @version $Id$
- * @since 1.5.9
+ * 
  */
 public class CommandLineTimeOutException
     extends CommandLineException

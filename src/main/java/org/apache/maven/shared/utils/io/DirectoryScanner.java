@@ -224,7 +224,7 @@ public class DirectoryScanner
     /**
      * Whether or not symbolic links should be followed.
      *
-     * @since Ant 1.5
+     * 
      */
     private boolean followSymlinks = true;
 
@@ -885,7 +885,7 @@ public class DirectoryScanner
      *
      * @param parent the parent directory of the file to test
      * @param name   the name of the file to test.
-     * @since Ant 1.5
+     * 
      */
     boolean isSymbolicLink( final File parent, final String name )
         throws IOException

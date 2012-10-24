@@ -394,7 +394,7 @@ public class Commandline
      * Allows to set the shell to be used in this command line.
      *
      * @param shell the shell
-     * @since 1.2
+     * 
      */
     void setShell( Shell shell )
     {
@@ -404,7 +404,7 @@ public class Commandline
     /**
      * Get the shell to be used in this command line.
      *
-     * @since 1.2
+     * 
      */
     public Shell getShell()
     {

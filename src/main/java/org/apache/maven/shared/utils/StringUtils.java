@@ -50,7 +50,7 @@ import javax.annotation.Nullable;
  * @author Holger Krauth
  * @author <a href="mailto:alex@purpletech.com">Alexander Day Chaffee</a>
  * @version $Id$
- * @since 1.0
+ * 
  */
 @SuppressWarnings( "JavaDoc" )
 public class StringUtils
@@ -165,7 +165,7 @@ public class StringUtils
      *
      * @param str the String to check, may be null
      * @return <code>true</code> if the String is null, empty or whitespace
-     * @since 1.5.2
+     * 
      */
     public static boolean isBlank( @Nullable String str )
     {
@@ -199,7 +199,7 @@ public class StringUtils
      *
      * @param str the String to check, may be null
      * @return <code>true</code> if the String is not empty and not null and not whitespace
-     * @since 1.5.2
+     * 
      */
     public static boolean isNotBlank( @Nullable String str )
     {
@@ -2213,7 +2213,7 @@ public class StringUtils
      * @return the String quoted and escaped
      * @see #quoteAndEscape(String, char, char[], char[], char, boolean)
      * @see #quoteAndEscape(String, char, char[], char[], char, boolean)
-     * @since 1.5.1
+     * 
      */
     public static String quoteAndEscape( @Nullable String source, char quoteChar )
     {
@@ -2228,7 +2228,7 @@ public class StringUtils
      * @param quotingTriggers
      * @return the String quoted and escaped
      * @see #quoteAndEscape(String, char, char[], char[], char, boolean)
-     * @since 1.5.1
+     * 
      */
     public static String quoteAndEscape( @Nullable String source, char quoteChar, @Nonnull char[] quotingTriggers )
     {
@@ -2243,7 +2243,7 @@ public class StringUtils
      * @param force
      * @return the String quoted and escaped
      * @see #quoteAndEscape(String, char, char[], char[], char, boolean)
-     * @since 1.5.1
+     * 
      */
     public static String quoteAndEscape( @Nullable String source, char quoteChar, @Nonnull final char[] escapedChars, char escapeChar,
                                          boolean force )
@@ -2259,7 +2259,7 @@ public class StringUtils
      * @param escapeChar
      * @param force
      * @return the String quoted and escaped
-     * @since 1.5.1
+     * 
      */
     public static String quoteAndEscape( @Nullable String source, char quoteChar, @Nonnull final char[] escapedChars,
                                          @Nonnull final char[] quotingTriggers, char escapeChar, boolean force )
@@ -2311,7 +2311,7 @@ public class StringUtils
      * @param escapedChars
      * @param escapeChar
      * @return the String escaped
-     * @since 1.5.1
+     * 
      */
     public static String escape( @Nullable String source, @Nonnull final char[] escapedChars, char escapeChar )
     {
@@ -2347,7 +2347,7 @@ public class StringUtils
      *
      * @param s a not null String
      * @return a string with unique whitespace.
-     * @since 1.5.7
+     * 
      */
     public @Nonnull static String removeDuplicateWhitespace( @Nonnull String s )
     {
@@ -2374,7 +2374,7 @@ public class StringUtils
      * @param s a not null String
      * @return a String that contains only System line separators.
      * @see #unifyLineSeparators(String, String)
-     * @since 1.5.7
+     * 
      */
     public static String unifyLineSeparators( @Nullable String s )
     {
@@ -2389,7 +2389,7 @@ public class StringUtils
      * @param ls the wanted line separator ("\n" on UNIX), if null using the System line separator.
      * @return a String that contains only System line separators.
      * @throws IllegalArgumentException if ls is not '\n', '\r' and '\r\n' characters.
-     * @since 1.5.7
+     * 
      */
     public static String unifyLineSeparators( @Nullable String s, @Nullable String ls )
     {
@@ -2452,7 +2452,7 @@ public class StringUtils
      * @param searchChar the character to find
      * @return true if the String contains the search character,
      *         false if not or <code>null</code> string input
-     * @since 1.5.7
+     * 
      */
     @SuppressWarnings( "ConstantConditions" )
     public static boolean contains( @Nullable String str, char searchChar )
@@ -2479,7 +2479,7 @@ public class StringUtils
      * @param searchStr the String to find, may be null
      * @return true if the String contains the search String,
      *         false if not or <code>null</code> string input
-     * @since 1.5.7
+     * 
      */
     public static boolean contains( @Nullable String str, @Nullable String searchStr )
     {

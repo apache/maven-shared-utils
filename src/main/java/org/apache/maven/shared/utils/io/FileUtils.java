@@ -395,7 +395,7 @@ public class FileUtils
      * @param encoding The encoding of the file.
      * @param data     The content to write to the file.
      * @throws IOException if any
-     * @since 2.0.6
+     * 
      */
     public static void fileWrite( @Nonnull File file, @Nullable String encoding, @Nonnull String data )
         throws IOException
@@ -427,7 +427,7 @@ public class FileUtils
      * @param file The path of the file to write.
      * @param data The content to write to the file.
      * @throws IOException if any
-     * @since 1.0
+     * 
      */
     public static void fileWriteArray( @Nonnull File file, @Nullable String... data )
         throws IOException
@@ -442,7 +442,7 @@ public class FileUtils
      * @param encoding The encoding of the file.
      * @param data     The content to write to the file.
      * @throws IOException if any
-     * @since 1.0
+     * 
      */
     public static void fileWriteArray( @Nonnull File file, @Nullable String encoding, @Nullable String... data )
         throws IOException
@@ -1819,7 +1819,7 @@ public class FileUtils
      * @param overwrite if true and f wrappers is null or empty, the file will be copy
      *                  enven if to.lastModified() < from.lastModified()
      * @throws IOException if an IO error occurs during copying or filtering
-     * @since 1.5.2
+     * 
      */
     public static void copyFile( @Nonnull File from, @Nonnull File to, @Nullable String encoding, @Nullable FilterWrapper[] wrappers, boolean overwrite )
         throws IOException
@@ -1921,7 +1921,7 @@ public class FileUtils
      * @return <code>false</code> if the file path contains any of forbidden Windows characters,
      *         <code>true</code> if the Os is not Windows or if the file path respect the Windows constraints.
      * @see #INVALID_CHARACTERS_FOR_WINDOWS_FILE_NAME
-     * @since 1.5.2
+     * 
      */
     private static boolean isValidWindowsFileName( @Nonnull File f )
     {

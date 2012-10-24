@@ -32,7 +32,7 @@ import org.apache.maven.shared.utils.io.IOUtil;
  *
  * @author <a href="mailto:fvancea@maxiq.com">Florin Vancea </a>
  * @author <a href="mailto:pj@thoughtworks.com">Paul Julius </a>
- * @since June 11, 2001
+ * 
  */
 class StreamPumper
     extends AbstractStreamHandler

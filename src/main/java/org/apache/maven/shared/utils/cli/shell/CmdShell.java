@@ -28,7 +28,7 @@ import java.util.List;
  * </p>
  *
  * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
- * @since 1.2
+ * 
  */
 public class CmdShell
     extends Shell

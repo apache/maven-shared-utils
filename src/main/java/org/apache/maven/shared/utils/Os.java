@@ -40,7 +40,7 @@ import java.util.Set;
  * @author Brian Fox
  * @author Mark Struberg
  * @version $Revision$
- * @since 1.0
+ * 
  */
 public class Os
 {
@@ -224,7 +224,7 @@ public class Os
      *
      * @param family the family to check for
      * @return true if the OS matches
-     * @since 1.5
+     * 
      */
     public static boolean isFamily( String family )
     {
@@ -237,7 +237,7 @@ public class Os
      *
      * @param name the OS name to check for
      * @return true if the OS matches
-     * @since 1.7
+     * 
      */
     public static boolean isName( String name )
     {
@@ -250,7 +250,7 @@ public class Os
      *
      * @param arch the OS architecture to check for
      * @return true if the OS matches
-     * @since 1.7
+     * 
      */
     public static boolean isArch( String arch )
     {
@@ -263,7 +263,7 @@ public class Os
      *
      * @param version the OS version to check for
      * @return true if the OS matches
-     * @since 1.7
+     * 
      */
     public static boolean isVersion( String version )
     {
@@ -279,7 +279,7 @@ public class Os
      * @param arch    The OS architecture
      * @param version The OS version
      * @return true if the OS matches
-     * @since 1.7
+     * 
      */
     private static boolean isOs( String family, String name, String arch, String version )
     {
