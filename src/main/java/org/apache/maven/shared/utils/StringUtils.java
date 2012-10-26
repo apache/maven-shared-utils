@@ -2106,7 +2106,7 @@ public class StringUtils
      *
      * @param data
      * @param replaceThis
-     * @return
+     * @return humped String
      */
     public @Nonnull static String removeAndHump( @Nonnull String data, @Nonnull String replaceThis )
     {
@@ -2178,7 +2178,7 @@ public class StringUtils
      * 'ThisIsIt' will become 'this-is-it'.
      *
      * @param view
-     * @return deHumped string
+     * @return deHumped String
      */
     public @Nonnull static String addAndDeHump( @Nonnull String view )
     {
