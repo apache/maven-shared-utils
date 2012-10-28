@@ -236,8 +236,6 @@ public class PrettyPrintXMLWriter
 
         completePreviouslyOpenedElement();
 
-        newLine();
-
         writer.write( markup );
     }
 
