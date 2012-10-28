@@ -66,7 +66,7 @@ public class XmlWriterUtil
      * Convenience method to repeat <code>CRLF</code> and to indent the writer by <code>2</code>.
      *
      * @param writer not null
-     * @param repeat
+     * @param repeat The number of repetitions of the indent
      * @param indent positive number
      * @see #DEFAULT_INDENTATION_SIZE
      * @see #writeLineBreak(XMLWriter, int, int, int)
@@ -80,7 +80,7 @@ public class XmlWriterUtil
      * Convenience method to repeat <code>CRLF</code> and to indent the writer by <code>indentSize</code>.
      *
      * @param writer not null
-     * @param repeat
+     * @param repeat The number of repetitions of the indent
      * @param indent positive number
      * @param indentSize positive number
      */
@@ -133,7 +133,7 @@ public class XmlWriterUtil
      * Convenience method to write XML comment line. The <code>comment</code> is splitted to have a size of <code>80</code>.
      *
      * @param writer not null
-     * @param comment
+     * @param comment The comment to write
      * @see #DEFAULT_INDENTATION_SIZE
      * @see #writeComment(XMLWriter, String, int, int)
      */
@@ -147,7 +147,7 @@ public class XmlWriterUtil
      * and is indented by <code>indent</code> using <code>2</code> as indentation size.
      *
      * @param writer not null
-     * @param comment
+     * @param comment The comment to write
      * @param indent positive number
      * @see #DEFAULT_INDENTATION_SIZE
      * @see #writeComment(XMLWriter, String, int, int)
@@ -162,7 +162,7 @@ public class XmlWriterUtil
      * and is indented by <code>indent</code> using <code>indentSize</code>.
      *
      * @param writer not null
-     * @param comment
+     * @param comment The comment to write
      * @param indent positive number
      * @param indentSize positive number
      * @see #DEFAULT_COLUMN_LINE
@@ -177,7 +177,7 @@ public class XmlWriterUtil
      * and is indented by <code>indent</code> using <code>indentSize</code>.
      *
      * @param writer not null
-     * @param comment
+     * @param comment The comment to write
      * @param indent positive number
      * @param indentSize positive number
      * @param columnSize positive number
@@ -209,17 +209,16 @@ public class XmlWriterUtil
         String[] sentences = StringUtils.split( comment, LS );
 
         StringBuffer line = new StringBuffer( indentation + "<!-- " );
-        for ( int i = 0; i < sentences.length; i++ )
+        for ( String sentence : sentences )
         {
-            String sentence = sentences[i];
             String[] words = StringUtils.split( sentence, " " );
-            for ( int j = 0; j < words.length; j++ )
+            for ( String word : words )
             {
-                StringBuffer sentenceTmp = new StringBuffer( line.toString() );
-                sentenceTmp.append( words[j] ).append( ' ' );
+                StringBuilder sentenceTmp = new StringBuilder( line.toString() );
+                sentenceTmp.append( word ).append( ' ' );
                 if ( sentenceTmp.length() > magicNumber )
                 {
-                    if ( line.length() != indentation.length() + "<!-- ".length())
+                    if ( line.length() != indentation.length() + "<!-- ".length() )
                     {
                         if ( magicNumber - line.length() > 0 )
                         {
@@ -230,11 +229,11 @@ public class XmlWriterUtil
                         writer.writeMarkup( line.toString() );
                     }
                     line = new StringBuffer( indentation + "<!-- " );
-                    line.append( words[j] ).append( ' ' );
+                    line.append( word ).append( ' ' );
                 }
                 else
                 {
-                    line.append( words[j] ).append( ' ' );
+                    line.append( word ).append( ' ' );
                 }
             }
 
@@ -259,7 +258,7 @@ public class XmlWriterUtil
      * The XML comment block is not indented.
      *
      * @param writer not null
-     * @param comment
+     * @param comment The comment to write
      * @see #DEFAULT_INDENTATION_SIZE
      * @see #writeCommentText(XMLWriter, String, int, int)
      */
@@ -274,7 +273,7 @@ public class XmlWriterUtil
      * <code>2</code> as indentation size.
      *
      * @param writer not null
-     * @param comment
+     * @param comment The comment to write
      * @param indent positive number
      * @see #DEFAULT_INDENTATION_SIZE
      * @see #writeCommentText(XMLWriter, String, int, int)
@@ -289,7 +288,7 @@ public class XmlWriterUtil
      * The XML comment block is also indented by <code>indent</code> using <code>indentSize</code>.
      *
      * @param writer not null
-     * @param comment
+     * @param comment The comment to write
      * @param indent positive number
      * @param indentSize positive number
      * @see #DEFAULT_COLUMN_LINE
@@ -306,7 +305,7 @@ public class XmlWriterUtil
      * The column size could be also be specified.
      *
      * @param writer not null
-     * @param comment
+     * @param comment The comment to write
      * @param indent positive number
      * @param indentSize positive number
      * @param columnSize positive number
