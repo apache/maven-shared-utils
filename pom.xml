@@ -64,13 +64,15 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>2.2</version> <!-- attention: this is the last version supporting java-1.5 -->
+      <version>2.2</version>
+      <!-- attention: this is the last version supporting java-1.5 -->
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.1</version> <!-- attention: this is the last version supporting java-1.5 -->
+      <version>3.1</version>
+      <!-- attention: this is the last version supporting java-1.5 -->
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -114,7 +116,27 @@
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>findbugs-maven-plugin</artifactId>
         <configuration>
-            <excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>
+          <excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.rat</groupId>
+        <artifactId>apache-rat-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>.git/**/*</exclude>
+            <exclude>.idea/**/*</exclude>
+            <exclude>**/.svn/**/*</exclude>
+            <exclude>**/*.iml</exclude>
+            <exclude>**/*.ipr</exclude>
+            <exclude>**/*.iws</exclude>
+            <exclude>**/*.versionsBackup</exclude>
+            <exclude>.gitignore</exclude>
+            <exclude>src/test/resources/directorywalker/**/*</exclude>
+            <exclude>readme.md</exclude>
+            <exclude>dependency-reduced-pom.xml</exclude>
+            <exclude>findbugs-exclude.xml</exclude>
+          </excludes>
         </configuration>
       </plugin>
       <plugin>
@@ -136,5 +158,4 @@
       </plugin>
     </plugins>
   </build>
-
 </project>
