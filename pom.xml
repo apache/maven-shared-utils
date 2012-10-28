@@ -17,7 +17,9 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<project xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd' xmlns='http://maven.apache.org/POM/4.0.0'>
+<project xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+         xsi:schemaLocation='http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd'
+         xmlns='http://maven.apache.org/POM/4.0.0'>
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -43,7 +45,8 @@
 
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/maven/shared/trunk/maven-shared-utils</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/shared/trunk/maven-shared-utils</developerConnection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/shared/trunk/maven-shared-utils
+    </developerConnection>
     <url>http://svn.apache.org/viewvc/maven/shared/trunk/maven-shared-utils</url>
   </scm>
   <issueManagement>
@@ -112,6 +115,23 @@
         <artifactId>findbugs-maven-plugin</artifactId>
         <configuration>
             <excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.rat</groupId>
+        <artifactId>apache-rat-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>.git/**/*</exclude>
+            <exclude>.idea/**/*</exclude>
+            <exclude>**/.svn/**/*</exclude>
+            <exclude>**/*.iml</exclude>
+            <exclude>**/*.ipr</exclude>
+            <exclude>**/*.iws</exclude>
+            <exclude>**/*.versionsBackup</exclude>
+            <exclude>.gitignore</exclude>
+            <exclude>src/test/resources/directorywalker/**/*</exclude>
+          </excludes>
         </configuration>
       </plugin>
     </plugins>
