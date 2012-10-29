@@ -135,23 +135,6 @@
           </excludes>
         </configuration>
       </plugin>
-      <plugin>
-        <groupId>org.apache.rat</groupId>
-        <artifactId>apache-rat-plugin</artifactId>
-        <configuration>
-          <excludes>
-            <exclude>.git/**/*</exclude>
-            <exclude>.idea/**/*</exclude>
-            <exclude>**/.svn/**/*</exclude>
-            <exclude>**/*.iml</exclude>
-            <exclude>**/*.ipr</exclude>
-            <exclude>**/*.iws</exclude>
-            <exclude>**/*.versionsBackup</exclude>
-            <exclude>.gitignore</exclude>
-            <exclude>src/test/resources/directorywalker/**/*</exclude>
-          </excludes>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
 </project>
