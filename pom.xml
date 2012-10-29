@@ -28,7 +28,7 @@
   </parent>
 
   <artifactId>maven-shared-utils</artifactId>
-  <version>0.2-SNAPSHOT</version>
+  <version>0.1</version>
 
   <properties>
     <mavenVersion>2.1.0</mavenVersion>
@@ -42,10 +42,10 @@
   </prerequisites>
 
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/shared/trunk/maven-shared-utils</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/shared/trunk/maven-shared-utils
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/shared/tags/maven-shared-utils-0.1</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/shared/tags/maven-shared-utils-0.1
     </developerConnection>
-    <url>http://svn.apache.org/viewvc/maven/shared/trunk/maven-shared-utils</url>
+    <url>http://svn.apache.org/viewvc/maven/shared/tags/maven-shared-utils-0.1</url>
   </scm>
   <issueManagement>
     <system>jira</system>
