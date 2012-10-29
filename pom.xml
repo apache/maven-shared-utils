@@ -131,9 +131,7 @@
             <exclude>**/*.versionsBackup</exclude>
             <exclude>.gitignore</exclude>
             <exclude>src/test/resources/directorywalker/**/*</exclude>
-            <exclude>readme.md</exclude>
             <exclude>dependency-reduced-pom.xml</exclude>
-            <exclude>findbugs-exclude.xml</exclude>
           </excludes>
         </configuration>
       </plugin>
