@@ -23,19 +23,22 @@ import org.xml.sax.SAXException;
 
 import java.io.IOException;
 
-public class XmlPullParserException extends RuntimeException {
+public class XmlPullParserException
+    extends RuntimeException
+{
 
-    public XmlPullParserException(IOException e) {
-        super(e);
+    public XmlPullParserException( IOException e )
+    {
+        super( e );
     }
 
-    public XmlPullParserException(SAXException e) {
-        super(e);
+    public XmlPullParserException( SAXException e )
+    {
+        super( e );
     }
 
     public XmlPullParserException( String message )
     {
-        super(message);
+        super( message );
     }
 }
-
