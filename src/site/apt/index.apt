@@ -38,9 +38,9 @@ Apache Maven Shared Utils
 
 Relation to Commons-*
 
-  maven-shared-utils internally use commons-io. We shade all commons
-  classes into our own private package to prevent classpatch clashes.
+  maven-shared-utils internally use {{{http://commons.apache.org/io/}commons-io}}. We shade all commons
+  classes into our own private package to prevent classpath clashes.
 
   This is the reason why any public API in maven-shared-utils must
-  avoid to expose commons classe directly. Most times it's sufficient
+  avoid to expose commons-io classes directly. Most times it's sufficient
   to just create an empty subclass and expose that instead.
