@@ -53,11 +53,14 @@ public class Xpp3DomBuilder
     public static Xpp3Dom build( @WillClose InputStream is, @Nonnull String encoding, boolean trim )
         throws XmlPullParserException
     {
-        try {
-            Reader reader = new InputStreamReader(is, encoding);
-            return build( reader, trim);
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
+        try
+        {
+            Reader reader = new InputStreamReader( is, encoding );
+            return build( reader, trim );
+        }
+        catch ( UnsupportedEncodingException e )
+        {
+            throw new RuntimeException( e );
         }
     }
 
@@ -66,7 +69,7 @@ public class Xpp3DomBuilder
     {
         try
         {
-            DocHandler docHandler = parseSax(new InputSource(reader), trim);
+            DocHandler docHandler = parseSax( new InputSource( reader ), trim );
             return docHandler.result;
         }
         finally
@@ -75,24 +78,34 @@ public class Xpp3DomBuilder
         }
     }
 
-    private static DocHandler parseSax(@Nonnull InputSource inputSource, boolean trim) throws XmlPullParserException {
+    private static DocHandler parseSax( @Nonnull
+    InputSource inputSource, boolean trim )
+        throws XmlPullParserException
+    {
 
-        try {
-            DocHandler ch = new DocHandler(trim);
+        try
+        {
+            DocHandler ch = new DocHandler( trim );
             XMLReader parser = org.xml.sax.helpers.XMLReaderFactory.createXMLReader();
-            parser.setContentHandler( ch);
-            parser.parse(inputSource);
+            parser.setContentHandler( ch );
+            parser.parse( inputSource );
             return ch;
-        } catch (IOException e){
-            throw new XmlPullParserException(e);
-        } catch (SAXException e) {
-            throw new XmlPullParserException(e);
+        }
+        catch ( IOException e )
+        {
+            throw new XmlPullParserException( e );
+        }
+        catch ( SAXException e )
+        {
+            throw new XmlPullParserException( e );
         }
     }
 
-
-    private static class DocHandler extends DefaultHandler {
+    private static class DocHandler
+        extends DefaultHandler
+    {
         private final List<Xpp3Dom> elemStack = new ArrayList<Xpp3Dom>();
+
         private final List<StringBuilder> values = new ArrayList<StringBuilder>();
 
         // Todo: Use these for something smart !
@@ -105,17 +118,20 @@ public class Xpp3DomBuilder
 
         private final boolean trim;
 
-        DocHandler(boolean trim) {
+        DocHandler( boolean trim )
+        {
             this.trim = trim;
         }
 
         @Override
-        public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+        public void startElement( String uri, String localName, String qName, Attributes attributes )
+            throws SAXException
+        {
 
             Xpp3Dom child = new Xpp3Dom( localName );
 
-            attachToParent(child);
-            pushOnStack(child);
+            attachToParent( child );
+            pushOnStack( child );
 
             // Todo: Detecting tags that close immediately seem to be impossible in sax ?
             // http://stackoverflow.com/questions/12968390/detecting-self-closing-tags-in-sax
@@ -124,37 +140,44 @@ public class Xpp3DomBuilder
             int size = attributes.getLength();
             for ( int i = 0; i < size; i++ )
             {
-                child.setAttribute(attributes.getQName(i), attributes.getValue(i));
+                child.setAttribute( attributes.getQName( i ), attributes.getValue( i ) );
             }
         }
 
-        private boolean pushOnStack(Xpp3Dom child) {
-            return elemStack.add(child);
+        private boolean pushOnStack( Xpp3Dom child )
+        {
+            return elemStack.add( child );
         }
 
-        private void attachToParent(Xpp3Dom child) {
+        private void attachToParent( Xpp3Dom child )
+        {
             int depth = elemStack.size();
             if ( depth > 0 )
             {
-                elemStack.get(depth - 1).addChild(child);
+                elemStack.get( depth - 1 ).addChild( child );
             }
         }
 
         @Override
-        public void warning(SAXParseException e) throws SAXException {
-            warnings.add(e);
+        public void warning( SAXParseException e )
+            throws SAXException
+        {
+            warnings.add( e );
         }
 
         @Override
-        public void error(SAXParseException e) throws SAXException {
-            errors.add(e);
+        public void error( SAXParseException e )
+            throws SAXException
+        {
+            errors.add( e );
         }
 
         @Override
-        public void fatalError(SAXParseException e) throws SAXException {
-            fatals.add(e);
+        public void fatalError( SAXParseException e )
+            throws SAXException
+        {
+            fatals.add( e );
         }
-
 
         private Xpp3Dom pop()
         {
@@ -163,12 +186,14 @@ public class Xpp3DomBuilder
         }
 
         @Override
-        public void endElement(String uri, String localName, String qName) throws SAXException {
+        public void endElement( String uri, String localName, String qName )
+            throws SAXException
+        {
             int depth = elemStack.size() - 1;
 
             Xpp3Dom finishedConfiguration = pop();
 
-                /* this Object could be null if it is a singleton tag */
+            /* this Object could be null if it is a singleton tag */
             Object accumulatedValue = values.remove( depth );
 
             if ( finishedConfiguration.getChildCount() == 0 )
@@ -190,15 +215,18 @@ public class Xpp3DomBuilder
         }
 
         @Override
-        public void characters(char[] ch, int start, int length) throws SAXException {
-            String text = new String(ch, start, length);
-            appendToTopValue(trim ? text.trim() : text);
+        public void characters( char[] ch, int start, int length )
+            throws SAXException
+        {
+            String text = new String( ch, start, length );
+            appendToTopValue( trim ? text.trim() : text );
         }
 
-        private void appendToTopValue(String toAppend) {
-            //noinspection MismatchedQueryAndUpdateOfStringBuilder
-            StringBuilder stringBuilder = values.get(values.size() - 1);
-            stringBuilder.append( toAppend);
+        private void appendToTopValue( String toAppend )
+        {
+            // noinspection MismatchedQueryAndUpdateOfStringBuilder
+            StringBuilder stringBuilder = values.get( values.size() - 1 );
+            stringBuilder.append( toAppend );
         }
     }
 

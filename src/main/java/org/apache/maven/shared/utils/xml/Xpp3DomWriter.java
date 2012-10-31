@@ -46,12 +46,14 @@ public class Xpp3DomWriter
     {
         xmlWriter.startElement( dom.getName() );
         String[] attributeNames = dom.getAttributeNames();
-        for (String attributeName : attributeNames) {
-            xmlWriter.addAttribute(attributeName, dom.getAttribute(attributeName));
+        for ( String attributeName : attributeNames )
+        {
+            xmlWriter.addAttribute( attributeName, dom.getAttribute( attributeName ) );
         }
         Xpp3Dom[] children = dom.getChildren();
-        for (Xpp3Dom aChildren : children) {
-            write(xmlWriter, aChildren, escape);
+        for ( Xpp3Dom aChildren : children )
+        {
+            write( xmlWriter, aChildren, escape );
         }
 
         String value = dom.getValue();
@@ -68,6 +70,5 @@ public class Xpp3DomWriter
         }
         xmlWriter.endElement();
     }
-
 
 }

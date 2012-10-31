@@ -26,7 +26,7 @@ import java.util.LinkedList;
 import org.apache.maven.shared.utils.Os;
 
 /**
- * XMLWriter with nice indention
+ * XMLWriter with nice indentation
  */
 public class PrettyPrintXMLWriter
     implements XMLWriter

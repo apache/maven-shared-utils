@@ -34,7 +34,9 @@ import javax.annotation.Nonnull;
  *
  * @author Kristian Rosenvold
  */
-public class Xpp3Dom implements Iterable<Xpp3Dom> {
+public class Xpp3Dom
+    implements Iterable<Xpp3Dom>
+{
     @SuppressWarnings( "UnusedDeclaration" )
     private static final long serialVersionUID = 2567894443061173996L;
 
@@ -80,7 +82,7 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
 
     public Xpp3Dom( Xpp3Dom source)
     {
-        this(source, source.getName() );
+        this( source, source.getName() );
     }
 
     public Xpp3Dom( @Nonnull Xpp3Dom src, String name )
@@ -89,16 +91,18 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
 
         int size = src.getChildCount();
         childList = new ArrayList<Xpp3Dom>( size );
-        childMap = new HashMap<String, Xpp3Dom>( );
+        childMap = new HashMap<String, Xpp3Dom>();
 
         setValue( src.getValue() );
 
-        for (String attributeName : src.getAttributeNames()) {
-            setAttribute(attributeName, src.getAttribute(attributeName));
+        for ( String attributeName : src.getAttributeNames() )
+        {
+            setAttribute( attributeName, src.getAttribute( attributeName ) );
         }
 
-        for (Xpp3Dom xpp3Dom : src.getChildren()) {
-            addChild( new Xpp3Dom( xpp3Dom ));
+        for ( Xpp3Dom xpp3Dom : src.getChildren() )
+        {
+            addChild( new Xpp3Dom( xpp3Dom ) );
         }
     }
 
@@ -133,13 +137,15 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
     @SuppressWarnings( "ConstantConditions" )
     public void setAttribute( @Nonnull String name, @Nonnull String value )
     {
-        if ( value == null) {
+        if ( value == null )
+        {
             throw new NullPointerException( "value can not be null" );
         }
-        if ( name == null) {
+        if ( name == null )
+        {
             throw new NullPointerException( "name can not be null" );
         }
-        if ( attributes == null)
+        if ( attributes == null )
         {
             attributes = new HashMap<String, String>();
         }
@@ -178,22 +184,24 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
 
     public Xpp3Dom[] getChildren( String name )
     {
-        List<Xpp3Dom> children = getChildrenList(name);
-        return children.toArray(new Xpp3Dom[children.size()]);
+        List<Xpp3Dom> children = getChildrenList( name );
+        return children.toArray( new Xpp3Dom[children.size()] );
     }
 
     private List<Xpp3Dom> getChildrenList( String name )
     {
-        if ( childList== null )
+        if ( childList == null )
         {
             return Collections.emptyList();
         }
         else
         {
             ArrayList<Xpp3Dom> children = new ArrayList<Xpp3Dom>();
-            for (Xpp3Dom aChildList : childList) {
-                if (name.equals(aChildList.getName())) {
-                    children.add(aChildList);
+            for ( Xpp3Dom aChildList : childList )
+            {
+                if ( name.equals( aChildList.getName() ) )
+                {
+                    children.add( aChildList );
                 }
             }
             return children;
@@ -231,30 +239,35 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
   //  public void writeToSerializer( String namespace, XmlSerializer serializer )
     //        throws IOException
 
-    private static Xpp3Dom merge(Xpp3Dom dominant, Xpp3Dom recessive, Boolean childMergeOverride)
+    private static Xpp3Dom merge( Xpp3Dom dominant, Xpp3Dom recessive, Boolean childMergeOverride )
     {
-        if ( recessive == null || isCombineSelfOverride(dominant))
+        if ( recessive == null || isCombineSelfOverride( dominant ) )
         {
             return dominant;
         }
 
-        if (isEmpty(dominant.getValue())) {
-            dominant.setValue(recessive.getValue());
+        if ( isEmpty( dominant.getValue() ) )
+        {
+            dominant.setValue( recessive.getValue() );
         }
 
-        for (String attr : recessive.getAttributeNames()) {
-            if (isEmpty(dominant.getAttribute(attr))) {
-                dominant.setAttribute(attr, recessive.getAttribute(attr));
+        for ( String attr : recessive.getAttributeNames() )
+        {
+            if ( isEmpty( dominant.getAttribute( attr ) ) )
+            {
+                dominant.setAttribute( attr, recessive.getAttribute( attr ) );
             }
         }
 
         if ( recessive.getChildCount() > 0 )
         {
-            boolean mergeChildren = isMergeChildren(dominant, childMergeOverride);
+            boolean mergeChildren = isMergeChildren( dominant, childMergeOverride );
 
-            if (mergeChildren) {
-                Map<String, Iterator<Xpp3Dom>> commonChildren = getCommonChildren(dominant, recessive);
-                for (Xpp3Dom recessiveChild : recessive) {
+            if ( mergeChildren )
+            {
+                Map<String, Iterator<Xpp3Dom>> commonChildren = getCommonChildren( dominant, recessive );
+                for ( Xpp3Dom recessiveChild : recessive )
+                {
                     Iterator<Xpp3Dom> it = commonChildren.get( recessiveChild.getName() );
                     if ( it == null )
                     {
@@ -263,59 +276,67 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
                     else if ( it.hasNext() )
                     {
                         Xpp3Dom dominantChild = it.next();
-                        merge(dominantChild, recessiveChild, childMergeOverride);
+                        merge( dominantChild, recessiveChild, childMergeOverride );
                     }
                 }
-            } else {
+            }
+            else
+            {
                 Xpp3Dom[] dominantChildren = dominant.getChildren();
                 dominant.childList.clear();
-                for (Xpp3Dom child: recessive) {
+                for ( Xpp3Dom child : recessive )
+                {
                     dominant.addChild( new Xpp3Dom( child ) );
                 }
 
-                for (Xpp3Dom aDominantChildren : dominantChildren) {
-                    dominant.addChild(aDominantChildren);
+                for ( Xpp3Dom aDominantChildren : dominantChildren )
+                {
+                    dominant.addChild( aDominantChildren );
                 }
             }
         }
         return dominant;
     }
 
-    private static Map<String, Iterator<Xpp3Dom>> getCommonChildren(Xpp3Dom dominant, Xpp3Dom recessive) {
+    private static Map<String, Iterator<Xpp3Dom>> getCommonChildren( Xpp3Dom dominant, Xpp3Dom recessive )
+    {
         Map<String, Iterator<Xpp3Dom>> commonChildren = new HashMap<String, Iterator<Xpp3Dom>>();
 
         for ( String childName : recessive.childMap.keySet() )
         {
-            List<Xpp3Dom> dominantChildren = dominant.getChildrenList(childName);
+            List<Xpp3Dom> dominantChildren = dominant.getChildrenList( childName );
             if ( dominantChildren.size() > 0 )
             {
-                commonChildren.put(childName, dominantChildren.iterator());
+                commonChildren.put( childName, dominantChildren.iterator() );
             }
         }
         return commonChildren;
     }
 
-    private static boolean isMergeChildren(Xpp3Dom dominant, Boolean override) {
-        return override != null ? override : !isMergeChildren(dominant);
+    private static boolean isMergeChildren( Xpp3Dom dominant, Boolean override )
+    {
+        return override != null ? override : !isMergeChildren( dominant );
     }
 
-    private static boolean isMergeChildren(Xpp3Dom dominant) {
-        return CHILDREN_COMBINATION_APPEND.equals(dominant.getAttribute( CHILDREN_COMBINATION_MODE_ATTRIBUTE ));
+    private static boolean isMergeChildren( Xpp3Dom dominant )
+    {
+        return CHILDREN_COMBINATION_APPEND.equals( dominant.getAttribute( CHILDREN_COMBINATION_MODE_ATTRIBUTE ) );
     }
 
-    private static boolean isCombineSelfOverride(Xpp3Dom xpp3Dom){
+    private static boolean isCombineSelfOverride( Xpp3Dom xpp3Dom )
+    {
         String selfMergeMode = xpp3Dom.getAttribute( SELF_COMBINATION_MODE_ATTRIBUTE );
         return SELF_COMBINATION_OVERRIDE.equals( selfMergeMode );
     }
 
     public static Xpp3Dom mergeXpp3Dom( Xpp3Dom dominant, Xpp3Dom recessive, Boolean childMergeOverride )
     {
-         return dominant != null ? merge(dominant, recessive, childMergeOverride) : recessive;
+        return dominant != null ? merge( dominant, recessive, childMergeOverride ) : recessive;
     }
 
     public static Xpp3Dom mergeXpp3Dom( Xpp3Dom dominant, Xpp3Dom recessive )
     {
-            return dominant != null ? merge(dominant, recessive, null) : recessive;
+        return dominant != null ? merge( dominant, recessive, null ) : recessive;
     }
 
     public boolean equals( Object obj )
@@ -332,10 +353,10 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
 
         Xpp3Dom dom = (Xpp3Dom) obj;
 
-        return !(name == null ? dom.name != null : !name.equals(dom.name)) &&
-               !(value == null ? dom.value != null : !value.equals(dom.value)) &&
-               !(attributes == null ? dom.attributes != null : !attributes.equals(dom.attributes)) &&
-               !(childList == null ? dom.childList != null : !childList.equals(dom.childList));
+        return !( name == null ? dom.name != null : !name.equals( dom.name ) )
+            && !( value == null ? dom.value != null : !value.equals( dom.value ) )
+            && !( attributes == null ? dom.attributes != null : !attributes.equals( dom.attributes ) )
+            && !( childList == null ? dom.childList != null : !childList.equals( dom.childList ) );
     }
 
     public int hashCode()
@@ -351,7 +372,7 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
     public String toString()
     {
         StringWriter writer = new StringWriter();
-        Xpp3DomWriter.write(getPrettyPrintXMLWriter(writer), this );
+        Xpp3DomWriter.write( getPrettyPrintXMLWriter( writer ), this );
         return writer.toString();
 
     }
@@ -359,11 +380,12 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
     public String toUnescapedString()
     {
         StringWriter writer = new StringWriter();
-        Xpp3DomWriter.write(getPrettyPrintXMLWriter(writer), this, false );
+        Xpp3DomWriter.write( getPrettyPrintXMLWriter( writer ), this, false );
         return writer.toString();
     }
 
-    private PrettyPrintXMLWriter getPrettyPrintXMLWriter(StringWriter writer) {
+    private PrettyPrintXMLWriter getPrettyPrintXMLWriter( StringWriter writer )
+    {
         return new PrettyPrintXMLWriter( writer, "UTF-8", null );
     }
 

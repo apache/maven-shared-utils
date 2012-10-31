@@ -19,7 +19,6 @@ package org.apache.maven.shared.utils.xml;
  * under the License.
  */
 
-
 /**
  * Collection of XML encoding/decoding helpers. <br>
  * This is all about the special characters &amp; and &lt;, and for attributes
@@ -37,10 +36,11 @@ final class XMLEncode
      */
     public static boolean isWhiteSpace( String text )
     {
-        for( int i = 0; i < text.length(); i++ )
+        for ( int i = 0; i < text.length(); i++ )
         {
             char c = text.charAt( i );
-            if (!Character.isWhitespace( c )) {
+            if ( !Character.isWhitespace( c ) )
+            {
                 return false;
             }
         }
@@ -52,7 +52,7 @@ final class XMLEncode
      */
     public static String xmlEncodeTextForAttribute( String text, char quoteChar )
     {
-        if( text == null )
+        if ( text == null )
         {
             return null;
         }
@@ -64,21 +64,21 @@ final class XMLEncode
      */
     public static String xmlEncodeText( String text )
     {
-        if( text == null )
+        if ( text == null )
         {
             return null;
         }
-        if( !needsEncoding( text ) )
+        if ( !needsEncoding( text ) )
         {
             return text;
         }
         else
         {
             // only encode as cdata if is is longer than CDATA block overhead:
-            if( text.length() > CDATA_BLOCK_THRESHOLD_LENGTH )
+            if ( text.length() > CDATA_BLOCK_THRESHOLD_LENGTH )
             {
                 String cdata = xmlEncodeTextAsCDATABlock( text );
-                if( cdata != null )
+                if ( cdata != null )
                 {
                     return cdata;
                 }
@@ -93,7 +93,7 @@ final class XMLEncode
      */
     public static String xmlEncodeTextAsPCDATA( String text )
     {
-        if( text == null )
+        if ( text == null )
         {
             return null;
         }
@@ -120,16 +120,16 @@ final class XMLEncode
      */
     public static String xmlEncodeTextAsPCDATA( String text, boolean forAttribute, char quoteChar )
     {
-        if( text == null )
+        if ( text == null )
         {
             return null;
         }
         char c;
         StringBuilder n = new StringBuilder( text.length() * 2 );
-        for( int i = 0; i < text.length(); i++ )
+        for ( int i = 0; i < text.length(); i++ )
         {
             c = text.charAt( i );
-            switch( c )
+            switch ( c )
             {
                 case '&':
                     n.append( "&amp;" );
@@ -141,7 +141,7 @@ final class XMLEncode
                     n.append( "&gt;" );
                     break;
                 case '"':
-                    if( forAttribute )
+                    if ( forAttribute )
                     {
                         n.append( "&quot;" );
                     }
@@ -151,7 +151,7 @@ final class XMLEncode
                     }
                     break;
                 case '\'':
-                    if( forAttribute )
+                    if ( forAttribute )
                     {
                         n.append( "&apos;" );
                     }
@@ -163,7 +163,7 @@ final class XMLEncode
                 case '\r':
                     if ( forAttribute )
                     {
-                        if ( i == text.length() || text.charAt( i + 1 ) != '\n')
+                        if ( i == text.length() || text.charAt( i + 1 ) != '\n' )
                         {
                             n.append( "&#13;" );
                         }
@@ -191,7 +191,7 @@ final class XMLEncode
             }
         }
 
-        if( forAttribute )
+        if ( forAttribute )
         {
             n.append( quoteChar );
             n.insert( 0, quoteChar );
@@ -205,11 +205,11 @@ final class XMLEncode
      */
     public static String xmlEncodeTextAsCDATABlock( String text )
     {
-        if( text == null )
+        if ( text == null )
         {
             return null;
         }
-        if( isCompatibleWithCDATABlock( text ) )
+        if ( isCompatibleWithCDATABlock( text ) )
         {
             return "<![CDATA[" + text + "]]>";
         }
@@ -235,15 +235,15 @@ final class XMLEncode
      */
     public static boolean needsEncoding( String data, boolean checkForAttr )
     {
-        if( data == null )
+        if ( data == null )
         {
             return false;
         }
         char c;
-        for( int i = 0; i < data.length(); i++ )
+        for ( int i = 0; i < data.length(); i++ )
         {
             c = data.charAt( i );
-            if( c == '&' || c == '<' || (checkForAttr && (c == '"' || c == '\'')) )
+            if ( c == '&' || c == '<' || ( checkForAttr && ( c == '"' || c == '\'' ) ) )
             {
                 return true;
             }
@@ -256,7 +256,7 @@ final class XMLEncode
      */
     public static boolean isCompatibleWithCDATABlock( String text )
     {
-        return text != null && (!text.contains("]]>"));
+        return text != null && ( !text.contains( "]]>" ) );
     }
 
     /**
@@ -265,16 +265,16 @@ final class XMLEncode
      */
     public static String xmlDecodeTextToCDATA( String pcdata )
     {
-        if( pcdata == null )
+        if ( pcdata == null )
         {
             return null;
         }
         char c, c1, c2, c3, c4, c5;
         StringBuilder n = new StringBuilder( pcdata.length() );
-        for( int i = 0; i < pcdata.length(); i++ )
+        for ( int i = 0; i < pcdata.length(); i++ )
         {
             c = pcdata.charAt( i );
-            if( c == '&' )
+            if ( c == '&' )
             {
                 c1 = lookAhead( 1, i, pcdata );
                 c2 = lookAhead( 2, i, pcdata );
@@ -282,27 +282,27 @@ final class XMLEncode
                 c4 = lookAhead( 4, i, pcdata );
                 c5 = lookAhead( 5, i, pcdata );
 
-                if( c1 == 'a' && c2 == 'm' && c3 == 'p' && c4 == ';' )
+                if ( c1 == 'a' && c2 == 'm' && c3 == 'p' && c4 == ';' )
                 {
                     n.append( "&" );
                     i += 4;
                 }
-                else if( c1 == 'l' && c2 == 't' && c3 == ';' )
+                else if ( c1 == 'l' && c2 == 't' && c3 == ';' )
                 {
                     n.append( "<" );
                     i += 3;
                 }
-                else if( c1 == 'g' && c2 == 't' && c3 == ';' )
+                else if ( c1 == 'g' && c2 == 't' && c3 == ';' )
                 {
                     n.append( ">" );
                     i += 3;
                 }
-                else if( c1 == 'q' && c2 == 'u' && c3 == 'o' && c4 == 't' && c5 == ';' )
+                else if ( c1 == 'q' && c2 == 'u' && c3 == 'o' && c4 == 't' && c5 == ';' )
                 {
                     n.append( "\"" );
                     i += 5;
                 }
-                else if( c1 == 'a' && c2 == 'p' && c3 == 'o' && c4 == 's' && c5 == ';' )
+                else if ( c1 == 'a' && c2 == 'p' && c3 == 'o' && c4 == 's' && c5 == ';' )
                 {
                     n.append( "'" );
                     i += 5;
@@ -326,7 +326,7 @@ final class XMLEncode
         {
             return data.charAt( offset + la );
         }
-        catch( StringIndexOutOfBoundsException e )
+        catch ( StringIndexOutOfBoundsException e )
         {
             return 0x0;
         }
@@ -335,15 +335,17 @@ final class XMLEncode
     // combine multiple checks in one methods for speed
     private static boolean contains( String text, char[] chars )
     {
-        if( text == null || chars == null || chars.length == 0 )
+        if ( text == null || chars == null || chars.length == 0 )
         {
             return false;
         }
-        for( int i = 0; i < text.length(); i++ )
+        for ( int i = 0; i < text.length(); i++ )
         {
             char c = text.charAt( i );
-            for (char aChar : chars) {
-                if (aChar == c) {
+            for ( char aChar : chars )
+            {
+                if ( aChar == c )
+                {
                     return true;
                 }
             }
