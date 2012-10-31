@@ -58,7 +58,7 @@ final class Reflector
      * @return The instantiated object
      * @throws ReflectorException In case anything goes wrong here...
      */
-    public Object newInstance( Class theClass, Object... params )
+    public Object newInstance( Class<?> theClass, Object... params )
         throws ReflectorException
     {
         if ( params == null )
@@ -66,7 +66,7 @@ final class Reflector
             params = new Object[0];
         }
 
-        Class[] paramTypes = new Class[params.length];
+        Class<?>[] paramTypes = new Class[params.length];
 
         for ( int i = 0, len = params.length; i < len; i++ )
         {
@@ -75,7 +75,7 @@ final class Reflector
 
         try
         {
-            Constructor con = getConstructor( theClass, paramTypes );
+            Constructor<?> con = getConstructor( theClass, paramTypes );
 
             return con.newInstance( params );
         }
@@ -102,10 +102,10 @@ final class Reflector
      * @return The singleton object
      * @throws ReflectorException In case anything goes wrong here...
      */
-    public Object getSingleton( Class theClass, Object... initParams )
+    public Object getSingleton( Class<?> theClass, Object... initParams )
         throws ReflectorException
     {
-        Class[] paramTypes = new Class[initParams.length];
+        Class<?>[] paramTypes = new Class[initParams.length];
 
         for ( int i = 0, len = initParams.length; i < len; i++ )
         {
@@ -145,7 +145,7 @@ final class Reflector
             params = new Object[0];
         }
 
-        Class[] paramTypes = new Class[params.length];
+        Class<?>[] paramTypes = new Class[params.length];
 
         for ( int i = 0, len = params.length; i < len; i++ )
         {
@@ -168,7 +168,7 @@ final class Reflector
         }
     }
 
-    public Object getStaticField( Class targetClass, String fieldName )
+    public Object getStaticField( Class<?> targetClass, String fieldName )
         throws ReflectorException
     {
         try
@@ -204,7 +204,7 @@ final class Reflector
     public Object getField( Object target, String fieldName, boolean breakAccessibility )
         throws ReflectorException
     {
-        Class targetClass = target.getClass();
+        Class<?> targetClass = target.getClass();
         while ( targetClass != null )
         {
             try
@@ -257,7 +257,7 @@ final class Reflector
      * @return The result of the method call
      * @throws ReflectorException In case of an error looking up or invoking the method.
      */
-    public Object invokeStatic( Class targetClass, String methodName, Object... params )
+    public Object invokeStatic( Class<?> targetClass, String methodName, Object... params )
         throws ReflectorException
     {
         if ( params == null )
@@ -265,7 +265,7 @@ final class Reflector
             params = new Object[0];
         }
 
-        Class[] paramTypes = new Class[params.length];
+        Class<?>[] paramTypes = new Class[params.length];
 
         for ( int i = 0, len = params.length; i < len; i++ )
         {
@@ -296,7 +296,7 @@ final class Reflector
      * @return the Constructor object that matches, never {@code null}
      * @throws ReflectorException In case we can't retrieve the proper constructor.
      */
-    public Constructor<?> getConstructor( Class targetClass, Class... params )
+    public Constructor<?> getConstructor( Class<?> targetClass, Class<?>... params )
         throws ReflectorException
     {
         Map<String, Member> constructorMap = getConstructorMap( targetClass );
@@ -305,7 +305,7 @@ final class Reflector
 
         key.append( "(" );
 
-        for ( Class param : params )
+        for ( Class<?> param : params )
         {
             key.append( param.getName() );
             key.append( "," );
@@ -318,21 +318,21 @@ final class Reflector
 
         key.append( ")" );
 
-        Constructor constructor;
+        Constructor<?> constructor;
 
         String paramKey = key.toString();
 
         synchronized ( paramKey.intern() )
         {
-            constructor = (Constructor) constructorMap.get( paramKey );
+            constructor = (Constructor<?>) constructorMap.get( paramKey );
 
             if ( constructor == null )
             {
-                Constructor[] cands = targetClass.getConstructors();
+                Constructor<?>[] cands = targetClass.getConstructors();
 
-                for ( Constructor cand : cands )
+                for ( Constructor<?> cand : cands )
                 {
-                    Class[] types = cand.getParameterTypes();
+                    Class<?>[] types = cand.getParameterTypes();
 
                     if ( params.length != types.length )
                     {
