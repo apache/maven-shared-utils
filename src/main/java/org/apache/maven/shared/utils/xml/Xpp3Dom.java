@@ -30,7 +30,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 
 /**
- * A reimplementation of plexys xpp3dom based on the public interface of plexus xpp3dom.
+ * A reimplementation of Plexus Xpp3Dom based on the public interface of Plexus Xpp3Dom.
  *
  * @author Kristian Rosenvold
  */
