@@ -78,8 +78,7 @@ public class Xpp3DomBuilder
         }
     }
 
-    private static DocHandler parseSax( @Nonnull
-    InputSource inputSource, boolean trim )
+    private static DocHandler parseSax( @Nonnull InputSource inputSource, boolean trim )
         throws XmlPullParserException
     {
 
@@ -191,26 +190,26 @@ public class Xpp3DomBuilder
         {
             int depth = elemStack.size() - 1;
 
-            Xpp3Dom finishedConfiguration = pop();
+            Xpp3Dom element = pop();
 
             /* this Object could be null if it is a singleton tag */
             Object accumulatedValue = values.remove( depth );
 
-            if ( finishedConfiguration.getChildCount() == 0 )
+            if ( element.getChildCount() == 0 )
             {
                 if ( accumulatedValue == null )
                 {
-                    finishedConfiguration.setValue( "" ); // null in xpp3dom, but we dont do that around here
+                    element.setValue( "" ); // null in xpp3dom, but we don't do that around here
                 }
                 else
                 {
-                    finishedConfiguration.setValue( accumulatedValue.toString() );
+                    element.setValue( accumulatedValue.toString() );
                 }
             }
 
             if ( depth == 0 )
             {
-                result = finishedConfiguration;
+                result = element;
             }
         }
 
