@@ -34,7 +34,7 @@ import org.apache.maven.shared.utils.io.IOUtil;
  * @author <a href="mailto:pj@thoughtworks.com">Paul Julius </a>
  * 
  */
-class StreamPumper
+public class StreamPumper
     extends AbstractStreamHandler
 {
     private final BufferedReader in;

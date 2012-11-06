@@ -106,7 +106,7 @@ public abstract class CommandLineUtils
      * @throws CommandLineException or CommandLineTimeOutException if time out occurs
      * @noinspection ThrowableResultOfMethodCallIgnored
      */
-    private static int executeCommandLine( Commandline cl, InputStream systemIn, StreamConsumer systemOut,
+    public static int executeCommandLine( Commandline cl, InputStream systemIn, StreamConsumer systemOut,
                                           StreamConsumer systemErr, int timeoutInSeconds )
         throws CommandLineException
     {
