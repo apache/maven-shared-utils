@@ -54,7 +54,7 @@ class AbstractStreamHandler
         disabled = true;
     }
 
-    void setDone()
+    protected void setDone()
     {
         done = true;
     }
