@@ -117,6 +117,8 @@ public class Xpp3DomBuilder
 
         private final boolean trim;
 
+        private boolean spacePreserve = false;
+
         DocHandler( boolean trim )
         {
             this.trim = trim;
@@ -126,7 +128,7 @@ public class Xpp3DomBuilder
         public void startElement( String uri, String localName, String qName, Attributes attributes )
             throws SAXException
         {
-
+            spacePreserve = false;
             Xpp3Dom child = new Xpp3Dom( localName );
 
             attachToParent( child );
@@ -139,7 +141,10 @@ public class Xpp3DomBuilder
             int size = attributes.getLength();
             for ( int i = 0; i < size; i++ )
             {
-                child.setAttribute( attributes.getQName( i ), attributes.getValue( i ) );
+                String name = attributes.getQName( i );
+                String value = attributes.getValue( i );
+                child.setAttribute( name, value );
+                spacePreserve = spacePreserve || ( "xml:space".equals( name ) && "preserve".equals( value ) );
             }
         }
 
@@ -218,7 +223,7 @@ public class Xpp3DomBuilder
             throws SAXException
         {
             String text = new String( ch, start, length );
-            appendToTopValue( trim ? text.trim() : text );
+            appendToTopValue( ( trim && !spacePreserve ) ? text.trim() : text );
         }
 
         private void appendToTopValue( String toAppend )
