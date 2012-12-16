@@ -35,6 +35,16 @@ Apache Maven Shared Utils
    It is not a 100% API compatible replacement though but a replacement <with improvements>:
    lots of methods got cleaned up, generics got added and we dropped a lot of unused code.
 
+Why ?
+
+   plexus-utils consisted mostly of code that was forked from various apache projects. From a licensing
+   perspective this code became "unclean" when it was forked to codehaus. maven-shared-utils is
+   based on the original from the apache sources.
+
+Why not commons ?
+    We would prefer code to use commons-* code where appropriate, but the plexus-utils became
+    slightly incompatible (different) from the commons over the years, so migrating is not
+    always a 1:1 operation. Migrating to maven-shared-utils is a 1:1 operation in most cases.
 
 Relation to Commons-*
 
