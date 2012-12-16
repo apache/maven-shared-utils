@@ -37,9 +37,8 @@ Apache Maven Shared Utils
 
 Why ?
 
-   plexus-utils consisted mostly of code that was forked from various apache projects. From a licensing
-   perspective this code became "unclean" when it was forked to codehaus. maven-shared-utils is
-   based on the original from the apache sources.
+   plexus-utils consisted mostly of code that was forked from various apache projects. 
+   maven-shared-utils is based on the original from the apache sources.
 
 Why not commons ?
     We would prefer code to use commons-* code where appropriate, but the plexus-utils became
