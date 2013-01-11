@@ -27,6 +27,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.WillClose;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +66,7 @@ public class Xpp3DomBuilder
     }
 
     public static Xpp3Dom build( @WillClose Reader reader, boolean trim )
-            throws XmlPullParserException
+        throws XmlPullParserException
     {
         try
         {
@@ -82,6 +83,9 @@ public class Xpp3DomBuilder
         throws XmlPullParserException
     {
 
+        String key = "org.xml.sax.driver";
+        String oldParser = System.getProperty( key );
+        System.clearProperty( key ); // There's a slight problem with this an parallel maven
         try
         {
             DocHandler ch = new DocHandler( trim );
@@ -98,6 +102,13 @@ public class Xpp3DomBuilder
         {
             throw new XmlPullParserException( e );
         }
+        finally
+        {
+            if ( oldParser != null )
+            {
+                System.setProperty( key, oldParser );
+            }
+        }
     }
 
     private static class DocHandler
@@ -109,7 +120,9 @@ public class Xpp3DomBuilder
 
         // Todo: Use these for something smart !
         private final List<SAXParseException> warnings = new ArrayList<SAXParseException>();
+
         private final List<SAXParseException> errors = new ArrayList<SAXParseException>();
+
         private final List<SAXParseException> fatals = new ArrayList<SAXParseException>();
 
 
