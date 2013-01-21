@@ -28,6 +28,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
+
 import org.apache.maven.shared.utils.Os;
 import org.apache.maven.shared.utils.StringUtils;
 
@@ -110,8 +111,28 @@ public abstract class CommandLineUtils
                                           StreamConsumer systemErr, int timeoutInSeconds )
         throws CommandLineException
     {
+        return executeCommandLine( cl, systemIn, systemOut, systemErr, timeoutInSeconds, null );
+    }
+
+    /**
+     * @param cl               The command line to execute
+     * @param systemIn         The input to read from, must be thread safe
+     * @param systemOut        A consumer that receives output, must be thread safe
+     * @param systemErr        A consumer that receives system error stream output, must be thread safe
+     * @param timeoutInSeconds Positive integer to specify timeout, zero and negative integers for no timeout.
+     * @param runAfterProcessTermination Optional callback to run after the process terminated or the the timeout was
+     *  exceeded, but before waiting on the stream feeder and pumpers to finish.
+     * @return A return value, see {@link Process#exitValue()}
+     * @throws CommandLineException or CommandLineTimeOutException if time out occurs
+     * @noinspection ThrowableResultOfMethodCallIgnored
+     */
+    public static int executeCommandLine( Commandline cl, InputStream systemIn, StreamConsumer systemOut,
+                                          StreamConsumer systemErr, int timeoutInSeconds,
+                                          Runnable runAfterProcessTermination )
+        throws CommandLineException
+    {
         final CommandLineCallable future =
-            executeCommandLineAsCallable( cl, systemIn, systemOut, systemErr, timeoutInSeconds );
+            executeCommandLineAsCallable( cl, systemIn, systemOut, systemErr, timeoutInSeconds, runAfterProcessTermination );
         return future.call();
     }
 
@@ -123,6 +144,7 @@ public abstract class CommandLineUtils
      * @param systemOut        A consumer that receives output, must be thread safe
      * @param systemErr        A consumer that receives system error stream output, must be thread safe
      * @param timeoutInSeconds Positive integer to specify timeout, zero and negative integers for no timeout.
+     * @param runAfterProcessTermination Optional callback to run after the process terminated or the the timeout was
      * @return A CommandLineCallable that provides the process return value, see {@link Process#exitValue()}. "call" must be called on
      *         this to be sure the forked process has terminated, no guarantees is made about
      *         any internal state before after the completion of the call statements
@@ -132,7 +154,8 @@ public abstract class CommandLineUtils
     private static CommandLineCallable executeCommandLineAsCallable( final Commandline cl, final InputStream systemIn,
                                                                     final StreamConsumer systemOut,
                                                                     final StreamConsumer systemErr,
-                                                                    final int timeoutInSeconds )
+                                                                    final int timeoutInSeconds,
+                                                                    final Runnable runAfterProcessTermination )
         throws CommandLineException
     {
         if ( cl == null )
@@ -189,6 +212,11 @@ public abstract class CommandLineUtils
                         }
 
                         returnValue = p.exitValue();
+                    }
+
+                    if ( runAfterProcessTermination != null )
+                    {
+                        runAfterProcessTermination.run();
                     }
 
                     waitForAllPumpers( inputFeeder, outputPumper, errorPumper );
