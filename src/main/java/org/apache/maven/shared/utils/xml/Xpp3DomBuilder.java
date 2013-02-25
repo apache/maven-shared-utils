@@ -82,14 +82,10 @@ public class Xpp3DomBuilder
     private static DocHandler parseSax( @Nonnull InputSource inputSource, boolean trim )
         throws XmlPullParserException
     {
-
-        String key = "org.xml.sax.driver";
-        String oldParser = System.getProperty( key );
-        System.clearProperty( key ); // There's a slight problem with this an parallel maven
         try
         {
             DocHandler ch = new DocHandler( trim );
-            XMLReader parser = org.xml.sax.helpers.XMLReaderFactory.createXMLReader();
+            XMLReader parser = createXmlReader();
             parser.setContentHandler( ch );
             parser.parse( inputSource );
             return ch;
@@ -102,6 +98,26 @@ public class Xpp3DomBuilder
         {
             throw new XmlPullParserException( e );
         }
+    }
+
+
+    private static XMLReader createXmlReader()
+        throws SAXException
+    {
+        XMLReader comSunXmlReader = instantiate( "com.sun.org.apache.xerces.internal.parsers.SAXParser" );
+        if ( comSunXmlReader != null )
+        {
+            return comSunXmlReader;
+        }
+
+        String key = "org.xml.sax.driver";
+        String oldParser = System.getProperty( key );
+        System.clearProperty( key ); // There's a "slight" problem with this an parallel maven: It does not work ;)
+
+        try
+        {
+            return org.xml.sax.helpers.XMLReaderFactory.createXMLReader();
+        }
         finally
         {
             if ( oldParser != null )
@@ -109,7 +125,29 @@ public class Xpp3DomBuilder
                 System.setProperty( key, oldParser );
             }
         }
+
     }
+
+    private static XMLReader instantiate( String s ){
+        try
+        {
+            Class<?> aClass = Class.forName(  s );
+            return (XMLReader) aClass.newInstance();
+        }
+        catch ( ClassNotFoundException e )
+        {
+            return  null;
+        }
+        catch ( InstantiationException e )
+        {
+            return  null;
+        }
+        catch ( IllegalAccessException e )
+        {
+            return  null;
+        }
+    }
+
 
     private static class DocHandler
         extends DefaultHandler
