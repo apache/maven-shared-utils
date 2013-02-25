@@ -19,9 +19,10 @@ package org.apache.maven.shared.utils.cli;
  * under the License.
  */
 
-import java.io.IOException;
+import org.apache.maven.shared.utils.Os;
+import org.apache.maven.shared.utils.StringUtils;
+
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -40,6 +41,7 @@ public abstract class CommandLineUtils
 {
 
 
+    @SuppressWarnings( "UnusedDeclaration" )
     public static class StringStreamConsumer
         implements StreamConsumer
     {
@@ -77,12 +79,14 @@ public abstract class CommandLineUtils
     }
 
 
+    @SuppressWarnings( "UnusedDeclaration" )
     public static int executeCommandLine( Commandline cl, StreamConsumer systemOut, StreamConsumer systemErr )
         throws CommandLineException
     {
         return executeCommandLine( cl, null, systemOut, systemErr, 0 );
     }
 
+    @SuppressWarnings( "UnusedDeclaration" )
     public static int executeCommandLine( Commandline cl, StreamConsumer systemOut, StreamConsumer systemErr,
                                           int timeoutInSeconds )
         throws CommandLineException
@@ -90,6 +94,7 @@ public abstract class CommandLineUtils
         return executeCommandLine( cl, null, systemOut, systemErr, timeoutInSeconds );
     }
 
+    @SuppressWarnings( "UnusedDeclaration" )
     public static int executeCommandLine( Commandline cl, InputStream systemIn, StreamConsumer systemOut,
                                           StreamConsumer systemErr )
         throws CommandLineException
@@ -284,12 +289,10 @@ public abstract class CommandLineUtils
      * with case-insensitive environment variables like Windows, all variable names will be normalized to upper case.
      *
      * @return The shell environment variables, can be empty but never <code>null</code>.
-     * @throws IOException If the environment variables could not be queried from the shell.
      * @see System#getenv() System.getenv() API, new in JDK 5.0, to get the same result
      *      <b>since 2.0.2 System#getenv() will be used if available in the current running jvm.</b>
      */
     public static Properties getSystemEnvVars()
-        throws IOException
     {
         return getSystemEnvVars( !Os.isFamily( Os.FAMILY_WINDOWS ) );
     }
@@ -300,33 +303,13 @@ public abstract class CommandLineUtils
      *
      * @param caseSensitive Whether environment variable keys should be treated case-sensitively.
      * @return Properties object of (possibly modified) envar keys mapped to their values.
-     * @throws IOException .
      * @see System#getenv() System.getenv() API, new in JDK 5.0, to get the same result
      *      <b>since 2.0.2 System#getenv() will be used if available in the current running jvm.</b>
      */
     public static Properties getSystemEnvVars( boolean caseSensitive )
-        throws IOException
     {
-
-        // check if it's 1.5+ run
-
-        try
-        {
-            Map<String, String> envs = System.getenv();
-            return ensureCaseSensitivity( envs, caseSensitive );
-        }
-        catch ( IllegalAccessException e )
-        {
-            throw new IOException( e.getMessage() );
-        }
-        catch ( IllegalArgumentException e )
-        {
-            throw new IOException( e.getMessage() );
-        }
-        catch ( InvocationTargetException e )
-        {
-            throw new IOException( e.getMessage() );
-        }
+        Map<String, String> envs = System.getenv();
+        return ensureCaseSensitivity( envs, caseSensitive );
     }
 
     private static boolean isAlive( Process p )
@@ -457,7 +440,6 @@ public abstract class CommandLineUtils
     }
 
     static Properties ensureCaseSensitivity( Map<String, String> envs, boolean preserveKeyCase )
-        throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
     {
         Properties envVars = new Properties();
         for ( Map.Entry<String, String> entry : envs.entrySet() )

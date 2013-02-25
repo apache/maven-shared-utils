@@ -71,7 +71,7 @@ public class Commandline
 
     //protected Vector envVars = new Vector();
     // synchronized added to preserve synchronize of Vector class
-    private final Map<String,String> envVars = Collections.synchronizedMap( new LinkedHashMap<String,String>() );
+    private final Map<String, String> envVars = Collections.synchronizedMap( new LinkedHashMap<String, String>() );
 
     private Shell shell;
 
@@ -88,7 +88,7 @@ public class Commandline
      * Create a new command line object.
      * Shell is autodetected from operating system
      *
-     * @param toProcess  The command to process
+     * @param toProcess The command to process
      */
     public Commandline( String toProcess )
     {
@@ -217,7 +217,6 @@ public class Commandline
      * Add system environment variables
      */
     public void addSystemEnvironment()
-        throws Exception
     {
         Properties systemEnvVars = CommandLineUtils.getSystemEnvVars();
 
@@ -235,16 +234,8 @@ public class Commandline
      * Return the list of environment variables
      */
     public String[] getEnvironmentVariables()
-        throws CommandLineException
     {
-        try
-        {
-            addSystemEnvironment();
-        }
-        catch ( Exception e )
-        {
-            throw new CommandLineException( "Error setting up environmental variables", e );
-        }
+        addSystemEnvironment();
         String[] environmentVars = new String[envVars.size()];
         int i = 0;
         for ( String name : envVars.keySet() )
@@ -394,7 +385,6 @@ public class Commandline
      * Allows to set the shell to be used in this command line.
      *
      * @param shell the shell
-     * 
      */
     void setShell( Shell shell )
     {
@@ -403,8 +393,6 @@ public class Commandline
 
     /**
      * Get the shell to be used in this command line.
-     *
-     * 
      */
     public Shell getShell()
     {

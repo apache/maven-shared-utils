@@ -38,7 +38,6 @@ public class CommandLineUtilsTest
      * Tests that case-insensitive environment variables are normalized to upper case.
      */
     public void testGetSystemEnvVarsCaseInsensitive()
-        throws Exception
     {
         Properties vars = CommandLineUtils.getSystemEnvVars( false );
         for ( Object o : vars.keySet() )
