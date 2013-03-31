@@ -131,7 +131,7 @@ public class Xpp3DomBuilder
     private static XMLReader instantiate( String s ){
         try
         {
-            Class<?> aClass = Class.forName(  s );
+            Class<?> aClass = Thread.currentThread().getContextClassLoader().loadClass( s );
             return (XMLReader) aClass.newInstance();
         }
         catch ( ClassNotFoundException e )

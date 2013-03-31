@@ -42,8 +42,8 @@ public class Java7Support
         boolean isJava7x = true;
         try
         {
-            Class<?> files = Class.forName( "java.nio.file.Files" );
-            Class<?> path = Class.forName( "java.nio.file.Path" );
+            Class<?> files = Thread.currentThread().getContextClassLoader().loadClass( "java.nio.file.Files" );
+            Class<?> path = Thread.currentThread().getContextClassLoader().loadClass( "java.nio.file.Path" );
             isSymbolicLink = files.getMethod( "isSymbolicLink", path );
             toPath = File.class.getMethod( "toPath" );
         } catch (ClassNotFoundException e)
