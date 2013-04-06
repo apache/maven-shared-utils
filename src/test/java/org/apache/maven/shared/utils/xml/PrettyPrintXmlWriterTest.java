@@ -126,6 +126,16 @@ public class PrettyPrintXmlWriterTest
     }
 
     @Test
+    public void testEscapeXmlAttributeTrailingCR()
+    {
+        // Mac
+        writer.startElement( HTML.Tag.DIV.toString() );
+        writer.addAttribute( "class", "section\r" );
+        writer.endElement(); // Tag.DIV
+        Assert.assertEquals( "<div class=\"section&#13;\"/>", w.toString() );
+    }
+
+    @Test
     public void testEscapeXmlAttributeUnix()
     {
         // Unix

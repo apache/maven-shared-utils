@@ -163,7 +163,7 @@ final class XMLEncode
                 case '\r':
                     if ( forAttribute )
                     {
-                        if ( i == text.length() || text.charAt( i + 1 ) != '\n' )
+                        if ( i == ( text.length() - 1 ) || text.charAt( i + 1 ) != '\n' )
                         {
                             n.append( "&#13;" );
                         }
