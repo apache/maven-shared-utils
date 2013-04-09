@@ -41,6 +41,7 @@ Why ?
    maven-shared-utils is based on the original from the apache sources.
 
 Why not commons ?
+
     We would prefer code to use commons-* code where appropriate, but the plexus-utils became
     slightly incompatible (different) from the commons over the years, so migrating is not
     always a 1:1 operation. Migrating to maven-shared-utils is a 1:1 operation in most cases.
