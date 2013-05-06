@@ -25,6 +25,7 @@ import java.lang.reflect.Constructor;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import static org.apache.maven.shared.utils.testhelpers.ExceptionHelper.*;
@@ -116,8 +117,8 @@ public class ReflectorTest
     public void newInstancePublicConstructor()
         throws Exception
     {
-        assertThat( reflector.newInstance( ReflectorTestHelper.class, new Object[]{ "" } ),
-                    is( ReflectorTestHelper.class ) );
+        assertTrue( reflector.newInstance( ReflectorTestHelper.class, new Object[]{ "" } )
+                    instanceof ReflectorTestHelper );
     }
 
     @Test( expected = NullPointerException.class )
@@ -222,8 +223,8 @@ public class ReflectorTest
     public void getSingletonPublicMethod()
         throws Exception
     {
-        assertThat( reflector.getSingleton( ReflectorTestHelper.class, new Object[]{ "" } ),
-                    is( ReflectorTestHelper.class ) );
+        assertTrue( reflector.getSingleton( ReflectorTestHelper.class, new Object[]{ "" } )
+                    instanceof ReflectorTestHelper );
     }
 
     @Test( expected = NullPointerException.class )
@@ -252,8 +253,8 @@ public class ReflectorTest
     public void getSingletonNonStaticMethod()
         throws Exception
     {
-        assertThat( reflector.getSingleton( ReflectorTestHelper.class, new Object[]{ "", Boolean.FALSE } ),
-                    is( ReflectorTestHelper.class ) );
+        assertTrue( reflector.getSingleton( ReflectorTestHelper.class, new Object[]{ "", Boolean.FALSE } )
+                    instanceof ReflectorTestHelper );
     }
 
     //// invoke( Object, String, Object[] )
@@ -866,8 +867,8 @@ public class ReflectorTest
     public void invokeStaticPublicMethod()
         throws Exception
     {
-        assertThat( reflector.invokeStatic( ReflectorTestHelper.class, "getInstance", new Object[]{ "" } ),
-                    is( ReflectorTestHelper.class ) );
+        assertTrue( reflector.invokeStatic( ReflectorTestHelper.class, "getInstance", new Object[]{ "" } )
+                    instanceof ReflectorTestHelper );
     }
 
     @Test( expected = NullPointerException.class )
@@ -896,9 +897,9 @@ public class ReflectorTest
     public void invokeStaticNonStaticMethod()
         throws Exception
     {
-        assertThat(
-            reflector.invokeStatic( ReflectorTestHelper.class, "getInstance", new Object[]{ "", Boolean.FALSE } ),
-            is( ReflectorTestHelper.class ) );
+        assertTrue(
+            reflector.invokeStatic( ReflectorTestHelper.class, "getInstance", new Object[]{ "", Boolean.FALSE } )
+            instanceof ReflectorTestHelper );
     }
 
     //// getConstructor( Class, Class[] )

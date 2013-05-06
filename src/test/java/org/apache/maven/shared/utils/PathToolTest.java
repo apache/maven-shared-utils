@@ -143,7 +143,7 @@ public class PathToolTest extends Assert
     public void testUppercaseDrive()
     {
         assertThat( PathTool.uppercaseDrive( null )
-                , CoreMatchers.<Object>nullValue() );
+                , CoreMatchers.nullValue() );
 
         assertThat( PathTool.uppercaseDrive( "d:" )
                 , is( "D:" ) );

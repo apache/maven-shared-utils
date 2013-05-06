@@ -182,8 +182,8 @@ public class FileUtilsTest
     public void toFile3()
         throws Exception
     {
-        assertThat( FileUtils.toFile( null ), CoreMatchers.<File> nullValue() );
-        assertThat( FileUtils.toFile( new URL( "http://jakarta.apache.org" ) ), CoreMatchers.<File> nullValue() );
+        assertThat( FileUtils.toFile( null ), CoreMatchers.nullValue() );
+        assertThat( FileUtils.toFile( new URL( "http://jakarta.apache.org" ) ), CoreMatchers.nullValue() );
     }
 
     @Test( expected = NumberFormatException.class )

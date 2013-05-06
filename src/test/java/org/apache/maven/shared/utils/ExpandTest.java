@@ -73,6 +73,7 @@ public class ExpandTest
      * @return
      */
     private File getTestTargetDir()
+        throws Exception
     {
         return tempFolder.newFolder( TEST_ZIP_TARGET_FOLDER );
     }
