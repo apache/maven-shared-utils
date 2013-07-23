@@ -35,7 +35,7 @@
     <mavenVersion>2.1.0</mavenVersion>
   </properties>
 
-  <name>Maven Shared Utils</name>
+  <name>Apache Maven Shared Utils</name>
   <description>Shared utils without any further dependencies</description>
 
   <prerequisites>

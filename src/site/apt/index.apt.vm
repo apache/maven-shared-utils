@@ -1,9 +1,9 @@
  ------
- Maven shared Utils
+ Introduction
  ------
  Kristian Rosenvold
  ------
- 2012-10-29
+ 2013-07-24
  ------
 
  ~~ Licensed to the Apache Software Foundation (ASF) under one
@@ -27,7 +27,7 @@
  ~~ http://maven.apache.org/doxia/references/apt-format.html
 
 
-Apache Maven Shared Utils
+${project.name}
 
    This project aims to be a functional replacement for
    {{{http://plexus.codehaus.org/plexus-utils}plexus-utils}} in Maven.
