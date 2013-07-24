@@ -72,7 +72,7 @@ public class XmlWriterUtilTest
     {
         XmlWriterUtil.writeLineBreak( xmlWriter );
         writer.close();
-        System.out.println( "outpur = " + output.toString() + "x");
+        System.out.println( "output = " + output.toString() + "x");
         assertTrue( StringUtils.countMatches( output.toString(), XmlWriterUtil.LS ) == 1 );
     }
 
