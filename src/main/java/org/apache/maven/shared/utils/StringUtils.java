@@ -772,7 +772,7 @@ public class StringUtils
         int start = 0, end;
         while ( ( end = text.indexOf( repl, start ) ) != -1 )
         {
-            buf.append( text.substring( start, end ) ).append( with );
+            buf.append( text, start, end ).append( with );
             start = end + repl.length();
 
             if ( --max == 0 )
@@ -780,7 +780,7 @@ public class StringUtils
                 break;
             }
         }
-        buf.append( text.substring( start ) );
+        buf.append( text, start, text.length());
         return buf.toString();
     }
 
@@ -801,7 +801,11 @@ public class StringUtils
         {
             throw new NullPointerException( "overlay is null" );
         }
-        return text.substring( 0, start ) + overlay + text.substring( end );
+        return new StringBuilder( start + overlay.length() + text.length() - end + 1 )
+            .append( text, 0, start  )
+            .append( overlay )
+            .append( text, end, text.length() )
+            .toString();
     }
 
     // Centering
@@ -1438,13 +1442,20 @@ public class StringUtils
         {
             return null;
         }
-        else if ( str.length() == 0 )
-        {
-            return "";
-        }
         else
         {
-            return String.valueOf( Character.toLowerCase( str.charAt( 0 ) ) ) + str.substring( 1 );
+            int length = str.length();
+            if ( length == 0 )
+            {
+                return "";
+            }
+            else
+            {
+                return new StringBuffer( length )
+                    .append( Character.toLowerCase( str.charAt( 0 ) ) )
+                    .append( str, 1, length )
+                    .toString();
+            }
         }
     }
 
@@ -1463,13 +1474,20 @@ public class StringUtils
         {
             return null;
         }
-        else if ( str.length() == 0 )
-        {
-            return "";
-        }
         else
         {
-            return String.valueOf( Character.toTitleCase( str.charAt( 0 ) ) ) + str.substring( 1 );
+            int length = str.length();
+            if ( length == 0 )
+            {
+                return "";
+            }
+            else
+            {
+                return new StringBuilder( length )
+                    .append( Character.toTitleCase( str.charAt( 0 ) ) )
+                    .append( str, 1, length )
+                    .toString();
+            }
         }
     }
 
@@ -2143,11 +2161,16 @@ public class StringUtils
      */
     public @Nonnull static String capitalizeFirstLetter( @Nonnull String data )
     {
-        char firstLetter = Character.toTitleCase( data.substring( 0, 1 ).charAt( 0 ) );
-
-        String restLetters = data.substring( 1 );
-
-        return firstLetter + restLetters;
+        char firstChar = data.charAt( 0 );
+        char titleCase = Character.toTitleCase( firstChar );
+        if (firstChar == titleCase)
+        {
+            return data;
+        }
+        StringBuilder result = new StringBuilder( data.length() );
+        result.append( titleCase );
+        result.append(  data, 1, data.length() );
+        return result.toString();
     }
 
     /**

@@ -125,8 +125,14 @@ final class XMLEncode
             return null;
         }
         char c;
-        StringBuilder n = new StringBuilder( text.length() * 2 );
-        for ( int i = 0; i < text.length(); i++ )
+        int length = text.length();
+        StringBuilder n = new StringBuilder( length * 2 );
+        if ( forAttribute )
+        {
+            n.append( quoteChar );
+        }
+
+        for ( int i = 0; i < length; i++ )
         {
             c = text.charAt( i );
             switch ( c )
@@ -163,7 +169,7 @@ final class XMLEncode
                 case '\r':
                     if ( forAttribute )
                     {
-                        if ( i == ( text.length() - 1 ) || text.charAt( i + 1 ) != '\n' )
+                        if ( i == ( length - 1 ) || text.charAt( i + 1 ) != '\n' )
                         {
                             n.append( "&#13;" );
                         }
@@ -194,7 +200,6 @@ final class XMLEncode
         if ( forAttribute )
         {
             n.append( quoteChar );
-            n.insert( 0, quoteChar );
         }
 
         return n.toString();
