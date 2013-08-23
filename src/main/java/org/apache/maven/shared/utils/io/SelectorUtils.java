@@ -606,11 +606,18 @@ public final class SelectorUtils
                                                      boolean isCaseSensitive )
     {
         String[] strDirs = tokenizePathToString( str, separator );
+        return matchAntPathPatternStart( patDirs, strDirs, isCaseSensitive );
+    }
+
+    private static boolean matchAntPathPatternStart( @Nonnull String[] patDirs,
+                                                     @Nonnull String[] tokenizedFileName,
+                                                     boolean isCaseSensitive )
+    {
 
         int patIdxStart = 0;
         int patIdxEnd = patDirs.length - 1;
         int strIdxStart = 0;
-        int strIdxEnd = strDirs.length - 1;
+        int strIdxEnd = tokenizedFileName.length - 1;
 
         // up to first '**'
         while ( patIdxStart <= patIdxEnd && strIdxStart <= strIdxEnd )
@@ -620,7 +627,7 @@ public final class SelectorUtils
             {
                 break;
             }
-            if ( !match( patDir, strDirs[strIdxStart], isCaseSensitive ) )
+            if ( !match( patDir, tokenizedFileName[strIdxStart], isCaseSensitive ) )
             {
                 return false;
             }

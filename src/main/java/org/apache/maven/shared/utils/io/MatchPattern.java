@@ -23,6 +23,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 
@@ -39,6 +40,8 @@ public class MatchPattern
 
     private final String regexPattern;
 
+    private final Pattern regexPatternRegex;
+
     private final String separator;
 
     private final String[] tokenized;
@@ -48,6 +51,7 @@ public class MatchPattern
         regexPattern = SelectorUtils.isRegexPrefixedPattern( source ) ? source.substring(
             SelectorUtils.REGEX_HANDLER_PREFIX.length(),
             source.length() - SelectorUtils.PATTERN_HANDLER_SUFFIX.length() ) : null;
+        regexPatternRegex = regexPattern != null ? Pattern.compile(  regexPattern ) : null;
         this.source =
             SelectorUtils.isAntPrefixedPattern( source ) ? source.substring( SelectorUtils.ANT_HANDLER_PREFIX.length(),
                                                                              source.length()
@@ -62,7 +66,7 @@ public class MatchPattern
     {
         if ( regexPattern != null )
         {
-            return str.matches( regexPattern );
+            return regexPatternRegex.matcher( str).matches();
         }
         else
         {
@@ -74,7 +78,7 @@ public class MatchPattern
     {
         if ( regexPattern != null )
         {
-            return str.matches( regexPattern );
+            return regexPatternRegex.matcher( str).matches();
         }
         else
         {
