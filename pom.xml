@@ -31,10 +31,6 @@
   <artifactId>maven-shared-utils</artifactId>
   <version>0.5-SNAPSHOT</version>
 
-  <properties>
-    <mavenVersion>2.1.0</mavenVersion>
-  </properties>
-
   <name>Apache Maven Shared Utils</name>
   <description>Shared utils without any further dependencies</description>
 
@@ -52,6 +48,17 @@
     <system>jira</system>
     <url>http://jira.codehaus.org/browse/MSHARED</url>
   </issueManagement>
+  <distributionManagement>
+    <site>
+      <id>apache.website</id>
+      <url>scm:svn:https://svn.apache.org/repos/infra/websites/production/maven/content/${maven.site.path}</url>
+    </site>
+  </distributionManagement>
+
+  <properties>
+    <mavenVersion>2.1.0</mavenVersion>
+    <maven.site.path>shared-archives/${project.artifactId}-LATEST</maven.site.path>
+  </properties>
 
   <dependencies>
     <dependency>
