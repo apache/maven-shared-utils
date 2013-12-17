@@ -33,14 +33,14 @@ import org.apache.maven.toolchain.Toolchain;
  * @author Tony Chemit <chemit@codelutin.com>
  * @since 0.5
  */
-public interface JavaTool<Request extends JavaToolRequest, Result extends JavaToolResult>
+public interface JavaTool<Request extends JavaToolRequest>
 {
 
     /**
      * Return the name of the java tool. This is exactly the name (without his extension) of the executable to
      * find in the {@code jdk/bin} directory.
      * <p/>
-     * For example: {@code jarsigner, keytoll, javadoc, ...}
+     * For example: {@code jarsigner, keytool, javadoc, ...}
      *
      * @return the name of the java tool.
      */
@@ -58,13 +58,13 @@ public interface JavaTool<Request extends JavaToolRequest, Result extends JavaTo
      * <p/>
      * If could not create the java tool invocation, a {@link JavaToolException} will be thrown.
      * <p/>
-     * If execution fails, then the result will have a none-zero {@link Result#getExitCode()} and his
-     * {@link Result#getExecutionException()} will be filled with the error, otherwise the exist code will be zero.
+     * If execution fails, then the result will have a none-zero {@link JavaToolResult#getExitCode()} and his
+     * {@link JavaToolResult#getExecutionException()} will be filled with the error, otherwise the exist code will be zero.
      *
      * @param request the request to perform
      * @return the result of the tool execution
      * @throws JavaToolException if could not create the java tool invocation
      */
-    Result execute( Request request )
+    JavaToolResult execute( Request request )
         throws JavaToolException;
 }

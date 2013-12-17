@@ -28,22 +28,23 @@ import org.apache.maven.shared.utils.cli.Commandline;
  * @author Tony Chemit <chemit@codelutin.com>
  * @since 0.5
  */
-public interface JavaToolResult
+public class JavaToolResult
 {
     /**
-     * Gets the command line used.
-     *
-     * @return The command line used
+     * The exception that prevented to execute the command line, will be <code>null</code> if jarSigner could be
+     * successfully started.
      */
-    Commandline getCommandline();
+    private CommandLineException executionException;
 
     /**
-     * Gets the exception that possibly occurred during the execution of the command line.
-     *
-     * @return The exception that prevented to invoke tool or <code>null</code> if the command line was successfully
-     *         processed by the operating system.
+     * The exit code reported by the Maven invocation.
      */
-    CommandLineException getExecutionException();
+    private int exitCode = Integer.MIN_VALUE;
+
+    /**
+     * The command line used to obtain this result.
+     */
+    private Commandline commandline;
 
     /**
      * Gets the exit code from the tool invocation. A non-zero value indicates a build failure. <strong>Note:</strong>
@@ -51,26 +52,59 @@ public interface JavaToolResult
      *
      * @return The exit code from the tool invocation.
      */
-    int getExitCode();
+    public int getExitCode()
+    {
+        return exitCode;
+    }
+
+    /**
+     * Gets the command line used.
+     *
+     * @return The command line used
+     */
+    public Commandline getCommandline()
+    {
+        return commandline;
+    }
+
+    /**
+     * Gets the exception that possibly occurred during the execution of the command line.
+     *
+     * @return The exception that prevented to invoke tool or <code>null</code> if the command line was successfully
+     * processed by the operating system.
+     */
+    public CommandLineException getExecutionException()
+    {
+        return executionException;
+    }
 
     /**
      * Sets the exit code reported by the tool invocation.
      *
      * @param exitCode The exit code reported by the tool invocation.
      */
-    void setExitCode( int exitCode );
+    public void setExitCode( int exitCode )
+    {
+        this.exitCode = exitCode;
+    }
 
     /**
      * Sets the exception that prevented to execute the command line.
      *
      * @param executionException The exception that prevented to execute the command line, may be <code>null</code>.
      */
-    void setExecutionException( CommandLineException executionException );
+    public void setExecutionException( CommandLineException executionException )
+    {
+        this.executionException = executionException;
+    }
 
     /**
      * Set the commandline used to obtain this result.
      *
      * @param commandline the commandline used to obtain this result
      */
-    void setCommandline( Commandline commandline );
+    public void setCommandline( Commandline commandline )
+    {
+        this.commandline = commandline;
+    }
 }

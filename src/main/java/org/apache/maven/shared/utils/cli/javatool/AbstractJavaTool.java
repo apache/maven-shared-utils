@@ -38,9 +38,9 @@ import java.util.Map;
  * @author Tony Chemit <chemit@codelutin.com>
  * @since 0.5
  */
-public abstract class AbstractJavaTool<Request extends JavaToolRequest, Result extends JavaToolResult>
+public abstract class AbstractJavaTool<Request extends JavaToolRequest>
     extends AbstractLogEnabled
-    implements JavaTool<Request, Result>
+    implements JavaTool<Request>
 {
 
     /**
@@ -74,8 +74,6 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest, Result e
     protected abstract Commandline createCommandLine( Request request, String javaToolFile )
         throws JavaToolException;
 
-    protected abstract Result createResult();
-
     /**
      * {@inheritDoc}
      */
@@ -95,7 +93,7 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest, Result e
     /**
      * {@inheritDoc}
      */
-    public Result execute( Request request )
+    public JavaToolResult execute( Request request )
         throws JavaToolException
     {
 
@@ -118,7 +116,7 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest, Result e
         Commandline cli = createCommandLine( request, javaToolFile );
 
         // execute it
-        Result result = executeCommandLine( cli, request );
+        JavaToolResult result = executeCommandLine( cli, request );
 
         // return result
         return result;
@@ -141,14 +139,14 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest, Result e
         return systemIn;
     }
 
-    protected Result executeCommandLine( Commandline cli, Request request )
+    protected JavaToolResult executeCommandLine( Commandline cli, Request request )
     {
         if ( getLogger().isDebugEnabled() )
         {
             getLogger().debug( "Executing: " + cli );
         }
 
-        Result result = createResult();
+        JavaToolResult result = createResult();
 
         result.setCommandline( cli );
 
@@ -216,6 +214,11 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest, Result e
             };
         }
         return systemOut;
+    }
+
+    protected JavaToolResult createResult()
+    {
+        return new JavaToolResult();
     }
 
     protected String findJavaToolExecutable()
