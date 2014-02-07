@@ -29,4 +29,12 @@ public interface Arg
 
     void setFile( File value );
 
+    /**
+     * To mask the argument value when a command line ask to print his arguments.
+     *
+     * @param mask new state of the {@code maks} property
+     * @since 0.6
+     */
+    void setMask( boolean mask );
+
 }

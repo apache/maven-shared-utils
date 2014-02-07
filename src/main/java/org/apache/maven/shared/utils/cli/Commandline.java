@@ -22,6 +22,7 @@ package org.apache.maven.shared.utils.cli;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -266,11 +267,21 @@ public class Commandline
     }
 
     /**
-     * Returns the shell, executable and all defined arguments.
+     * @return the shell, executable and all defined arguments without masking any arguments.
      */
     private String[] getShellCommandline()
     {
-        List<String> shellCommandLine = getShell().getShellCommandLine( getArguments() );
+        return getShellCommandline( false ) ;
+    }
+
+    /**
+     * @param mask flag to mask any arguments (having his {@code mask} field to {@code true}).
+     * @return the shell, executable and all defined arguments with masking some arguments if
+     * {@code mask} parameter is on
+     */
+    private String[] getShellCommandline(boolean mask)
+    {
+        List<String> shellCommandLine = getShell().getShellCommandLine( getArguments( mask ) );
         return shellCommandLine.toArray( new String[shellCommandLine.size()] );
     }
 
@@ -280,6 +291,17 @@ public class Commandline
      */
     public String[] getArguments()
     {
+        return getArguments( false );
+    }
+
+    /**
+     * Returns all arguments defined by <code>addLine</code>,
+     * <code>addValue</code> or the argument object.
+     *
+     * @param mask flag to mask any arguments (having his {@code mask} field to {@code true}).
+     */
+    public String[] getArguments( boolean mask )
+    {
         List<String> result = new ArrayList<String>( arguments.size() * 2 );
         for ( Arg argument : arguments )
         {
@@ -287,6 +309,18 @@ public class Commandline
             String[] s = arg.getParts();
             if ( s != null )
             {
+                if ( mask && ( arg.isMask() ) )
+                {
+                    // should be a key-pair argument
+                    if ( s.length > 0 )
+                    {
+
+                        // use a masked copy
+                        String[] copy = new String[s.length];
+                        Arrays.fill( copy, "*****" );
+                        s = copy;
+                    }
+                }
                 Collections.addAll( result, s );
             }
         }
@@ -296,7 +330,7 @@ public class Commandline
 
     public String toString()
     {
-        return StringUtils.join( getShellCommandline(), " " );
+        return StringUtils.join( getShellCommandline( true ), " " );
     }
 
 
@@ -404,8 +438,10 @@ public class Commandline
     {
         private String[] parts;
 
-        /* (non-Javadoc)
-         * @see org.apache.maven.shared.utils.cli.Argumnt#setValue(java.lang.String)
+        private boolean mask;
+
+        /**
+         * {@inheritDoc}
          */
         public void setValue( String value )
         {
@@ -415,8 +451,8 @@ public class Commandline
             }
         }
 
-        /* (non-Javadoc)
-         * @see org.apache.maven.shared.utils.cli.Argumnt#setLine(java.lang.String)
+        /**
+         * {@inheritDoc}
          */
         public void setLine( String line )
         {
@@ -434,20 +470,30 @@ public class Commandline
             }
         }
 
-        /* (non-Javadoc)
-         * @see org.apache.maven.shared.utils.cli.Argumnt#setFile(java.io.File)
+        /**
+         * {@inheritDoc}
          */
         public void setFile( File value )
         {
             parts = new String[]{ value.getAbsolutePath() };
         }
 
-        /* (non-Javadoc)
-         * @see org.apache.maven.shared.utils.cli.Argumnt#getParts()
+        /**
+         * {@inheritDoc}
          */
+        public void setMask( boolean mask )
+        {
+            this.mask = mask;
+        }
+
         private String[] getParts()
         {
             return parts;
+        }
+
+        public boolean isMask()
+        {
+            return mask;
         }
     }
 }
