@@ -21,14 +21,21 @@ package org.apache.maven.shared.utils.xml;
 
 import org.apache.maven.shared.utils.io.IOUtil;
 import org.apache.maven.shared.utils.xml.pull.XmlPullParserException;
-
-import org.xml.sax.*;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.WillClose;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -128,7 +135,8 @@ public class Xpp3DomBuilder
 
     }
 
-    private static XMLReader instantiate( String s ){
+    private static XMLReader instantiate( String s )
+    {
         try
         {
             Class<?> aClass = Thread.currentThread().getContextClassLoader().loadClass( s );

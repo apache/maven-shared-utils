@@ -58,7 +58,7 @@ public class Xpp3Dom
 
     public static final String CHILDREN_COMBINATION_APPEND = "append";
 
-    @SuppressWarnings("UnusedDeclaration")
+    @SuppressWarnings( "UnusedDeclaration" )
     private static final String DEFAULT_CHILDREN_COMBINATION_MODE = CHILDREN_COMBINATION_MERGE; // plexus: public
 
     public static final String SELF_COMBINATION_MODE_ATTRIBUTE = "combine.self";
@@ -67,7 +67,7 @@ public class Xpp3Dom
 
     public static final String SELF_COMBINATION_MERGE = "merge";
 
-    @SuppressWarnings("UnusedDeclaration")
+    @SuppressWarnings( "UnusedDeclaration" )
     private static final String DEFAULT_SELF_COMBINATION_MODE = SELF_COMBINATION_MERGE;  // plexus: public
 
     private static final String[] EMPTY_STRING_ARRAY = new String[0];
@@ -80,7 +80,7 @@ public class Xpp3Dom
         childMap = new HashMap<String, Xpp3Dom>();
     }
 
-    public Xpp3Dom( Xpp3Dom source)
+    public Xpp3Dom( Xpp3Dom source )
     {
         this( source, source.getName() );
     }

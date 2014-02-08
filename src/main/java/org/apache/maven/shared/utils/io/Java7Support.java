@@ -31,7 +31,7 @@ import java.lang.reflect.Method;
 public class Java7Support
 {
 
-    private static final boolean isJava7;
+    private static final boolean IS_JAVA7;
 
     private static Method isSymbolicLink;
 
@@ -46,14 +46,16 @@ public class Java7Support
             Class<?> path = Thread.currentThread().getContextClassLoader().loadClass( "java.nio.file.Path" );
             isSymbolicLink = files.getMethod( "isSymbolicLink", path );
             toPath = File.class.getMethod( "toPath" );
-        } catch (ClassNotFoundException e)
-        {
-            isJava7x = false;
-        } catch (NoSuchMethodException e)
+        }
+        catch ( ClassNotFoundException e )
         {
             isJava7x = false;
         }
-        isJava7 = isJava7x;
+        catch ( NoSuchMethodException e )
+        {
+            isJava7x = false;
+        }
+        IS_JAVA7 = isJava7x;
     }
 
     public static boolean isSymLink( File file )
@@ -73,10 +75,8 @@ public class Java7Support
         }
     }
 
-
-
     public static boolean isJava7()
     {
-        return isJava7;
+        return IS_JAVA7;
     }
 }

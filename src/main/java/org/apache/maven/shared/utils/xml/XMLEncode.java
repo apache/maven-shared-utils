@@ -27,8 +27,8 @@ package org.apache.maven.shared.utils.xml;
 final class XMLEncode
 {
 
-    private final static int CDATA_BLOCK_THRESHOLD_LENGTH = 12;
-    private final static char DEFAULT_QUOTE_CHAR = '"';
+    private static final int CDATA_BLOCK_THRESHOLD_LENGTH = 12;
+    private static final char DEFAULT_QUOTE_CHAR = '"';
 
     /**
      * Checks if this text purely consists of the white space characters

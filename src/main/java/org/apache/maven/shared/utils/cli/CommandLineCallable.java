@@ -22,11 +22,11 @@ package org.apache.maven.shared.utils.cli;
 import java.util.concurrent.Callable;
 
 /**
- * Callable wrapper that exposes the proper exeception type to the client.
+ * Callable wrapper that exposes the proper exception type to the client.
  *
  * @author Kristian Rosenvold
  */
-public interface CommandLineCallable
+interface CommandLineCallable
     extends Callable<Integer>
 {
     public Integer call()

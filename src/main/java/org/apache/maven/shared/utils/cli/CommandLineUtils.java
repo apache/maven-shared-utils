@@ -19,9 +19,6 @@ package org.apache.maven.shared.utils.cli;
  * under the License.
  */
 
-import org.apache.maven.shared.utils.Os;
-import org.apache.maven.shared.utils.StringUtils;
-
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;

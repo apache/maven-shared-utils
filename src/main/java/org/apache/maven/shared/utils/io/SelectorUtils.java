@@ -575,18 +575,13 @@ public final class SelectorUtils
     }
 
 
-    @SuppressWarnings("SimplifiableIfStatement")
     static boolean matchAntPathPatternStart( @Nonnull MatchPattern pattern,
                                              @Nonnull String str,
                                              @Nonnull String separator,
                                              boolean isCaseSensitive )
     {
-        if ( separatorPatternStartSlashMismatch( pattern, str, separator ) )
-        {
-            return false;
-        }
-
-        return matchAntPathPatternStart( pattern.getTokenizedPathString(), str, separator, isCaseSensitive );
+        return separatorPatternStartSlashMismatch( pattern, str, separator )
+            && matchAntPathPatternStart( pattern.getTokenizedPathString(), str, separator, isCaseSensitive );
     }
 
     private static String[] tokenizePathToString( @Nonnull String path, @Nonnull String separator )

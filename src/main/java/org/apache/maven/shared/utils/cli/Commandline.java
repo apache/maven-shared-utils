@@ -279,7 +279,7 @@ public class Commandline
      * @return the shell, executable and all defined arguments with masking some arguments if
      * {@code mask} parameter is on
      */
-    private String[] getShellCommandline(boolean mask)
+    private String[] getShellCommandline( boolean mask )
     {
         List<String> shellCommandLine = getShell().getShellCommandLine( getArguments( mask ) );
         return shellCommandLine.toArray( new String[shellCommandLine.size()] );

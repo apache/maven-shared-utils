@@ -66,7 +66,7 @@ public class MatchPattern
     {
         if ( regexPattern != null )
         {
-            return regexPatternRegex.matcher( str).matches();
+            return regexPatternRegex.matcher( str ).matches();
         }
         else
         {
@@ -78,7 +78,7 @@ public class MatchPattern
     {
         if ( regexPattern != null )
         {
-            return regexPatternRegex.matcher( str).matches();
+            return regexPatternRegex.matcher( str ).matches();
         }
         else
         {

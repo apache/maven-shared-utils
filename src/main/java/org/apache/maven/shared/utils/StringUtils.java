@@ -2163,7 +2163,7 @@ public class StringUtils
     {
         char firstChar = data.charAt( 0 );
         char titleCase = Character.toTitleCase( firstChar );
-        if (firstChar == titleCase)
+        if ( firstChar == titleCase )
         {
             return data;
         }
