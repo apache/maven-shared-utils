@@ -26,7 +26,7 @@ import java.util.concurrent.Callable;
  *
  * @author Kristian Rosenvold
  */
-interface CommandLineCallable
+public interface CommandLineCallable
     extends Callable<Integer>
 {
     public Integer call()
