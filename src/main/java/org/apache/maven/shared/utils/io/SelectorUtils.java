@@ -580,8 +580,8 @@ public final class SelectorUtils
                                              @Nonnull String separator,
                                              boolean isCaseSensitive )
     {
-        return separatorPatternStartSlashMismatch( pattern, str, separator )
-            || matchAntPathPatternStart( pattern.getTokenizedPathString(), str, separator, isCaseSensitive );
+        return !separatorPatternStartSlashMismatch( pattern, str, separator )
+            && matchAntPathPatternStart( pattern.getTokenizedPathString(), str, separator, isCaseSensitive );
     }
 
     private static String[] tokenizePathToString( @Nonnull String path, @Nonnull String separator )
