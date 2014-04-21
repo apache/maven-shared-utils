@@ -2502,10 +2502,45 @@ public class StringUtils
      * @param searchStr the String to find, may be null
      * @return true if the String contains the search String,
      *         false if not or <code>null</code> string input
-     * 
      */
     public static boolean contains( @Nullable String str, @Nullable String searchStr )
     {
         return !( str == null || searchStr == null ) && str.contains( searchStr );
+    }
+
+    /**
+     * <p>Checks if String ends with a search String, handling <code>null</code>.</p>
+     * <p/>
+     * <p>A <code>null</code> String will return <code>false</code>.</p>
+     * <p/>
+     * <pre>
+     * StringUtils.endsWithIgnoreCase(null, *)     = false
+     * StringUtils.endsWithIgnoreCase(*, null)     = false
+     * StringUtils.endsWithIgnoreCase("", "")      = true
+     * StringUtils.endsWithIgnoreCase("abc", "")   = true
+     * StringUtils.endsWithIgnoreCase("abc", "C")  = true
+     * StringUtils.endsWithIgnoreCase("abc", "a")  = false
+     * </pre>
+     *
+     * @param str       the String to check, may be null
+     * @param searchStr the String to find at end, may be null
+     * @return true if the String ends with the search String,
+     *         false if not or <code>null</code> string input
+     * 
+     */
+    public static boolean endsWithIgnoreCase( @Nullable String str, @Nullable String searchStr )
+    {
+        if ( str == null || searchStr == null )
+        {
+            // for consistency with contains
+            return false;
+        }
+
+        if ( str.length() < searchStr.length() )
+        {
+            return false;
+        }
+
+        return str.regionMatches( true, str.length() - searchStr.length(), searchStr, 0, searchStr.length() );
     }
 }

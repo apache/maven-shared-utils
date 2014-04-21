@@ -550,6 +550,28 @@ public class StringUtilsTest
     }
 
     @Test
+    public void testEndsWithIgnoreCase()
+    {
+        assertThat( StringUtils.endsWithIgnoreCase( null, null )
+                , is( false ) );
+
+        assertThat( StringUtils.endsWithIgnoreCase( null, "string" )
+                , is( false ) );
+
+        assertThat( StringUtils.endsWithIgnoreCase( "string", null )
+                , is( false ) );
+
+        assertThat( StringUtils.endsWithIgnoreCase( "string", "ing" )
+                , is( true ) );
+
+        assertThat( StringUtils.endsWithIgnoreCase( "string", "a string" )
+                , is( false ) );
+
+        assertThat( StringUtils.endsWithIgnoreCase( "string", "str" )
+                , is( false ) );
+    }
+
+    @Test
     public void testEquals()
     {
         assertThat( StringUtils.equals( null, null )
@@ -2062,6 +2084,5 @@ public class StringUtilsTest
                   , is( "DINGS" ) );
 
     }
-
 
 }
