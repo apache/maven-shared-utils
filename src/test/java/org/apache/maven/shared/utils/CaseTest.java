@@ -51,12 +51,12 @@ public class CaseTest
     /** turkish dotted I = İ */
     private final static char DOTTED_I = '\u0130';
 
-    private final Locale savedDefaultLocale = Locale.getDefault();
+    private final static Locale SAVED_DEFAULT_LOCALE = Locale.getDefault();
 
     @AfterClass
-    public void restoreDefaultLocale()
+    public static void restoreDefaultLocale()
     {
-        Locale.setDefault( savedDefaultLocale );
+        Locale.setDefault( SAVED_DEFAULT_LOCALE );
     }
 
     /**
