@@ -51,7 +51,7 @@ public class CaseTest
     private final static char DOTTED_I = '\u0130';
 
     /**
-     * test the known case of upper I which doesn't give commonly expected i in Turkish locale, but i (dotless i).
+     * test the known case of upper I which doesn't give commonly expected i in Turkish locale, but ı (dotless i).
      * @see <a href="http://mattryall.net/blog/2009/02/the-infamous-turkish-locale-bug">The infamous Turkish locale bug</a>
      */
     @Test
@@ -92,4 +92,51 @@ public class CaseTest
         }
     }
 
+    /**
+     * Test case change on all ascii characters with every available locale, to check that turkish i is the only
+     * exception on these characters.
+     */
+    @Test
+    public void testAsciiAvailableLocales()
+    {
+        final String lower = "abcdefghijklmnopqrstuvwxyz";
+        final String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+        Locale savedDefaultLocale = Locale.getDefault();
+
+        for ( Locale locale : Locale.getAvailableLocales() )
+        {
+            // check that toUpper() == toUpper(default locale) and toLower() = toLower(default locale)
+            Locale.setDefault( locale );
+            assertEquals( lower.toUpperCase(), lower.toUpperCase( locale ) );
+            assertEquals( upper.toLowerCase(), upper.toLowerCase( locale ) );
+
+            // check result
+            String expectedToUpperCase = upper;
+            String expectedToLowerCase = lower;
+            if ( LOCALE_TURKISH.getLanguage().equals( locale.getLanguage() ) )
+            {
+                expectedToUpperCase = upper.replace( DOTLESS_I, DOTTED_I );
+                expectedToLowerCase = lower.replace( DOTTED_i, DOTLESS_i );
+            }
+
+            assertEquals( "'" + lower + "'.toUpperCase('" + locale.toString() + "')", expectedToUpperCase,
+                          lower.toUpperCase( locale ) );
+            assertEquals( "'" + upper + "'.toLowerCase('" + locale.toString() + "')", expectedToLowerCase,
+                          upper.toLowerCase( locale ) );
+
+            // check that toLowerCase on lower and toUpperCase on upper don't cause harm
+            assertEquals( "'" + lower + "'.toLowerCase('" + locale.toString() + "')", lower, lower.toLowerCase( locale ) );
+            assertEquals( "'" + upper + "'.toUpperCase('" + locale.toString() + "')", upper, upper.toUpperCase( locale ) );
+
+            // check equalsIgnoreCase
+            assertTrue( "'" + upper + "'.equalsIgnoreCase('" + lower + "')", upper.equalsIgnoreCase( lower ) );
+            assertTrue( "'" + upper + "'.equalsIgnoreCase('" + expectedToLowerCase + "')",
+                        upper.equalsIgnoreCase( expectedToLowerCase ) );
+            assertTrue( "'" + expectedToUpperCase + "'.equalsIgnoreCase('" + lower + "')",
+                        expectedToUpperCase.equalsIgnoreCase( lower ) );
+        }
+
+        Locale.setDefault( savedDefaultLocale );
+    }
 }
