@@ -21,6 +21,7 @@ package org.apache.maven.shared.utils;
 
 import java.util.Locale;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -49,6 +50,14 @@ public class CaseTest
 
     /** turkish dotted I = İ */
     private final static char DOTTED_I = '\u0130';
+
+    private final Locale savedDefaultLocale = Locale.getDefault();
+
+    @AfterClass
+    public void restoreDefaultLocale()
+    {
+        Locale.setDefault( savedDefaultLocale );
+    }
 
     /**
      * test the known case of upper I which doesn't give commonly expected i in Turkish locale, but ı (dotless i).
@@ -102,8 +111,6 @@ public class CaseTest
         final String lower = "abcdefghijklmnopqrstuvwxyz";
         final String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-        Locale savedDefaultLocale = Locale.getDefault();
-
         for ( Locale locale : Locale.getAvailableLocales() )
         {
             // check that toUpper() == toUpper(default locale) and toLower() = toLower(default locale)
@@ -136,7 +143,5 @@ public class CaseTest
             assertTrue( "'" + expectedToUpperCase + "'.equalsIgnoreCase('" + lower + "')",
                         expectedToUpperCase.equalsIgnoreCase( lower ) );
         }
-
-        Locale.setDefault( savedDefaultLocale );
     }
 }
