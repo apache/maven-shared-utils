@@ -21,8 +21,10 @@ package org.apache.maven.shared.utils;
 
 import java.util.Locale;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.ComparisonFailure;
 import org.junit.Test;
 
 /**
@@ -51,6 +53,9 @@ public class CaseTest
     /** turkish dotted I = İ */
     private final static char DOTTED_I = '\u0130';
 
+    /** http://en.wikipedia.org/wiki/Dot_(diacritic) */
+    private final static char COMBINING_DOT_ABOVE = '\u0307';
+
     private final static Locale SAVED_DEFAULT_LOCALE = Locale.getDefault();
 
     @AfterClass
@@ -73,17 +78,19 @@ public class CaseTest
         final String iIıİ = "iIıİ";
 
         // check source encoding doesn't wreck havoc */
-        assertEquals( "misc i directly in (UTF-8) source", iIıİ, "" + DOTTED_i + DOTLESS_I + DOTLESS_i + DOTTED_I );
+        assertUnicodeEquals( "misc i directly in (UTF-8) source", iIıİ, "" + DOTTED_i + DOTLESS_I + DOTLESS_i
+            + DOTTED_I );
 
         // check toUpperCase and toLowerCase difference with turkish and english locales
-        assertEquals( "'iIıİ'.toUpperCase('tr')=='İIIİ'", "" + DOTTED_I + DOTLESS_I + DOTLESS_I + DOTTED_I,
-                      iIıİ.toUpperCase( LOCALE_TURKISH ) );
-        assertEquals( "'iIıİ'.toLowerCase('tr')=='iııi'", "" + DOTTED_i + DOTLESS_i + DOTLESS_i + DOTTED_i,
-                      iIıİ.toLowerCase( LOCALE_TURKISH ) );
-        assertEquals( "'iIıİ'.toUpperCase('en')=='IIIİ'", "" + DOTLESS_I + DOTLESS_I + DOTLESS_I + DOTTED_I,
-                      iIıİ.toUpperCase( Locale.ENGLISH ) );
-        assertEquals( "'iIıİ'.toLowerCase('en')=='iiıi'", "" + DOTTED_i + DOTTED_i + DOTLESS_i + DOTTED_i,
-                      iIıİ.toLowerCase( Locale.ENGLISH ) );
+        assertUnicodeEquals( "'iIıİ'.toUpperCase('tr')=='İIIİ'", "" + DOTTED_I + DOTLESS_I + DOTLESS_I + DOTTED_I,
+                             iIıİ.toUpperCase( LOCALE_TURKISH ) );
+        assertUnicodeEquals( "'iIıİ'.toLowerCase('tr')=='iııi'", "" + DOTTED_i + DOTLESS_i + DOTLESS_i + DOTTED_i,
+                             iIıİ.toLowerCase( LOCALE_TURKISH ) );
+        assertUnicodeEquals( "'iIıİ'.toUpperCase('en')=='IIIİ'", "" + DOTLESS_I + DOTLESS_I + DOTLESS_I + DOTTED_I,
+                             iIıİ.toUpperCase( Locale.ENGLISH ) );
+        String lower = iIıİ.toLowerCase( Locale.ENGLISH ); // on some platforms, ends with extra COMBINED DOT ABOVE
+        assertUnicodeEquals( "'iIıİ'.toLowerCase('en')=='iiıi'", "" + DOTTED_i + DOTTED_i + DOTLESS_i + DOTTED_i
+            + ( lower.length() > 4 ? COMBINING_DOT_ABOVE : "" ), lower );
 
         // check equalsIgnoreCase() , which has no locale
         for ( int i = 0; i < iIıİ.length(); i++ )
@@ -99,6 +106,23 @@ public class CaseTest
 
             assertTrue( "'" + current + "'.equalsIgnoreCase('" + iIıİ + "')", current.equalsIgnoreCase( iIıİ ) );
         }
+    }
+
+    /**
+     * Assert equals, and in case the result isn't as expected, display content unicode-escaped.
+     * @param message
+     * @param expected
+     * @param actual
+     */
+    private void assertUnicodeEquals( String message, String expected, String actual )
+    {
+        if ( expected.equals( actual ) )
+        {
+            return;
+        }
+
+        throw new ComparisonFailure( message, StringEscapeUtils.escapeJava( expected ),
+                                     StringEscapeUtils.escapeJava( actual ) );
     }
 
     /**
