@@ -115,6 +115,20 @@ public class DirectoryScannerTest
     }
 
     @Test
+    public void followSymlinks(){
+        DirectoryScanner ds = new DirectoryScanner();
+        ds.setBasedir( new File("src/test/resources/symlinks/src/") );
+        ds.setFollowSymlinks( false );
+        ds.scan();
+        List<String> included = Arrays.asList( ds.getIncludedFiles() );
+        System.out.println( "includedFiles(nosymlinks) = " + included );
+        ds.setFollowSymlinks( true );
+        ds.scan();
+        included = Arrays.asList( ds.getIncludedFiles() );
+        System.out.println( "includedFiles(symlinks  ) = " + included );
+    }
+
+    @Test
     public void testSimpleExcludes()
         throws Exception
     {
