@@ -122,6 +122,7 @@ public class DirectoryScannerTest
     @Test
     public void followSymlinksFalse()
     {
+        if (!Java7Support.isJava7()) return;
         DirectoryScanner ds = new DirectoryScanner();
         ds.setBasedir( new File( "src/test/resources/symlinks/src/" ) );
         ds.setFollowSymlinks( false );
@@ -154,6 +155,7 @@ public class DirectoryScannerTest
     @Test
     public void followSymlinks()
     {
+        if (!Java7Support.isJava7()) return;
         DirectoryScanner ds = new DirectoryScanner();
         ds.setBasedir( new File( "src/test/resources/symlinks/src/" ) );
         ds.setFollowSymlinks( true );
