@@ -20,10 +20,10 @@ package org.apache.maven.shared.utils.io;
  */
 
 import org.apache.maven.shared.utils.testhelpers.FileTestHelper;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.Assert;
 import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
@@ -31,6 +31,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class DirectoryScannerTest
 {
@@ -67,7 +70,8 @@ public class DirectoryScannerTest
         fitScanTest( true, true, true,
                 /* includes */        null,
                 /* excludes */        null,
-                /* expInclFiles */    new String[]{ "file1.txt", "file2.txt", "file3.dat", "folder1/file4.txt", "folder1/file5.dat" },
+                /* expInclFiles */
+                new String[]{ "file1.txt", "file2.txt", "file3.dat", "folder1/file4.txt", "folder1/file5.dat" },
                 /* expInclDirs */     new String[]{ "", "folder1" },
                 /* expNotInclFiles */ NONE,
                 /* expNotInclDirs  */ NONE,
@@ -78,7 +82,8 @@ public class DirectoryScannerTest
         fitScanTest( true, false, true,
                 /* includes */        null,
                 /* excludes */        null,
-                /* expInclFiles */    new String[]{ "file1.txt", "file2.txt", "file3.dat", "folder1/file4.txt", "folder1/file5.dat" },
+                /* expInclFiles */
+                new String[]{ "file1.txt", "file2.txt", "file3.dat", "folder1/file4.txt", "folder1/file5.dat" },
                 /* expInclDirs */     new String[]{ "", "folder1" },
                 /* expNotInclFiles */ NONE,
                 /* expNotInclDirs  */ NONE,
@@ -115,18 +120,57 @@ public class DirectoryScannerTest
     }
 
     @Test
-    public void followSymlinks()
+    public void followSymlinksFalse()
     {
         DirectoryScanner ds = new DirectoryScanner();
         ds.setBasedir( new File( "src/test/resources/symlinks/src/" ) );
         ds.setFollowSymlinks( false );
         ds.scan();
         List<String> included = Arrays.asList( ds.getIncludedFiles() );
-        System.out.println( "includedFiles(nosymlinks) = " + included );
+        assertAlwaysIncluded( included );
+        assertEquals( 9, included.size() );
+        List<String> includedDirs = Arrays.asList( ds.getIncludedDirectories() );
+        assertTrue( includedDirs.contains( "" ) ); // w00t !
+        assertTrue( includedDirs.contains( "aRegularDir" ) );
+        assertTrue( includedDirs.contains( "symDir" ) );
+        assertTrue( includedDirs.contains( "symLinkToDirOnTheOutside" ) );
+        assertTrue( includedDirs.contains( "targetDir" ) );
+        assertEquals( 5, includedDirs.size() );
+    }
+
+    private void assertAlwaysIncluded( List<String> included )
+    {
+        assertTrue( included.contains( "aRegularDir/aRegularFile.txt" ) );
+        assertTrue( included.contains( "targetDir/targetFile.txt" ) );
+        assertTrue( included.contains( "fileR.txt" ) );
+        assertTrue( included.contains( "fileW.txt" ) );
+        assertTrue( included.contains( "fileX.txt" ) );
+        assertTrue( included.contains( "symR" ) );
+        assertTrue( included.contains( "symW" ) );
+        assertTrue( included.contains( "symX" ) );
+        assertTrue( included.contains( "symLinkToFileOnTheOutside" ) );
+    }
+
+    @Test
+    public void followSymlinks()
+    {
+        DirectoryScanner ds = new DirectoryScanner();
+        ds.setBasedir( new File( "src/test/resources/symlinks/src/" ) );
         ds.setFollowSymlinks( true );
         ds.scan();
-        included = Arrays.asList( ds.getIncludedFiles() );
-        System.out.println( "  includedFiles(symlinks) = " + included );
+        List<String> included = Arrays.asList( ds.getIncludedFiles() );
+        assertAlwaysIncluded( included );
+        assertTrue( included.contains( "symDir/targetFile.txt" ) );
+        assertTrue( included.contains( "symLinkToDirOnTheOutside/FileInDirOnTheOutside.txt" ) );
+        assertEquals( 11, included.size() );
+
+        List<String> includedDirs = Arrays.asList( ds.getIncludedDirectories() );
+        assertTrue( includedDirs.contains( "" ) ); // w00t !
+        assertTrue( includedDirs.contains( "aRegularDir" ) );
+        assertTrue( includedDirs.contains( "symDir" ) );
+        assertTrue( includedDirs.contains( "symLinkToDirOnTheOutside" ) );
+        assertTrue( includedDirs.contains( "targetDir" ) );
+        assertEquals( 5, includedDirs.size() );
     }
 
     @Test
@@ -168,15 +212,10 @@ public class DirectoryScannerTest
     /**
      * Performs a scan and test for the given parameters if not null.
      */
-    private void fitScanTest( boolean caseSensitive,
-                              boolean followSymLinks,
-                              boolean addDefaultExcludes,
-                              String[] includes, String[] excludes,
-                              String[] expectedIncludedFiles,
-                              String[] expectedIncludedDirectories,
-                              String[] expectedNotIncludedFiles,
-                              String[] expectedNotIncludedDirectories,
-                              String[] expectedExcludedFiles,
+    private void fitScanTest( boolean caseSensitive, boolean followSymLinks, boolean addDefaultExcludes,
+                              String[] includes, String[] excludes, String[] expectedIncludedFiles,
+                              String[] expectedIncludedDirectories, String[] expectedNotIncludedFiles,
+                              String[] expectedNotIncludedDirectories, String[] expectedExcludedFiles,
                               String[] expectedExcludedDirectories )
     {
         DirectoryScanner ds = new DirectoryScanner();
@@ -198,7 +237,7 @@ public class DirectoryScannerTest
             ds.setExcludes( excludes );
         }
 
-        TestScanConductor scanConductor =  new TestScanConductor();
+        TestScanConductor scanConductor = new TestScanConductor();
 
         ds.setScanConductor( scanConductor );
 
@@ -217,6 +256,7 @@ public class DirectoryScannerTest
 
     /**
      * Check if the resolved files match the rules of the expected files.
+     *
      * @param expectedFiles
      * @param resolvedFiles
      */
@@ -224,16 +264,17 @@ public class DirectoryScannerTest
     {
         if ( expectedFiles != null )
         {
-            String msg = category + " expected: " + Arrays.toString( expectedFiles ) + " but got: " + Arrays.toString( resolvedFiles );
+            String msg = category + " expected: " + Arrays.toString( expectedFiles ) + " but got: " + Arrays.toString(
+                resolvedFiles );
             Assert.assertNotNull( msg, resolvedFiles );
-            Assert.assertEquals( msg, expectedFiles.length, resolvedFiles.length );
+            assertEquals( msg, expectedFiles.length, resolvedFiles.length );
 
             Arrays.sort( expectedFiles );
             Arrays.sort( resolvedFiles );
 
             for ( int i = 0; i < resolvedFiles.length; i++ )
             {
-                Assert.assertEquals( msg, expectedFiles[i], resolvedFiles[i].replace( "\\", "/" ) );
+                assertEquals( msg, expectedFiles[i], resolvedFiles[i].replace( "\\", "/" ) );
             }
         }
     }
@@ -245,7 +286,7 @@ public class DirectoryScannerTest
 
         public ScanConductor.ScanAction visitDirectory( String name, File directory )
         {
-            Assert.assertTrue( directory.isDirectory() );
+            assertTrue( directory.isDirectory() );
 
             if ( directory.getName().equals( "ignorefolder" ) )
             {
@@ -257,7 +298,7 @@ public class DirectoryScannerTest
 
         public ScanConductor.ScanAction visitFile( String name, File file )
         {
-            Assert.assertTrue( file.isFile() );
+            assertTrue( file.isFile() );
             visitedFiles.add( name );
             return ScanAction.CONTINUE;
         }
@@ -301,12 +342,11 @@ public class DirectoryScannerTest
         String[] removedFiles = dsr.getFilesRemoved();
         Assert.assertNotNull( addedFiles );
         Assert.assertNotNull( removedFiles );
-        Assert.assertEquals( 1, addedFiles.length );
-        Assert.assertEquals( 2, removedFiles.length );
+        assertEquals( 1, addedFiles.length );
+        assertEquals( 2, removedFiles.length );
     }
 
-    @Ignore( "Enable this test to run performance checks" )
-    @Test
+    @Ignore( "Enable this test to run performance checks" ) @Test
     public void performanceTest()
         throws Exception
     {
