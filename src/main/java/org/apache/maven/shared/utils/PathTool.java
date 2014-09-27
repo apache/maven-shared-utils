@@ -194,7 +194,7 @@ public class PathTool
      *         terminated with a forward slash.  A zero-length string is
      *         returned if: the filename is zero-length.
      */
-    private @Nonnull static String determineRelativePath( @Nonnull String filename, @Nonnull String separator )
+    @Nonnull private static String determineRelativePath( @Nonnull String filename, @Nonnull String separator )
     {
         if ( filename.length() == 0 )
         {
@@ -267,7 +267,8 @@ public class PathTool
         return path;
     }
 
-    private @Nonnull static String buildRelativePath( @Nonnull String toPath, @Nonnull String fromPath, final char separatorChar )
+    @Nonnull private static String buildRelativePath( @Nonnull String toPath, @Nonnull String fromPath,
+                                                      final char separatorChar )
     {
         // use tokeniser to traverse paths and for lazy checking
         StringTokenizer toTokeniser = new StringTokenizer( toPath, String.valueOf( separatorChar ) );

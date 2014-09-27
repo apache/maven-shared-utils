@@ -115,9 +115,10 @@ public class DirectoryScannerTest
     }
 
     @Test
-    public void followSymlinks(){
+    public void followSymlinks()
+    {
         DirectoryScanner ds = new DirectoryScanner();
-        ds.setBasedir( new File("src/test/resources/symlinks/src/") );
+        ds.setBasedir( new File( "src/test/resources/symlinks/src/" ) );
         ds.setFollowSymlinks( false );
         ds.scan();
         List<String> included = Arrays.asList( ds.getIncludedFiles() );
@@ -125,7 +126,7 @@ public class DirectoryScannerTest
         ds.setFollowSymlinks( true );
         ds.scan();
         included = Arrays.asList( ds.getIncludedFiles() );
-        System.out.println( "includedFiles(symlinks  ) = " + included );
+        System.out.println( "  includedFiles(symlinks) = " + included );
     }
 
     @Test
@@ -304,7 +305,7 @@ public class DirectoryScannerTest
         Assert.assertEquals( 2, removedFiles.length );
     }
 
-    @Ignore("Enable this test to run performance checks")
+    @Ignore( "Enable this test to run performance checks" )
     @Test
     public void performanceTest()
         throws Exception

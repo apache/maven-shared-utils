@@ -111,7 +111,7 @@ public class Xpp3Dom
         return name;
     }
 
-    public @Nonnull String getValue()
+    @Nonnull public String getValue()
     {
         return value;
     }

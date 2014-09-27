@@ -79,7 +79,7 @@ public class StringUtils
      * @return the trimmed text (never <code>null</code>)
      * @see java.lang.String#trim()
      */
-    public @Nonnull static String clean( String str )
+    @Nonnull public static String clean( String str )
     {
         return ( str == null ? "" : str.trim() );
     }
@@ -108,7 +108,7 @@ public class StringUtils
      * @return the String without whitespaces
      * @throws NullPointerException
      */
-    public @Nonnull static String deleteWhitespace( @Nonnull String str )
+    @Nonnull public static String deleteWhitespace( @Nonnull String str )
     {
         StringBuilder buffer = new StringBuilder();
         int sz = str.length();
@@ -510,7 +510,7 @@ public class StringUtils
      * @param str the String to parse
      * @return an array of parsed Strings
      */
-    public @Nonnull static String[] split( @Nonnull String str )
+    @Nonnull public static String[] split( @Nonnull String str )
     {
         return split( str, null, -1 );
     }
@@ -518,7 +518,7 @@ public class StringUtils
     /**
      * @see #split(String, String, int)
      */
-    public @Nonnull static String[] split( @Nonnull String text, String separator )
+    @Nonnull public static String[] split( @Nonnull String text, String separator )
     {
         return split( text, separator, -1 );
     }
@@ -541,7 +541,7 @@ public class StringUtils
      *                  array.  A zero or negative value implies no limit.
      * @return an array of parsed Strings
      */
-    public @Nonnull static String[] split( @Nonnull String str, String separator, int max )
+    @Nonnull public static String[] split( @Nonnull String str, String separator, int max )
     {
         StringTokenizer tok;
         if ( separator == null )
@@ -599,7 +599,7 @@ public class StringUtils
      * @param array the array of values to concatenate.
      * @return the concatenated string.
      */
-    public @Nonnull static String concatenate( @Nonnull Object... array )
+    @Nonnull public static String concatenate( @Nonnull Object... array )
     {
         return join( array, "" );
     }
@@ -615,7 +615,7 @@ public class StringUtils
      * @param separator the separator character to use
      * @return the joined String
      */
-    public @Nonnull static String join( @Nonnull Object[] array, String separator )
+    @Nonnull public static String join( @Nonnull Object[] array, String separator )
     {
         if ( separator == null )
         {
@@ -647,7 +647,7 @@ public class StringUtils
      * @param separator the separator character to use
      * @return the joined String
      */
-    public @Nonnull static String join( @Nonnull Iterator<?> iterator, String separator )
+    @Nonnull public static String join( @Nonnull Iterator<?> iterator, String separator )
     {
         if ( separator == null )
         {
@@ -780,7 +780,7 @@ public class StringUtils
                 break;
             }
         }
-        buf.append( text, start, text.length());
+        buf.append( text, start, text.length() );
         return buf.toString();
     }
 
@@ -795,7 +795,7 @@ public class StringUtils
      * @throws NullPointerException if text or overlay is <code>null</code>
      */
     @SuppressWarnings( "ConstantConditions" )
-    public @Nonnull static String overlayString( @Nonnull String text, @Nonnull String overlay, int start, int end )
+    @Nonnull public static String overlayString( @Nonnull String text, @Nonnull String overlay, int start, int end )
     {
         if ( overlay == null )
         {
@@ -822,7 +822,7 @@ public class StringUtils
      * @return String containing centered String
      * @throws NullPointerException if str is <code>null</code>
      */
-    public @Nonnull static String center( @Nonnull String str, int size )
+    @Nonnull public static String center( @Nonnull String str, int size )
     {
         return center( str, size, " " );
     }
@@ -839,7 +839,7 @@ public class StringUtils
      * @throws NullPointerException if str or delim is <code>null</code>
      * @throws ArithmeticException  if delim is the empty String
      */
-    public @Nonnull static String center( @Nonnull String str, int size, @Nonnull String delim )
+    @Nonnull public static String center( @Nonnull String str, int size, @Nonnull String delim )
     {
         int sz = str.length();
         int p = size - sz;
@@ -862,7 +862,7 @@ public class StringUtils
      * @return String without chomped newline
      * @throws NullPointerException if str is <code>null</code>
      */
-    public @Nonnull static String chomp( @Nonnull String str )
+    @Nonnull public static String chomp( @Nonnull String str )
     {
         return chomp( str, "\n" );
     }
@@ -876,7 +876,7 @@ public class StringUtils
      * @return String without chomped ending
      * @throws NullPointerException if str or sep is <code>null</code>
      */
-    public @Nonnull static String chomp( @Nonnull String str, @Nonnull String sep )
+    @Nonnull public static String chomp( @Nonnull String str, @Nonnull String sep )
     {
         int idx = str.lastIndexOf( sep );
         if ( idx != -1 )
@@ -897,7 +897,7 @@ public class StringUtils
      * @return String without chomped ending
      * @throws NullPointerException if str is <code>null</code>
      */
-    public @Nonnull static String chompLast( @Nonnull String str )
+    @Nonnull public static String chompLast( @Nonnull String str )
     {
         return chompLast( str, "\n" );
     }
@@ -910,7 +910,7 @@ public class StringUtils
      * @return String without chomped ending
      * @throws NullPointerException if str or sep is <code>null</code>
      */
-    public @Nonnull static String chompLast( @Nonnull String str, @Nonnull String sep )
+    @Nonnull public static String chompLast( @Nonnull String str, @Nonnull String sep )
     {
         if ( str.length() == 0 )
         {
@@ -936,7 +936,7 @@ public class StringUtils
      * @return String chomped
      * @throws NullPointerException if str or sep is <code>null</code>
      */
-    public @Nonnull static String getChomp( @Nonnull String str, @Nonnull String sep )
+    @Nonnull public static String getChomp( @Nonnull String str, @Nonnull String sep )
     {
         int idx = str.lastIndexOf( sep );
         if ( idx == str.length() - sep.length() )
@@ -962,7 +962,7 @@ public class StringUtils
      * @return String without chomped beginning
      * @throws NullPointerException if str or sep is <code>null</code>
      */
-    public @Nonnull static String prechomp( @Nonnull String str, @Nonnull String sep )
+    @Nonnull public static String prechomp( @Nonnull String str, @Nonnull String sep )
     {
         int idx = str.indexOf( sep );
         if ( idx != -1 )
@@ -984,7 +984,7 @@ public class StringUtils
      * @return String prechomped
      * @throws NullPointerException if str or sep is <code>null</code>
      */
-    public @Nonnull static String getPrechomp( @Nonnull String str, String sep )
+    @Nonnull public static String getPrechomp( @Nonnull String str, String sep )
     {
         int idx = str.indexOf( sep );
         if ( idx != -1 )
@@ -1010,7 +1010,7 @@ public class StringUtils
      * @return String without last character
      * @throws NullPointerException if str is <code>null</code>
      */
-    public @Nonnull static String chop( @Nonnull String str )
+    @Nonnull public static String chop( @Nonnull String str )
     {
         if ( "".equals( str ) )
         {
@@ -1041,7 +1041,7 @@ public class StringUtils
      * @return String without newline
      * @throws NullPointerException if str is <code>null</code>
      */
-    public @Nonnull static String chopNewline( @Nonnull String str )
+    @Nonnull public static String chopNewline( @Nonnull String str )
     {
         int lastIdx = str.length() - 1;
         char last = str.charAt( lastIdx );
@@ -1074,7 +1074,7 @@ public class StringUtils
      * @return String with escaped values
      * @throws NullPointerException if str is <code>null</code>
      */
-    public @Nonnull static String escape( @Nonnull String str )
+    @Nonnull public static String escape( @Nonnull String str )
     {
         // improved with code from  cybertiger@cyberiantiger.org
         // unicode from him, and defaul for < 32's.
@@ -1171,7 +1171,7 @@ public class StringUtils
      * @throws NegativeArraySizeException if <code>repeat < 0</code>
      * @throws NullPointerException       if str is <code>null</code>
      */
-    public @Nonnull static String repeat( @Nonnull String str, int repeat )
+    @Nonnull public static String repeat( @Nonnull String str, int repeat )
     {
         StringBuilder buffer = new StringBuilder( repeat * str.length() );
         for ( int i = 0; i < repeat; i++ )
@@ -1191,7 +1191,7 @@ public class StringUtils
      * @return right padded String
      * @throws NullPointerException if str is <code>null</code>
      */
-    public @Nonnull static String rightPad( @Nonnull String str, int size )
+    @Nonnull public static String rightPad( @Nonnull String str, int size )
     {
         return rightPad( str, size, " " );
     }
@@ -1208,7 +1208,7 @@ public class StringUtils
      * @throws NullPointerException if str or delim is <code>null</code>
      * @throws ArithmeticException  if delim is the empty String
      */
-    public @Nonnull static String rightPad( @Nonnull String str, int size, @Nonnull String delim )
+    @Nonnull public static String rightPad( @Nonnull String str, int size, @Nonnull String delim )
     {
         size = ( size - str.length() ) / delim.length();
         if ( size > 0 )
@@ -1228,7 +1228,7 @@ public class StringUtils
      * @return left padded String
      * @throws NullPointerException if str or delim is <code>null</code>
      */
-    public @Nonnull static String leftPad( @Nonnull String str, int size )
+    @Nonnull public static String leftPad( @Nonnull String str, int size )
     {
         return leftPad( str, size, " " );
     }
@@ -1243,7 +1243,7 @@ public class StringUtils
      * @throws NullPointerException if str or delim is null
      * @throws ArithmeticException  if delim is the empty string
      */
-    public @Nonnull static String leftPad( @Nonnull String str, int size, @Nonnull String delim )
+    @Nonnull public static String leftPad( @Nonnull String str, int size, @Nonnull String delim )
     {
         size = ( size - str.length() ) / delim.length();
         if ( size > 0 )
@@ -1883,7 +1883,7 @@ public class StringUtils
      * @return the passed in Object's toString, or blank if it was
      *         <code>null</code>
      */
-    public @Nonnull static String defaultString( Object obj )
+    @Nonnull public static String defaultString( Object obj )
     {
         return defaultString( obj, "" );
     }
@@ -1899,7 +1899,7 @@ public class StringUtils
      * @return the passed in string, or the default if it was
      *         <code>null</code>
      */
-    public @Nonnull static String defaultString( Object obj, @Nonnull String defaultString )
+    @Nonnull public static String defaultString( Object obj, @Nonnull String defaultString )
     {
         return ( obj == null ) ? defaultString : obj.toString();
     }
@@ -1935,7 +1935,7 @@ public class StringUtils
      * @param delimiter the delimiter to use
      * @return the reversed String
      */
-    public @Nonnull static String reverseDelimitedString( @Nonnull String str, String delimiter )
+    @Nonnull public static String reverseDelimitedString( @Nonnull String str, String delimiter )
     {
         // could implement manually, but simple way is to reuse other,
         // probably slower, methods.
@@ -1982,7 +1982,7 @@ public class StringUtils
      *
      * @param maxWidth maximum length of result string
      */
-    public @Nonnull static String abbreviate( @Nonnull String s, int maxWidth )
+    @Nonnull public static String abbreviate( @Nonnull String s, int maxWidth )
     {
         return abbreviate( s, 0, maxWidth );
     }
@@ -1999,7 +1999,7 @@ public class StringUtils
      * @param offset   left edge of source string
      * @param maxWidth maximum length of result string
      */
-    public @Nonnull static String abbreviate( @Nonnull String s, int offset, int maxWidth )
+    @Nonnull public static String abbreviate( @Nonnull String s, int offset, int maxWidth )
     {
         if ( maxWidth < 4 )
         {
@@ -2126,7 +2126,7 @@ public class StringUtils
      * @param replaceThis
      * @return humped String
      */
-    public @Nonnull static String removeAndHump( @Nonnull String data, @Nonnull String replaceThis )
+    @Nonnull public static String removeAndHump( @Nonnull String data, @Nonnull String replaceThis )
     {
         String temp;
 
@@ -2159,7 +2159,7 @@ public class StringUtils
      * @return data string with the first character transformed to uppercase
      * @throws NullPointerException if data is <code>null</code>
      */
-    public @Nonnull static String capitalizeFirstLetter( @Nonnull String data )
+    @Nonnull public static String capitalizeFirstLetter( @Nonnull String data )
     {
         char firstChar = data.charAt( 0 );
         char titleCase = Character.toTitleCase( firstChar );
@@ -2186,7 +2186,7 @@ public class StringUtils
      * @return data string with the first character transformed to lowercase
      * @throws NullPointerException if data is <code>null</code>
      */
-    public @Nonnull static String lowercaseFirstLetter( @Nonnull String data )
+    @Nonnull public static String lowercaseFirstLetter( @Nonnull String data )
     {
         char firstLetter = Character.toLowerCase( data.substring( 0, 1 ).charAt( 0 ) );
 
@@ -2203,7 +2203,7 @@ public class StringUtils
      * @param view
      * @return deHumped String
      */
-    public @Nonnull static String addAndDeHump( @Nonnull String view )
+    @Nonnull public static String addAndDeHump( @Nonnull String view )
     {
         StringBuilder sb = new StringBuilder();
 
@@ -2372,7 +2372,7 @@ public class StringUtils
      * @return a string with unique whitespace.
      * 
      */
-    public @Nonnull static String removeDuplicateWhitespace( @Nonnull String s )
+    @Nonnull public static String removeDuplicateWhitespace( @Nonnull String s )
     {
         StringBuilder result = new StringBuilder();
         int length = s.length();

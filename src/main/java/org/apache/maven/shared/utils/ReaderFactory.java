@@ -29,7 +29,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.nio.charset.Charset;
 import org.apache.commons.io.input.XmlStreamReader;
 
 import javax.annotation.Nonnull;
@@ -40,9 +39,8 @@ import javax.annotation.Nonnull;
  * XML, or specified.
  *
  * @author <a href="mailto:hboutemy@apache.org">Hervé Boutemy</a>
- * @see Charset
+ * @see java.nio.charset.Charset
  * @see <a href="http://docs.oracle.com/javase/1.5.0/docs/guide/intl/encoding.doc.html">Supported encodings</a>
- * 
  */
 public class ReaderFactory
 {
@@ -50,7 +48,7 @@ public class ReaderFactory
      * ISO Latin Alphabet #1, also known as ISO-LATIN-1.
      * Every implementation of the Java platform is required to support this character encoding.
      *
-     * @see Charset
+     * @see java.nio.charset.Charset
      */
     public static final String ISO_8859_1 = "ISO-8859-1";
 
@@ -58,7 +56,7 @@ public class ReaderFactory
      * Seven-bit ASCII, also known as ISO646-US, also known as the Basic Latin block of the Unicode character set.
      * Every implementation of the Java platform is required to support this character encoding.
      *
-     * @see Charset
+     * @see java.nio.charset.Charset
      */
     public static final String US_ASCII = "US-ASCII";
 
@@ -67,7 +65,7 @@ public class ReaderFactory
      * order accepted on input, big-endian used on output).
      * Every implementation of the Java platform is required to support this character encoding.
      *
-     * @see Charset
+     * @see java.nio.charset.Charset
      */
     public static final String UTF_16 = "UTF-16";
 
@@ -75,7 +73,7 @@ public class ReaderFactory
      * Sixteen-bit Unicode Transformation Format, big-endian byte order.
      * Every implementation of the Java platform is required to support this character encoding.
      *
-     * @see Charset
+     * @see java.nio.charset.Charset
      */
     public static final String UTF_16BE = "UTF-16BE";
 
@@ -83,7 +81,7 @@ public class ReaderFactory
      * Sixteen-bit Unicode Transformation Format, little-endian byte order.
      * Every implementation of the Java platform is required to support this character encoding.
      *
-     * @see Charset
+     * @see java.nio.charset.Charset
      */
     public static final String UTF_16LE = "UTF-16LE";
 
@@ -91,7 +89,7 @@ public class ReaderFactory
      * Eight-bit Unicode Transformation Format.
      * Every implementation of the Java platform is required to support this character encoding.
      *
-     * @see Charset
+     * @see java.nio.charset.Charset
      */
     public static final String UTF_8 = "UTF-8";
 
@@ -148,7 +146,7 @@ public class ReaderFactory
      * @param file not null file.
      * @return a reader instance for the input file using the default platform charset.
      * @throws FileNotFoundException if any.
-     * @see Charset#defaultCharset()
+     * @see java.nio.charset.Charset#defaultCharset()
      */
     public static Reader newPlatformReader( @Nonnull File file )
         throws FileNotFoundException

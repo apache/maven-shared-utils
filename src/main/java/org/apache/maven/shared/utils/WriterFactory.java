@@ -28,7 +28,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
-import java.nio.charset.Charset;
 import org.apache.maven.shared.utils.xml.XmlStreamWriter;
 
 
@@ -39,7 +38,7 @@ import javax.annotation.Nonnull;
  * XML, or specified.
  *
  * @author Hervé Boutemy
- * @see Charset
+ * @see java.nio.charset.Charset
  * @see <a href="http://docs.oracle.com/javase/1.5.0/docs/guide/intl/encoding.doc.html">Supported encodings</a>
  * @version $Id$
  */
@@ -48,14 +47,14 @@ public class WriterFactory
     /**
      * ISO Latin Alphabet #1, also known as ISO-LATIN-1.
      * Every implementation of the Java platform is required to support this character encoding.
-     * @see Charset
+     * @see java.nio.charset.Charset
      */
     public static final String ISO_8859_1 = "ISO-8859-1";
 
     /**
      * Seven-bit ASCII, also known as ISO646-US, also known as the Basic Latin block of the Unicode character set.
      * Every implementation of the Java platform is required to support this character encoding.
-     * @see Charset
+     * @see java.nio.charset.Charset
      */
     public static final String US_ASCII = "US-ASCII";
 
@@ -63,28 +62,28 @@ public class WriterFactory
      * Sixteen-bit Unicode Transformation Format, byte order specified by a mandatory initial byte-order mark (either
      * order accepted on input, big-endian used on output).
      * Every implementation of the Java platform is required to support this character encoding.
-     * @see Charset
+     * @see java.nio.charset.Charset
      */
     public static final String UTF_16 = "UTF-16";
 
     /**
      * Sixteen-bit Unicode Transformation Format, big-endian byte order.
      * Every implementation of the Java platform is required to support this character encoding.
-     * @see Charset
+     * @see java.nio.charset.Charset
      */
     public static final String UTF_16BE = "UTF-16BE";
 
     /**
      * Sixteen-bit Unicode Transformation Format, little-endian byte order.
      * Every implementation of the Java platform is required to support this character encoding.
-     * @see Charset
+     * @see java.nio.charset.Charset
      */
     public static final String UTF_16LE = "UTF-16LE";
 
     /**
      * Eight-bit Unicode Transformation Format.
      * Every implementation of the Java platform is required to support this character encoding.
-     * @see Charset
+     * @see java.nio.charset.Charset
      */
     public static final String UTF_8 = "UTF-8";
 
@@ -126,7 +125,7 @@ public class WriterFactory
      *
      * @param out not null output stream.
      * @return a writer instance for the output stream using the default platform charset.
-     * @see Charset#defaultCharset()
+     * @see java.nio.charset.Charset#defaultCharset()
      */
     public static Writer newPlatformWriter( @Nonnull OutputStream out )
     {
@@ -139,7 +138,7 @@ public class WriterFactory
      * @param file not null file.
      * @return a writer instance for the output file using the default platform charset.
      * @throws IOException if any.
-     * @see Charset#defaultCharset()
+     * @see java.nio.charset.Charset#defaultCharset()
      */
     public static Writer newPlatformWriter( @Nonnull File file )
         throws IOException
