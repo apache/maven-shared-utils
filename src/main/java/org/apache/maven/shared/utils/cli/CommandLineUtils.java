@@ -153,7 +153,7 @@ public abstract class CommandLineUtils
      * @throws CommandLineException or CommandLineTimeOutException if time out occurs
      * @noinspection ThrowableResultOfMethodCallIgnored
      */
-    private static CommandLineCallable executeCommandLineAsCallable( final Commandline cl, final InputStream systemIn,
+    public static CommandLineCallable executeCommandLineAsCallable( final Commandline cl, final InputStream systemIn,
                                                                     final StreamConsumer systemOut,
                                                                     final StreamConsumer systemErr,
                                                                     final int timeoutInSeconds,
