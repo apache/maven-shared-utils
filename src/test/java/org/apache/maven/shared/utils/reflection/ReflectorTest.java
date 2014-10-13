@@ -102,7 +102,7 @@ public class ReflectorTest
     public void newInstanceProtectedConstructor()
         throws Exception
     {
-        reflector.newInstance( ReflectorTestHelper.class, new Object[]{ Integer.valueOf( 0 ) } );
+        reflector.newInstance( ReflectorTestHelper.class, new Object[]{ 0 } );
     }
 
     @Test( expected = IllegalArgumentException.class )
@@ -110,7 +110,7 @@ public class ReflectorTest
     public void newInstanceProtectedConstructorThrowsSomething()
         throws Exception
     {
-        reflector.newInstance( ReflectorTestHelper.class, new Object[]{ Integer.valueOf( 1 ) } );
+        reflector.newInstance( ReflectorTestHelper.class, new Object[]{ 1 } );
     }
 
     @Test
@@ -208,7 +208,7 @@ public class ReflectorTest
     public void getSingletonProtectedMethod()
         throws Exception
     {
-        reflector.getSingleton( ReflectorTestHelper.class, new Object[]{ Integer.valueOf( 0 ) } );
+        reflector.getSingleton( ReflectorTestHelper.class, new Object[]{ 0 } );
     }
 
     @Test( expected = IllegalArgumentException.class )
@@ -216,7 +216,7 @@ public class ReflectorTest
     public void getSingletonProtectedMethodThrowsSomething()
         throws Exception
     {
-        reflector.getSingleton( ReflectorTestHelper.class, new Object[]{ Integer.valueOf( 1 ) } );
+        reflector.getSingleton( ReflectorTestHelper.class, new Object[]{ 1 } );
     }
 
     @Test
@@ -320,7 +320,7 @@ public class ReflectorTest
         throws Exception
     {
         Object object = new Object();
-        assertThat( reflector.invoke( object, "hashCode", null ), is( (Object) Integer.valueOf( object.hashCode() ) ) );
+        assertThat( reflector.invoke( object, "hashCode", null ), is( (Object) object.hashCode() ) );
     }
 
     @Test
@@ -329,7 +329,7 @@ public class ReflectorTest
     {
         Object object = new Object();
         assertThat( reflector.invoke( object, "hashCode", new Object[0] ),
-                    is( (Object) Integer.valueOf( object.hashCode() ) ) );
+                    is( (Object) object.hashCode() ) );
     }
 
     @Test( expected = ReflectorException.class )
@@ -852,7 +852,7 @@ public class ReflectorTest
     public void invokeStaticProtectedMethod()
         throws Exception
     {
-        reflector.invokeStatic( ReflectorTestHelper.class, "getInstance", new Object[]{ Integer.valueOf( 0 ) } );
+        reflector.invokeStatic( ReflectorTestHelper.class, "getInstance", new Object[]{ 0 } );
     }
 
     @Test( expected = IllegalArgumentException.class )
@@ -860,7 +860,7 @@ public class ReflectorTest
     public void invokeStaticProtectedMethodThrowsSomething()
         throws Exception
     {
-        reflector.invokeStatic( ReflectorTestHelper.class, "getInstance", new Object[]{ Integer.valueOf( 1 ) } );
+        reflector.invokeStatic( ReflectorTestHelper.class, "getInstance", new Object[]{ 1 } );
     }
 
     @Test

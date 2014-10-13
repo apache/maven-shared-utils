@@ -43,7 +43,7 @@ class ReflectorTestHelper
 
     protected ReflectorTestHelper( Integer throwCount )
     {
-        if ( throwCount != null && throwCount.intValue() > 0 )
+        if ( throwCount != null && throwCount > 0 )
         {
             throw new HelperException( "Something" );
         }
@@ -73,7 +73,7 @@ class ReflectorTestHelper
 
     protected static ReflectorTestHelper getInstance( Integer throwCount )
     {
-        if ( throwCount != null && throwCount.intValue() > 0 )
+        if ( throwCount != null && throwCount > 0 )
         {
             throw new HelperException( "Something" );
         }

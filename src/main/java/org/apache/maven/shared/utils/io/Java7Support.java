@@ -19,18 +19,12 @@ package org.apache.maven.shared.utils.io;
  * under the License.
  */
 
-import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
-
 import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.nio.file.Files;
-import java.nio.file.LinkOption;
-import java.nio.file.Path;
-import java.nio.file.attribute.FileAttribute;
 
 /**
  * Java7 feature detection
@@ -137,7 +131,7 @@ public class Java7Support
         {
             Object path = toPath.invoke( file );
             final Object invoke = exists.invoke( null, path, emptyLinkOpts );
-            return ((Boolean)invoke).booleanValue();
+            return (Boolean) invoke;
         }
         catch ( IllegalAccessException e )
         {
