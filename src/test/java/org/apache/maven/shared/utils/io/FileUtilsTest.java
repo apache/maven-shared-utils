@@ -36,8 +36,7 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import static org.junit.Assume.assumeThat;
 import static org.junit.matchers.JUnitMatchers.containsString;
 import static org.junit.matchers.JUnitMatchers.hasItems;
@@ -420,6 +419,41 @@ public class FileUtilsTest
         /* disabled: Thread.sleep doesn't work reliantly for this case
         assertTrue("Check last modified date preserved",
             testFile1.lastModified() == destination.lastModified());*/
+    }
+
+    @Test
+    public void deleteFile()
+        throws Exception
+    {
+        File destination = new File( tempFolder.getRoot(), "copy1.txt" );
+        FileUtils.copyFile( testFile1, destination );
+        FileUtils.delete( destination );
+        assertThat( "Check Exist", destination.exists(), is( false ) );
+    }
+
+    @Test(expected = IOException.class)
+    public void deleteFileNofile()
+        throws Exception
+    {
+        File destination = new File( "abc/cde" );
+        FileUtils.delete( destination );
+    }
+
+    @Test
+    public void deleteFileLegacy()
+        throws Exception
+    {
+        File destination = new File( tempFolder.getRoot(), "copy1.txt" );
+        FileUtils.copyFile( testFile1, destination );
+        assertTrue( FileUtils.deleteLegacyStyle( destination ) );
+    }
+
+    @Test
+    public void deleteFileLegacyNofile()
+        throws Exception
+    {
+        File destination = new File( "abc/cde" );
+        assertFalse( FileUtils.deleteLegacyStyle( destination ) );
     }
 
     @Test

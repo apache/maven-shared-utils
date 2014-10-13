@@ -226,7 +226,7 @@ class Expand
         }
         else
         {
-            targetFile.delete();
+            FileUtils.delete( targetFile );
         }
 
     }

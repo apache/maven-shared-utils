@@ -19,6 +19,12 @@ package org.apache.maven.shared.utils.io;
  * under the License.
  */
 
+import org.apache.maven.shared.utils.Os;
+import org.apache.maven.shared.utils.StringUtils;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.WillClose;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,13 +47,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-
-import org.apache.maven.shared.utils.Os;
-import org.apache.maven.shared.utils.StringUtils;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.WillClose;
 
 /**
  * This class provides basic facilities for manipulating files and file paths.
@@ -122,7 +121,7 @@ public class FileUtils
      * Non-valid Characters for naming files, folders under Windows: <code>":", "*", "?", "\"", "<", ">", "|"</code>
      *
      * @see <a href="http://support.microsoft.com/?scid=kb%3Ben-us%3B177506&x=12&y=13">
-     *      http://support.microsoft.com/?scid=kb%3Ben-us%3B177506&x=12&y=13</a>
+     * http://support.microsoft.com/?scid=kb%3Ben-us%3B177506&x=12&y=13</a>
      */
     private static final String[] INVALID_CHARACTERS_FOR_WINDOWS_FILE_NAME = { ":", "*", "?", "\"", "<", ">", "|" };
 
@@ -139,7 +138,7 @@ public class FileUtils
      * @return the default excludes pattern as list.
      * @see #getDefaultExcludes()
      */
-    @Nonnull public static List<String>  getDefaultExcludesAsList()
+    @Nonnull public static List<String> getDefaultExcludesAsList()
     {
         return Arrays.asList( getDefaultExcludes() );
     }
@@ -304,7 +303,7 @@ public class FileUtils
     /**
      * @param file the file path
      * @return the file content lines as String[] using the systems default encoding.
-     *         An empty List if the file didn't exist.
+     * An empty List if the file didn't exist.
      * @throws IOException
      */
     @Nonnull public static String[] fileReadArray( @Nonnull File file )
@@ -395,7 +394,6 @@ public class FileUtils
      * @param encoding The encoding of the file.
      * @param data     The content to write to the file.
      * @throws IOException if any
-     * 
      */
     public static void fileWrite( @Nonnull File file, @Nullable String encoding, @Nonnull String data )
         throws IOException
@@ -427,7 +425,6 @@ public class FileUtils
      * @param file The path of the file to write.
      * @param data The content to write to the file.
      * @throws IOException if any
-     * 
      */
     public static void fileWriteArray( @Nonnull File file, @Nullable String... data )
         throws IOException
@@ -442,7 +439,6 @@ public class FileUtils
      * @param encoding The encoding of the file.
      * @param data     The content to write to the file.
      * @throws IOException if any
-     * 
      */
     public static void fileWriteArray( @Nonnull File file, @Nullable String encoding, @Nullable String... data )
         throws IOException
@@ -484,7 +480,7 @@ public class FileUtils
     {
         File file = new File( fileName );
         //noinspection ResultOfMethodCallIgnored
-        file.delete();
+        deleteLegacyStyle( file );
     }
 
     /**
@@ -553,7 +549,7 @@ public class FileUtils
     /**
      * Private helper method for getFilesFromExtension()
      */
-    @Nonnull private static List<String> blendFilesToList( @Nonnull List<String> v, @Nonnull String...files )
+    @Nonnull private static List<String> blendFilesToList( @Nonnull List<String> v, @Nonnull String... files )
     {
         Collections.addAll( v, files );
 
@@ -597,9 +593,9 @@ public class FileUtils
 
         if ( Os.isFamily( Os.FAMILY_WINDOWS ) && !isValidWindowsFileName( file ) )
         {
-            throw new IllegalArgumentException( "The file (" + dir
-                + ") cannot contain any of the following characters: \n"
-                + StringUtils.join( INVALID_CHARACTERS_FOR_WINDOWS_FILE_NAME, " " ) );
+            throw new IllegalArgumentException(
+                "The file (" + dir + ") cannot contain any of the following characters: \n" + StringUtils.join(
+                    INVALID_CHARACTERS_FOR_WINDOWS_FILE_NAME, " " ) );
         }
 
         if ( !file.exists() )
@@ -659,7 +655,7 @@ public class FileUtils
      *
      * @param url File URL.
      * @return The equivalent <code>File</code> object, or <code>null</code> if the URL's protocol
-     *         is not <code>file</code>
+     * is not <code>file</code>
      */
     public @Nullable static File toFile( final @Nullable URL url )
     {
@@ -782,7 +778,8 @@ public class FileUtils
      * @throws IOException                   if <code>source</code> does not exist, the file in
      *                                       <code>destinationDirectory</code> cannot be written to, or an IO error occurs during copying.
      */
-    private static void copyFileToDirectoryIfModified( @Nonnull final File source, @Nonnull final File destinationDirectory )
+    private static void copyFileToDirectoryIfModified( @Nonnull final File source,
+                                                       @Nonnull final File destinationDirectory )
         throws IOException
     {
         if ( destinationDirectory.exists() && !destinationDirectory.isDirectory() )
@@ -805,7 +802,6 @@ public class FileUtils
      * @throws IOException                   if <code>source</code> does not exist, <code>destination</code> cannot be
      *                                       written to, or an IO error occurs during copying.
      * @throws java.io.FileNotFoundException if <code>destination</code> is a directory
-     *
      */
     public static void copyFile( @Nonnull final File source, @Nonnull final File destination )
         throws IOException
@@ -938,7 +934,8 @@ public class FileUtils
      *                     <li>an IO error occurs during copying</li>
      *                     </ul>
      */
-    private static void copyStreamToFile( @Nonnull final @WillClose InputStream source, @Nonnull final File destination )
+    private static void copyStreamToFile( @Nonnull final @WillClose InputStream source,
+                                          @Nonnull final File destination )
         throws IOException
     {
         FileOutputStream output = null;
@@ -1153,6 +1150,50 @@ public class FileUtils
     }
 
     /**
+     * deletes a file.
+     *
+     * @param file The file to delete
+     * @throws IOException If the file cannot be delted.
+     */
+
+
+    public static void delete( File file )
+        throws IOException
+    {
+        if ( Java7Support.isAtLeastJava7() )
+        {
+            Java7Support.delete( file );
+        }
+        else
+        {
+            if ( !file.delete() )
+            {
+                throw new IOException( "Could not delete " + file.getName() );
+            }
+        }
+    }
+
+    public static boolean deleteLegacyStyle( File file )
+    {
+        if ( Java7Support.isAtLeastJava7() )
+        {
+            try
+            {
+                Java7Support.delete( file );
+                return true;
+            }
+            catch ( IOException e )
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return file.delete();
+        }
+    }
+
+    /**
      * Accommodate Windows bug encountered in both Sun and IBM JDKs.
      * Others possible. If the delete does not work, call System.gc(),
      * wait a little and try again.
@@ -1168,7 +1209,7 @@ public class FileUtils
             throw new IOException( "File " + file + " isn't a file." );
         }
 
-        if ( !file.delete() )
+        if ( !deleteLegacyStyle( file ) )
         {
             if ( Os.isFamily( Os.FAMILY_WINDOWS ) )
             {
@@ -1179,11 +1220,11 @@ public class FileUtils
             try
             {
                 Thread.sleep( 10 );
-                return file.delete();
+                return deleteLegacyStyle( file );
             }
             catch ( InterruptedException ex )
             {
-                return file.delete();
+                return deleteLegacyStyle( file );
             }
         }
 
@@ -1258,13 +1299,13 @@ public class FileUtils
         /* try delete the directory before its contents, which will take
          * care of any directories that are really symbolic links.
          */
-        if ( directory.delete() )
+        if ( deleteLegacyStyle( directory) )
         {
             return;
         }
 
         cleanDirectory( directory );
-        if ( !directory.delete() )
+        if ( !deleteLegacyStyle( directory ) )
         {
             final String message = "Directory " + directory + " unable to be deleted.";
             throw new IOException( message );
@@ -1384,7 +1425,8 @@ public class FileUtils
      * @throws IOException
      * @see #getFileNames(File, String, String, boolean)
      */
-    @Nonnull public static List<File> getFiles( @Nonnull File directory, @Nullable String includes, @Nullable String excludes )
+    @Nonnull
+    public static List<File> getFiles( @Nonnull File directory, @Nullable String includes, @Nullable String excludes )
         throws IOException
     {
         return getFiles( directory, includes, excludes, true );
@@ -1401,7 +1443,9 @@ public class FileUtils
      * @throws IOException
      * @see #getFileNames(File, String, String, boolean)
      */
-    @Nonnull public static List<File> getFiles( @Nonnull File directory, @Nullable String includes, @Nullable  String excludes, boolean includeBasedir )
+    @Nonnull
+    public static List<File> getFiles( @Nonnull File directory, @Nullable String includes, @Nullable String excludes,
+                                       boolean includeBasedir )
         throws IOException
     {
         List<String> fileNames = getFileNames( directory, includes, excludes, includeBasedir );
@@ -1427,7 +1471,8 @@ public class FileUtils
      * @return a list of files as String
      * @throws IOException
      */
-    @Nonnull public static List<String> getFileNames( @Nonnull File directory, @Nullable String includes, @Nullable  String excludes, boolean includeBasedir )
+    @Nonnull public static List<String> getFileNames( @Nonnull File directory, @Nullable String includes,
+                                                      @Nullable String excludes, boolean includeBasedir )
         throws IOException
     {
         return getFileNames( directory, includes, excludes, includeBasedir, true );
@@ -1444,8 +1489,9 @@ public class FileUtils
      * @return a list of files as String
      * @throws IOException
      */
-    @Nonnull private static List<String> getFileNames( @Nonnull File directory, @Nullable String includes, @Nullable  String excludes, boolean includeBasedir,
-                                             boolean isCaseSensitive )
+    @Nonnull private static List<String> getFileNames( @Nonnull File directory, @Nullable String includes,
+                                                       @Nullable String excludes, boolean includeBasedir,
+                                                       boolean isCaseSensitive )
         throws IOException
     {
         return getFileAndDirectoryNames( directory, includes, excludes, includeBasedir, isCaseSensitive, true, false );
@@ -1462,8 +1508,8 @@ public class FileUtils
      * @return a list of directories as String
      * @throws IOException
      */
-    @Nonnull public static List<String> getDirectoryNames( @Nonnull File directory, @Nullable String includes, @Nullable String excludes,
-                                                  boolean includeBasedir )
+    @Nonnull public static List<String> getDirectoryNames( @Nonnull File directory, @Nullable String includes,
+                                                           @Nullable String excludes, boolean includeBasedir )
         throws IOException
     {
         return getDirectoryNames( directory, includes, excludes, includeBasedir, true );
@@ -1480,8 +1526,9 @@ public class FileUtils
      * @return a list of directories as String
      * @throws IOException
      */
-    @Nonnull public static List<String> getDirectoryNames( @Nonnull File directory, @Nullable String includes, @Nullable String excludes,
-                                                  boolean includeBasedir, boolean isCaseSensitive )
+    @Nonnull public static List<String> getDirectoryNames( @Nonnull File directory, @Nullable String includes,
+                                                           @Nullable String excludes, boolean includeBasedir,
+                                                           boolean isCaseSensitive )
         throws IOException
     {
         return getFileAndDirectoryNames( directory, includes, excludes, includeBasedir, isCaseSensitive, false, true );
@@ -1499,9 +1546,10 @@ public class FileUtils
      * @param getDirectories  true if get directories
      * @return a list of files as String
      */
-    @Nonnull public static List<String> getFileAndDirectoryNames( File directory, @Nullable String includes, @Nullable String excludes,
-                                                         boolean includeBasedir, boolean isCaseSensitive,
-                                                         boolean getFiles, boolean getDirectories )
+    @Nonnull public static List<String> getFileAndDirectoryNames( File directory, @Nullable String includes,
+                                                                  @Nullable String excludes, boolean includeBasedir,
+                                                                  boolean isCaseSensitive, boolean getFiles,
+                                                                  boolean getDirectories )
     {
         DirectoryScanner scanner = new DirectoryScanner();
 
@@ -1583,8 +1631,8 @@ public class FileUtils
      * @throws IOException if any
      * @see #getFiles(File, String, String)
      */
-    public static void copyDirectory( @Nonnull File sourceDirectory, @Nonnull File destinationDirectory, @Nullable String includes,
-                                      @Nullable  String excludes )
+    public static void copyDirectory( @Nonnull File sourceDirectory, @Nonnull File destinationDirectory,
+                                      @Nullable String includes, @Nullable String excludes )
         throws IOException
     {
         if ( !sourceDirectory.exists() )
@@ -1685,8 +1733,8 @@ public class FileUtils
             {
                 if ( !destination.exists() && !destination.mkdirs() )
                 {
-                    throw new IOException( "Could not create destination directory '" + destination.getAbsolutePath()
-                        + "'." );
+                    throw new IOException(
+                        "Could not create destination directory '" + destination.getAbsolutePath() + "'." );
                 }
 
                 copyDirectoryStructure( file, destination, rootDestinationDirectory, onlyModifiedFiles );
@@ -1714,7 +1762,7 @@ public class FileUtils
     public static void rename( @Nonnull File from, @Nonnull File to )
         throws IOException
     {
-        if ( to.exists() && !to.delete() )
+        if ( to.exists() && !deleteLegacyStyle( to ) )
         {
             throw new IOException( "Failed to delete " + to + " while trying to rename " + from );
         }
@@ -1728,7 +1776,7 @@ public class FileUtils
         if ( !from.renameTo( to ) )
         {
             copyFile( from, to );
-            if ( !from.delete() )
+            if ( !deleteLegacyStyle( from ) )
             {
                 throw new IOException( "Failed to delete " + from + " while trying to rename it." );
             }
@@ -1798,7 +1846,8 @@ public class FileUtils
      * @param wrappers array of {@link FilterWrapper}
      * @throws IOException if an IO error occurs during copying or filtering
      */
-    public static void copyFile( @Nonnull File from, @Nonnull File to, @Nullable String encoding, @Nullable FilterWrapper... wrappers )
+    public static void copyFile( @Nonnull File from, @Nonnull File to, @Nullable String encoding,
+                                 @Nullable FilterWrapper... wrappers )
         throws IOException
     {
         copyFile( from, to, encoding, wrappers, false );
@@ -1819,9 +1868,9 @@ public class FileUtils
      * @param overwrite if true and f wrappers is null or empty, the file will be copy
      *                  enven if to.lastModified() < from.lastModified()
      * @throws IOException if an IO error occurs during copying or filtering
-     * 
      */
-    public static void copyFile( @Nonnull File from, @Nonnull File to, @Nullable String encoding, @Nullable FilterWrapper[] wrappers, boolean overwrite )
+    public static void copyFile( @Nonnull File from, @Nonnull File to, @Nullable String encoding,
+                                 @Nullable FilterWrapper[] wrappers, boolean overwrite )
         throws IOException
     {
         if ( wrappers != null && wrappers.length > 0 )
@@ -1919,9 +1968,8 @@ public class FileUtils
      *
      * @param f not null file
      * @return <code>false</code> if the file path contains any of forbidden Windows characters,
-     *         <code>true</code> if the Os is not Windows or if the file path respect the Windows constraints.
+     * <code>true</code> if the Os is not Windows or if the file path respect the Windows constraints.
      * @see #INVALID_CHARACTERS_FOR_WINDOWS_FILE_NAME
-     * 
      */
     private static boolean isValidWindowsFileName( @Nonnull File f )
     {

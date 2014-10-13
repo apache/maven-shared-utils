@@ -20,6 +20,7 @@ package org.apache.maven.shared.utils.io;
  */
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -35,6 +36,8 @@ public class Java7Support
 
     private static Method isSymbolicLink;
 
+    private static Method delete;
+
     private static Method toPath;
 
     static
@@ -45,6 +48,7 @@ public class Java7Support
             Class<?> files = Thread.currentThread().getContextClassLoader().loadClass( "java.nio.file.Files" );
             Class<?> path = Thread.currentThread().getContextClassLoader().loadClass( "java.nio.file.Path" );
             isSymbolicLink = files.getMethod( "isSymbolicLink", path );
+            delete = files.getMethod( "delete", path );
             toPath = File.class.getMethod( "toPath" );
         }
         catch ( ClassNotFoundException e )
@@ -75,8 +79,37 @@ public class Java7Support
         }
     }
 
+    /**
+     * Performs a nio delete
+     * @param file the file to delete
+     * @throws IOException
+     */
+
+    public static void delete( File file ) throws IOException
+    {
+        try
+        {
+            Object path = toPath.invoke( file );
+            delete.invoke( null, path );
+        }
+        catch ( IllegalAccessException e )
+        {
+            throw new RuntimeException( e );
+        }
+        catch ( InvocationTargetException e )
+        {
+            throw (IOException) e.getTargetException();
+        }
+    }
+
     public static boolean isJava7()
     {
         return IS_JAVA7;
     }
+
+    public static boolean isAtLeastJava7()
+    {
+        return IS_JAVA7;
+    }
+
 }
