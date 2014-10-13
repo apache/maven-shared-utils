@@ -1988,4 +1988,67 @@ public class FileUtils
 
         return true;
     }
+
+    /**
+     * Checks whether a given file is a symbolic link.
+     *
+     * This only works reliably on java7 and higher. For earlier version we use a highly crappy heuristic
+     * that mostly does not work.
+     * <p>
+     * It doesn't really test for symbolic links but whether the canonical and absolute paths of the file are identical
+     * - this may lead to false positives on some platforms.
+     * </p>
+     *
+     * @param file the file to check
+     *
+     */
+    public static boolean isSymbolicLink( final File file )
+        throws IOException
+    {
+        if ( Java7Support.isJava7() )
+        {
+            return Java7Support.isSymLink( file );
+        }
+        return isSymbolicLinkLegacy( file );
+    }
+
+    /**
+     * Checks whether a given file is a symbolic link.
+     *
+     * @param file the file to check
+     * @return true if and only if we reliably can say this is a symlink. This will
+     *         always return false for java versions prior to 1.7.
+     *
+     */
+    public static boolean isSymbolicLinkForSure( final File file )
+        throws IOException
+    {
+        return Java7Support.isJava7() && Java7Support.isSymLink( file );
+    }
+
+    /**
+     * Checks whether a given file is a symbolic link.
+     * <p>
+     * It doesn't really test for symbolic links but whether the canonical and absolute
+     * paths of the file are identical - this may lead to false positives on some platforms.
+     *
+     * It also returns true for any file that has been reached via a symbolic link,
+     * if you decide to traverse into the symlink.
+     *
+     * As can be seen from the "return" clause of this method, there is really no
+     * guarantee of any sort from this method. Small wonder this ever got used for
+     * anything.
+     * </p>
+     *
+     * @param file the file to check
+     * @return true if the file is a symbolic link or if we're on some crappy os.
+     *         false if the file is not a symlink or we're not able to detect it.
+     */
+    static boolean isSymbolicLinkLegacy( final File file )
+        throws IOException
+    {
+        final File canonical = new File( file.getCanonicalPath() );
+        return !file.getAbsolutePath().equals( canonical.getPath() );
+    }
+
 }
