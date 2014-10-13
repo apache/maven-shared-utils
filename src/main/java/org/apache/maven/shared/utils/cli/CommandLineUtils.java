@@ -30,6 +30,9 @@ import java.util.StringTokenizer;
 import org.apache.maven.shared.utils.Os;
 import org.apache.maven.shared.utils.StringUtils;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l </a>
  * @version $Id$
@@ -77,14 +80,14 @@ public abstract class CommandLineUtils
 
 
     @SuppressWarnings( "UnusedDeclaration" )
-    public static int executeCommandLine( Commandline cl, StreamConsumer systemOut, StreamConsumer systemErr )
+    public static int executeCommandLine( @Nonnull Commandline cl, StreamConsumer systemOut, StreamConsumer systemErr )
         throws CommandLineException
     {
         return executeCommandLine( cl, null, systemOut, systemErr, 0 );
     }
 
     @SuppressWarnings( "UnusedDeclaration" )
-    public static int executeCommandLine( Commandline cl, StreamConsumer systemOut, StreamConsumer systemErr,
+    public static int executeCommandLine( @Nonnull Commandline cl, StreamConsumer systemOut, StreamConsumer systemErr,
                                           int timeoutInSeconds )
         throws CommandLineException
     {
@@ -92,7 +95,7 @@ public abstract class CommandLineUtils
     }
 
     @SuppressWarnings( "UnusedDeclaration" )
-    public static int executeCommandLine( Commandline cl, InputStream systemIn, StreamConsumer systemOut,
+    public static int executeCommandLine( @Nonnull Commandline cl, InputStream systemIn, StreamConsumer systemOut,
                                           StreamConsumer systemErr )
         throws CommandLineException
     {
@@ -109,7 +112,7 @@ public abstract class CommandLineUtils
      * @throws CommandLineException or CommandLineTimeOutException if time out occurs
      * @noinspection ThrowableResultOfMethodCallIgnored
      */
-    public static int executeCommandLine( Commandline cl, InputStream systemIn, StreamConsumer systemOut,
+    public static int executeCommandLine( @Nonnull Commandline cl, InputStream systemIn, StreamConsumer systemOut,
                                           StreamConsumer systemErr, int timeoutInSeconds )
         throws CommandLineException
     {
@@ -128,9 +131,9 @@ public abstract class CommandLineUtils
      * @throws CommandLineException or CommandLineTimeOutException if time out occurs
      * @noinspection ThrowableResultOfMethodCallIgnored
      */
-    public static int executeCommandLine( Commandline cl, InputStream systemIn, StreamConsumer systemOut,
+    public static int executeCommandLine( @Nonnull Commandline cl, InputStream systemIn, StreamConsumer systemOut,
                                           StreamConsumer systemErr, int timeoutInSeconds,
-                                          Runnable runAfterProcessTermination )
+                                          @Nullable Runnable runAfterProcessTermination )
         throws CommandLineException
     {
         final CommandLineCallable future =
@@ -153,13 +156,15 @@ public abstract class CommandLineUtils
      * @throws CommandLineException or CommandLineTimeOutException if time out occurs
      * @noinspection ThrowableResultOfMethodCallIgnored
      */
-    public static CommandLineCallable executeCommandLineAsCallable( final Commandline cl, final InputStream systemIn,
+    public static CommandLineCallable executeCommandLineAsCallable( @Nonnull final Commandline cl,
+                                                                    @Nullable final InputStream systemIn,
                                                                     final StreamConsumer systemOut,
                                                                     final StreamConsumer systemErr,
                                                                     final int timeoutInSeconds,
-                                                                    final Runnable runAfterProcessTermination )
+                                                                    @Nullable final Runnable runAfterProcessTermination )
         throws CommandLineException
     {
+        //noinspection ConstantConditions
         if ( cl == null )
         {
             throw new IllegalArgumentException( "cl cannot be null." );
@@ -266,7 +271,7 @@ public abstract class CommandLineUtils
         };
     }
 
-    private static void waitForAllPumpers( StreamFeeder inputFeeder, StreamPumper outputPumper,
+    private static void waitForAllPumpers( @Nullable StreamFeeder inputFeeder, StreamPumper outputPumper,
                                            StreamPumper errorPumper )
         throws InterruptedException
     {
