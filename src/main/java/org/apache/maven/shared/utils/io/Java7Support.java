@@ -173,7 +173,7 @@ public class Java7Support
      * @throws IOException
      */
 
-    public static void delete( File file ) throws IOException
+    public static void delete( @Nonnull File file ) throws IOException
     {
         try
         {

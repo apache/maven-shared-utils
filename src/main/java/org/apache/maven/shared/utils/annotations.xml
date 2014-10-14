@@ -1,0 +1,229 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<root>
+  <item name='org.apache.maven.shared.utils.StringUtils boolean contains(java.lang.String, char)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;null,_-&gt;false&quot;"/>
+    </annotation>
+  </item>
+  <item name='org.apache.maven.shared.utils.StringUtils boolean contains(java.lang.String, java.lang.String)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;_,null-&gt;false;null,_-&gt;false&quot;"/>
+    </annotation>
+  </item>
+  <item name='org.apache.maven.shared.utils.StringUtils boolean equals(java.lang.String, java.lang.String)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;null, null -&gt; true&quot;"/>
+    </annotation>
+  </item>
+  <item name='org.apache.maven.shared.utils.StringUtils boolean equalsIgnoreCase(java.lang.String, java.lang.String)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;null, null -&gt;true&quot;"/>
+    </annotation>
+  </item>
+  <item name='org.apache.maven.shared.utils.StringUtils boolean isAlpha(java.lang.String)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;null-&gt;false&quot;"/>
+    </annotation>
+  </item>
+  <item name='org.apache.maven.shared.utils.StringUtils boolean isAlphaSpace(java.lang.String)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;null-&gt;false&quot;"/>
+    </annotation>
+  </item>
+  <item name='org.apache.maven.shared.utils.StringUtils boolean isAlphanumeric(java.lang.String)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;null-&gt;false&quot;"/>
+    </annotation>
+  </item>
+  <item name='org.apache.maven.shared.utils.StringUtils boolean isAlphanumericSpace(java.lang.String)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;null-&gt;false&quot;"/>
+    </annotation>
+  </item>
+  <item name='org.apache.maven.shared.utils.StringUtils boolean isBlank(java.lang.String)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;null-&gt;true&quot;"/>
+    </annotation>
+  </item>
+  <item name='org.apache.maven.shared.utils.StringUtils boolean isEmpty(java.lang.String)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;null-&gt;true&quot;"/>
+    </annotation>
+  </item>
+  <item name='org.apache.maven.shared.utils.StringUtils boolean isNotBlank(java.lang.String)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;null -&gt;false&quot;"/>
+    </annotation>
+  </item>
+  <item name='org.apache.maven.shared.utils.StringUtils boolean isNumeric(java.lang.String)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;null-&gt;false&quot;"/>
+    </annotation>
+  </item>
+  <item name='org.apache.maven.shared.utils.StringUtils boolean isWhitespace(java.lang.String)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;null-&gt;false&quot;"/>
+    </annotation>
+  </item>
+  <item name='org.apache.maven.shared.utils.StringUtils java.lang.String capitalise(java.lang.String)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;!null-&gt;!null;null-&gt;null&quot;"/>
+    </annotation>
+  </item>
+  <item name='org.apache.maven.shared.utils.StringUtils java.lang.String capitaliseAllWords(java.lang.String)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;!null-&gt;!null;null-&gt;null&quot;"/>
+    </annotation>
+  </item>
+  <item name='org.apache.maven.shared.utils.StringUtils java.lang.String escape(java.lang.String, char[], char)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;null,_,_-&gt;null; !null,_,_ -&gt; !null&quot;"/>
+    </annotation>
+  </item>
+  <item
+      name='org.apache.maven.shared.utils.StringUtils java.lang.String getNestedString(java.lang.String, java.lang.String)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;null, _-&gt;null;!null,_-&gt;!null&quot;"/>
+    </annotation>
+  </item>
+  <item
+      name='org.apache.maven.shared.utils.StringUtils java.lang.String getNestedString(java.lang.String, java.lang.String, java.lang.String)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;null,_,_-&gt;null;!null,_,_-&gt;!null&quot;"/>
+    </annotation>
+  </item>
+  <item name='org.apache.maven.shared.utils.StringUtils java.lang.String left(java.lang.String, int)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;!null,_-&gt;!null;null,_-&gt;null&quot;"/>
+    </annotation>
+  </item>
+  <item name='org.apache.maven.shared.utils.StringUtils java.lang.String lowerCase(java.lang.String)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;!null-&gt;!null;null-&gt;null&quot;"/>
+    </annotation>
+  </item>
+  <item name='org.apache.maven.shared.utils.StringUtils java.lang.String mid(java.lang.String, int, int)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;!null,_,_-&gt;!null;null,_,_-&gt;null&quot;"/>
+    </annotation>
+  </item>
+  <item
+      name='org.apache.maven.shared.utils.StringUtils java.lang.String quoteAndEscape(java.lang.String, char, char[], char[], char, boolean)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;null,_,_,_,_,_-&gt;null; !null,_,_,_,_,_-&gt;!null&quot;"/>
+    </annotation>
+  </item>
+  <item name='org.apache.maven.shared.utils.StringUtils java.lang.String replace(java.lang.String, char, char)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;!null,_,_-&gt;!null;null,_,_-&gt;null&quot;"/>
+    </annotation>
+  </item>
+  <item name='org.apache.maven.shared.utils.StringUtils java.lang.String replace(java.lang.String, char, char, int)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;!null,_,_,_-&gt;!null;null,_,_,_-&gt;null&quot;"/>
+    </annotation>
+  </item>
+  <item
+      name='org.apache.maven.shared.utils.StringUtils java.lang.String replace(java.lang.String, java.lang.String, java.lang.String)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;!null,_,_-&gt;!null;null,_,_-&gt;null&quot;"/>
+    </annotation>
+  </item>
+  <item
+      name='org.apache.maven.shared.utils.StringUtils java.lang.String replace(java.lang.String, java.lang.String, java.lang.String, int)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;!null,_,_,_-&gt;!null;null,_,_,_-&gt;null&quot;"/>
+    </annotation>
+  </item>
+  <item
+      name='org.apache.maven.shared.utils.StringUtils java.lang.String replaceOnce(java.lang.String, java.lang.String, java.lang.String)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;!null,_,_-&gt;!null;null,_,_-&gt;null&quot;"/>
+    </annotation>
+  </item>
+  <item name='org.apache.maven.shared.utils.StringUtils java.lang.String reverse(java.lang.String)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;!null-&gt;!null;null-&gt;null&quot;"/>
+    </annotation>
+  </item>
+  <item name='org.apache.maven.shared.utils.StringUtils java.lang.String right(java.lang.String, int)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;!null,_-&gt;!null;null,_-&gt;null&quot;"/>
+    </annotation>
+  </item>
+  <item name='org.apache.maven.shared.utils.StringUtils java.lang.String stripEnd(java.lang.String, java.lang.String)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;!null,_-&gt;!null;null,_-&gt;null&quot;"/>
+    </annotation>
+  </item>
+  <item
+      name='org.apache.maven.shared.utils.StringUtils java.lang.String stripStart(java.lang.String, java.lang.String)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;!null,_-&gt;!null;null,_-&gt;null&quot;"/>
+    </annotation>
+  </item>
+  <item name='org.apache.maven.shared.utils.StringUtils java.lang.String substring(java.lang.String, int)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;null, _ -&gt; null&quot;"/>
+    </annotation>
+  </item>
+  <item name='org.apache.maven.shared.utils.StringUtils java.lang.String substring(java.lang.String, int, int)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;null, _ ,_ -&gt; null&quot;"/>
+    </annotation>
+  </item>
+  <item name='org.apache.maven.shared.utils.StringUtils java.lang.String swapCase(java.lang.String)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;!null-&gt;!null;null-&gt;null&quot;"/>
+    </annotation>
+  </item>
+  <item name='org.apache.maven.shared.utils.StringUtils java.lang.String uncapitalise(java.lang.String)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;!null-&gt;!null;null-&gt;null&quot;"/>
+    </annotation>
+  </item>
+  <item name='org.apache.maven.shared.utils.StringUtils java.lang.String uncapitaliseAllWords(java.lang.String)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;!null-&gt;!null;null-&gt;null&quot;"/>
+    </annotation>
+  </item>
+  <item name='org.apache.maven.shared.utils.StringUtils java.lang.String unifyLineSeparators(java.lang.String)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;!null-&gt;!null;null-&gt;null&quot;"/>
+    </annotation>
+  </item>
+  <item
+      name='org.apache.maven.shared.utils.StringUtils java.lang.String unifyLineSeparators(java.lang.String, java.lang.String)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;!null,_-&gt;!null;null,_-&gt;null&quot;"/>
+    </annotation>
+  </item>
+  <item name='org.apache.maven.shared.utils.StringUtils java.lang.String upperCase(java.lang.String)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;!null-&gt;!null;null-&gt;null&quot;"/>
+    </annotation>
+  </item>
+  <item
+      name='org.apache.maven.shared.utils.StringUtils java.lang.String[] stripAll(java.lang.String[], java.lang.String)'>
+    <annotation name='org.jetbrains.annotations.Contract'>
+      <val val="&quot;null,_-&gt;null; !null, _ -&gt; !null&quot;"/>
+    </annotation>
+  </item>
+</root>

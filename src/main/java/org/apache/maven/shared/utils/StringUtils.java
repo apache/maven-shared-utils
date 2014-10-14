@@ -129,7 +129,7 @@ public class StringUtils
      * @param str the String to check
      * @return true if the String is non-null, and not length zero
      */
-    public static boolean isNotEmpty( String str )
+    public static boolean isNotEmpty( @Nullable String str )
     {
         return ( ( str != null ) && ( str.length() > 0 ) );
     }
@@ -518,7 +518,7 @@ public class StringUtils
     /**
      * @see #split(String, String, int)
      */
-    @Nonnull public static String[] split( @Nonnull String text, String separator )
+    @Nonnull public static String[] split( @Nonnull String text, @Nullable String separator )
     {
         return split( text, separator, -1 );
     }
@@ -541,7 +541,7 @@ public class StringUtils
      *                  array.  A zero or negative value implies no limit.
      * @return an array of parsed Strings
      */
-    @Nonnull public static String[] split( @Nonnull String str, String separator, int max )
+    @Nonnull public static String[] split( @Nonnull String str, @Nullable String separator, int max )
     {
         StringTokenizer tok;
         if ( separator == null )
@@ -615,7 +615,7 @@ public class StringUtils
      * @param separator the separator character to use
      * @return the joined String
      */
-    @Nonnull public static String join( @Nonnull Object[] array, String separator )
+    @Nonnull public static String join( @Nonnull Object[] array, @Nullable String separator )
     {
         if ( separator == null )
         {
@@ -984,7 +984,7 @@ public class StringUtils
      * @return String prechomped
      * @throws NullPointerException if str or sep is <code>null</code>
      */
-    @Nonnull public static String getPrechomp( @Nonnull String str, String sep )
+    @Nonnull public static String getPrechomp( @Nonnull String str, @Nonnull String sep )
     {
         int idx = str.indexOf( sep );
         if ( idx != -1 )

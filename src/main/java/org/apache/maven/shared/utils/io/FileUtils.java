@@ -983,7 +983,7 @@ public class FileUtils
      * @param path the path to normalize
      * @return the normalized String, or <code>null</code> if too many ..'s.
      */
-    public static String normalize( final String path )
+    public static @Nonnull String normalize( @Nonnull final String path )
     {
         String normalized = path;
         // Resolve occurrences of "//" in the normalized path
@@ -1038,7 +1038,7 @@ public class FileUtils
      * @param filename Absolute or relative file path to resolve.
      * @return The canonical <code>File</code> of <code>filename</code>.
      */
-    public static File resolveFile( final File baseFile, String filename )
+    public static @Nonnull File resolveFile( final File baseFile, @Nonnull String filename )
     {
         String filenm = filename;
         if ( '/' != File.separatorChar )
@@ -1115,7 +1115,7 @@ public class FileUtils
      * @param file the file path
      * @throws IOException if any
      */
-    public static void forceDelete( final String file )
+    public static void forceDelete( @Nonnull final String file )
         throws IOException
     {
         forceDelete( new File( file ) );
@@ -1157,7 +1157,7 @@ public class FileUtils
      */
 
 
-    public static void delete( File file )
+    public static void delete( @Nonnull File file )
         throws IOException
     {
         if ( Java7Support.isAtLeastJava7() )
@@ -1173,7 +1173,7 @@ public class FileUtils
         }
     }
 
-    public static boolean deleteLegacyStyle( File file )
+    public static boolean deleteLegacyStyle( @Nonnull File file )
     {
         if ( Java7Support.isAtLeastJava7() )
         {
@@ -1615,7 +1615,7 @@ public class FileUtils
      * @param destinationDirectory the target dir
      * @throws IOException if any
      */
-    public static void copyDirectory( File sourceDirectory, File destinationDirectory )
+    public static void copyDirectory( @Nonnull File sourceDirectory, @Nonnull File destinationDirectory )
         throws IOException
     {
         copyDirectory( sourceDirectory, destinationDirectory, "**", null );
@@ -2002,7 +2002,7 @@ public class FileUtils
      * @param file the file to check
      *
      */
-    public static boolean isSymbolicLink( final File file )
+    public static boolean isSymbolicLink( final @Nonnull File file )
         throws IOException
     {
         if ( Java7Support.isAtLeastJava7() )
@@ -2020,7 +2020,7 @@ public class FileUtils
      *         always return false for java versions prior to 1.7.
      *
      */
-    public static boolean isSymbolicLinkForSure( final File file )
+    public static boolean isSymbolicLinkForSure( final @Nonnull File file )
         throws IOException
     {
         return Java7Support.isAtLeastJava7() && Java7Support.isSymLink( file );
@@ -2044,7 +2044,7 @@ public class FileUtils
      * @return true if the file is a symbolic link or if we're on some crappy os.
      *         false if the file is not a symlink or we're not able to detect it.
      */
-    static boolean isSymbolicLinkLegacy( final File file )
+    static boolean isSymbolicLinkLegacy( final @Nonnull File file )
         throws IOException
     {
         final File canonical = new File( file.getCanonicalPath() );
