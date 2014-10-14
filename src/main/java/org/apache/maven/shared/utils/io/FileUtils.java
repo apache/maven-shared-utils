@@ -2005,7 +2005,7 @@ public class FileUtils
     public static boolean isSymbolicLink( final File file )
         throws IOException
     {
-        if ( Java7Support.isJava7() )
+        if ( Java7Support.isAtLeastJava7() )
         {
             return Java7Support.isSymLink( file );
         }
@@ -2023,7 +2023,7 @@ public class FileUtils
     public static boolean isSymbolicLinkForSure( final File file )
         throws IOException
     {
-        return Java7Support.isJava7() && Java7Support.isSymLink( file );
+        return Java7Support.isAtLeastJava7() && Java7Support.isSymLink( file );
     }
 
     /**

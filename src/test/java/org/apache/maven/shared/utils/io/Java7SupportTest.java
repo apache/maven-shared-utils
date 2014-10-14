@@ -34,7 +34,7 @@ public class Java7SupportTest
     {
 
         File file = new File( "." );
-        if ( Java7Support.isJava7() )
+        if ( Java7Support.isAtLeastJava7() )
         {
             assertFalse( Java7Support.isSymLink( file ) );
         }
@@ -45,7 +45,7 @@ public class Java7SupportTest
     {
 
         File file = new File( "target/fzz" );
-        if ( Java7Support.isJava7() )
+        if ( Java7Support.isAtLeastJava7() )
         {
             Java7Support.createSymbolicLink(  file, new File("../target") );
 
