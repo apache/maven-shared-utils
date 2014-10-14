@@ -19,6 +19,7 @@ package org.apache.maven.shared.utils.io;
  * under the License.
  */
 
+import org.apache.maven.shared.utils.Os;
 import org.apache.maven.shared.utils.testhelpers.FileTestHelper;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
@@ -1371,6 +1372,9 @@ public class FileUtilsTest
     public void isASymbolicLink()
         throws IOException
     {
+        // This testcase will pass when running under java7 or higher
+        assumeThat( Os.isFamily(Os.FAMILY_WINDOWS), is(false) );
+
         File file = new File( "src/test/resources/symlinks/src/symDir" );
         assertTrue(FileUtils.isSymbolicLink(file  ));
         assertTrue(FileUtils.isSymbolicLinkLegacy(file  ));
