@@ -19,6 +19,7 @@ package org.apache.maven.shared.utils.introspection;
  * under the License.
  */
 
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -28,6 +29,7 @@ import java.util.StringTokenizer;
 import java.util.WeakHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.apache.maven.shared.utils.StringUtils;
 import org.apache.maven.shared.utils.introspection.MethodMap.AmbiguousException;
 
@@ -46,292 +48,291 @@ import javax.annotation.Nullable;
  * @version $Id$
  * @see <a href="http://struts.apache.org/1.x/struts-taglib/indexedprops.html">http://struts.apache.org/1.x/struts-taglib/indexedprops.html</a>
  */
-public class ReflectionValueExtractor
-{
-    private static final Class<?>[] CLASS_ARGS = new Class[0];
+public class ReflectionValueExtractor {
+	private static final Class<?>[] CLASS_ARGS = new Class[0];
 
-    private static final Object[] OBJECT_ARGS = new Object[0];
+	private static final Object[] OBJECT_ARGS = new Object[0];
 
-    /**
-     * Use a WeakHashMap here, so the keys (Class objects) can be garbage collected.
-     * This approach prevents permgen space overflows due to retention of discarded
-     * classloaders.
-     */
-    private static final Map<Class<?>, ClassMap> classMaps = new WeakHashMap<Class<?>, ClassMap>();
+	/**
+	 * Use a WeakHashMap here, so the keys (Class objects) can be garbage collected.
+	 * This approach prevents permgen space overflows due to retention of discarded
+	 * classloaders.
+	 */
+	private static final Map<Class<?>, ClassMap> classMaps = new WeakHashMap<Class<?>, ClassMap>();
 
-    /**
-     * Indexed properties pattern, ie <code>(\\w+)\\[(\\d+)\\]</code>
-     */
-    private static final Pattern INDEXED_PROPS = Pattern.compile( "(\\w+)\\[(\\d+)\\]" );
 
-    /**
-     * Indexed properties pattern, ie <code>(\\w+)\\((.+)\\)</code>
-     */
-    private static final Pattern MAPPED_PROPS = Pattern.compile( "(\\w+)\\((.+)\\)" );
+	static final int EOF = -1;
 
-    private ReflectionValueExtractor()
-    {
-    }
+	static final char PROPERTY_START = '.';
 
-    /**
-     * <p>The implementation supports indexed, nested and mapped properties.</p>
-     * <p/>
-     * <ul>
-     * <li>nested properties should be defined by a dot, i.e. "user.address.street"</li>
-     * <li>indexed properties (java.util.List or array instance) should be contains <code>(\\w+)\\[(\\d+)\\]</code>
-     * pattern, i.e. "user.addresses[1].street"</li>
-     * <li>mapped properties should be contains <code>(\\w+)\\((.+)\\)</code> pattern, i.e. "user.addresses(myAddress).street"</li>
-     * <ul>
-     *
-     * @param expression not null expression
-     * @param root       not null object
-     * @return the object defined by the expression
-     * @throws IntrospectionException if any
-     */
-    public static Object evaluate( @Nonnull String expression, @Nullable Object root )
-        throws IntrospectionException
-    {
-        return evaluate( expression, root, true );
-    }
+	static final char INDEXED_START = '[';
 
-    /**
-     * <p>The implementation supports indexed, nested and mapped properties.</p>
-     * <p/>
-     * <ul>
-     * <li>nested properties should be defined by a dot, i.e. "user.address.street"</li>
-     * <li>indexed properties (java.util.List or array instance) should be contains <code>(\\w+)\\[(\\d+)\\]</code>
-     * pattern, i.e. "user.addresses[1].street"</li>
-     * <li>mapped properties should be contains <code>(\\w+)\\((.+)\\)</code> pattern, i.e. "user.addresses(myAddress).street"</li>
-     * <ul>
-     *
-     * @param expression not null expression
-     * @param root       not null object
-     * @return the object defined by the expression
-     * @throws IntrospectionException if any
-     */
-    public static Object evaluate( @Nonnull String expression, @Nullable Object root, boolean trimRootToken )
-        throws IntrospectionException
-    {
-        // if the root token refers to the supplied root object parameter, remove it.
-        if ( trimRootToken )
-        {
-            expression = expression.substring( expression.indexOf( '.' ) + 1 );
+	static final char INDEXED_END = ']';
+
+	static final char MAPPED_START = '(';
+
+	static final char MAPPED_END = ')';
+
+	static class Tokenizer {
+		final String expression;
+
+		int idx;
+
+		public Tokenizer(String expression) {
+			this.expression = expression;
+		}
+
+		public int peekChar() {
+			return idx < expression.length() ? expression.charAt(idx) : EOF;
+		}
+
+		public int skipChar() {
+			return idx < expression.length() ? expression.charAt(idx++) : EOF;
+		}
+
+		public String nextToken(char delimiter) {
+			int start = idx;
+
+			while (idx < expression.length() && delimiter != expression.charAt(idx)) {
+				idx++;
+			}
+
+			// delimiter MUST be present
+			if (idx <= start || idx >= expression.length()) {
+				return null;
+			}
+
+			return expression.substring(start, idx++);
+		}
+
+		public String nextPropertyName() {
+			final int start = idx;
+
+			while (idx < expression.length() && Character.isJavaIdentifierPart(expression.charAt(idx))) {
+				idx++;
+			}
+
+			// property name does not require delimiter
+			if (idx <= start || idx > expression.length()) {
+				return null;
+			}
+
+			return expression.substring(start, idx);
+		}
+
+		public int getPosition() {
+			return idx < expression.length() ? idx : EOF;
+		}
+
+		// to make tokenizer look pretty in debugger
+		@Override
+		public String toString() {
+			return idx < expression.length() ? expression.substring(idx) : "<EOF>";
+		}
+	}
+
+	private ReflectionValueExtractor() {
+	}
+
+	/**
+	 * <p>The implementation supports indexed, nested and mapped properties.</p>
+	 * <p/>
+	 * <ul>
+	 * <li>nested properties should be defined by a dot, i.e. "user.address.street"</li>
+	 * <li>indexed properties (java.util.List or array instance) should be contains <code>(\\w+)\\[(\\d+)\\]</code>
+	 * pattern, i.e. "user.addresses[1].street"</li>
+	 * <li>mapped properties should be contains <code>(\\w+)\\((.+)\\)</code> pattern, i.e. "user.addresses(myAddress).street"</li>
+	 * <ul>
+	 *
+	 * @param expression not null expression
+	 * @param root       not null object
+	 * @return the object defined by the expression
+	 * @throws IntrospectionException if any
+	 */
+	public static Object evaluate(@Nonnull String expression, @Nullable Object root)
+			throws IntrospectionException {
+		return evaluate(expression, root, true);
+	}
+
+	/**
+	 * <p>The implementation supports indexed, nested and mapped properties.</p>
+	 * <p/>
+	 * <ul>
+	 * <li>nested properties should be defined by a dot, i.e. "user.address.street"</li>
+	 * <li>indexed properties (java.util.List or array instance) should be contains <code>(\\w+)\\[(\\d+)\\]</code>
+	 * pattern, i.e. "user.addresses[1].street"</li>
+	 * <li>mapped properties should be contains <code>(\\w+)\\((.+)\\)</code> pattern, i.e. "user.addresses(myAddress).street"</li>
+	 * <ul>
+	 *
+	 * @param expression not null expression
+	 * @param root       not null object
+	 * @return the object defined by the expression
+	 * @throws IntrospectionException if any
+	 */
+	public static Object evaluate(@Nonnull String expression, @Nullable Object root, boolean trimRootToken)
+			throws IntrospectionException {
+		Object value = root;
+
+		// ----------------------------------------------------------------------
+		// Walk the dots and retrieve the ultimate value desired from the
+		// MavenProject instance.
+		// ----------------------------------------------------------------------
+
+		if (org.codehaus.plexus.util.StringUtils.isEmpty(expression) || !Character.isJavaIdentifierStart(expression.charAt(0))) {
+			return null;
+		}
+
+		final Tokenizer tokenizer;
+		if (trimRootToken) {
+			tokenizer = new Tokenizer(expression);
+			tokenizer.nextPropertyName();
+			if (tokenizer.getPosition() == EOF) {
+				return null;
+			}
+		} else {
+			tokenizer = new Tokenizer("." + expression);
+		}
+
+		int propertyPosition = tokenizer.getPosition();
+		while (value != null && tokenizer.peekChar() != EOF) {
+			switch (tokenizer.skipChar()) {
+				case INDEXED_START:
+					value =
+							getIndexedValue(expression, propertyPosition, tokenizer.getPosition(), value,
+									tokenizer.nextToken(INDEXED_END));
+					break;
+				case MAPPED_START:
+					value =
+							getMappedValue(expression, propertyPosition, tokenizer.getPosition(), value,
+									tokenizer.nextToken(MAPPED_END));
+					break;
+				case PROPERTY_START:
+					propertyPosition = tokenizer.getPosition();
+					value = getPropertyValue(value, tokenizer.nextPropertyName());
+					break;
+				default:
+					// could not parse expression
+					return null;
+			}
+		}
+
+		return value;
+	}
+
+	private static Object getMappedValue(final String expression, final int from, final int to, final Object value,
+			final String key)
+			throws IntrospectionException {
+		if (value == null || key == null) {
+			return null;
+		}
+
+		if (value instanceof Map) {
+			Object[] localParams = new Object[] { key };
+			ClassMap classMap = getClassMap(value.getClass());
+			try {
+				Method method = classMap.findMethod("get", localParams);
+				return method.invoke(value, localParams);
+			} catch (AmbiguousException e) {
+				throw new IntrospectionException(e);
+			} catch (IllegalAccessException e) {
+				throw new IntrospectionException(e);
+			} catch (InvocationTargetException e) {
+				throw new IntrospectionException(e.getTargetException());
+			}
+
+		}
+
+		final String message =
+				String.format("The token '%s' at position '%d' refers to a java.util.Map, but the value seems is an instance of '%s'",
+						expression.subSequence(from, to), from, value.getClass());
+
+		throw new IntrospectionException(message);
+	}
+
+	private static Object getIndexedValue(final String expression, final int from, final int to, final Object value,
+			final String indexStr)
+			throws IntrospectionException {
+		try {
+			int index = Integer.parseInt(indexStr);
+
+			if (value.getClass().isArray()) {
+				return Array.get(value, index);
+			}
+
+			if (value instanceof List) {
+				ClassMap classMap = getClassMap(value.getClass());
+				// use get method on List interface
+				Object[] localParams = new Object[] { index };
+				Method method = null;
+				try {
+					method = classMap.findMethod("get", localParams);
+					return method.invoke(value, localParams);
+				} catch (AmbiguousException e) {
+					throw new IntrospectionException(e);
+				} catch (IllegalAccessException e) {
+					throw new IntrospectionException(e);
+				}
+			}
+		} catch (NumberFormatException e) {
+			return null;
+		} catch (InvocationTargetException e) {
+			// catch array index issues gracefully, otherwise release
+			if (e.getCause() instanceof IndexOutOfBoundsException) {
+				return null;
+			}
+
+			throw new IntrospectionException(e.getTargetException());
+		}
+
+		final String message =
+				String.format("The token '%s' at position '%d' refers to a java.util.List or an array, but the value seems is an instance of '%s'",
+						expression.subSequence(from, to), from, value.getClass());
+
+		throw new IntrospectionException(message);
+	}
+
+	private static Object getPropertyValue(Object value, String property)
+			throws IntrospectionException {
+		if (value == null || property == null) {
+			return null;
+		}
+
+		ClassMap classMap = getClassMap(value.getClass());
+		String methodBase = org.codehaus.plexus.util.StringUtils.capitalizeFirstLetter(property);
+		String methodName = "get" + methodBase;
+        try {
+		Method method = classMap.findMethod(methodName, CLASS_ARGS);
+
+		if (method == null) {
+			// perhaps this is a boolean property??
+			methodName = "is" + methodBase;
+
+			method = classMap.findMethod(methodName, CLASS_ARGS);
+		}
+
+		if (method == null) {
+			return null;
+		}
+
+			return method.invoke(value, OBJECT_ARGS);
+		} catch (InvocationTargetException e) {
+			throw new IntrospectionException(e.getTargetException());
+		} catch (AmbiguousException e) {
+            throw new IntrospectionException(e);
+        } catch (IllegalAccessException e) {
+            throw new IntrospectionException(e);
         }
-
-        Object value = root;
-
-        // ----------------------------------------------------------------------
-        // Walk the dots and retrieve the ultimate value desired from the
-        // MavenProject instance.
-        // ----------------------------------------------------------------------
-
-        StringTokenizer parser = new StringTokenizer( expression, "." );
-
-        while ( parser.hasMoreTokens() )
-        {
-            // if we have nothing, stop now
-            if ( value == null )
-            {
-                return null;
-            }
-
-            String token = parser.nextToken();
-
-            ClassMap classMap = getClassMap( value.getClass() );
-
-            Method method;
-            Object[] localParams = OBJECT_ARGS;
-
-            // do we have an indexed property?
-            Matcher matcher = INDEXED_PROPS.matcher( token );
-            if ( matcher.find() )
-            {
-                String methodBase = StringUtils.capitalizeFirstLetter( matcher.group( 1 ) );
-                String methodName = "get" + methodBase;
-                try
-                {
-                    method = classMap.findMethod( methodName, CLASS_ARGS );
-                }
-                catch ( AmbiguousException e )
-                {
-                    throw new IntrospectionException( e );
-                }
-                
-                try
-                {
-                    value = method.invoke( value, OBJECT_ARGS );
-                }
-                catch ( IllegalArgumentException e )
-                {
-                    throw new IntrospectionException( e );
-                }
-                catch ( IllegalAccessException e )
-                {
-                    throw new IntrospectionException( e );
-                }
-                catch ( InvocationTargetException e )
-                {
-                    throw new IntrospectionException( e );
-                }                
-                
-                classMap = getClassMap( value.getClass() );
-
-                if ( classMap.getCachedClass().isArray() )
-                {
-                    value = Arrays.asList( (Object[]) value );
-                    classMap = getClassMap( value.getClass() );
-                }
-
-                if ( value instanceof List )
-                {
-                    // use get method on List interface
-                    localParams = new Object[1];
-                    localParams[0] = Integer.valueOf( matcher.group( 2 ) );
-                    try
-                    {
-                        method = classMap.findMethod( "get", localParams );
-                    }
-                    catch ( AmbiguousException e )
-                    {
-                        throw new IntrospectionException( e );
-                    }
-                }
-                else
-                {
-                    throw new IntrospectionException( "The token '" + token
-                                             + "' refers to a java.util.List or an array, but the value seems is an instance of '"
-                                             + value.getClass() + "'." );
-                }
-            }
-            else
-            {
-                // do we have a mapped property?
-                matcher = MAPPED_PROPS.matcher( token );
-                if ( matcher.find() )
-                {
-                    String methodBase = StringUtils.capitalizeFirstLetter( matcher.group( 1 ) );
-                    String methodName = "get" + methodBase;
-                    try
-                    {
-                        method = classMap.findMethod( methodName, CLASS_ARGS );
-                    }
-                    catch ( AmbiguousException e )
-                    {
-                        throw new IntrospectionException( e );
-                    }
-                    
-                    try
-                    {
-                        value = method.invoke( value, OBJECT_ARGS );
-                    }
-                    catch ( IllegalArgumentException e )
-                    {
-                        throw new IntrospectionException( e );
-                    }
-                    catch ( IllegalAccessException e )
-                    {
-                        throw new IntrospectionException( e );
-                    }
-                    catch ( InvocationTargetException e )
-                    {
-                        throw new IntrospectionException( e );
-                    }
-                    classMap = getClassMap( value.getClass() );
-
-                    if ( value instanceof Map )
-                    {
-                        // use get method on List interface
-                        localParams = new Object[1];
-                        localParams[0] = matcher.group( 2 );
-                        try
-                        {
-                            method = classMap.findMethod( "get", localParams );
-                        }
-                        catch ( AmbiguousException e )
-                        {
-                            throw new IntrospectionException( e );
-                        }
-                    }
-                    else
-                    {
-                        throw new IntrospectionException( "The token '" + token
-                                                 + "' refers to a java.util.Map, but the value seems is an instance of '"
-                                                 + value.getClass() + "'." );
-                    }
-                }
-                else
-                {
-                    String methodBase = StringUtils.capitalizeFirstLetter( token );
-                    String methodName = "get" + methodBase;
-                    try
-                    {
-                        method = classMap.findMethod( methodName, CLASS_ARGS );
-                    }
-                    catch ( AmbiguousException e )
-                    {
-                        throw new IntrospectionException( e );
-                    }
-
-                    if ( method == null )
-                    {
-                        // perhaps this is a boolean property??
-                        methodName = "is" + methodBase;
-
-                        try
-                        {
-                            method = classMap.findMethod( methodName, CLASS_ARGS );
-                        }
-                        catch ( AmbiguousException e )
-                        {
-                            throw new IntrospectionException( e );
-                        }
-                    }
-                }
-            }
-
-            if ( method == null )
-            {
-                return null;
-            }
-
-            try
-            {
-                value = method.invoke( value, localParams );
-            }
-            catch ( InvocationTargetException e )
-            {
-                // catch array index issues gracefully, otherwise release
-                if ( e.getCause() instanceof IndexOutOfBoundsException )
-                {
-                    return null;
-                }
-
-                throw new IntrospectionException( e );
-            }
-            catch ( IllegalArgumentException e )
-            {
-                throw new IntrospectionException( e );
-            }
-            catch ( IllegalAccessException e )
-            {
-                throw new IntrospectionException( e );
-            }
-        }
-
-        return value;
     }
 
-    private static ClassMap getClassMap( Class<?> clazz )
-    {
-        ClassMap classMap = classMaps.get( clazz );
+	private static ClassMap getClassMap(Class<?> clazz) {
+		ClassMap classMap = classMaps.get(clazz);
 
-        if ( classMap == null )
-        {
-            classMap = new ClassMap( clazz );
+		if (classMap == null) {
+			classMap = new ClassMap(clazz);
 
-            classMaps.put( clazz, classMap );
-        }
+			classMaps.put(clazz, classMap);
+		}
 
-        return classMap;
-    }
+		return classMap;
+	}
 }
