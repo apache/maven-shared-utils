@@ -27,6 +27,7 @@ import java.util.Map;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
+import org.apache.maven.plugin.testing.stubs.MavenProjectStub;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -512,5 +513,14 @@ public class ReflectionValueExtractorTest
         {
             return value;
         }
+    }
+
+    public void testRootPropertyRegression()
+        throws Exception
+    {
+        MavenProjectStub project = new MavenProjectStub(  );
+        project.setDescription( "c:\\\\org\\apache\\test" );
+        Object evalued  = ReflectionValueExtractor.evaluate( "description", project );
+        assertNotNull( evalued );
     }
 }

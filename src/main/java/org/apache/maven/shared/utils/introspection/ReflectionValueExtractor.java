@@ -178,12 +178,14 @@ public class ReflectionValueExtractor {
 		// MavenProject instance.
 		// ----------------------------------------------------------------------
 
-		if (org.codehaus.plexus.util.StringUtils.isEmpty(expression) || !Character.isJavaIdentifierStart(expression.charAt(0))) {
+		if (StringUtils.isEmpty(expression) || !Character.isJavaIdentifierStart(expression.charAt(0))) {
 			return null;
 		}
 
-		final Tokenizer tokenizer;
-		if (trimRootToken) {
+        boolean hasDots = expression.indexOf( PROPERTY_START ) >= 0;
+
+        final Tokenizer tokenizer;
+		if (trimRootToken && hasDots) {
 			tokenizer = new Tokenizer(expression);
 			tokenizer.nextPropertyName();
 			if (tokenizer.getPosition() == EOF) {
@@ -298,7 +300,7 @@ public class ReflectionValueExtractor {
 		}
 
 		ClassMap classMap = getClassMap(value.getClass());
-		String methodBase = org.codehaus.plexus.util.StringUtils.capitalizeFirstLetter(property);
+		String methodBase = StringUtils.capitalizeFirstLetter(property);
 		String methodName = "get" + methodBase;
         try {
 		Method method = classMap.findMethod(methodName, CLASS_ARGS);
