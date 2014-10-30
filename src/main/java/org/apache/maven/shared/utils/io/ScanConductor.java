@@ -19,7 +19,6 @@ package org.apache.maven.shared.utils.io;
  * under the License.
  */
 
-
 import java.io.File;
 
 /**
@@ -37,6 +36,9 @@ import java.io.File;
  */
 public interface ScanConductor
 {
+    /**
+     * 
+     */
     public enum ScanAction
     {
         /**

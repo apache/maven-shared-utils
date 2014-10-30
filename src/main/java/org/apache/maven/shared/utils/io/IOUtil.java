@@ -147,7 +147,8 @@ public final class IOUtil
      *
      * @param bufferSize Size of internal buffer to use.
      */
-    public static void copy( @Nonnull final InputStream input, @Nonnull final OutputStream output, final int bufferSize )
+    public static void copy( @Nonnull final InputStream input, @Nonnull final OutputStream output,
+                             final int bufferSize )
         throws IOException
     {
         final byte[] buffer = new byte[bufferSize];
@@ -225,7 +226,8 @@ public final class IOUtil
      *                 <a href="http://www.iana.org/assignments/character-sets">IANA
      *                 Charset Registry</a> for a list of valid encoding types.
      */
-    public static void copy( @Nonnull final InputStream input, @Nonnull final Writer output, @Nonnull final String encoding )
+    public static void copy( @Nonnull final InputStream input, @Nonnull final Writer output,
+                             @Nonnull final String encoding )
         throws IOException
     {
         final InputStreamReader in = new InputStreamReader( input, encoding );
@@ -241,7 +243,8 @@ public final class IOUtil
      *                   Charset Registry</a> for a list of valid encoding types.
      * @param bufferSize Size of internal buffer to use.
      */
-    public static void copy( @Nonnull final InputStream input, @Nonnull final Writer output, @Nonnull final String encoding, final int bufferSize )
+    public static void copy( @Nonnull final InputStream input, @Nonnull final Writer output,
+                             @Nonnull final String encoding, final int bufferSize )
         throws IOException
     {
         final InputStreamReader in = new InputStreamReader( input, encoding );
@@ -296,7 +299,8 @@ public final class IOUtil
      *                   Charset Registry</a> for a list of valid encoding types.
      * @param bufferSize Size of internal buffer to use.
      */
-    @Nonnull public static String toString( @Nonnull final InputStream input, @Nonnull final String encoding, final int bufferSize )
+    @Nonnull public static String toString( @Nonnull final InputStream input, @Nonnull final String encoding,
+                                            final int bufferSize )
         throws IOException
     {
         final StringWriter sw = new StringWriter();
@@ -542,7 +546,8 @@ public final class IOUtil
      *                   Charset Registry</a> for a list of valid encoding types.
      * @param bufferSize Size of internal buffer to use.
      */
-    public static void copy( @Nonnull final byte[] input, @Nonnull final Writer output, @Nonnull final String encoding, final int bufferSize )
+    public static void copy( @Nonnull final byte[] input, @Nonnull final Writer output, @Nonnull final String encoding,
+                             final int bufferSize )
         throws IOException
     {
         final ByteArrayInputStream in = new ByteArrayInputStream( input );
@@ -597,7 +602,8 @@ public final class IOUtil
      *                   Charset Registry</a> for a list of valid encoding types.
      * @param bufferSize Size of internal buffer to use.
      */
-    @Nonnull public static String toString( @Nonnull final byte[] input, @Nonnull final String encoding, final int bufferSize )
+    @Nonnull public static String toString( @Nonnull final byte[] input, @Nonnull final String encoding,
+                                            final int bufferSize )
         throws IOException
     {
         final StringWriter sw = new StringWriter();

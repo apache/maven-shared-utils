@@ -51,12 +51,10 @@ public class MatchPattern
         regexPattern = SelectorUtils.isRegexPrefixedPattern( source ) ? source.substring(
             SelectorUtils.REGEX_HANDLER_PREFIX.length(),
             source.length() - SelectorUtils.PATTERN_HANDLER_SUFFIX.length() ) : null;
-        regexPatternRegex = regexPattern != null ? Pattern.compile(  regexPattern ) : null;
-        this.source =
-            SelectorUtils.isAntPrefixedPattern( source ) ? source.substring( SelectorUtils.ANT_HANDLER_PREFIX.length(),
-                                                                             source.length()
-                                                                                 - SelectorUtils.PATTERN_HANDLER_SUFFIX.length() )
-                : source;
+        regexPatternRegex = regexPattern != null ? Pattern.compile( regexPattern ) : null;
+        this.source = SelectorUtils.isAntPrefixedPattern( source ) ? source.substring(
+            SelectorUtils.ANT_HANDLER_PREFIX.length(),
+            source.length() - SelectorUtils.PATTERN_HANDLER_SUFFIX.length() ) : source;
         this.separator = separator;
         tokenized = tokenizePathToString( this.source, separator );
     }

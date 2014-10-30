@@ -59,17 +59,18 @@ public class Java7Support
         boolean isJava7x = true;
         try
         {
-            Class<?> files = Thread.currentThread().getContextClassLoader().loadClass( "java.nio.file.Files" );
-            Class<?> path = Thread.currentThread().getContextClassLoader().loadClass( "java.nio.file.Path" );
-            Class<?> fa = Thread.currentThread().getContextClassLoader().loadClass( "java.nio.file.attribute.FileAttribute" );
-            Class<?> linkOption = Thread.currentThread().getContextClassLoader().loadClass( "java.nio.file.LinkOption" );
+            ClassLoader cl = Thread.currentThread().getContextClassLoader();
+            Class<?> files = cl.loadClass( "java.nio.file.Files" );
+            Class<?> path = cl.loadClass( "java.nio.file.Path" );
+            Class<?> fa = cl.loadClass( "java.nio.file.attribute.FileAttribute" );
+            Class<?> linkOption = cl.loadClass( "java.nio.file.LinkOption" );
             isSymbolicLink = files.getMethod( "isSymbolicLink", path );
             delete = files.getMethod( "delete", path );
             readSymlink = files.getMethod( "readSymbolicLink", path );
 
             emptyFileAttributes = Array.newInstance( fa, 0 );
             final Object o = emptyFileAttributes;
-            createSymlink  = files.getMethod( "createSymbolicLink", path,path, o.getClass() );
+            createSymlink = files.getMethod( "createSymbolicLink", path, path, o.getClass() );
             emptyLinkOpts = Array.newInstance( linkOption, 0 );
             exists = files.getMethod( "exists", path, emptyLinkOpts.getClass() );
             toPath = File.class.getMethod( "toPath" );
@@ -149,7 +150,8 @@ public class Java7Support
     {
         try
         {
-            if (!exists( symlink )){
+            if ( !exists( symlink ) )
+            {
                 Object link = toPath.invoke( symlink );
                 Object path = createSymlink.invoke( null, link, toPath.invoke( target ), emptyFileAttributes );
                 return (File) toFile.invoke( path );
@@ -163,7 +165,7 @@ public class Java7Support
         catch ( InvocationTargetException e )
         {
             final Throwable targetException = e.getTargetException();
-            throw (IOException)targetException;
+            throw (IOException) targetException;
         }
 
     }
@@ -172,8 +174,8 @@ public class Java7Support
      * @param file the file to delete
      * @throws IOException
      */
-
-    public static void delete( @Nonnull File file ) throws IOException
+    public static void delete( @Nonnull File file )
+        throws IOException
     {
         try
         {

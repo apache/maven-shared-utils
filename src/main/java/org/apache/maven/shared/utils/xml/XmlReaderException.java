@@ -36,17 +36,17 @@ import java.io.InputStream;
 class XmlReaderException
     extends IOException
 {
-    private final String _bomEncoding;
+    private final String bomEncoding;
 
-    private final String _xmlGuessEncoding;
+    private final String xmlGuessEncoding;
 
-    private final String _xmlEncoding;
+    private final String xmlEncoding;
 
-    private final String _contentTypeMime;
+    private final String contentTypeMime;
 
-    private final String _contentTypeEncoding;
+    private final String contentTypeEncoding;
 
-    private final InputStream _is;
+    private final InputStream is;
 
     /**
      * Creates an exception instance if the charset encoding could not be determined.
@@ -83,12 +83,12 @@ class XmlReaderException
                                String xmlEnc, InputStream is )
     {
         super( msg );
-        _contentTypeMime = ctMime;
-        _contentTypeEncoding = ctEnc;
-        _bomEncoding = bomEnc;
-        _xmlGuessEncoding = xmlGuessEnc;
-        _xmlEncoding = xmlEnc;
-        _is = is;
+        contentTypeMime = ctMime;
+        contentTypeEncoding = ctEnc;
+        bomEncoding = bomEnc;
+        xmlGuessEncoding = xmlGuessEnc;
+        xmlEncoding = xmlEnc;
+        this.is = is;
     }
 
     /**
@@ -99,7 +99,7 @@ class XmlReaderException
      */
     public String getBomEncoding()
     {
-        return _bomEncoding;
+        return bomEncoding;
     }
 
     /**
@@ -110,7 +110,7 @@ class XmlReaderException
      */
     public String getXmlGuessEncoding()
     {
-        return _xmlGuessEncoding;
+        return xmlGuessEncoding;
     }
 
     /**
@@ -121,7 +121,7 @@ class XmlReaderException
      */
     public String getXmlEncoding()
     {
-        return _xmlEncoding;
+        return xmlEncoding;
     }
 
     /**
@@ -133,7 +133,7 @@ class XmlReaderException
      */
     public String getContentTypeMime()
     {
-        return _contentTypeMime;
+        return contentTypeMime;
     }
 
     /**
@@ -145,7 +145,7 @@ class XmlReaderException
      */
     public String getContentTypeEncoding()
     {
-        return _contentTypeEncoding;
+        return contentTypeEncoding;
     }
 
     /**
@@ -157,6 +157,6 @@ class XmlReaderException
      */
     public InputStream getInputStream()
     {
-        return _is;
+        return is;
     }
 }

@@ -752,7 +752,8 @@ public class FileUtils
      * @throws java.io.FileNotFoundException if <code>source</code> isn't a normal file.
      * @throws IllegalArgumentException      if <code>destinationDirectory</code> isn't a directory.
      * @throws IOException                   if <code>source</code> does not exist, the file in
-     *                                       <code>destinationDirectory</code> cannot be written to, or an IO error occurs during copying.
+     *                                       <code>destinationDirectory</code> cannot be written to, or an IO error
+     *                                       occurs during copying.
      */
     public static void copyFileToDirectory( @Nonnull final File source, @Nonnull final File destinationDirectory )
         throws IOException
@@ -776,7 +777,8 @@ public class FileUtils
      * @throws java.io.FileNotFoundException if <code>source</code> isn't a normal file.
      * @throws IllegalArgumentException      if <code>destinationDirectory</code> isn't a directory.
      * @throws IOException                   if <code>source</code> does not exist, the file in
-     *                                       <code>destinationDirectory</code> cannot be written to, or an IO error occurs during copying.
+     *                                       <code>destinationDirectory</code> cannot be written to, or an IO error
+     *                                       occurs during copying.
      */
     private static void copyFileToDirectoryIfModified( @Nonnull final File source,
                                                        @Nonnull final File destinationDirectory )
@@ -1299,7 +1301,7 @@ public class FileUtils
         /* try delete the directory before its contents, which will take
          * care of any directories that are really symbolic links.
          */
-        if ( deleteLegacyStyle( directory) )
+        if ( deleteLegacyStyle( directory ) )
         {
             return;
         }
@@ -1853,7 +1855,7 @@ public class FileUtils
         copyFile( from, to, encoding, wrappers, false );
     }
 
-    public static abstract class FilterWrapper
+    public abstract static class FilterWrapper
     {
         public abstract Reader getReader( Reader fileReader );
     }

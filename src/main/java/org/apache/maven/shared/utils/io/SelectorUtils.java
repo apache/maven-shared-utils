@@ -787,8 +787,8 @@ public final class SelectorUtils
             && pattern.startsWith( ANT_HANDLER_PREFIX ) && pattern.endsWith( PATTERN_HANDLER_SUFFIX );
     }
 
-    static boolean matchAntPathPattern( @Nonnull MatchPattern matchPattern, @Nonnull String str, @Nonnull String separator,
-                                        boolean isCaseSensitive )
+    static boolean matchAntPathPattern( @Nonnull MatchPattern matchPattern, @Nonnull String str,
+                                        @Nonnull String separator, boolean isCaseSensitive )
     {
         if ( separatorPatternStartSlashMismatch( matchPattern, str, separator ) )
         {

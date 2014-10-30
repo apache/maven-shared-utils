@@ -40,7 +40,6 @@ import javax.annotation.Nullable;
 public abstract class CommandLineUtils
 {
 
-
     @SuppressWarnings( "UnusedDeclaration" )
     public static class StringStreamConsumer
         implements StreamConsumer
@@ -137,7 +136,8 @@ public abstract class CommandLineUtils
         throws CommandLineException
     {
         final CommandLineCallable future =
-            executeCommandLineAsCallable( cl, systemIn, systemOut, systemErr, timeoutInSeconds, runAfterProcessTermination );
+            executeCommandLineAsCallable( cl, systemIn, systemOut, systemErr, timeoutInSeconds,
+                                          runAfterProcessTermination );
         return future.call();
     }
 
@@ -150,8 +150,8 @@ public abstract class CommandLineUtils
      * @param systemErr        A consumer that receives system error stream output, must be thread safe
      * @param timeoutInSeconds Positive integer to specify timeout, zero and negative integers for no timeout.
      * @param runAfterProcessTermination Optional callback to run after the process terminated or the the timeout was
-     * @return A CommandLineCallable that provides the process return value, see {@link Process#exitValue()}. "call" must be called on
-     *         this to be sure the forked process has terminated, no guarantees is made about
+     * @return A CommandLineCallable that provides the process return value, see {@link Process#exitValue()}. "call"
+     *         must be called on this to be sure the forked process has terminated, no guarantees is made about
      *         any internal state before after the completion of the call statements
      * @throws CommandLineException or CommandLineTimeOutException if time out occurs
      * @noinspection ThrowableResultOfMethodCallIgnored

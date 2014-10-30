@@ -19,7 +19,6 @@ package org.apache.maven.shared.utils;
  * under the License.
  */
 
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -28,6 +27,9 @@ import org.apache.maven.shared.utils.io.IOUtil;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * 
+ */
 public class PropertyUtils
 {
 

@@ -39,27 +39,27 @@ class DirectoryWalker
         /**
          * Count of files in the directory.
          */
-        public final int count;
+        private final int count;
 
         /**
          * Current Directory.
          */
-        public final File dir;
+        private final File dir;
 
         /**
          * Index (or offset) within the directory count.
          */
-        public int index;
+        private int index;
 
         /**
          * Offset for percentage calculations. Based on parent DirStackEntry.
          */
-        public double percentageOffset;
+        private double percentageOffset;
 
         /**
          * Size of percentage space to work with.
          */
-        public double percentageSize;
+        private double percentageSize;
 
         /**
          * Create a DirStackEntry.

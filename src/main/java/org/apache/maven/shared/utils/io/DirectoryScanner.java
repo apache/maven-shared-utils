@@ -407,7 +407,8 @@ public class DirectoryScanner
                 {
                     scanAction = scanConductor.visitDirectory( "", basedir );
 
-                    if ( ScanConductor.ScanAction.ABORT.equals( scanAction ) || ScanConductor.ScanAction.ABORT_DIRECTORY.equals( scanAction )
+                    if ( ScanConductor.ScanAction.ABORT.equals( scanAction )
+                        || ScanConductor.ScanAction.ABORT_DIRECTORY.equals( scanAction )
                         || ScanConductor.ScanAction.NO_RECURSE.equals( scanAction ) )
                     {
                         return;
@@ -631,7 +632,8 @@ public class DirectoryScanner
                         {
                             scanAction = scanConductor.visitDirectory( name, file );
 
-                            if ( ScanConductor.ScanAction.ABORT.equals( scanAction ) || ScanConductor.ScanAction.ABORT_DIRECTORY.equals( scanAction ) )
+                            if ( ScanConductor.ScanAction.ABORT.equals( scanAction )
+                                || ScanConductor.ScanAction.ABORT_DIRECTORY.equals( scanAction ) )
                             {
                                 return;
                             }
