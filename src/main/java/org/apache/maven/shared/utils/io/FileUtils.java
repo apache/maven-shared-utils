@@ -814,6 +814,11 @@ public class FileUtils
             final String message = "File " + source + " does not exist";
             throw new IOException( message );
         }
+        if (Java7Support.isAtLeastJava7() && Java7Support.isSymLink(  source )){
+            File target = Java7Support.readSymbolicLink( source );
+            Java7Support.createSymbolicLink( destination, target );
+            return;
+        }
 
         //check source != destination, see PLXUTILS-10
         if ( source.getCanonicalPath().equals( destination.getCanonicalPath() ) )

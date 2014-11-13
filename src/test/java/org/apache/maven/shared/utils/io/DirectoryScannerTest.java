@@ -120,6 +120,19 @@ public class DirectoryScannerTest
     }
 
     @Test
+    public void checkSymlinkBehaviour(){
+        DirectoryScanner ds = new DirectoryScanner();
+        ds.setBasedir( new File("src/test/resources/symlinks/src") );
+        ds.setFollowSymlinks( false );
+        ds.scan();
+        String[] includedDirectories = ds.getIncludedDirectories();
+        String[] files = ds.getIncludedFiles();
+        System.out.println( "files = " + files );
+
+
+    }
+
+    @Test
     @Ignore("Wait until we can run with assembly 2.5 which will support symlinks properly")
     public void followSymlinksFalse()
     {

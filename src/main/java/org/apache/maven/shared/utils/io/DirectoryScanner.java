@@ -779,7 +779,7 @@ public class DirectoryScanner
      * patterns. The names are relative to the base directory.
      *
      * @return the names of the files which matched at least one of the include patterns and none of the exclude
-     *         patterns.
+     *         patterns. May also contain symbolic links to files.
      */
     public String[] getIncludedFiles()
     {
@@ -823,7 +823,7 @@ public class DirectoryScanner
      * patterns. The names are relative to the base directory.
      *
      * @return the names of the directories which matched at least one of the include patterns and none of the exclude
-     *         patterns.
+     *         patterns. May also contain symbolic links to directories.
      */
     public String[] getIncludedDirectories()
     {

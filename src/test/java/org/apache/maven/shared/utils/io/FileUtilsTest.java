@@ -39,6 +39,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.*;
 import static org.junit.Assume.assumeThat;
+import static org.junit.Assume.assumeTrue;
 import static org.junit.matchers.JUnitMatchers.containsString;
 import static org.junit.matchers.JUnitMatchers.hasItems;
 
@@ -421,6 +422,18 @@ public class FileUtilsTest
         assertTrue("Check last modified date preserved",
             testFile1.lastModified() == destination.lastModified());*/
     }
+
+    @Test
+    public void copyFileThatIsSymlink()
+        throws Exception
+    {
+        assumeTrue( Java7Support.isAtLeastJava7() );
+        File destination = new File( tempFolder.getRoot(), "symCopy.txt" );
+        FileUtils.copyFile( new File("src/test/resources/symlinks/src/symR"), destination );
+        assertTrue( Java7Support.isSymLink(  destination ));
+    }
+
+
 
     @Test
     public void deleteFile()
