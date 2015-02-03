@@ -24,6 +24,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.Reader;
+import java.nio.charset.Charset;
+
+import javax.annotation.Nullable;
+
 import org.apache.maven.shared.utils.io.IOUtil;
 
 /**
@@ -32,7 +37,7 @@ import org.apache.maven.shared.utils.io.IOUtil;
  *
  * @author <a href="mailto:fvancea@maxiq.com">Florin Vancea </a>
  * @author <a href="mailto:pj@thoughtworks.com">Paul Julius </a>
- * 
+ *
  */
 public class StreamPumper
     extends AbstractStreamHandler
@@ -49,12 +54,17 @@ public class StreamPumper
 
     public StreamPumper( InputStream in, StreamConsumer consumer )
     {
-        this( in, null, consumer );
+        this( new InputStreamReader( in ), null, consumer );
     }
 
-    private StreamPumper( InputStream in, PrintWriter writer, StreamConsumer consumer )
+    public StreamPumper( InputStream in, StreamConsumer consumer,  @Nullable Charset charset )
     {
-        this.in = new BufferedReader( new InputStreamReader( in ), SIZE );
+        this( null == charset ? new InputStreamReader( in ) : new InputStreamReader( in, charset ), null, consumer );
+    }
+
+    private StreamPumper( Reader in, PrintWriter writer, StreamConsumer consumer )
+    {
+        this.in = new BufferedReader( in, SIZE );
         this.out = writer;
         this.consumer = consumer;
     }
