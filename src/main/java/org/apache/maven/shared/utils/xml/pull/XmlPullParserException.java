@@ -23,6 +23,9 @@ import org.xml.sax.SAXException;
 
 import java.io.IOException;
 
+/**
+ * 
+ */
 public class XmlPullParserException
     extends RuntimeException
 {

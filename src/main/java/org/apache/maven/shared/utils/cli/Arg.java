@@ -21,6 +21,9 @@ package org.apache.maven.shared.utils.cli;
 
 import java.io.File;
 
+/**
+ * 
+ */
 public interface Arg
 {
     void setValue( String value );

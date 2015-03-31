@@ -814,7 +814,8 @@ public class FileUtils
             final String message = "File " + source + " does not exist";
             throw new IOException( message );
         }
-        if (Java7Support.isAtLeastJava7() && Java7Support.isSymLink(  source )){
+        if ( Java7Support.isAtLeastJava7() && Java7Support.isSymLink( source ) )
+        {
             File target = Java7Support.readSymbolicLink( source );
             Java7Support.createSymbolicLink( destination, target );
             return;
@@ -1860,20 +1861,24 @@ public class FileUtils
         copyFile( from, to, encoding, wrappers, false );
     }
 
+    /**
+     * 
+     */
     public abstract static class FilterWrapper
     {
         public abstract Reader getReader( Reader fileReader );
     }
 
     /**
-     * <b>If wrappers is null or empty, the file will be copy only if to.lastModified() < from.lastModified() or if overwrite is true</b>
+     * <b>If wrappers is null or empty, the file will be copy only if to.lastModified() < from.lastModified() or if
+     * overwrite is true</b>
      *
-     * @param from      the file to copy
-     * @param to        the destination file
-     * @param encoding  the file output encoding (only if wrappers is not empty)
-     * @param wrappers  array of {@link FilterWrapper}
-     * @param overwrite if true and f wrappers is null or empty, the file will be copy
-     *                  enven if to.lastModified() < from.lastModified()
+     * @param from the file to copy
+     * @param to the destination file
+     * @param encoding the file output encoding (only if wrappers is not empty)
+     * @param wrappers array of {@link FilterWrapper}
+     * @param overwrite if true and f wrappers is null or empty, the file will be copy enven if to.lastModified() <
+     *            from.lastModified()
      * @throws IOException if an IO error occurs during copying or filtering
      */
     public static void copyFile( @Nonnull File from, @Nonnull File to, @Nullable String encoding,

@@ -56,7 +56,7 @@ public class ReflectionValueExtractor
      * This approach prevents permgen space overflows due to retention of discarded
      * classloaders.
      */
-    private static final Map<Class<?>, ClassMap> classMaps = new WeakHashMap<Class<?>, ClassMap>();
+    private static final Map<Class<?>, ClassMap> CLASS_MAPS = new WeakHashMap<Class<?>, ClassMap>();
 
     static final int EOF = -1;
 
@@ -167,17 +167,20 @@ public class ReflectionValueExtractor
     }
 
     /**
-     * <p>The implementation supports indexed, nested and mapped properties.</p>
+     * <p>
+     * The implementation supports indexed, nested and mapped properties.
+     * </p>
      * <p/>
      * <ul>
      * <li>nested properties should be defined by a dot, i.e. "user.address.street"</li>
      * <li>indexed properties (java.util.List or array instance) should be contains <code>(\\w+)\\[(\\d+)\\]</code>
      * pattern, i.e. "user.addresses[1].street"</li>
-     * <li>mapped properties should be contains <code>(\\w+)\\((.+)\\)</code> pattern, i.e. "user.addresses(myAddress).street"</li>
+     * <li>mapped properties should be contains <code>(\\w+)\\((.+)\\)</code> pattern, i.e.
+     * "user.addresses(myAddress).street"</li>
      * <ul>
      *
      * @param expression not null expression
-     * @param root       not null object
+     * @param root not null object
      * @return the object defined by the expression
      * @throws IntrospectionException if any
      */
@@ -383,13 +386,13 @@ public class ReflectionValueExtractor
 
     private static ClassMap getClassMap( Class<?> clazz )
     {
-        ClassMap classMap = classMaps.get( clazz );
+        ClassMap classMap = CLASS_MAPS.get( clazz );
 
         if ( classMap == null )
         {
             classMap = new ClassMap( clazz );
 
-            classMaps.put( clazz, classMap );
+            CLASS_MAPS.put( clazz, classMap );
         }
 
         return classMap;

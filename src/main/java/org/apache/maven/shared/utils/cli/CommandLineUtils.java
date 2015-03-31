@@ -41,6 +41,9 @@ import org.apache.maven.shared.utils.StringUtils;
 public abstract class CommandLineUtils
 {
 
+    /**
+     * 
+     */
     @SuppressWarnings( "UnusedDeclaration" )
     public static class StringStreamConsumer
         implements StreamConsumer
@@ -185,7 +188,7 @@ public abstract class CommandLineUtils
                                                                     final StreamConsumer systemOut,
                                                                     final StreamConsumer systemErr,
                                                                     final int timeoutInSeconds,
-                                                                    @Nullable final Runnable runAfterProcessTermination )
+                                                                  @Nullable final Runnable runAfterProcessTermination )
         throws CommandLineException
     {
         return executeCommandLineAsCallable( cl, systemIn, systemOut, systemErr, timeoutInSeconds,

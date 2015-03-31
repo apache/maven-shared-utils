@@ -37,6 +37,7 @@ import java.util.Map;
  *
  * @author Tony Chemit <chemit@codelutin.com>
  * @since 0.5
+ * @param <Request>
  */
 public abstract class AbstractJavaTool<Request extends JavaToolRequest>
     extends AbstractLogEnabled

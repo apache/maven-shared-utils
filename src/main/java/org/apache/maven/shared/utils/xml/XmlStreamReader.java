@@ -28,11 +28,15 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.regex.Pattern;
 
+/**
+ * 
+ */
 public class XmlStreamReader
         extends Reader
 {
     private final org.apache.commons.io.input.XmlStreamReader reader;
 
+    @SuppressWarnings( "checkstyle:staticvariablename" )
     private static String _staticDefaultEncoding = null;
 
     public static void setDefaultEncoding( String encoding )

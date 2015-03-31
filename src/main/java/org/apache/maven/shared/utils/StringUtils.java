@@ -170,7 +170,9 @@ public class StringUtils
     public static boolean isBlank( @Nullable String str )
     {
         int strLen;
+        // CHECKSTYLE_OFF: InnerAssignment
         if ( str == null || ( strLen = str.length() ) == 0 )
+        // CHECKSTYLE_ON: InnerAssignment
         {
             return true;
         }
@@ -1085,6 +1087,7 @@ public class StringUtils
             char ch = str.charAt( i );
 
             // handle unicode
+            // CHECKSTYLE_OFF: MagicNumber
             if ( ch > 0xfff )
             {
                 buffer.append( "\\u" ).append( Integer.toHexString( ch ) );
@@ -1097,6 +1100,7 @@ public class StringUtils
             {
                 buffer.append( "\\u00" ).append( Integer.toHexString( ch ) );
             }
+            // CHECKSTYLE_ON: MagicNumber
             else if ( ch < 32 )
             {
                 switch ( ch )
@@ -2268,8 +2272,8 @@ public class StringUtils
      * @see #quoteAndEscape(String, char, char[], char[], char, boolean)
      * 
      */
-    public static String quoteAndEscape( @Nullable String source, char quoteChar, @Nonnull final char[] escapedChars, char escapeChar,
-                                         boolean force )
+    public static String quoteAndEscape( @Nullable String source, char quoteChar,
+                                         @Nonnull final char[] escapedChars, char escapeChar, boolean force )
     {
         return quoteAndEscape( source, quoteChar, escapedChars, new char[]{ ' ' }, escapeChar, force );
     }

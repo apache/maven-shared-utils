@@ -20,15 +20,17 @@ package org.apache.maven.shared.utils;
  */
 
 /**
-*
-* The following classes have not been implemented because they are easy to get other where:
-*
-* <dl>
-*   <dt>Base64</dt>
-*   <dd>commons-io has a much better maintained version than plexus-utils had. Commons / jakarta is also the original source.</dd>
-* </dl>
-* <dl>
-*   <dt>FastMap</dt>
-*   <dd>This stuff contains tons of ancient java-1.2 logic. HotSpot collections are much faster that this stuff in the meantime.</dd>
-* </dl>
-*/
+ *
+ * The following classes have not been implemented because they are easy to get other where:
+ *
+ * <dl>
+ *   <dt>Base64</dt>
+ *   <dd>commons-io has a much better maintained version than plexus-utils had.
+ *   Commons / Jakarta is also the original source.</dd>
+ * </dl>
+ * <dl>
+ *   <dt>FastMap</dt>
+ *   <dd>This stuff contains tons of ancient java-1.2 logic. HotSpot collections are much faster that this stuff
+ *   in the meantime.</dd>
+ * </dl>
+ */

@@ -190,10 +190,8 @@ final class XMLEncode
                     break;
 
                 default:
-                {
                     n.append( c );
                     break;
-                }
             }
         }
 

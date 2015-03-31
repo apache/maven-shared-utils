@@ -86,7 +86,7 @@ import java.nio.channels.Channel;
  * @version CVS $Revision$ $Date$
  * 
  */
-
+public final class IOUtil
 /*
  * Behold, intrepid explorers; a map of this class:
  *
@@ -117,8 +117,6 @@ import java.nio.channels.Channel;
  * each row may correspond to up to 4 methods.
  *
  */
-
-public final class IOUtil
 {
     private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
 

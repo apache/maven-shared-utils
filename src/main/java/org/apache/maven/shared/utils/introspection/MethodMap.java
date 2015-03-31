@@ -181,7 +181,6 @@ class MethodMap
                 switch ( moreSpecific( appArgs, max.getParameterTypes() ) )
                 {
                     case MORE_SPECIFIC:
-                    {
                         /*
                          * This method is more specific than the previously
                          * known maximally specific, so remove the old maximum.
@@ -189,10 +188,8 @@ class MethodMap
 
                         maximal.remove();
                         break;
-                    }
 
                     case LESS_SPECIFIC:
-                    {
                         /*
                          * This method is less specific than some of the
                          * currently known maximally specific methods, so we
@@ -202,7 +199,8 @@ class MethodMap
 
                         lessSpecific = true;
                         break;
-                    }
+
+                    default:
                 }
             }
 

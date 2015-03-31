@@ -301,6 +301,7 @@ final class Reflector
     {
         Map<String, Member> constructorMap = getConstructorMap( targetClass );
 
+        @SuppressWarnings( "checkstyle:magicnumber" )
         StringBuilder key = new StringBuilder( 200 );
 
         key.append( "(" );
@@ -435,17 +436,20 @@ final class Reflector
 
         if ( method == null )
         {
-            throw new ReflectorException( "Method: \'" + methodName + "\' not found in class: \'" + targetClass + "\'" );
+            throw new ReflectorException( "Method: \'" + methodName + "\' not found in class: \'" + targetClass
+                                          + "\'" );
         }
 
         return method;
     }
 
+    @SuppressWarnings( "checkstyle:methodname" )
     private Method _getMethod( Class<?> targetClass, String methodName, Class<?>... params )
         throws ReflectorException
     {
         Map<String, Member> methodMap = getMethodMap( targetClass, methodName );
 
+        @SuppressWarnings( "checkstyle:magicnumber" )
         StringBuilder key = new StringBuilder( 200 );
 
         key.append( "(" );

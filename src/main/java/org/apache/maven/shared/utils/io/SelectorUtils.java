@@ -426,7 +426,9 @@ public final class SelectorUtils
         }
 
         // Process characters before first star
+        // CHECKSTYLE_OFF: InnerAssignment
         while ( ( ch = patArr[patIdxStart] ) != '*' && strIdxStart <= strIdxEnd )
+        // CHECKSTYLE_ON: InnerAssignment
         {
             if ( ch != '?' && !equals( ch, strArr[strIdxStart], isCaseSensitive ) )
             {
@@ -450,7 +452,9 @@ public final class SelectorUtils
         }
 
         // Process characters after last star
+        // CHECKSTYLE_OFF: InnerAssignment
         while ( ( ch = patArr[patIdxEnd] ) != '*' && strIdxStart <= strIdxEnd )
+        // CHECKSTYLE_ON: InnerAssignment
         {
             if ( ch != '?' && !equals( ch, strArr[strIdxEnd], isCaseSensitive ) )
             {
