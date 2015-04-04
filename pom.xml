@@ -156,6 +156,7 @@
             <exclude>**/*.versionsBackup</exclude>
             <exclude>.gitignore</exclude>
             <exclude>src/test/resources/directorywalker/**/*</exclude>
+            <exclude>src/test/resources/symlinks/**/*</exclude>
             <exclude>dependency-reduced-pom.xml</exclude>
           </excludes>
         </configuration>
