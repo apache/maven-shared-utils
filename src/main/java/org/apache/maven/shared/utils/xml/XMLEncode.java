@@ -19,6 +19,10 @@ package org.apache.maven.shared.utils.xml;
  * under the License.
  */
 
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+
 /**
  * Collection of XML encoding/decoding helpers. <br>
  * This is all about the special characters &amp; and &lt;, and for attributes
@@ -28,6 +32,7 @@ final class XMLEncode
 {
 
     private static final int CDATA_BLOCK_THRESHOLD_LENGTH = 12;
+
     private static final char DEFAULT_QUOTE_CHAR = '"';
 
     /**
@@ -68,24 +73,44 @@ final class XMLEncode
         {
             return null;
         }
-        if ( !needsEncoding( text ) )
+        StringWriter writer = new StringWriter( text.length() * 2 );
+        xmlEncodeText( text, writer );
+        return writer.toString();
+    }
+
+    public static void xmlEncodeText( String text, Writer writer )
+    {
+        if ( text == null )
         {
-            return text;
+            return;
         }
-        else
+        try
         {
-            // only encode as cdata if is is longer than CDATA block overhead:
-            if ( text.length() > CDATA_BLOCK_THRESHOLD_LENGTH )
+            if ( !needsEncoding( text ) )
             {
-                String cdata = xmlEncodeTextAsCDATABlock( text );
-                if ( cdata != null )
+                writer.write( text );
+                return;
+            }
+            else
+            {
+                // only encode as cdata if is is longer than CDATA block overhead:
+                if ( text.length() > CDATA_BLOCK_THRESHOLD_LENGTH )
                 {
-                    return cdata;
+                    String cdata = xmlEncodeTextAsCDATABlock( text );
+                    if ( cdata != null )
+                    {
+                        writer.write( cdata );
+                        return;
+                    }
                 }
             }
         }
+        catch ( IOException e )
+        {
+            throw new RuntimeException( e );
+        }
         // if every thing else fails, do it the save way...
-        return xmlEncodeTextAsPCDATA( text );
+        xmlEncodeTextAsPCDATA( text, false, DEFAULT_QUOTE_CHAR, writer );
     }
 
     /**
@@ -124,83 +149,98 @@ final class XMLEncode
         {
             return null;
         }
-        char c;
-        int length = text.length();
-        StringBuilder n = new StringBuilder( length * 2 );
-        if ( forAttribute )
+        StringWriter writer = new StringWriter( text.length() * 2 );
+        xmlEncodeTextAsPCDATA( text, forAttribute, quoteChar, writer );
+        return writer.toString();
+    }
+
+    public static void xmlEncodeTextAsPCDATA( String text, boolean forAttribute, char quoteChar, Writer n )
+    {
+        if ( text == null )
         {
-            n.append( quoteChar );
+            return;
         }
-
-        for ( int i = 0; i < length; i++ )
+        try
         {
-            c = text.charAt( i );
-            switch ( c )
+            char c;
+            int length = text.length();
+            if ( forAttribute )
             {
-                case '&':
-                    n.append( "&amp;" );
-                    break;
-                case '<':
-                    n.append( "&lt;" );
-                    break;
-                case '>': // FIX for sourceforge bug #802520 ("]]>" needs encoding)
-                    n.append( "&gt;" );
-                    break;
-                case '"':
-                    if ( forAttribute )
-                    {
-                        n.append( "&quot;" );
-                    }
-                    else
-                    {
-                        n.append( c );
-                    }
-                    break;
-                case '\'':
-                    if ( forAttribute )
-                    {
-                        n.append( "&apos;" );
-                    }
-                    else
-                    {
-                        n.append( c );
-                    }
-                    break;
-                case '\r':
-                    if ( forAttribute )
-                    {
-                        if ( i == ( length - 1 ) || text.charAt( i + 1 ) != '\n' )
+                n.append( quoteChar );
+            }
+
+            for ( int i = 0; i < length; i++ )
+            {
+                c = text.charAt( i );
+                switch ( c )
+                {
+                    case '&':
+                        n.append( "&amp;" );
+                        break;
+                    case '<':
+                        n.append( "&lt;" );
+                        break;
+                    case '>': // FIX for sourceforge bug #802520 ("]]>" needs encoding)
+                        n.append( "&gt;" );
+                        break;
+                    case '"':
+                        if ( forAttribute )
                         {
-                            n.append( "&#13;" );
+                            n.append( "&quot;" );
                         }
-                    }
-                    else
-                    {
+                        else
+                        {
+                            n.append( c );
+                        }
+                        break;
+                    case '\'':
+                        if ( forAttribute )
+                        {
+                            n.append( "&apos;" );
+                        }
+                        else
+                        {
+                            n.append( c );
+                        }
+                        break;
+                    case '\r':
+                        if ( forAttribute )
+                        {
+                            if ( i == ( length - 1 ) || text.charAt( i + 1 ) != '\n' )
+                            {
+                                n.append( "&#13;" );
+                            }
+                        }
+                        else
+                        {
+                            n.append( c );
+                        }
+                        // but skip the \r in \r\n
+
+                        break;
+                    case '\n':
+                        if ( forAttribute )
+                        {
+                            n.append( "&#10;" );
+                        }
+                        break;
+
+                    default:
                         n.append( c );
-                    }
-                    // but skip the \r in \r\n
+                        break;
+                }
+            }
 
-
-                    break;
-                case '\n':
-                    if ( forAttribute )
-                    {
-                        n.append( "&#10;" );
-                    }
-                    break;
-
-                default:
-                    n.append( c );
-                    break;
+            if ( forAttribute )
+            {
+                n.append( quoteChar );
             }
         }
-
-        if ( forAttribute )
+        catch ( IOException e )
         {
-            n.append( quoteChar );
+            throw new RuntimeException( e );
         }
 
-        return n.toString();
     }
 
     /**

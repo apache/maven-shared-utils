@@ -19,11 +19,11 @@ package org.apache.maven.shared.utils.xml;
  * under the License.
  */
 
+import org.apache.maven.shared.utils.Os;
+
 import java.io.PrintWriter;
 import java.io.Writer;
-import java.util.LinkedList;
-
-import org.apache.maven.shared.utils.Os;
+import java.util.ArrayList;
 
 /**
  * XMLWriter with nice indentation
@@ -31,9 +31,15 @@ import org.apache.maven.shared.utils.Os;
 public class PrettyPrintXMLWriter
     implements XMLWriter
 {
+    private static final char[] CLOSE_1 = "/>".toCharArray();
+
+    private static final char[] CLOSE_2 = "</".toCharArray();
+
+    private static final char[] DEFAULT_LINE_INDENT = new char[]{ ' ', ' ' };
+
     private PrintWriter writer;
 
-    private LinkedList<String> elementStack = new LinkedList<String>();
+    private ArrayList<String> elementStack = new ArrayList<String>();
 
     private boolean processingElement = false;
 
@@ -43,9 +49,9 @@ public class PrettyPrintXMLWriter
 
     private int depth = 0;
 
-    private String lineIndent;
+    private char[] lineIndent;
 
-    private String lineSeparator;
+    private char[] lineSeparator;
 
     private String encoding;
 
@@ -93,7 +99,7 @@ public class PrettyPrintXMLWriter
      */
     public PrettyPrintXMLWriter( PrintWriter writer, String lineIndent, String encoding, String doctype )
     {
-        this( writer, lineIndent, Os.LINE_SEP, encoding, doctype );
+        this( writer, lineIndent.toCharArray(), Os.LINE_SEP.toCharArray(), encoding, doctype );
     }
 
     /**
@@ -114,7 +120,7 @@ public class PrettyPrintXMLWriter
      */
     public PrettyPrintXMLWriter( PrintWriter writer, String encoding, String doctype )
     {
-        this( writer, "  ", encoding, doctype );
+        this( writer, DEFAULT_LINE_INDENT, Os.LINE_SEP.toCharArray(), encoding, doctype );
     }
 
     /**
@@ -137,6 +143,19 @@ public class PrettyPrintXMLWriter
     public PrettyPrintXMLWriter( PrintWriter writer, String lineIndent, String lineSeparator, String encoding,
                                  String doctype )
     {
+        this( writer, lineIndent.toCharArray(), lineSeparator.toCharArray(), encoding, doctype );
+    }
+
+    /**
+     * @param writer        not null
+     * @param lineIndent    could be null, but the normal way is some spaces.
+     * @param lineSeparator could be null, but the normal way is valid line separator
+     * @param encoding      could be null or the encoding to use.
+     * @param doctype       could be null.
+     */
+    private PrettyPrintXMLWriter( PrintWriter writer, char[] lineIndent, char[] lineSeparator, String encoding,
+                                  String doctype )
+    {
         this.writer = writer;
         this.lineIndent = lineIndent;
         this.lineSeparator = lineSeparator;
@@ -156,7 +175,7 @@ public class PrettyPrintXMLWriter
         writer.write( ' ' );
         writer.write( key );
         writer.write( '=' );
-        writer.write( XMLEncode.xmlEncodeTextForAttribute( value, '"' ) );
+        XMLEncode.xmlEncodeTextAsPCDATA( value, true, '"', writer );
     }
 
     public void setEncoding( String encoding )
@@ -186,7 +205,7 @@ public class PrettyPrintXMLWriter
             throw new IllegalStateException( "Document headers already written!" );
         }
 
-        this.lineSeparator = lineSeparator;
+        this.lineSeparator = lineSeparator.toCharArray();
     }
 
     public void setLineIndenter( String lineIndent )
@@ -196,7 +215,7 @@ public class PrettyPrintXMLWriter
             throw new IllegalStateException( "Document headers already written!" );
         }
 
-        this.lineIndent = lineIndent;
+        this.lineIndent = lineIndent.toCharArray();
     }
 
     public void startElement( String elementName )
@@ -214,9 +233,8 @@ public class PrettyPrintXMLWriter
         writer.write( elementName );
 
         processingElement = true;
-        depth++;
 
-        elementStack.addLast( elementName );
+        elementStack.add( depth++, elementName );
     }
 
     public void writeText( String text )
@@ -225,7 +243,7 @@ public class PrettyPrintXMLWriter
 
         completePreviouslyOpenedElement();
 
-        writer.write( XMLEncode.xmlEncodeText( text ) );
+        XMLEncode.xmlEncodeText( text, writer );
 
         endOnSameLine = true;
     }
@@ -241,14 +259,12 @@ public class PrettyPrintXMLWriter
 
     public void endElement()
     {
-        depth--;
-
+        String chars = elementStack.get( --depth );
         if ( processingElement )
         {
             // this means we don't have any content yet so we just add a />
-            writer.write( "/>" );
+            writer.write( CLOSE_1 );
 
-            elementStack.removeLast();
             processingElement = false;
         }
         else
@@ -259,7 +275,9 @@ public class PrettyPrintXMLWriter
             }
 
             // otherwise we need a full closing tag for that element
-            writer.write( "</" + elementStack.removeLast() + ">" );
+            writer.write( CLOSE_2 );
+            writer.write( chars );
+            writer.write( '>' );
         }
 
         endOnSameLine = false;
@@ -267,7 +285,7 @@ public class PrettyPrintXMLWriter
 
     /**
      * Write the documents if not already done.
-     * 
+     *
      * @return <code>true</code> if the document headers have freshly been written.
      */
     private boolean ensureDocumentStarted()
@@ -293,7 +311,9 @@ public class PrettyPrintXMLWriter
 
         if ( encoding != null )
         {
-            writer.write( " encoding=\"" + encoding + "\"" );
+            writer.write( " encoding=\"" );
+            writer.write( encoding );
+            writer.write( '\"' );
         }
 
         writer.write( "?>" );
@@ -303,7 +323,9 @@ public class PrettyPrintXMLWriter
         if ( docType != null )
         {
             newLine();
-            writer.write( "<!DOCTYPE " + docType + ">" );
+            writer.write( "<!DOCTYPE " );
+            writer.write( docType );
+            writer.write( '>' );
         }
     }
 
