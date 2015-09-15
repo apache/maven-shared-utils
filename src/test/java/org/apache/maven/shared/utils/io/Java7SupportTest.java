@@ -25,6 +25,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assume.assumeThat;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 
 public class Java7SupportTest
 {
@@ -39,11 +42,12 @@ public class Java7SupportTest
             assertFalse( Java7Support.isSymLink( file ) );
         }
     }
+
     @Test
     public void createAndReadSymlink()
         throws Exception
     {
-
+        assumeThat( System.getProperty( "os.name" ), is( not( "Windows XP" ) ) );
         File file = new File( "target/fzz" );
         if ( Java7Support.isAtLeastJava7() )
         {

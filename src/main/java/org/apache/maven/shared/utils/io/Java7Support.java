@@ -165,7 +165,20 @@ public class Java7Support
         catch ( InvocationTargetException e )
         {
             final Throwable targetException = e.getTargetException();
-            throw (IOException) targetException;
+            if ( targetException instanceof IOException )
+            {
+                throw (IOException) targetException;
+            }
+            else if ( targetException instanceof RuntimeException )
+            {
+                // java.lang.UnsupportedOperationException: Symbolic links not supported on this operating system
+                // java.lang.SecurityException: denies certain permissions see Javadoc
+                throw ( RuntimeException ) targetException;
+            }
+            else
+            {
+                throw new IOException( targetException.getClass() + ": " + targetException.getLocalizedMessage() );
+            }
         }
 
     }
