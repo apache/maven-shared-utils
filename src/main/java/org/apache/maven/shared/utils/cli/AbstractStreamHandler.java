@@ -25,7 +25,7 @@ package org.apache.maven.shared.utils.cli;
 class AbstractStreamHandler
     extends Thread
 {
-    private boolean done;
+    private volatile boolean done;
 
     private volatile boolean disabled;
 

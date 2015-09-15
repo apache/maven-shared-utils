@@ -22,6 +22,7 @@ package org.apache.maven.shared.utils.cli;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Read from an InputStream and write the output to an OutputStream.
@@ -32,10 +33,8 @@ import java.io.OutputStream;
 class StreamFeeder
     extends AbstractStreamHandler
 {
-    private InputStream input;
-
-    private OutputStream output;
-
+    private final AtomicReference<InputStream> input;
+    private final AtomicReference<OutputStream> output;
 
     /**
      * Create a new StreamFeeder
@@ -45,24 +44,24 @@ class StreamFeeder
      */
     public StreamFeeder( InputStream input, OutputStream output )
     {
-        this.input = input;
-
-        this.output = output;
+        this.input = new AtomicReference<InputStream>( input );
+        this.output = new AtomicReference<OutputStream>( output );
     }
 
     // ----------------------------------------------------------------------
     // Runnable implementation
     // ----------------------------------------------------------------------
 
+    @Override
     public void run()
     {
         try
         {
             feed();
         }
-        catch ( Throwable ex )
+        catch ( Throwable e )
         {
-            // Catched everything so the streams will be closed and flagged as done.
+            // Catch everything so the streams will be closed and flagged as done.
         }
         finally
         {
@@ -70,9 +69,7 @@ class StreamFeeder
 
             synchronized ( this )
             {
-                setDone();
-
-                this.notifyAll();
+                notifyAll();
             }
         }
     }
@@ -83,37 +80,30 @@ class StreamFeeder
 
     public void close()
     {
-        if ( input != null )
+        setDone();
+        final InputStream is = input.getAndSet( null );
+        if ( is != null )
         {
-            synchronized ( input )
+            try
             {
-                try
-                {
-                    input.close();
-                }
-                catch ( IOException ex )
-                {
-                    // ignore
-                }
-
-                input = null;
+                is.close();
+            }
+            catch ( IOException ex )
+            {
+                // ignore
             }
         }
 
-        if ( output != null )
+        final OutputStream os = output.getAndSet( null );
+        if ( os != null )
         {
-            synchronized ( output )
+            try
             {
-                try
-                {
-                    output.close();
-                }
-                catch ( IOException ex )
-                {
-                    // ignore
-                }
-
-                output = null;
+                os.close();
+            }
+            catch ( IOException ex )
+            {
+                // ignore
             }
         }
     }
@@ -122,21 +112,20 @@ class StreamFeeder
     //
     // ----------------------------------------------------------------------
 
+    @SuppressWarnings( "checkstyle:innerassignment" )
     private void feed()
         throws IOException
     {
-        int data = input.read();
-
-        while ( !isDone() && data != -1 )
+        InputStream is = input.get();
+        OutputStream os = output.get();
+        if ( is != null && os != null )
         {
-            synchronized ( output )
+            for ( int data; !isDone() && ( data = is.read() ) != -1; )
             {
                 if ( !isDisabled() )
                 {
-                    output.write( data );
+                    os.write( data );
                 }
-
-                data = input.read();
             }
         }
     }
