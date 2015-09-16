@@ -19,6 +19,7 @@ package org.apache.maven.shared.utils.io;
  * under the License.
  */
 
+import org.apache.maven.shared.utils.Os;
 import org.apache.maven.shared.utils.testhelpers.FileTestHelper;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -34,6 +35,8 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeTrue;
 
 public class DirectoryScannerTest
 {
@@ -120,9 +123,10 @@ public class DirectoryScannerTest
     }
 
     @Test
-    public void checkSymlinkBehaviour(){
+    public void checkSymlinkBehaviour()
+    {
         DirectoryScanner ds = new DirectoryScanner();
-        ds.setBasedir( new File("src/test/resources/symlinks/src") );
+        ds.setBasedir( new File( "src/test/resources/symlinks/src" ) );
         ds.setFollowSymlinks( false );
         ds.scan();
         String[] includedDirectories = ds.getIncludedDirectories();
@@ -133,12 +137,16 @@ public class DirectoryScannerTest
     }
 
     @Test
-    @Ignore("Wait until we can run with assembly 2.5 which will support symlinks properly")
     public void followSymlinksFalse()
+        throws IOException
     {
-        if (!Java7Support.isAtLeastJava7()) return;
+        assumeFalse( Os.isFamily( Os.FAMILY_WINDOWS ) );
+        assumeTrue( Java7Support.isAtLeastJava7() );
+
+        File testDir = SymlinkTestSetup.createStandardSymlinkTestDir( new File( "target/test/symlinkTestCase" ) );
+
         DirectoryScanner ds = new DirectoryScanner();
-        ds.setBasedir( new File( "src/test/resources/symlinks/src/" ) );
+        ds.setBasedir( testDir );
         ds.setFollowSymlinks( false );
         ds.scan();
         List<String> included = Arrays.asList( ds.getIncludedFiles() );
@@ -168,10 +176,15 @@ public class DirectoryScannerTest
 
     @Test
     public void followSymlinks()
+        throws IOException
     {
-        if (!Java7Support.isAtLeastJava7()) return;
+        assumeFalse( Os.isFamily( Os.FAMILY_WINDOWS ) );
+        assumeTrue( Java7Support.isAtLeastJava7() );
+
         DirectoryScanner ds = new DirectoryScanner();
-        ds.setBasedir( new File( "src/test/resources/symlinks/src/" ) );
+        File testDir = SymlinkTestSetup.createStandardSymlinkTestDir( new File( "target/test/symlinkTestCase" ) );
+
+        ds.setBasedir( testDir );
         ds.setFollowSymlinks( true );
         ds.scan();
         List<String> included = Arrays.asList( ds.getIncludedFiles() );
@@ -188,6 +201,10 @@ public class DirectoryScannerTest
         assertTrue( includedDirs.contains( "targetDir" ) );
         assertEquals( 5, includedDirs.size() );
     }
+
+    /*
+        Creates a standard directory layout with symlinks and files.
+     */
 
     @Test
     public void testSimpleExcludes()
@@ -362,7 +379,8 @@ public class DirectoryScannerTest
         assertEquals( 2, removedFiles.length );
     }
 
-    @Ignore( "Enable this test to run performance checks" ) @Test
+    @Ignore( "Enable this test to run performance checks" )
+    @Test
     public void performanceTest()
         throws Exception
     {

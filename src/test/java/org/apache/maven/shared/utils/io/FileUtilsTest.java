@@ -29,7 +29,14 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.rules.TestName;
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -37,7 +44,11 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeThat;
 import static org.junit.Assume.assumeTrue;
 import static org.junit.matchers.JUnitMatchers.containsString;
@@ -428,8 +439,13 @@ public class FileUtilsTest
         throws Exception
     {
         assumeTrue( Java7Support.isAtLeastJava7() );
+        assumeFalse( Os.isFamily( Os.FAMILY_WINDOWS ) );
+
         File destination = new File( tempFolder.getRoot(), "symCopy.txt" );
-        FileUtils.copyFile( new File("src/test/resources/symlinks/src/symR"), destination );
+
+        File testDir = SymlinkTestSetup.createStandardSymlinkTestDir( new File( "target/test/symlinkCopy" ) );
+
+        FileUtils.copyFile( new File( testDir, "symR" ), destination );
         assertTrue( Java7Support.isSymLink(  destination ));
     }
 
