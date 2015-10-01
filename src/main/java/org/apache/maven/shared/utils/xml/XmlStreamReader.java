@@ -36,17 +36,16 @@ public class XmlStreamReader
 {
     private final org.apache.commons.io.input.XmlStreamReader reader;
 
-    @SuppressWarnings( "checkstyle:staticvariablename" )
-    private static String _staticDefaultEncoding = null;
+    private static String staticDefaultEncoding = null;
 
     public static void setDefaultEncoding( String encoding )
     {
-        _staticDefaultEncoding = encoding;
+        staticDefaultEncoding = encoding;
     }
 
     public static String getDefaultEncoding()
     {
-        return _staticDefaultEncoding;
+        return staticDefaultEncoding;
     }
 
     public XmlStreamReader( File file )
@@ -64,7 +63,7 @@ public class XmlStreamReader
     public XmlStreamReader( InputStream is, boolean lenient )
             throws IOException, XmlStreamReaderException
     {
-        reader = new org.apache.commons.io.input.XmlStreamReader( is, lenient, _staticDefaultEncoding );
+        reader = new org.apache.commons.io.input.XmlStreamReader( is, lenient, staticDefaultEncoding );
     }
 
     public XmlStreamReader( URL url )
@@ -76,7 +75,7 @@ public class XmlStreamReader
     public XmlStreamReader( URLConnection conn )
             throws IOException
     {
-        reader = new org.apache.commons.io.input.XmlStreamReader( conn, _staticDefaultEncoding );
+        reader = new org.apache.commons.io.input.XmlStreamReader( conn, staticDefaultEncoding );
     }
 
     public XmlStreamReader( InputStream is, String httpContentType )
@@ -90,7 +89,7 @@ public class XmlStreamReader
     {
         reader = new org.apache.commons.io.input.XmlStreamReader( is, httpContentType, lenient,
                 ( defaultEncoding == null )
-                        ? _staticDefaultEncoding
+                        ? staticDefaultEncoding
                         : defaultEncoding );
     }
 

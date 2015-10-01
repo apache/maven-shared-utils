@@ -375,25 +375,4 @@ final class XMLEncode
         }
     }
 
-    // combine multiple checks in one methods for speed
-    private static boolean contains( String text, char[] chars )
-    {
-        if ( text == null || chars == null || chars.length == 0 )
-        {
-            return false;
-        }
-        for ( int i = 0; i < text.length(); i++ )
-        {
-            char c = text.charAt( i );
-            for ( char aChar : chars )
-            {
-                if ( aChar == c )
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
 }

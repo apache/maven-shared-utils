@@ -38,6 +38,11 @@ class XmlStreamReaderException
     extends XmlReaderException
 {
     /**
+     * 
+     */
+    private static final long serialVersionUID = 1007947701939672080L;
+
+    /**
      * Creates an exception instance if the charset encoding could not be determined.
      * <p/>
      * Instances of this exception are thrown by the XmlReader.

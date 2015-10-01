@@ -44,7 +44,6 @@ public abstract class CommandLineUtils
     /**
      * 
      */
-    @SuppressWarnings( "UnusedDeclaration" )
     public static class StringStreamConsumer
         implements StreamConsumer
     {
@@ -82,14 +81,12 @@ public abstract class CommandLineUtils
     }
 
 
-    @SuppressWarnings( "UnusedDeclaration" )
     public static int executeCommandLine( @Nonnull Commandline cl, StreamConsumer systemOut, StreamConsumer systemErr )
         throws CommandLineException
     {
         return executeCommandLine( cl, null, systemOut, systemErr, 0 );
     }
 
-    @SuppressWarnings( "UnusedDeclaration" )
     public static int executeCommandLine( @Nonnull Commandline cl, StreamConsumer systemOut, StreamConsumer systemErr,
                                           int timeoutInSeconds )
         throws CommandLineException
@@ -97,7 +94,6 @@ public abstract class CommandLineUtils
         return executeCommandLine( cl, null, systemOut, systemErr, timeoutInSeconds );
     }
 
-    @SuppressWarnings( "UnusedDeclaration" )
     public static int executeCommandLine( @Nonnull Commandline cl, InputStream systemIn, StreamConsumer systemOut,
                                           StreamConsumer systemErr )
         throws CommandLineException

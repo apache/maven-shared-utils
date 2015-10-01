@@ -52,7 +52,6 @@ import javax.annotation.Nullable;
  * @version $Id$
  * 
  */
-@SuppressWarnings( "JavaDoc" )
 public class StringUtils
 {
     /**
@@ -796,7 +795,6 @@ public class StringUtils
      * @return String with overlayed text
      * @throws NullPointerException if text or overlay is <code>null</code>
      */
-    @SuppressWarnings( "ConstantConditions" )
     @Nonnull public static String overlayString( @Nonnull String text, @Nonnull String overlay, int start, int end )
     {
         if ( overlay == null )
@@ -2480,7 +2478,6 @@ public class StringUtils
      *         false if not or <code>null</code> string input
      * 
      */
-    @SuppressWarnings( "ConstantConditions" )
     public static boolean contains( @Nullable String str, char searchChar )
     {
         return !isEmpty( str ) && str.indexOf( searchChar ) >= 0;

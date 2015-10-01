@@ -37,7 +37,6 @@ import javax.annotation.Nonnull;
 public class Xpp3Dom
     implements Iterable<Xpp3Dom>
 {
-    @SuppressWarnings( "UnusedDeclaration" )
     private static final long serialVersionUID = 2567894443061173996L;
 
     private String name; // plexus: protected
