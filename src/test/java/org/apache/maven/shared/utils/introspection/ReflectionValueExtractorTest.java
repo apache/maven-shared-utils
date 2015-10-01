@@ -24,10 +24,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.maven.plugin.testing.stubs.MavenProjectStub;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import org.apache.maven.plugin.testing.stubs.MavenProjectStub;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
