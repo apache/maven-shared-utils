@@ -28,7 +28,7 @@
   </parent>
 
   <artifactId>maven-shared-utils</artifactId>
-  <version>0.10-SNAPSHOT</version>
+  <version>3.0.0-SNAPSHOT</version>
 
   <name>Apache Maven Shared Utils</name>
   <description>Shared utils without any further dependencies</description>
