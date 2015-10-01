@@ -246,7 +246,7 @@ public class FileUtilsTest
 
         // Test escaped char
         assertThat( urls[2].toExternalForm().startsWith( "file:" ), is( true ) );
-        assertThat( urls[2].toExternalForm(), not( containsString( "test%20file.txt" ) ) );
+        assertThat( urls[2].toExternalForm(), containsString( "test%20file.txt" ) );
     }
 
 //    @Test public void toURLs2() throws Exception {

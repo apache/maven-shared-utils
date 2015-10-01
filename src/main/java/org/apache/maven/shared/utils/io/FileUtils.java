@@ -692,9 +692,7 @@ public class FileUtils
 
         for ( int i = 0; i < urls.length; i++ )
         {
-            // Although this method is deprecated, it is still the most solid way to translate a File to URL
-            //noinspection deprecation
-            urls[i] = files[i].toURL();
+            urls[i] = files[i].toURI().toURL();
         }
 
         return urls;
