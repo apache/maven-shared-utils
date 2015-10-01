@@ -657,7 +657,7 @@ public class FileUtils
      * @return The equivalent <code>File</code> object, or <code>null</code> if the URL's protocol
      * is not <code>file</code>
      */
-    public @Nullable static File toFile( final @Nullable URL url )
+    @Nullable public static File toFile( final @Nullable URL url )
     {
         if ( url == null || !url.getProtocol().equalsIgnoreCase( "file" ) )
         {
@@ -942,7 +942,7 @@ public class FileUtils
      *                     <li>an IO error occurs during copying</li>
      *                     </ul>
      */
-    private static void copyStreamToFile( @Nonnull final @WillClose InputStream source,
+    private static void copyStreamToFile( @Nonnull @WillClose final InputStream source,
                                           @Nonnull final File destination )
         throws IOException
     {
@@ -991,7 +991,7 @@ public class FileUtils
      * @param path the path to normalize
      * @return the normalized String, or <code>null</code> if too many ..'s.
      */
-    public static @Nonnull String normalize( @Nonnull final String path )
+    @Nonnull public static String normalize( @Nonnull final String path )
     {
         String normalized = path;
         // Resolve occurrences of "//" in the normalized path
@@ -1046,7 +1046,7 @@ public class FileUtils
      * @param filename Absolute or relative file path to resolve.
      * @return The canonical <code>File</code> of <code>filename</code>.
      */
-    public static @Nonnull File resolveFile( final File baseFile, @Nonnull String filename )
+    @Nonnull public static File resolveFile( final File baseFile, @Nonnull String filename )
     {
         String filenm = filename;
         if ( '/' != File.separatorChar )
@@ -2014,7 +2014,7 @@ public class FileUtils
      * @param file the file to check
      *
      */
-    public static boolean isSymbolicLink( final @Nonnull File file )
+    public static boolean isSymbolicLink( @Nonnull final File file )
         throws IOException
     {
         if ( Java7Support.isAtLeastJava7() )
@@ -2032,7 +2032,7 @@ public class FileUtils
      *         always return false for java versions prior to 1.7.
      *
      */
-    public static boolean isSymbolicLinkForSure( final @Nonnull File file )
+    public static boolean isSymbolicLinkForSure( @Nonnull final File file )
         throws IOException
     {
         return Java7Support.isAtLeastJava7() && Java7Support.isSymLink( file );
@@ -2056,7 +2056,7 @@ public class FileUtils
      * @return true if the file is a symbolic link or if we're on some crappy os.
      *         false if the file is not a symlink or we're not able to detect it.
      */
-    static boolean isSymbolicLinkLegacy( final @Nonnull File file )
+    static boolean isSymbolicLinkLegacy( @Nonnull final File file )
         throws IOException
     {
         final File canonical = new File( file.getCanonicalPath() );

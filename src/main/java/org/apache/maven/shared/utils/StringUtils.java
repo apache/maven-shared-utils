@@ -1999,7 +1999,8 @@ public class StringUtils
      * character in the result, or the first
      * character following the ellipses, but it will appear somewhere in the result.
      * In no case will it return a string of length greater than maxWidth.
-     *
+     * 
+     * @param s        String to abbreviate.
      * @param offset   left edge of source string
      * @param maxWidth maximum length of result string
      */
@@ -2286,7 +2287,6 @@ public class StringUtils
      * @param escapeChar
      * @param force
      * @return the String quoted and escaped
-     * 
      */
     public static String quoteAndEscape( @Nullable String source, char quoteChar, @Nonnull final char[] escapedChars,
                                          @Nonnull final char[] quotingTriggers, char escapeChar, boolean force )
@@ -2338,7 +2338,6 @@ public class StringUtils
      * @param escapedChars
      * @param escapeChar
      * @return the String escaped
-     * 
      */
     public static String escape( @Nullable String source, @Nonnull final char[] escapedChars, char escapeChar )
     {

@@ -29,16 +29,33 @@ import java.util.Map;
  */
 public class Xpp3DomUtils
 {
+    /**
+     * @param dominant {@link Xpp3Dom}
+     * @param recessive {@link Xpp3Dom}
+     * @param childMergeOverride true/false.
+     * @return Merged dom.
+     */
     public static Xpp3Dom mergeXpp3Dom( Xpp3Dom dominant, Xpp3Dom recessive, Boolean childMergeOverride )
     {
         return dominant != null ? merge( dominant, recessive, childMergeOverride ) : recessive;
     }
 
+    /**
+     * @param dominant {@link Xpp3Dom}
+     * @param recessive {@link Xpp3Dom}
+     * @return Merged dom.
+     */
     public static Xpp3Dom mergeXpp3Dom( Xpp3Dom dominant, Xpp3Dom recessive )
     {
         return dominant != null ? merge( dominant, recessive, null ) : recessive;
     }
 
+    /**
+     * @param dominant {@link Xpp3Dom}
+     * @param recessive {@link Xpp3Dom}
+     * @param childMergeOverride true/false.
+     * @return Merged dom.
+     */
     public static Xpp3Dom merge( Xpp3Dom dominant, Xpp3Dom recessive, Boolean childMergeOverride )
     {
         if ( recessive == null || isCombineSelfOverride( dominant ) )
@@ -130,6 +147,10 @@ public class Xpp3DomUtils
             dominant.getAttribute( Xpp3Dom.CHILDREN_COMBINATION_MODE_ATTRIBUTE ) );
     }
 
+    /**
+     * @param str The string to be checked.
+     * @return <code>true</code> in case string is empty <code>false</code> otherwise.
+     */
     public static boolean isEmpty( String str )
     {
         return str == null || str.trim().length() == 0;

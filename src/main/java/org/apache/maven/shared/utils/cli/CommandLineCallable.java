@@ -29,6 +29,9 @@ import java.util.concurrent.Callable;
 public interface CommandLineCallable
     extends Callable<Integer>
 {
+    /* (non-Javadoc)
+     * @see java.util.concurrent.Callable#call()
+     */
     Integer call()
         throws CommandLineException;
 }

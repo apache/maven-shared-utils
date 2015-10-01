@@ -46,18 +46,36 @@ public class Xpp3DomBuilder
 {
     private static final boolean DEFAULT_TRIM = true;
 
+    /**
+     * @param reader {@link Reader}
+     * @return the built dom.
+     * @throws XmlPullParserException
+     */
     public static Xpp3Dom build( @WillClose @Nonnull Reader reader )
         throws XmlPullParserException
     {
         return build( reader, DEFAULT_TRIM );
     }
 
+    /**
+     * @param is {@link InputStream}
+     * @param encoding
+     * @return the built dom.
+     * @throws XmlPullParserException
+     */
     public static Xpp3Dom build( @WillClose InputStream is, @Nonnull String encoding )
         throws XmlPullParserException
     {
         return build( is, encoding, DEFAULT_TRIM );
     }
 
+    /**
+     * @param is {@link InputStream}
+     * @param encoding The encoding.
+     * @param trim true/false.
+     * @return the built dom.
+     * @throws XmlPullParserException
+     */
     public static Xpp3Dom build( @WillClose InputStream is, @Nonnull String encoding, boolean trim )
         throws XmlPullParserException
     {
@@ -72,6 +90,12 @@ public class Xpp3DomBuilder
         }
     }
 
+    /**
+     * @param reader {@link Reader}
+     * @param trim true/false.
+     * @return the built dom.
+     * @throws XmlPullParserException
+     */
     public static Xpp3Dom build( @WillClose Reader reader, boolean trim )
         throws XmlPullParserException
     {

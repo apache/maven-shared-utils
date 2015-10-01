@@ -133,6 +133,7 @@ public final class IOUtil
 
     /**
      * Copy bytes from an <code>InputStream</code> to an <code>OutputStream</code>.
+     * @throws IOException
      */
     public static void copy( @Nonnull final InputStream input, @Nonnull final OutputStream output )
         throws IOException
@@ -144,6 +145,7 @@ public final class IOUtil
      * Copy bytes from an <code>InputStream</code> to an <code>OutputStream</code>.
      *
      * @param bufferSize Size of internal buffer to use.
+     * @throws IOException
      */
     public static void copy( @Nonnull final InputStream input, @Nonnull final OutputStream output,
                              final int bufferSize )
@@ -159,6 +161,7 @@ public final class IOUtil
 
     /**
      * Copy chars from a <code>Reader</code> to a <code>Writer</code>.
+     * @throws IOException
      */
     public static void copy( @Nonnull final Reader input, @Nonnull final Writer output )
         throws IOException
@@ -170,6 +173,7 @@ public final class IOUtil
      * Copy chars from a <code>Reader</code> to a <code>Writer</code>.
      *
      * @param bufferSize Size of internal buffer to use.
+     * @throws IOException
      */
     public static void copy( @Nonnull final Reader input, @Nonnull final Writer output, final int bufferSize )
         throws IOException
@@ -195,6 +199,7 @@ public final class IOUtil
      * Copy and convert bytes from an <code>InputStream</code> to chars on a
      * <code>Writer</code>.
      * The platform's default encoding is used for the byte-to-char conversion.
+     * @throws IOException
      */
     public static void copy( @Nonnull final InputStream input, @Nonnull final Writer output )
         throws IOException
@@ -208,6 +213,7 @@ public final class IOUtil
      * The platform's default encoding is used for the byte-to-char conversion.
      *
      * @param bufferSize Size of internal buffer to use.
+     * @throws IOException
      */
     public static void copy( @Nonnull final InputStream input, @Nonnull final Writer output, final int bufferSize )
         throws IOException
@@ -223,6 +229,7 @@ public final class IOUtil
      * @param encoding The name of a supported character encoding. See the
      *                 <a href="http://www.iana.org/assignments/character-sets">IANA
      *                 Charset Registry</a> for a list of valid encoding types.
+     * @throws IOException
      */
     public static void copy( @Nonnull final InputStream input, @Nonnull final Writer output,
                              @Nonnull final String encoding )
@@ -240,6 +247,7 @@ public final class IOUtil
      *                   <a href="http://www.iana.org/assignments/character-sets">IANA
      *                   Charset Registry</a> for a list of valid encoding types.
      * @param bufferSize Size of internal buffer to use.
+     * @throws IOException
      */
     public static void copy( @Nonnull final InputStream input, @Nonnull final Writer output,
                              @Nonnull final String encoding, final int bufferSize )
@@ -255,6 +263,7 @@ public final class IOUtil
     /**
      * Get the contents of an <code>InputStream</code> as a String.
      * The platform's default encoding is used for the byte-to-char conversion.
+     * @throws IOException
      */
     @Nonnull public static String toString( @Nonnull final InputStream input )
         throws IOException
@@ -267,6 +276,7 @@ public final class IOUtil
      * The platform's default encoding is used for the byte-to-char conversion.
      *
      * @param bufferSize Size of internal buffer to use.
+     * @throws IOException
      */
     @Nonnull public static String toString( @Nonnull final InputStream input, final int bufferSize )
         throws IOException
@@ -282,6 +292,7 @@ public final class IOUtil
      * @param encoding The name of a supported character encoding. See the
      *                 <a href="http://www.iana.org/assignments/character-sets">IANA
      *                 Charset Registry</a> for a list of valid encoding types.
+     * @throws IOException
      */
     @Nonnull public static String toString( @Nonnull final InputStream input, @Nonnull final String encoding )
         throws IOException
@@ -296,6 +307,7 @@ public final class IOUtil
      *                   <a href="http://www.iana.org/assignments/character-sets">IANA
      *                   Charset Registry</a> for a list of valid encoding types.
      * @param bufferSize Size of internal buffer to use.
+     * @throws IOException
      */
     @Nonnull public static String toString( @Nonnull final InputStream input, @Nonnull final String encoding,
                                             final int bufferSize )
@@ -311,6 +323,7 @@ public final class IOUtil
 
     /**
      * Get the contents of an <code>InputStream</code> as a <code>byte[]</code>.
+     * @throws IOException
      */
     @Nonnull public static byte[] toByteArray( @Nonnull final InputStream input )
         throws IOException
@@ -322,6 +335,7 @@ public final class IOUtil
      * Get the contents of an <code>InputStream</code> as a <code>byte[]</code>.
      *
      * @param bufferSize Size of internal buffer to use.
+     * @throws IOException
      */
     @Nonnull public static byte[] toByteArray( @Nonnull final InputStream input, final int bufferSize )
         throws IOException
@@ -342,6 +356,7 @@ public final class IOUtil
     /**
      * Serialize chars from a <code>Reader</code> to bytes on an <code>OutputStream</code>, and
      * flush the <code>OutputStream</code>.
+     * @throws IOException
      */
     public static void copy( @Nonnull final Reader input, @Nonnull final OutputStream output )
         throws IOException
@@ -354,6 +369,7 @@ public final class IOUtil
      * flush the <code>OutputStream</code>.
      *
      * @param bufferSize Size of internal buffer to use.
+     * @throws IOException
      */
     public static void copy( @Nonnull final Reader input, @Nonnull final OutputStream output, final int bufferSize )
         throws IOException
@@ -370,6 +386,7 @@ public final class IOUtil
 
     /**
      * Get the contents of a <code>Reader</code> as a String.
+     * @throws IOException
      */
     @Nonnull public static String toString( @Nonnull final Reader input )
         throws IOException
@@ -381,6 +398,7 @@ public final class IOUtil
      * Get the contents of a <code>Reader</code> as a String.
      *
      * @param bufferSize Size of internal buffer to use.
+     * @throws IOException
      */
     @Nonnull public static String toString( @Nonnull final Reader input, final int bufferSize )
         throws IOException
@@ -395,6 +413,7 @@ public final class IOUtil
 
     /**
      * Get the contents of a <code>Reader</code> as a <code>byte[]</code>.
+     * @throws IOException
      */
     @Nonnull public static byte[] toByteArray( @Nonnull final Reader input )
         throws IOException
@@ -406,6 +425,7 @@ public final class IOUtil
      * Get the contents of a <code>Reader</code> as a <code>byte[]</code>.
      *
      * @param bufferSize Size of internal buffer to use.
+     * @throws IOException
      */
     @Nonnull public static byte[] toByteArray( @Nonnull final Reader input, final int bufferSize )
         throws IOException
@@ -426,6 +446,7 @@ public final class IOUtil
     /**
      * Serialize chars from a <code>String</code> to bytes on an <code>OutputStream</code>, and
      * flush the <code>OutputStream</code>.
+     * @throws IOException
      */
     public static void copy( @Nonnull final String input, @Nonnull final OutputStream output )
         throws IOException
@@ -438,6 +459,7 @@ public final class IOUtil
      * flush the <code>OutputStream</code>.
      *
      * @param bufferSize Size of internal buffer to use.
+     * @throws IOException
      */
     public static void copy( @Nonnull final String input, @Nonnull final OutputStream output, final int bufferSize )
         throws IOException
@@ -455,6 +477,9 @@ public final class IOUtil
 
     /**
      * Copy chars from a <code>String</code> to a <code>Writer</code>.
+     * @param input
+     * @param output
+     * @throws IOException
      */
     public static void copy( @Nonnull final String input, @Nonnull final Writer output )
         throws IOException
@@ -467,6 +492,7 @@ public final class IOUtil
 
     /**
      * Get the contents of a <code>String</code> as a <code>byte[]</code>.
+     * @throws IOException
      */
     @Nonnull public static byte[] toByteArray( @Nonnull final String input )
         throws IOException
@@ -478,6 +504,7 @@ public final class IOUtil
      * Get the contents of a <code>String</code> as a <code>byte[]</code>.
      *
      * @param bufferSize Size of internal buffer to use.
+     * @throws IOException
      */
     @Nonnull public static byte[] toByteArray( @Nonnull final String input, final int bufferSize )
         throws IOException
@@ -499,6 +526,7 @@ public final class IOUtil
      * Copy and convert bytes from a <code>byte[]</code> to chars on a
      * <code>Writer</code>.
      * The platform's default encoding is used for the byte-to-char conversion.
+     * @throws IOException
      */
     public static void copy( @Nonnull final byte[] input, @Nonnull final Writer output )
         throws IOException
@@ -512,6 +540,7 @@ public final class IOUtil
      * The platform's default encoding is used for the byte-to-char conversion.
      *
      * @param bufferSize Size of internal buffer to use.
+     * @throws IOException
      */
     public static void copy( @Nonnull final byte[] input, @Nonnull final Writer output, final int bufferSize )
         throws IOException
@@ -527,6 +556,7 @@ public final class IOUtil
      * @param encoding The name of a supported character encoding. See the
      *                 <a href="http://www.iana.org/assignments/character-sets">IANA
      *                 Charset Registry</a> for a list of valid encoding types.
+     * @throws IOException
      */
     public static void copy( @Nonnull final byte[] input, @Nonnull final Writer output, final String encoding )
         throws IOException
@@ -543,6 +573,7 @@ public final class IOUtil
      *                   <a href="http://www.iana.org/assignments/character-sets">IANA
      *                   Charset Registry</a> for a list of valid encoding types.
      * @param bufferSize Size of internal buffer to use.
+     * @throws IOException
      */
     public static void copy( @Nonnull final byte[] input, @Nonnull final Writer output, @Nonnull final String encoding,
                              final int bufferSize )
@@ -558,6 +589,7 @@ public final class IOUtil
     /**
      * Get the contents of a <code>byte[]</code> as a String.
      * The platform's default encoding is used for the byte-to-char conversion.
+     * @throws IOException
      */
     @Nonnull public static String toString( @Nonnull final byte[] input )
         throws IOException
@@ -570,6 +602,7 @@ public final class IOUtil
      * The platform's default encoding is used for the byte-to-char conversion.
      *
      * @param bufferSize Size of internal buffer to use.
+     * @throws IOException
      */
     @Nonnull public static String toString( @Nonnull final byte[] input, final int bufferSize )
         throws IOException
@@ -585,6 +618,7 @@ public final class IOUtil
      * @param encoding The name of a supported character encoding. See the
      *                 <a href="http://www.iana.org/assignments/character-sets">IANA
      *                 Charset Registry</a> for a list of valid encoding types.
+     * @throws IOException
      */
     @Nonnull public static String toString( @Nonnull final byte[] input, @Nonnull final String encoding )
         throws IOException
@@ -599,6 +633,7 @@ public final class IOUtil
      *                   <a href="http://www.iana.org/assignments/character-sets">IANA
      *                   Charset Registry</a> for a list of valid encoding types.
      * @param bufferSize Size of internal buffer to use.
+     * @throws IOException
      */
     @Nonnull public static String toString( @Nonnull final byte[] input, @Nonnull final String encoding,
                                             final int bufferSize )
@@ -614,6 +649,7 @@ public final class IOUtil
 
     /**
      * Copy bytes from a <code>byte[]</code> to an <code>OutputStream</code>.
+     * @throws IOException
      */
     public static void copy( @Nonnull final byte[] input, @Nonnull final OutputStream output )
         throws IOException
@@ -627,6 +663,7 @@ public final class IOUtil
      * @param input1 the first stream
      * @param input2 the second stream
      * @return true if the content of the streams are equal or they both don't exist, false otherwise
+     * @throws IOException
      */
     public static boolean contentEquals( @Nonnull final InputStream input1, @Nonnull final InputStream input2 )
         throws IOException

@@ -44,12 +44,24 @@ import java.util.Set;
  */
 public class Os
 {
+    /**
+     * The OS Name.
+     */
     public static final String OS_NAME = System.getProperty( "os.name" ).toLowerCase( Locale.ENGLISH );
 
+    /**
+     * The OA architecture.
+     */
     public static final String OS_ARCH = System.getProperty( "os.arch" ).toLowerCase( Locale.ENGLISH );
 
+    /**
+     * The OS version.
+     */
     public static final String OS_VERSION = System.getProperty( "os.version" ).toLowerCase( Locale.ENGLISH );
 
+    /**
+     * The path separator.
+     */
     public static final String PATH_SEP = System.getProperty( "path.separator" );
 
     /**
@@ -57,6 +69,9 @@ public class Os
      */
     public static final String LINE_SEP = System.getProperty( "line.separator" );
 
+    /**
+     * OS Family
+     */
     public static final String OS_FAMILY = getOsFamily();
 
     // store the valid families
@@ -140,6 +155,7 @@ public class Os
     /**
      * The set of valid families. This methods initializes the set until
      * VALID_FAMILIES constant is set.
+     * @return The set of families.
      */
     public static Set<String> getValidFamilies()
     {

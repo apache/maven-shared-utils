@@ -105,7 +105,7 @@ public class Java7Support
     }
 
 
-    public static @Nonnull File readSymbolicLink( @Nonnull File symlink )
+    @Nonnull public static File readSymbolicLink( @Nonnull File symlink )
         throws IOException
     {
         try
@@ -145,7 +145,7 @@ public class Java7Support
 
     }
 
-    public static @Nonnull File createSymbolicLink( @Nonnull File symlink,  @Nonnull File target )
+    @Nonnull public static File createSymbolicLink( @Nonnull File symlink,  @Nonnull File target )
         throws IOException
     {
         try

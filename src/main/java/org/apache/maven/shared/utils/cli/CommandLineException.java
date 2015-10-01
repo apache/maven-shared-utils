@@ -26,11 +26,23 @@ package org.apache.maven.shared.utils.cli;
 public class CommandLineException
     extends Exception
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1344773066470228441L;
+
+    /**
+     * @param message
+     */
     public CommandLineException( String message )
     {
         super( message );
     }
 
+    /**
+     * @param message
+     * @param cause
+     */
     public CommandLineException( String message, Throwable cause )
     {
         super( message, cause );

@@ -30,16 +30,30 @@ public class XmlPullParserException
     extends RuntimeException
 {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 117075811816936575L;
+
+    /**
+     * @param e IOException.
+     */
     public XmlPullParserException( IOException e )
     {
         super( e );
     }
 
+    /**
+     * @param e The exception.
+     */
     public XmlPullParserException( SAXException e )
     {
         super( e );
     }
 
+    /**
+     * @param message The message.
+     */
     public XmlPullParserException( String message )
     {
         super( message );

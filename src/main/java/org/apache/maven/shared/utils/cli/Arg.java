@@ -26,10 +26,19 @@ import java.io.File;
  */
 public interface Arg
 {
+    /**
+     * @param value Set the value.
+     */
     void setValue( String value );
 
+    /**
+     * @param line
+     */
     void setLine( String line );
 
+    /**
+     * @param value
+     */
     void setFile( File value );
 
     /**

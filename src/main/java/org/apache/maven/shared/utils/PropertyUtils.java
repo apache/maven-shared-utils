@@ -19,13 +19,16 @@ package org.apache.maven.shared.utils;
  * under the License.
  */
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
-import org.apache.maven.shared.utils.io.IOUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.apache.maven.shared.utils.io.IOUtil;
 
 /**
  * 
@@ -38,6 +41,10 @@ public class PropertyUtils
         // should throw new IllegalAccessError( "Utility class" );
     }
 
+    /**
+     * @param url
+     * @return The loaded properties.
+     */
     public static java.util.Properties loadProperties( @Nonnull java.net.URL url )
     {
         try
@@ -51,7 +58,11 @@ public class PropertyUtils
         return null;
     }
 
-    public static java.util.Properties loadProperties( @Nonnull java.io.File file )
+    /**
+     * @param file
+     * @return The loaded properties.
+     */
+    public static Properties loadProperties( @Nonnull File file )
     {
         try
         {
@@ -64,7 +75,11 @@ public class PropertyUtils
         return null;
     }
 
-    public static java.util.Properties loadProperties( @Nullable java.io.InputStream is )
+    /**
+     * @param is {@link InputStream}
+     * @return The loaded properties.
+     */
+    public static Properties loadProperties( @Nullable InputStream is )
     {
         try
         {

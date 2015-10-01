@@ -27,21 +27,38 @@ import java.io.Writer;
  */
 public class Xpp3DomWriter
 {
+    /**
+     * @param writer {@link Writer}
+     * @param dom {@link Xpp3Dom}
+     */
     public static void write( Writer writer, Xpp3Dom dom )
     {
         write( new PrettyPrintXMLWriter( writer ), dom );
     }
 
+    /**
+     * @param writer {@link PrintWriter}
+     * @param dom {@link Xpp3Dom}
+     */
     public static void write( PrintWriter writer, Xpp3Dom dom )
     {
         write( new PrettyPrintXMLWriter( writer ), dom );
     }
 
+    /**
+     * @param xmlWriter {@link XMLWriter}
+     * @param dom {@link Xpp3Dom}
+     */
     public static void write( XMLWriter xmlWriter, Xpp3Dom dom )
     {
         write( xmlWriter, dom, true );
     }
 
+    /**
+     * @param xmlWriter {@link XMLWriter}
+     * @param dom {@link Xpp3Dom}
+     * @param escape true/false.
+     */
     public static void write( XMLWriter xmlWriter, Xpp3Dom dom, boolean escape )
     {
         xmlWriter.startElement( dom.getName() );
