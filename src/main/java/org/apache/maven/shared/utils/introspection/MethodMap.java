@@ -143,6 +143,8 @@ class MethodMap
     static class AmbiguousException
         extends Exception
     {
+
+        private static final long serialVersionUID = 751688436639650618L;
     }
 
 

@@ -28,11 +28,9 @@ import org.apache.maven.shared.utils.Os;
 
 import junit.framework.TestCase;
 
-@SuppressWarnings( { "JavaDoc", "deprecation" } )
 public class CommandLineUtilsTest
     extends TestCase
 {
-
 
     /**
      * Tests that case-insensitive environment variables are normalized to upper case.

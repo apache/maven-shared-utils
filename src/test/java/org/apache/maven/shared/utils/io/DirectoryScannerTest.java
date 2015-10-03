@@ -131,6 +131,8 @@ public class DirectoryScannerTest
         ds.scan();
         String[] includedDirectories = ds.getIncludedDirectories();
         String[] files = ds.getIncludedFiles();
+        
+        //FIXME: This should be changed to some kind of assert...WhatEver()...
         System.out.println( "files = " + files );
 
 

@@ -26,7 +26,6 @@ import java.util.Map;
 
 import org.apache.maven.plugin.testing.stubs.MavenProjectStub;
 
-import junit.framework.Assert;
 import junit.framework.TestCase;
 
 /**
@@ -93,11 +92,11 @@ public class ReflectionValueExtractorTest
         // Dependencies
         // ----------------------------------------------------------------------
 
-        List dependencies = (List) ReflectionValueExtractor.evaluate( "project.dependencies", project );
+        List<?> dependencies = (List<?>) ReflectionValueExtractor.evaluate( "project.dependencies", project );
 
-        Assert.assertNotNull( dependencies );
+        assertNotNull( dependencies );
 
-        Assert.assertEquals( 2, dependencies.size() );
+        assertEquals( 2, dependencies.size() );
 
         // ----------------------------------------------------------------------
         // Dependencies - using index notation
@@ -106,37 +105,37 @@ public class ReflectionValueExtractorTest
         // List
         Dependency dependency = (Dependency) ReflectionValueExtractor.evaluate( "project.dependencies[0]", project );
 
-        Assert.assertNotNull( dependency );
+        assertNotNull( dependency );
 
-        Assert.assertTrue( "dep1".equals( dependency.getArtifactId() ) );
+        assertTrue( "dep1".equals( dependency.getArtifactId() ) );
 
         String artifactId = (String) ReflectionValueExtractor.evaluate( "project.dependencies[1].artifactId", project );
 
-        Assert.assertTrue( "dep2".equals( artifactId ) );
+        assertTrue( "dep2".equals( artifactId ) );
 
         // Array
 
         dependency = (Dependency) ReflectionValueExtractor.evaluate( "project.dependenciesAsArray[0]", project );
 
-        Assert.assertNotNull( dependency );
+        assertNotNull( dependency );
 
-        Assert.assertTrue( "dep1".equals( dependency.getArtifactId() ) );
+        assertTrue( "dep1".equals( dependency.getArtifactId() ) );
 
         artifactId = (String) ReflectionValueExtractor.evaluate( "project.dependenciesAsArray[1].artifactId", project );
 
-        Assert.assertTrue( "dep2".equals( artifactId ) );
+        assertTrue( "dep2".equals( artifactId ) );
 
         // Map
 
         dependency = (Dependency) ReflectionValueExtractor.evaluate( "project.dependenciesAsMap(dep1)", project );
 
-        Assert.assertNotNull( dependency );
+        assertNotNull( dependency );
 
-        Assert.assertTrue( "dep1".equals( dependency.getArtifactId() ) );
+        assertTrue( "dep1".equals( dependency.getArtifactId() ) );
 
         artifactId = (String) ReflectionValueExtractor.evaluate( "project.dependenciesAsMap(dep2).artifactId", project );
 
-        Assert.assertTrue( "dep2".equals( artifactId ) );
+        assertTrue( "dep2".equals( artifactId ) );
 
         // ----------------------------------------------------------------------
         // Build
@@ -144,15 +143,15 @@ public class ReflectionValueExtractorTest
 
         Build build = (Build) ReflectionValueExtractor.evaluate( "project.build", project );
 
-        Assert.assertNotNull( build );
+        assertNotNull( build );
     }
 
     public void testValueExtractorWithAInvalidExpression()
         throws Exception
     {
-        Assert.assertNull( ReflectionValueExtractor.evaluate( "project.foo", project ) );
-        Assert.assertNull( ReflectionValueExtractor.evaluate( "project.dependencies[10]", project ) );
-        Assert.assertNull( ReflectionValueExtractor.evaluate( "project.dependencies[0].foo", project ) );
+        assertNull( ReflectionValueExtractor.evaluate( "project.foo", project ) );
+        assertNull( ReflectionValueExtractor.evaluate( "project.dependencies[10]", project ) );
+        assertNull( ReflectionValueExtractor.evaluate( "project.dependencies[0].foo", project ) );
     }
 
     public void testMappedDottedKey()
@@ -161,7 +160,7 @@ public class ReflectionValueExtractorTest
         Map<String, String> map = new HashMap<String, String>();
         map.put( "a.b", "a.b-value" );
 
-        Assert.assertEquals( "a.b-value", ReflectionValueExtractor.evaluate("h.value(a.b)", new ValueHolder(map)) );
+        assertEquals( "a.b-value", ReflectionValueExtractor.evaluate("h.value(a.b)", new ValueHolder(map)) );
     }
 
     public void testIndexedMapped()
@@ -172,7 +171,7 @@ public class ReflectionValueExtractorTest
         List<Object> list = new ArrayList<Object>();
         list.add( map );
 
-        Assert.assertEquals( "a-value", ReflectionValueExtractor.evaluate("h.value[0](a)", new ValueHolder(list)) );
+        assertEquals( "a-value", ReflectionValueExtractor.evaluate("h.value[0](a)", new ValueHolder(list)) );
     }
 
     public void testMappedIndexed()
@@ -182,7 +181,7 @@ public class ReflectionValueExtractorTest
         list.add( "a-value" );
         Map<Object, Object> map = new HashMap<Object, Object>();
         map.put( "a", list );
-        Assert.assertEquals( "a-value", ReflectionValueExtractor.evaluate("h.value(a)[0]", new ValueHolder(map)) );
+        assertEquals( "a-value", ReflectionValueExtractor.evaluate("h.value(a)[0]", new ValueHolder(map)) );
     }
 
     public void testMappedMissingDot()
@@ -190,7 +189,7 @@ public class ReflectionValueExtractorTest
     {
         Map<Object, Object> map = new HashMap<Object, Object>();
         map.put( "a", new ValueHolder( "a-value" ) );
-        Assert.assertNull( ReflectionValueExtractor.evaluate("h.value(a)value", new ValueHolder(map)) );
+        assertNull( ReflectionValueExtractor.evaluate("h.value(a)value", new ValueHolder(map)) );
     }
 
     public void testIndexedMissingDot()
@@ -198,13 +197,13 @@ public class ReflectionValueExtractorTest
     {
         List<Object> list = new ArrayList<Object>();
         list.add( new ValueHolder( "a-value" ) );
-        Assert.assertNull( ReflectionValueExtractor.evaluate("h.value[0]value", new ValueHolder(list)) );
+        assertNull( ReflectionValueExtractor.evaluate("h.value[0]value", new ValueHolder(list)) );
     }
 
     public void testDotDot()
             throws Exception
     {
-        Assert.assertNull( ReflectionValueExtractor.evaluate("h..value", new ValueHolder("value")) );
+        assertNull( ReflectionValueExtractor.evaluate("h..value", new ValueHolder("value")) );
     }
 
     public void testBadIndexedSyntax()
@@ -214,12 +213,12 @@ public class ReflectionValueExtractorTest
         list.add( "a-value" );
         Object value = new ValueHolder( list );
 
-        Assert.assertNull( ReflectionValueExtractor.evaluate("h.value[", value) );
-        Assert.assertNull( ReflectionValueExtractor.evaluate("h.value[]", value) );
-        Assert.assertNull( ReflectionValueExtractor.evaluate("h.value[a]", value) );
-        Assert.assertNull( ReflectionValueExtractor.evaluate("h.value[0", value) );
-        Assert.assertNull( ReflectionValueExtractor.evaluate("h.value[0)", value) );
-        Assert.assertNull( ReflectionValueExtractor.evaluate("h.value[-1]", value) );
+        assertNull( ReflectionValueExtractor.evaluate("h.value[", value) );
+        assertNull( ReflectionValueExtractor.evaluate("h.value[]", value) );
+        assertNull( ReflectionValueExtractor.evaluate("h.value[a]", value) );
+        assertNull( ReflectionValueExtractor.evaluate("h.value[0", value) );
+        assertNull( ReflectionValueExtractor.evaluate("h.value[0)", value) );
+        assertNull( ReflectionValueExtractor.evaluate("h.value[-1]", value) );
     }
 
     public void testBadMappedSyntax()
@@ -229,10 +228,10 @@ public class ReflectionValueExtractorTest
         map.put( "a", "a-value" );
         Object value = new ValueHolder( map );
 
-        Assert.assertNull( ReflectionValueExtractor.evaluate("h.value(", value) );
-        Assert.assertNull( ReflectionValueExtractor.evaluate("h.value()", value) );
-        Assert.assertNull( ReflectionValueExtractor.evaluate("h.value(a", value) );
-        Assert.assertNull( ReflectionValueExtractor.evaluate("h.value(a]", value) );
+        assertNull( ReflectionValueExtractor.evaluate("h.value(", value) );
+        assertNull( ReflectionValueExtractor.evaluate("h.value()", value) );
+        assertNull( ReflectionValueExtractor.evaluate("h.value(a", value) );
+        assertNull( ReflectionValueExtractor.evaluate("h.value(a]", value) );
     }
 
     public void testIllegalIndexedType()
@@ -264,7 +263,7 @@ public class ReflectionValueExtractorTest
     public void testTrimRootToken()
             throws Exception
     {
-        Assert.assertNull( ReflectionValueExtractor.evaluate("project", project, true) );
+        assertNull( ReflectionValueExtractor.evaluate("project", project, true) );
     }
 
     public void testArtifactMap()

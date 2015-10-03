@@ -1128,7 +1128,7 @@ public class ReflectorTest
     public void getMethodObjectNullNull()
         throws Exception
     {
-        reflector.getMethod( Object.class, null, null );
+        reflector.getMethod( Object.class, (String)null, (Class<?>)null );
     }
 
     @Test( expected = NullPointerException.class )

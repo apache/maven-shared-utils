@@ -23,6 +23,11 @@ class IntrospectionException
     extends Exception
 {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -6090771282553728784L;
+
     public IntrospectionException( String message )
     {
         super( message );

@@ -24,7 +24,6 @@ package org.apache.maven.shared.utils.reflection;
  */
 class ReflectorTestHelper
 {
-    private static String PRIVATE_STATIC_STRING = "private static string";
     static String PACKAGE_STATIC_STRING = "package static string";
     protected static String PROTECTED_STATIC_STRING = "protected static string";
     public static String PUBLIC_STATIC_STRING = "public static string";
@@ -55,11 +54,6 @@ class ReflectorTestHelper
         {
             throw new HelperException( throwMessage );
         }
-    }
-
-    private static ReflectorTestHelper getInstance()
-    {
-        return new ReflectorTestHelper();
     }
 
     static ReflectorTestHelper getInstance( Boolean throwSomething )
@@ -97,6 +91,11 @@ class ReflectorTestHelper
     public static class HelperException
         extends RuntimeException
     {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = -3395757415194358525L;
+
         public HelperException()
         {
             super();    //To change body of overridden methods use File | Settings | File Templates.
