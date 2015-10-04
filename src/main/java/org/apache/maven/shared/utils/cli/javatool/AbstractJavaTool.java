@@ -59,20 +59,23 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest>
      */
     private Toolchain toolchain;
 
+    /**
+     * @param javaToolName The name of the java tool.
+     */
     protected AbstractJavaTool( String javaToolName )
     {
         this.javaToolName = javaToolName;
     }
 
     /**
-     * Create the commandline object given the request.
+     * Create the command line object given the request.
      *
      * @param request      User request on the java tool
-     * @param javaToolFile Location of the java tool file to use
-     * @return the commandline
+     * @param javaToolFileLocation Location of the java tool file to use
+     * @return the command line
      * @throws JavaToolException if could not create the command line from the request
      */
-    protected abstract Commandline createCommandLine( Request request, String javaToolFile )
+    protected abstract Commandline createCommandLine( Request request, String javaToolFileLocation )
         throws JavaToolException;
 
     /**
@@ -217,11 +220,17 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest>
         return systemOut;
     }
 
+    /**
+     * @return The JavaToolResult.
+     */
     protected JavaToolResult createResult()
     {
         return new JavaToolResult();
     }
 
+    /**
+     * @return The location of the java tool executable.
+     */
     protected String findJavaToolExecutable()
     {
         String command = javaToolName + ( Os.isFamily( Os.FAMILY_WINDOWS ) ? ".exe" : "" );

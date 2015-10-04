@@ -78,6 +78,10 @@ public class CmdShell
      * Always quoting the entire command line, regardless of these conditions
      * appears to make Windows processes invoke successfully.
      * </p>
+     * 
+     * @param executable The executable.
+     * @param arguments The arguments for the executable.
+     * @return The resulting command line.
      */
     public List<String> getCommandLine( String executable, String... arguments )
     {

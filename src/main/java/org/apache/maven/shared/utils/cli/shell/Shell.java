@@ -125,6 +125,11 @@ public class Shell
         return getRawCommandLine( executable, arguments );
     }
 
+    /**
+     * @param executable Executable.
+     * @param arguments The arguments for the executable.
+     * @return The list on command line. 
+     */
     List<String> getRawCommandLine( String executable, String... arguments )
     {
         List<String> commandLine = new ArrayList<String>();
@@ -205,11 +210,17 @@ public class Shell
         return result;
     }
 
+    /**
+     * @return false in all cases. 
+     */
     protected boolean isDoubleQuotedArgumentEscaped()
     {
         return false;
     }
 
+    /**
+     * @return {@link #singleQuotedArgumentEscaped}
+     */
     protected boolean isSingleQuotedArgumentEscaped()
     {
         return singleQuotedArgumentEscaped;
@@ -225,6 +236,9 @@ public class Shell
         return singleQuotedExecutableEscaped;
     }
 
+    /**
+     * @param argQuoteDelimiter {@link #argQuoteDelimiter}
+     */
     void setArgumentQuoteDelimiter( char argQuoteDelimiter )
     {
         this.argQuoteDelimiter = argQuoteDelimiter;
@@ -235,6 +249,9 @@ public class Shell
         return argQuoteDelimiter;
     }
 
+    /**
+     * @param exeQuoteDelimiter {@link #exeQuoteDelimiter}
+     */
     void setExecutableQuoteDelimiter( char exeQuoteDelimiter )
     {
         this.exeQuoteDelimiter = exeQuoteDelimiter;
@@ -279,6 +296,9 @@ public class Shell
         return shellArgs;
     }
 
+    /**
+     * @param quotedArgumentsEnabled {@link #quotedArgumentsEnabled}
+     */
     public void setQuotedArgumentsEnabled( boolean quotedArgumentsEnabled )
     {
         this.quotedArgumentsEnabled = quotedArgumentsEnabled;
@@ -301,6 +321,7 @@ public class Shell
 
     /**
      * Sets the executable to run.
+     * @param executable The executable.
      */
     public void setExecutable( String executable )
     {
@@ -311,6 +332,9 @@ public class Shell
         this.executable = executable.replace( '/', File.separatorChar ).replace( '\\', File.separatorChar );
     }
 
+    /**
+     * @return The executable.
+     */
     public String getExecutable()
     {
         return executable;
@@ -318,26 +342,31 @@ public class Shell
 
     /**
      * Sets execution directory.
+     * @param path The path which should be used as working directory.
      */
     public void setWorkingDirectory( String path )
     {
         if ( path != null )
         {
-            workingDir = path;
+            this.workingDir = path;
         }
     }
 
     /**
      * Sets execution directory.
+     * @param workingDirectory The working directory.
      */
-    public void setWorkingDirectory( File workingDir )
+    public void setWorkingDirectory( File workingDirectory )
     {
-        if ( workingDir != null )
+        if ( workingDirectory != null )
         {
-            this.workingDir = workingDir.getAbsolutePath();
+            this.workingDir = workingDirectory.getAbsolutePath();
         }
     }
 
+    /**
+     * @return The working directory.
+     */
     public File getWorkingDirectory()
     {
         return workingDir == null ? null : new File( workingDir );
@@ -348,6 +377,7 @@ public class Shell
         return workingDir;
     }
 
+    /** {@inheritDoc} */
     public Object clone()
     {
         throw new RuntimeException( "Do we ever clone this?" );

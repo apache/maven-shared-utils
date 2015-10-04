@@ -36,11 +36,18 @@ public class JavaToolException
 {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * @param message The message of the exception.
+     */
     public JavaToolException( String message )
     {
         super( message );
     }
 
+    /**
+     * @param message The message of the exception.
+     * @param cause The cause of the exception.
+     */
     public JavaToolException( String message, Throwable cause )
     {
         super( message, cause );

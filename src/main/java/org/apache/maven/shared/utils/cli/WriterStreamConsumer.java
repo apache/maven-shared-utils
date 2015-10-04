@@ -32,11 +32,16 @@ public class WriterStreamConsumer
 
     private final PrintWriter writer;
 
+    /**
+     * @param writer {@link Writer}
+     */
     public WriterStreamConsumer( Writer writer )
     {
         this.writer = new PrintWriter( writer );
     }
 
+    /** {@inheritDoc}
+     */
     public void consumeLine( String line )
     {
         writer.println( line );

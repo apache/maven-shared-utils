@@ -34,6 +34,9 @@ public class BourneShell
     private static final char[] BASH_QUOTING_TRIGGER_CHARS =
         { ' ', '$', ';', '&', '|', '<', '>', '*', '?', '(', ')', '[', ']', '{', '}', '`' };
 
+    /**
+     * Create instance of BournShell.
+     */
     public BourneShell()
     {
         setShellCommand( "/bin/sh" );
@@ -57,6 +60,7 @@ public class BourneShell
         return unifyQuotes( super.getExecutable() );
     }
 
+    /** {@inheritDoc} */
     public List<String> getShellArgsList()
     {
         List<String> shellArgs = new ArrayList<String>();
@@ -72,6 +76,7 @@ public class BourneShell
         return shellArgs;
     }
 
+    /** {@inheritDoc} */
     public String[] getShellArgs()
     {
         String[] shellArgs = super.getShellArgs();
@@ -93,6 +98,7 @@ public class BourneShell
         return shellArgs;
     }
 
+    /** {@inheritDoc} */
     protected String getExecutionPreamble()
     {
         if ( getWorkingDirectoryAsString() == null )
@@ -110,6 +116,7 @@ public class BourneShell
         return sb.toString();
     }
 
+    /** {@inheritDoc} */
     protected char[] getQuotingTriggerChars()
     {
         return BASH_QUOTING_TRIGGER_CHARS;
