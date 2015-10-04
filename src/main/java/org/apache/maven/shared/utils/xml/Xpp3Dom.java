@@ -51,19 +51,34 @@ public class Xpp3Dom
 
     private Xpp3Dom parent; // plexus: protected
 
+    /**
+     * The attribute which identifies merge/append.
+     */
     public static final String CHILDREN_COMBINATION_MODE_ATTRIBUTE = "combine.children";
 
     private static final String CHILDREN_COMBINATION_MERGE = "merge";
 
+    /**
+     * The attribute append.
+     */
     public static final String CHILDREN_COMBINATION_APPEND = "append";
 
     @SuppressWarnings( "UnusedDeclaration" )
     private static final String DEFAULT_CHILDREN_COMBINATION_MODE = CHILDREN_COMBINATION_MERGE; // plexus: public
 
+    /**
+     * The name of the attribute.
+     */
     public static final String SELF_COMBINATION_MODE_ATTRIBUTE = "combine.self";
 
+    /**
+     * The attributes which identifies <code>override</code>.
+     */
     public static final String SELF_COMBINATION_OVERRIDE = "override";  // plexus: public
 
+    /**
+     * The attribute which identifies <code>merge</code>
+     */
     public static final String SELF_COMBINATION_MERGE = "merge";
 
     @SuppressWarnings( "UnusedDeclaration" )
@@ -72,6 +87,9 @@ public class Xpp3Dom
     private static final String[] EMPTY_STRING_ARRAY = new String[0];
     private static final Xpp3Dom[] EMPTY_DOM_ARRAY = new Xpp3Dom[0];
 
+    /**
+     * @param name The name of the instance.
+     */
     public Xpp3Dom( String name )
     {
         this.name = name;
@@ -79,11 +97,20 @@ public class Xpp3Dom
         childMap = new HashMap<String, Xpp3Dom>();
     }
 
+    /**
+     * Create instance.
+     * @param source The source.
+     */
     public Xpp3Dom( Xpp3Dom source )
     {
         this( source, source.getName() );
     }
 
+    /**
+     * Create instance.
+     * @param src The source Dom.
+     * @param name The name of the Dom.
+     */
     public Xpp3Dom( @Nonnull Xpp3Dom src, String name )
     {
         this.name = name;
@@ -105,22 +132,34 @@ public class Xpp3Dom
         }
     }
 
+    /**
+     * @return The current name.
+     */
     public String getName()
     {
         return name;
     }
 
+    /**
+     * @return The current value.
+     */
     @Nonnull public String getValue()
     {
         return value;
     }
 
+    /**
+     * @param value The value to be set.
+     */
     public void setValue( @Nonnull String value )
     {
         this.value = value;
     }
 
 
+    /**
+     * @return The array of attribute names.
+     */
     public String[] getAttributeNames()
     {
         boolean isNothing = attributes == null || attributes.isEmpty();
@@ -128,19 +167,26 @@ public class Xpp3Dom
     }
 
 
-    public String getAttribute( String name )
+    /**
+     * @param nameParameter The name of the attribute.
+     * @return The attribute value.
+     */
+    public String getAttribute( String nameParameter )
     {
-        return attributes != null ? attributes.get( name ) : null;
+        return this.attributes != null ? this.attributes.get( nameParameter ) : null;
     }
 
-    @SuppressWarnings( "ConstantConditions" )
-    public void setAttribute( @Nonnull String name, @Nonnull String value )
+    /**
+     * @param nameParameter The name of the attribute.
+     * @param valueParameter The value of the attribute.
+     */
+    public void setAttribute( @Nonnull String nameParameter, @Nonnull String valueParameter )
     {
-        if ( value == null )
+        if ( valueParameter == null )
         {
             throw new NullPointerException( "value can not be null" );
         }
-        if ( name == null )
+        if ( nameParameter == null )
         {
             throw new NullPointerException( "name can not be null" );
         }
@@ -149,19 +195,30 @@ public class Xpp3Dom
             attributes = new HashMap<String, String>();
         }
 
-        attributes.put( name, value );
+        attributes.put( nameParameter, valueParameter );
     }
 
+    /**
+     * @param i The index to be selected.
+     * @return The child selected by index.
+     */
     public Xpp3Dom getChild( int i )
     {
         return childList.get( i );
     }
 
-    public Xpp3Dom getChild( String name )
+    /**
+     * @param nameParameter The name of the child.
+     * @return The child selected by name.
+     */
+    public Xpp3Dom getChild( String nameParameter )
     {
-        return childMap.get( name );
+        return childMap.get( nameParameter );
     }
 
+    /**
+     * @param child The child to be added.
+     */
     public void addChild( Xpp3Dom child )
     {
         child.setParent( this );
@@ -169,6 +226,9 @@ public class Xpp3Dom
         childMap.put( child.getName(), child );
     }
 
+    /**
+     * @return The array of childs.
+     */
     public Xpp3Dom[] getChildren()
     {
         boolean isNothing = childList == null || childList.isEmpty();
@@ -181,13 +241,17 @@ public class Xpp3Dom
         return isNothing ? Collections.<Xpp3Dom>emptyList() : childList;
     }
 
-    public Xpp3Dom[] getChildren( String name )
+    /**
+     * @param nameParameter The name of the child.
+     * @return The array of the Dom.
+     */
+    public Xpp3Dom[] getChildren( String nameParameter )
     {
-        List<Xpp3Dom> children = getChildrenList( name );
+        List<Xpp3Dom> children = getChildrenList( nameParameter );
         return children.toArray( new Xpp3Dom[children.size()] );
     }
 
-    List<Xpp3Dom> getChildrenList( String name )
+    List<Xpp3Dom> getChildrenList( String nameParameter )
     {
         if ( childList == null )
         {
@@ -198,7 +262,7 @@ public class Xpp3Dom
             ArrayList<Xpp3Dom> children = new ArrayList<Xpp3Dom>();
             for ( Xpp3Dom aChildList : childList )
             {
-                if ( name.equals( aChildList.getName() ) )
+                if ( nameParameter.equals( aChildList.getName() ) )
                 {
                     children.add( aChildList );
                 }
@@ -207,6 +271,9 @@ public class Xpp3Dom
         }
     }
 
+    /**
+     * @return The number of childs.
+     */
     public int getChildCount()
     {
         if ( childList == null )
@@ -217,6 +284,9 @@ public class Xpp3Dom
         return childList.size();
     }
 
+    /**
+     * @param i The child to be removed.
+     */
     public void removeChild( int i )
     {
         Xpp3Dom child = childList.remove( i );
@@ -224,11 +294,17 @@ public class Xpp3Dom
         child.setParent( null );
     }
 
+    /**
+     * @return The current parent.
+     */
     public Xpp3Dom getParent()
     {
         return parent;
     }
 
+    /**
+     * @param parent Set the parent.
+     */
     public void setParent( Xpp3Dom parent )
     {
        this.parent = parent;
@@ -243,16 +319,28 @@ public class Xpp3Dom
         return Xpp3DomUtils.merge( dominant, recessive, childMergeOverride );
     }
 
+    /**
+     * @param dominant The dominant part.
+     * @param recessive The recessive part.
+     * @param childMergeOverride true if child merge will take precedence false otherwise.
+     * @return The merged Xpp3Dom.
+     */
     public static Xpp3Dom mergeXpp3Dom( Xpp3Dom dominant, Xpp3Dom recessive, Boolean childMergeOverride )
     {
         return Xpp3DomUtils.mergeXpp3Dom( dominant, recessive, childMergeOverride );
     }
 
+    /**
+     * @param dominant The dominant part.
+     * @param recessive The recessive part.
+     * @return The merged Xpp3Dom.
+     */
     public static Xpp3Dom mergeXpp3Dom( Xpp3Dom dominant, Xpp3Dom recessive )
     {
         return Xpp3DomUtils.mergeXpp3Dom( dominant, recessive );
     }
 
+    /** {@inheritDoc} */
     public boolean equals( Object obj )
     {
         if ( obj == this )
@@ -273,6 +361,7 @@ public class Xpp3Dom
             && !( childList == null ? dom.childList != null : !childList.equals( dom.childList ) );
     }
 
+    /** {@inheritDoc} */
     public int hashCode()
     {
         int result = 17;
@@ -283,6 +372,7 @@ public class Xpp3Dom
         return result;
     }
 
+    /** {@inheritDoc} */
     public String toString()
     {
         StringWriter writer = new StringWriter();
@@ -291,6 +381,9 @@ public class Xpp3Dom
 
     }
 
+    /**
+     * @return Unescaped string.
+     */
     public String toUnescapedString()
     {
         StringWriter writer = new StringWriter();
@@ -303,16 +396,25 @@ public class Xpp3Dom
         return new PrettyPrintXMLWriter( writer, "UTF-8", null );
     }
 
+    /**
+     * @param str The string to be checked.
+     * @return true if the string is not empty (length &gt; 0) and not <code>null</code>.
+     */
     public static boolean isNotEmpty( String str )
     {
         return str != null && str.length() > 0;
     }
 
+    /**
+     * @param str The string to be checked.
+     * @return true if the string is empty or <code>null</code>.
+     */
     public static boolean isEmpty( String str )
     {
         return str == null || str.trim().length() == 0;
     }
 
+    /** {@inheritDoc} */
     public Iterator<Xpp3Dom> iterator()
     {
         return getChildrenList().iterator();

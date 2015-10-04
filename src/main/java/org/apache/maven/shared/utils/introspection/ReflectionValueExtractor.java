@@ -181,6 +181,7 @@ public class ReflectionValueExtractor
      *
      * @param expression not null expression
      * @param root not null object
+     * @param trimRootToken trim root token yes/no.
      * @return the object defined by the expression
      * @throws IntrospectionException if any
      */

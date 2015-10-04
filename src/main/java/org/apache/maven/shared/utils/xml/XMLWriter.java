@@ -47,7 +47,7 @@ public interface XMLWriter
 
     /**
      * Start an XML Element tag.
-     * @param name
+     * @param name The name of the tag.
      */
     void startElement( String name );
 
@@ -55,8 +55,8 @@ public interface XMLWriter
     /**
      * Add a XML attribute to the current XML Element.
      * This method must get called immediately after {@link #startElement(String)}
-     * @param key
-     * @param value
+     * @param key The key of the attribute.
+     * @param value The value of the attribute.
      * @throws IllegalStateException if no element tag is currently in process
      */
     void addAttribute( String key, String value );
@@ -64,14 +64,14 @@ public interface XMLWriter
     /**
      * Add a value text to the current element tag
      * This will perform XML escaping to guarantee valid content
-     * @param text
+     * @param text The text which should be written.
      * @throws IllegalStateException if no element tag got started yet
      */
     void writeText( String text );
 
     /**
      * Add a preformatted markup to the current element tag
-     * @param text
+     * @param text The text which should be written.
      * @throws IllegalStateException if no element tag got started yet
      */
     void writeMarkup( String text );

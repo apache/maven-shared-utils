@@ -43,12 +43,24 @@ import javax.annotation.Nonnull;
 public final class SelectorUtils
 {
 
+    /**
+     * Pattern handler prefix.
+     */
     private static final String PATTERN_HANDLER_PREFIX = "[";
 
+    /**
+     * Pattern handler suffix.
+     */
     public static final String PATTERN_HANDLER_SUFFIX = "]";
 
+    /**
+     * Regex start pattern.
+     */
     public static final String REGEX_HANDLER_PREFIX = "%regex" + PATTERN_HANDLER_PREFIX;
 
+    /**
+     * ANT pattern prefix.
+     */
     public static final String ANT_HANDLER_PREFIX = "%ant" + PATTERN_HANDLER_PREFIX;
 
     /**

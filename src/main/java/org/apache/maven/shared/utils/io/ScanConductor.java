@@ -71,7 +71,7 @@ public interface ScanConductor
      * This method will get invoked for every detected directory.
      *
      * @param name      the directory name (contains parent folders up to the pwd)
-     * @param directory
+     * @param directory The directory.
      * @return the ScanAction to control how to proceed with the scanning
      */
     ScanAction visitDirectory( String name, File directory );
@@ -80,7 +80,7 @@ public interface ScanConductor
      * This method will get invoked for every detected file.
      *
      * @param name the file name (contains parent folders up to the pwd)
-     * @param file
+     * @param file The file.
      * @return the ScanAction to control how to proceed with the scanning
      */
     ScanAction visitFile( String name, File file );

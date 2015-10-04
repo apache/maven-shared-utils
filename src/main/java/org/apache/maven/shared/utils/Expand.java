@@ -105,11 +105,11 @@ class Expand
      * <p/>
      * <p><b>Note:</b> we kept this protected method for the sake of backward compatibility!</p>
      *
-     * @param srcFile
-     * @param dest
-     * @throws Exception
+     * @param srcFile The source file.
+     * @param destination The destination.
+     * @throws Exception In case of failure.
      */
-    void expandFile( File srcFile, File dest )
+    void expandFile( File srcFile, File destination )
         throws Exception
     {
         if ( source == null )
@@ -117,7 +117,7 @@ class Expand
             throw new NullPointerException( "Source Archive must not be null!" );
         }
 
-        File destDir = dest;
+        File destDir = destination;
         if ( destDir == null )
         {
             destDir = new File( System.getProperty( "user.dir" ) );

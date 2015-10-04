@@ -28,6 +28,10 @@ import java.util.ArrayList;
 /**
  * XMLWriter with nice indentation
  */
+/**
+ * @author kama
+ *
+ */
 public class PrettyPrintXMLWriter
     implements XMLWriter
 {
@@ -165,6 +169,7 @@ public class PrettyPrintXMLWriter
         depth = 0;
     }
 
+    /** {@inheritDoc} */
     public void addAttribute( String key, String value )
     {
         if ( !processingElement )
@@ -178,6 +183,7 @@ public class PrettyPrintXMLWriter
         XMLEncode.xmlEncodeTextAsPCDATA( value, true, '"', writer );
     }
 
+    /** {@inheritDoc} */
     public void setEncoding( String encoding )
     {
         if ( documentStarted )
@@ -188,6 +194,7 @@ public class PrettyPrintXMLWriter
         this.encoding = encoding;
     }
 
+    /** {@inheritDoc} */
     public void setDocType( String docType )
     {
         if ( documentStarted )
@@ -198,6 +205,7 @@ public class PrettyPrintXMLWriter
         this.docType = docType;
     }
 
+    /** {@inheritDoc} */
     public void setLineSeparator( String lineSeparator )
     {
         if ( documentStarted )
@@ -208,16 +216,18 @@ public class PrettyPrintXMLWriter
         this.lineSeparator = lineSeparator.toCharArray();
     }
 
-    public void setLineIndenter( String lineIndent )
+    /** {@inheritDoc} */
+    public void setLineIndenter( String lineIndentParameter )
     {
         if ( documentStarted )
         {
             throw new IllegalStateException( "Document headers already written!" );
         }
 
-        this.lineIndent = lineIndent.toCharArray();
+        this.lineIndent = lineIndentParameter.toCharArray();
     }
 
+    /** {@inheritDoc} */
     public void startElement( String elementName )
     {
         boolean firstLine = ensureDocumentStarted();
@@ -237,6 +247,7 @@ public class PrettyPrintXMLWriter
         elementStack.add( depth++, elementName );
     }
 
+    /** {@inheritDoc} */
     public void writeText( String text )
     {
         ensureDocumentStarted();
@@ -248,6 +259,7 @@ public class PrettyPrintXMLWriter
         endOnSameLine = true;
     }
 
+    /** {@inheritDoc} */
     public void writeMarkup( String markup )
     {
         ensureDocumentStarted();
@@ -257,6 +269,7 @@ public class PrettyPrintXMLWriter
         writer.write( markup );
     }
 
+    /** {@inheritDoc} */
     public void endElement()
     {
         String chars = elementStack.get( --depth );

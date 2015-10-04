@@ -31,6 +31,9 @@ package org.apache.maven.shared.utils.cli.shell;
 public class CommandShell
     extends Shell
 {
+    /**
+     * Create an instance.
+     */
     public CommandShell()
     {
         setShellCommand( "command.com" );

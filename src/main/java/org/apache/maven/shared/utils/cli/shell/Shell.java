@@ -116,26 +116,26 @@ public class Shell
     /**
      * Get the command line for the provided executable and arguments in this shell
      *
-     * @param executable executable that the shell has to call
-     * @param arguments  arguments for the executable, not the shell
+     * @param executableParameter executable that the shell has to call
+     * @param argumentsParameter  arguments for the executable, not the shell
      * @return List with one String object with executable and arguments quoted as needed
      */
-    List<String> getCommandLine( String executable, String... arguments )
+    List<String> getCommandLine( String executableParameter, String... argumentsParameter )
     {
-        return getRawCommandLine( executable, arguments );
+        return getRawCommandLine( executableParameter, argumentsParameter );
     }
 
     /**
-     * @param executable Executable.
-     * @param arguments The arguments for the executable.
+     * @param executableParameter Executable.
+     * @param argumentsParameter The arguments for the executable.
      * @return The list on command line. 
      */
-    List<String> getRawCommandLine( String executable, String... arguments )
+    List<String> getRawCommandLine( String executableParameter, String... argumentsParameter )
     {
         List<String> commandLine = new ArrayList<String>();
         StringBuilder sb = new StringBuilder();
 
-        if ( executable != null )
+        if ( executableParameter != null )
         {
             String preamble = getExecutionPreamble();
             if ( preamble != null )
@@ -156,7 +156,7 @@ public class Shell
                 sb.append( getExecutable() );
             }
         }
-        for ( String argument : arguments )
+        for ( String argument : argumentsParameter )
         {
             if ( sb.length() > 0 )
             {
@@ -237,11 +237,11 @@ public class Shell
     }
 
     /**
-     * @param argQuoteDelimiter {@link #argQuoteDelimiter}
+     * @param argQuoteDelimiterParameter {@link #argQuoteDelimiter}
      */
-    void setArgumentQuoteDelimiter( char argQuoteDelimiter )
+    void setArgumentQuoteDelimiter( char argQuoteDelimiterParameter )
     {
-        this.argQuoteDelimiter = argQuoteDelimiter;
+        this.argQuoteDelimiter = argQuoteDelimiterParameter;
     }
 
     char getArgumentQuoteDelimiter()
@@ -250,11 +250,11 @@ public class Shell
     }
 
     /**
-     * @param exeQuoteDelimiter {@link #exeQuoteDelimiter}
+     * @param exeQuoteDelimiterParameter {@link #exeQuoteDelimiter}
      */
-    void setExecutableQuoteDelimiter( char exeQuoteDelimiter )
+    void setExecutableQuoteDelimiter( char exeQuoteDelimiterParameter )
     {
-        this.exeQuoteDelimiter = exeQuoteDelimiter;
+        this.exeQuoteDelimiter = exeQuoteDelimiterParameter;
     }
 
     char getExecutableQuoteDelimiter()

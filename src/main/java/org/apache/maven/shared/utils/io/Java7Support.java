@@ -87,6 +87,10 @@ public class Java7Support
         IS_JAVA7 = isJava7x;
     }
 
+    /**
+     * @param file The file to check for being a symbolic link.
+     * @return true if the file is a symlink false otherwise.
+     */
     public static boolean isSymLink( @Nonnull File file )
     {
         try
@@ -105,6 +109,11 @@ public class Java7Support
     }
 
 
+    /**
+     * @param symlink The sym link.
+     * @return The file.
+     * @throws IOException in case of error.
+     */
     @Nonnull public static File readSymbolicLink( @Nonnull File symlink )
         throws IOException
     {
@@ -125,6 +134,11 @@ public class Java7Support
     }
 
 
+    /**
+     * @param file The file to check.
+     * @return true if exist false otherwise.
+     * @throws IOException in case of failure.
+     */
     public static boolean exists( @Nonnull File file )
         throws IOException
     {
@@ -145,6 +159,12 @@ public class Java7Support
 
     }
 
+    /**
+     * @param symlink The link name.
+     * @param target The target.
+     * @return The linked file.
+     * @throws IOException in case of an error.
+     */
     @Nonnull public static File createSymbolicLink( @Nonnull File symlink,  @Nonnull File target )
         throws IOException
     {
@@ -185,7 +205,7 @@ public class Java7Support
     /**
      * Performs a nio delete
      * @param file the file to delete
-     * @throws IOException
+     * @throws IOException in case of error.
      */
     public static void delete( @Nonnull File file )
         throws IOException
@@ -205,11 +225,17 @@ public class Java7Support
         }
     }
 
+    /**
+     * @return true in case of Java 7.
+     */
     public static boolean isJava7()
     {
         return IS_JAVA7;
     }
 
+    /**
+     * @return true in case of Java7 or greater.
+     */
     public static boolean isAtLeastJava7()
     {
         return IS_JAVA7;

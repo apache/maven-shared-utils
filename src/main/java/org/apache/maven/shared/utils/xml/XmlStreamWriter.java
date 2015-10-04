@@ -30,11 +30,18 @@ import java.io.OutputStream;
 public class XmlStreamWriter
     extends org.apache.commons.io.output.XmlStreamWriter
 {
+    /**
+     * @param out {@link OutputStream}
+     */
     public XmlStreamWriter( OutputStream out )
     {
         super( out );
     }
 
+    /**
+     * @param file The file to use.
+     * @throws FileNotFoundException in case of not found file.
+     */
     public XmlStreamWriter( File file )
         throws FileNotFoundException
     {

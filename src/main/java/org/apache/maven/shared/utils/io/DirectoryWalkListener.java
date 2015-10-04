@@ -48,5 +48,8 @@ public interface DirectoryWalkListener
      */
     void directoryWalkFinished();
 
+    /**
+     * @param message The message for the debugging output.
+     */
     void debug( String message );
 }

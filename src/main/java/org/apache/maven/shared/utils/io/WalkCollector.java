@@ -41,6 +41,9 @@ public class WalkCollector
 
     int percentageHigh;
 
+    /**
+     * Create an instance.
+     */
     public WalkCollector()
     {
         steps = new ArrayList<File>();
@@ -50,17 +53,20 @@ public class WalkCollector
         percentageHigh = 0;
     }
 
+    /** {@inheritDoc} */
     public void debug( String message )
     {
         // can be used to set some message
     }
 
+    /** {@inheritDoc} */
     public void directoryWalkStarting( File basedir )
     {
         startingDir = basedir;
         startCount++;
     }
 
+    /** {@inheritDoc} */
     public void directoryWalkStep( int percentage, File file )
     {
         steps.add( file );
@@ -68,6 +74,7 @@ public class WalkCollector
         percentageHigh = Math.max( percentageHigh, percentage );
     }
 
+    /** {@inheritDoc} */
     public void directoryWalkFinished()
     {
         finishCount++;

@@ -49,7 +49,7 @@ public class Xpp3DomBuilder
     /**
      * @param reader {@link Reader}
      * @return the built dom.
-     * @throws XmlPullParserException
+     * @throws XmlPullParserException in case of an error.
      */
     public static Xpp3Dom build( @WillClose @Nonnull Reader reader )
         throws XmlPullParserException
@@ -59,9 +59,9 @@ public class Xpp3DomBuilder
 
     /**
      * @param is {@link InputStream}
-     * @param encoding
+     * @param encoding The encoding.
      * @return the built dom.
-     * @throws XmlPullParserException
+     * @throws XmlPullParserException in case of an error.
      */
     public static Xpp3Dom build( @WillClose InputStream is, @Nonnull String encoding )
         throws XmlPullParserException
@@ -74,7 +74,7 @@ public class Xpp3DomBuilder
      * @param encoding The encoding.
      * @param trim true/false.
      * @return the built dom.
-     * @throws XmlPullParserException
+     * @throws XmlPullParserException in case of an error.
      */
     public static Xpp3Dom build( @WillClose InputStream is, @Nonnull String encoding, boolean trim )
         throws XmlPullParserException
@@ -94,7 +94,7 @@ public class Xpp3DomBuilder
      * @param reader {@link Reader}
      * @param trim true/false.
      * @return the built dom.
-     * @throws XmlPullParserException
+     * @throws XmlPullParserException in case of an error.
      */
     public static Xpp3Dom build( @WillClose Reader reader, boolean trim )
         throws XmlPullParserException

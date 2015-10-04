@@ -62,6 +62,7 @@ public class ClassMap
 
     /**
      * Standard constructor
+     * @param clazz The class.
      */
     public ClassMap( Class<?> clazz )
     {
@@ -88,6 +89,10 @@ public class ClassMap
      * <p/>
      * If nothing is found, then we must actually go
      * and introspect the method from the MethodMap.
+     * @param name Method name.
+     * @param params Method parameters.
+     * @return The found method.
+     * @throws MethodMap.AmbiguousException in case of duplicate methods.
      */
     public Method findMethod( String name, Object... params )
         throws MethodMap.AmbiguousException

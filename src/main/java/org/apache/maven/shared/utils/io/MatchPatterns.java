@@ -59,6 +59,11 @@ public class MatchPatterns
         return false;
     }
 
+    /**
+     * @param name The name.
+     * @param isCaseSensitive being case sensetive.
+     * @return true if any of the supplied patterns match start.
+     */
     public boolean matchesPatternStart( @Nonnull String name, boolean isCaseSensitive )
     {
         for ( MatchPattern includesPattern : patterns )
@@ -71,6 +76,10 @@ public class MatchPatterns
         return false;
     }
 
+    /**
+     * @param sources The sources
+     * @return Converted match patterns.
+     */
     public static MatchPatterns from( @Nonnull String... sources )
     {
         final int length = sources.length;

@@ -33,6 +33,9 @@ import java.util.List;
 public class CmdShell
     extends Shell
 {
+    /**
+     * Create an instance of CmdShell.
+     */
     public CmdShell()
     {
         setShellCommand( "cmd.exe" );

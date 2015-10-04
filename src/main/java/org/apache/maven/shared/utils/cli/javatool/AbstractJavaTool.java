@@ -126,6 +126,9 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest>
         return result;
     }
 
+    /**
+     * @return {@link InputStream}
+     */
     protected InputStream createSystemInputStream()
     {
         InputStream systemIn = new InputStream()
@@ -143,6 +146,11 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest>
         return systemIn;
     }
 
+    /**
+     * @param cli {@link Commandline}
+     * @param request {@link Request}
+     * @return {@link JavaToolRequest}
+     */
     protected JavaToolResult executeCommandLine( Commandline cli, Request request )
     {
         if ( getLogger().isDebugEnabled() )
@@ -174,6 +182,10 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest>
         return result;
     }
 
+    /**
+     * @param request {@link Request}
+     * @return {@link StreamConsumer}
+     */
     protected StreamConsumer createSystemErrorStreamConsumer( Request request )
     {
         StreamConsumer systemErr = request.getSystemErrorStreamConsumer();
@@ -196,6 +208,10 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest>
         return systemErr;
     }
 
+    /**
+     * @param request {@link Request}
+     * @return {@link StreamConsumer}
+     */
     protected StreamConsumer createSystemOutStreamConsumer( Request request )
     {
         StreamConsumer systemOut = request.getSystemOutStreamConsumer();
