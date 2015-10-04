@@ -281,11 +281,11 @@ public class DirectoryScanner
     /**
      * Sets whether or not the file system should be regarded as case sensitive.
      *
-     * @param isCaseSensitive whether or not the file system should be regarded as a case sensitive one
+     * @param isCaseSensitiveParameter whether or not the file system should be regarded as a case sensitive one
      */
-    public void setCaseSensitive( final boolean isCaseSensitive )
+    public void setCaseSensitive( final boolean isCaseSensitiveParameter )
     {
-        this.isCaseSensitive = isCaseSensitive;
+        this.isCaseSensitive = isCaseSensitiveParameter;
     }
 
     /**
@@ -360,6 +360,9 @@ public class DirectoryScanner
         }
     }
 
+    /**
+     * @param scanConductor {@link #scanConductor}
+     */
     public void setScanConductor( final ScanConductor scanConductor )
     {
         this.scanConductor = scanConductor;
@@ -443,6 +446,7 @@ public class DirectoryScanner
      * {@link DirectoryScanResult#getFilesAdded()} and {@link DirectoryScanResult#getFilesRemoved()}
      *
      * @param oldFiles the list of previously captured files names.
+     * @return the result of the directory scan.
      */
     public DirectoryScanResult diffIncludedFiles( String... oldFiles )
     {
@@ -455,6 +459,11 @@ public class DirectoryScanner
         return diffFiles( oldFiles, filesIncluded.toArray( new String[filesIncluded.size()] ) );
     }
 
+    /**
+     * @param oldFiles array of old files.
+     * @param newFiles array of new files.
+     * @return calculated differerence.
+     */
     public static DirectoryScanResult diffFiles( @Nullable String[] oldFiles, @Nullable  String[] newFiles )
     {
         Set<String> oldFileSet = arrayAsHashSet( oldFiles );
@@ -583,39 +592,7 @@ public class DirectoryScanner
 
         if ( !followSymlinks )
         {
-            final List<String> noLinks = new ArrayList<String>();
-            for ( final String newfile : newfiles )
-            {
-                try
-                {
-                    if ( isSymbolicLink( dir, newfile ) )
-                    {
-                        final String name = vpath + newfile;
-                        final File file = new File( dir, newfile );
-                        if ( file.isDirectory() )
-                        {
-                            dirsExcluded.add( name );
-                        }
-                        else
-                        {
-                            filesExcluded.add( name );
-                        }
-                    }
-                    else
-                    {
-                        noLinks.add( newfile );
-                    }
-                }
-                catch ( final IOException ioe )
-                {
-                    final String msg =
-                        "IOException caught while checking " + "for links, couldn't get cannonical path!";
-                    // will be caught and redirected to Ant's logging system
-                    System.err.println( msg );
-                    noLinks.add( newfile );
-                }
-            }
-            newfiles = noLinks.toArray( new String[noLinks.size()] );
+            newfiles = doNotFollowSymbolicLinks( dir, vpath, newfiles );
         }
 
         for ( final String newfile : newfiles )
@@ -736,6 +713,44 @@ public class DirectoryScanner
                 }
             }
         }
+    }
+
+    private String[] doNotFollowSymbolicLinks( final File dir, final String vpath, String[] newfiles )
+    {
+        final List<String> noLinks = new ArrayList<String>();
+        for ( final String newfile : newfiles )
+        {
+            try
+            {
+                if ( isSymbolicLink( dir, newfile ) )
+                {
+                    final String name = vpath + newfile;
+                    final File file = new File( dir, newfile );
+                    if ( file.isDirectory() )
+                    {
+                        dirsExcluded.add( name );
+                    }
+                    else
+                    {
+                        filesExcluded.add( name );
+                    }
+                }
+                else
+                {
+                    noLinks.add( newfile );
+                }
+            }
+            catch ( final IOException ioe )
+            {
+                final String msg =
+                    "IOException caught while checking " + "for links, couldn't get cannonical path!";
+                // will be caught and redirected to Ant's logging system
+                System.err.println( msg );
+                noLinks.add( newfile );
+            }
+        }
+        newfiles = noLinks.toArray( new String[noLinks.size()] );
+        return newfiles;
     }
 
     /**

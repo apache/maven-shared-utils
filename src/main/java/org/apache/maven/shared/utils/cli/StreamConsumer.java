@@ -34,6 +34,7 @@ public interface StreamConsumer
 {
     /**
      * Called when the StreamPumper pumps a line from the Stream.
+     * @param line The line to be consumed.
      */
     void consumeLine( String line );
 }

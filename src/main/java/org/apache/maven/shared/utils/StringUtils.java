@@ -517,6 +517,9 @@ public class StringUtils
     }
 
     /**
+     * @param text The text to be split.
+     * @param separator The separator at which the text will be split.
+     * @return The resulting array.
      * @see #split(String, String, int)
      */
     @Nonnull public static String[] split( @Nonnull String text, @Nullable String separator )
@@ -1981,8 +1984,10 @@ public class StringUtils
      * Else abbreviate it to (substring(str, 0, max-3) + "...").
      * If maxWidth is less than 3, throw an IllegalArgumentException.
      * In no case will it return a string of length greater than maxWidth.
-     *
+     * 
+     * @param s The string to be abbreviated.
      * @param maxWidth maximum length of result string
+     * @return The abbreviated string.
      */
     @Nonnull public static String abbreviate( @Nonnull String s, int maxWidth )
     {
@@ -2001,6 +2006,7 @@ public class StringUtils
      * @param s        String to abbreviate.
      * @param offset   left edge of source string
      * @param maxWidth maximum length of result string
+     * @return The abbreviated string.
      */
     @Nonnull public static String abbreviate( @Nonnull String s, int offset, int maxWidth )
     {
@@ -2045,6 +2051,8 @@ public class StringUtils
      * <p/>
      * E.g. strdiff("i am a machine", "i am a robot") -> "robot"
      *
+     * @param s1 The first string.
+     * @param s2 The second string.
      * @return the portion of s2 where it differs from s1; returns the empty string ("") if they are equal
      */
     public static String difference( @Nonnull String s1, @Nonnull String s2 )
@@ -2063,6 +2071,8 @@ public class StringUtils
      * E.g. strdiff("i am a machine", "i am a robot") -> 7
      * </p>
      *
+     * @param s1 The first string.
+     * @param s2 The second string.
      * @return the index where s2 and s1 begin to differ; -1 if they are equal
      */
     public static int differenceAt( @Nonnull String s1, @Nonnull String s2 )
@@ -2087,8 +2097,8 @@ public class StringUtils
      * Any text looking like '${key}' will get replaced by the value stored
      * in the namespace map under the 'key'.
      *
-     * @param text
-     * @param namespace
+     * @param text The text where replacements will be searched for.
+     * @param namespace The namespace which contains the replacements.
      * @return the interpolated text.
      */
     public static String interpolate( String text, @Nonnull Map<?, ?> namespace )
@@ -2125,8 +2135,8 @@ public class StringUtils
      * </pre>
      * will become 'ThisIsIt'.
      *
-     * @param data
-     * @param replaceThis
+     * @param data The data.
+     * @param replaceThis The things which should be replaced.
      * @return humped String
      */
     @Nonnull public static String removeAndHump( @Nonnull String data, @Nonnull String replaceThis )
@@ -2203,7 +2213,7 @@ public class StringUtils
      * <p/>
      * 'ThisIsIt' will become 'this-is-it'.
      *
-     * @param view
+     * @param view The view.
      * @return deHumped String
      */
     @Nonnull public static String addAndDeHump( @Nonnull String view )
@@ -2234,8 +2244,8 @@ public class StringUtils
      * StringUtils.quoteAndEscape("a\"bc", '\'') = 'a\"bc'
      * </pre>
      *
-     * @param source
-     * @param quoteChar
+     * @param source The source.
+     * @param quoteChar The quote character.
      * @return the String quoted and escaped
      * @see #quoteAndEscape(String, char, char[], char[], char, boolean)
      * @see #quoteAndEscape(String, char, char[], char[], char, boolean)
@@ -2249,9 +2259,9 @@ public class StringUtils
     /**
      * <p>Quote and escape a String with the given character, handling <code>null</code>.</p>
      *
-     * @param source
-     * @param quoteChar
-     * @param quotingTriggers
+     * @param source The source.
+     * @param quoteChar The quote character.
+     * @param quotingTriggers The quoting trigger.
      * @return the String quoted and escaped
      * @see #quoteAndEscape(String, char, char[], char[], char, boolean)
      * 
@@ -2262,11 +2272,11 @@ public class StringUtils
     }
 
     /**
-     * @param source
-     * @param quoteChar
-     * @param escapedChars
-     * @param escapeChar
-     * @param force
+     * @param source The source.
+     * @param quoteChar The quote character.
+     * @param escapedChars The escaped characters.
+     * @param escapeChar The escape character.
+     * @param force true/false.
      * @return the String quoted and escaped
      * @see #quoteAndEscape(String, char, char[], char[], char, boolean)
      * 
@@ -2278,12 +2288,12 @@ public class StringUtils
     }
 
     /**
-     * @param source
-     * @param quoteChar
-     * @param escapedChars
-     * @param quotingTriggers
-     * @param escapeChar
-     * @param force
+     * @param source The source.
+     * @param quoteChar The quote character.
+     * @param escapedChars The escaped characters.
+     * @param quotingTriggers The quoting trigger.
+     * @param escapeChar The escape character.
+     * @param force true/false.
      * @return the String quoted and escaped
      */
     public static String quoteAndEscape( @Nullable String source, char quoteChar, @Nonnull final char[] escapedChars,
@@ -2332,9 +2342,9 @@ public class StringUtils
     }
 
     /**
-     * @param source
-     * @param escapedChars
-     * @param escapeChar
+     * @param source The source.
+     * @param escapedChars escape characters.
+     * @param escapeChar escape character.
      * @return the String escaped
      */
     public static String escape( @Nullable String source, @Nonnull final char[] escapedChars, char escapeChar )

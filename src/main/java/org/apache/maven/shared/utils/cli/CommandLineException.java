@@ -32,7 +32,7 @@ public class CommandLineException
     private static final long serialVersionUID = 1344773066470228441L;
 
     /**
-     * @param message
+     * @param message The message of the exception.
      */
     public CommandLineException( String message )
     {
@@ -40,8 +40,8 @@ public class CommandLineException
     }
 
     /**
-     * @param message
-     * @param cause
+     * @param message The message of the exception.
+     * @param cause The problem which caused the exception.
      */
     public CommandLineException( String message, Throwable cause )
     {

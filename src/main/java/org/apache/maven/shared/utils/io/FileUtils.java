@@ -87,6 +87,9 @@ import java.util.Random;
  */
 public class FileUtils
 {
+    /**
+     * protected constructor.
+     */
     protected FileUtils()
     {
         // This is a utility class.  Normally dont instantiate
@@ -304,7 +307,7 @@ public class FileUtils
      * @param file the file path
      * @return the file content lines as String[] using the systems default encoding.
      * An empty List if the file didn't exist.
-     * @throws IOException
+     * @throws IOException in case of failure.
      */
     @Nonnull public static String[] fileReadArray( @Nonnull File file )
         throws IOException
@@ -657,7 +660,7 @@ public class FileUtils
      * @return The equivalent <code>File</code> object, or <code>null</code> if the URL's protocol
      * is not <code>file</code>
      */
-    @Nullable public static File toFile( final @Nullable URL url )
+    @Nullable public static File toFile( @Nullable final URL url )
     {
         if ( url == null || !url.getProtocol().equalsIgnoreCase( "file" ) )
         {
@@ -1179,6 +1182,10 @@ public class FileUtils
         }
     }
 
+    /**
+     * @param file The file.
+     * @return true / false
+     */
     public static boolean deleteLegacyStyle( @Nonnull File file )
     {
         if ( Java7Support.isAtLeastJava7() )
@@ -1428,7 +1435,7 @@ public class FileUtils
      * @param includes  the includes pattern, comma separated
      * @param excludes  the excludes pattern, comma separated
      * @return a list of File objects
-     * @throws IOException
+     * @throws IOException in case of failure.
      * @see #getFileNames(File, String, String, boolean)
      */
     @Nonnull
@@ -1446,7 +1453,7 @@ public class FileUtils
      * @param excludes       the excludes pattern, comma separated
      * @param includeBasedir true to include the base dir in each file
      * @return a list of File objects
-     * @throws IOException
+     * @throws IOException in case of failure.
      * @see #getFileNames(File, String, String, boolean)
      */
     @Nonnull
@@ -1475,7 +1482,7 @@ public class FileUtils
      * @param excludes       the excludes pattern, comma separated
      * @param includeBasedir true to include the base dir in each String of file
      * @return a list of files as String
-     * @throws IOException
+     * @throws IOException in case of failure.
      */
     @Nonnull public static List<String> getFileNames( @Nonnull File directory, @Nullable String includes,
                                                       @Nullable String excludes, boolean includeBasedir )
@@ -1512,7 +1519,7 @@ public class FileUtils
      * @param excludes       the excludes pattern, comma separated
      * @param includeBasedir true to include the base dir in each String of file
      * @return a list of directories as String
-     * @throws IOException
+     * @throws IOException in case of failure.
      */
     @Nonnull public static List<String> getDirectoryNames( @Nonnull File directory, @Nullable String includes,
                                                            @Nullable String excludes, boolean includeBasedir )
@@ -1530,7 +1537,7 @@ public class FileUtils
      * @param includeBasedir  true to include the base dir in each String of file
      * @param isCaseSensitive true if case sensitive
      * @return a list of directories as String
-     * @throws IOException
+     * @throws IOException in case of failure.
      */
     @Nonnull public static List<String> getDirectoryNames( @Nonnull File directory, @Nullable String includes,
                                                            @Nullable String excludes, boolean includeBasedir,
@@ -1860,10 +1867,15 @@ public class FileUtils
     }
 
     /**
-     * 
+     * Wrapper class for Filter.
+     *
      */
     public abstract static class FilterWrapper
     {
+        /**
+         * @param fileReader {@link Reader}
+         * @return The Reader instance.
+         */
         public abstract Reader getReader( Reader fileReader );
     }
 
@@ -2010,6 +2022,8 @@ public class FileUtils
      * </p>
      *
      * @param file the file to check
+     * @throws IOException in case of failure.
+     * @return true if symbolic link false otherwise.
      *
      */
     public static boolean isSymbolicLink( @Nonnull final File file )
@@ -2029,6 +2043,7 @@ public class FileUtils
      * @return true if and only if we reliably can say this is a symlink. This will
      *         always return false for java versions prior to 1.7.
      *
+     * @throws IOException in case of failure.
      */
     public static boolean isSymbolicLinkForSure( @Nonnull final File file )
         throws IOException

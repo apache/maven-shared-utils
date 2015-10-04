@@ -51,11 +51,15 @@ public abstract class CommandLineUtils
 
         private static final String LS = System.getProperty( "line.separator" );
 
+        /** {@inheritDoc} */
         public void consumeLine( String line )
         {
             string.append( line ).append( LS );
         }
 
+        /**
+         * @return The output.
+         */
         public String getOutput()
         {
             return string.toString();
@@ -74,6 +78,7 @@ public abstract class CommandLineUtils
             this.setContextClassLoader( null );
         }
 
+        /** {@inheritDoc} */
         public void run()
         {
             process.destroy();
@@ -81,12 +86,27 @@ public abstract class CommandLineUtils
     }
 
 
+    /**
+     * @param cl The command line {@link Commandline}
+     * @param systemOut {@link StreamConsumer}
+     * @param systemErr {@link StreamConsumer}
+     * @return return code.
+     * @throws CommandLineException in case of a problem.
+     */
     public static int executeCommandLine( @Nonnull Commandline cl, StreamConsumer systemOut, StreamConsumer systemErr )
         throws CommandLineException
     {
         return executeCommandLine( cl, null, systemOut, systemErr, 0 );
     }
 
+    /**
+     * @param cl The command line {@link Commandline}
+     * @param systemOut {@link StreamConsumer}
+     * @param systemErr {@link StreamConsumer}
+     * @param timeoutInSeconds The timeout.
+     * @return return code.
+     * @throws CommandLineException in case of a problem.
+     */
     public static int executeCommandLine( @Nonnull Commandline cl, StreamConsumer systemOut, StreamConsumer systemErr,
                                           int timeoutInSeconds )
         throws CommandLineException
@@ -94,6 +114,14 @@ public abstract class CommandLineUtils
         return executeCommandLine( cl, null, systemOut, systemErr, timeoutInSeconds );
     }
 
+    /**
+     * @param cl The command line {@link Commandline}
+     * @param systemIn {@link StreamConsumer}
+     * @param systemOut {@link StreamConsumer}
+     * @param systemErr {@link StreamConsumer}
+     * @return return code.
+     * @throws CommandLineException in case of a problem.
+     */
     public static int executeCommandLine( @Nonnull Commandline cl, InputStream systemIn, StreamConsumer systemOut,
                                           StreamConsumer systemErr )
         throws CommandLineException
@@ -109,7 +137,6 @@ public abstract class CommandLineUtils
      * @param timeoutInSeconds Positive integer to specify timeout, zero and negative integers for no timeout.
      * @return A return value, see {@link Process#exitValue()}
      * @throws CommandLineException or CommandLineTimeOutException if time out occurs
-     * @noinspection ThrowableResultOfMethodCallIgnored
      */
     public static int executeCommandLine( @Nonnull Commandline cl, InputStream systemIn, StreamConsumer systemOut,
                                           StreamConsumer systemErr, int timeoutInSeconds )
@@ -128,7 +155,6 @@ public abstract class CommandLineUtils
      *  exceeded, but before waiting on the stream feeder and pumpers to finish.
      * @return A return value, see {@link Process#exitValue()}
      * @throws CommandLineException or CommandLineTimeOutException if time out occurs
-     * @noinspection ThrowableResultOfMethodCallIgnored
      */
     public static int executeCommandLine( @Nonnull Commandline cl, InputStream systemIn, StreamConsumer systemOut,
                                           StreamConsumer systemErr, int timeoutInSeconds,
@@ -150,7 +176,6 @@ public abstract class CommandLineUtils
      * @param streamCharset    Charset to use for reading streams
      * @return A return value, see {@link Process#exitValue()}
      * @throws CommandLineException or CommandLineTimeOutException if time out occurs
-     * @noinspection ThrowableResultOfMethodCallIgnored
      */
     public static int executeCommandLine( @Nonnull Commandline cl, InputStream systemIn, StreamConsumer systemOut,
                                           StreamConsumer systemErr, int timeoutInSeconds,
@@ -177,7 +202,6 @@ public abstract class CommandLineUtils
      *         must be called on this to be sure the forked process has terminated, no guarantees is made about
      *         any internal state before after the completion of the call statements
      * @throws CommandLineException or CommandLineTimeOutException if time out occurs
-     * @noinspection ThrowableResultOfMethodCallIgnored
      */
     public static CommandLineCallable executeCommandLineAsCallable( @Nonnull final Commandline cl,
                                                                     @Nullable final InputStream systemIn,
@@ -205,7 +229,6 @@ public abstract class CommandLineUtils
      *         must be called on this to be sure the forked process has terminated, no guarantees is made about
      *         any internal state before after the completion of the call statements
      * @throws CommandLineException or CommandLineTimeOutException if time out occurs
-     * @noinspection ThrowableResultOfMethodCallIgnored
      */
     public static CommandLineCallable executeCommandLineAsCallable( @Nonnull final Commandline cl,
                                                                     @Nullable final InputStream systemIn,
@@ -384,8 +407,12 @@ public abstract class CommandLineUtils
         }
     }
 
-    public static String[] translateCommandline( String toProcess )
-        throws Exception
+    /**
+     * @param toProcess The command line to translate.
+     * @return The array of translated parts.
+     * @throws CommandLineException in case of unbalanced quotes.
+     */
+    public static String[] translateCommandline( String toProcess ) throws CommandLineException
     {
         if ( ( toProcess == null ) || ( toProcess.length() == 0 ) )
         {
@@ -465,6 +492,10 @@ public abstract class CommandLineUtils
         return tokens.toArray( new String[tokens.size()] );
     }
 
+    /**
+     * @param line The line
+     * @return The concatenate lines.
+     */
     public static String toString( String... line )
     {
         // empty path return empty string

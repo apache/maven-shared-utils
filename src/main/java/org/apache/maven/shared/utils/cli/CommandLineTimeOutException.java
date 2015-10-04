@@ -34,8 +34,8 @@ public class CommandLineTimeOutException
     private static final long serialVersionUID = 7322428741683224481L;
 
     /**
-     * @param message
-     * @param cause
+     * @param message The message of the exception.
+     * @param cause The cause of the exception.
      */
     public CommandLineTimeOutException( String message, Throwable cause )
     {

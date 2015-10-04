@@ -79,6 +79,7 @@ public class Commandline
     /**
      * Create a new command line object.
      * Shell is autodetected from operating system
+     * @param shell The shell instance.
      */
     public Commandline( Shell shell )
     {
@@ -168,6 +169,7 @@ public class Commandline
      *
      * @param insertAtStart if true, the argument is inserted at the
      *                      beginning of the list of args, otherwise it is appended.
+     * @return The arguments.
      */
     public Arg createArg( boolean insertAtStart )
     {
@@ -185,18 +187,25 @@ public class Commandline
 
     /**
      * Sets the executable to run.
+     * @param executable The executable.
      */
     public void setExecutable( String executable )
     {
         shell.setExecutable( executable );
     }
 
+    /**
+     * @return The executable.
+     */
     public String getExecutable()
     {
 
         return shell.getExecutable();
     }
 
+    /**
+     * @param line The arguments.
+     */
     public void addArguments( String... line )
     {
         for ( String aLine : line )
@@ -207,6 +216,8 @@ public class Commandline
 
     /**
      * Add an environment variable
+     * @param name The name of the environment variable.
+     * @param value The appropriate value.
      */
     public void addEnvironment( String name, String value )
     {
@@ -233,6 +244,7 @@ public class Commandline
 
     /**
      * Return the list of environment variables
+     * @return an array of all environment variables.
      */
     public String[] getEnvironmentVariables()
     {
@@ -250,6 +262,7 @@ public class Commandline
 
     /**
      * Returns the executable and all defined arguments.
+     * @return an array of all arguments incl. executable.
      */
     public String[] getCommandline()
     {
@@ -288,6 +301,7 @@ public class Commandline
     /**
      * Returns all arguments defined by <code>addLine</code>,
      * <code>addValue</code> or the argument object.
+     * @return an array of arguments.
      */
     public String[] getArguments()
     {
@@ -299,6 +313,7 @@ public class Commandline
      * <code>addValue</code> or the argument object.
      *
      * @param mask flag to mask any arguments (having his {@code mask} field to {@code true}).
+     * @return an array of arguments.
      */
     public String[] getArguments( boolean mask )
     {
@@ -328,12 +343,16 @@ public class Commandline
         return result.toArray( new String[result.size()] );
     }
 
+    /** {@inheritDoc}
+     */
     public String toString()
     {
         return StringUtils.join( getShellCommandline( true ), " " );
     }
 
 
+    /** {@inheritDoc}
+     */
     public Object clone()
     {
         throw new RuntimeException( "Do we ever clone a commandline?" );
@@ -343,7 +362,8 @@ public class Commandline
     }
 
     /**
-     * Sets execution directory.
+     * Sets working directory.
+     * @param path The to be set as working directory.
      */
     public void setWorkingDirectory( String path )
     {
@@ -352,12 +372,16 @@ public class Commandline
 
     /**
      * Sets execution directory.
+     * @param workingDirectory The working directory.
      */
     public void setWorkingDirectory( File workingDirectory )
     {
         shell.setWorkingDirectory( workingDirectory );
     }
 
+    /**
+     * @return The working directory.
+     */
     public File getWorkingDirectory()
     {
         return shell.getWorkingDirectory();
@@ -373,6 +397,8 @@ public class Commandline
 
     /**
      * Executes the command.
+     * @return The process.
+     * @throws CommandLineException in case of errors.
      */
     public Process execute()
         throws CommandLineException
@@ -427,6 +453,7 @@ public class Commandline
 
     /**
      * Get the shell to be used in this command line.
+     * @return the shell.
      */
     public Shell getShell()
     {
@@ -489,11 +516,17 @@ public class Commandline
             this.mask = mask;
         }
 
+        /**
+         * @return The parts.
+         */
         private String[] getParts()
         {
             return parts;
         }
 
+        /**
+         * @return true/false
+         */
         public boolean isMask()
         {
             return mask;

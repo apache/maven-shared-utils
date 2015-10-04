@@ -26,6 +26,7 @@ package org.apache.maven.shared.utils.cli;
 public class DefaultConsumer
     implements StreamConsumer
 {
+    /** {@inheritDoc} */
     public void consumeLine( String line )
     {
         System.out.println( line );

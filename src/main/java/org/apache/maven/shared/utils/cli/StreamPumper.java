@@ -32,12 +32,10 @@ import javax.annotation.Nullable;
 import org.apache.maven.shared.utils.io.IOUtil;
 
 /**
- * Class to pump the error stream during Process's runtime. Copied from the Ant
- * built-in task.
+ * Class to pump the error stream during Process's runtime. Copied from the Ant built-in task.
  *
  * @author <a href="mailto:fvancea@maxiq.com">Florin Vancea </a>
  * @author <a href="mailto:pj@thoughtworks.com">Paul Julius </a>
- *
  */
 public class StreamPumper
     extends AbstractStreamHandler
@@ -52,16 +50,30 @@ public class StreamPumper
 
     private static final int SIZE = 1024;
 
+    /**
+     * @param in {@link InputStream}
+     * @param consumer {@link StreamConsumer}
+     */
     public StreamPumper( InputStream in, StreamConsumer consumer )
     {
         this( new InputStreamReader( in ), null, consumer );
     }
 
-    public StreamPumper( InputStream in, StreamConsumer consumer,  @Nullable Charset charset )
+    /**
+     * @param in {@link InputStream}
+     * @param consumer {@link StreamConsumer}
+     * @param charset {@link Charset}
+     */
+    public StreamPumper( InputStream in, StreamConsumer consumer, @Nullable Charset charset )
     {
         this( null == charset ? new InputStreamReader( in ) : new InputStreamReader( in, charset ), null, consumer );
     }
 
+    /**
+     * @param in {@link Writer}
+     * @param writer {@link PrintWriter}
+     * @param consumer {@link StreamConsumer}
+     */
     private StreamPumper( Reader in, PrintWriter writer, StreamConsumer consumer )
     {
         this.in = new BufferedReader( in, SIZE );
@@ -69,6 +81,7 @@ public class StreamPumper
         this.consumer = consumer;
     }
 
+    /** run it. */
     public void run()
     {
         try
@@ -113,6 +126,9 @@ public class StreamPumper
         }
     }
 
+    /**
+     * flush.
+     */
     public void flush()
     {
         if ( out != null )
@@ -121,11 +137,17 @@ public class StreamPumper
         }
     }
 
+    /**
+     * Close it.
+     */
     public void close()
     {
         IOUtil.close( out );
     }
 
+    /**
+     * @return {@link Exception}
+     */
     public Exception getException()
     {
         return exception;

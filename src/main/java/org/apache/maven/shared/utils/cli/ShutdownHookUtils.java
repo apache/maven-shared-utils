@@ -32,6 +32,9 @@ import java.security.AccessControlException;
 public class ShutdownHookUtils
 {
 
+    /**
+     * @param hook The thread hook.
+     */
     public static void addShutDownHook( Thread hook )
     {
         try
@@ -48,6 +51,9 @@ public class ShutdownHookUtils
         }
     }
 
+    /**
+     * @param hook The hook which should be removed.
+     */
     public static void removeShutdownHook( Thread hook )
     {
         try

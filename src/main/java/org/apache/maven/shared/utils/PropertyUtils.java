@@ -36,13 +36,16 @@ import org.apache.maven.shared.utils.io.IOUtil;
 public class PropertyUtils
 {
 
+    /**
+     * The constructor.
+     */
     public PropertyUtils()
     {
         // should throw new IllegalAccessError( "Utility class" );
     }
 
     /**
-     * @param url
+     * @param url The URL which should be used to load the properties.
      * @return The loaded properties.
      */
     public static java.util.Properties loadProperties( @Nonnull java.net.URL url )
@@ -59,7 +62,7 @@ public class PropertyUtils
     }
 
     /**
-     * @param file
+     * @param file The file from which the properties will be loaded.
      * @return The loaded properties.
      */
     public static Properties loadProperties( @Nonnull File file )

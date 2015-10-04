@@ -32,12 +32,12 @@ public interface Arg
     void setValue( String value );
 
     /**
-     * @param line
+     * @param line The line of arguments.
      */
     void setLine( String line );
 
     /**
-     * @param value
+     * @param value The file to be set.
      */
     void setFile( File value );
 
