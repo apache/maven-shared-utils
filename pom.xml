@@ -164,18 +164,9 @@
         <groupId>org.apache.rat</groupId>
         <artifactId>apache-rat-plugin</artifactId>
         <configuration>
-          <excludes>
-            <exclude>.git/**/*</exclude>
-            <exclude>.idea/**/*</exclude>
-            <exclude>**/.svn/**/*</exclude>
-            <exclude>**/*.iml</exclude>
-            <exclude>**/*.ipr</exclude>
-            <exclude>**/*.iws</exclude>
-            <exclude>**/*.versionsBackup</exclude>
-            <exclude>.gitignore</exclude>
+          <excludes combine.children="append">
             <exclude>src/test/resources/directorywalker/**/*</exclude>
             <exclude>src/test/resources/symlinks/**/*</exclude>
-            <exclude>dependency-reduced-pom.xml</exclude>
           </excludes>
         </configuration>
       </plugin>
