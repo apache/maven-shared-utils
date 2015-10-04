@@ -1,5 +1,7 @@
 package org.apache.maven.shared.utils.cli.shell;
 
+import java.util.List;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -21,9 +23,6 @@ package org.apache.maven.shared.utils.cli.shell;
 
 import org.apache.maven.shared.utils.StringUtils;
 import org.apache.maven.shared.utils.cli.Commandline;
-
-import java.util.Arrays;
-import java.util.List;
 
 import junit.framework.TestCase;
 
@@ -141,7 +140,7 @@ public class BourneShellTest
         commandline.createArg().setValue( "--password" );
         commandline.createArg().setValue( ";password" );
         lines = commandline.getShell().getShellCommandLine( commandline.getArguments() );
-        System.out.println( Arrays.asList( lines ) );
+        System.out.println( lines );
 
         assertEquals( "/bin/sh", lines.get( 0) );
         assertEquals( "-c", lines.get( 1 ) );
@@ -152,7 +151,7 @@ public class BourneShellTest
         commandline.createArg().setValue( "--password" );
         commandline.createArg().setValue( ";password" );
         lines = commandline.getShell().getShellCommandLine( commandline.getArguments() );
-        System.out.println( Arrays.asList( lines ) );
+        System.out.println( lines );
 
         assertEquals( "cmd.exe", lines.get( 0 ) );
         assertEquals( "/X", lines.get( 1 ) );
