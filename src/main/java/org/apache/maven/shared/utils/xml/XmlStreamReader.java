@@ -147,7 +147,9 @@ public class XmlStreamReader
         this( is, httpContentType, lenient, null );
     }
 
-    /** {@inheritDoc} */
+    /**
+     * @return The current encoding.
+     */
     public String getEncoding()
     {
         return reader.getEncoding();

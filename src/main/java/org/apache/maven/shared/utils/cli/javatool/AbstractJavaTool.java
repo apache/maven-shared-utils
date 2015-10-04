@@ -148,7 +148,7 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest>
 
     /**
      * @param cli {@link Commandline}
-     * @param request {@link Request}
+     * @param request The request.
      * @return {@link JavaToolRequest}
      */
     protected JavaToolResult executeCommandLine( Commandline cli, Request request )
@@ -183,7 +183,7 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest>
     }
 
     /**
-     * @param request {@link Request}
+     * @param request The request.
      * @return {@link StreamConsumer}
      */
     protected StreamConsumer createSystemErrorStreamConsumer( Request request )
@@ -209,7 +209,7 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest>
     }
 
     /**
-     * @param request {@link Request}
+     * @param request The request.
      * @return {@link StreamConsumer}
      */
     protected StreamConsumer createSystemOutStreamConsumer( Request request )

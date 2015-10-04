@@ -70,7 +70,7 @@ public class ExpandTest
      * Create a clean target directory for unzipping.
      * If it did exist, then clean it first.
      *
-     * @return
+     * @return The target folder.
      */
     private File getTestTargetDir()
         throws Exception

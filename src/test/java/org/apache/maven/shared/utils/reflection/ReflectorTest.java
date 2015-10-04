@@ -43,7 +43,7 @@ public class ReflectorTest
     public void newInstanceNullNull()
         throws Exception
     {
-        reflector.newInstance( null, null );
+        reflector.newInstance( (Class<?>)null, (Object)null );
     }
 
     @Test
@@ -149,14 +149,14 @@ public class ReflectorTest
     public void getSingletonNullNull()
         throws Exception
     {
-        reflector.getSingleton( null, null );
+        reflector.getSingleton( (Class<?>)null, (Object)null );
     }
 
     @Test( expected = NullPointerException.class )
     public void getSingletonClassNull()
         throws Exception
     {
-        assertThat( reflector.getSingleton( Object.class, null ), is( Object.class ) );
+        assertThat( reflector.getSingleton( (Class<?>)Object.class, (Object)null ), is( Object.class ) );
     }
 
     @Test( expected = NullPointerException.class )
@@ -188,7 +188,7 @@ public class ReflectorTest
     }
 
     @Test( expected = IllegalArgumentException.class )
-    // @ReproducesPlexusBug( "Looking up methods by signature has an unlabelled continue, so finds the wrong method" )
+    // @ReproducesPlexusBug( "Looking up methods by signature has an unlabeled continue, so finds the wrong method" )
     public void getSingletonPackageMethod()
         throws Exception
     {
@@ -196,7 +196,7 @@ public class ReflectorTest
     }
 
     @Test( expected = IllegalArgumentException.class )
-    // @ReproducesPlexusBug( "Looking up methods by signature has an unlabelled continue, so finds the wrong method" )
+    // @ReproducesPlexusBug( "Looking up methods by signature has an unlabeled continue, so finds the wrong method" )
     public void getSingletonPackageMethodThrowsSomething()
         throws Exception
     {
@@ -204,7 +204,7 @@ public class ReflectorTest
     }
 
     @Test( expected = IllegalArgumentException.class )
-    // @ReproducesPlexusBug( "Looking up methods by signature has an unlabelled continue, so finds the wrong method" )
+    // @ReproducesPlexusBug( "Looking up methods by signature has an unlabeled continue, so finds the wrong method" )
     public void getSingletonProtectedMethod()
         throws Exception
     {
@@ -212,7 +212,7 @@ public class ReflectorTest
     }
 
     @Test( expected = IllegalArgumentException.class )
-    // @ReproducesPlexusBug( "Looking up methods by signature has an unlabelled continue, so finds the wrong method" )
+    // @ReproducesPlexusBug( "Looking up methods by signature has an unlabeled continue, so finds the wrong method" )
     public void getSingletonProtectedMethodThrowsSomething()
         throws Exception
     {
@@ -263,7 +263,7 @@ public class ReflectorTest
     public void invokeNullNullNull()
         throws Exception
     {
-        reflector.invoke( null, null, null );
+        reflector.invoke( (Object)null, (String)null, (Object)null );
     }
 
     @Test( expected = NullPointerException.class )
@@ -277,7 +277,7 @@ public class ReflectorTest
     public void invokeNullEmptyNull()
         throws Exception
     {
-        reflector.invoke( null, "", null );
+        reflector.invoke( (Object)null, "", (Object)null );
     }
 
     @Test( expected = NullPointerException.class )
@@ -291,7 +291,7 @@ public class ReflectorTest
     public void invokeObjectNullNull()
         throws Exception
     {
-        reflector.invoke( new Object(), null, null );
+        reflector.invoke( new Object(), (String)null, (Object)null );
     }
 
     @Test( expected = NullPointerException.class )
@@ -345,6 +345,7 @@ public class ReflectorTest
     {
         class CoT
         {
+            @SuppressWarnings( "unused" )
             private Object doSomething()
             {
                 return "Done";
@@ -359,6 +360,7 @@ public class ReflectorTest
     {
         class CoT
         {
+            @SuppressWarnings( "unused" )
             Object doSomething()
             {
                 return "Done";
@@ -373,6 +375,7 @@ public class ReflectorTest
     {
         class CoT
         {
+            @SuppressWarnings( "unused" )
             protected Object doSomething()
             {
                 return "Done";
@@ -387,6 +390,7 @@ public class ReflectorTest
     {
         class CoT
         {
+            @SuppressWarnings( "unused" )
             public Object doSomething()
             {
                 return "Done";
@@ -531,6 +535,7 @@ public class ReflectorTest
         final String expected = "gotIt";
         class CoT
         {
+            @SuppressWarnings( "unused" )
             private String value = expected;
         }
         try
@@ -551,6 +556,7 @@ public class ReflectorTest
         final String expected = "gotIt";
         class CoT
         {
+            @SuppressWarnings( "unused" )
             String value = expected;
         }
         assertThat( reflector.getField( new CoT(), "value" ), is( (Object) expected ) );
@@ -563,6 +569,7 @@ public class ReflectorTest
         final String expected = "gotIt";
         class CoT
         {
+            @SuppressWarnings( "unused" )
             protected String value = expected;
         }
         assertThat( reflector.getField( new CoT(), "value" ), is( (Object) expected ) );
@@ -575,6 +582,7 @@ public class ReflectorTest
         final String expected = "gotIt";
         class CoT
         {
+            @SuppressWarnings( "unused" )
             public String value = expected;
         }
         assertThat( reflector.getField( new CoT(), "value" ), is( (Object) expected ) );
@@ -625,6 +633,7 @@ public class ReflectorTest
         final String expected = "gotIt";
         class CoT
         {
+            @SuppressWarnings( "unused" )
             private String value = expected;
         }
         try
@@ -645,6 +654,7 @@ public class ReflectorTest
         final String expected = "gotIt";
         class CoT
         {
+            @SuppressWarnings( "unused" )
             String value = expected;
         }
         assertThat( reflector.getField( new CoT(), "value", false ), is( (Object) expected ) );
@@ -657,6 +667,7 @@ public class ReflectorTest
         final String expected = "gotIt";
         class CoT
         {
+            @SuppressWarnings( "unused" )
             protected String value = expected;
         }
         assertThat( reflector.getField( new CoT(), "value", false ), is( (Object) expected ) );
@@ -669,6 +680,7 @@ public class ReflectorTest
         final String expected = "gotIt";
         class CoT
         {
+            @SuppressWarnings( "unused" )
             public String value = expected;
         }
         assertThat( reflector.getField( new CoT(), "value", false ), is( (Object) expected ) );
@@ -717,6 +729,7 @@ public class ReflectorTest
         final String expected = "gotIt";
         class CoT
         {
+            @SuppressWarnings( "unused" )
             private String value = expected;
         }
         assertThat( reflector.getField( new CoT(), "value", true ), is( (Object) expected ) );
@@ -729,6 +742,7 @@ public class ReflectorTest
         final String expected = "gotIt";
         class CoT
         {
+            @SuppressWarnings( "unused" )
             String value = expected;
         }
         assertThat( reflector.getField( new CoT(), "value", true ), is( (Object) expected ) );
@@ -741,6 +755,7 @@ public class ReflectorTest
         final String expected = "gotIt";
         class CoT
         {
+            @SuppressWarnings( "unused" )
             protected String value = expected;
         }
         assertThat( reflector.getField( new CoT(), "value", true ), is( (Object) expected ) );
@@ -753,6 +768,7 @@ public class ReflectorTest
         final String expected = "gotIt";
         class CoT
         {
+            @SuppressWarnings( "unused" )
             public String value = expected;
         }
         assertThat( reflector.getField( new CoT(), "value", true ), is( (Object) expected ) );
@@ -764,14 +780,14 @@ public class ReflectorTest
     public void invokeStaticNullNullNull()
         throws Exception
     {
-        reflector.invokeStatic( null, null, null );
+        reflector.invokeStatic( (Class<?>)null, (String)null, (Object)null );
     }
 
     @Test( expected = NullPointerException.class )
     public void invokeStaticClassNullNull()
         throws Exception
     {
-        assertThat( reflector.invokeStatic( Object.class, null, null ), is( Object.class ) );
+        assertThat( reflector.invokeStatic( Object.class, (String)null, (Object)null ), is( Object.class ) );
     }
 
     @Test( expected = NullPointerException.class )
@@ -792,7 +808,7 @@ public class ReflectorTest
     public void invokeStaticNullEmptyNull()
         throws Exception
     {
-        reflector.invokeStatic( null, "", null );
+        reflector.invokeStatic( (Class<?>)null, "", (Object)null );
     }
 
     @Test( expected = ReflectorException.class )
@@ -908,7 +924,7 @@ public class ReflectorTest
     public void getConstructorNullNull()
         throws Exception
     {
-        reflector.getConstructor( null, null );
+        reflector.getConstructor( (Class<?>)null, (Class<?>)null );
     }
 
     @Test( expected = NullPointerException.class )
@@ -918,14 +934,16 @@ public class ReflectorTest
         reflector.getConstructor( null, new Class[0] );
     }
 
+    @SuppressWarnings( "rawtypes" )
     @Test( expected = NullPointerException.class )
     public void getConstructorObjectNull()
         throws Exception
     {
-        assertThat( reflector.getConstructor( Object.class, null ),
+        assertThat( reflector.getConstructor( Object.class, (Class<?>)null ),
                     is( (Constructor) Object.class.getDeclaredConstructor() ) );
     }
 
+    @SuppressWarnings( "rawtypes" )
     @Test
     public void getConstructorObjectEmpty()
         throws Exception
@@ -934,6 +952,7 @@ public class ReflectorTest
                     is( (Constructor) Object.class.getDeclaredConstructor() ) );
     }
 
+    @SuppressWarnings( "rawtypes" )
     @Test( expected = ReflectorException.class )
     // @ReproducesPlexusBug( "Looking up methods by signature has an unlabelled continue, so finds the wrong method" )
     public void getConstructorPrivate()
@@ -943,6 +962,7 @@ public class ReflectorTest
                     is( (Constructor) ReflectorTestHelper.class.getDeclaredConstructor() ) );
     }
 
+    @SuppressWarnings( "rawtypes" )
     @Test
     public void getConstructorPackage()
         throws Exception
@@ -951,6 +971,7 @@ public class ReflectorTest
                     not( is( (Constructor) ReflectorTestHelper.class.getDeclaredConstructor( Boolean.class ) ) ) );
     }
 
+    @SuppressWarnings( "rawtypes" )
     @Test
     public void getConstructorProtected()
         throws Exception
@@ -959,6 +980,7 @@ public class ReflectorTest
                     not( is( (Constructor) ReflectorTestHelper.class.getDeclaredConstructor( Integer.class ) ) ) );
     }
 
+    @SuppressWarnings( "rawtypes" )
     @Test
     public void getConstructorPublic()
         throws Exception
@@ -1004,6 +1026,7 @@ public class ReflectorTest
     {
         class CoT
         {
+            @SuppressWarnings( "unused" )
             private int value = 42;
         }
         assertThat( reflector.getObjectProperty( new CoT(), "value" ), is( (Object) 42 ) );
@@ -1016,6 +1039,7 @@ public class ReflectorTest
     {
         class CoT
         {
+            @SuppressWarnings( "unused" )
             int value = 42;
         }
         assertThat( reflector.getObjectProperty( new CoT(), "value" ), is( (Object) 42 ) );
@@ -1028,6 +1052,7 @@ public class ReflectorTest
     {
         class CoT
         {
+            @SuppressWarnings( "unused" )
             protected int value = 42;
         }
         assertThat( reflector.getObjectProperty( new CoT(), "value" ), is( (Object) 42 ) );
@@ -1039,6 +1064,7 @@ public class ReflectorTest
     {
         class CoT
         {
+            @SuppressWarnings( "unused" )
             public int value = 42;
         }
         assertThat( reflector.getObjectProperty( new CoT(), "value" ), is( (Object) 42 ) );
@@ -1052,6 +1078,7 @@ public class ReflectorTest
         {
             private final int _value = 42;
 
+            @SuppressWarnings( "unused" )
             private int getValue()
             {
                 return _value;
@@ -1068,6 +1095,7 @@ public class ReflectorTest
         {
             private final int _value = 42;
 
+            @SuppressWarnings( "unused" )
             int getValue()
             {
                 return _value;
@@ -1084,6 +1112,7 @@ public class ReflectorTest
         {
             private final int _value = 42;
 
+            @SuppressWarnings( "unused" )
             protected int getValue()
             {
                 return _value;
@@ -1100,6 +1129,7 @@ public class ReflectorTest
         {
             private final int _value = 42;
 
+            @SuppressWarnings( "unused" )
             public int getValue()
             {
                 return _value;
@@ -1114,7 +1144,7 @@ public class ReflectorTest
     public void getMethodNullNullNull()
         throws Exception
     {
-        reflector.getMethod( null, null, null );
+        reflector.getMethod( (Class<?>)null, (String)null, (Class<?>)null );
     }
 
     @Test( expected = NullPointerException.class )
@@ -1142,7 +1172,7 @@ public class ReflectorTest
     public void getMethodNullEmptyNull()
         throws Exception
     {
-        reflector.getMethod( null, "", null );
+        reflector.getMethod( (Class<?>)null, "", (Class<?>)null );
     }
 
     @Test( expected = NullPointerException.class )
@@ -1156,7 +1186,7 @@ public class ReflectorTest
     public void getMethodObjectEmptyNull()
         throws Exception
     {
-        reflector.getMethod( Object.class, "", null );
+        reflector.getMethod( Object.class, "", (Class<?>)null );
     }
 
     @Test( expected = ReflectorException.class )

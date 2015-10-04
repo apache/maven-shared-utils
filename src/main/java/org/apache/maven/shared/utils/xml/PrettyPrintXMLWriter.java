@@ -205,7 +205,9 @@ public class PrettyPrintXMLWriter
         this.docType = docType;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * @param lineSeparator The line separator to be used.
+     */
     public void setLineSeparator( String lineSeparator )
     {
         if ( documentStarted )
@@ -216,7 +218,9 @@ public class PrettyPrintXMLWriter
         this.lineSeparator = lineSeparator.toCharArray();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * @param lineIndentParameter The line indent parameter.
+     */
     public void setLineIndenter( String lineIndentParameter )
     {
         if ( documentStarted )
