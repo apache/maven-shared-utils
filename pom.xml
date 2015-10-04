@@ -113,7 +113,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
         <!--
-          ! After a new parent has been released this version can be removed.
+          ! After a new parent (version 22) has been released this version can be removed.
          -->
         <version>2.4.1</version>
         <executions>
@@ -149,7 +149,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
         <!--
-          ! After a new parent has been released this version can be removed.
+          ! After a new parent (version 22) has been released this version can be removed.
          -->
         <version>2.15</version>
       </plugin>
@@ -191,7 +191,7 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-checkstyle-plugin</artifactId>
             <!--
-              ! After a new parent has been released this version can be removed.
+              ! After a new parent (version 22) has been released this version can be removed.
              -->
             <version>2.15</version>
           </plugin>
