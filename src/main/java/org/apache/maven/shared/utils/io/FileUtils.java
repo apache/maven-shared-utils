@@ -1227,7 +1227,6 @@ public class FileUtils
             if ( Os.isFamily( Os.FAMILY_WINDOWS ) )
             {
                 file = file.getCanonicalFile();
-                System.gc();
             }
 
             try
