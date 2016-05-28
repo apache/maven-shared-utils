@@ -1444,15 +1444,6 @@ public class FileUtilsTest
         // CVS
         "**/CVS", "**/CVS/**", "**/.cvsignore",
 
-        // RCS
-        "**/RCS", "**/RCS/**",
-
-        // SCCS
-        "**/SCCS", "**/SCCS/**",
-
-        // Visual SourceSafe
-        "**/vssver.scc",
-
         // Subversion
         "**/.svn", "**/.svn/**",
 

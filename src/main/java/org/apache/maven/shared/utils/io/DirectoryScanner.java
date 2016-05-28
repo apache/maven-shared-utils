@@ -122,15 +122,6 @@ public class DirectoryScanner
         // CVS
         "**/CVS", "**/CVS/**", "**/.cvsignore",
 
-        // RCS
-        "**/RCS", "**/RCS/**",
-
-        // SCCS
-        "**/SCCS", "**/SCCS/**",
-
-        // Visual SourceSafe
-        "**/vssver.scc",
-
         // Subversion
         "**/.svn", "**/.svn/**",
 
