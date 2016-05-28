@@ -54,3 +54,5 @@ Relation to Commons-*
   This is the reason why any public API in maven-shared-utils must
   avoid to expose commons-io classes directly. Most times it's sufficient
   to just create an empty subclass and expose that instead.
+
+  []
