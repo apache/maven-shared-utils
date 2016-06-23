@@ -51,8 +51,8 @@ public class PropertyUtils
      * @return The loaded properties.
      *
      * @deprecated As of 3.1.0, please use method {@link #loadOptionalProperties(java.net.URL)}. This method should not
-     * be used as it suppresses exceptions when loading properties fails and returns {@code null} instead of an empty
-     * {@code Properties} instance when the given {@code URL} is {@code null}.
+     * be used as it suppresses exceptions silently when loading properties fails and returns {@code null} instead of an
+     * empty {@code Properties} instance when the given {@code URL} is {@code null}.
      */
     @Deprecated
     public static java.util.Properties loadProperties( @Nonnull URL url )
@@ -74,8 +74,8 @@ public class PropertyUtils
      * @return The loaded properties.
      *
      * @deprecated As of 3.1.0, please use method {@link #loadOptionalProperties(java.io.File)}. This method should not
-     * be used as it suppresses exceptions when loading properties fails and returns {@code null} instead of an empty
-     * {@code Properties} instance when the given {@code File} is {@code null}.
+     * be used as it suppresses exceptions silently when loading properties fails and returns {@code null} instead of an
+     * empty {@code Properties} instance when the given {@code File} is {@code null}.
      */
     @Deprecated
     public static Properties loadProperties( @Nonnull File file )
@@ -97,7 +97,7 @@ public class PropertyUtils
      * @return The loaded properties.
      *
      * @deprecated As of 3.1.0, please use method {@link #loadOptionalProperties(java.io.InputStream)}. This method
-     * should not be used as it suppresses exceptions when loading properties fails.
+     * should not be used as it suppresses exceptions silently when loading properties fails.
      */
     @Deprecated
     public static Properties loadProperties( @Nullable InputStream is )
@@ -132,17 +132,18 @@ public class PropertyUtils
 
     /**
      * Loads {@code Properties} from a given {@code URL}.
+     * <p>
+     * If the given {@code URL} is not {@code null}, it is asserted to represent a valid and loadable properties
+     * resource.
+     * </p>
      *
      * @param url The {@code URL} of the properties resource to load or {@code null}.
      *
      * @return The loaded properties or an empty {@code Properties} instance if {@code url} is {@code null}.
      *
-     * @throws IOException if loading properties fails.
-     *
      * @since 3.1.0
      */
     @Nonnull public static Properties loadOptionalProperties( final @Nullable URL url )
-        throws IOException
     {
         InputStream in = null;
         try
@@ -159,6 +160,10 @@ public class PropertyUtils
 
             return properties;
         }
+        catch ( final IOException e )
+        {
+            throw new AssertionError( e );
+        }
         finally
         {
             IOUtil.close( in );
@@ -167,17 +172,18 @@ public class PropertyUtils
 
     /**
      * Loads {@code Properties} from a given {@code File}.
+     * <p>
+     * If the given {@code File} is not {@code null}, it is asserted to represent a valid and loadable properties
+     * resource.
+     * </p>
      *
      * @param file The {@code File} of the properties resource to load or {@code null}.
      *
      * @return The loaded properties or an empty {@code Properties} instance if {@code file} is {@code null}.
      *
-     * @throws IOException if loading properties fails.
-     *
      * @since 3.1.0
      */
     @Nonnull public static Properties loadOptionalProperties( final @Nullable File file )
-        throws IOException
     {
         InputStream in = null;
         try
@@ -194,6 +200,10 @@ public class PropertyUtils
 
             return properties;
         }
+        catch ( final IOException e )
+        {
+            throw new AssertionError( e );
+        }
         finally
         {
             IOUtil.close( in );
@@ -202,17 +212,18 @@ public class PropertyUtils
 
     /**
      * Loads {@code Properties} from a given {@code InputStream}.
+     * <p>
+     * If the given {@code InputStream} is not {@code null}, it is asserted to represent a valid and loadable properties
+     * resource.
+     * </p>
      *
      * @param inputStream The {@code InputStream} of the properties resource to load or {@code null}.
      *
      * @return The loaded properties or an empty {@code Properties} instance if {@code inputStream} is {@code null}.
      *
-     * @throws IOException if loading properties fails.
-     *
      * @since 3.1.0
      */
     @Nonnull public static Properties loadOptionalProperties( final @Nullable InputStream inputStream )
-        throws IOException
     {
         InputStream in = null;
         try
@@ -228,6 +239,10 @@ public class PropertyUtils
             }
 
             return properties;
+        }
+        catch ( final IOException e )
+        {
+            throw new AssertionError( e );
         }
         finally
         {
