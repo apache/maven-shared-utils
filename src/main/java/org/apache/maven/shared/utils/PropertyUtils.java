@@ -75,7 +75,7 @@ public class PropertyUtils
      *
      * @deprecated As of 3.1.0, please use method {@link #loadOptionalProperties(java.io.File)}. This method should not
      * be used as it suppresses exceptions when loading properties fails and returns {@code null} instead of an empty
-     * {@code Properties} instance when the given {@code URL} is {@code null}.
+     * {@code Properties} instance when the given {@code File} is {@code null}.
      */
     @Deprecated
     public static Properties loadProperties( @Nonnull File file )
