@@ -122,14 +122,18 @@ public class FileUtilsTest
         {
             throw new IOException( "Cannot create file " + file + " as the parent directory does not exist" );
         }
-        BufferedOutputStream output = new BufferedOutputStream( new FileOutputStream( file ) );
+
+        OutputStream out = null;
         try
         {
-            FileTestHelper.generateTestData( output, size );
+            out = new BufferedOutputStream( new FileOutputStream( file ) );
+            FileTestHelper.generateTestData( out, size );
+            out.close();
+            out = null;
         }
         finally
         {
-            IOUtil.close( output );
+            IOUtil.close( out );
         }
     }
 

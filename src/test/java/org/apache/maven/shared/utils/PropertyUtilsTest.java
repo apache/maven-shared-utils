@@ -19,14 +19,11 @@ package org.apache.maven.shared.utils;
  * under the License.
  */
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -34,11 +31,18 @@ import java.lang.annotation.Target;
 import java.net.URL;
 import java.util.Properties;
 
-import static org.hamcrest.CoreMatchers.*;
+import org.apache.maven.shared.utils.io.IOUtil;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class PropertyUtilsTest
 {
+
     @Retention( RetentionPolicy.RUNTIME )
     @Target( ElementType.METHOD )
     @interface NeedsTemporaryFolder
@@ -48,8 +52,8 @@ public class PropertyUtilsTest
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
 
-
     @Test
+    @SuppressWarnings( "deprecation" )
     // @ReproducesPlexusBug( "Should return null on error like url and file do" )
     public void loadNullInputStream()
         throws Exception
@@ -58,6 +62,14 @@ public class PropertyUtilsTest
     }
 
     @Test
+    public void loadOptionalNullInputStream()
+        throws Exception
+    {
+        assertThat( PropertyUtils.loadOptionalProperties( (InputStream) null ), is( new Properties() ) );
+    }
+
+    @Test
+    @SuppressWarnings( "deprecation" )
     public void loadNullURL()
         throws Exception
     {
@@ -65,6 +77,14 @@ public class PropertyUtilsTest
     }
 
     @Test
+    public void loadOptionalNullURL()
+        throws Exception
+    {
+        assertThat( PropertyUtils.loadOptionalProperties( (URL) null ), is( new Properties() ) );
+    }
+
+    @Test
+    @SuppressWarnings( "deprecation" )
     public void loadNullFile()
         throws Exception
     {
@@ -72,61 +92,113 @@ public class PropertyUtilsTest
     }
 
     @Test
+    public void loadOptionalNullFile()
+        throws Exception
+    {
+        assertThat( PropertyUtils.loadOptionalProperties( (File) null ), is( new Properties() ) );
+    }
+
+    @Test
+    @SuppressWarnings( "deprecation" )
     public void loadEmptyInputStream()
         throws Exception
     {
-        assertThat( PropertyUtils.loadProperties( new ByteArrayInputStream( new byte[0] ) ), is( new Properties() ) );
+        assertThat( PropertyUtils.loadProperties( new ByteArrayInputStream( new byte[ 0 ] ) ),
+                    is( new Properties() ) );
+
+        assertThat( PropertyUtils.loadOptionalProperties( new ByteArrayInputStream( new byte[ 0 ] ) ),
+                    is( new Properties() ) );
+
     }
 
     @Test
     @NeedsTemporaryFolder
+    @SuppressWarnings( "deprecation" )
     public void loadEmptyFile()
         throws Exception
     {
         assertThat( PropertyUtils.loadProperties( tempFolder.newFile( "empty" ) ), is( new Properties() ) );
+        assertThat( PropertyUtils.loadOptionalProperties( tempFolder.newFile( "optional" ) ), is( new Properties() ) );
     }
 
     @Test
     @NeedsTemporaryFolder
+    @SuppressWarnings( "deprecation" )
     public void loadEmptyURL()
         throws Exception
     {
-        assertThat( PropertyUtils.loadProperties( tempFolder.newFile( "empty" ).toURI().toURL() ), is( new Properties() ) );
+        assertThat( PropertyUtils.loadProperties( tempFolder.newFile( "empty" ).toURI().toURL() ),
+                    is( new Properties() ) );
+
+        assertThat( PropertyUtils.loadOptionalProperties( tempFolder.newFile( "optional" ).toURI().toURL() ),
+                    is( new Properties() ) );
+
     }
 
     @Test
+    @SuppressWarnings( "deprecation" )
     public void loadValidInputStream()
         throws Exception
     {
         Properties value = new Properties();
         value.setProperty( "a", "b" );
+
         assertThat( PropertyUtils.loadProperties( new ByteArrayInputStream( "a=b".getBytes( "ISO-8859-1" ) ) ),
                     is( value ) );
+
+        assertThat( PropertyUtils.loadOptionalProperties( new ByteArrayInputStream( "a=b".getBytes( "ISO-8859-1" ) ) ),
+                    is( value ) );
+
     }
 
     @Test
     @NeedsTemporaryFolder
+    @SuppressWarnings( "deprecation" )
     public void loadValidFile()
         throws Exception
     {
-        File valid = tempFolder.newFile( "valid" );
-        Properties value = new Properties();
-        value.setProperty( "a", "b" );
-        value.store( new FileOutputStream( valid ), "a test" );
-        assertThat( PropertyUtils.loadProperties( valid ), is( value ) );
+        OutputStream out = null;
+        try
+        {
+            File valid = tempFolder.newFile( "valid" );
+            Properties value = new Properties();
+            value.setProperty( "a", "b" );
+            out = new FileOutputStream( valid );
+            value.store( out, "a test" );
+            out.close();
+            out = null;
+            assertThat( PropertyUtils.loadProperties( valid ), is( value ) );
+            assertThat( PropertyUtils.loadOptionalProperties( valid ), is( value ) );
+        }
+        finally
+        {
+            IOUtil.close( out );
+        }
     }
 
     @Test
     @NeedsTemporaryFolder
+    @SuppressWarnings( "deprecation" )
     public void loadValidURL()
         throws Exception
     {
-        File valid = tempFolder.newFile( "valid" );
-        Properties value = new Properties();
-        value.setProperty( "a", "b" );
-        value.store( new FileOutputStream( valid ), "a test" );
-        assertThat( PropertyUtils.loadProperties( valid.toURI().toURL() ), is( value ) );
+        OutputStream out = null;
+        try
+        {
+            File valid = tempFolder.newFile( "valid" );
+            Properties value = new Properties();
+            value.setProperty( "a", "b" );
+            out = new FileOutputStream( valid );
+            value.store( out, "a test" );
+            out.close();
+            out = null;
+            assertThat( PropertyUtils.loadProperties( valid.toURI().toURL() ), is( value ) );
+            assertThat( PropertyUtils.loadOptionalProperties( valid.toURI().toURL() ), is( value ) );
+        }
+        finally
+        {
+            IOUtil.close( out );
+        }
     }
-
 
 }

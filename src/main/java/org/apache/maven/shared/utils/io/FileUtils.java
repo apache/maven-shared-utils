@@ -25,6 +25,7 @@ import org.apache.maven.shared.utils.StringUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.WillClose;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -290,10 +291,12 @@ public class FileUtils
             }
             int count;
             char[] b = new char[512];
-            while ( ( count = reader.read( b ) ) > 0 )  // blocking read
+            while ( ( count = reader.read( b ) ) >= 0 )  // blocking read
             {
                 buf.append( b, 0, count );
             }
+            reader.close();
+            reader = null;
         }
         finally
         {
@@ -312,9 +315,9 @@ public class FileUtils
     @Nonnull public static String[] fileReadArray( @Nonnull File file )
         throws IOException
     {
-        List<String> files = loadFile( file );
+        List<String> lines = loadFile( file );
 
-        return files.toArray( new String[files.size()] );
+        return lines.toArray( new String[lines.size()] );
     }
 
     /**
@@ -354,6 +357,8 @@ public class FileUtils
             {
                 out.write( data.getBytes() );
             }
+            out.close();
+            out = null;
         }
         finally
         {
@@ -404,16 +409,17 @@ public class FileUtils
         Writer writer = null;
         try
         {
-            OutputStream out = new FileOutputStream( file );
             if ( encoding != null )
             {
-                writer = new OutputStreamWriter( out, encoding );
+                writer = new OutputStreamWriter( new FileOutputStream( file ), encoding );
             }
             else
             {
-                writer = new OutputStreamWriter( out );
+                writer = new OutputStreamWriter( new FileOutputStream( file ) );
             }
             writer.write( data );
+            writer.close();
+            writer = null;
         }
         finally
         {
@@ -449,14 +455,13 @@ public class FileUtils
         Writer writer = null;
         try
         {
-            OutputStream out = new FileOutputStream( file );
             if ( encoding != null )
             {
-                writer = new OutputStreamWriter( out, encoding );
+                writer = new OutputStreamWriter( new FileOutputStream( file ), encoding );
             }
             else
             {
-                writer = new OutputStreamWriter( out );
+                writer = new OutputStreamWriter( new FileOutputStream( file ) );
             }
 
             for ( int i = 0; data != null && i < data.length; i++ )
@@ -467,6 +472,9 @@ public class FileUtils
                     writer.write( "\n" );
                 }
             }
+
+            writer.close();
+            writer = null;
         }
         finally
         {
@@ -639,18 +647,23 @@ public class FileUtils
 
         InputStream input1 = null;
         InputStream input2 = null;
+        boolean equals = false;
         try
         {
             input1 = new FileInputStream( file1 );
             input2 = new FileInputStream( file2 );
-            return IOUtil.contentEquals( input1, input2 );
-
+            equals = IOUtil.contentEquals( input1, input2 );
+            input1.close();
+            input1 = null;
+            input2.close();
+            input2 = null;
         }
         finally
         {
             IOUtil.close( input1 );
             IOUtil.close( input2 );
         }
+        return equals;
     }
 
     /**
@@ -871,6 +884,14 @@ public class FileUtils
                 count = size - pos > FILE_COPY_BUFFER_SIZE ? FILE_COPY_BUFFER_SIZE : size - pos;
                 pos += output.transferFrom( input, pos, count );
             }
+            output.close();
+            output = null;
+            fos.close();
+            fos = null;
+            input.close();
+            input = null;
+            fis.close();
+            fis = null;
         }
         finally
         {
@@ -947,7 +968,8 @@ public class FileUtils
                                           @Nonnull final File destination )
         throws IOException
     {
-        FileOutputStream output = null;
+        InputStream in = source;
+        OutputStream out = null;
         try
         {
             //does destination directory exist ?
@@ -964,13 +986,17 @@ public class FileUtils
                 throw new IOException( message );
             }
 
-            output = new FileOutputStream( destination );
-            IOUtil.copy( source, output );
+            out = new FileOutputStream( destination );
+            IOUtil.copy( in, out );
+            out.close();
+            out = null;
+            in.close();
+            in = null;
         }
         finally
         {
-            IOUtil.close( source );
-            IOUtil.close( output );
+            IOUtil.close( out );
+            IOUtil.close( in );
         }
     }
 
@@ -1908,22 +1934,20 @@ public class FileUtils
                 }
                 else
                 {
-                    FileInputStream instream = new FileInputStream( from );
-
-                    FileOutputStream outstream = new FileOutputStream( to );
-
-                    fileReader = new BufferedReader( new InputStreamReader( instream, encoding ) );
-
-                    fileWriter = new OutputStreamWriter( outstream, encoding );
+                    fileReader = new BufferedReader( new InputStreamReader( new FileInputStream( from ), encoding ) );
+                    fileWriter = new OutputStreamWriter( new FileOutputStream( to ), encoding );
                 }
 
-                Reader reader = fileReader;
                 for ( FilterWrapper wrapper : wrappers )
                 {
-                    reader = wrapper.getReader( reader );
+                    fileReader = wrapper.getReader( fileReader );
                 }
 
-                IOUtil.copy( reader, fileWriter );
+                IOUtil.copy( fileReader, fileWriter );
+                fileWriter.close();
+                fileWriter = null;
+                fileReader.close();
+                fileReader = null;
             }
             finally
             {
@@ -1954,14 +1978,12 @@ public class FileUtils
 
         if ( file.exists() )
         {
-            FileReader fileReader = new FileReader( file );
+            BufferedReader reader = null;
             try
             {
-                BufferedReader reader = new BufferedReader( fileReader );
+                reader = new BufferedReader( new FileReader( file ) );
 
-                String line = reader.readLine();
-
-                while ( line != null )
+                for ( String line = reader.readLine(); line != null; line = reader.readLine() )
                 {
                     line = line.trim();
 
@@ -1969,14 +1991,14 @@ public class FileUtils
                     {
                         lines.add( line );
                     }
-                    line = reader.readLine();
                 }
 
                 reader.close();
+                reader = null;
             }
             finally
             {
-                fileReader.close();
+                IOUtil.close( reader );
             }
         }
 

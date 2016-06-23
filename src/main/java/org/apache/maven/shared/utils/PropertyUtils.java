@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Properties;
 
 import javax.annotation.Nonnull;
@@ -31,7 +32,7 @@ import javax.annotation.Nullable;
 import org.apache.maven.shared.utils.io.IOUtil;
 
 /**
- * 
+ *
  */
 public class PropertyUtils
 {
@@ -46,9 +47,15 @@ public class PropertyUtils
 
     /**
      * @param url The URL which should be used to load the properties.
+     *
      * @return The loaded properties.
+     *
+     * @deprecated As of 3.1.0, please use method {@link #loadOptionalProperties(java.net.URL)}. This method should not
+     * be used as it suppresses exceptions when loading properties fails and returns {@code null} instead of an empty
+     * {@code Properties} instance when the given {@code URL} is {@code null}.
      */
-    public static java.util.Properties loadProperties( @Nonnull java.net.URL url )
+    @Deprecated
+    public static java.util.Properties loadProperties( @Nonnull URL url )
     {
         try
         {
@@ -63,8 +70,14 @@ public class PropertyUtils
 
     /**
      * @param file The file from which the properties will be loaded.
+     *
      * @return The loaded properties.
+     *
+     * @deprecated As of 3.1.0, please use method {@link #loadOptionalProperties(java.io.File)}. This method should not
+     * be used as it suppresses exceptions when loading properties fails and returns {@code null} instead of an empty
+     * {@code Properties} instance when the given {@code URL} is {@code null}.
      */
+    @Deprecated
     public static Properties loadProperties( @Nonnull File file )
     {
         try
@@ -80,8 +93,13 @@ public class PropertyUtils
 
     /**
      * @param is {@link InputStream}
+     *
      * @return The loaded properties.
+     *
+     * @deprecated As of 3.1.0, please use method {@link #loadOptionalProperties(java.io.InputStream)}. This method
+     * should not be used as it suppresses exceptions when loading properties fails.
      */
+    @Deprecated
     public static Properties loadProperties( @Nullable InputStream is )
     {
         try
@@ -110,6 +128,111 @@ public class PropertyUtils
             IOUtil.close( is );
         }
         return null;
+    }
+
+    /**
+     * Loads {@code Properties} from a given {@code URL}.
+     *
+     * @param url The {@code URL} of the properties resource to load or {@code null}.
+     *
+     * @return The loaded properties or an empty {@code Properties} instance if {@code url} is {@code null}.
+     *
+     * @throws IOException if loading properties fails.
+     *
+     * @since 3.1.0
+     */
+    @Nonnull public static Properties loadOptionalProperties( final @Nullable URL url )
+        throws IOException
+    {
+        InputStream in = null;
+        try
+        {
+            final Properties properties = new Properties();
+
+            if ( url != null )
+            {
+                in = url.openStream();
+                properties.load( in );
+                in.close();
+                in = null;
+            }
+
+            return properties;
+        }
+        finally
+        {
+            IOUtil.close( in );
+        }
+    }
+
+    /**
+     * Loads {@code Properties} from a given {@code File}.
+     *
+     * @param file The {@code File} of the properties resource to load or {@code null}.
+     *
+     * @return The loaded properties or an empty {@code Properties} instance if {@code file} is {@code null}.
+     *
+     * @throws IOException if loading properties fails.
+     *
+     * @since 3.1.0
+     */
+    @Nonnull public static Properties loadOptionalProperties( final @Nullable File file )
+        throws IOException
+    {
+        InputStream in = null;
+        try
+        {
+            final Properties properties = new Properties();
+
+            if ( file != null )
+            {
+                in = new FileInputStream( file );
+                properties.load( in );
+                in.close();
+                in = null;
+            }
+
+            return properties;
+        }
+        finally
+        {
+            IOUtil.close( in );
+        }
+    }
+
+    /**
+     * Loads {@code Properties} from a given {@code InputStream}.
+     *
+     * @param inputStream The {@code InputStream} of the properties resource to load or {@code null}.
+     *
+     * @return The loaded properties or an empty {@code Properties} instance if {@code inputStream} is {@code null}.
+     *
+     * @throws IOException if loading properties fails.
+     *
+     * @since 3.1.0
+     */
+    @Nonnull public static Properties loadOptionalProperties( final @Nullable InputStream inputStream )
+        throws IOException
+    {
+        InputStream in = null;
+        try
+        {
+            final Properties properties = new Properties();
+
+            if ( inputStream != null )
+            {
+                in = inputStream;
+                properties.load( in );
+                in.close();
+                in = null;
+            }
+
+            return properties;
+        }
+        finally
+        {
+            IOUtil.close( in );
+        }
     }
 
 }

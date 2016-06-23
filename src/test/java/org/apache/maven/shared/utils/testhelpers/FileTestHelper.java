@@ -70,17 +70,21 @@ public final class FileTestHelper
         {
             throw new IOException( "Cannot create file " + file + " as the parent directory does not exist" );
         }
-        PrintWriter output = new PrintWriter( new OutputStreamWriter( new FileOutputStream( file ), "UTF-8" ) );
+
+        PrintWriter out = null;
         try
         {
+            out = new PrintWriter( new OutputStreamWriter( new FileOutputStream( file ), "UTF-8" ) );
             for ( String aData : data )
             {
-                output.println( aData );
+                out.println( aData );
             }
+            out.close();
+            out = null;
         }
         finally
         {
-            IOUtil.close( output );
+            IOUtil.close( out );
         }
     }
 

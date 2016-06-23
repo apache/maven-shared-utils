@@ -24,10 +24,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
 import org.apache.maven.shared.utils.io.FileUtils;
+import org.apache.maven.shared.utils.io.IOUtil;
 
 /**
  * Expand will unpack the given zip archive.
@@ -123,31 +126,25 @@ class Expand
             destDir = new File( System.getProperty( "user.dir" ) );
         }
 
-        FileInputStream fileInputStream = new FileInputStream( srcFile );
+        ZipInputStream in = null;
         try
         {
-            ZipInputStream zipInputStream = new ZipInputStream( fileInputStream );
+            in = new ZipInputStream( new FileInputStream( srcFile ) );
 
-            ZipEntry zipEntry;
-
-            while ( ( zipEntry = zipInputStream.getNextEntry() ) != null )
+            for ( ZipEntry zipEntry = in.getNextEntry(); zipEntry != null; zipEntry = in.getNextEntry() )
             {
                 String zipEntryName = zipEntry.getName();
                 Date zipEntryDate = new Date( zipEntry.getTime() );
 
-                extractFile( source, destDir, zipInputStream, zipEntryName, zipEntryDate, zipEntry.isDirectory() );
+                extractFile( source, destDir, in, zipEntryName, zipEntryDate, zipEntry.isDirectory() );
             }
+
+            in.close();
+            in = null;
         }
         finally
         {
-            try
-            {
-                fileInputStream.close();
-            }
-            catch ( IOException ioe )
-            {
-                // no worries, all is ok ...
-            }
+            IOUtil.close( in );
         }
     }
 
@@ -191,25 +188,23 @@ class Expand
             else
             {
                 byte[] buffer = new byte[BUFFER_SIZE];
-                FileOutputStream fileOutputStream = new FileOutputStream( targetFile );
+                OutputStream out = null;
                 try
                 {
+                    out = new FileOutputStream( targetFile );
+
                     int len;
-                    while ( ( len = compressedInputStream.read( buffer ) ) > 0 )
+                    while ( ( len = compressedInputStream.read( buffer ) ) >= 0 )
                     {
-                        fileOutputStream.write( buffer, 0, len );
+                        out.write( buffer, 0, len );
                     }
+
+                    out.close();
+                    out = null;
                 }
                 finally
                 {
-                    try
-                    {
-                        fileOutputStream.close();
-                    }
-                    catch ( IOException ioe )
-                    {
-                        // no worries, all is ok ...
-                    }
+                    IOUtil.close( out );
                 }
                 targetFile.setLastModified( entryDate.getTime() );
             }

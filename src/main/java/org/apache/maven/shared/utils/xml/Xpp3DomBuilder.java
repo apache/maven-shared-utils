@@ -102,7 +102,13 @@ public class Xpp3DomBuilder
         try
         {
             DocHandler docHandler = parseSax( new InputSource( reader ), trim );
+            reader.close();
+            reader = null;
             return docHandler.result;
+        }
+        catch ( final IOException e )
+        {
+            throw new XmlPullParserException( e );
         }
         finally
         {
