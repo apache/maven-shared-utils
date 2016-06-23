@@ -170,6 +170,11 @@ class Expand
     {
         File targetFile = new File( destDir, entryName );
 
+        if ( !targetFile.getAbsolutePath().startsWith( destDir.getAbsolutePath() ) )
+        {
+            throw new IOException( "Entry '" + entryName + "' outside the target directory." );
+        }
+
         // if overwrite is specified and the file type
         // of the existing file does not match, then delete it
         if ( overwrite && targetFile.exists() && targetFile.isDirectory() != isDirectory )
