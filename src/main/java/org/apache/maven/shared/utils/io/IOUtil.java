@@ -864,7 +864,7 @@ public final class IOUtil
      * Closes an {@code InputStream} suppressing any {@code IOException}.
      * <p>
      * <b>Note:</b><br/>The usecase justifying this method is a shortcoming of the Java language up to but not including
-     * Java 7. For any code targetting Java 7 or later use of this method is highly discouraged and the
+     * Java 7. For any code targeting Java 7 or later use of this method is highly discouraged and the
      * {@code try-with-resources} statement should be used instead. Care must be taken to not use this method in a way
      * {@code IOException}s get suppressed incorrectly.
      * <strong>You must close all resources in use inside the {@code try} block to not suppress exceptions in the
@@ -897,7 +897,7 @@ public final class IOUtil
      *     // This may throw an exception. Not reached if an exception has been thrown above.
      *     resource1.close();
      *     resource1 = null;
-     *     // Not reached if an exception has been thrown above.
+     *     // This may throw an exception. Not reached if an exception has been thrown above.
      *     resource2.close();
      *     resource2 = null;
      *
@@ -968,7 +968,7 @@ public final class IOUtil
      * Closes an {@code OutputStream} suppressing any {@code IOException}.
      * <p>
      * <b>Note:</b><br/>The usecase justifying this method is a shortcoming of the Java language up to but not including
-     * Java 7. For any code targetting Java 7 or later use of this method is highly discouraged and the
+     * Java 7. For any code targeting Java 7 or later use of this method is highly discouraged and the
      * {@code try-with-resources} statement should be used instead. Care must be taken to not use this method in a way
      * {@code IOException}s get suppressed incorrectly.
      * <strong>You must close all resources in use inside the {@code try} block to not suppress exceptions in the
@@ -1001,7 +1001,7 @@ public final class IOUtil
      *     // This may throw an exception. Not reached if an exception has been thrown above.
      *     resource1.close();
      *     resource1 = null;
-     *     // Not reached if an exception has been thrown above.
+     *     // This may throw an exception. Not reached if an exception has been thrown above.
      *     resource2.close();
      *     resource2 = null;
      *
@@ -1072,7 +1072,7 @@ public final class IOUtil
      * Closes a {@code Reader} suppressing any {@code IOException}.
      * <p>
      * <b>Note:</b><br/>The usecase justifying this method is a shortcoming of the Java language up to but not including
-     * Java 7. For any code targetting Java 7 or later use of this method is highly discouraged and the
+     * Java 7. For any code targeting Java 7 or later use of this method is highly discouraged and the
      * {@code try-with-resources} statement should be used instead. Care must be taken to not use this method in a way
      * {@code IOException}s get suppressed incorrectly.
      * <strong>You must close all resources in use inside the {@code try} block to not suppress exceptions in the
@@ -1105,7 +1105,7 @@ public final class IOUtil
      *     // This may throw an exception. Not reached if an exception has been thrown above.
      *     resource1.close();
      *     resource1 = null;
-     *     // Not reached if an exception has been thrown above.
+     *     // This may throw an exception. Not reached if an exception has been thrown above.
      *     resource2.close();
      *     resource2 = null;
      *
@@ -1176,7 +1176,7 @@ public final class IOUtil
      * Closes a {@code Writer} suppressing any {@code IOException}.
      * <p>
      * <b>Note:</b><br/>The usecase justifying this method is a shortcoming of the Java language up to but not including
-     * Java 7. For any code targetting Java 7 or later use of this method is highly discouraged and the
+     * Java 7. For any code targeting Java 7 or later use of this method is highly discouraged and the
      * {@code try-with-resources} statement should be used instead. Care must be taken to not use this method in a way
      * {@code IOException}s get suppressed incorrectly.
      * <strong>You must close all resources in use inside the {@code try} block to not suppress exceptions in the
@@ -1209,7 +1209,7 @@ public final class IOUtil
      *     // This may throw an exception. Not reached if an exception has been thrown above.
      *     resource1.close();
      *     resource1 = null;
-     *     // Not reached if an exception has been thrown above.
+     *     // This may throw an exception. Not reached if an exception has been thrown above.
      *     resource2.close();
      *     resource2 = null;
      *
