@@ -757,112 +757,522 @@ public final class IOUtil
     // ----------------------------------------------------------------------
 
     /**
-     * Closes a channel. Channel can be null and any IOException's will be swallowed.
+     * Closes a {@code Channel} suppressing any {@code IOException}.
+     * <p>
+     * <b>Note:</b><br/>The usecase justifying this method is a shortcoming of the Java language up to but not including
+     * Java 7. For any code targetting Java 7 or later use of this method is highly discouraged and the
+     * {@code try-with-resources} statement should be used instead. Care must be taken to not use this method in a way
+     * {@code IOException}s get suppressed incorrectly.
+     * <strong>You must close all resources in use inside the {@code try} block to not suppress exceptions in the
+     * {@code finally} block incorrectly by using this method.</strong>
+     * </p>
+     * <p>
+     * <b>Example:</b><br/>
+     * <pre>
+     * // Introduce variables for the resources and initialize them to null. This cannot throw an exception.
+     * Closeable resource1 = null;
+     * Closeable resource2 = null;
+     * try
+     * {
+     *     // Obtain a resource object and assign it to variable resource1. This may throw an exception.
+     *     // If successful, resource1 != null.
+     *     resource1 = ...
      *
-     * @param channel The stream to close.
+     *     // Obtain a resource object and assign it to variable resource2. This may throw an exception.
+     *     // If successful, resource2 != null. Not reached if an exception has been thrown above.
+     *     resource2 = ...
+     *
+     *     // Perform operations on the resources. This may throw an exception. Not reached if an exception has been
+     *     // thrown above. Note: Treat the variables resource1 and resource2 the same way as if they would have been
+     *     // declared with the final modifier - that is - do NOT write anyting like resource1 = something else or
+     *     // resource2 = something else here.
+     *     resource1 ...
+     *     resource2 ...
+     *
+     *     // Finally, close the resources and set the variables to null indicating successful completion.
+     *     // This may throw an exception. Not reached if an exception has been thrown above.
+     *     resource1.close();
+     *     resource1 = null;
+     *     // Not reached if an exception has been thrown above.
+     *     resource2.close();
+     *     resource2 = null;
+     *
+     *     // All resources are closed at this point and all operations (up to here) completed successfully without
+     *     // throwing an exception we would need to handle (by letting it propagate or by catching and handling it).
+     * }
+     * finally
+     * {
+     *     // Cleanup any resource not closed in the try block due to an exception having been thrown and suppress any
+     *     // exception this may produce to not stop the exception from the try block to be propagated. If the try
+     *     // block completed successfully, all variables will have been set to null there and this will not do
+     *     // anything. This is just to cleanup properly in case of an exception.
+     *
+     *     IOUtil.close( resource1 );
+     *     IOUtil.close( resource2 );
+     *
+     *     // Without that utility method you would need to write the following:
+     *     //
+     *     // try
+     *     // {
+     *     //     if ( resource1 != null )
+     *     //     {
+     *     //         resource1.close();
+     *     //     }
+     *     // }
+     *     // catch( IOException e )
+     *     // {
+     *     //     Suppressed. If resource1 != null, an exception has already been thrown in the try block we need to
+     *     //     propagate instead of this one.
+     *     // }
+     *     // finally
+     *     // {
+     *     //     try
+     *     //     {
+     *     //         if ( resource2 != null )
+     *     //         {
+     *     //             resource2.close();
+     *     //         }
+     *     //     }
+     *     //     catch ( IOException e )
+     *     //     {
+     *     //         Suppressed. If resource2 != null, an exception has already been thrown in the try block we need to
+     *     //         propagate instead of this one.
+     *     //     }
+     *     // }
+     * }
+     * </pre>
+     * </p>
+     *
+     * @param channel The channel to close or {@code null}.
      */
     public static void close( @Nullable Channel channel )
     {
-        if ( channel == null )
-        {
-            return;
-        }
-
         try
         {
-            channel.close();
+            if ( channel != null )
+            {
+                channel.close();
+            }
         }
         catch ( IOException ex )
         {
-            // ignore
+            // Suppressed
         }
     }
 
     /**
-     * Closes the input stream. The input stream can be null and any IOException's will be swallowed.
+     * Closes an {@code InputStream} suppressing any {@code IOException}.
+     * <p>
+     * <b>Note:</b><br/>The usecase justifying this method is a shortcoming of the Java language up to but not including
+     * Java 7. For any code targetting Java 7 or later use of this method is highly discouraged and the
+     * {@code try-with-resources} statement should be used instead. Care must be taken to not use this method in a way
+     * {@code IOException}s get suppressed incorrectly.
+     * <strong>You must close all resources in use inside the {@code try} block to not suppress exceptions in the
+     * {@code finally} block incorrectly by using this method.</strong>
+     * </p>
+     * <p>
+     * <b>Example:</b><br/>
+     * <pre>
+     * // Introduce variables for the resources and initialize them to null. This cannot throw an exception.
+     * Closeable resource1 = null;
+     * Closeable resource2 = null;
+     * try
+     * {
+     *     // Obtain a resource object and assign it to variable resource1. This may throw an exception.
+     *     // If successful, resource1 != null.
+     *     resource1 = ...
      *
-     * @param inputStream The stream to close.
+     *     // Obtain a resource object and assign it to variable resource2. This may throw an exception.
+     *     // If successful, resource2 != null. Not reached if an exception has been thrown above.
+     *     resource2 = ...
+     *
+     *     // Perform operations on the resources. This may throw an exception. Not reached if an exception has been
+     *     // thrown above. Note: Treat the variables resource1 and resource2 the same way as if they would have been
+     *     // declared with the final modifier - that is - do NOT write anyting like resource1 = something else or
+     *     // resource2 = something else here.
+     *     resource1 ...
+     *     resource2 ...
+     *
+     *     // Finally, close the resources and set the variables to null indicating successful completion.
+     *     // This may throw an exception. Not reached if an exception has been thrown above.
+     *     resource1.close();
+     *     resource1 = null;
+     *     // Not reached if an exception has been thrown above.
+     *     resource2.close();
+     *     resource2 = null;
+     *
+     *     // All resources are closed at this point and all operations (up to here) completed successfully without
+     *     // throwing an exception we would need to handle (by letting it propagate or by catching and handling it).
+     * }
+     * finally
+     * {
+     *     // Cleanup any resource not closed in the try block due to an exception having been thrown and suppress any
+     *     // exception this may produce to not stop the exception from the try block to be propagated. If the try
+     *     // block completed successfully, all variables will have been set to null there and this will not do
+     *     // anything. This is just to cleanup properly in case of an exception.
+     *
+     *     IOUtil.close( resource1 );
+     *     IOUtil.close( resource2 );
+     *
+     *     // Without that utility method you would need to write the following:
+     *     //
+     *     // try
+     *     // {
+     *     //     if ( resource1 != null )
+     *     //     {
+     *     //         resource1.close();
+     *     //     }
+     *     // }
+     *     // catch( IOException e )
+     *     // {
+     *     //     Suppressed. If resource1 != null, an exception has already been thrown in the try block we need to
+     *     //     propagate instead of this one.
+     *     // }
+     *     // finally
+     *     // {
+     *     //     try
+     *     //     {
+     *     //         if ( resource2 != null )
+     *     //         {
+     *     //             resource2.close();
+     *     //         }
+     *     //     }
+     *     //     catch ( IOException e )
+     *     //     {
+     *     //         Suppressed. If resource2 != null, an exception has already been thrown in the try block we need to
+     *     //         propagate instead of this one.
+     *     //     }
+     *     // }
+     * }
+     * </pre>
+     * </p>
+     *
+     * @param inputStream The stream to close or {@code null}.
      */
     public static void close( @Nullable InputStream inputStream )
     {
-        if ( inputStream == null )
-        {
-            return;
-        }
-
         try
         {
-            inputStream.close();
+            if ( inputStream != null )
+            {
+                inputStream.close();
+            }
         }
         catch ( IOException ex )
         {
-            // ignore
+            // Suppressed
         }
     }
 
     /**
-     * Closes the output stream. The output stream can be null and any IOException's will be swallowed.
+     * Closes an {@code OutputStream} suppressing any {@code IOException}.
+     * <p>
+     * <b>Note:</b><br/>The usecase justifying this method is a shortcoming of the Java language up to but not including
+     * Java 7. For any code targetting Java 7 or later use of this method is highly discouraged and the
+     * {@code try-with-resources} statement should be used instead. Care must be taken to not use this method in a way
+     * {@code IOException}s get suppressed incorrectly.
+     * <strong>You must close all resources in use inside the {@code try} block to not suppress exceptions in the
+     * {@code finally} block incorrectly by using this method.</strong>
+     * </p>
+     * <p>
+     * <b>Example:</b><br/>
+     * <pre>
+     * // Introduce variables for the resources and initialize them to null. This cannot throw an exception.
+     * Closeable resource1 = null;
+     * Closeable resource2 = null;
+     * try
+     * {
+     *     // Obtain a resource object and assign it to variable resource1. This may throw an exception.
+     *     // If successful, resource1 != null.
+     *     resource1 = ...
      *
-     * @param outputStream The stream to close.
+     *     // Obtain a resource object and assign it to variable resource2. This may throw an exception.
+     *     // If successful, resource2 != null. Not reached if an exception has been thrown above.
+     *     resource2 = ...
+     *
+     *     // Perform operations on the resources. This may throw an exception. Not reached if an exception has been
+     *     // thrown above. Note: Treat the variables resource1 and resource2 the same way as if they would have been
+     *     // declared with the final modifier - that is - do NOT write anyting like resource1 = something else or
+     *     // resource2 = something else here.
+     *     resource1 ...
+     *     resource2 ...
+     *
+     *     // Finally, close the resources and set the variables to null indicating successful completion.
+     *     // This may throw an exception. Not reached if an exception has been thrown above.
+     *     resource1.close();
+     *     resource1 = null;
+     *     // Not reached if an exception has been thrown above.
+     *     resource2.close();
+     *     resource2 = null;
+     *
+     *     // All resources are closed at this point and all operations (up to here) completed successfully without
+     *     // throwing an exception we would need to handle (by letting it propagate or by catching and handling it).
+     * }
+     * finally
+     * {
+     *     // Cleanup any resource not closed in the try block due to an exception having been thrown and suppress any
+     *     // exception this may produce to not stop the exception from the try block to be propagated. If the try
+     *     // block completed successfully, all variables will have been set to null there and this will not do
+     *     // anything. This is just to cleanup properly in case of an exception.
+     *
+     *     IOUtil.close( resource1 );
+     *     IOUtil.close( resource2 );
+     *
+     *     // Without that utility method you would need to write the following:
+     *     //
+     *     // try
+     *     // {
+     *     //     if ( resource1 != null )
+     *     //     {
+     *     //         resource1.close();
+     *     //     }
+     *     // }
+     *     // catch( IOException e )
+     *     // {
+     *     //     Suppressed. If resource1 != null, an exception has already been thrown in the try block we need to
+     *     //     propagate instead of this one.
+     *     // }
+     *     // finally
+     *     // {
+     *     //     try
+     *     //     {
+     *     //         if ( resource2 != null )
+     *     //         {
+     *     //             resource2.close();
+     *     //         }
+     *     //     }
+     *     //     catch ( IOException e )
+     *     //     {
+     *     //         Suppressed. If resource2 != null, an exception has already been thrown in the try block we need to
+     *     //         propagate instead of this one.
+     *     //     }
+     *     // }
+     * }
+     * </pre>
+     * </p>
+     *
+     * @param outputStream The stream to close or {@code null}.
      */
     public static void close( @Nullable OutputStream outputStream )
     {
-        if ( outputStream == null )
-        {
-            return;
-        }
-
         try
         {
-            outputStream.close();
+            if ( outputStream != null )
+            {
+                outputStream.close();
+            }
         }
         catch ( IOException ex )
         {
-            // ignore
+            // Suppressed
         }
     }
 
     /**
-     * Closes the reader. The reader can be null and any IOException's will be swallowed.
+     * Closes a {@code Reader} suppressing any {@code IOException}.
+     * <p>
+     * <b>Note:</b><br/>The usecase justifying this method is a shortcoming of the Java language up to but not including
+     * Java 7. For any code targetting Java 7 or later use of this method is highly discouraged and the
+     * {@code try-with-resources} statement should be used instead. Care must be taken to not use this method in a way
+     * {@code IOException}s get suppressed incorrectly.
+     * <strong>You must close all resources in use inside the {@code try} block to not suppress exceptions in the
+     * {@code finally} block incorrectly by using this method.</strong>
+     * </p>
+     * <p>
+     * <b>Example:</b><br/>
+     * <pre>
+     * // Introduce variables for the resources and initialize them to null. This cannot throw an exception.
+     * Closeable resource1 = null;
+     * Closeable resource2 = null;
+     * try
+     * {
+     *     // Obtain a resource object and assign it to variable resource1. This may throw an exception.
+     *     // If successful, resource1 != null.
+     *     resource1 = ...
      *
-     * @param reader The reader to close.
+     *     // Obtain a resource object and assign it to variable resource2. This may throw an exception.
+     *     // If successful, resource2 != null. Not reached if an exception has been thrown above.
+     *     resource2 = ...
+     *
+     *     // Perform operations on the resources. This may throw an exception. Not reached if an exception has been
+     *     // thrown above. Note: Treat the variables resource1 and resource2 the same way as if they would have been
+     *     // declared with the final modifier - that is - do NOT write anyting like resource1 = something else or
+     *     // resource2 = something else here.
+     *     resource1 ...
+     *     resource2 ...
+     *
+     *     // Finally, close the resources and set the variables to null indicating successful completion.
+     *     // This may throw an exception. Not reached if an exception has been thrown above.
+     *     resource1.close();
+     *     resource1 = null;
+     *     // Not reached if an exception has been thrown above.
+     *     resource2.close();
+     *     resource2 = null;
+     *
+     *     // All resources are closed at this point and all operations (up to here) completed successfully without
+     *     // throwing an exception we would need to handle (by letting it propagate or by catching and handling it).
+     * }
+     * finally
+     * {
+     *     // Cleanup any resource not closed in the try block due to an exception having been thrown and suppress any
+     *     // exception this may produce to not stop the exception from the try block to be propagated. If the try
+     *     // block completed successfully, all variables will have been set to null there and this will not do
+     *     // anything. This is just to cleanup properly in case of an exception.
+     *
+     *     IOUtil.close( resource1 );
+     *     IOUtil.close( resource2 );
+     *
+     *     // Without that utility method you would need to write the following:
+     *     //
+     *     // try
+     *     // {
+     *     //     if ( resource1 != null )
+     *     //     {
+     *     //         resource1.close();
+     *     //     }
+     *     // }
+     *     // catch( IOException e )
+     *     // {
+     *     //     Suppressed. If resource1 != null, an exception has already been thrown in the try block we need to
+     *     //     propagate instead of this one.
+     *     // }
+     *     // finally
+     *     // {
+     *     //     try
+     *     //     {
+     *     //         if ( resource2 != null )
+     *     //         {
+     *     //             resource2.close();
+     *     //         }
+     *     //     }
+     *     //     catch ( IOException e )
+     *     //     {
+     *     //         Suppressed. If resource2 != null, an exception has already been thrown in the try block we need to
+     *     //         propagate instead of this one.
+     *     //     }
+     *     // }
+     * }
+     * </pre>
+     * </p>
+     *
+     * @param reader The reader to close or {@code null}.
      */
     public static void close( @Nullable Reader reader )
     {
-        if ( reader == null )
-        {
-            return;
-        }
-
         try
         {
-            reader.close();
+            if ( reader != null )
+            {
+                reader.close();
+            }
         }
         catch ( IOException ex )
         {
-            // ignore
+            // Suppressed
         }
     }
 
     /**
-     * Closes the writer. The writer can be null and any IOException's will be swallowed.
+     * Closes a {@code Writer} suppressing any {@code IOException}.
+     * <p>
+     * <b>Note:</b><br/>The usecase justifying this method is a shortcoming of the Java language up to but not including
+     * Java 7. For any code targetting Java 7 or later use of this method is highly discouraged and the
+     * {@code try-with-resources} statement should be used instead. Care must be taken to not use this method in a way
+     * {@code IOException}s get suppressed incorrectly.
+     * <strong>You must close all resources in use inside the {@code try} block to not suppress exceptions in the
+     * {@code finally} block incorrectly by using this method.</strong>
+     * </p>
+     * <p>
+     * <b>Example:</b><br/>
+     * <pre>
+     * // Introduce variables for the resources and initialize them to null. This cannot throw an exception.
+     * Closeable resource1 = null;
+     * Closeable resource2 = null;
+     * try
+     * {
+     *     // Obtain a resource object and assign it to variable resource1. This may throw an exception.
+     *     // If successful, resource1 != null.
+     *     resource1 = ...
      *
-     * @param writer The writer to close.
+     *     // Obtain a resource object and assign it to variable resource2. This may throw an exception.
+     *     // If successful, resource2 != null. Not reached if an exception has been thrown above.
+     *     resource2 = ...
+     *
+     *     // Perform operations on the resources. This may throw an exception. Not reached if an exception has been
+     *     // thrown above. Note: Treat the variables resource1 and resource2 the same way as if they would have been
+     *     // declared with the final modifier - that is - do NOT write anyting like resource1 = something else or
+     *     // resource2 = something else here.
+     *     resource1 ...
+     *     resource2 ...
+     *
+     *     // Finally, close the resources and set the variables to null indicating successful completion.
+     *     // This may throw an exception. Not reached if an exception has been thrown above.
+     *     resource1.close();
+     *     resource1 = null;
+     *     // Not reached if an exception has been thrown above.
+     *     resource2.close();
+     *     resource2 = null;
+     *
+     *     // All resources are closed at this point and all operations (up to here) completed successfully without
+     *     // throwing an exception we would need to handle (by letting it propagate or by catching and handling it).
+     * }
+     * finally
+     * {
+     *     // Cleanup any resource not closed in the try block due to an exception having been thrown and suppress any
+     *     // exception this may produce to not stop the exception from the try block to be propagated. If the try
+     *     // block completed successfully, all variables will have been set to null there and this will not do
+     *     // anything. This is just to cleanup properly in case of an exception.
+     *
+     *     IOUtil.close( resource1 );
+     *     IOUtil.close( resource2 );
+     *
+     *     // Without that utility method you would need to write the following:
+     *     //
+     *     // try
+     *     // {
+     *     //     if ( resource1 != null )
+     *     //     {
+     *     //         resource1.close();
+     *     //     }
+     *     // }
+     *     // catch( IOException e )
+     *     // {
+     *     //     Suppressed. If resource1 != null, an exception has already been thrown in the try block we need to
+     *     //     propagate instead of this one.
+     *     // }
+     *     // finally
+     *     // {
+     *     //     try
+     *     //     {
+     *     //         if ( resource2 != null )
+     *     //         {
+     *     //             resource2.close();
+     *     //         }
+     *     //     }
+     *     //     catch ( IOException e )
+     *     //     {
+     *     //         Suppressed. If resource2 != null, an exception has already been thrown in the try block we need to
+     *     //         propagate instead of this one.
+     *     //     }
+     *     // }
+     * }
+     * </pre>
+     * </p>
+     *
+     * @param writer The writer to close or {@code null}.
      */
     public static void close( @Nullable Writer writer )
     {
-        if ( writer == null )
-        {
-            return;
-        }
-
         try
         {
-            writer.close();
+            if ( writer != null )
+            {
+                writer.close();
+            }
         }
         catch ( IOException ex )
         {
-            // ignore
+            // Suppressed
         }
     }
 }
