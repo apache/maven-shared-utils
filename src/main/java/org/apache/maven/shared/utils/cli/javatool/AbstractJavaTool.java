@@ -25,11 +25,12 @@ import org.apache.maven.shared.utils.cli.CommandLineException;
 import org.apache.maven.shared.utils.cli.CommandLineUtils;
 import org.apache.maven.shared.utils.cli.Commandline;
 import org.apache.maven.shared.utils.cli.StreamConsumer;
-import org.apache.maven.toolchain.Toolchain;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 import java.io.File;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
@@ -57,7 +58,7 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest>
     /**
      * Optional toolChain used to find java tool executable file.
      */
-    private Toolchain toolchain;
+    private Object toolchain;
 
     /**
      * @param javaToolName The name of the java tool.
@@ -89,7 +90,7 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest>
     /**
      * {@inheritDoc}
      */
-    public void setToolchain( Toolchain toolchain )
+    public void setToolchain( Object toolchain )
     {
         this.toolchain = toolchain;
     }
@@ -249,14 +250,14 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest>
      */
     protected String findJavaToolExecutable()
     {
-        String command = javaToolName + ( Os.isFamily( Os.FAMILY_WINDOWS ) ? ".exe" : "" );
-
         String executable = null;
 
         if ( toolchain != null )
         {
-            executable = toolchain.findTool( javaToolName );
+            executable = findToolchainExecutable();
         }
+
+        String command = javaToolName + ( Os.isFamily( Os.FAMILY_WINDOWS ) ? ".exe" : "" );
 
         if ( executable == null )
         {
@@ -286,6 +287,45 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest>
         }
 
         return executable;
+    }
+
+    /**
+     * Run toolchain.findTool( javaToolName ); through reflection to avoid compile dependency on
+     * Maven core.
+     */
+    private String findToolchainExecutable()
+    {
+        try
+        {
+            Method m = toolchain.getClass().getMethod( "findTool", String.class );
+            return (String) m.invoke( toolchain, javaToolName );
+        }
+        catch ( NoSuchMethodException e )
+        {
+            // should not happen if toolchain is really a Toolchain object
+            getLogger().warn( "unexpected NoSuchMethodException", e );
+        }
+        catch ( SecurityException e )
+        {
+            // should not happen
+            getLogger().warn( "unexpected SecurityException", e );
+        }
+        catch ( IllegalAccessException e )
+        {
+            // should not happen
+            getLogger().warn( "unexpected IllegalAccessException", e );
+        }
+        catch ( IllegalArgumentException e )
+        {
+            // should not happen: parameter is the right type
+            getLogger().warn( "unexpected IllegalArgumentException", e );
+        }
+        catch ( InvocationTargetException e )
+        {
+            // not expected...
+            getLogger().warn( "unexpected InvocationTargetException", e );
+        }
+        return null;
     }
 
     /**

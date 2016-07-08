@@ -19,8 +19,6 @@ package org.apache.maven.shared.utils.cli.javatool;
  * under the License.
  */
 
-import org.apache.maven.toolchain.Toolchain;
-
 /**
  * Describes a java tool, means a executable available in the jdk.
  * <p/>
@@ -51,8 +49,10 @@ public interface JavaTool<Request extends JavaToolRequest>
      * Set an optional tool chain to find out the java tool executable location.
      *
      * @param toolchain optional tool chain to find out the java tool executable location.
+     * To avoid direct dependency on Maven core, this parameter is an Object that will be
+     * used as Toolchain through reflection
      */
-    void setToolchain( Toolchain toolchain );
+    void setToolchain( Object toolchain );
 
     /**
      * Execute the input request and then returns the result of the execution.
