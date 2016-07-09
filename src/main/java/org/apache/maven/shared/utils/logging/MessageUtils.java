@@ -24,6 +24,7 @@ import org.fusesource.jansi.AnsiConsole;
 
 /**
  * Colored message utils, to manage colors colors consistently across plugins (only if Maven version is at least 3.4).
+ * For Maven version before 3.4, message built with this util will never add color.
  */
 public class MessageUtils
 {
@@ -44,6 +45,9 @@ public class MessageUtils
         JANSI = jansi;
     }
 
+    /**
+     * Install color support.
+     */
     public static void systemInstall()
     {
         if ( JANSI )
@@ -60,6 +64,10 @@ public class MessageUtils
         }
     }
 
+    /**
+     * Activates message color (if JAnsi is available).
+     * @param flag
+     */
     public static void setColor( boolean flag )
     {
         if ( JANSI )
@@ -68,23 +76,50 @@ public class MessageUtils
         }
     }
 
+    /**
+     * Is message color active: requires JAnsi available (through Maven) and the color has not been disabled.
+     * @return
+     */
     public static boolean isColor()
     {
         return JANSI ? Ansi.isEnabled() : false;
     }
 
+    /**
+     * Create a default message buffer.
+     * @return a new buffer
+     */
     public static MessageBuffer buffer()
     {
         return JANSI ? new AnsiMessageBuffer() : new PlainMessageBuffer();
     }
 
+    /**
+     * Create a message buffer with defined String builder.
+     * @return a new buffer
+     */
     public static MessageBuffer buffer( StringBuilder builder )
     {
         return JANSI ? new AnsiMessageBuffer( builder ) : new PlainMessageBuffer( builder );
     }
 
+    /**
+     * Create a message buffer with an internal buffer of defined size.
+     * @return a new buffer
+     */
     public static MessageBuffer buffer( int size )
     {
         return JANSI ? new AnsiMessageBuffer( size ) : new PlainMessageBuffer( size );
     }
+
+    /**
+     * Remove any ANSI code from a message
+     * @param msg message eventually containing ANSI codes
+     * @return the message with ANSI codes removed
+     */
+    public static String stripAnsi( String msg )
+    {
+        return msg.replaceAll( "\u001B\\[[;\\d]*[ -/]*[@-~]", "" );
+    }
+
 }
