@@ -42,14 +42,20 @@ enum Style
 
     private final boolean bold;
 
+    private final boolean bright;
+
     private final Color color;
+
+    private final boolean bgBright;
 
     private final Color bgColor;
 
     Style( String defaultValue )
     {
         boolean currentBold = false;
+        boolean currentBright = false;
         Color currentColor = null;
+        boolean currentBgBright = false;
         Color currentBgColor = null;
 
         String value = System.getProperty( "style." + name().toLowerCase( Locale.ENGLISH ),
@@ -63,16 +69,29 @@ enum Style
             }
             else if ( token.startsWith( "bg" ) )
             {
-                currentBgColor = toColor( token.substring( 2 ) );
+                token = token.substring( 2 );
+                if ( token.startsWith( "bright" ) )
+                {
+                    currentBgBright = true;
+                    token = token.substring( 6 );
+                }
+                currentBgColor = toColor( token );
             }
             else
             {
+                if ( token.startsWith( "bright" ) )
+                {
+                    currentBright = true;
+                    token = token.substring( 6 );
+                }
                 currentColor = toColor( token );
             }
         }
 
         this.bold = currentBold;
+        this.bright = currentBright;
         this.color = currentColor;
+        this.bgBright = currentBgBright;
         this.bgColor = currentBgColor;
     }
 
@@ -96,11 +115,25 @@ enum Style
         }
         if ( color != null )
         {
-            ansi.fg( color );
+            if ( bright )
+            {
+                ansi.fgBright( color );
+            }
+            else
+            {
+                ansi.fg( color );
+            }
         }
         if ( bgColor != null )
         {
-            ansi.bg( bgColor );
+            if ( bgBright )
+            {
+                ansi.bgBright( bgColor );
+            }
+            else
+            {
+                ansi.bg( bgColor );
+            }
         }
     }
 
@@ -122,6 +155,10 @@ enum Style
             {
                 sb.append(  ',' );
             }
+            if ( bright )
+            {
+                sb.append( "bright" );
+            }
             sb.append( color.name() );
         }
         if ( bgColor != null )
@@ -131,6 +168,10 @@ enum Style
                 sb.append(  ',' );
             }
             sb.append( "bg" );
+            if ( bgBright )
+            {
+                sb.append( "bright" );
+            }
             sb.append( bgColor.name() );
         }
         return name() + '=' + sb;
