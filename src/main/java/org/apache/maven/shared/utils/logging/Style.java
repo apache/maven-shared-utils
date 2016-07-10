@@ -20,10 +20,7 @@ package org.apache.maven.shared.utils.logging;
  */
 
 import org.fusesource.jansi.Ansi;
-import org.fusesource.jansi.Ansi.Attribute;
 import org.fusesource.jansi.Ansi.Color;
-
-import static org.fusesource.jansi.Ansi.Attribute.INTENSITY_BOLD;
 
 import java.util.Locale;
 
@@ -43,66 +40,100 @@ enum Style
     MOJO(    "green"       ),
     PROJECT( "cyan"        );
 
-    private final Attribute attribute;
+    private final boolean bold;
 
     private final Color color;
 
+    private final Color bgColor;
+
     Style( String defaultValue )
     {
-        Attribute currentAttribute = null;
+        boolean currentBold = false;
         Color currentColor = null;
+        Color currentBgColor = null;
 
-        String value = System.getProperty( "style." + name().toLowerCase( Locale.ENGLISH ), defaultValue );
+        String value = System.getProperty( "style." + name().toLowerCase( Locale.ENGLISH ),
+                                           defaultValue ).toLowerCase( Locale.ENGLISH );
 
         for ( String token : value.split( "," ) )
         {
-            for ( Color color : Color.values() )
+            if ( "bold".equals( token ) )
             {
-                if ( color.toString().equalsIgnoreCase( token ) )
-                {
-                    currentColor = color;
-                    break;
-                }
+                currentBold = true;
             }
-
-            if ( "bold".equalsIgnoreCase( token ) )
+            else if ( token.startsWith( "bg" ) )
             {
-                currentAttribute = INTENSITY_BOLD;
+                currentBgColor = toColor( token.substring( 2 ) );
+            }
+            else
+            {
+                currentColor = toColor( token );
             }
         }
 
-        this.attribute = currentAttribute;
+        this.bold = currentBold;
         this.color = currentColor;
+        this.bgColor = currentBgColor;
+    }
+
+    private static Color toColor( String token )
+    {
+        for ( Color color : Color.values() )
+        {
+            if ( color.toString().equalsIgnoreCase( token ) )
+            {
+                return color;
+            }
+        }
+        return null;
     }
 
     void apply( Ansi ansi )
     {
-        if ( attribute != null )
+        if ( bold )
         {
-            ansi.a( attribute );
+            ansi.bold();
         }
         if ( color != null )
         {
             ansi.fg( color );
+        }
+        if ( bgColor != null )
+        {
+            ansi.bg( bgColor );
         }
     }
 
     @Override
     public String toString()
     {
-        if ( attribute == null && color == null )
+        if ( !bold && color == null && bgColor == null )
         {
             return name();
         }
-        if ( attribute == null )
+        StringBuilder sb = new StringBuilder();
+        if ( bold )
         {
-            return name() + "=" + color.toString();
+            sb.append( "bold" );
         }
-        if ( color == null )
+        if ( color != null )
         {
-            return name() + "=" + attribute.toString();
+            if ( sb.length() > 0 )
+            {
+                sb.append(  ',' );
+            }
+            sb.append( color.name() );
         }
-        return name() + "=" + attribute + "," + color;
+        if ( bgColor != null )
+        {
+            if ( sb.length() > 0 )
+            {
+                sb.append(  ',' );
+            }
+            sb.append( "bg" );
+            sb.append( bgColor.name() );
+        }
+        return name() + '=' + sb;
     }
 
 }
