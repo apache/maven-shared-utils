@@ -20,64 +20,64 @@ package org.apache.maven.shared.utils.logging;
  */
 
 /**
- * Message buffer that supports configurable styling.
+ * Message builder that supports configurable styling.
  * @see MessageUtils
  */
-public interface MessageBuffer
+public interface MessageBuilder
 {
     /**
      * Append message content for DEBUG level.
      * By default, bold cyan
      */
-    MessageBuffer debug( Object message );
+    MessageBuilder debug( Object message );
     
     /**
      * Append message content for INFO level.
      * By default, bold blue
      */
-    MessageBuffer info( Object message );
+    MessageBuilder info( Object message );
     
     /**
      * Append message content in warning style or WARNING level.
      * By default, bold yellow
      */
-    MessageBuffer warning( Object message );
+    MessageBuilder warning( Object message );
     
     /**
      * Append message content for ERROR level.
      * By default, bold red
      */
-    MessageBuffer error( Object message );
+    MessageBuilder error( Object message );
     
     /**
      * Append message content in success style.
      * By default, bold green
      */
-    MessageBuffer success( Object message );
+    MessageBuilder success( Object message );
     
     /**
      * Append message content in failure style.
      * By default, bold red
      */
-    MessageBuffer failure( Object message );
+    MessageBuilder failure( Object message );
 
     /**
      * Append message content in strong style.
      * By default, bold
      */
-    MessageBuffer strong( Object message );
+    MessageBuilder strong( Object message );
     
     /**
      * Append message content in mojo style.
      * By default, green
      */
-    MessageBuffer mojo( Object message );
+    MessageBuilder mojo( Object message );
     
     /**
      * Append message content in project style.
      * By default, cyan
      */
-    MessageBuffer project( Object message );
+    MessageBuilder project( Object message );
     
     //
     // message building methods modelled after Ansi methods
@@ -85,36 +85,36 @@ public interface MessageBuffer
     /**
      * Append content to the message buffer.
      */
-    MessageBuffer a( char[] value, int offset, int len );
+    MessageBuilder a( char[] value, int offset, int len );
 
     /**
      * Append content to the message buffer.
      */
-    MessageBuffer a( char[] value );
+    MessageBuilder a( char[] value );
 
     /**
      * Append content to the message buffer.
      */
-    MessageBuffer a( CharSequence value, int start, int end );
+    MessageBuilder a( CharSequence value, int start, int end );
 
     /**
      * Append content to the message buffer.
      */
-    MessageBuffer a( CharSequence value );
+    MessageBuilder a( CharSequence value );
 
     /**
      * Append content to the message buffer.
      */
-    MessageBuffer a( Object value );
+    MessageBuilder a( Object value );
 
     /**
      * Append newline to the message buffer.
      */
-    MessageBuffer newline();
+    MessageBuilder newline();
 
     /**
      * Append formatted content to the buffer.
      * @see String#format(String, Object...)
      */
-    MessageBuffer format( String pattern, Object... args );
+    MessageBuilder format( String pattern, Object... args );
 }

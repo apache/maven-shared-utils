@@ -22,125 +22,125 @@ package org.apache.maven.shared.utils.logging;
 import org.fusesource.jansi.Ansi;
 
 /**
- * Message buffer implementation that supports ANSI colors through
+ * Message builder implementation that supports ANSI colors through
  * <a href="http://fusesource.github.io/jansi/">Jansi</a> with configurable styles through {@link Style}.
  */
-class AnsiMessageBuffer
-    implements MessageBuffer
+class AnsiMessageBuilder
+    implements MessageBuilder
 {
     private Ansi ansi;
 
-    AnsiMessageBuffer()
+    AnsiMessageBuilder()
     {
         this( Ansi.ansi() );
     }
 
-    AnsiMessageBuffer( StringBuilder builder )
+    AnsiMessageBuilder( StringBuilder builder )
     {
         this( Ansi.ansi( builder ) );
     }
 
-    AnsiMessageBuffer( int size )
+    AnsiMessageBuilder( int size )
     {
         this( Ansi.ansi( size ) );
     }
 
-    AnsiMessageBuffer( Ansi ansi )
+    AnsiMessageBuilder( Ansi ansi )
     {
         this.ansi = ansi;
     }
 
-    public AnsiMessageBuffer debug( Object message )
+    public AnsiMessageBuilder debug( Object message )
     {
         Style.DEBUG.apply( ansi ).a( message ).reset();
         return this;
     }
 
-    public AnsiMessageBuffer info( Object message )
+    public AnsiMessageBuilder info( Object message )
     {
         Style.INFO.apply( ansi ).a( message ).reset();
         return this;
     }
 
-    public AnsiMessageBuffer warning( Object message )
+    public AnsiMessageBuilder warning( Object message )
     {
         Style.WARNING.apply( ansi ).a( message ).reset();
         return this;
     }
 
-    public AnsiMessageBuffer error( Object message )
+    public AnsiMessageBuilder error( Object message )
     {
         Style.ERROR.apply( ansi ).a( message ).reset();
         return this;
     }
 
-    public AnsiMessageBuffer success( Object message )
+    public AnsiMessageBuilder success( Object message )
     {
         Style.SUCCESS.apply( ansi ).a( message ).reset();
         return this;
     }
 
-    public AnsiMessageBuffer failure( Object message )
+    public AnsiMessageBuilder failure( Object message )
     {
         Style.FAILURE.apply( ansi ).a( message ).reset();
         return this;
     }
 
-    public AnsiMessageBuffer strong( Object message )
+    public AnsiMessageBuilder strong( Object message )
     {
         Style.STRONG.apply( ansi ).a( message ).reset();
         return this;
     }
 
-    public AnsiMessageBuffer mojo( Object message )
+    public AnsiMessageBuilder mojo( Object message )
     {
         Style.MOJO.apply( ansi ).a( message ).reset();
         return this;
     }
 
-    public AnsiMessageBuffer project( Object message )
+    public AnsiMessageBuilder project( Object message )
     {
         Style.PROJECT.apply( ansi ).a( message ).reset();
         return this;
     }
 
-    public AnsiMessageBuffer a( char[] value, int offset, int len )
+    public AnsiMessageBuilder a( char[] value, int offset, int len )
     {
         ansi.a( value, offset, len );
         return this;
     }
 
-    public AnsiMessageBuffer a( char[] value )
+    public AnsiMessageBuilder a( char[] value )
     {
         ansi.a( value );
         return this;
     }
 
-    public AnsiMessageBuffer a( CharSequence value, int start, int end )
+    public AnsiMessageBuilder a( CharSequence value, int start, int end )
     {
         ansi.a( value, start, end );
         return this;
     }
 
-    public AnsiMessageBuffer a( CharSequence value )
+    public AnsiMessageBuilder a( CharSequence value )
     {
         ansi.a( value );
         return this;
     }
 
-    public AnsiMessageBuffer a( Object value )
+    public AnsiMessageBuilder a( Object value )
     {
         ansi.a( value );
         return this;
     }
 
-    public AnsiMessageBuffer newline()
+    public AnsiMessageBuilder newline()
     {
         ansi.newline();
         return this;
     }
 
-    public AnsiMessageBuffer format( String pattern, Object... args )
+    public AnsiMessageBuilder format( String pattern, Object... args )
     {
         ansi.format( pattern, args );
         return this;

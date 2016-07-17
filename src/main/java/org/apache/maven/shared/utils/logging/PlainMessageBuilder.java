@@ -20,110 +20,110 @@ package org.apache.maven.shared.utils.logging;
  */
 
 /**
- * Message buffer implementation that just ignores styling, for Maven version earlier than 3.4.0.
+ * Message builder implementation that just ignores styling, for Maven version earlier than 3.4.0.
  */
-class PlainMessageBuffer
-    implements MessageBuffer
+class PlainMessageBuilder
+    implements MessageBuilder
 {
     private StringBuilder buffer;
 
-    PlainMessageBuffer()
+    PlainMessageBuilder()
     {
         buffer = new StringBuilder();
     }
 
-    PlainMessageBuffer( StringBuilder builder )
+    PlainMessageBuilder( StringBuilder builder )
     {
         buffer = builder;
     }
 
-    PlainMessageBuffer( int size )
+    PlainMessageBuilder( int size )
     {
         buffer = new StringBuilder( size );
     }
 
-    public PlainMessageBuffer debug( Object message )
+    public PlainMessageBuilder debug( Object message )
     {
         return a( message );
     }
     
-    public PlainMessageBuffer info( Object message )
+    public PlainMessageBuilder info( Object message )
     {
         return a( message );
     }
     
-    public PlainMessageBuffer warning( Object message )
+    public PlainMessageBuilder warning( Object message )
     {
         return a( message );
     }
     
-    public PlainMessageBuffer error( Object message )
+    public PlainMessageBuilder error( Object message )
     {
         return a( message );
     }
 
-    public PlainMessageBuffer success( Object message )
+    public PlainMessageBuilder success( Object message )
     {
         return a( message );
     }
 
-    public PlainMessageBuffer failure( Object message )
+    public PlainMessageBuilder failure( Object message )
     {
         return a( message );
     }
 
-    public PlainMessageBuffer strong( Object message )
+    public PlainMessageBuilder strong( Object message )
     {
         return a( message );
     }
 
-    public PlainMessageBuffer mojo( Object message )
+    public PlainMessageBuilder mojo( Object message )
     {
         return a( message );
     }
 
-    public PlainMessageBuffer project( Object message )
+    public PlainMessageBuilder project( Object message )
     {
         return a( message );
     }
 
-    public PlainMessageBuffer a( char[] value, int offset, int len )
+    public PlainMessageBuilder a( char[] value, int offset, int len )
     {
         buffer.append( value, offset, len );
         return this;
     }
 
-    public PlainMessageBuffer a( char[] value )
+    public PlainMessageBuilder a( char[] value )
     {
         buffer.append( value );
         return this;
     }
 
-    public PlainMessageBuffer a( CharSequence value, int start, int end )
+    public PlainMessageBuilder a( CharSequence value, int start, int end )
     {
         buffer.append( value, start, end );
         return this;
     }
 
-    public PlainMessageBuffer a( CharSequence value )
+    public PlainMessageBuilder a( CharSequence value )
     {
         buffer.append( value );
         return this;
     }
 
-    public PlainMessageBuffer a( Object value )
+    public PlainMessageBuilder a( Object value )
     {
         buffer.append( value );
         return this;
     }
 
-    public PlainMessageBuffer newline()
+    public PlainMessageBuilder newline()
     {
         buffer.append( System.getProperty( "line.separator" ) );
         return this;
     }
 
-    public PlainMessageBuffer format( String pattern, Object... args )
+    public PlainMessageBuilder format( String pattern, Object... args )
     {
         buffer.append( String.format( pattern, args ) );
         return this;

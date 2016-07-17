@@ -21,7 +21,7 @@
  * An API to write Maven messages to console with styled color content, consistently across whole
  * Maven ecosystem (Maven itself or any plugin or extension). 
  * <p>
- * Messages are built with instances of {@link org.apache.maven.shared.utils.logging.MessageBuffer MessageBuffer}
+ * Messages are built with instances of {@link org.apache.maven.shared.utils.logging.MessageBuilder MessageBuilder}
  * which provides a fluent API.
  * {@link org.apache.maven.shared.utils.logging.MessageUtils MessageUtils} gives access to these buffers.
  * <p>

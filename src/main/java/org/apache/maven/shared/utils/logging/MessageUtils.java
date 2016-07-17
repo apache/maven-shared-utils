@@ -97,27 +97,27 @@ public class MessageUtils
      * Create a default message buffer.
      * @return a new buffer
      */
-    public static MessageBuffer buffer()
+    public static MessageBuilder buffer()
     {
-        return JANSI ? new AnsiMessageBuffer() : new PlainMessageBuffer();
+        return JANSI ? new AnsiMessageBuilder() : new PlainMessageBuilder();
     }
 
     /**
      * Create a message buffer with defined String builder.
      * @return a new buffer
      */
-    public static MessageBuffer buffer( StringBuilder builder )
+    public static MessageBuilder buffer( StringBuilder builder )
     {
-        return JANSI ? new AnsiMessageBuffer( builder ) : new PlainMessageBuffer( builder );
+        return JANSI ? new AnsiMessageBuilder( builder ) : new PlainMessageBuilder( builder );
     }
 
     /**
      * Create a message buffer with an internal buffer of defined size.
      * @return a new buffer
      */
-    public static MessageBuffer buffer( int size )
+    public static MessageBuilder buffer( int size )
     {
-        return JANSI ? new AnsiMessageBuffer( size ) : new PlainMessageBuffer( size );
+        return JANSI ? new AnsiMessageBuilder( size ) : new PlainMessageBuilder( size );
     }
 
     /**
