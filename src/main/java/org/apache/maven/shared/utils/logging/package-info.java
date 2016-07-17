@@ -33,7 +33,7 @@
  * <li><code>success</code>, <code>failure</code>, <code>strong</code>, <code>mojo</code> and <code>project</code> for
  * message content</li>
  * </ul>
- * Default styles colors can be configured through system properties, that can be set in <code>MAVEN_OPTS</code>
+ * Default styles colors can be overridden through system properties, that can be set in <code>MAVEN_OPTS</code>
  * environment variable (eventually in <code>.mavenrc</code> script):<ul>
  * <li>system properties are named <code>style.&lt;style name&gt;</code>,</li>
  * <li>values are comma separated combination of <code>bold</code>, <code>&lt;color&gt;</code> and

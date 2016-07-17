@@ -22,8 +22,8 @@ package org.apache.maven.shared.utils.logging;
 import org.fusesource.jansi.Ansi;
 
 /**
- * Message buffer implementation that supports ANSI colors through JAnsi with configurable
- * styles through {@link Style}.
+ * Message buffer implementation that supports ANSI colors through <a href="http://fusesource.github.io/jansi/">Jansi</a>
+ * with configurable styles through {@link Style}.
  */
 class AnsiMessageBuffer
     implements MessageBuffer

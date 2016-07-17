@@ -110,21 +110,46 @@ public interface MessageBuffer
     MessageBuffer project( Object message );
     
     //
-    // message building methods (modelled after Ansi methods)
+    // message building methods modelled after Ansi methods
     //
+    /**
+     * Reset to default style.
+     */
     MessageBuffer reset();
 
+    /**
+     * Append content to the buffer.
+     */
     MessageBuffer a( char[] value, int offset, int len );
 
+    /**
+     * Append content to the buffer.
+     */
     MessageBuffer a( char[] value );
 
+    /**
+     * Append content to the buffer.
+     */
     MessageBuffer a( CharSequence value, int start, int end );
 
+    /**
+     * Append content to the buffer.
+     */
     MessageBuffer a( CharSequence value );
 
+    /**
+     * Append content to the buffer.
+     */
     MessageBuffer a( Object value );
 
+    /**
+     * Append a newline to the buffer.
+     */
     MessageBuffer newline();
 
+    /**
+     * Append formatted content to the buffer.
+     * @see String#format(String, Object...)
+     */
     MessageBuffer format( String pattern, Object... args );
 }
