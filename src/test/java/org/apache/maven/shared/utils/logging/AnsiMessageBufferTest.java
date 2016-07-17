@@ -39,25 +39,17 @@ public class AnsiMessageBufferTest
     @Test
     public void should_color_debug()
     {
-        ansiMessageBuffer.debug();
+        ansiMessageBuffer.debug( "a debug message" );
 
-        assertThat( ansiMessageBuffer.toString(), equalTo( "\u001B[1;36m" ) );
+        assertThat( ansiMessageBuffer.toString(), equalTo( "\u001B[1;36ma debug message\u001B[m" ) );
     }
 
     @Test
     public void should_color_info()
     {
-        ansiMessageBuffer.info();
+        ansiMessageBuffer.info( "an info message" );
 
-        assertThat( ansiMessageBuffer.toString(), equalTo( "\u001B[1;34m" ) );
-    }
-
-    @Test
-    public void should_color_warning()
-    {
-        ansiMessageBuffer.warning();
-
-        assertThat( ansiMessageBuffer.toString(), equalTo( "\u001B[1;33m" ) );
+        assertThat( ansiMessageBuffer.toString(), equalTo( "\u001B[1;34man info message\u001B[m" ) );
     }
 
     @Test
@@ -71,17 +63,9 @@ public class AnsiMessageBufferTest
     @Test
     public void should_color_error()
     {
-        ansiMessageBuffer.error();
+        ansiMessageBuffer.error( "an error message" );
 
-        assertThat( ansiMessageBuffer.toString(), equalTo( "\u001B[1;31m" ) );
-    }
-
-    @Test
-    public void should_color_success()
-    {
-        ansiMessageBuffer.success();
-
-        assertThat( ansiMessageBuffer.toString(), equalTo( "\u001B[1;32m" ) );
+        assertThat( ansiMessageBuffer.toString(), equalTo( "\u001B[1;31man error message\u001B[m" ) );
     }
 
     @Test
@@ -93,27 +77,11 @@ public class AnsiMessageBufferTest
     }
 
     @Test
-    public void should_color_failure()
-    {
-        ansiMessageBuffer.failure();
-
-        assertThat( ansiMessageBuffer.toString(), equalTo( "\u001B[1;31m" ) );
-    }
-
-    @Test
     public void should_color_failure_and_reset()
     {
         ansiMessageBuffer.failure( "a failure message" );
 
         assertThat( ansiMessageBuffer.toString(), equalTo( "\u001B[1;31ma failure message\u001B[m" ) );
-    }
-
-    @Test
-    public void should_color_strong()
-    {
-        ansiMessageBuffer.strong();
-
-        assertThat( ansiMessageBuffer.toString(), equalTo( "\u001B[1m" ) );
     }
 
     @Test
@@ -125,27 +93,11 @@ public class AnsiMessageBufferTest
     }
 
     @Test
-    public void should_color_mojo()
-    {
-        ansiMessageBuffer.mojo();
-
-        assertThat( ansiMessageBuffer.toString(), equalTo( "\u001B[32m" ) );
-    }
-
-    @Test
     public void should_color_mojo_and_reset()
     {
         ansiMessageBuffer.mojo( "a mojo" );
 
         assertThat( ansiMessageBuffer.toString(), equalTo( "\u001B[32ma mojo\u001B[m" ) );
-    }
-
-    @Test
-    public void should_color_project()
-    {
-        ansiMessageBuffer.project();
-
-        assertThat( ansiMessageBuffer.toString(), equalTo( "\u001B[36m" ) );
     }
 
     @Test

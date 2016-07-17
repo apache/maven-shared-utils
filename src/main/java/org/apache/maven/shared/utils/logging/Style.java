@@ -107,7 +107,7 @@ enum Style
         return null;
     }
 
-    void apply( Ansi ansi )
+    Ansi apply( Ansi ansi )
     {
         if ( bold )
         {
@@ -135,6 +135,7 @@ enum Style
                 ansi.bg( bgColor );
             }
         }
+        return ansi;
     }
 
     @Override

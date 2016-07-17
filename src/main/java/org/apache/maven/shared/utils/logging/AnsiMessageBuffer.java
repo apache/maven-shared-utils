@@ -50,93 +50,57 @@ class AnsiMessageBuffer
         this.ansi = ansi;
     }
 
-    public AnsiMessageBuffer debug()
+    public AnsiMessageBuffer debug( Object message )
     {
-        Style.DEBUG.apply( ansi );
+        Style.DEBUG.apply( ansi ).a( message ).reset();
         return this;
     }
 
-    public AnsiMessageBuffer info()
+    public AnsiMessageBuffer info( Object message )
     {
-        Style.INFO.apply( ansi );
-        return this;
-    }
-
-    public AnsiMessageBuffer warning()
-    {
-        Style.WARNING.apply( ansi );
+        Style.INFO.apply( ansi ).a( message ).reset();
         return this;
     }
 
     public AnsiMessageBuffer warning( Object message )
     {
-        return warning().a( message ).reset();
-    }
-
-    public AnsiMessageBuffer error()
-    {
-        Style.ERROR.apply( ansi );
+        Style.WARNING.apply( ansi ).a( message ).reset();
         return this;
     }
 
-    public AnsiMessageBuffer success()
+    public AnsiMessageBuffer error( Object message )
     {
-        Style.SUCCESS.apply( ansi );
+        Style.ERROR.apply( ansi ).a( message ).reset();
         return this;
     }
 
     public AnsiMessageBuffer success( Object message )
     {
-        return success().a( message ).reset();
-    }
-
-    public AnsiMessageBuffer failure()
-    {
-        Style.FAILURE.apply( ansi );
+        Style.SUCCESS.apply( ansi ).a( message ).reset();
         return this;
     }
 
     public AnsiMessageBuffer failure( Object message )
     {
-        return failure().a( message ).reset();
-    }
-
-    public AnsiMessageBuffer strong()
-    {
-        Style.STRONG.apply( ansi );
+        Style.FAILURE.apply( ansi ).a( message ).reset();
         return this;
     }
 
     public AnsiMessageBuffer strong( Object message )
     {
-        return strong().a( message ).reset();
-    }
-
-    public AnsiMessageBuffer mojo()
-    {
-        Style.MOJO.apply( ansi );
+        Style.STRONG.apply( ansi ).a( message ).reset();
         return this;
     }
 
     public AnsiMessageBuffer mojo( Object message )
     {
-        return mojo().a( message ).reset();
-    }
-
-
-    public AnsiMessageBuffer project()
-    {
-        Style.PROJECT.apply( ansi );
+        Style.MOJO.apply( ansi ).a( message ).reset();
         return this;
     }
 
     public AnsiMessageBuffer project( Object message )
     {
-        return project().a( message ).reset();
-    }
-    public AnsiMessageBuffer reset()
-    {
-        ansi.reset();
+        Style.PROJECT.apply( ansi ).a( message ).reset();
         return this;
     }
 

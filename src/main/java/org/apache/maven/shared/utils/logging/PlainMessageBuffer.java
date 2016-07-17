@@ -42,19 +42,14 @@ class PlainMessageBuffer
         buffer = new StringBuilder( size );
     }
 
-    public PlainMessageBuffer debug()
+    public PlainMessageBuffer debug( Object message )
     {
-        return this;
+        return a( message );
     }
     
-    public PlainMessageBuffer info()
+    public PlainMessageBuffer info( Object message )
     {
-        return this;
-    }
-    
-    public PlainMessageBuffer warning()
-    {
-        return this;
+        return a( message );
     }
     
     public PlainMessageBuffer warning( Object message )
@@ -62,14 +57,9 @@ class PlainMessageBuffer
         return a( message );
     }
     
-    public PlainMessageBuffer error()
+    public PlainMessageBuffer error( Object message )
     {
-        return this;
-    }
-
-    public PlainMessageBuffer success()
-    {
-        return this;
+        return a( message );
     }
 
     public PlainMessageBuffer success( Object message )
@@ -77,19 +67,9 @@ class PlainMessageBuffer
         return a( message );
     }
 
-    public PlainMessageBuffer failure()
-    {
-        return this;
-    }
-
     public PlainMessageBuffer failure( Object message )
     {
         return a( message );
-    }
-
-    public PlainMessageBuffer strong()
-    {
-        return this;
     }
 
     public PlainMessageBuffer strong( Object message )
@@ -97,29 +77,14 @@ class PlainMessageBuffer
         return a( message );
     }
 
-    public PlainMessageBuffer mojo()
-    {
-        return this;
-    }
-
     public PlainMessageBuffer mojo( Object message )
     {
         return a( message );
     }
 
-    public PlainMessageBuffer project()
-    {
-        return this;
-    }
-
     public PlainMessageBuffer project( Object message )
     {
         return a( message );
-    }
-
-    public PlainMessageBuffer reset()
-    {
-        return this;
     }
 
     public PlainMessageBuffer a( char[] value, int offset, int len )

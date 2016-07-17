@@ -26,86 +26,56 @@ package org.apache.maven.shared.utils.logging;
 public interface MessageBuffer
 {
     /**
-     * Insert color for DEBUG level display.
+     * Append message content for DEBUG level.
      * By default, bold cyan
      */
-    MessageBuffer debug();
+    MessageBuffer debug( Object message );
     
     /**
-     * Insert color for INFO level display.
+     * Append message content for INFO level.
      * By default, bold blue
      */
-    MessageBuffer info();
+    MessageBuffer info( Object message );
     
     /**
-     * Insert color for WARNING level or warning message display.
+     * Append message content in warning style or WARNING level.
      * By default, bold yellow
-     */
-    MessageBuffer warning();
-    
-    /**
-     * Append warning message: equivalent to appending warning color, then message, then reset.
      */
     MessageBuffer warning( Object message );
     
     /**
-     * Insert color for ERROR level display.
+     * Append message content for ERROR level.
      * By default, bold red
      */
-    MessageBuffer error();
+    MessageBuffer error( Object message );
     
     /**
-     * Insert color for success message display.
+     * Append message content in success style.
      * By default, bold green
-     */
-    MessageBuffer success();
-    
-    /**
-     * Append success message: equivalent to appending success color, then message, then reset.
      */
     MessageBuffer success( Object message );
     
     /**
-     * Insert color for failure message display.
+     * Append message content in failure style.
      * By default, bold red
      */
-    MessageBuffer failure();
-
-    /**
-     * Append failure message: equivalent to appending failure color, then message, then reset.
-     */
     MessageBuffer failure( Object message );
-    
-    /**
-     * Insert color for strong message display.
-     * By default, bold
-     */
-    MessageBuffer strong();
 
     /**
-     * Append strong message: equivalent to appending strong color, then message, then reset.
+     * Append message content in strong style.
+     * By default, bold
      */
     MessageBuffer strong( Object message );
     
     /**
-     * Insert color for mojo message display.
+     * Append message content in mojo style.
      * By default, green
-     */
-    MessageBuffer mojo();
-
-    /**
-     * Append mojo message: equivalent to appending mojo color, then message, then reset.
      */
     MessageBuffer mojo( Object message );
     
     /**
-     * Insert color for project message display.
+     * Append message content in project style.
      * By default, cyan
-     */
-    MessageBuffer project();
-
-    /**
-     * Append project message: equivalent to appending project color, then message, then reset.
      */
     MessageBuffer project( Object message );
     
@@ -113,37 +83,32 @@ public interface MessageBuffer
     // message building methods modelled after Ansi methods
     //
     /**
-     * Reset to default style.
-     */
-    MessageBuffer reset();
-
-    /**
-     * Append content to the buffer.
+     * Append content to the message buffer.
      */
     MessageBuffer a( char[] value, int offset, int len );
 
     /**
-     * Append content to the buffer.
+     * Append content to the message buffer.
      */
     MessageBuffer a( char[] value );
 
     /**
-     * Append content to the buffer.
+     * Append content to the message buffer.
      */
     MessageBuffer a( CharSequence value, int start, int end );
 
     /**
-     * Append content to the buffer.
+     * Append content to the message buffer.
      */
     MessageBuffer a( CharSequence value );
 
     /**
-     * Append content to the buffer.
+     * Append content to the message buffer.
      */
     MessageBuffer a( Object value );
 
     /**
-     * Append a newline to the buffer.
+     * Append newline to the message buffer.
      */
     MessageBuffer newline();
 
