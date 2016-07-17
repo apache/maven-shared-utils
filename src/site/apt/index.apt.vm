@@ -36,7 +36,7 @@ ${project.name}
    lots of methods got cleaned up, generics got added and we dropped a lot of unused code.
 
    Then there are additions, like
-   {{{apidocs/org/apache/maven/shared/utils/logging/package-summary.html}styled message API}}.
+   {{{./apidocs/org/apache/maven/shared/utils/logging/package-summary.html}styled message API}}.
 
 Why?
 
