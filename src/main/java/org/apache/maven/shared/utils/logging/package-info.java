@@ -30,8 +30,8 @@
  * <p>
  * Styles are:<ul>
  * <li><code>debug</code>, <code>info</code>, <code>warning</code> and <code>error</code> for slf4j level display,</li>
- * <li><code>success</code>, <code>failure</code>, <code>strong</code>, <code>mojo</code> and <code>project</code> for
- * message content</li>
+ * <li><code>success</code>, <code>warning</code>, <code>failure</code>, <code>strong</code>, <code>mojo</code>
+ * and <code>project</code> for message content</li>
  * </ul>
  * Default styles colors can be overridden through system properties, that can be set in <code>MAVEN_OPTS</code>
  * environment variable (eventually in <code>.mavenrc</code> script):<ul>

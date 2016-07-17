@@ -23,7 +23,7 @@ import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
 
 /**
- * Colored message utils, to manage colors colors consistently across plugins (only if Maven version is at least 3.4.0).
+ * Colored message utils, to manage colors consistently across plugins (only if Maven version is at least 3.4.0).
  * For Maven version before 3.4.0, message built with this util will never add color.
  * <p>
  * Internally, <a href="http://fusesource.github.io/jansi/">Jansi</a> is used to render
@@ -60,6 +60,11 @@ public class MessageUtils
         }
     }
 
+    /**
+     * Undo a previous {@link #systemInstall()}.  If {@link #systemInstall()} was called
+     * multiple times, {@link #systemUninstall()} must be called call the same number of times before
+     * it is actually uninstalled.
+     */
     public static void systemUninstall()
     {
         if ( JANSI )
@@ -69,10 +74,10 @@ public class MessageUtils
     }
 
     /**
-     * Activates message color (if JAnsi is available).
+     * Enables message color (if JAnsi is available).
      * @param flag
      */
-    public static void setColor( boolean flag )
+    public static void setColorEnabled( boolean flag )
     {
         if ( JANSI )
         {
@@ -81,9 +86,9 @@ public class MessageUtils
     }
 
     /**
-     * Is message color active: requires JAnsi available (through Maven) and the color has not been disabled.
+     * Is message color enabled: requires JAnsi available (through Maven) and the color has not been disabled.
      */
-    public static boolean isColor()
+    public static boolean isColorEnabled()
     {
         return JANSI ? Ansi.isEnabled() : false;
     }
@@ -116,11 +121,11 @@ public class MessageUtils
     }
 
     /**
-     * Remove any ANSI code from a message
+     * Remove any ANSI code from a message (colors or other escape sequences).
      * @param msg message eventually containing ANSI codes
      * @return the message with ANSI codes removed
      */
-    public static String stripAnsi( String msg )
+    public static String stripAnsiCodes( String msg )
     {
         return msg.replaceAll( "\u001B\\[[;\\d]*[ -/]*[@-~]", "" );
     }

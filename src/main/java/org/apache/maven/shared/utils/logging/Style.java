@@ -144,7 +144,7 @@ enum Style
         {
             return name();
         }
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder( name() + '=' );
         if ( bold )
         {
             sb.append( "bold" );
@@ -174,7 +174,7 @@ enum Style
             }
             sb.append( bgColor.name() );
         }
-        return name() + '=' + sb;
+        return sb.toString();
     }
 
 }
