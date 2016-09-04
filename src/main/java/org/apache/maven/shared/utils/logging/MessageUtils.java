@@ -122,11 +122,12 @@ public class MessageUtils
     }
 
     /**
-     * Create a message buffer with an internal buffer of defined size.
-     * @return a new buffer
+     * Create a logger level renderer.
+     * @return a logger level renderer
+     * @since 3.2.0
      */
     @SuppressWarnings( "checkstyle:magicnumber" )
-    public static LoggerLevelRenderer logger()
+    public static LoggerLevelRenderer level()
     {
         return JANSI ? new AnsiMessageBuilder( 20 ) : new PlainMessageBuilder( 7 );
     }
