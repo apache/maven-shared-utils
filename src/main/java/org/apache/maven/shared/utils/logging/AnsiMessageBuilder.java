@@ -26,7 +26,7 @@ import org.fusesource.jansi.Ansi;
  * <a href="http://fusesource.github.io/jansi/">Jansi</a> with configurable styles through {@link Style}.
  */
 class AnsiMessageBuilder
-    implements MessageBuilder
+    implements MessageBuilder, LoggerLevelRenderer
 {
     private Ansi ansi;
 
@@ -50,33 +50,35 @@ class AnsiMessageBuilder
         this.ansi = ansi;
     }
 
-    public AnsiMessageBuilder debug( Object message )
+    public String debug( String level )
     {
-        Style.DEBUG.apply( ansi ).a( message ).reset();
-        return this;
+        return Style.DEBUG.apply( ansi ).a( level ).reset().toString();
     }
 
-    public AnsiMessageBuilder info( Object message )
+    public String info( String level )
     {
-        Style.INFO.apply( ansi ).a( message ).reset();
+        return Style.INFO.apply( ansi ).a( level ).reset().toString();
+    }
+
+    public String warning( String level )
+    {
+        return Style.WARNING.apply( ansi ).a( level ).reset().toString();
+    }
+
+    public String error( String level )
+    {
+        return Style.ERROR.apply( ansi ).a( level ).reset().toString();
+    }
+
+    public AnsiMessageBuilder success( Object message )
+    {
+        Style.SUCCESS.apply( ansi ).a( message ).reset();
         return this;
     }
 
     public AnsiMessageBuilder warning( Object message )
     {
         Style.WARNING.apply( ansi ).a( message ).reset();
-        return this;
-    }
-
-    public AnsiMessageBuilder error( Object message )
-    {
-        Style.ERROR.apply( ansi ).a( message ).reset();
-        return this;
-    }
-
-    public AnsiMessageBuilder success( Object message )
-    {
-        Style.SUCCESS.apply( ansi ).a( message ).reset();
         return this;
     }
 

@@ -22,38 +22,21 @@ package org.apache.maven.shared.utils.logging;
 /**
  * Message builder that supports configurable styling.
  * @see MessageUtils
+ * @since 3.1.0
  */
 public interface MessageBuilder
 {
-    /**
-     * Append message content for DEBUG level.
-     * By default, bold cyan
-     */
-    MessageBuilder debug( Object message );
-    
-    /**
-     * Append message content for INFO level.
-     * By default, bold blue
-     */
-    MessageBuilder info( Object message );
-    
-    /**
-     * Append message content in warning style or WARNING level.
-     * By default, bold yellow
-     */
-    MessageBuilder warning( Object message );
-    
-    /**
-     * Append message content for ERROR level.
-     * By default, bold red
-     */
-    MessageBuilder error( Object message );
-    
     /**
      * Append message content in success style.
      * By default, bold green
      */
     MessageBuilder success( Object message );
+    
+    /**
+     * Append message content in warning style.
+     * By default, bold yellow
+     */
+    MessageBuilder warning( Object message );
     
     /**
      * Append message content in failure style.

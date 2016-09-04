@@ -26,6 +26,7 @@ import java.util.Locale;
 
 /**
  * Configurable message styles.
+ * @since 3.1.0
  */
 enum Style
 {

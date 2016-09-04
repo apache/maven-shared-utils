@@ -42,6 +42,7 @@
  * <code>red</code>, <code>green</code>, <code>yellow</code>, <code>blue</code>, <code>magenta</code>,
  * <code>cyan</code> or <code>white</code>, eventually with <code>bright</code> prefix</li>
  * </ul>
+ * @since 3.1.0
  */
 package org.apache.maven.shared.utils.logging;
 

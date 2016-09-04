@@ -39,33 +39,33 @@ public class AnsiMessageBuilderTest
     @Test
     public void should_color_debug()
     {
-        ansiMessageBuilder.debug( "a debug message" );
+        ansiMessageBuilder.debug( "DEBUG" );
 
-        assertThat( ansiMessageBuilder.toString(), equalTo( "\u001B[1;36ma debug message\u001B[m" ) );
+        assertThat( ansiMessageBuilder.toString(), equalTo( "\u001B[1;36mDEBUG\u001B[m" ) );
     }
 
     @Test
     public void should_color_info()
     {
-        ansiMessageBuilder.info( "an info message" );
+        ansiMessageBuilder.info( "INFO" );
 
-        assertThat( ansiMessageBuilder.toString(), equalTo( "\u001B[1;34man info message\u001B[m" ) );
+        assertThat( ansiMessageBuilder.toString(), equalTo( "\u001B[1;34mINFO\u001B[m" ) );
     }
 
     @Test
     public void should_color_warning_and_reset()
     {
-        ansiMessageBuilder.warning( "a warning message" );
+        ansiMessageBuilder.warning( "WARNING" );
 
-        assertThat( ansiMessageBuilder.toString(), equalTo( "\u001B[1;33ma warning message\u001B[m" ) );
+        assertThat( ansiMessageBuilder.toString(), equalTo( "\u001B[1;33mWARNING\u001B[m" ) );
     }
 
     @Test
     public void should_color_error()
     {
-        ansiMessageBuilder.error( "an error message" );
+        ansiMessageBuilder.error( "ERROR" );
 
-        assertThat( ansiMessageBuilder.toString(), equalTo( "\u001B[1;31man error message\u001B[m" ) );
+        assertThat( ansiMessageBuilder.toString(), equalTo( "\u001B[1;31mERROR\u001B[m" ) );
     }
 
     @Test

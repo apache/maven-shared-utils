@@ -28,6 +28,7 @@ import org.fusesource.jansi.AnsiConsole;
  * <p>
  * Internally, <a href="http://fusesource.github.io/jansi/">Jansi</a> is used to render
  * <a href="https://en.wikipedia.org/wiki/ANSI_escape_code#Colors">ANSI colors</a> on any platform.
+ * @since 3.1.0
  */
 public class MessageUtils
 {
@@ -118,6 +119,16 @@ public class MessageUtils
     public static MessageBuilder buffer( int size )
     {
         return JANSI ? new AnsiMessageBuilder( size ) : new PlainMessageBuilder( size );
+    }
+
+    /**
+     * Create a message buffer with an internal buffer of defined size.
+     * @return a new buffer
+     */
+    @SuppressWarnings( "checkstyle:magicnumber" )
+    public static LoggerLevelRenderer logger()
+    {
+        return JANSI ? new AnsiMessageBuilder( 20 ) : new PlainMessageBuilder( 7 );
     }
 
     /**

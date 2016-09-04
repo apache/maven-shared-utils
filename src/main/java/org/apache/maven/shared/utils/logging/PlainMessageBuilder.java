@@ -23,7 +23,7 @@ package org.apache.maven.shared.utils.logging;
  * Message builder implementation that just ignores styling, for Maven version earlier than 3.4.0.
  */
 class PlainMessageBuilder
-    implements MessageBuilder
+    implements MessageBuilder, LoggerLevelRenderer
 {
     private StringBuilder buffer;
 
@@ -42,24 +42,24 @@ class PlainMessageBuilder
         buffer = new StringBuilder( size );
     }
 
-    public PlainMessageBuilder debug( Object message )
+    public String debug( String level )
     {
-        return a( message );
+        return a( level ).toString();
     }
     
-    public PlainMessageBuilder info( Object message )
+    public String info( String level )
     {
-        return a( message );
+        return a( level ).toString();
     }
     
-    public PlainMessageBuilder warning( Object message )
+    public String warning( String level )
     {
-        return a( message );
+        return a( level ).toString();
     }
     
-    public PlainMessageBuilder error( Object message )
+    public String error( String level )
     {
-        return a( message );
+        return a( level ).toString();
     }
 
     public PlainMessageBuilder success( Object message )
@@ -67,6 +67,11 @@ class PlainMessageBuilder
         return a( message );
     }
 
+    public PlainMessageBuilder warning( Object message )
+    {
+        return a( message );
+    }
+    
     public PlainMessageBuilder failure( Object message )
     {
         return a( message );
