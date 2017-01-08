@@ -64,7 +64,6 @@ public class PrettyPrintXMLWriter
     /**
      * @param writer not null
      * @param lineIndent could be null, but the normal way is some spaces.
-     * @throws IOException if {@code writer} is in error state.
      */
     public PrettyPrintXMLWriter( PrintWriter writer, String lineIndent )
     {
