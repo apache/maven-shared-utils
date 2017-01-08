@@ -19,11 +19,11 @@ package org.apache.maven.shared.utils.xml;
  * under the License.
  */
 
-import org.apache.maven.shared.utils.Os;
-
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import org.apache.maven.shared.utils.Os;
 
 /**
  * XMLWriter with nice indentation
@@ -64,6 +64,7 @@ public class PrettyPrintXMLWriter
     /**
      * @param writer not null
      * @param lineIndent could be null, but the normal way is some spaces.
+     * @throws IOException if {@code writer} is in error state.
      */
     public PrettyPrintXMLWriter( PrintWriter writer, String lineIndent )
     {
@@ -160,6 +161,7 @@ public class PrettyPrintXMLWriter
     private PrettyPrintXMLWriter( PrintWriter writer, char[] lineIndent, char[] lineSeparator, String encoding,
                                   String doctype )
     {
+        super();
         this.writer = writer;
         this.lineIndent = lineIndent;
         this.lineSeparator = lineSeparator;
@@ -167,10 +169,13 @@ public class PrettyPrintXMLWriter
         this.docType = doctype;
 
         depth = 0;
+
+        // Fail early with assertions enabled. Issue is in the calling code not having checked for any errors.
+        assert !writer.checkError() : "Unexpected error state PrintWriter passed to PrettyPrintXMLWriter.";
     }
 
     /** {@inheritDoc} */
-    public void addAttribute( String key, String value )
+    public void addAttribute( String key, String value ) throws IOException
     {
         if ( !processingElement )
         {
@@ -181,6 +186,10 @@ public class PrettyPrintXMLWriter
         writer.write( key );
         writer.write( '=' );
         XMLEncode.xmlEncodeTextAsPCDATA( value, true, '"', writer );
+        if ( writer.checkError() )
+        {
+            throw new IOException( "Failure adding attribute '" + key + "' with value '" + value + "'" );
+        }
     }
 
     /** {@inheritDoc} */
@@ -232,7 +241,7 @@ public class PrettyPrintXMLWriter
     }
 
     /** {@inheritDoc} */
-    public void startElement( String elementName )
+    public void startElement( String elementName ) throws IOException
     {
         boolean firstLine = ensureDocumentStarted();
 
@@ -245,6 +254,10 @@ public class PrettyPrintXMLWriter
 
         writer.write( '<' );
         writer.write( elementName );
+        if ( writer.checkError() )
+        {
+            throw new IOException( "Failure starting element '" + elementName + "'." );
+        }
 
         processingElement = true;
 
@@ -252,7 +265,7 @@ public class PrettyPrintXMLWriter
     }
 
     /** {@inheritDoc} */
-    public void writeText( String text )
+    public void writeText( String text ) throws IOException
     {
         ensureDocumentStarted();
 
@@ -261,20 +274,30 @@ public class PrettyPrintXMLWriter
         XMLEncode.xmlEncodeText( text, writer );
 
         endOnSameLine = true;
+        
+        if ( writer.checkError() )
+        {
+            throw new IOException( "Failure writing text." );
+        }
     }
 
     /** {@inheritDoc} */
-    public void writeMarkup( String markup )
+    public void writeMarkup( String markup ) throws IOException
     {
         ensureDocumentStarted();
 
         completePreviouslyOpenedElement();
 
         writer.write( markup );
+
+        if ( writer.checkError() )
+        {
+            throw new IOException( "Failure writing markup." );
+        }
     }
 
     /** {@inheritDoc} */
-    public void endElement()
+    public void endElement() throws IOException
     {
         String chars = elementStack.get( --depth );
         if ( processingElement )
@@ -298,6 +321,11 @@ public class PrettyPrintXMLWriter
         }
 
         endOnSameLine = false;
+
+        if ( writer.checkError() )
+        {
+            throw new IOException( "Failure ending element." );
+        }
     }
 
     /**

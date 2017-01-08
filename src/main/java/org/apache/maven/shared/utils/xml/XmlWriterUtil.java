@@ -19,6 +19,7 @@ package org.apache.maven.shared.utils.xml;
  * under the License.
  */
 
+import java.io.IOException;
 import org.apache.maven.shared.utils.StringUtils;
 
 /**
@@ -42,8 +43,9 @@ public class XmlWriterUtil
      * Convenience method to write one <code>CRLF</code>.
      *
      * @param writer not null writer
+     * @throws IOException if writing fails.
      */
-    public static void writeLineBreak( XMLWriter writer )
+    public static void writeLineBreak( XMLWriter writer ) throws IOException
     {
         writeLineBreak( writer, 1 );
     }
@@ -53,8 +55,9 @@ public class XmlWriterUtil
      *
      * @param writer not null
      * @param repeat positive number
+     * @throws IOException if writing fails.
      */
-    public static void writeLineBreak( XMLWriter writer, int repeat )
+    public static void writeLineBreak( XMLWriter writer, int repeat ) throws IOException
     {
         for ( int i = 0; i < repeat; i++ )
         {
@@ -70,8 +73,9 @@ public class XmlWriterUtil
      * @param indent positive number
      * @see #DEFAULT_INDENTATION_SIZE
      * @see #writeLineBreak(XMLWriter, int, int, int)
+     * @throws IOException if writing fails.
      */
-    public static void writeLineBreak( XMLWriter writer, int repeat, int indent )
+    public static void writeLineBreak( XMLWriter writer, int repeat, int indent ) throws IOException
     {
         writeLineBreak( writer, repeat, indent, DEFAULT_INDENTATION_SIZE );
     }
@@ -83,8 +87,9 @@ public class XmlWriterUtil
      * @param repeat The number of repetitions of the indent
      * @param indent positive number
      * @param indentSize positive number
+     * @throws IOException if writing fails.
      */
-    public static void writeLineBreak( XMLWriter writer, int repeat, int indent, int indentSize )
+    public static void writeLineBreak( XMLWriter writer, int repeat, int indent, int indentSize ) throws IOException
     {
         writeLineBreak( writer, repeat );
 
@@ -107,8 +112,9 @@ public class XmlWriterUtil
      * @param writer not null
      * @see #DEFAULT_COLUMN_LINE
      * @see #writeCommentLineBreak(XMLWriter, int)
+     * @throws IOException if writing fails.
      */
-    public static void writeCommentLineBreak( XMLWriter writer )
+    public static void writeCommentLineBreak( XMLWriter writer ) throws IOException
     {
         writeCommentLineBreak( writer, DEFAULT_COLUMN_LINE );
     }
@@ -118,8 +124,9 @@ public class XmlWriterUtil
      *
      * @param writer not null
      * @param columnSize positive number
+     * @throws IOException if writing fails.
      */
-    public static void writeCommentLineBreak( XMLWriter writer, int columnSize )
+    public static void writeCommentLineBreak( XMLWriter writer, int columnSize ) throws IOException
     {
         if ( columnSize < 10 )
         {
@@ -137,8 +144,9 @@ public class XmlWriterUtil
      * @param comment The comment to write
      * @see #DEFAULT_INDENTATION_SIZE
      * @see #writeComment(XMLWriter, String, int, int)
+     * @throws IOException if writing fails.
      */
-    public static void writeComment( XMLWriter writer, String comment )
+    public static void writeComment( XMLWriter writer, String comment ) throws IOException
     {
         writeComment( writer, comment, 0, DEFAULT_INDENTATION_SIZE );
     }
@@ -152,8 +160,9 @@ public class XmlWriterUtil
      * @param indent positive number
      * @see #DEFAULT_INDENTATION_SIZE
      * @see #writeComment(XMLWriter, String, int, int)
+     * @throws IOException if writing fails.
      */
-    public static void writeComment( XMLWriter writer, String comment, int indent )
+    public static void writeComment( XMLWriter writer, String comment, int indent ) throws IOException
     {
         writeComment( writer, comment, indent, DEFAULT_INDENTATION_SIZE );
     }
@@ -168,8 +177,9 @@ public class XmlWriterUtil
      * @param indentSize positive number
      * @see #DEFAULT_COLUMN_LINE
      * @see #writeComment(XMLWriter, String, int, int, int)
+     * @throws IOException if writing fails.
      */
-    public static void writeComment( XMLWriter writer, String comment, int indent, int indentSize )
+    public static void writeComment( XMLWriter writer, String comment, int indent, int indentSize ) throws IOException
     {
         writeComment( writer, comment, indent, indentSize, DEFAULT_COLUMN_LINE );
     }
@@ -183,8 +193,10 @@ public class XmlWriterUtil
      * @param indent positive number
      * @param indentSize positive number
      * @param columnSize positive number
+     * @throws IOException if writing fails.
      */
     public static void writeComment( XMLWriter writer, String comment, int indent, int indentSize, int columnSize )
+        throws IOException
     {
         if ( comment == null )
         {
@@ -263,8 +275,9 @@ public class XmlWriterUtil
      * @param comment The comment to write
      * @see #DEFAULT_INDENTATION_SIZE
      * @see #writeCommentText(XMLWriter, String, int, int)
+     * @throws IOException if writing fails.
      */
-    public static void writeCommentText( XMLWriter writer, String comment )
+    public static void writeCommentText( XMLWriter writer, String comment ) throws IOException
     {
         writeCommentText( writer, comment, 0, DEFAULT_INDENTATION_SIZE );
     }
@@ -279,8 +292,9 @@ public class XmlWriterUtil
      * @param indent positive number
      * @see #DEFAULT_INDENTATION_SIZE
      * @see #writeCommentText(XMLWriter, String, int, int)
+     * @throws IOException if writing fails.
      */
-    public static void writeCommentText( XMLWriter writer, String comment, int indent )
+    public static void writeCommentText( XMLWriter writer, String comment, int indent ) throws IOException
     {
         writeCommentText( writer, comment, indent, DEFAULT_INDENTATION_SIZE );
     }
@@ -295,8 +309,10 @@ public class XmlWriterUtil
      * @param indentSize positive number
      * @see #DEFAULT_COLUMN_LINE
      * @see #writeCommentText(XMLWriter, String, int, int, int)
+     * @throws IOException if writing fails.
      */
     public static void writeCommentText( XMLWriter writer, String comment, int indent, int indentSize )
+        throws IOException
     {
         writeCommentText( writer, comment, indent, indentSize, DEFAULT_COLUMN_LINE );
     }
@@ -311,8 +327,10 @@ public class XmlWriterUtil
      * @param indent positive number
      * @param indentSize positive number
      * @param columnSize positive number
+     * @throws IOException if writing fails.
      */
     public static void writeCommentText( XMLWriter writer, String comment, int indent, int indentSize, int columnSize )
+        throws IOException
     {
         if ( indent < 0 )
         {

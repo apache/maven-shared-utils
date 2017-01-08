@@ -1,5 +1,6 @@
 package org.apache.maven.shared.utils.xml;
 
+import java.io.IOException;
 import javax.swing.text.html.HTML;
 import java.io.StringWriter;
 
@@ -60,7 +61,7 @@ public class PrettyPrintXmlWriterTest
     }
 
     @Test
-    public void testDefaultPrettyPrintXMLWriter()
+    public void testDefaultPrettyPrintXMLWriter() throws IOException
     {
         writer.startElement( HTML.Tag.HTML.toString() );
 
@@ -74,7 +75,7 @@ public class PrettyPrintXmlWriterTest
     }
 
     @Test
-    public void testPrettyPrintXMLWriterWithGivenLineSeparator()
+    public void testPrettyPrintXMLWriterWithGivenLineSeparator() throws IOException
     {
         writer.setLineSeparator( "\n" );
 
@@ -90,7 +91,7 @@ public class PrettyPrintXmlWriterTest
     }
 
     @Test
-    public void testPrettyPrintXMLWriterWithGivenLineIndenter()
+    public void testPrettyPrintXMLWriterWithGivenLineIndenter() throws IOException
     {
         writer.setLineIndenter( "    " );
 
@@ -106,7 +107,7 @@ public class PrettyPrintXmlWriterTest
     }
 
     @Test
-    public void testEscapeXmlAttributeWindows()
+    public void testEscapeXmlAttributeWindows() throws IOException
     {
         // Windows
         writer.startElement( HTML.Tag.DIV.toString() );
@@ -116,7 +117,7 @@ public class PrettyPrintXmlWriterTest
     }
 
     @Test
-    public void testEscapeXmlAttributeMac()
+    public void testEscapeXmlAttributeMac() throws IOException
     {
         // Mac
         writer.startElement( HTML.Tag.DIV.toString() );
@@ -126,7 +127,7 @@ public class PrettyPrintXmlWriterTest
     }
 
     @Test
-    public void testEscapeXmlAttributeTrailingCR()
+    public void testEscapeXmlAttributeTrailingCR() throws IOException
     {
         // Mac
         writer.startElement( HTML.Tag.DIV.toString() );
@@ -136,7 +137,7 @@ public class PrettyPrintXmlWriterTest
     }
 
     @Test
-    public void testEscapeXmlAttributeUnix()
+    public void testEscapeXmlAttributeUnix() throws IOException
     {
         // Unix
         writer.startElement( HTML.Tag.DIV.toString() );
@@ -145,7 +146,7 @@ public class PrettyPrintXmlWriterTest
         Assert.assertEquals( "<div class=\"sect&#10;ion\"/>", w.toString() );
     }
 
-    private void writeXhtmlHead( XMLWriter writer )
+    private void writeXhtmlHead( XMLWriter writer ) throws IOException
     {
         writer.startElement( HTML.Tag.HEAD.toString() );
         writer.startElement( HTML.Tag.TITLE.toString() );
@@ -162,7 +163,7 @@ public class PrettyPrintXmlWriterTest
         writer.endElement(); // Tag.HEAD
     }
 
-    private void writeXhtmlBody( XMLWriter writer )
+    private void writeXhtmlBody( XMLWriter writer ) throws IOException
     {
         writer.startElement( HTML.Tag.BODY.toString() );
         writer.startElement( HTML.Tag.P.toString() );

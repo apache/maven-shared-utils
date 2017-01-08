@@ -19,6 +19,7 @@ package org.apache.maven.shared.utils.xml;
  * under the License.
  */
 
+import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -375,10 +376,17 @@ public class Xpp3Dom
     /** {@inheritDoc} */
     public String toString()
     {
-        StringWriter writer = new StringWriter();
-        Xpp3DomWriter.write( getPrettyPrintXMLWriter( writer ), this );
-        return writer.toString();
-
+        try
+        {
+            StringWriter writer = new StringWriter();
+            Xpp3DomWriter.write( getPrettyPrintXMLWriter( writer ), this );
+            return writer.toString();
+        }
+        catch ( final IOException e )
+        {
+            // JDK error in StringWriter.
+            throw new AssertionError( "Unexpected IOException from StringWriter." );
+        }
     }
 
     /**
@@ -386,9 +394,17 @@ public class Xpp3Dom
      */
     public String toUnescapedString()
     {
-        StringWriter writer = new StringWriter();
-        Xpp3DomWriter.write( getPrettyPrintXMLWriter( writer ), this, false );
-        return writer.toString();
+        try
+        {
+            StringWriter writer = new StringWriter();
+            Xpp3DomWriter.write( getPrettyPrintXMLWriter( writer ), this, false );
+            return writer.toString();
+        }
+        catch ( final IOException e )
+        {
+            // JDK error in StringWriter.
+            throw new AssertionError( "Unexpected IOException from StringWriter." );
+        }
     }
 
     private PrettyPrintXMLWriter getPrettyPrintXMLWriter( StringWriter writer )

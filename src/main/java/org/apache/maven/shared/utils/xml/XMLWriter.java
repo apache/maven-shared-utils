@@ -19,6 +19,7 @@ package org.apache.maven.shared.utils.xml;
  * under the License.
  */
 
+import java.io.IOException;
 
 /**
  * Interface for tools writing XML files.
@@ -48,8 +49,9 @@ public interface XMLWriter
     /**
      * Start an XML Element tag.
      * @param name The name of the tag.
+     * @throws IOException if starting the element fails.
      */
-    void startElement( String name );
+    void startElement( String name ) throws IOException;
 
 
     /**
@@ -58,27 +60,31 @@ public interface XMLWriter
      * @param key The key of the attribute.
      * @param value The value of the attribute.
      * @throws IllegalStateException if no element tag is currently in process
+     * @throws IOException if adding the attribute fails.
      */
-    void addAttribute( String key, String value );
+    void addAttribute( String key, String value ) throws IOException;
 
     /**
      * Add a value text to the current element tag
      * This will perform XML escaping to guarantee valid content
      * @param text The text which should be written.
      * @throws IllegalStateException if no element tag got started yet
+     * @throws IOException if writing the text fails.
      */
-    void writeText( String text );
+    void writeText( String text ) throws IOException;
 
     /**
      * Add a preformatted markup to the current element tag
      * @param text The text which should be written.
      * @throws IllegalStateException if no element tag got started yet
+     * @throws IOException if writing the markup fails.
      */
-    void writeMarkup( String text );
+    void writeMarkup( String text ) throws IOException;
 
     /**
      * End the previously opened element.
      * @see #startElement(String)
+     * @throws IOException if ending the element fails.
      */
-    void endElement();
+    void endElement() throws IOException;
 }
