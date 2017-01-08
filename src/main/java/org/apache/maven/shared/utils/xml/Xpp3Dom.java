@@ -385,7 +385,7 @@ public class Xpp3Dom
         catch ( final IOException e )
         {
             // JDK error in StringWriter.
-            throw new AssertionError( "Unexpected IOException from StringWriter.", e );
+            throw (AssertionError) new AssertionError( "Unexpected IOException from StringWriter." ).initCause( e );
         }
     }
 
@@ -403,7 +403,7 @@ public class Xpp3Dom
         catch ( final IOException e )
         {
             // JDK error in StringWriter.
-            throw new AssertionError( "Unexpected IOException from StringWriter.", e );
+            throw (AssertionError) new AssertionError( "Unexpected IOException from StringWriter." ).initCause( e );
         }
     }
 
