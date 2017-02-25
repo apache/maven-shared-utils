@@ -199,6 +199,7 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest>
                 /**
                  * {@inheritDoc}
                  */
+                @Override
                 public void consumeLine( final String line )
                 {
                     getLogger().warn( line );
@@ -226,6 +227,7 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest>
                 /**
                  * {@inheritDoc}
                  */
+                @Override
                 public void consumeLine( final String line )
                 {
                     getLogger().info( line );

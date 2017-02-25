@@ -19,6 +19,8 @@ package org.apache.maven.shared.utils.cli;
  * under the License.
  */
 
+import java.io.IOException;
+
 /**
  * Works in concert with the StreamPumper class to
  * allow implementations to gain access to the lines being
@@ -35,6 +37,7 @@ public interface StreamConsumer
     /**
      * Called when the StreamPumper pumps a line from the Stream.
      * @param line The line to be consumed.
+     * @throws IOException if consuming {@code line} fails.
      */
-    void consumeLine( String line );
+    void consumeLine( String line ) throws IOException;
 }

@@ -52,6 +52,7 @@ public abstract class CommandLineUtils
         private static final String LS = System.getProperty( "line.separator" );
 
         /** {@inheritDoc} */
+        @Override
         public void consumeLine( String line )
         {
             string.append( line ).append( LS );

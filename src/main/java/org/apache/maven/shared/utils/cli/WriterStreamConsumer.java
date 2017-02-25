@@ -19,7 +19,8 @@ package org.apache.maven.shared.utils.cli;
  * under the License.
  */
 
-import java.io.PrintWriter;
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.Writer;
 
 /**
@@ -30,22 +31,26 @@ public class WriterStreamConsumer
     implements StreamConsumer
 {
 
-    private final PrintWriter writer;
+    private final BufferedWriter writer;
 
     /**
      * @param writer {@link Writer}
      */
     public WriterStreamConsumer( Writer writer )
     {
-        this.writer = new PrintWriter( writer );
+        super();
+        this.writer = new BufferedWriter( writer );
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
      */
-    public void consumeLine( String line )
+    @Override
+    public void consumeLine( String line ) throws IOException
     {
-        writer.println( line );
-
-        writer.flush();
+        this.writer.append( line );
+        this.writer.newLine();
+        this.writer.flush();
     }
+
 }

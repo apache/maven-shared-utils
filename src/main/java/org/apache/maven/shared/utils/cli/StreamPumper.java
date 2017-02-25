@@ -145,7 +145,7 @@ public class StreamPumper
         return exception;
     }
 
-    private void consumeLine( String line )
+    private void consumeLine( String line ) throws IOException
     {
         if ( consumer != null && !isDisabled() )
         {
