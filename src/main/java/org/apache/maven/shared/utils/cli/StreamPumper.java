@@ -23,13 +23,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.io.Reader;
 import java.nio.charset.Charset;
-
 import javax.annotation.Nullable;
-
-import org.apache.maven.shared.utils.io.IOUtil;
 
 /**
  * Class to pump the error stream during Process's runtime. Copied from the Ant built-in task.
@@ -44,8 +40,6 @@ public class StreamPumper
 
     private final StreamConsumer consumer;
 
-    private final PrintWriter out;
-
     private volatile Exception exception = null;
 
     private static final int SIZE = 1024;
@@ -56,7 +50,7 @@ public class StreamPumper
      */
     public StreamPumper( InputStream in, StreamConsumer consumer )
     {
-        this( new InputStreamReader( in ), null, consumer );
+        this( new InputStreamReader( in ), consumer );
     }
 
     /**
@@ -66,18 +60,17 @@ public class StreamPumper
      */
     public StreamPumper( InputStream in, StreamConsumer consumer, @Nullable Charset charset )
     {
-        this( null == charset ? new InputStreamReader( in ) : new InputStreamReader( in, charset ), null, consumer );
+        this( null == charset ? new InputStreamReader( in ) : new InputStreamReader( in, charset ), consumer );
     }
 
     /**
-     * @param in {@link Writer}
-     * @param writer {@link PrintWriter}
+     * @param in {@link Reader}
      * @param consumer {@link StreamConsumer}
      */
-    private StreamPumper( Reader in, PrintWriter writer, StreamConsumer consumer )
+    private StreamPumper( Reader in, StreamConsumer consumer )
     {
+        super();
         this.in = new BufferedReader( in, SIZE );
-        this.out = writer;
         this.consumer = consumer;
     }
 
@@ -99,14 +92,6 @@ public class StreamPumper
                 {
                     exception = t;
                 }
-
-                if ( out != null )
-                {
-                    out.println( line );
-
-                    out.flush();
-                }
-
             }
         }
         catch ( IOException e )
@@ -115,7 +100,17 @@ public class StreamPumper
         }
         finally
         {
-            IOUtil.close( in );
+            try
+            {
+                in.close();
+            }
+            catch ( final IOException e2 )
+            {
+                if ( this.exception == null )
+                {
+                    this.exception = e2;
+                }
+            }
 
             synchronized ( this )
             {
@@ -131,10 +126,7 @@ public class StreamPumper
      */
     public void flush()
     {
-        if ( out != null )
-        {
-            out.flush();
-        }
+        // Nothing to flush.
     }
 
     /**
@@ -142,7 +134,7 @@ public class StreamPumper
      */
     public void close()
     {
-        IOUtil.close( out );
+        // Nothing to close.
     }
 
     /**
