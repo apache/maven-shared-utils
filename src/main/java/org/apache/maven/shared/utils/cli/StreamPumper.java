@@ -123,7 +123,10 @@ public class StreamPumper
 
     /**
      * flush.
+     *
+     * @deprecated As of 3.2.0, removed without replacement.
      */
+    @Deprecated
     public void flush()
     {
         // Nothing to flush.
@@ -131,7 +134,10 @@ public class StreamPumper
 
     /**
      * Close it.
+     *
+     * @deprecated As of 3.2.0, removed without replacement.
      */
+    @Deprecated
     public void close()
     {
         // Nothing to close.
