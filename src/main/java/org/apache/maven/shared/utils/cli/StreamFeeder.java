@@ -129,6 +129,8 @@ class StreamFeeder
     {
         InputStream is = input.get();
         OutputStream os = output.get();
+        boolean flush = false;
+
         if ( is != null && os != null )
         {
             for ( int data; !isDone() && ( data = is.read() ) != -1; )
@@ -136,7 +138,13 @@ class StreamFeeder
                 if ( !isDisabled() )
                 {
                     os.write( data );
+                    flush = true;
                 }
+            }
+
+            if ( flush )
+            {
+                os.flush();
             }
         }
     }
