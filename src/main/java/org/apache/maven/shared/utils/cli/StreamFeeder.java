@@ -33,24 +33,25 @@ import java.util.concurrent.atomic.AtomicReference;
 class StreamFeeder
     extends AbstractStreamHandler
 {
+
     private final AtomicReference<InputStream> input;
+
     private final AtomicReference<OutputStream> output;
+
+    private volatile Throwable exception;
 
     /**
      * Create a new StreamFeeder
      *
-     * @param input  Stream to read from
+     * @param input Stream to read from
      * @param output Stream to write to
      */
     public StreamFeeder( InputStream input, OutputStream output )
     {
+        super();
         this.input = new AtomicReference<InputStream>( input );
         this.output = new AtomicReference<OutputStream>( output );
     }
-
-    // ----------------------------------------------------------------------
-    // Runnable implementation
-    // ----------------------------------------------------------------------
 
     @Override
     public void run()
@@ -62,6 +63,10 @@ class StreamFeeder
         catch ( Throwable e )
         {
             // Catch everything so the streams will be closed and flagged as done.
+            if ( this.exception != null )
+            {
+                this.exception = e;
+            }
         }
         finally
         {
@@ -73,10 +78,6 @@ class StreamFeeder
             }
         }
     }
-
-    // ----------------------------------------------------------------------
-    //
-    // ----------------------------------------------------------------------
 
     public void close()
     {
@@ -90,7 +91,10 @@ class StreamFeeder
             }
             catch ( IOException ex )
             {
-                // ignore
+                if ( this.exception != null )
+                {
+                    this.exception = ex;
+                }
             }
         }
 
@@ -103,14 +107,21 @@ class StreamFeeder
             }
             catch ( IOException ex )
             {
-                // ignore
+                if ( this.exception != null )
+                {
+                    this.exception = ex;
+                }
             }
         }
     }
 
-    // ----------------------------------------------------------------------
-    //
-    // ----------------------------------------------------------------------
+    /**
+     * @since 3.2.0
+     */
+    public Throwable getException()
+    {
+        return this.exception;
+    }
 
     @SuppressWarnings( "checkstyle:innerassignment" )
     private void feed()
