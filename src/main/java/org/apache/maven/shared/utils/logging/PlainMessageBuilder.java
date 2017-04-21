@@ -20,7 +20,7 @@ package org.apache.maven.shared.utils.logging;
  */
 
 /**
- * Message builder implementation that just ignores styling, for Maven version earlier than 3.4.0.
+ * Message builder implementation that just ignores styling, for Maven version earlier than 3.5.0.
  */
 class PlainMessageBuilder
     implements MessageBuilder, LoggerLevelRenderer
@@ -46,17 +46,17 @@ class PlainMessageBuilder
     {
         return a( level ).toString();
     }
-    
+
     public String info( String level )
     {
         return a( level ).toString();
     }
-    
+
     public String warning( String level )
     {
         return a( level ).toString();
     }
-    
+
     public String error( String level )
     {
         return a( level ).toString();
@@ -71,7 +71,7 @@ class PlainMessageBuilder
     {
         return a( message );
     }
-    
+
     public PlainMessageBuilder failure( Object message )
     {
         return a( message );
