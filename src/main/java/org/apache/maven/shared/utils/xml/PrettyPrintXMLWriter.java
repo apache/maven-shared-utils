@@ -366,10 +366,10 @@ public class PrettyPrintXMLWriter
 
         if ( docType != null )
         {
-            newLine();
             writer.write( "<!DOCTYPE " );
             writer.write( docType );
             writer.write( '>' );
+            newLine();
         }
     }
 
