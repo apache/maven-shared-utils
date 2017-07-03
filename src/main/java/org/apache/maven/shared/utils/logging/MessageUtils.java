@@ -34,6 +34,12 @@ public class MessageUtils
 {
     private static final boolean JANSI;
 
+    /** Reference to the JVM shutdown hook, if registered */
+    private static Thread shutdownHook;
+
+    /** Synchronization monitor for the "uninstall" */
+    private static final Object STARTUP_SHUTDOWN_MONITOR = new Object();
+
     static
     {
         boolean jansi = true;
@@ -67,6 +73,31 @@ public class MessageUtils
      * it is actually uninstalled.
      */
     public static void systemUninstall()
+    {
+        synchronized ( STARTUP_SHUTDOWN_MONITOR )
+        {
+            doSystemUninstall();
+
+            // hook can only set when JANSI is true 
+            if ( shutdownHook != null )
+            {
+                // if out and system_out are same instance again, ansi is assumed to be uninstalled 
+                if ( AnsiConsole.out == AnsiConsole.system_out )
+                {
+                    try
+                    {
+                        Runtime.getRuntime().removeShutdownHook( shutdownHook );
+                    }
+                    catch ( IllegalStateException ex )
+                    {
+                        // ignore - VM is already shutting down
+                    }
+                }
+            }
+        }
+    }
+
+    private static void doSystemUninstall()
     {
         if ( JANSI )
         {
@@ -142,4 +173,32 @@ public class MessageUtils
         return msg.replaceAll( "\u001B\\[[;\\d]*[ -/]*[@-~]", "" );
     }
 
+    /**
+     * Register a shutdown hook with the JVM runtime, uninstalling Ansi support on
+     * JVM shutdown unless is has already been uninstalled at that time.
+     * <p>Delegates to {@link #doSystemUninstall()} for the actual uninstall procedure
+     * 
+     * @see Runtime#addShutdownHook(Thread)
+     * @see MessageUtils#systemUninstall()
+     * @see #doSystemUninstall()
+     */
+    public static void registerShutdownHook()
+    {
+        if ( JANSI && shutdownHook == null )
+        {
+            // No shutdown hook registered yet.
+            shutdownHook = new Thread()
+            {
+                @Override
+                public void run()
+                {
+                    synchronized ( STARTUP_SHUTDOWN_MONITOR )
+                    {
+                        doSystemUninstall();
+                    }
+                }
+            };
+            Runtime.getRuntime().addShutdownHook( shutdownHook );
+        }
+    }
 }
