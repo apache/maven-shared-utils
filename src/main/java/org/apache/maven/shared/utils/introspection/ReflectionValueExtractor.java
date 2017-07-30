@@ -76,7 +76,7 @@ public class ReflectionValueExtractor
 
         int idx;
 
-        public Tokenizer( String expression )
+        Tokenizer( String expression )
         {
             this.expression = expression;
         }

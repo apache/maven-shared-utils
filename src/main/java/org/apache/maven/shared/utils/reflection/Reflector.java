@@ -45,7 +45,7 @@ final class Reflector
     /**
      * Ensure no instances of Reflector are created...this is a utility.
      */
-    public Reflector()
+    Reflector()
     {
     }
 

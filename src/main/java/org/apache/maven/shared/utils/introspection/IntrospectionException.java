@@ -28,12 +28,12 @@ class IntrospectionException
      */
     private static final long serialVersionUID = -6090771282553728784L;
 
-    public IntrospectionException( String message )
+    IntrospectionException( String message )
     {
         super( message );
     }
 
-    public IntrospectionException( Throwable cause )
+    IntrospectionException( Throwable cause )
     {
         super( cause );
     }

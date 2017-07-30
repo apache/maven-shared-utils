@@ -46,7 +46,7 @@ class StreamFeeder
      * @param input Stream to read from
      * @param output Stream to write to
      */
-    public StreamFeeder( InputStream input, OutputStream output )
+    StreamFeeder( InputStream input, OutputStream output )
     {
         super();
         this.input = new AtomicReference<InputStream>( input );

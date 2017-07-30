@@ -32,7 +32,7 @@ class ReflectorException
     /**
      * Create a new ReflectorException.
      */
-    public ReflectorException()
+    ReflectorException()
     {
     }
 
@@ -41,7 +41,7 @@ class ReflectorException
      *
      * @param msg The message.
      */
-    public ReflectorException( String msg )
+    ReflectorException( String msg )
     {
         super( msg );
     }
@@ -51,7 +51,7 @@ class ReflectorException
      *
      * @param root The root cause.
      */
-    public ReflectorException( Throwable root )
+    ReflectorException( Throwable root )
     {
         super( root );
     }
@@ -63,7 +63,7 @@ class ReflectorException
      * @param msg  The message.
      * @param root The root cause.
      */
-    public ReflectorException( String msg, Throwable root )
+    ReflectorException( String msg, Throwable root )
     {
         super( msg, root );
     }

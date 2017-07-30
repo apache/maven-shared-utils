@@ -39,7 +39,7 @@ public interface ScanConductor
     /**
      * 
      */
-    public enum ScanAction
+    enum ScanAction
     {
         /**
          * Abort the whole scanning process. The current file will not

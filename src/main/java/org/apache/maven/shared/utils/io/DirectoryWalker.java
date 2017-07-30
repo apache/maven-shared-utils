@@ -67,7 +67,7 @@ class DirectoryWalker
          * @param d the directory to track
          * @param length the length of entries in the directory.
          */
-        public DirStackEntry( File d, int length )
+        DirStackEntry( File d, int length )
         {
             dir = d;
             count = length;
@@ -125,7 +125,7 @@ class DirectoryWalker
 
     private final List<DirectoryWalkListener> listeners;
 
-    public DirectoryWalker()
+    DirectoryWalker()
     {
         this.includes = new ArrayList<String>();
         this.excludes = new ArrayList<String>();

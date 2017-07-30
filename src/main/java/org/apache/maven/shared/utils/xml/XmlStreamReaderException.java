@@ -54,7 +54,7 @@ class XmlStreamReaderException
      * @param xmlEnc      XML prolog encoding.
      * @param is          the unconsumed InputStream.
      */
-    public XmlStreamReaderException( String msg, String bomEnc, String xmlGuessEnc, String xmlEnc, InputStream is )
+    XmlStreamReaderException( String msg, String bomEnc, String xmlGuessEnc, String xmlEnc, InputStream is )
     {
         super( msg, bomEnc, xmlGuessEnc, xmlEnc, is );
     }
@@ -73,7 +73,7 @@ class XmlStreamReaderException
      * @param xmlEnc      XML prolog encoding.
      * @param is          the unconsumed InputStream.
      */
-    public XmlStreamReaderException( String msg, String ctMime, String ctEnc, String bomEnc, String xmlGuessEnc,
+    XmlStreamReaderException( String msg, String ctMime, String ctEnc, String bomEnc, String xmlGuessEnc,
                                      String xmlEnc, InputStream is )
     {
         super( msg, ctMime, ctEnc, bomEnc, xmlGuessEnc, xmlEnc, is );
