@@ -145,7 +145,8 @@ public class CaseTest
             // check result
             String expectedToUpperCase = upper;
             String expectedToLowerCase = lower;
-            if ( LOCALE_TURKISH.getLanguage().equals( locale.getLanguage() ) )
+            if ( LOCALE_TURKISH.getLanguage().equals( locale.getLanguage() ) ||
+                 new Locale( "az" ).getLanguage().equals( locale.getLanguage() )           )
             {
                 expectedToUpperCase = upper.replace( DOTLESS_I, DOTTED_I );
                 expectedToLowerCase = lower.replace( DOTTED_i, DOTLESS_i );
