@@ -1,4 +1,5 @@
-// CHECKSTYLE_OFF: RegexpHeader
+package org.apache.maven.shared.utils.logging;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,6 +18,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 /**
  * An API to write Maven messages to console with styled color content, consistently across whole
  * Maven ecosystem (Maven itself or any plugin or extension).
@@ -47,5 +49,3 @@
  * </ul>
  * @since 3.1.0
  */
-package org.apache.maven.shared.utils.logging;
-
