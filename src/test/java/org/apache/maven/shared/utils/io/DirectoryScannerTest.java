@@ -72,6 +72,7 @@ public class DirectoryScannerTest
     {
         createTestData();
 
+        //@formatter:off
         fitScanTest( true, true, true,
                 /* includes */        null,
                 /* excludes */        null,
@@ -94,6 +95,7 @@ public class DirectoryScannerTest
                 /* expNotInclDirs  */ NONE,
                 /* expNotExclFiles */ NONE,
                 /* expNotExclDirs  */ NONE );
+        //@formatter:on
     }
 
     @Test
@@ -102,6 +104,7 @@ public class DirectoryScannerTest
     {
         createTestData();
 
+        //@formatter:off
         fitScanTest( true, true, true,
                 /* includes        */ new String[]{ "**/*.dat", "*.somethingelse" },
                 /* excludes        */ null,
@@ -122,6 +125,7 @@ public class DirectoryScannerTest
                 /* expNotInclDirs  */ new String[]{ "", "folder1" },
                 /* expExclFiles    */ NONE,
                 /* expExclDirs     */ NONE );
+        //@formatter:on
     }
 
     @Test
@@ -133,43 +137,27 @@ public class DirectoryScannerTest
         ds.scan();
         String[] includedDirectories = ds.getIncludedDirectories();
         String[] files = ds.getIncludedFiles();
-        
-        assertEquals( 9, files.length );
-        assertEquals( 5,  includedDirectories.length );
-        
-        //@formatter:off
-        String[] expectedFiles = { 
-            "aRegularDir/aRegularFile.txt", 
-            "fileR.txt", 
-            "fileW.txt", 
-            "fileX.txt", 
-            "symLinkToFileOnTheOutside",
-            "symR",
-            "symW",
-            "symX",
-            "targetDir/targetFile.txt",
-        };
-        //@formatter:on
-        List<String> sortedFiles = Arrays.asList( files );
-        List<String> sortedExpectedFiles = Arrays.asList( expectedFiles );
-        Collections.sort( sortedFiles );
-        Collections.sort( sortedExpectedFiles );
-        assertArrayEquals( sortedExpectedFiles.toArray(), sortedFiles.toArray() );
 
-        //@formatter:off
-        String[] expectedDirs = {
-            "",
-            "aRegularDir",
-            "symDir",
-            "symLinkToDirOnTheOutside",
-            "targetDir",
-        };
-        //@formatter:on
-        List<String> sortedIncludedDirectories = Arrays.asList( includedDirectories );
-        List<String> sortedExpectedDirs = Arrays.asList( expectedDirs );
-        Collections.sort( sortedIncludedDirectories );
-        Collections.sort( sortedExpectedDirs );
-        assertArrayEquals( sortedExpectedDirs.toArray(), sortedIncludedDirectories.toArray() );
+        assertEquals( 9, files.length );
+
+        List<String> arrayFiles = Arrays.asList( files );
+        assertTrue( arrayFiles.contains( "aRegularDir/aRegularFile.txt" ) );
+        assertTrue( arrayFiles.contains( "fileR.txt" ) );
+        assertTrue( arrayFiles.contains( "fileW.txt" ) );
+        assertTrue( arrayFiles.contains( "fileX.txt" ) );
+        assertTrue( arrayFiles.contains( "symLinkToFileOnTheOutside" ) );
+        assertTrue( arrayFiles.contains( "symR" ) );
+        assertTrue( arrayFiles.contains( "symW" ) );
+        assertTrue( arrayFiles.contains( "symX" ) );
+        assertTrue( arrayFiles.contains( "targetDir/targetFile.txt" ) );
+
+        assertEquals( 5, includedDirectories.length );
+        List<String> arrayDirs = Arrays.asList( includedDirectories );
+        assertTrue( arrayDirs.contains( "" ) );
+        assertTrue( arrayDirs.contains( "aRegularDir" ) );
+        assertTrue( arrayDirs.contains( "symDir" ) );
+        assertTrue( arrayDirs.contains( "symLinkToDirOnTheOutside" ) );
+        assertTrue( arrayDirs.contains( "targetDir" ) );
 
     }
 
@@ -240,7 +228,7 @@ public class DirectoryScannerTest
     }
 
     /*
-        Creates a standard directory layout with symlinks and files.
+     * Creates a standard directory layout with symlinks and files.
      */
 
     @Test
@@ -249,6 +237,7 @@ public class DirectoryScannerTest
     {
         createTestData();
 
+        //@formatter:off
         fitScanTest( true, true, true,
                 /* includes        */ null,
                 /* excludes        */ new String[]{ "**/*.dat", "*.somethingelse" },
@@ -269,6 +258,7 @@ public class DirectoryScannerTest
                 /* expNotInclDirs  */ NONE,
                 /* expExclFiles    */ new String[]{ "file3.dat", "folder1/file5.dat" },
                 /* expExclDirs     */ NONE );
+        //@formatter:on
     }
 
     public void testIsSymLin()
@@ -334,8 +324,8 @@ public class DirectoryScannerTest
     {
         if ( expectedFiles != null )
         {
-            String msg = category + " expected: " + Arrays.toString( expectedFiles ) + " but got: " + Arrays.toString(
-                resolvedFiles );
+            String msg = category + " expected: " + Arrays.toString( expectedFiles ) + " but got: "
+                + Arrays.toString( resolvedFiles );
             Assert.assertNotNull( msg, resolvedFiles );
             assertEquals( msg, expectedFiles.length, resolvedFiles.length );
 
