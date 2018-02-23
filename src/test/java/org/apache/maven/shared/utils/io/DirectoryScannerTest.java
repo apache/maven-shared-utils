@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeFalse;
@@ -132,9 +133,34 @@ public class DirectoryScannerTest
         String[] includedDirectories = ds.getIncludedDirectories();
         String[] files = ds.getIncludedFiles();
         
-        //FIXME: This should be changed to some kind of assert...WhatEver()...
-        System.out.println( "files = " + files );
+        assertEquals( 9, files.length );
+        assertEquals( 5,  includedDirectories.length );
+        
+        //@formatter:off
+        String[] expectedFiles = { 
+            "aRegularDir/aRegularFile.txt", 
+            "fileR.txt", 
+            "fileW.txt", 
+            "fileX.txt", 
+            "symLinkToFileOnTheOutside",
+            "symR",
+            "symW",
+            "symX",
+            "targetDir/targetFile.txt",
+        };
+        //@formatter:on
+        assertArrayEquals( expectedFiles, files );
 
+        //@formatter:off
+        String[] expectedDirs = {
+            "",
+            "aRegularDir",
+            "symDir",
+            "symLinkToDirOnTheOutside",
+            "targetDir",
+        };
+        //@formatter:on
+        assertArrayEquals( expectedDirs, includedDirectories );
 
     }
 
