@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertArrayEquals;
@@ -149,7 +150,11 @@ public class DirectoryScannerTest
             "targetDir/targetFile.txt",
         };
         //@formatter:on
-        assertArrayEquals( expectedFiles, files );
+        List<String> sortedFiles = Arrays.asList( files );
+        List<String> sortedExpectedFiles = Arrays.asList( expectedFiles );
+        Collections.sort( sortedFiles );
+        Collections.sort( sortedExpectedFiles );
+        assertArrayEquals( sortedExpectedFiles.toArray(), sortedFiles.toArray() );
 
         //@formatter:off
         String[] expectedDirs = {
@@ -160,7 +165,11 @@ public class DirectoryScannerTest
             "targetDir",
         };
         //@formatter:on
-        assertArrayEquals( expectedDirs, includedDirectories );
+        List<String> sortedIncludedDirectories = Arrays.asList( includedDirectories );
+        List<String> sortedExpectedDirs = Arrays.asList( expectedDirs );
+        Collections.sort( sortedIncludedDirectories );
+        Collections.sort( sortedExpectedDirs );
+        assertArrayEquals( sortedExpectedDirs.toArray(), sortedIncludedDirectories.toArray() );
 
     }
 
