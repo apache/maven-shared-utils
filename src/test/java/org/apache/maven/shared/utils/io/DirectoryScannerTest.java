@@ -138,6 +138,16 @@ public class DirectoryScannerTest
         String[] includedDirectories = ds.getIncludedDirectories();
         String[] files = ds.getIncludedFiles();
 
+        System.out.println( " --- Files ----" );
+        for ( String file : files )
+        {
+            System.out.println( "File: '" + file + "'" );
+        }
+        System.out.println( " --- Directories ----" );
+        for ( String dir : includedDirectories )
+        {
+            System.out.println( "Dir: '" + dir + "'" );
+        }
         assertEquals( 9, files.length );
 
         List<String> arrayFiles = Arrays.asList( files );
