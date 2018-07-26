@@ -2290,9 +2290,9 @@ public class StringUtils
     /**
      * @param source The source.
      * @param quoteChar The quote character.
-     * @param escapedChars The escaped characters.
+     * @param escapedChars set of characters to escape.
      * @param quotingTriggers The quoting trigger.
-     * @param escapeChar The escape character.
+     * @param escapeChar prefix for escaping a character.
      * @param force true/false.
      * @return the String quoted and escaped
      */
@@ -2343,8 +2343,8 @@ public class StringUtils
 
     /**
      * @param source The source.
-     * @param escapedChars escape characters.
-     * @param escapeChar escape character.
+     * @param escapedChars set of characters to escape.
+     * @param escapeChar prefix for escaping a character.
      * @return the String escaped
      */
     public static String escape( @Nullable String source, @Nonnull final char[] escapedChars, char escapeChar )

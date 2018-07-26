@@ -78,7 +78,7 @@ public class BourneShellTest
         sh.setWorkingDirectory( "/usr/bin" );
         sh.setExecutable( "chmod" );
 
-        String[] args = { "\'some arg with spaces\'" };
+        final String[] args = { "\"some arg with spaces\"" };
 
         List<String> shellCommandLine = sh.getShellCommandLine( args );
 
@@ -100,10 +100,10 @@ public class BourneShellTest
 
         String cli = StringUtils.join( shellCommandLine.iterator(), " " );
         System.out.println( cli );
-        assertTrue( cli.endsWith( "\'" + args[0] + "\'" ) );
+        assertTrue( cli.endsWith( "\"" + args[0] + "\"" ) );
     }
 
-    public void testArgumentsWithsemicolon()
+    public void testArgumentsWithSemicolon()
     {
 
         System.out.println( "---- semi colon tests ----" );
@@ -119,7 +119,7 @@ public class BourneShellTest
 
         String cli = StringUtils.join( shellCommandLine.iterator(), " " );
         System.out.println( cli );
-        assertTrue( cli.endsWith( "\'" + args[0] + "\'" ) );
+        assertTrue( cli.endsWith( "\"" + args[0] + "\"" ) );
 
         Commandline commandline = new Commandline( newShell() );
         commandline.setExecutable( "chmod" );
@@ -132,7 +132,7 @@ public class BourneShellTest
 
         assertEquals( "/bin/sh", lines.get( 0 ) );
         assertEquals( "-c", lines.get( 1 ) );
-        assertEquals( "chmod --password ';password'", lines.get( 2 ) );
+        assertEquals( "chmod --password \";password\"", lines.get( 2 ) );
 
         commandline = new Commandline( newShell() );
         commandline.setExecutable( "chmod" );
@@ -144,7 +144,7 @@ public class BourneShellTest
 
         assertEquals( "/bin/sh", lines.get( 0) );
         assertEquals( "-c", lines.get( 1 ) );
-        assertEquals( "chmod --password ';password'", lines.get( 2 ) );
+        assertEquals( "chmod --password \";password\"", lines.get( 2 ) );
 
         commandline = new Commandline( new CmdShell() );
         commandline.getShell().setQuotedArgumentsEnabled( true );
@@ -192,7 +192,7 @@ public class BourneShellTest
 
         assertEquals( "/bin/sh", lines.get( 0 ) );
         assertEquals( "-c", lines.get( 1 ) );
-        assertEquals( "chmod ' ' '|' '&&' '||' ';' ';;' '&' '()' '<' '<<' '>' '>>' '*' '?' '[' ']' '{' '}' '`'",
+        assertEquals( "chmod \" \" \"|\" \"&&\" \"||\" \";\" \";;\" \"&\" \"()\" \"<\" \"<<\" \">\" \">>\" \"*\" \"?\" \"[\" \"]\" \"{\" \"}\" \"`\"",
                       lines.get( 2 ) );
     }
 

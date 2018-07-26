@@ -31,17 +31,19 @@ import org.apache.maven.shared.utils.StringUtils;
 public class BourneShell
     extends Shell
 {
+    private static final char DOUBLE_QUOTATION = '"';
+
     private static final char[] BASH_QUOTING_TRIGGER_CHARS =
         { ' ', '$', ';', '&', '|', '<', '>', '*', '?', '(', ')', '[', ']', '{', '}', '`' };
 
     /**
-     * Create instance of BournShell.
+     * Create instance of BourneShell.
      */
     public BourneShell()
     {
         setShellCommand( "/bin/sh" );
-        setArgumentQuoteDelimiter( '\'' );
-        setExecutableQuoteDelimiter( '\"' );
+        setArgumentQuoteDelimiter( DOUBLE_QUOTATION );
+        setExecutableQuoteDelimiter( DOUBLE_QUOTATION );
         setSingleQuotedArgumentEscaped( true );
         setSingleQuotedExecutableEscaped( false );
         setQuotedExecutableEnabled( true );

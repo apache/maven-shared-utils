@@ -19,22 +19,27 @@ package org.apache.maven.shared.utils.cli;
  * under the License.
  */
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+
 import org.apache.maven.shared.utils.Os;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 public class CommandLineUtilsTest
-    extends TestCase
 {
 
     /**
      * Tests that case-insensitive environment variables are normalized to upper case.
      */
+    @Test
     public void testGetSystemEnvVarsCaseInsensitive()
     {
         Properties vars = CommandLineUtils.getSystemEnvVars( false );
@@ -45,6 +50,7 @@ public class CommandLineUtilsTest
         }
     }
 
+    @Test
     public void testEnsureCaseSensitivity()
         throws Exception
     {
@@ -57,6 +63,7 @@ public class CommandLineUtilsTest
     /**
      * Tests that environment variables on Windows are normalized to upper case. Does nothing on Unix platforms.
      */
+    @Test
     public void testGetSystemEnvVarsWindows()
         throws Exception
     {
@@ -75,6 +82,7 @@ public class CommandLineUtilsTest
     /**
      * Tests the splitting of a command line into distinct arguments.
      */
+    @Test
     public void testTranslateCommandline()
         throws Exception
     {
@@ -89,6 +97,26 @@ public class CommandLineUtilsTest
 
         assertCmdLineArgs( new String[] { "foo", " \" ", "bar" }, "foo ' \" ' bar" );
         assertCmdLineArgs( new String[] { "foo", " ' ", "bar" }, "foo \" ' \" bar" );
+    }
+
+    @Test
+    public void givenASingleQuoteMarkInArgument_whenExecutingCode_thenExitCode0Returned() throws Exception {
+        final Process p = exec("echo \"let's go\"");
+
+        assertEquals(0, p.exitValue());
+    }
+
+    @Test
+    public void givenADoubleQuoteMarkInArgument_whenExecutingCode_thenExitCode0Returned() throws Exception {
+        final Process p = exec("echo \"let\"s go\"");
+
+        assertEquals(0, p.exitValue());
+    }
+
+    private Process exec(String cmd) throws CommandLineException, InterruptedException {
+        Process p = new Commandline(cmd).execute();
+        Thread.sleep(1000);
+        return p;
     }
 
     private void assertCmdLineArgs( String[] expected, String cmdLine )
