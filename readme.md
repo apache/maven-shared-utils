@@ -51,9 +51,10 @@ Making and Submitting Changes
 We accept Pull Requests via GitHub. The [developer mailing list][dev-ml-list] is the
 main channel of communication for contributors.  
 There are some guidelines which will make applying PRs easier for us:
-+ Create a topic branch from where you want to base your work (this is usually the master branch).
-  Push your changes to a topic branch in your fork of the repository.
++ Create a branch from where you want to base your work (this is usually the master branch).
+  Push your changes to a branch in your fork of the repository.
 + Make commits of logical units.
++ You can use version 9 of Java, but be aware that the code has target of version 6.
 + Respect the original code style: by using the same [codestyle][code-style],
   patches should only highlight the actual difference, not being disturbed by any formatting issues:
   + Only use spaces for indentation.
