@@ -22,6 +22,7 @@ package org.apache.maven.shared.utils.cli;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -99,27 +100,38 @@ public class CommandLineUtilsTest
         assertCmdLineArgs( new String[] { "foo", " ' ", "bar" }, "foo \" ' \" bar" );
     }
 
-    @Test
-    public void givenASingleQuoteMarkInArgument_whenExecutingCode_thenExitCode0Returned() throws Exception {
-        final Process p = exec("echo \"let's go\"");
-
-        assertEquals(0, p.exitValue());
-    }
 
     @Test
-    public void givenADoubleQuoteMarkInArgument_whenExecutingCode_thenExitCode0Returned() throws Exception {
-        final Process p = exec("echo \"let\"s go\"");
-
-        assertEquals(0, p.exitValue());
+    public void givenASingleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenTheQuotationMarkIsNotEscaped() throws Exception
+    {
+        final String command = "echo \"let's go\"";
+        final String[] expected = new String[]{"echo", "let's go"};
+        assertCmdLineArgs(expected, command);
     }
 
-    private Process exec(String cmd) throws CommandLineException, InterruptedException {
-        Process p = new Commandline(cmd).execute();
-        Thread.sleep(1000);
-        return p;
+    @Test
+    public void givenAnEscapedDoubleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenTheQuotationMarkRemainsEscaped() throws Exception
+    {
+        final String command = "echo \"let\\\"s go\"";
+        final String[] expected = new String[]{"echo", "let\\\"s go"};
+        assertCmdLineArgs(expected, command);
     }
 
-    private void assertCmdLineArgs( String[] expected, String cmdLine )
+    @Test
+    public void givenAnEscapedSingleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenTheQuotationMarkRemainsEscaped() throws Exception
+    {
+        final String command = "echo \"let\\\'s go\"";
+        final String[] expected = new String[]{"echo", "let\\\'s go"};
+        assertCmdLineArgs(expected, command);
+    }
+
+    @Test
+    public void givenAnEscapedDoubleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenNoExceptionIsThrown() throws Exception
+    {
+        new Commandline("echo \"let\\\"s go\"").execute();
+    }
+
+    private void assertCmdLineArgs( final String[] expected, final String cmdLine )
         throws Exception
     {
         String[] actual = CommandLineUtils.translateCommandline( cmdLine );
