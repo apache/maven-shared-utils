@@ -19,6 +19,7 @@ package org.apache.maven.shared.utils.cli;
  * under the License.
  */
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -100,6 +101,31 @@ public class CommandLineUtilsTest
         assertCmdLineArgs( new String[] { "foo", " ' ", "bar" }, "foo \" ' \" bar" );
     }
 
+
+    @Test
+    public void givenASingleQuoteMarkInArgument_whenExecutingCode_thenNoExceptionIsThrown() throws Exception {
+        new Commandline("echo \"let's go\"").execute();
+    }
+
+    @Test
+    public void givenADoubleQuoteMarkInArgument_whenExecutingCode_thenCommandLineExceptionIsThrown() throws Exception {
+        try {
+            new Commandline("echo \"let\"s go\"").execute();
+        } catch (CommandLineException e) {
+            assertTrue(true);
+            return;
+        }
+        fail("Exception was not thrown when given invalid (3 unescaped double quote) input");
+    }
+
+
+    @Test
+    public void givenASingleQuoteMarkInArgument_whenExecutingCode_thenExitCode0Returned() throws Exception {
+        final Process p = new Commandline("echo \"let's go\"").execute();
+        // Note, this sleep should be removed when java version reaches Java 8
+        Thread.sleep(1000);
+        assertEquals(0, p.exitValue());
+    }
 
     @Test
     public void givenASingleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenTheQuotationMarkIsNotEscaped() throws Exception

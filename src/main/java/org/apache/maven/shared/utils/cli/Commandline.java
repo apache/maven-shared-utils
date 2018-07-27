@@ -92,19 +92,11 @@ public class Commandline
      *
      * @param toProcess The command to process
      */
-    public Commandline( String toProcess )
+    public Commandline( String toProcess ) throws CommandLineException
     {
         setDefaultShell();
-        String[] tmp = new String[0];
-        try
-        {
-            tmp = CommandLineUtils.translateCommandline( toProcess );
-        }
-        catch ( Exception e )
-        {
-            System.err.println( "Error translating Commandline." );
-        }
-        if ( ( tmp != null ) && ( tmp.length > 0 ) )
+        String[] tmp = CommandLineUtils.translateCommandline( toProcess );
+        if ( ( tmp.length > 0 ) )
         {
             setExecutable( tmp[0] );
             for ( int i = 1; i < tmp.length; i++ )
@@ -484,7 +476,7 @@ public class Commandline
         /**
          * {@inheritDoc}
          */
-        public void setLine( String line )
+        public void setLine( String line ) throws CommandLineException
         {
             if ( line == null )
             {
@@ -494,9 +486,10 @@ public class Commandline
             {
                 parts = CommandLineUtils.translateCommandline( line );
             }
-            catch ( Exception e )
+            catch ( CommandLineException e )
             {
                 System.err.println( "Error translating Commandline." );
+                throw( e );
             }
         }
 
