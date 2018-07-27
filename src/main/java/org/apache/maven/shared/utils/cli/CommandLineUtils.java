@@ -477,8 +477,9 @@ public abstract class CommandLineUtils
         final int normal = 0;
         final int inQuote = 1;
         final int inDoubleQuote = 2;
+        boolean inEscape = false;
         int state = normal;
-        StringTokenizer tok = new StringTokenizer( toProcess, "\"\' ", true );
+        final StringTokenizer tok = new StringTokenizer( toProcess, "\"\' \\", true );
         List<String> tokens = new ArrayList<String>();
         StringBuilder current = new StringBuilder();
 
@@ -490,31 +491,65 @@ public abstract class CommandLineUtils
                 case inQuote:
                     if ( "\'".equals( nextTok ) )
                     {
-                        state = normal;
+                        if ( inEscape )
+                        {
+                            current.append( nextTok );
+                            inEscape = false;
+                        }
+                        else
+                        {
+                            state = normal;
+                        }
                     }
                     else
                     {
                         current.append( nextTok );
+                        inEscape = "\\".equals( nextTok );
                     }
                     break;
                 case inDoubleQuote:
                     if ( "\"".equals( nextTok ) )
                     {
-                        state = normal;
+                        if ( inEscape )
+                        {
+                            current.append( nextTok );
+                            inEscape = false;
+                        }
+                        else
+                        {
+                            state = normal;
+                        }
                     }
                     else
                     {
                         current.append( nextTok );
+                        inEscape = "\\".equals( nextTok );
                     }
                     break;
                 default:
                     if ( "\'".equals( nextTok ) )
                     {
-                        state = inQuote;
+                        if ( inEscape )
+                        {
+                            inEscape = false;
+                            current.append( nextTok );
+                        }
+                        else
+                        {
+                            state = inQuote;
+                        }
                     }
                     else if ( "\"".equals( nextTok ) )
                     {
-                        state = inDoubleQuote;
+                        if ( inEscape )
+                        {
+                            inEscape = false;
+                            current.append( nextTok );
+                        }
+                        else
+                            {
+                            state = inDoubleQuote;
+                        }
                     }
                     else if ( " ".equals( nextTok ) )
                     {
@@ -527,6 +562,7 @@ public abstract class CommandLineUtils
                     else
                     {
                         current.append( nextTok );
+                        inEscape = "\\".equals( nextTok );
                     }
                     break;
             }
