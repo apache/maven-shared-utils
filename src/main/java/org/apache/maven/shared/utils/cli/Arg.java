@@ -34,7 +34,7 @@ public interface Arg
     /**
      * @param line The line of arguments.
      */
-    void setLine( String line );
+    void setLine( String line ) throws CommandLineException;
 
     /**
      * @param value The file to be set.
