@@ -40,7 +40,9 @@ enum Style
     STRONG(  "bold"        ),
     MOJO(    "green"       ),
     PROJECT( "cyan"        ),
-    PATH(    "blue"        );
+    WORKING_DIR("black"    ),
+    MODULE_DIR("green"     ),
+    FILE_PATH(    "blue"   );
 
     private final boolean bold;
 

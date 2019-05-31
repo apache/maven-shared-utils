@@ -19,9 +19,12 @@ package org.apache.maven.shared.utils.logging;
  * under the License.
  */
 
+import org.apache.maven.shared.utils.StringUtils;
 import org.fusesource.jansi.Ansi;
 
+import java.io.File;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Message builder implementation that supports ANSI colors through
@@ -31,6 +34,10 @@ class AnsiMessageBuilder
     implements MessageBuilder, LoggerLevelRenderer
 {
     private Ansi ansi;
+
+    private Path workingDirectory;
+
+    private Path moduleBaseDirectory;
 
     AnsiMessageBuilder()
     {
@@ -50,6 +57,15 @@ class AnsiMessageBuilder
     AnsiMessageBuilder( Ansi ansi )
     {
         this.ansi = ansi;
+        String mavenProjectBaseDir = System.getenv("MAVEN_PROJECTBASEDIR");
+        if (StringUtils.isNotBlank(mavenProjectBaseDir)) {
+            this.workingDirectory = Paths.get(mavenProjectBaseDir);
+        }
+
+        String moduleBaseDir = System.getProperty("basedir");
+        if (StringUtils.isNotBlank(moduleBaseDir)) {
+            this.moduleBaseDirectory = Paths.get(moduleBaseDir);
+        }
     }
 
     public String debug( String level )
@@ -110,7 +126,22 @@ class AnsiMessageBuilder
 
     public AnsiMessageBuilder path ( Path path )
     {
-        Style.PATH.apply( ansi ).a ( path.toString() ).reset();
+        Path absolutePath = path.toAbsolutePath();
+
+        if (workingDirectory != null && moduleBaseDirectory != null) {
+            Style.WORKING_DIR.apply(ansi).a(workingDirectory.toString() + File.separator).reset();
+
+            if (!moduleBaseDirectory.equals(workingDirectory)) {
+                String moduleDirectory = workingDirectory.relativize(moduleBaseDirectory).toString() + File.separator;
+                Style.MODULE_DIR.apply( ansi ).a(moduleDirectory).reset();
+            }
+
+            String filePath = moduleBaseDirectory.relativize(absolutePath).toString();
+            Style.FILE_PATH.apply(ansi).a(filePath).reset();
+        } else {
+            Style.FILE_PATH.apply( ansi ).a ( absolutePath ).reset();
+        }
+
         return this;
     }
 

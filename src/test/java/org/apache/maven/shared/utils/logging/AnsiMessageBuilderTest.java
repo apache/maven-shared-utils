@@ -19,11 +19,14 @@ package org.apache.maven.shared.utils.logging;
  * under the License.
  */
 
+import org.apache.maven.shared.utils.Os;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Properties;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
@@ -114,23 +117,31 @@ public class AnsiMessageBuilderTest
     @Test
     public void should_color_paths_and_reset()
     {
-        ansiMessageBuilder.path( Paths.get( "aFile" ) );
+        ansiMessageBuilder.path( Paths.get( "core", "aFile" ) );
 
-        assertThat( ansiMessageBuilder.toString(), equalTo( "\u001B[34maFile\u001B[m" ));
+        assertThat( ansiMessageBuilder.toString(), containsString( "\u001B[34maFile\u001B[m" ));
     }
 
     @Test
-    public void should_not_alter_paths()
+    public void should_color_working_dir_from_path()
     {
-        Path path = Paths.get("aFile");
-        Path absolutePath = path.toAbsolutePath();
-
-        ansiMessageBuilder.path( path );
-        assertThat( ansiMessageBuilder.toString(), containsString( "aFile" ));
-        assertThat( ansiMessageBuilder.toString(), not( containsString( absolutePath.toString() ) ) );
+        Path absolutePath = Paths.get("src", "main").toAbsolutePath();
+        Path workingDir = Paths.get("").toAbsolutePath();
 
         ansiMessageBuilder.path( absolutePath );
-        assertThat( ansiMessageBuilder.toString(), containsString( absolutePath.toString() ));
+
+        String expectedPath =  workingDir.toString() + File.separator;
+        assertThat(ansiMessageBuilder.toString(), containsString("\u001B[30m" + expectedPath + "\u001B[m"));
+    }
+
+    @Test
+    public void should_color_module_dir_from_path()
+    {
+        Path absolutePath = Paths.get("core","src", "main").toAbsolutePath();
+
+        ansiMessageBuilder.path( absolutePath );
+        String expectedPath = "core" + File.separator;
+        assertThat(ansiMessageBuilder.toString(), containsString("\u001B[32m" + expectedPath));
     }
 
 }
