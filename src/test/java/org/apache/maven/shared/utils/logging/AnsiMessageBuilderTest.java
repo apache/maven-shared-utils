@@ -113,11 +113,9 @@ public class AnsiMessageBuilderTest
     @Test
     public void should_color_paths_and_reset()
     {
-        ansiMessageBuilder.path( Paths.get( "dummy" ) );
+        ansiMessageBuilder.path( Paths.get( "aFile" ) );
 
-        System.out.println(ansiMessageBuilder.toString());
-
-        assertThat( ansiMessageBuilder.toString(), equalTo( "\u001B[34mdummy\u001B[m" ));
+        assertThat( ansiMessageBuilder.toString(), equalTo( "\u001B[34maFile\u001B[m" ));
     }
 
 }
