@@ -22,9 +22,10 @@ package org.apache.maven.shared.utils.logging;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 public class AnsiMessageBuilderTest
@@ -116,6 +117,20 @@ public class AnsiMessageBuilderTest
         ansiMessageBuilder.path( Paths.get( "aFile" ) );
 
         assertThat( ansiMessageBuilder.toString(), equalTo( "\u001B[34maFile\u001B[m" ));
+    }
+
+    @Test
+    public void should_not_alter_paths()
+    {
+        Path path = Paths.get("aFile");
+        Path absolutePath = path.toAbsolutePath();
+
+        ansiMessageBuilder.path( path );
+        assertThat( ansiMessageBuilder.toString(), containsString( "aFile" ));
+        assertThat( ansiMessageBuilder.toString(), not( containsString( absolutePath.toString() ) ) );
+
+        ansiMessageBuilder.path( absolutePath );
+        assertThat( ansiMessageBuilder.toString(), containsString( absolutePath.toString() ));
     }
 
 }

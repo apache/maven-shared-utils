@@ -66,6 +66,7 @@ public interface MessageBuilder
 
     /**
      * Append a {@link Path} in path style.
+     * The path is not modified (e.g. transformed to absolute or relative form).
      * By default, blue
      */
     MessageBuilder path ( Path path );
