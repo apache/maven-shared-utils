@@ -19,6 +19,8 @@ package org.apache.maven.shared.utils.logging;
  * under the License.
  */
 
+import java.nio.file.Path;
+
 /**
  * Message builder that supports configurable styling.
  * @see MessageUtils
@@ -61,6 +63,12 @@ public interface MessageBuilder
      * By default, cyan
      */
     MessageBuilder project( Object message );
+
+    /**
+     * Append a {@link Path} in path style.
+     * By default, blue
+     */
+    MessageBuilder path ( Path path );
     
     //
     // message building methods modelled after Ansi methods

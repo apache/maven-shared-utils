@@ -22,6 +22,8 @@ package org.apache.maven.shared.utils.logging;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.nio.file.Paths;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
@@ -106,6 +108,16 @@ public class AnsiMessageBuilderTest
         ansiMessageBuilder.project( "a project" );
 
         assertThat( ansiMessageBuilder.toString(), equalTo( "\u001B[36ma project\u001B[m" ) );
+    }
+
+    @Test
+    public void should_color_paths_and_reset()
+    {
+        ansiMessageBuilder.path( Paths.get( "dummy" ) );
+
+        System.out.println(ansiMessageBuilder.toString());
+
+        assertThat( ansiMessageBuilder.toString(), equalTo( "\u001B[34mdummy\u001B[m" ));
     }
 
 }

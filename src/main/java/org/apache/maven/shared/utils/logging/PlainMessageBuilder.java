@@ -19,6 +19,8 @@ package org.apache.maven.shared.utils.logging;
  * under the License.
  */
 
+import java.nio.file.Path;
+
 /**
  * Message builder implementation that just ignores styling, for Maven version earlier than 3.5.0.
  */
@@ -90,6 +92,11 @@ class PlainMessageBuilder
     public PlainMessageBuilder project( Object message )
     {
         return a( message );
+    }
+
+    public PlainMessageBuilder path ( Path path )
+    {
+        return a( path.toString() );
     }
 
     public PlainMessageBuilder a( char[] value, int offset, int len )

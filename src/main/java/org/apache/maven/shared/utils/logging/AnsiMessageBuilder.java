@@ -21,6 +21,8 @@ package org.apache.maven.shared.utils.logging;
 
 import org.fusesource.jansi.Ansi;
 
+import java.nio.file.Path;
+
 /**
  * Message builder implementation that supports ANSI colors through
  * <a href="http://fusesource.github.io/jansi/">Jansi</a> with configurable styles through {@link Style}.
@@ -103,6 +105,12 @@ class AnsiMessageBuilder
     public AnsiMessageBuilder project( Object message )
     {
         Style.PROJECT.apply( ansi ).a( message ).reset();
+        return this;
+    }
+
+    public AnsiMessageBuilder path ( Path path )
+    {
+        Style.PATH.apply( ansi ).a ( path.toString() ).reset();
         return this;
     }
 

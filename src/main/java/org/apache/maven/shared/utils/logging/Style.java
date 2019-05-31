@@ -39,7 +39,8 @@ enum Style
     FAILURE( "bold,red"    ),
     STRONG(  "bold"        ),
     MOJO(    "green"       ),
-    PROJECT( "cyan"        );
+    PROJECT( "cyan"        ),
+    PATH(    "blue"        );
 
     private final boolean bold;
 
