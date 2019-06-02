@@ -161,4 +161,18 @@ public class AnsiMessageBuilderTest
 
         assertThat( sut.toString(), containsString( "\u001B[34m" + path.toString() + "\u001B[m" ));
     }
+
+    @Test
+    public void should_not_color_module_dir_when_equal_to_working_dir()
+    {
+        Path absolutePath = Paths.get( "src", "main" ).toAbsolutePath();
+        Path workingDir = Paths.get( "" ).toAbsolutePath();
+        Path moduleDir = Paths.get( "" ).toAbsolutePath();
+        MessageBuilder sut = new AnsiMessageBuilder( Ansi.ansi(), workingDir.toString(), moduleDir.toString() );
+
+        ansiMessageBuilder.path( absolutePath );
+
+        assertThat( ansiMessageBuilder.toString(), not( containsString( "\u001B[32m" ) ) );
+    }
+
 }
