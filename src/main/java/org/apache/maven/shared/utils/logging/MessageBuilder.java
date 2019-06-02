@@ -66,8 +66,10 @@ public interface MessageBuilder
 
     /**
      * Append a {@link Path} in path style.
-     * The path is not modified (e.g. transformed to absolute or relative form).
-     * By default, blue
+     * The path will be transformed to an absolute path (path.absolutePath() will be called).
+     * The path will be split into three parts, the working directory, module and file.
+     * By default, black, green, blue, respectively.
+     * If splitting the path is not possible, the whole path is blue, by default.
      */
     MessageBuilder path ( Path path );
     

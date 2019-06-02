@@ -19,14 +19,13 @@ package org.apache.maven.shared.utils.logging;
  * under the License.
  */
 
-import org.apache.maven.shared.utils.Os;
+import org.fusesource.jansi.Ansi;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Properties;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
@@ -117,9 +116,12 @@ public class AnsiMessageBuilderTest
     @Test
     public void should_color_paths_and_reset()
     {
-        ansiMessageBuilder.path( Paths.get( "core", "aFile" ) );
+        String workingDir = Paths.get(("")).toAbsolutePath().toString();
+        MessageBuilder sut = new AnsiMessageBuilder( Ansi.ansi(), workingDir, workingDir );
 
-        assertThat( ansiMessageBuilder.toString(), containsString( "\u001B[34maFile\u001B[m" ));
+        sut.path( Paths.get( "file" ) );
+
+        assertThat( sut.toString(), containsString( "\u001B[34mfile\u001B[m" ));
     }
 
     @Test
@@ -127,21 +129,36 @@ public class AnsiMessageBuilderTest
     {
         Path absolutePath = Paths.get("src", "main").toAbsolutePath();
         Path workingDir = Paths.get("").toAbsolutePath();
+        MessageBuilder sut = new AnsiMessageBuilder( Ansi.ansi(), workingDir.toString(), workingDir.toString() );
 
-        ansiMessageBuilder.path( absolutePath );
+        sut.path( absolutePath );
 
         String expectedPath =  workingDir.toString() + File.separator;
-        assertThat(ansiMessageBuilder.toString(), containsString("\u001B[30m" + expectedPath + "\u001B[m"));
+        assertThat(sut.toString(), containsString("\u001B[30m" + expectedPath + "\u001B[m"));
     }
 
     @Test
     public void should_color_module_dir_from_path()
     {
-        Path absolutePath = Paths.get("core","src", "main").toAbsolutePath();
+        Path filePath = Paths.get("core","src", "main").toAbsolutePath();
+        Path workingDir = Paths.get("").toAbsolutePath();
+        Path moduleDir = Paths.get("core").toAbsolutePath();
+        MessageBuilder sut = new AnsiMessageBuilder( Ansi.ansi(), workingDir.toString(), moduleDir.toString() );
 
-        ansiMessageBuilder.path( absolutePath );
+        sut.path( filePath );
+
         String expectedPath = "core" + File.separator;
-        assertThat(ansiMessageBuilder.toString(), containsString("\u001B[32m" + expectedPath));
+        assertThat( sut.toString(), containsString("\u001B[32m" + expectedPath ) );
     }
 
+    @Test
+    public void should_color_whole_path_when_no_working_dir_paths()
+    {
+        Path path = Paths.get("src", "file").toAbsolutePath();
+        MessageBuilder sut = new AnsiMessageBuilder(Ansi.ansi(), null, null);
+
+        sut.path(path);
+
+        assertThat( sut.toString(), containsString( "\u001B[34m" + path.toString() + "\u001B[m" ));
+    }
 }

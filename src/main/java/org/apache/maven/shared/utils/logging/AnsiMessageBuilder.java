@@ -19,7 +19,6 @@ package org.apache.maven.shared.utils.logging;
  * under the License.
  */
 
-import org.apache.maven.shared.utils.StringUtils;
 import org.fusesource.jansi.Ansi;
 
 import java.io.File;
@@ -33,38 +32,47 @@ import java.nio.file.Paths;
 class AnsiMessageBuilder
     implements MessageBuilder, LoggerLevelRenderer
 {
+    private static final String MAVEN_PROJECTBASEDIR_ENV = "MAVEN_PROJECTBASEDIR";
+
+    private static final String BASEDIR_ENV = "basedir";
+
     private Ansi ansi;
 
-    private Path workingDirectory;
+    private Path workingDir;
 
-    private Path moduleBaseDirectory;
+    private Path moduleDir;
 
     AnsiMessageBuilder()
     {
-        this( Ansi.ansi() );
+        this( Ansi.ansi(), System.getenv( MAVEN_PROJECTBASEDIR_ENV ), System.getenv( BASEDIR_ENV ) );
     }
 
     AnsiMessageBuilder( StringBuilder builder )
     {
-        this( Ansi.ansi( builder ) );
+        this( Ansi.ansi( builder ), System.getenv().get( MAVEN_PROJECTBASEDIR_ENV ), System.getenv( BASEDIR_ENV ) );
     }
 
     AnsiMessageBuilder( int size )
     {
-        this( Ansi.ansi( size ) );
+        this( Ansi.ansi( size ), System.getenv().get( MAVEN_PROJECTBASEDIR_ENV ), System.getenv( BASEDIR_ENV ) );
     }
 
-    AnsiMessageBuilder( Ansi ansi )
+    AnsiMessageBuilder ( Ansi ansi )
+    {
+        this( ansi, System.getenv( MAVEN_PROJECTBASEDIR_ENV ), System.getenv( BASEDIR_ENV ) );
+    }
+
+    AnsiMessageBuilder( Ansi ansi, String workingDirectory, String moduleDirectory )
     {
         this.ansi = ansi;
-        String mavenProjectBaseDir = System.getenv("MAVEN_PROJECTBASEDIR");
-        if (StringUtils.isNotBlank(mavenProjectBaseDir)) {
-            this.workingDirectory = Paths.get(mavenProjectBaseDir);
-        }
 
-        String moduleBaseDir = System.getProperty("basedir");
-        if (StringUtils.isNotBlank(moduleBaseDir)) {
-            this.moduleBaseDirectory = Paths.get(moduleBaseDir);
+        if ( workingDirectory != null )
+        {
+            this.workingDir = Paths.get( workingDirectory );
+        }
+        if ( moduleDirectory != null )
+        {
+            this.moduleDir = Paths.get( moduleDirectory );
         }
     }
 
@@ -128,17 +136,22 @@ class AnsiMessageBuilder
     {
         Path absolutePath = path.toAbsolutePath();
 
-        if (workingDirectory != null && moduleBaseDirectory != null) {
-            Style.WORKING_DIR.apply(ansi).a(workingDirectory.toString() + File.separator).reset();
+        if ( workingDir != null && moduleDir != null )
+        {
+            Style.WORKING_DIR.apply( ansi ).a( workingDir.toString() ).a( File.separator ).reset();
 
-            if (!moduleBaseDirectory.equals(workingDirectory)) {
-                String moduleDirectory = workingDirectory.relativize(moduleBaseDirectory).toString() + File.separator;
-                Style.MODULE_DIR.apply( ansi ).a(moduleDirectory).reset();
+            if ( !moduleDir.equals( workingDir ) )
+            { // Only add module to message if there is a module
+                String moduleDirectory = workingDir.relativize( moduleDir ).toString();
+                Style.MODULE_DIR.apply( ansi ).a( moduleDirectory ).a( File.separator ).reset();
             }
 
-            String filePath = moduleBaseDirectory.relativize(absolutePath).toString();
-            Style.FILE_PATH.apply(ansi).a(filePath).reset();
-        } else {
+            String filePath = moduleDir.relativize( absolutePath ).toString();
+            Style.FILE_PATH.apply( ansi ).a( filePath ).reset();
+
+        }
+        else
+        {
             Style.FILE_PATH.apply( ansi ).a ( absolutePath ).reset();
         }
 

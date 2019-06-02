@@ -31,18 +31,18 @@ import java.util.Locale;
 enum Style
 {
 
-    DEBUG(   "bold,cyan"   ),
-    INFO(    "bold,blue"   ),
-    WARNING( "bold,yellow" ),
-    ERROR(   "bold,red"    ),
-    SUCCESS( "bold,green"  ),
-    FAILURE( "bold,red"    ),
-    STRONG(  "bold"        ),
-    MOJO(    "green"       ),
-    PROJECT( "cyan"        ),
-    WORKING_DIR("black"    ),
-    MODULE_DIR("green"     ),
-    FILE_PATH(    "blue"   );
+    DEBUG(       "bold,cyan"   ),
+    INFO(        "bold,blue"   ),
+    WARNING(     "bold,yellow" ),
+    ERROR(       "bold,red"    ),
+    SUCCESS(     "bold,green"  ),
+    FAILURE(     "bold,red"    ),
+    STRONG(      "bold"        ),
+    MOJO(        "green"       ),
+    PROJECT(     "cyan"        ),
+    WORKING_DIR( "black"       ),
+    MODULE_DIR(  "green"       ),
+    FILE_PATH(   "blue"        );
 
     private final boolean bold;
 
