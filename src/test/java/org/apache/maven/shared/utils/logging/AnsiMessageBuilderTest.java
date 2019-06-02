@@ -121,7 +121,7 @@ public class AnsiMessageBuilderTest
 
         sut.path( Paths.get( "file" ) );
 
-        assertThat( sut.toString(), containsString( "\u001B[34mfile\u001B[m" ));
+        assertThat( sut.toString(), containsString( "\u001B[0;34mfile\u001B[m" ));
     }
 
     @Test
@@ -134,7 +134,7 @@ public class AnsiMessageBuilderTest
         sut.path( absolutePath );
 
         String expectedPath =  workingDir.toString() + File.separator;
-        assertThat(sut.toString(), containsString("\u001B[30m" + expectedPath + "\u001B[m"));
+        assertThat(sut.toString(), containsString("\u001B[30m" + expectedPath + "\u001B[0;34m"));
     }
 
     @Test
@@ -148,7 +148,7 @@ public class AnsiMessageBuilderTest
         sut.path( filePath );
 
         String expectedPath = "core" + File.separator;
-        assertThat( sut.toString(), containsString("\u001B[32m" + expectedPath ) );
+        assertThat( sut.toString(), containsString("\u001B[0;32m" + expectedPath + "\u001B[0;34m" ) );
     }
 
     @Test
