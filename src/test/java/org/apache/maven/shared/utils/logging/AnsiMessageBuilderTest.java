@@ -140,7 +140,7 @@ public class AnsiMessageBuilderTest
     @Test
     public void should_color_module_dir_from_path()
     {
-        Path filePath = Paths.get("core","src", "main").toAbsolutePath();
+        Path filePath = Paths.get( "core", "src", "main" ).toAbsolutePath();
         Path workingDir = Paths.get("").toAbsolutePath();
         Path moduleDir = Paths.get("core").toAbsolutePath();
         MessageBuilder sut = new AnsiMessageBuilder( Ansi.ansi(), workingDir.toString(), moduleDir.toString() );
