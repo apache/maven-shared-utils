@@ -24,8 +24,6 @@ import org.junit.Before;
 import org.junit.After;
 import org.junit.Assert;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -40,7 +38,6 @@ public class OsTest
     extends Assert
 {
     private String origOsName;
-    private String origOsFamily;
     private String origOsArch;
     private String origOsVersion;
 
@@ -56,8 +53,6 @@ public class OsTest
         System.setProperty( "os.name"   , "os/2" );
         System.setProperty( "os.arch"   , "i386" );
         System.setProperty( "os.version", "2.1.32" );
-
-        origOsFamily = Os.OS_FAMILY;
     }
 
     @After
