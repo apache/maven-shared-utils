@@ -24,8 +24,6 @@ import org.junit.Before;
 import org.junit.After;
 import org.junit.Assert;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -40,65 +38,34 @@ public class OsTest
     extends Assert
 {
     private String origOsName;
-    private String origOsFamily;
     private String origOsArch;
     private String origOsVersion;
 
 
     @Before
     public void setUp()
-        throws Exception
     {
         origOsName = System.getProperty( "os.name" );
         origOsArch = System.getProperty( "os.arch" );
         origOsVersion = System.getProperty( "os.version" );
-        origOsFamily = Os.OS_FAMILY;
 
         // and now set some special settings ;)
         System.setProperty( "os.name"   , "os/2" );
         System.setProperty( "os.arch"   , "i386" );
         System.setProperty( "os.version", "2.1.32" );
-
-        // blow away the originally loaded values
-        setStaticOsField( "OS_NAME", "os/2" );
-        setStaticOsField( "OS_FAMILY", "os/2" );
-        setStaticOsField( "OS_ARCH", "i386" );
-        setStaticOsField( "OS_VERSION", "2.1.32" );
     }
 
     @After
     public void tearDown()
-        throws Exception
     {
         // set the original OS settings again
         System.setProperty( "os.name"   , origOsName );
         System.setProperty( "os.arch"   , origOsArch );
         System.setProperty( "os.version", origOsVersion );
-
-        // restore the originally loaded values
-        setStaticOsField( "OS_NAME", origOsName );
-        setStaticOsField( "OS_ARCH", origOsArch );
-        setStaticOsField( "OS_VERSION", origOsVersion );
-        setStaticOsField( "OS_FAMILY", origOsFamily );
     }
-
-    private void setStaticOsField( String variableName, Object value )
-        throws NoSuchFieldException, IllegalAccessException
-    {
-        Field field = Os.class.getField( variableName );
-
-        Field modifiersField = Field.class.getDeclaredField( "modifiers" );
-        modifiersField.setAccessible( true );
-        modifiersField.setInt( field, field.getModifiers() & ~Modifier.FINAL );
-
-        field.setAccessible( true );
-        field.set( null, value );
-    }
-
 
     @Test
     public void testConstructor()
-        throws Exception
     {
         Os os  = new Os();
         os.eval();

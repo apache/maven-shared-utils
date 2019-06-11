@@ -23,7 +23,7 @@
   <parent>
     <groupId>org.apache.maven.shared</groupId>
     <artifactId>maven-shared-components</artifactId>
-    <version>32</version>
+    <version>33</version>
     <relativePath>../../pom/maven/maven-shared-components/pom.xml</relativePath>
   </parent>
 
@@ -63,6 +63,7 @@
   <properties>
     <checkstyle.violation.ignore>RedundantThrows,NewlineAtEndOfFile,ParameterNumber,MethodLength,FileLength,ModifierOrder</checkstyle.violation.ignore>
 
+    <javaVersion>7</javaVersion>
     <mavenVersion>3.0</mavenVersion>
   </properties>
 
@@ -142,6 +143,13 @@
             <exclude>src/test/resources/directorywalker/**/*</exclude>
             <exclude>src/test/resources/symlinks/**/*</exclude>
           </excludes>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <reuseForks>false</reuseForks>
         </configuration>
       </plugin>
     </plugins>
