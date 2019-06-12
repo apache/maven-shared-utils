@@ -844,7 +844,10 @@ public final class IOUtil
      * </p>
      *
      * @param channel The channel to close or {@code null}.
+     * @deprecated Use try-with-resources instead
+     * @see {@link AutoCloseable}
      */
+    @Deprecated
     public static void close( @Nullable Channel channel )
     {
         try
@@ -948,7 +951,10 @@ public final class IOUtil
      * </p>
      *
      * @param inputStream The stream to close or {@code null}.
+     * @deprecated Use try-with-resources instead
+     * @see {@link AutoCloseable}
      */
+    @Deprecated
     public static void close( @Nullable InputStream inputStream )
     {
         try
@@ -1052,7 +1058,10 @@ public final class IOUtil
      * </p>
      *
      * @param outputStream The stream to close or {@code null}.
+     * @deprecated Use try-with-resources instead
+     * @see {@link AutoCloseable}
      */
+    @Deprecated
     public static void close( @Nullable OutputStream outputStream )
     {
         try
@@ -1156,7 +1165,10 @@ public final class IOUtil
      * </p>
      *
      * @param reader The reader to close or {@code null}.
+     * @deprecated Use try-with-resources instead
+     * @see {@link AutoCloseable}
      */
+    @Deprecated
     public static void close( @Nullable Reader reader )
     {
         try
@@ -1260,7 +1272,10 @@ public final class IOUtil
      * </p>
      *
      * @param writer The writer to close or {@code null}.
+     * @deprecated Use try-with-resources instead
+     * @see {@link AutoCloseable}
      */
+    @Deprecated
     public static void close( @Nullable Writer writer )
     {
         try

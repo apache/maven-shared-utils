@@ -50,98 +50,115 @@ class AnsiMessageBuilder
         this.ansi = ansi;
     }
 
+    @Override
     public String debug( String level )
     {
         return Style.DEBUG.apply( ansi ).a( level ).reset().toString();
     }
 
+    @Override
     public String info( String level )
     {
         return Style.INFO.apply( ansi ).a( level ).reset().toString();
     }
 
+    @Override
     public String warning( String level )
     {
         return Style.WARNING.apply( ansi ).a( level ).reset().toString();
     }
 
+    @Override
     public String error( String level )
     {
         return Style.ERROR.apply( ansi ).a( level ).reset().toString();
     }
 
+    @Override
     public AnsiMessageBuilder success( Object message )
     {
         Style.SUCCESS.apply( ansi ).a( message ).reset();
         return this;
     }
 
+    @Override
     public AnsiMessageBuilder warning( Object message )
     {
         Style.WARNING.apply( ansi ).a( message ).reset();
         return this;
     }
 
+    @Override
     public AnsiMessageBuilder failure( Object message )
     {
         Style.FAILURE.apply( ansi ).a( message ).reset();
         return this;
     }
 
+    @Override
     public AnsiMessageBuilder strong( Object message )
     {
         Style.STRONG.apply( ansi ).a( message ).reset();
         return this;
     }
 
+    @Override
     public AnsiMessageBuilder mojo( Object message )
     {
         Style.MOJO.apply( ansi ).a( message ).reset();
         return this;
     }
 
+    @Override
     public AnsiMessageBuilder project( Object message )
     {
         Style.PROJECT.apply( ansi ).a( message ).reset();
         return this;
     }
 
+    @Override
     public AnsiMessageBuilder a( char[] value, int offset, int len )
     {
         ansi.a( value, offset, len );
         return this;
     }
 
+    @Override
     public AnsiMessageBuilder a( char[] value )
     {
         ansi.a( value );
         return this;
     }
 
+    @Override
     public AnsiMessageBuilder a( CharSequence value, int start, int end )
     {
         ansi.a( value, start, end );
         return this;
     }
 
+    @Override
     public AnsiMessageBuilder a( CharSequence value )
     {
         ansi.a( value );
         return this;
     }
 
+    @Override
     public AnsiMessageBuilder a( Object value )
     {
         ansi.a( value );
         return this;
     }
 
+    @Override
     public AnsiMessageBuilder newline()
     {
         ansi.newline();
         return this;
     }
 
+    @Override
     public AnsiMessageBuilder format( String pattern, Object... args )
     {
         ansi.format( pattern, args );

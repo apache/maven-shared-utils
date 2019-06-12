@@ -33,7 +33,6 @@ import java.util.Map;
  * @author <a href="mailto:Christoph.Reck@dlr.de">Christoph Reck</a>
  * @author <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
  * @author <a href="mailto:szegedia@freemail.hu">Attila Szegedi</a>
- * @version $Id$
  */
 class MethodMap
 {
@@ -46,7 +45,7 @@ class MethodMap
     /**
      * Keep track of all methods with the same name.
      */
-    private final Map<String, List<Method>> methodByNameMap = new Hashtable<String, List<Method>>();
+    private final Map<String, List<Method>> methodByNameMap = new Hashtable<>();
 
     /**
      * Add a method to a list of methods by name.
@@ -63,7 +62,7 @@ class MethodMap
 
         if ( l == null )
         {
-            l = new ArrayList<Method>();
+            l = new ArrayList<>();
             methodByNameMap.put( methodName, l );
         }
 
@@ -169,7 +168,7 @@ class MethodMap
          * (the most specific method) otherwise we have ambiguity.
          */
 
-        LinkedList<Method> maximals = new LinkedList<Method>();
+        LinkedList<Method> maximals = new LinkedList<>();
 
         for ( Method app : applicables )
         {
@@ -283,7 +282,7 @@ class MethodMap
      */
     private static LinkedList<Method> getApplicables( List<Method> methods, Class<?>... classes )
     {
-        LinkedList<Method> list = new LinkedList<Method>();
+        LinkedList<Method> list = new LinkedList<>();
 
         for ( Method method : methods )
         {

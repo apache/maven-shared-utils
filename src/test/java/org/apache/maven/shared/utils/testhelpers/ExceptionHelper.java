@@ -49,6 +49,7 @@ public class ExceptionHelper
             this.cause = cause;
         }
 
+        @Override
         public boolean matches( Object item )
         {
             Throwable throwable = (Throwable) item;
@@ -59,6 +60,7 @@ public class ExceptionHelper
             return cause.isInstance( throwable );
         }
 
+        @Override
         public void describeTo( Description description )
         {
             description.appendText( "was caused by a " ).appendValue( cause ).appendText( " being thrown" );

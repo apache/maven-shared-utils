@@ -29,9 +29,7 @@ import java.util.concurrent.Callable;
 public interface CommandLineCallable
     extends Callable<Integer>
 {
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     Integer call()
         throws CommandLineException;
 }

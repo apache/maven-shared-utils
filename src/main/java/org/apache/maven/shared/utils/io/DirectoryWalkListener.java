@@ -23,8 +23,6 @@ import java.io.File;
 
 /**
  * DirectoryWalkListener
- *
- * @version $Id$
  */
 public interface DirectoryWalkListener
 {

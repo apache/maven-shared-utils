@@ -20,6 +20,7 @@ package org.apache.maven.shared.utils;
  */
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.StringTokenizer;
 
 import javax.annotation.Nonnull;
@@ -32,7 +33,10 @@ import javax.annotation.Nullable;
  * This class originally got developed at Apache Anakia and later maintained
  * in maven-utils of Apache Maven-1.
  * Some external fixes by Apache Committers have been applied later.
+ * 
+ * @deprecated Use {@link Path} instead
  */
+@Deprecated
 public class PathTool
 {
     /**

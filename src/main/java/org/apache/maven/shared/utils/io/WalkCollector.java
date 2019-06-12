@@ -46,27 +46,27 @@ public class WalkCollector
      */
     public WalkCollector()
     {
-        steps = new ArrayList<File>();
+        steps = new ArrayList<>();
         startCount = 0;
         finishCount = 0;
         percentageLow = 0;
         percentageHigh = 0;
     }
 
-    /** {@inheritDoc} */
+    @Override
     public void debug( String message )
     {
         // can be used to set some message
     }
 
-    /** {@inheritDoc} */
+    @Override
     public void directoryWalkStarting( File basedir )
     {
         startingDir = basedir;
         startCount++;
     }
 
-    /** {@inheritDoc} */
+    @Override
     public void directoryWalkStep( int percentage, File file )
     {
         steps.add( file );
@@ -74,7 +74,7 @@ public class WalkCollector
         percentageHigh = Math.max( percentageHigh, percentage );
     }
 
-    /** {@inheritDoc} */
+    @Override
     public void directoryWalkFinished()
     {
         finishCount++;

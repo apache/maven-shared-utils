@@ -28,7 +28,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Vector;
 
 import org.apache.maven.shared.utils.Os;
 import org.apache.maven.shared.utils.StringUtils;
@@ -68,7 +67,7 @@ import org.apache.maven.shared.utils.cli.shell.Shell;
 public class Commandline
     implements Cloneable
 {
-    private final List<Arg> arguments = new Vector<Arg>();
+    private final List<Argument> arguments = new ArrayList<>();
 
     //protected Vector envVars = new Vector();
     // synchronized added to preserve synchronize of Vector class
@@ -96,7 +95,7 @@ public class Commandline
     {
         setDefaultShell();
         String[] tmp = CommandLineUtils.translateCommandline( toProcess );
-        if ( ( tmp.length > 0 ) )
+        if ( tmp.length > 0 )
         {
             setExecutable( tmp[0] );
             for ( int i = 1; i < tmp.length; i++ )
@@ -165,7 +164,7 @@ public class Commandline
      */
     public Arg createArg( boolean insertAtStart )
     {
-        Arg argument = new Argument();
+        Argument argument = new Argument();
         if ( insertAtStart )
         {
             arguments.add( 0, argument );
@@ -309,10 +308,9 @@ public class Commandline
      */
     public String[] getArguments( boolean mask )
     {
-        List<String> result = new ArrayList<String>( arguments.size() * 2 );
-        for ( Arg argument : arguments )
+        List<String> result = new ArrayList<>( arguments.size() * 2 );
+        for ( Argument arg : arguments )
         {
-            Argument arg = (Argument) argument;
             String[] s = arg.getParts();
             if ( s != null )
             {
@@ -335,16 +333,13 @@ public class Commandline
         return result.toArray( new String[result.size()] );
     }
 
-    /** {@inheritDoc}
-     */
+    @Override
     public String toString()
     {
         return StringUtils.join( getShellCommandline( true ), " " );
     }
 
-
-    /** {@inheritDoc}
-     */
+    @Override
     public Object clone()
     {
         throw new RuntimeException( "Do we ever clone a commandline?" );
@@ -462,9 +457,7 @@ public class Commandline
 
         private boolean mask;
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public void setValue( String value )
         {
             if ( value != null )
@@ -473,9 +466,7 @@ public class Commandline
             }
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public void setLine( String line ) throws CommandLineException
         {
             if ( line == null )
@@ -493,17 +484,13 @@ public class Commandline
             }
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public void setFile( File value )
         {
             parts = new String[]{ value.getAbsolutePath() };
         }
 
-        /**
-         * {@inheritDoc}
-         */
+        @Override
         public void setMask( boolean mask )
         {
             this.mask = mask;

@@ -155,14 +155,14 @@ public class XmlStreamReader
         return reader.getEncoding();
     }
 
-    /** {@inheritDoc} */
+    @Override
     public int read( char[] buf, int offset, int len )
             throws IOException
     {
         return reader.read( buf, offset, len );
     }
 
-    /** {@inheritDoc} */
+    @Override
     public void close()
             throws IOException
     {

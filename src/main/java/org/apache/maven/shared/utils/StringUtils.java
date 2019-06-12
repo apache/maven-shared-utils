@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.StringTokenizer;
 
 import javax.annotation.Nonnull;
@@ -49,8 +50,6 @@ import javax.annotation.Nullable;
  * @author <a href="mailto:fredrik@westermarck.com">Fredrik Westermarck</a>
  * @author Holger Krauth
  * @author <a href="mailto:alex@purpletech.com">Alexander Day Chaffee</a>
- * @version $Id$
- * 
  */
 public class StringUtils
 {
@@ -1890,7 +1889,7 @@ public class StringUtils
      */
     @Nonnull public static String defaultString( Object obj )
     {
-        return defaultString( obj, "" );
+        return Objects.toString( obj, "" );
     }
 
     /**
@@ -1906,7 +1905,7 @@ public class StringUtils
      */
     @Nonnull public static String defaultString( Object obj, @Nonnull String defaultString )
     {
-        return ( obj == null ) ? defaultString : obj.toString();
+        return Objects.toString( obj, defaultString );
     }
 
     // Reversing

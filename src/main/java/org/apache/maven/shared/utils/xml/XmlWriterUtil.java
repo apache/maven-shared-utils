@@ -26,12 +26,11 @@ import org.apache.maven.shared.utils.StringUtils;
  * Utility class for the <code>XmlWriter</code> class.
  *
  * @author <a href="mailto:vincent.siveton@gmail.com">Vincent Siveton</a>
- * @version $Id$
  */
 public class XmlWriterUtil
 {
     /** The vm line separator */
-    public static final String LS = System.getProperty( "line.separator" );
+    public static final String LS = System.lineSeparator();
 
     /** The default line indenter size i.e. 2. */
     public static final int DEFAULT_INDENTATION_SIZE = 2;

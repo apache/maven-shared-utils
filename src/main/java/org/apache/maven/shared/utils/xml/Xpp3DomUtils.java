@@ -117,7 +117,7 @@ public class Xpp3DomUtils
 
     private static Map<String, Iterator<Xpp3Dom>> getCommonChildren( Xpp3Dom dominant, Xpp3Dom recessive )
     {
-        Map<String, Iterator<Xpp3Dom>> commonChildren = new HashMap<String, Iterator<Xpp3Dom>>();
+        Map<String, Iterator<Xpp3Dom>> commonChildren = new HashMap<>();
 
         for ( String childName : recessive.childMap.keySet() )
         {

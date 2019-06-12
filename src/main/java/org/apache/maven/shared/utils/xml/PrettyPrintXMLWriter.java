@@ -173,7 +173,7 @@ public class PrettyPrintXMLWriter
         assert !writer.checkError() : "Unexpected error state PrintWriter passed to PrettyPrintXMLWriter.";
     }
 
-    /** {@inheritDoc} */
+    @Override
     public void addAttribute( String key, String value ) throws IOException
     {
         if ( !processingElement )
@@ -191,7 +191,7 @@ public class PrettyPrintXMLWriter
         }
     }
 
-    /** {@inheritDoc} */
+    @Override
     public void setEncoding( String encoding )
     {
         if ( documentStarted )
@@ -202,7 +202,7 @@ public class PrettyPrintXMLWriter
         this.encoding = encoding;
     }
 
-    /** {@inheritDoc} */
+    @Override
     public void setDocType( String docType )
     {
         if ( documentStarted )
@@ -239,7 +239,7 @@ public class PrettyPrintXMLWriter
         this.lineIndent = lineIndentParameter.toCharArray();
     }
 
-    /** {@inheritDoc} */
+    @Override
     public void startElement( String elementName ) throws IOException
     {
         boolean firstLine = ensureDocumentStarted();
@@ -263,7 +263,7 @@ public class PrettyPrintXMLWriter
         elementStack.add( depth++, elementName );
     }
 
-    /** {@inheritDoc} */
+    @Override
     public void writeText( String text ) throws IOException
     {
         ensureDocumentStarted();
@@ -280,7 +280,7 @@ public class PrettyPrintXMLWriter
         }
     }
 
-    /** {@inheritDoc} */
+    @Override
     public void writeMarkup( String markup ) throws IOException
     {
         ensureDocumentStarted();
@@ -295,7 +295,7 @@ public class PrettyPrintXMLWriter
         }
     }
 
-    /** {@inheritDoc} */
+    @Override
     public void endElement() throws IOException
     {
         String chars = elementStack.get( --depth );

@@ -33,7 +33,6 @@ import java.util.Map;
  * @author <a href="mailto:bob@werken.com">Bob McWhirter</a>
  * @author <a href="mailto:szegedia@freemail.hu">Attila Szegedi</a>
  * @author <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
- * @version $Id$
  */
 public class ClassMap
 {
@@ -56,7 +55,7 @@ public class ClassMap
      * Cache of Methods, or CACHE_MISS, keyed by method
      * name and actual arguments used to find it.
      */
-    private final Map<String, Object> methodCache = new Hashtable<String, Object>();
+    private final Map<String, Object> methodCache = new Hashtable<>();
 
     private MethodMap methodMap = new MethodMap();
 

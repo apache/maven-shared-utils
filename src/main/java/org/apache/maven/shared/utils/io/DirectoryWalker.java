@@ -27,7 +27,6 @@ import java.util.Stack;
 /**
  * DirectoryWalker
  * 
- * @version $Id$
  */
 class DirectoryWalker
 {
@@ -104,6 +103,7 @@ class DirectoryWalker
             return (int) Math.floor( percentageOffset + ( percentageWithinDir * percentageSize ) );
         }
 
+        @Override
         public String toString()
         {
             return "DirStackEntry[" + "dir=" + dir.getAbsolutePath() + ",count=" + count + ",index=" + index
@@ -127,9 +127,9 @@ class DirectoryWalker
 
     DirectoryWalker()
     {
-        this.includes = new ArrayList<String>();
-        this.excludes = new ArrayList<String>();
-        this.listeners = new ArrayList<DirectoryWalkListener>();
+        this.includes = new ArrayList<>();
+        this.excludes = new ArrayList<>();
+        this.listeners = new ArrayList<>();
     }
 
     public void addDirectoryWalkListener( DirectoryWalkListener listener )

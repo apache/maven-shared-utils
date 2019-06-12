@@ -29,7 +29,6 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 import java.io.File;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
@@ -79,25 +78,19 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest>
     protected abstract Commandline createCommandLine( Request request, String javaToolFileLocation )
         throws JavaToolException;
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public String getJavaToolName()
     {
         return javaToolName;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void setToolchain( Object toolchain )
     {
         this.toolchain = toolchain;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public JavaToolResult execute( Request request )
         throws JavaToolException
     {
@@ -134,10 +127,7 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest>
     {
         InputStream systemIn = new InputStream()
         {
-
-            /**
-             * {@inheritDoc}
-             */
+            @Override
             public int read()
             {
                 return -1;
@@ -195,10 +185,6 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest>
         {
             systemErr = new StreamConsumer()
             {
-
-                /**
-                 * {@inheritDoc}
-                 */
                 @Override
                 public void consumeLine( final String line )
                 {
@@ -223,10 +209,6 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest>
 
             systemOut = new StreamConsumer()
             {
-
-                /**
-                 * {@inheritDoc}
-                 */
                 @Override
                 public void consumeLine( final String line )
                 {
@@ -302,30 +284,10 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest>
             Method m = toolchain.getClass().getMethod( "findTool", String.class );
             return (String) m.invoke( toolchain, javaToolName );
         }
-        catch ( NoSuchMethodException e )
+        catch ( ReflectiveOperationException | SecurityException | IllegalArgumentException e )
         {
             // should not happen if toolchain is really a Toolchain object
-            getLogger().warn( "unexpected NoSuchMethodException", e );
-        }
-        catch ( SecurityException e )
-        {
-            // should not happen
-            getLogger().warn( "unexpected SecurityException", e );
-        }
-        catch ( IllegalAccessException e )
-        {
-            // should not happen
-            getLogger().warn( "unexpected IllegalAccessException", e );
-        }
-        catch ( IllegalArgumentException e )
-        {
-            // should not happen: parameter is the right type
-            getLogger().warn( "unexpected IllegalArgumentException", e );
-        }
-        catch ( InvocationTargetException e )
-        {
-            // not expected...
-            getLogger().warn( "unexpected InvocationTargetException", e );
+            getLogger().warn( "unexpected exception", e );
         }
         return null;
     }

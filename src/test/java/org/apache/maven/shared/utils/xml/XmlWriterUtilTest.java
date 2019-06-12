@@ -29,7 +29,6 @@ import junit.framework.TestCase;
 
 /**
  * @author <a href="mailto:vincent.siveton@gmail.com">Vincent Siveton</a>
- * @version $Id$
  */
 public class XmlWriterUtilTest
     extends TestCase
@@ -41,6 +40,7 @@ public class XmlWriterUtilTest
     private XMLWriter xmlWriter;
 
     /** {@inheritDoc} */
+    @Override
     protected void setUp()
         throws Exception
     {
@@ -52,6 +52,7 @@ public class XmlWriterUtilTest
     }
 
     /** {@inheritDoc} */
+    @Override
     protected void tearDown()
         throws Exception
     {

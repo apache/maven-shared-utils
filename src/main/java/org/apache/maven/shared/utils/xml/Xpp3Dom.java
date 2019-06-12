@@ -332,7 +332,7 @@ public class Xpp3Dom
         return Xpp3DomUtils.mergeXpp3Dom( dominant, recessive );
     }
 
-    /** {@inheritDoc} */
+    @Override
     public boolean equals( Object obj )
     {
         if ( obj == this )
@@ -353,7 +353,7 @@ public class Xpp3Dom
             && !( childList == null ? dom.childList != null : !childList.equals( dom.childList ) );
     }
 
-    /** {@inheritDoc} */
+    @Override
     public int hashCode()
     {
         int result = 17;
@@ -364,7 +364,7 @@ public class Xpp3Dom
         return result;
     }
 
-    /** {@inheritDoc} */
+    @Override
     public String toString()
     {
         try
@@ -421,7 +421,7 @@ public class Xpp3Dom
         return str == null || str.trim().length() == 0;
     }
 
-    /** {@inheritDoc} */
+    @Override
     public Iterator<Xpp3Dom> iterator()
     {
         return getChildrenList().iterator();

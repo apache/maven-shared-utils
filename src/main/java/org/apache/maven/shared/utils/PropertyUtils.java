@@ -29,8 +29,6 @@ import java.util.Properties;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.apache.maven.shared.utils.io.IOUtil;
-
 /**
  *
  */
@@ -108,7 +106,7 @@ public class PropertyUtils
             Properties result = new Properties();
             if ( is != null )
             {
-                try
+                try ( InputStream in = is )
                 {
                     result.load( is );
                 }
@@ -122,10 +120,6 @@ public class PropertyUtils
         catch ( Exception e )
         {
             // ignore
-        }
-        finally
-        {
-            IOUtil.close( is );
         }
         return null;
     }
@@ -145,29 +139,21 @@ public class PropertyUtils
      */
     @Nonnull public static Properties loadOptionalProperties( final @Nullable URL url )
     {
-        InputStream in = null;
-        try
-        {
-            final Properties properties = new Properties();
+        final Properties properties = new Properties();
 
-            if ( url != null )
+        if ( url != null )
+        {
+            try ( InputStream in = url.openStream() ) 
             {
-                in = url.openStream();
                 properties.load( in );
-                in.close();
-                in = null;
             }
+            catch ( final IOException e )
+            {
+                throw new AssertionError( e );
+            }
+        }
 
-            return properties;
-        }
-        catch ( final IOException e )
-        {
-            throw new AssertionError( e );
-        }
-        finally
-        {
-            IOUtil.close( in );
-        }
+        return properties;
     }
 
     /**
@@ -185,29 +171,21 @@ public class PropertyUtils
      */
     @Nonnull public static Properties loadOptionalProperties( final @Nullable File file )
     {
-        InputStream in = null;
-        try
-        {
-            final Properties properties = new Properties();
+        final Properties properties = new Properties();
 
-            if ( file != null )
+        if ( file != null )
+        {
+            try ( InputStream in = new FileInputStream( file ) ) 
             {
-                in = new FileInputStream( file );
                 properties.load( in );
-                in.close();
-                in = null;
             }
+            catch ( final IOException e )
+            {
+                throw new AssertionError( e );
+            }
+        }
 
-            return properties;
-        }
-        catch ( final IOException e )
-        {
-            throw new AssertionError( e );
-        }
-        finally
-        {
-            IOUtil.close( in );
-        }
+        return properties;
     }
 
     /**
@@ -225,29 +203,21 @@ public class PropertyUtils
      */
     @Nonnull public static Properties loadOptionalProperties( final @Nullable InputStream inputStream )
     {
-        InputStream in = null;
-        try
-        {
-            final Properties properties = new Properties();
+        final Properties properties = new Properties();
 
-            if ( inputStream != null )
+        if ( inputStream != null )
+        {
+            try ( InputStream in = inputStream ) 
             {
-                in = inputStream;
                 properties.load( in );
-                in.close();
-                in = null;
             }
+            catch ( final IOException e )
+            {
+                throw new AssertionError( e );
+            }
+        }
 
-            return properties;
-        }
-        catch ( final IOException e )
-        {
-            throw new AssertionError( e );
-        }
-        finally
-        {
-            IOUtil.close( in );
-        }
+        return properties;
     }
 
 }

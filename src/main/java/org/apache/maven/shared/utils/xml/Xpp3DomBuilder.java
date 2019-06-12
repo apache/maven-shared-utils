@@ -19,7 +19,6 @@ package org.apache.maven.shared.utils.xml;
  * under the License.
  */
 
-import org.apache.maven.shared.utils.io.IOUtil;
 import org.apache.maven.shared.utils.xml.pull.XmlPullParserException;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -99,20 +98,14 @@ public class Xpp3DomBuilder
     public static Xpp3Dom build( @WillClose Reader reader, boolean trim )
         throws XmlPullParserException
     {
-        try
+        try ( Reader r = reader )
         {
-            DocHandler docHandler = parseSax( new InputSource( reader ), trim );
-            reader.close();
-            reader = null;
+            DocHandler docHandler = parseSax( new InputSource( r ), trim );
             return docHandler.result;
         }
         catch ( final IOException e )
         {
             throw new XmlPullParserException( e );
-        }
-        finally
-        {
-            IOUtil.close( reader );
         }
     }
 
@@ -190,16 +183,16 @@ public class Xpp3DomBuilder
     private static class DocHandler
         extends DefaultHandler
     {
-        private final List<Xpp3Dom> elemStack = new ArrayList<Xpp3Dom>();
+        private final List<Xpp3Dom> elemStack = new ArrayList<>();
 
-        private final List<StringBuilder> values = new ArrayList<StringBuilder>();
+        private final List<StringBuilder> values = new ArrayList<>();
 
         // Todo: Use these for something smart !
-        private final List<SAXParseException> warnings = new ArrayList<SAXParseException>();
+        private final List<SAXParseException> warnings = new ArrayList<>();
 
-        private final List<SAXParseException> errors = new ArrayList<SAXParseException>();
+        private final List<SAXParseException> errors = new ArrayList<>();
 
-        private final List<SAXParseException> fatals = new ArrayList<SAXParseException>();
+        private final List<SAXParseException> fatals = new ArrayList<>();
 
 
         Xpp3Dom result = null;

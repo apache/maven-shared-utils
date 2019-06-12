@@ -272,7 +272,7 @@ public class Shell
     public List<String> getShellCommandLine( String... arguments )
     {
 
-        List<String> commandLine = new ArrayList<String>();
+        List<String> commandLine = new ArrayList<>();
 
         if ( getShellCommand() != null )
         {
@@ -377,7 +377,7 @@ public class Shell
         return workingDir;
     }
 
-    /** {@inheritDoc} */
+    @Override
     public Object clone()
     {
         throw new RuntimeException( "Do we ever clone this?" );

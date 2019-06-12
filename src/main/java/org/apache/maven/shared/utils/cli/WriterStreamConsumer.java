@@ -25,7 +25,6 @@ import java.io.Writer;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
- * @version $Id$
  */
 public class WriterStreamConsumer
     implements StreamConsumer
@@ -42,9 +41,6 @@ public class WriterStreamConsumer
         this.writer = new BufferedWriter( writer );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void consumeLine( String line ) throws IOException
     {

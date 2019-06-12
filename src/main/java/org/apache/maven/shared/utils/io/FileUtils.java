@@ -41,6 +41,7 @@ import java.io.Reader;
 import java.io.Writer;
 import java.net.URL;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
 import java.security.SecureRandom;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -84,7 +85,6 @@ import java.util.Random;
  * @author <a href="mailto:Christoph.Reck@dlr.de">Christoph.Reck</a>
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version $Id$
  */
 public class FileUtils
 {
@@ -110,11 +110,6 @@ public class FileUtils
      * The file copy buffer size (30 MB)
      */
     private static final long FILE_COPY_BUFFER_SIZE = ONE_MB * 30;
-
-    /**
-     * The vm line separator
-     */
-    private static final String FS = System.getProperty( "file.separator" );
 
     /**
      * Non-valid Characters for naming files, folders under Windows: <code>":", "*", "?", "\"", "<", ">", "|"</code>
@@ -272,33 +267,29 @@ public class FileUtils
     {
         StringBuilder buf = new StringBuilder();
 
-        Reader reader = null;
-
-        try
+        try ( Reader reader = getReader( file, encoding ) )
         {
-            if ( encoding != null )
-            {
-                reader = new InputStreamReader( new FileInputStream( file ), encoding );
-            }
-            else
-            {
-                reader = new InputStreamReader( new FileInputStream( file ) );
-            }
             int count;
             char[] b = new char[512];
             while ( ( count = reader.read( b ) ) >= 0 )  // blocking read
             {
                 buf.append( b, 0, count );
             }
-            reader.close();
-            reader = null;
-        }
-        finally
-        {
-            IOUtil.close( reader );
         }
 
         return buf.toString();
+    }
+    
+    private static Reader getReader( @Nonnull File file, @Nullable String encoding ) throws IOException
+    {
+        if ( encoding != null )
+        {
+            return new InputStreamReader( new FileInputStream( file ), encoding );
+        }
+        else
+        {
+            return new InputStreamReader( new FileInputStream( file ) );
+        }
     }
 
     /**
@@ -340,10 +331,8 @@ public class FileUtils
     public static void fileAppend( @Nonnull String fileName, @Nullable String encoding, @Nonnull String data )
         throws IOException
     {
-        FileOutputStream out = null;
-        try
+        try ( FileOutputStream out = new FileOutputStream( fileName, true ) ) 
         {
-            out = new FileOutputStream( fileName, true );
             if ( encoding != null )
             {
                 out.write( data.getBytes( encoding ) );
@@ -352,12 +341,6 @@ public class FileUtils
             {
                 out.write( data.getBytes() );
             }
-            out.close();
-            out = null;
-        }
-        finally
-        {
-            IOUtil.close( out );
         }
     }
 
@@ -401,24 +384,21 @@ public class FileUtils
     public static void fileWrite( @Nonnull File file, @Nullable String encoding, @Nonnull String data )
         throws IOException
     {
-        Writer writer = null;
-        try
+        try ( Writer writer = getWriter( file, encoding ) )
         {
-            if ( encoding != null )
-            {
-                writer = new OutputStreamWriter( new FileOutputStream( file ), encoding );
-            }
-            else
-            {
-                writer = new OutputStreamWriter( new FileOutputStream( file ) );
-            }
             writer.write( data );
-            writer.close();
-            writer = null;
         }
-        finally
+    }
+    
+    private static Writer getWriter( @Nonnull File file, @Nullable String encoding ) throws IOException
+    {
+        if ( encoding != null )
         {
-            IOUtil.close( writer );
+            return new OutputStreamWriter( new FileOutputStream( file ), encoding );
+        }
+        else
+        {
+            return new OutputStreamWriter( new FileOutputStream( file ) );
         }
     }
 
@@ -447,18 +427,8 @@ public class FileUtils
     public static void fileWriteArray( @Nonnull File file, @Nullable String encoding, @Nullable String... data )
         throws IOException
     {
-        Writer writer = null;
-        try
+        try ( Writer writer = getWriter( file, encoding ) ) 
         {
-            if ( encoding != null )
-            {
-                writer = new OutputStreamWriter( new FileOutputStream( file ), encoding );
-            }
-            else
-            {
-                writer = new OutputStreamWriter( new FileOutputStream( file ) );
-            }
-
             for ( int i = 0; data != null && i < data.length; i++ )
             {
                 writer.write( data[i] );
@@ -467,13 +437,6 @@ public class FileUtils
                     writer.write( "\n" );
                 }
             }
-
-            writer.close();
-            writer = null;
-        }
-        finally
-        {
-            IOUtil.close( writer );
         }
     }
 
@@ -500,7 +463,7 @@ public class FileUtils
      */
     public static String[] getFilesFromExtension( @Nonnull String directory, @Nonnull String... extensions )
     {
-        List<String> files = new ArrayList<String>();
+        List<String> files = new ArrayList<>();
 
         File currentDir = new File( directory );
 
@@ -513,7 +476,7 @@ public class FileUtils
 
         for ( String unknownFile : unknownFiles )
         {
-            String currentFileName = directory + System.getProperty( "file.separator" ) + unknownFile;
+            String currentFileName = directory + File.separator + unknownFile;
             File currentFile = new File( currentFileName );
 
             if ( currentFile.isDirectory() )
@@ -637,25 +600,11 @@ public class FileUtils
             return false;
         }
 
-        InputStream input1 = null;
-        InputStream input2 = null;
-        boolean equals = false;
-        try
+        try ( InputStream input1 = new FileInputStream( file1 );
+              InputStream input2 = new FileInputStream( file2 ) )
         {
-            input1 = new FileInputStream( file1 );
-            input2 = new FileInputStream( file2 );
-            equals = IOUtil.contentEquals( input1, input2 );
-            input1.close();
-            input1 = null;
-            input2.close();
-            input2 = null;
+            return IOUtil.contentEquals( input1, input2 );
         }
-        finally
-        {
-            IOUtil.close( input1 );
-            IOUtil.close( input2 );
-        }
-        return equals;
     }
 
     /**
@@ -820,9 +769,9 @@ public class FileUtils
             final String message = "File " + source + " does not exist";
             throw new IOException( message );
         }
-        if ( Java7Support.isAtLeastJava7() && Java7Support.isSymLink( source ) )
+        if ( Files.isSymbolicLink( source.toPath() ) )
         {
-            File target = Java7Support.readSymbolicLink( source );
+            File target = Files.readSymbolicLink( source.toPath() ).toFile();
             Java7Support.createSymbolicLink( destination, target );
             return;
         }
@@ -858,16 +807,12 @@ public class FileUtils
     private static void doCopyFile( @Nonnull File source, @Nonnull File destination )
         throws IOException
     {
-        FileInputStream fis = null;
-        FileOutputStream fos = null;
-        FileChannel input = null;
-        FileChannel output = null;
-        try
+        
+        try ( FileInputStream fis = new FileInputStream( source );
+              FileOutputStream fos = new FileOutputStream( destination );
+              FileChannel input = fis.getChannel();
+              FileChannel output = fos.getChannel();  )
         {
-            fis = new FileInputStream( source );
-            fos = new FileOutputStream( destination );
-            input = fis.getChannel();
-            output = fos.getChannel();
             long size = input.size();
             long pos = 0;
             long count;
@@ -876,21 +821,6 @@ public class FileUtils
                 count = size - pos > FILE_COPY_BUFFER_SIZE ? FILE_COPY_BUFFER_SIZE : size - pos;
                 pos += output.transferFrom( input, pos, count );
             }
-            output.close();
-            output = null;
-            fos.close();
-            fos = null;
-            input.close();
-            input = null;
-            fis.close();
-            fis = null;
-        }
-        finally
-        {
-            IOUtil.close( output );
-            IOUtil.close( fos );
-            IOUtil.close( input );
-            IOUtil.close( fis );
         }
     }
 
@@ -960,35 +890,24 @@ public class FileUtils
                                           @Nonnull final File destination )
         throws IOException
     {
-        InputStream in = source;
-        OutputStream out = null;
-        try
+        //does destination directory exist ?
+        if ( destination.getParentFile() != null && !destination.getParentFile().exists() )
         {
-            //does destination directory exist ?
-            if ( destination.getParentFile() != null && !destination.getParentFile().exists() )
-            {
-                //noinspection ResultOfMethodCallIgnored
-                destination.getParentFile().mkdirs();
-            }
-
-            //make sure we can write to destination
-            if ( destination.exists() && !destination.canWrite() )
-            {
-                final String message = "Unable to open file " + destination + " for writing.";
-                throw new IOException( message );
-            }
-
-            out = new FileOutputStream( destination );
-            IOUtil.copy( in, out );
-            out.close();
-            out = null;
-            in.close();
-            in = null;
+            //noinspection ResultOfMethodCallIgnored
+            destination.getParentFile().mkdirs();
         }
-        finally
+
+        //make sure we can write to destination
+        if ( destination.exists() && !destination.canWrite() )
         {
-            IOUtil.close( out );
-            IOUtil.close( in );
+            final String message = "Unable to open file " + destination + " for writing.";
+            throw new IOException( message );
+        }
+
+        try ( InputStream in = source;
+              OutputStream out = new FileOutputStream( destination ) )
+        {
+            IOUtil.copy( in, out );
         }
     }
 
@@ -1480,7 +1399,7 @@ public class FileUtils
     {
         List<String> fileNames = getFileNames( directory, includes, excludes, includeBasedir );
 
-        List<File> files = new ArrayList<File>();
+        List<File> files = new ArrayList<>();
 
         for ( String filename : fileNames )
         {
@@ -1599,7 +1518,7 @@ public class FileUtils
 
         scanner.scan();
 
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
 
         if ( getFiles )
         {
@@ -1609,7 +1528,7 @@ public class FileUtils
             {
                 if ( includeBasedir )
                 {
-                    list.add( directory + FileUtils.FS + file );
+                    list.add( directory + File.separator + file );
                 }
                 else
                 {
@@ -1626,7 +1545,7 @@ public class FileUtils
             {
                 if ( includeBasedir )
                 {
-                    list.add( directory + FileUtils.FS + directory1 );
+                    list.add( directory + File.separator + directory1 );
                 }
                 else
                 {
@@ -1966,15 +1885,12 @@ public class FileUtils
     @Nonnull public static List<String> loadFile( @Nonnull File file )
         throws IOException
     {
-        List<String> lines = new ArrayList<String>();
+        List<String> lines = new ArrayList<>();
 
         if ( file.exists() )
         {
-            BufferedReader reader = null;
-            try
+            try ( BufferedReader reader = new BufferedReader( new FileReader( file ) ) )
             {
-                reader = new BufferedReader( new FileReader( file ) );
-
                 for ( String line = reader.readLine(); line != null; line = reader.readLine() )
                 {
                     line = line.trim();
@@ -1984,13 +1900,6 @@ public class FileUtils
                         lines.add( line );
                     }
                 }
-
-                reader.close();
-                reader = null;
-            }
-            finally
-            {
-                IOUtil.close( reader );
             }
         }
 
@@ -2027,41 +1936,33 @@ public class FileUtils
     /**
      * Checks whether a given file is a symbolic link.
      *
-     * This only works reliably on java7 and higher. For earlier version we use a highly crappy heuristic
-     * that mostly does not work.
-     * <p>
-     * It doesn't really test for symbolic links but whether the canonical and absolute paths of the file are identical
-     * - this may lead to false positives on some platforms.
-     * </p>
-     *
      * @param file the file to check
      * @throws IOException in case of failure.
      * @return true if symbolic link false otherwise.
-     *
+     * @deprecated Use {@link Files#isSymbolicLink(java.nio.file.Path)} instead
      */
+    @Deprecated
     public static boolean isSymbolicLink( @Nonnull final File file )
         throws IOException
     {
-        if ( Java7Support.isAtLeastJava7() )
-        {
-            return Java7Support.isSymLink( file );
-        }
-        return isSymbolicLinkLegacy( file );
+        return Files.isSymbolicLink( file.toPath() );
     }
 
     /**
      * Checks whether a given file is a symbolic link.
      *
      * @param file the file to check
-     * @return true if and only if we reliably can say this is a symlink. This will
-     *         always return false for java versions prior to 1.7.
+     * @return true if and only if we reliably can say this is a symlink.
      *
      * @throws IOException in case of failure.
+     * @deprecated Use {@link Files#isSymbolicLink(java.nio.file.Path)} instead
      */
+    @Deprecated
     public static boolean isSymbolicLinkForSure( @Nonnull final File file )
         throws IOException
     {
-        return Java7Support.isAtLeastJava7() && Java7Support.isSymLink( file );
+        // Used to return false for Java 6 and older
+        return Files.isSymbolicLink( file.toPath() );
     }
 
     /**

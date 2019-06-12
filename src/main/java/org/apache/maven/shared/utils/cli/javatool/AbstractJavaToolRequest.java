@@ -41,33 +41,25 @@ public class AbstractJavaToolRequest
      */
     private StreamConsumer systemErrorStreamConsumer;
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public StreamConsumer getSystemOutStreamConsumer()
     {
         return systemOutStreamConsumer;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public StreamConsumer getSystemErrorStreamConsumer()
     {
         return systemErrorStreamConsumer;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void setSystemOutStreamConsumer( StreamConsumer systemOutStreamConsumer )
     {
         this.systemOutStreamConsumer = systemOutStreamConsumer;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void setSystemErrorStreamConsumer( StreamConsumer systemErrorStreamConsumer )
     {
         this.systemErrorStreamConsumer = systemErrorStreamConsumer;

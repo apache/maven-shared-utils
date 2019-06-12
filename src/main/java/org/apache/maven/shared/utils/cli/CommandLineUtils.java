@@ -36,7 +36,6 @@ import org.apache.maven.shared.utils.StringUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l </a>
- * @version $Id$
  */
 public abstract class CommandLineUtils
 {
@@ -50,17 +49,12 @@ public abstract class CommandLineUtils
         implements StreamConsumer
     {
 
-        private final StringBuffer string = new StringBuffer();
-
-        private static final String LS = System.getProperty( "line.separator", "\n" );
-
-        /**
-         * {@inheritDoc}
-         */
+        private final StringBuilder string = new StringBuilder();
+       
         @Override
         public void consumeLine( String line )
         {
-            string.append( line ).append( LS );
+            string.append( line ).append( System.lineSeparator() );
         }
 
         /**
