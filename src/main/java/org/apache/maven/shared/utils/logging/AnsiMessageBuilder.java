@@ -25,6 +25,9 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static java.lang.System.getProperty;
+import static java.lang.System.getenv;
+
 /**
  * Message builder implementation that supports ANSI colors through
  * <a href="http://fusesource.github.io/jansi/">Jansi</a> with configurable styles through {@link Style}.
@@ -33,6 +36,7 @@ class AnsiMessageBuilder
     implements MessageBuilder, LoggerLevelRenderer
 {
     private static final String MAVEN_PROJECTBASEDIR_ENV = "MAVEN_PROJECTBASEDIR";
+    private static final String MAVEN_MULTIMODULEPROJECTDIR_PROP = "maven.multiModuleProjectDirectory";
 
     private static final String BASEDIR_ENV = "basedir";
 
@@ -44,22 +48,22 @@ class AnsiMessageBuilder
 
     AnsiMessageBuilder()
     {
-        this( Ansi.ansi(), System.getenv( MAVEN_PROJECTBASEDIR_ENV ), System.getenv( BASEDIR_ENV ) );
+        this( Ansi.ansi(), getProperty( MAVEN_MULTIMODULEPROJECTDIR_PROP ), getProperty( BASEDIR_ENV ) );
     }
 
     AnsiMessageBuilder( StringBuilder builder )
     {
-        this( Ansi.ansi( builder ), System.getenv().get( MAVEN_PROJECTBASEDIR_ENV ), System.getenv( BASEDIR_ENV ) );
+        this( Ansi.ansi( builder ), getProperty( MAVEN_MULTIMODULEPROJECTDIR_PROP ), getenv( BASEDIR_ENV ) );
     }
 
     AnsiMessageBuilder( int size )
     {
-        this( Ansi.ansi( size ), System.getenv().get( MAVEN_PROJECTBASEDIR_ENV ), System.getenv( BASEDIR_ENV ) );
+        this( Ansi.ansi( size ), getProperty( MAVEN_MULTIMODULEPROJECTDIR_PROP ), getenv( BASEDIR_ENV ) );
     }
 
     AnsiMessageBuilder ( Ansi ansi )
     {
-        this( ansi, System.getenv( MAVEN_PROJECTBASEDIR_ENV ), System.getenv( BASEDIR_ENV ) );
+        this( ansi, getProperty( MAVEN_MULTIMODULEPROJECTDIR_PROP ), getenv( BASEDIR_ENV ) );
     }
 
     AnsiMessageBuilder( Ansi ansi, String workingDirectory, String moduleDirectory )
@@ -138,17 +142,17 @@ class AnsiMessageBuilder
 
         if ( workingDir != null && moduleDir != null )
         {
-            Style.WORKING_DIR.apply( ansi ).a( workingDir.toString() ).a( File.separator ).reset();
+            ansi.a( workingDir.toString() ).a( File.separator );
 
+            // Only add module to message if there is a module (i.e., moduleDir != project root dir)
             if ( !moduleDir.equals( workingDir ) )
-            { // Only add module to message if there is a module
+            {
                 String moduleDirectory = workingDir.relativize( moduleDir ).toString();
                 Style.MODULE_DIR.apply( ansi ).a( moduleDirectory ).a( File.separator ).reset();
             }
 
             String filePath = moduleDir.relativize( absolutePath ).toString();
             Style.FILE_PATH.apply( ansi ).a( filePath ).reset();
-
         }
         else
         {
@@ -203,6 +207,8 @@ class AnsiMessageBuilder
     @Override
     public String toString()
     {
-        return ansi.toString();
+        String result = ansi.toString();
+        System.out.println( result );
+        return result;
     }
 }
