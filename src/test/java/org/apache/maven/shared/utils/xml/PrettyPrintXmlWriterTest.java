@@ -1,8 +1,3 @@
-package org.apache.maven.shared.utils.xml;
-
-import java.io.IOException;
-import javax.swing.text.html.HTML;
-import java.io.StringWriter;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -23,13 +18,15 @@ import java.io.StringWriter;
  * under the License.
  */
 
+package org.apache.maven.shared.utils.xml;
 
+import java.io.IOException;
+import javax.swing.text.html.HTML;
+import java.io.StringWriter;
 
 import org.apache.maven.shared.utils.Os;
 import org.apache.maven.shared.utils.StringUtils;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -40,26 +37,24 @@ import org.junit.Test;
  */
 public class PrettyPrintXmlWriterTest
 {
-    StringWriter w;
+    private StringWriter w = new StringWriter();;
 
-    PrettyPrintXMLWriter writer;
+    private PrettyPrintXMLWriter writer = new PrettyPrintXMLWriter( w );
 
-    @Before
-    public void before()
-            throws Exception
+    
+    @Test
+    public void testNoStartTag() throws IOException
     {
-        w = new StringWriter();
-        writer = new PrettyPrintXMLWriter( w );
+        
+        try {
+            writer.startElement( "" );
+            Assert.fail( "allowed empty name" );
+        } catch ( IllegalArgumentException ex ) {
+            Assert.assertEquals( "Element name cannot be empty", ex.getMessage() );
+        }
+        
     }
-
-    @After
-    public void after()
-            throws Exception
-    {
-        writer = null;
-        w = null;
-    }
-
+    
     @Test
     public void testDefaultPrettyPrintXMLWriter() throws IOException
     {

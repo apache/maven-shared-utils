@@ -30,7 +30,7 @@ public interface XMLWriter
 
     /**
      * Sets the encoding of the document.
-     * If not set, UTF-8 is being used
+     * If not set, UTF-8 is used.
      *
      * @param encoding the encoding
      * @throws IllegalStateException if the generation of the document has already started
@@ -38,7 +38,7 @@ public interface XMLWriter
     void setEncoding( String encoding );
 
     /**
-     * Sets the docType of the document.
+     * Sets the DOCTYPE of the document.
      *
      * @param docType the docType
      * @throws IllegalStateException if the generation of the document has already started
@@ -48,15 +48,17 @@ public interface XMLWriter
 
     /**
      * Start an XML Element tag.
-     * @param name The name of the tag.
-     * @throws IOException if starting the element fails.
+     * 
+     * @param name the name of the tag
+     * @throws IOException if starting the element fails
      */
     void startElement( String name ) throws IOException;
 
 
     /**
      * Add a XML attribute to the current XML Element.
-     * This method must get called immediately after {@link #startElement(String)}
+     * This method must get called immediately after {@link #startElement(String)}.
+     * 
      * @param key The key of the attribute.
      * @param value The value of the attribute.
      * @throws IllegalStateException if no element tag is currently in process
@@ -65,8 +67,9 @@ public interface XMLWriter
     void addAttribute( String key, String value ) throws IOException;
 
     /**
-     * Add a value text to the current element tag
-     * This will perform XML escaping to guarantee valid content
+     * Add text to the current element tag.
+     * This performs XML escaping to guarantee well-formed content.
+     * 
      * @param text The text which should be written.
      * @throws IllegalStateException if no element tag got started yet
      * @throws IOException if writing the text fails.
@@ -74,10 +77,11 @@ public interface XMLWriter
     void writeText( String text ) throws IOException;
 
     /**
-     * Add a preformatted markup to the current element tag
-     * @param text The text which should be written.
-     * @throws IllegalStateException if no element tag got started yet
-     * @throws IOException if writing the markup fails.
+     * Add preformatted markup to the current element tag.
+     * 
+     * @param text the text which should be written
+     * @throws IllegalStateException if no element tag is started yet
+     * @throws IOException if writing the markup fails
      */
     void writeMarkup( String text ) throws IOException;
 

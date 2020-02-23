@@ -27,10 +27,8 @@ import org.apache.maven.shared.utils.Os;
 
 /**
  * XMLWriter with nice indentation
- */
-/**
+ * 
  * @author kama
- *
  */
 public class PrettyPrintXMLWriter
     implements XMLWriter
@@ -214,7 +212,7 @@ public class PrettyPrintXMLWriter
     }
 
     /**
-     * @param lineSeparator The line separator to be used.
+     * @param lineSeparator the line separator to be output
      */
     public void setLineSeparator( String lineSeparator )
     {
@@ -227,7 +225,7 @@ public class PrettyPrintXMLWriter
     }
 
     /**
-     * @param lineIndentParameter The line indent parameter.
+     * @param lineIndentParameter the line indent parameter
      */
     public void setLineIndenter( String lineIndentParameter )
     {
@@ -242,6 +240,11 @@ public class PrettyPrintXMLWriter
     /** {@inheritDoc} */
     public void startElement( String elementName ) throws IOException
     {
+        
+        if (elementName.isEmpty()) {
+            throw new IllegalArgumentException("Element name cannot be empty");
+        }
+        
         boolean firstLine = ensureDocumentStarted();
 
         completePreviouslyOpenedElement();
@@ -328,7 +331,7 @@ public class PrettyPrintXMLWriter
     }
 
     /**
-     * Write the documents if not already done.
+     * Write the document if not already done.
      *
      * @return <code>true</code> if the document headers have freshly been written.
      */
