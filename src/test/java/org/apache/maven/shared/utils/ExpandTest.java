@@ -29,17 +29,17 @@ import org.junit.rules.TemporaryFolder;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
+import java.util.Scanner;
 
 import static org.hamcrest.CoreMatchers.*;
 
 /**
- * This will test the plexus utility class {@link Expand}.
+ * This tests the utility class {@link Expand}.
  *
- * Most of this stuff will be obsolete because java-1.4.2
+ * Most of this stuff is obsolete because java-1.4.2
  * introduced a java.util.zip package which works like a charm.
  *
- * We of course need to implement this class due to compatibility
- * reasons.
+ * We  need to implement this class for compatibility reasons.
  *
  * @author <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
@@ -326,11 +326,11 @@ public class ExpandTest
 
         assertNotNull( expandedFile );
 
-        java.util.Scanner scanner = new java.util.Scanner( expandedFile ).useDelimiter( "\n" );
-        String text = scanner.next();
-
-        assertThat( "expanded file content must match"
-                  , text
-                  , is( expectedContent ) );
+        try (Scanner base = new Scanner( expandedFile );
+             Scanner scanner = base.useDelimiter( "\n" ) ) 
+        {
+            String text = scanner.next();
+            assertThat( "expanded file content must match", text, is( expectedContent ) );
+        }
     }
 }

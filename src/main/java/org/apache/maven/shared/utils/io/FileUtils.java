@@ -107,11 +107,6 @@ public class FileUtils
     private static final int ONE_MB = ONE_KB * ONE_KB;
 
     /**
-     * The number of bytes in a gigabyte.
-     */
-    private static final int ONE_GB = ONE_KB * ONE_MB;
-
-    /**
      * The file copy buffer size (30 MB)
      */
     private static final long FILE_COPY_BUFFER_SIZE = ONE_MB * 30;
@@ -496,9 +491,6 @@ public class FileUtils
 
     /**
      * Given a directory and an array of extensions return an array of compliant files.
-     * <p/>
-     * TODO Should an ignore list be passed in?
-     * TODO Should a recurse flag be passed in?
      * <p/>
      * The given extensions should be like "java" and not like ".java"
      *

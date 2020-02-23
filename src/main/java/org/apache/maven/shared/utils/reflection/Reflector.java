@@ -422,12 +422,12 @@ final class Reflector
     }
 
     /**
-     * Return the method, checking the cache first and storing in cache if not already there..
+     * Return the method, checking the cache first and storing in cache if not already there.
      * 
-     * @param targetClass The class to get the method from
-     * @param params The classes of the parameters which the method should match.
+     * @param targetClass the class to get the method from
+     * @param params the classes of the parameters which the method should match.
      * @return the Method object that matches, never {@code null}
-     * @throws ReflectorException In case we can't retrieve the proper method.
+     * @throws ReflectorException if we can't retrieve the proper method
      */
     public Method getMethod( Class<?> targetClass, String methodName, Class<?>... params )
         throws ReflectorException

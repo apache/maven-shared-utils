@@ -129,7 +129,6 @@ public class DirectoryScannerTest
         ds.setBasedir( new File( "src/test/resources/symlinks/src" ) );
         ds.setFollowSymlinks( false );
         ds.scan();
-        String[] includedDirectories = ds.getIncludedDirectories();
         String[] files = ds.getIncludedFiles();
         
         //FIXME: This should be changed to some kind of assert...WhatEver()...
