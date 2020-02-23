@@ -139,7 +139,7 @@ public class DirectoryScannerTest
         String[] files = ds.getIncludedFiles();
         assertAlwaysIncluded( Arrays.asList( files ) );
         assertEquals( 5, includedDirectories.length );
-        Assert.assertEquals( 9, files.length );
+        assertEquals( 9, files.length );
     }
 
     @Test
