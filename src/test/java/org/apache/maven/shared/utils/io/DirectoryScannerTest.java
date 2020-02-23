@@ -50,7 +50,10 @@ public class DirectoryScannerTest
     {
         File rootDir = tempFolder.getRoot();
         File folder1 = new File( rootDir, "folder1" );
-        folder1.mkdirs();
+        if (!folder1.mkdirs()) 
+        {
+            Assert.fail();
+        };
 
         FileTestHelper.generateTestFile( new File( rootDir, "file1.txt" ), 11 );
         FileTestHelper.generateTestFile( new File( rootDir, "file2.txt" ), 12 );
@@ -60,7 +63,10 @@ public class DirectoryScannerTest
         FileTestHelper.generateTestFile( new File( folder1, "file5.dat" ), 15 );
 
         File folder2 = new File( folder1, "ignorefolder" );
-        folder2.mkdirs();
+        if (!folder2.mkdirs()) 
+        {
+            Assert.fail();
+        };
         FileTestHelper.generateTestFile( new File( folder2, "file7.txt" ), 17 );
     }
 
@@ -131,11 +137,9 @@ public class DirectoryScannerTest
         ds.scan();
         String[] includedDirectories = ds.getIncludedDirectories();
         String[] files = ds.getIncludedFiles();
-        
-        //FIXME: This should be changed to some kind of assert...WhatEver()...
-        System.out.println( "files = " + files );
-
-
+        assertAlwaysIncluded( Arrays.asList( files ) );
+        assertEquals( 5, includedDirectories.length );
+        Assert.assertEquals( 9, files.length );
     }
 
     @Test
@@ -155,11 +159,6 @@ public class DirectoryScannerTest
         assertAlwaysIncluded( included );
         assertEquals( 9, included.size() );
         List<String> includedDirs = Arrays.asList( ds.getIncludedDirectories() );
-        assertTrue( includedDirs.contains( "" ) ); // w00t !
-        assertTrue( includedDirs.contains( "aRegularDir" ) );
-        assertTrue( includedDirs.contains( "symDir" ) );
-        assertTrue( includedDirs.contains( "symLinkToDirOnTheOutside" ) );
-        assertTrue( includedDirs.contains( "targetDir" ) );
         assertEquals( 5, includedDirs.size() );
     }
 
