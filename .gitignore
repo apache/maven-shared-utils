@@ -2,6 +2,7 @@ target/
 .project
 .classpath
 .settings/
+.checkstyle
 .svn/
 bin/
 # Intellij
@@ -13,3 +14,4 @@ out/
 /bootstrap
 /dependencies.xml
 .java-version
+
