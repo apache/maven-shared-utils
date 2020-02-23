@@ -159,6 +159,11 @@ public class DirectoryScannerTest
         assertAlwaysIncluded( included );
         assertEquals( 9, included.size() );
         List<String> includedDirs = Arrays.asList( ds.getIncludedDirectories() );
+        assertTrue( includedDirs.contains( "" ) );
+        assertTrue( includedDirs.contains( "aRegularDir" ) );
+        assertTrue( includedDirs.contains( "symDir" ) );
+        assertTrue( includedDirs.contains( "symLinkToDirOnTheOutside" ) );
+        assertTrue( includedDirs.contains( "targetDir" ) );
         assertEquals( 5, includedDirs.size() );
     }
 
