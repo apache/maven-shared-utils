@@ -277,13 +277,16 @@ public abstract class CommandLineUtils
                     if ( systemIn != null )
                     {
                         inputFeeder = new StreamFeeder( systemIn, p.getOutputStream() );
+                        inputFeeder.setName("StreamFeeder-systemIn");
                         inputFeeder.start();
                     }
 
                     outputPumper = new StreamPumper( p.getInputStream(), systemOut );
+                    outputPumper.setName("StreamPumper-systemOut");
                     outputPumper.start();
 
                     errorPumper = new StreamPumper( p.getErrorStream(), systemErr );
+                    errorPumper.setName("StreamPumper-systemErr");
                     errorPumper.start();
 
                     int returnValue;
