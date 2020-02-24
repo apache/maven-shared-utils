@@ -50,10 +50,10 @@ public class DirectoryScannerTest
     {
         File rootDir = tempFolder.getRoot();
         File folder1 = new File( rootDir, "folder1" );
-        if (!folder1.mkdirs()) 
+        if ( !folder1.mkdirs() )
         {
             Assert.fail();
-        };
+        }
 
         FileTestHelper.generateTestFile( new File( rootDir, "file1.txt" ), 11 );
         FileTestHelper.generateTestFile( new File( rootDir, "file2.txt" ), 12 );
@@ -63,10 +63,10 @@ public class DirectoryScannerTest
         FileTestHelper.generateTestFile( new File( folder1, "file5.dat" ), 15 );
 
         File folder2 = new File( folder1, "ignorefolder" );
-        if (!folder2.mkdirs()) 
+        if ( !folder2.mkdirs() )
         {
             Assert.fail();
-        };
+        }
         FileTestHelper.generateTestFile( new File( folder2, "file7.txt" ), 17 );
     }
 
