@@ -326,9 +326,9 @@ public class ExpandTest
 
         assertNotNull( expandedFile );
 
-        try (Scanner base = new Scanner( expandedFile );
-             Scanner scanner = base.useDelimiter( "\n" ) ) 
+        try (Scanner scanner = new Scanner( expandedFile )) 
         {
+            scanner.useDelimiter( "\n" );
             String text = scanner.next();
             assertThat( "expanded file content must match", text, is( expectedContent ) );
         }
