@@ -31,7 +31,7 @@
   <version>3.2.2-SNAPSHOT</version>
 
   <name>Apache Maven Shared Utils</name>
-  <description>Shared utils without any further dependencies</description>
+  <description>Shared utilities for use by Maven core and plugins</description>
 
   <scm>
     <connection>scm:git:https://gitbox.apache.org/repos/asf/maven-shared-utils.git</connection>
