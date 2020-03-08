@@ -24,7 +24,7 @@ import java.util.List;
 
 /**
  * <p>
- * Implementation to call the CMD Shell present on Windows NT, 2000 and XP
+ * Implementation to call the CMD Shell present on Windows NT, 2000, X, 7, and 10.
  * </p>
  *
  * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>

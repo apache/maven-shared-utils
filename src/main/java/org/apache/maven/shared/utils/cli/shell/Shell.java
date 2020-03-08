@@ -29,12 +29,11 @@ import org.apache.maven.shared.utils.StringUtils;
 /**
  * <p>
  * Class that abstracts the Shell functionality,
- * with subclases for shells that behave particularly, like
+ * with subclasses for shells that behave particularly, like</p>
  * <ul>
  * <li><code>command.com</code></li>
  * <li><code>cmd.exe</code></li>
  * </ul>
- * </p>
  *
  * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
  * 

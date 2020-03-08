@@ -26,8 +26,9 @@ package org.apache.maven.shared.utils.cli.shell;
  * </p>
  *
  * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
- * 
+ * @deprecated Windows Me is long dead. Update to Windows 10 and use {@link CmdShell}.
  */
+@Deprecated
 public class CommandShell
     extends Shell
 {
