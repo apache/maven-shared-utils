@@ -27,9 +27,9 @@ import java.util.List;
 import org.apache.maven.shared.utils.StringUtils;
 
 /**
- * <p>
  * Class that abstracts the Shell functionality,
- * with subclasses for shells that behave particularly, like</p>
+ * with subclasses for shells that behave particularly, like<p>
+ * 
  * <ul>
  * <li><code>command.com</code></li>
  * <li><code>cmd.exe</code></li>
@@ -64,9 +64,9 @@ public class Shell
     private char exeQuoteDelimiter = '\"';
 
     /**
-     * Set the command to execute the shell (eg. COMMAND.COM, /bin/bash,...)
+     * Set the command to execute the shell (e.g. COMMAND.COM, /bin/bash,...).
      *
-     * @param shellCommand The command
+     * @param shellCommand the command
      */
     void setShellCommand( String shellCommand )
     {
@@ -74,9 +74,9 @@ public class Shell
     }
 
     /**
-     * Get the command to execute the shell
+     * Get the command to execute the shell.
      *
-     * @return  The command
+     * @return the command
      */
     String getShellCommand()
     {
@@ -85,7 +85,7 @@ public class Shell
 
     /**
      * Set the shell arguments when calling a command line (not the executable arguments)
-     * (eg. /X /C for CMD.EXE)
+     * (e.g. /X /C for CMD.EXE).
      *
      * @param shellArgs the arguments to the shell
      */
@@ -98,7 +98,7 @@ public class Shell
     /**
      * Get the shell arguments
      *
-     * @return  The arguments
+     * @return the arguments
      */
     String[] getShellArgs()
     {
@@ -117,7 +117,7 @@ public class Shell
      *
      * @param executableParameter executable that the shell has to call
      * @param argumentsParameter  arguments for the executable, not the shell
-     * @return List with one String object with executable and arguments quoted as needed
+     * @return list with one String object with executable and arguments quoted as needed
      */
     List<String> getCommandLine( String executableParameter, String... argumentsParameter )
     {
@@ -125,9 +125,9 @@ public class Shell
     }
 
     /**
-     * @param executableParameter Executable.
-     * @param argumentsParameter The arguments for the executable.
-     * @return The list on command line. 
+     * @param executableParameter Executable
+     * @param argumentsParameter the arguments for the executable
+     * @return the list on command line
      */
     List<String> getRawCommandLine( String executableParameter, String... argumentsParameter )
     {
@@ -210,7 +210,7 @@ public class Shell
     }
 
     /**
-     * @return false in all cases. 
+     * @return false in all cases 
      */
     protected boolean isDoubleQuotedArgumentEscaped()
     {
@@ -353,7 +353,8 @@ public class Shell
 
     /**
      * Sets execution directory.
-     * @param workingDirectory The working directory.
+     * 
+     * @param workingDirectory the working directory
      */
     public void setWorkingDirectory( File workingDirectory )
     {
@@ -364,7 +365,7 @@ public class Shell
     }
 
     /**
-     * @return The working directory.
+     * @return the working directory
      */
     public File getWorkingDirectory()
     {
