@@ -135,10 +135,12 @@ public class DirectoryScannerTest
         ds.setBasedir( new File( "src/test/resources/symlinks/src" ) );
         ds.setFollowSymlinks( false );
         ds.scan();
+        
         String[] includedDirectories = ds.getIncludedDirectories();
+        assertEquals( 5, includedDirectories.length );
+        
         String[] files = ds.getIncludedFiles();
         assertAlwaysIncluded( Arrays.asList( files ) );
-        assertEquals( 5, includedDirectories.length );
         assertEquals( 9, files.length );
     }
 
@@ -169,8 +171,8 @@ public class DirectoryScannerTest
 
     private void assertAlwaysIncluded( List<String> included )
     {
-        assertTrue( included.contains( "aRegularDir/aRegularFile.txt" ) );
-        assertTrue( included.contains( "targetDir/targetFile.txt" ) );
+        assertTrue( included.contains( "aRegularDir" + File.separator + "aRegularFile.txt" ) );
+        assertTrue( included.contains( "targetDir" + File.separator + "targetFile.txt" ) );
         assertTrue( included.contains( "fileR.txt" ) );
         assertTrue( included.contains( "fileW.txt" ) );
         assertTrue( included.contains( "fileX.txt" ) );
