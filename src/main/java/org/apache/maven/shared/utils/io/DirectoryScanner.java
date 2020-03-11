@@ -828,9 +828,11 @@ public class DirectoryScanner
      * Returns the names of the directories which matched at least one of the include patterns and none of the exclude
      * patterns. The names are relative to the base directory.
      *
+     * @deprecated this method is buggy. Do not depend on it. 
      * @return the names of the directories which matched at least one of the include patterns and none of the exclude
      *         patterns. May also contain symbolic links to directories.
      */
+    @Deprecated
     public String[] getIncludedDirectories()
     {
         return dirsIncluded.toArray( new String[dirsIncluded.size()] );
