@@ -784,9 +784,11 @@ public class DirectoryScanner
      * Returns the names of the files which matched at least one of the include patterns and none of the exclude
      * patterns. The names are relative to the base directory.
      *
+     * @deprecated this method does not work correctly on Windows. 
      * @return the names of the files which matched at least one of the include patterns and none of the exclude
      *         patterns. May also contain symbolic links to files.
      */
+    @Deprecated
     public String[] getIncludedFiles()
     {
         if ( filesIncluded == null )
