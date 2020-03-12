@@ -145,7 +145,7 @@ public class DirectoryScannerTest
         assertAlwaysIncluded( Arrays.asList( files ) );
         
         // FIXME getIncludedFiles is broken on Windows; correct answer is 9
-        assertTrue( files.length == 9|| files.length == 11);  
+        assertTrue( files.length == 9 || files.length == 11);  
     }
 
     @Test
