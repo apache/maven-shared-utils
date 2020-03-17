@@ -31,7 +31,7 @@
   <version>3.2.2-SNAPSHOT</version>
 
   <name>Apache Maven Shared Utils</name>
-  <description>Shared utils without any further dependencies</description>
+  <description>Shared utilities for use by Maven core and plugins</description>
 
   <scm>
     <connection>scm:git:https://gitbox.apache.org/repos/asf/maven-shared-utils.git</connection>
@@ -41,7 +41,7 @@
  </scm>
   <issueManagement>
     <system>jira</system>
-    <url>https://issues.apache.org/jira/browse/MSHARED/component/12326452</url>
+    <url>https://issues.apache.org/jira/issues/?jql=project%20%3D%20MSHARED%20AND%20component%20%3D%20maven-shared-utils</url>
   </issueManagement>
   <ciManagement>
     <system>Jenkins</system>
@@ -77,7 +77,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.11</version>
+      <version>4.13</version>
       <scope>test</scope>
     </dependency>
     <dependency>
