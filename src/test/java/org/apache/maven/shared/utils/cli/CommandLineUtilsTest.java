@@ -127,33 +127,37 @@ public class CommandLineUtilsTest
     }
 
     @Test
-    public void givenASingleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenTheQuotationMarkIsNotEscaped() throws Exception
+    public void givenASingleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenTheQuotationMarkIsNotEscaped()
+        throws Exception
     {
         final String command = "echo \"let's go\"";
-        final String[] expected = new String[]{"echo", "let's go"};
-        assertCmdLineArgs(expected, command);
+        final String[] expected = new String[] { "echo", "let's go" };
+        assertCmdLineArgs( expected, command );
     }
 
     @Test
-    public void givenAnEscapedDoubleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenTheQuotationMarkRemainsEscaped() throws Exception
+    public void givenAnEscapedDoubleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenTheQuotationMarkRemainsEscaped()
+        throws Exception
     {
         final String command = "echo \"let\\\"s go\"";
-        final String[] expected = new String[]{"echo", "let\\\"s go"};
-        assertCmdLineArgs(expected, command);
+        final String[] expected = new String[] { "echo", "let\\\"s go" };
+        assertCmdLineArgs( expected, command );
     }
 
     @Test
-    public void givenAnEscapedSingleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenTheQuotationMarkRemainsEscaped() throws Exception
+    public void givenAnEscapedSingleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenTheQuotationMarkRemainsEscaped()
+        throws Exception
     {
         final String command = "echo \"let\\\'s go\"";
-        final String[] expected = new String[]{"echo", "let\\\'s go"};
-        assertCmdLineArgs(expected, command);
+        final String[] expected = new String[] { "echo", "let\\\'s go" };
+        assertCmdLineArgs( expected, command );
     }
 
     @Test
-    public void givenAnEscapedDoubleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenNoExceptionIsThrown() throws Exception
+    public void givenAnEscapedDoubleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenNoExceptionIsThrown()
+        throws Exception
     {
-        new Commandline("echo \"let\\\"s go\"").execute();
+        new Commandline( "echo \"let\\\"s go\"" ).execute();
     }
 
     private void assertCmdLineArgs( final String[] expected, final String cmdLine )

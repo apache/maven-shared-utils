@@ -311,15 +311,6 @@ public class Xpp3Dom
        this.parent = parent;
     }
 
-    // Todo: Support writing to serializer (>1.0)
-  //  public void writeToSerializer( String namespace, XmlSerializer serializer )
-    //        throws IOException
-
-    private static Xpp3Dom merge( Xpp3Dom dominant, Xpp3Dom recessive, Boolean childMergeOverride )
-    {
-        return Xpp3DomUtils.merge( dominant, recessive, childMergeOverride );
-    }
-
     /**
      * @param dominant The dominant part.
      * @param recessive The recessive part.
