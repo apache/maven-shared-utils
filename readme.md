@@ -54,7 +54,7 @@ There are some guidelines which will make applying PRs easier for us:
 + Create a branch from where you want to base your work (this is usually the master branch).
   Push your changes to a branch in your fork of the repository.
 + Make commits of logical units.
-+ You can use version 9 of Java, but be aware that the code has target of version 6.
++ You can compile with JDK 7 or later, but the code targets Java 7. For example, you cannot use lambdas.
 + Respect the original code style: by using the same [codestyle][code-style],
   patches should only highlight the actual difference, not being disturbed by any formatting issues:
   + Only use spaces for indentation.
