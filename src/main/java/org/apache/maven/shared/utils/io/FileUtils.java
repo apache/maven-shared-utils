@@ -93,7 +93,7 @@ public class FileUtils
      */
     protected FileUtils()
     {
-        // This is a utility class.  Normally dont instantiate
+        // This is a utility class.  Normally don't instantiate
     }
 
     /**
@@ -134,7 +134,7 @@ public class FileUtils
     }
 
     /**
-     * @return the default excludes pattern as list.
+     * @return the default excludes pattern as list
      * @see #getDefaultExcludes()
      */
     @Nonnull public static List<String> getDefaultExcludesAsList()
@@ -157,7 +157,7 @@ public class FileUtils
      * Matches the equally named unix command.
      *
      * @param filename the file path
-     * @return The directory portion excluding the ending file separator.
+     * @return the directory portion excluding the ending file separator
      */
     @Nonnull public static String dirname( @Nonnull String filename )
     {
@@ -169,7 +169,7 @@ public class FileUtils
      * Returns the filename portion of a file specification string.
      *
      * @param filename the file path
-     * @return The filename string with extension.
+     * @return the filename string with extension
      */
     @Nonnull public static String filename( @Nonnull String filename )
     {
@@ -212,10 +212,10 @@ public class FileUtils
     }
 
     /**
-     * Check if a file exits.
+     * Check if a file exists.
      *
-     * @param fileName the file path.
-     * @return true if file exists.
+     * @param fileName the file path
+     * @return true if file exists
      */
     public static boolean fileExists( @Nonnull String fileName )
     {
@@ -227,7 +227,7 @@ public class FileUtils
      * Note: the file content is read with platform encoding.
      *
      * @param file the file path
-     * @return the file content using the platform encoding.
+     * @return the file content using the platform encoding
      * @throws IOException if any
      */
     @Nonnull public static String fileRead( @Nonnull String file )
@@ -239,7 +239,7 @@ public class FileUtils
     /**
      * @param file     the file path
      * @param encoding the wanted encoding
-     * @return the file content using the specified encoding.
+     * @return the file content using the specified encoding
      * @throws IOException if any
      */
     @Nonnull private static String fileRead( @Nonnull String file, @Nullable String encoding )
@@ -249,10 +249,10 @@ public class FileUtils
     }
 
     /**
-     * Note: the file content is read with platform encoding
+     * Note: the file content is read with platform encoding.
      *
      * @param file the file path
-     * @return the file content using the platform encoding.
+     * @return the file content using the platform encoding
      * @throws IOException if any
      */
     @Nonnull public static String fileRead( @Nonnull File file )
@@ -264,7 +264,7 @@ public class FileUtils
     /**
      * @param file     the file path
      * @param encoding the wanted encoding
-     * @return the file content using the specified encoding.
+     * @return the file content using the specified encoding
      * @throws IOException if any
      */
     @Nonnull public static String fileRead( @Nonnull File file, @Nullable String encoding )
@@ -303,9 +303,9 @@ public class FileUtils
 
     /**
      * @param file the file path
-     * @return the file content lines as String[] using the systems default encoding.
-     * An empty List if the file didn't exist.
-     * @throws IOException in case of failure.
+     * @return the file content lines as String[] using the system default encoding.
+     * An empty List if the file doesn't exist.
+     * @throws IOException in case of failure
      */
     @Nonnull public static String[] fileReadArray( @Nonnull File file )
         throws IOException
@@ -316,11 +316,11 @@ public class FileUtils
     }
 
     /**
-     * Appends data to a file. The file will be created if it does not exist.
-     * Note: the data is written with platform encoding
+     * Appends data to a file. The file is created if it does not exist.
+     * Note: the data is written with platform encoding.
      *
-     * @param fileName The path of the file to write.
-     * @param data     The content to write to the file.
+     * @param fileName the path of the file to write
+     * @param data     the content to write to the file
      * @throws IOException if any
      */
     public static void fileAppend( @Nonnull String fileName, @Nonnull String data )
@@ -332,9 +332,9 @@ public class FileUtils
     /**
      * Appends data to a file. The file will be created if it does not exist.
      *
-     * @param fileName The path of the file to write.
-     * @param encoding The encoding of the file.
-     * @param data     The content to write to the file.
+     * @param fileName the path of the file to write
+     * @param encoding the encoding of the file
+     * @param data     the content to write to the file
      * @throws IOException if any
      */
     public static void fileAppend( @Nonnull String fileName, @Nullable String encoding, @Nonnull String data )
@@ -365,8 +365,8 @@ public class FileUtils
      * Writes data to a file. The file will be created if it does not exist.
      * Note: the data is written with platform encoding
      *
-     * @param fileName The path of the file to write.
-     * @param data     The content to write to the file.
+     * @param fileName the path of the file to write
+     * @param data     the content to write to the file
      * @throws IOException if any
      */
     public static void fileWrite( @Nonnull String fileName, @Nonnull String data )
@@ -378,9 +378,9 @@ public class FileUtils
     /**
      * Writes data to a file. The file will be created if it does not exist.
      *
-     * @param fileName The path of the file to write.
-     * @param encoding The encoding of the file.
-     * @param data     The content to write to the file.
+     * @param fileName the path of the file to write
+     * @param encoding the encoding of the file
+     * @param data     the content to write to the file
      * @throws IOException if any
      */
     public static void fileWrite( @Nonnull String fileName, @Nullable String encoding, @Nonnull String data )
@@ -393,9 +393,9 @@ public class FileUtils
     /**
      * Writes data to a file. The file will be created if it does not exist.
      *
-     * @param file     The path of the file to write.
-     * @param encoding The encoding of the file.
-     * @param data     The content to write to the file.
+     * @param file     the path of the file to write
+     * @param encoding the encoding of the file
+     * @param data     the content to write to the file
      * @throws IOException if any
      */
     public static void fileWrite( @Nonnull File file, @Nullable String encoding, @Nonnull String data )
@@ -426,8 +426,8 @@ public class FileUtils
      * Writes String array data to a file in the systems default encoding.
      * The file will be created if it does not exist.
      *
-     * @param file The path of the file to write.
-     * @param data The content to write to the file.
+     * @param file the path of the file to write
+     * @param data the content to write to the file
      * @throws IOException if any
      */
     public static void fileWriteArray( @Nonnull File file, @Nullable String... data )
@@ -437,11 +437,11 @@ public class FileUtils
     }
 
     /**
-     * Writes String array data to a file. The file will be created if it does not exist.
+     * Writes String array data to a file. The file is created if it does not exist.
      *
-     * @param file     The path of the file to write.
-     * @param encoding The encoding of the file.
-     * @param data     The content to write to the file.
+     * @param file     the path of the file to write
+     * @param encoding the encoding of the file
+     * @param data     the content to write to the file
      * @throws IOException if any
      */
     public static void fileWriteArray( @Nonnull File file, @Nullable String encoding, @Nullable String... data )
@@ -480,7 +480,7 @@ public class FileUtils
     /**
      * Deletes a file.
      *
-     * @param fileName The path of the file to delete.
+     * @param fileName the path of the file to delete
      */
     public static void fileDelete( @Nonnull String fileName )
     {
@@ -494,9 +494,9 @@ public class FileUtils
      * <p/>
      * The given extensions should be like "java" and not like ".java"
      *
-     * @param directory  The path of the directory.
-     * @param extensions an array of expected extensions.
-     * @return An array of files for the wanted extensions.
+     * @param directory  the path of the directory
+     * @param extensions an array of expected extensions
+     * @return tn array of files for the wanted extensions
      */
     public static String[] getFilesFromExtension( @Nonnull String directory, @Nonnull String... extensions )
     {
@@ -524,7 +524,7 @@ public class FileUtils
                     continue;
                 }
 
-                // ok... transverse into this directory and get all the files... then combine
+                // ok... traverse into this directory and get all the files... then combine
                 // them with the current list.
 
                 String[] fetchFiles = getFilesFromExtension( currentFileName, extensions );
@@ -661,9 +661,9 @@ public class FileUtils
     /**
      * Convert from a <code>URL</code> to a <code>File</code>.
      *
-     * @param url File URL.
-     * @return The equivalent <code>File</code> object, or <code>null</code> if the URL's protocol
-     * is not <code>file</code>
+     * @param url file URL
+     * @return the equivalent <code>File</code> object, or <code>null</code> if the URL's protocol
+     *     is not <code>file</code>
      */
     @Nullable public static File toFile( @Nullable final URL url )
     {
@@ -707,8 +707,7 @@ public class FileUtils
     }
 
     /**
-     * Remove extension from filename.
-     * ie
+     * Remove extension from filename. E.g.
      * <pre>
      * foo.txt    --> foo
      * a\b\c.jpg --> a\b\c
@@ -732,8 +731,8 @@ public class FileUtils
     }
 
     /**
-     * Get extension from filename.
-     * ie
+     * Get extension from filename. E.g.
+     *
      * <pre>
      * foo.txt    --> "txt"
      * a\b\c.jpg --> "jpg"
@@ -753,10 +752,10 @@ public class FileUtils
      * (and any parent directories) will be created. If a file <code>source</code> in
      * <code>destinationDirectory</code> exists, it will be overwritten.
      *
-     * @param source               An existing <code>File</code> to copy.
-     * @param destinationDirectory A directory to copy <code>source</code> into.
-     * @throws java.io.FileNotFoundException if <code>source</code> isn't a normal file.
-     * @throws IllegalArgumentException      if <code>destinationDirectory</code> isn't a directory.
+     * @param source               an existing <code>File</code> to copy
+     * @param destinationDirectory a directory to copy <code>source</code> into
+     * @throws java.io.FileNotFoundException if <code>source</code> isn't a normal file
+     * @throws IllegalArgumentException      if <code>destinationDirectory</code> isn't a directory
      * @throws IOException                   if <code>source</code> does not exist, the file in
      *                                       <code>destinationDirectory</code> cannot be written to, or an IO error
      *                                       occurs during copying.
@@ -775,16 +774,16 @@ public class FileUtils
     /**
      * Copy file from source to destination only if source is newer than the target file.
      * If <code>destinationDirectory</code> does not exist, it
-     * (and any parent directories) will be created. If a file <code>source</code> in
-     * <code>destinationDirectory</code> exists, it will be overwritten.
+     * (and any parent directories) is created. If a file <code>source</code> in
+     * <code>destinationDirectory</code> exists, it is overwritten.
      *
-     * @param source               An existing <code>File</code> to copy.
-     * @param destinationDirectory A directory to copy <code>source</code> into.
-     * @throws java.io.FileNotFoundException if <code>source</code> isn't a normal file.
-     * @throws IllegalArgumentException      if <code>destinationDirectory</code> isn't a directory.
+     * @param source               an existing <code>File</code> to copy
+     * @param destinationDirectory a directory to copy <code>source</code> into
+     * @throws java.io.FileNotFoundException if <code>source</code> isn't a normal file
+     * @throws IllegalArgumentException      if <code>destinationDirectory</code> isn't a directory
      * @throws IOException                   if <code>source</code> does not exist, the file in
      *                                       <code>destinationDirectory</code> cannot be written to, or an IO error
-     *                                       occurs during copying.
+     *                                       occurs during copying
      */
     private static void copyFileToDirectoryIfModified( @Nonnull final File source,
                                                        @Nonnull final File destinationDirectory )
@@ -804,11 +803,11 @@ public class FileUtils
      * created if they don't already exist. <code>destination</code> will be overwritten if it
      * already exists.
      *
-     * @param source      An existing non-directory <code>File</code> to copy bytes from.
-     * @param destination A non-directory <code>File</code> to write bytes to (possibly
-     *                    overwriting).
-     * @throws IOException                   if <code>source</code> does not exist, <code>destination</code> cannot be
-     *                                       written to, or an IO error occurs during copying.
+     * @param source      an existing non-directory <code>File</code> to copy bytes from
+     * @param destination a non-directory <code>File</code> to write bytes to (possibly
+     *                    overwriting)
+     * @throws IOException  if <code>source</code> does not exist, <code>destination</code> cannot be
+     *                      written to, or an IO error occurs during copying.
      * @throws java.io.FileNotFoundException if <code>destination</code> is a directory
      */
     public static void copyFile( @Nonnull final File source, @Nonnull final File destination )
