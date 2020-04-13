@@ -31,7 +31,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -41,6 +40,7 @@ import java.io.Reader;
 import java.io.Writer;
 import java.net.URL;
 import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 import java.security.SecureRandom;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -270,32 +270,20 @@ public class FileUtils
     @Nonnull public static String fileRead( @Nonnull File file, @Nullable String encoding )
         throws IOException
     {
-        StringBuilder buf = new StringBuilder();
-
-        Reader reader = null;
-
-        try
+        StringBuilder buf = new StringBuilder();   
+        if ( encoding == null ) 
         {
-            if ( encoding != null )
-            {
-                reader = new InputStreamReader( new FileInputStream( file ), encoding );
-            }
-            else
-            {
-                reader = new InputStreamReader( new FileInputStream( file ) );
-            }
+            encoding = Charset.defaultCharset().name();
+        }
+
+        try ( Reader reader = new InputStreamReader( new FileInputStream( file ), encoding ) )
+        {
             int count;
             char[] b = new char[512];
             while ( ( count = reader.read( b ) ) >= 0 )  // blocking read
             {
                 buf.append( b, 0, count );
             }
-            reader.close();
-            reader = null;
-        }
-        finally
-        {
-            IOUtil.close( reader );
         }
 
         return buf.toString();
@@ -340,24 +328,15 @@ public class FileUtils
     public static void fileAppend( @Nonnull String fileName, @Nullable String encoding, @Nonnull String data )
         throws IOException
     {
-        FileOutputStream out = null;
-        try
+        
+        if ( encoding == null ) 
         {
-            out = new FileOutputStream( fileName, true );
-            if ( encoding != null )
-            {
-                out.write( data.getBytes( encoding ) );
-            }
-            else
-            {
-                out.write( data.getBytes() );
-            }
-            out.close();
-            out = null;
+            encoding = Charset.defaultCharset().name();
         }
-        finally
+        
+        try ( OutputStream out = new FileOutputStream( fileName, true ) )
         {
-            IOUtil.close( out );
+          out.write( data.getBytes( encoding ) );
         }
     }
 
@@ -401,24 +380,15 @@ public class FileUtils
     public static void fileWrite( @Nonnull File file, @Nullable String encoding, @Nonnull String data )
         throws IOException
     {
-        Writer writer = null;
-        try
+        
+        if ( encoding == null ) 
         {
-            if ( encoding != null )
-            {
-                writer = new OutputStreamWriter( new FileOutputStream( file ), encoding );
-            }
-            else
-            {
-                writer = new OutputStreamWriter( new FileOutputStream( file ) );
-            }
-            writer.write( data );
-            writer.close();
-            writer = null;
+            encoding = Charset.defaultCharset().name();
         }
-        finally
+
+        try ( Writer writer = new OutputStreamWriter( new FileOutputStream( file ), encoding ) ) 
         {
-            IOUtil.close( writer );
+            writer.write( data );
         }
     }
 
@@ -447,18 +417,14 @@ public class FileUtils
     public static void fileWriteArray( @Nonnull File file, @Nullable String encoding, @Nullable String... data )
         throws IOException
     {
-        Writer writer = null;
-        try
+        
+        if ( encoding == null ) 
         {
-            if ( encoding != null )
-            {
-                writer = new OutputStreamWriter( new FileOutputStream( file ), encoding );
-            }
-            else
-            {
-                writer = new OutputStreamWriter( new FileOutputStream( file ) );
-            }
+            encoding = Charset.defaultCharset().name();
+        }
 
+        try ( Writer writer = new OutputStreamWriter( new FileOutputStream( file ), encoding ) )
+        {
             for ( int i = 0; data != null && i < data.length; i++ )
             {
                 writer.write( data[i] );
@@ -467,13 +433,6 @@ public class FileUtils
                     writer.write( "\n" );
                 }
             }
-
-            writer.close();
-            writer = null;
-        }
-        finally
-        {
-            IOUtil.close( writer );
         }
     }
 
@@ -637,25 +596,11 @@ public class FileUtils
             return false;
         }
 
-        InputStream input1 = null;
-        InputStream input2 = null;
-        boolean equals = false;
-        try
-        {
-            input1 = new FileInputStream( file1 );
-            input2 = new FileInputStream( file2 );
-            equals = IOUtil.contentEquals( input1, input2 );
-            input1.close();
-            input1 = null;
-            input2.close();
-            input2 = null;
+        try ( InputStream input1 = new FileInputStream( file1 );
+            InputStream  input2 = new FileInputStream( file2 ) )
+        { 
+            return IOUtil.contentEquals( input1, input2 );
         }
-        finally
-        {
-            IOUtil.close( input1 );
-            IOUtil.close( input2 );
-        }
-        return equals;
     }
 
     /**
@@ -857,16 +802,13 @@ public class FileUtils
     private static void doCopyFile( @Nonnull File source, @Nonnull File destination )
         throws IOException
     {
-        FileInputStream fis = null;
-        FileOutputStream fos = null;
-        FileChannel input = null;
-        FileChannel output = null;
-        try
+
+        try ( FileInputStream fis = new FileInputStream( source );
+              FileOutputStream fos = new FileOutputStream( destination );
+              FileChannel input = fis.getChannel();
+              FileChannel output = fos.getChannel() )
         {
-            fis = new FileInputStream( source );
-            fos = new FileOutputStream( destination );
-            input = fis.getChannel();
-            output = fos.getChannel();
+            
             long size = input.size();
             long pos = 0;
             long count;
@@ -875,21 +817,6 @@ public class FileUtils
                 count = size - pos > FILE_COPY_BUFFER_SIZE ? FILE_COPY_BUFFER_SIZE : size - pos;
                 pos += output.transferFrom( input, pos, count );
             }
-            output.close();
-            output = null;
-            fos.close();
-            fos = null;
-            input.close();
-            input = null;
-            fis.close();
-            fis = null;
-        }
-        finally
-        {
-            IOUtil.close( output );
-            IOUtil.close( fos );
-            IOUtil.close( input );
-            IOUtil.close( fis );
         }
     }
 
@@ -959,35 +886,23 @@ public class FileUtils
                                           @Nonnull final File destination )
         throws IOException
     {
-        InputStream in = source;
-        OutputStream out = null;
-        try
+        // does destination directory exist ?
+        if ( destination.getParentFile() != null && !destination.getParentFile().exists() )
         {
-            //does destination directory exist ?
-            if ( destination.getParentFile() != null && !destination.getParentFile().exists() )
-            {
-                //noinspection ResultOfMethodCallIgnored
-                destination.getParentFile().mkdirs();
-            }
-
-            //make sure we can write to destination
-            if ( destination.exists() && !destination.canWrite() )
-            {
-                final String message = "Unable to open file " + destination + " for writing.";
-                throw new IOException( message );
-            }
-
-            out = new FileOutputStream( destination );
-            IOUtil.copy( in, out );
-            out.close();
-            out = null;
-            in.close();
-            in = null;
+            // noinspection ResultOfMethodCallIgnored
+            destination.getParentFile().mkdirs();
         }
-        finally
+
+        // make sure we can write to destination
+        if ( destination.exists() && !destination.canWrite() )
         {
-            IOUtil.close( out );
-            IOUtil.close( in );
+            final String message = "Unable to open file " + destination + " for writing.";
+            throw new IOException( message );
+        }
+
+        try ( OutputStream out = new FileOutputStream( destination ); InputStream in = source )
+        {
+            IOUtil.copy( in, out );
         }
     }
 
@@ -1179,7 +1094,7 @@ public class FileUtils
      * deletes a file.
      *
      * @param file The file to delete
-     * @throws IOException If the file cannot be delted.
+     * @throws IOException if the file cannot be deleted
      */
 
 
@@ -1913,37 +1828,25 @@ public class FileUtils
     {
         if ( wrappers != null && wrappers.length > 0 )
         {
-            // buffer so it isn't reading a byte at a time!
-            Reader fileReader = null;
-            Writer fileWriter = null;
-            try
+            
+            if ( encoding == null || encoding.isEmpty() ) 
             {
-                if ( encoding == null || encoding.length() < 1 )
-                {
-                    fileReader = new BufferedReader( new FileReader( from ) );
-                    fileWriter = new FileWriter( to );
-                }
-                else
-                {
-                    fileReader = new BufferedReader( new InputStreamReader( new FileInputStream( from ), encoding ) );
-                    fileWriter = new OutputStreamWriter( new FileOutputStream( to ), encoding );
-                }
+                encoding = Charset.defaultCharset().name();
+            }
+            
+            // buffer so it isn't reading a byte at a time!
+            try ( Reader fileReader =
+                new BufferedReader( new InputStreamReader( new FileInputStream( from ), encoding ) );
+                            Writer fileWriter = new OutputStreamWriter( new FileOutputStream( to ), encoding ) )
+            {
 
+                Reader wrapped = fileReader;
                 for ( FilterWrapper wrapper : wrappers )
                 {
-                    fileReader = wrapper.getReader( fileReader );
+                    wrapped = wrapper.getReader( wrapped );
                 }
 
-                IOUtil.copy( fileReader, fileWriter );
-                fileWriter.close();
-                fileWriter = null;
-                fileReader.close();
-                fileReader = null;
-            }
-            finally
-            {
-                IOUtil.close( fileReader );
-                IOUtil.close( fileWriter );
+                IOUtil.copy( wrapped, fileWriter );
             }
         }
         else
@@ -1956,7 +1859,7 @@ public class FileUtils
     }
 
     /**
-     * Note: the file content is read with platform encoding
+     * Note: the file content is read with platform encoding.
      *
      * @param file the file
      * @return a List containing every every line not starting with # and not empty
@@ -1969,31 +1872,21 @@ public class FileUtils
 
         if ( file.exists() )
         {
-            BufferedReader reader = null;
-            try
+            try ( BufferedReader reader = new BufferedReader( new FileReader( file ) ) )
             {
-                reader = new BufferedReader( new FileReader( file ) );
-
                 for ( String line = reader.readLine(); line != null; line = reader.readLine() )
                 {
                     line = line.trim();
-
                     if ( !line.startsWith( "#" ) && line.length() != 0 )
                     {
                         lines.add( line );
                     }
                 }
-
-                reader.close();
-                reader = null;
-            }
-            finally
-            {
-                IOUtil.close( reader );
             }
         }
 
         return lines;
+
     }
 
     /**
