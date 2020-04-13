@@ -423,7 +423,8 @@ public class FileUtils
             encoding = Charset.defaultCharset().name();
         }
 
-        try ( Writer writer = new OutputStreamWriter( new FileOutputStream( file ), encoding ) ) {
+        try ( Writer writer = new OutputStreamWriter( new FileOutputStream( file ), encoding ) )
+        {
             for ( int i = 0; data != null && i < data.length; i++ )
             {
                 writer.write( data[i] );
@@ -1834,8 +1835,9 @@ public class FileUtils
             }
             
             // buffer so it isn't reading a byte at a time!
-            try ( Reader fileReader = new BufferedReader( new InputStreamReader( new FileInputStream( from ), encoding ) );
-                  Writer fileWriter = new OutputStreamWriter( new FileOutputStream( to ), encoding ) ) 
+            try ( Reader fileReader =
+                new BufferedReader( new InputStreamReader( new FileInputStream( from ), encoding ) );
+                            Writer fileWriter = new OutputStreamWriter( new FileOutputStream( to ), encoding ) )
             {
 
                 Reader wrapped = fileReader;
@@ -1857,7 +1859,7 @@ public class FileUtils
     }
 
     /**
-     * Note: the file content is read with platform encoding
+     * Note: the file content is read with platform encoding.
      *
      * @param file the file
      * @return a List containing every every line not starting with # and not empty
@@ -1872,14 +1874,12 @@ public class FileUtils
         {
             try ( BufferedReader reader = new BufferedReader( new FileReader( file ) ) )
             {
+                for ( String line = reader.readLine(); line != null; line = reader.readLine() )
                 {
-                    for ( String line = reader.readLine(); line != null; line = reader.readLine() )
+                    line = line.trim();
+                    if ( !line.startsWith( "#" ) && line.length() != 0 )
                     {
-                        line = line.trim();
-                        if ( !line.startsWith( "#" ) && line.length() != 0 )
-                        {
-                            lines.add( line );
-                        }
+                        lines.add( line );
                     }
                 }
             }

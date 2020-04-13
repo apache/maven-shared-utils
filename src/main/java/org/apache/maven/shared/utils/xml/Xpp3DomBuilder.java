@@ -92,9 +92,9 @@ public class Xpp3DomBuilder
 
     /**
      * @param reader {@link Reader}
-     * @param trim true/false.
-     * @return the built dom.
-     * @throws XmlPullParserException in case of an error.
+     * @param trim true/false
+     * @return the built dom
+     * @throws XmlPullParserException in case of an error
      */
     public static Xpp3Dom build( @WillClose Reader reader, boolean trim )
         throws XmlPullParserException
