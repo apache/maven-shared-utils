@@ -651,7 +651,7 @@ public class FileUtilsTest
     }
 
     @Test
-    public void copyFileWithFilteringAndNewerDestination()
+    public void copyFileWithFilteringAndNewerDestinationButModifiedContent()
             throws Exception
     {
         File from = write(
@@ -672,6 +672,32 @@ public class FileUtilsTest
             to.lastModified() >= MODIFIED_TODAY
         );
         assertFileContent( to, "Hello Bob!" );
+    }
+
+    @Test
+    public void copyFileWithFilteringAndNewerDestinationAndMatchingContent()
+            throws Exception
+    {
+        File from = write(
+            "from.txt",
+            MODIFIED_LAST_WEEK,
+            "Hello ${name}!"
+        );
+        File to = write(
+            "to.txt",
+            MODIFIED_YESTERDAY,
+            "Hello Bob!"
+        );
+
+        String encoding = null;
+
+        FileUtils.copyFile( from, to, null, wrappers( "name", "Bob" ) );
+
+        assertFileContent( to, "Hello Bob!" );
+        assertTrue(
+            "to.txt content should be unchanged and have been left alone",
+            to.lastModified() < MODIFIED_TODAY
+        );
     }
 
     private FileUtils.FilterWrapper[] wrappers( String key, String value )

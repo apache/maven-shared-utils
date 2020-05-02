@@ -36,11 +36,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.RandomAccessFile;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.URL;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
+import java.nio.charset.CoderResult;
 import java.nio.file.Files;
 import java.security.SecureRandom;
 import java.text.DecimalFormat;
@@ -110,7 +115,7 @@ public class FileUtils
     /**
      * The file copy buffer size (30 MB)
      */
-    private static final long FILE_COPY_BUFFER_SIZE = ONE_MB * 30;
+    private static final int FILE_COPY_BUFFER_SIZE = ONE_MB * 30;
 
     /**
      * The vm line separator
@@ -1823,20 +1828,88 @@ public class FileUtils
             {
                 encoding = Charset.defaultCharset().name();
             }
-            
+
             // buffer so it isn't reading a byte at a time!
             try ( Reader fileReader =
-                new BufferedReader( new InputStreamReader( new FileInputStream( from ), encoding ) );
-                            Writer fileWriter = new OutputStreamWriter( new FileOutputStream( to ), encoding ) )
+                    new BufferedReader( new InputStreamReader( new FileInputStream( from ), encoding ) ) )
             {
-
                 Reader wrapped = fileReader;
                 for ( FilterWrapper wrapper : wrappers )
                 {
                     wrapped = wrapper.getReader( wrapped );
                 }
 
-                IOUtil.copy( wrapped, fileWriter );
+                if ( overwrite || !to.exists() )
+                {
+                    try ( Writer fileWriter = new OutputStreamWriter( new FileOutputStream( to ), encoding ) )
+                    {
+                        IOUtil.copy( wrapped, fileWriter );
+                    }
+                }
+                else
+                {
+                    CharsetEncoder encoder = Charset.forName( encoding ).newEncoder();
+
+                    int totalBufferSize = FILE_COPY_BUFFER_SIZE;
+
+                    int charBufferSize = ( int ) Math.floor( totalBufferSize / ( 2 + 2 * encoder.maxBytesPerChar() ) );
+                    int byteBufferSize = ( int ) Math.ceil( charBufferSize * encoder.maxBytesPerChar() );
+
+                    CharBuffer newChars = CharBuffer.allocate( charBufferSize );
+                    ByteBuffer newBytes = ByteBuffer.allocate( byteBufferSize );
+                    ByteBuffer existingBytes = ByteBuffer.allocate( byteBufferSize );
+
+                    CoderResult coderResult;
+                    int existingRead;
+                    boolean writing = false;
+
+                    try ( final RandomAccessFile existing = new RandomAccessFile( to, "rw" ) )
+                    {
+                        int n;
+                        while ( -1 != ( n = wrapped.read( newChars ) ) )
+                        {
+                            newChars.flip();
+
+                            coderResult = encoder.encode( newChars, newBytes, n != 0 );
+                            if ( coderResult.isError() )
+                            {
+                                coderResult.throwException();
+                            }
+
+                            newBytes.flip();
+
+                            if ( !writing )
+                            {
+                                existingRead = existing.read( existingBytes.array(), 0, newBytes.remaining() );
+                                existingBytes.position( existingRead );
+                                existingBytes.flip();
+
+                                if ( newBytes.compareTo( existingBytes ) != 0 )
+                                {
+                                    writing = true;
+                                    if ( existingRead > 0 )
+                                    {
+                                        existing.seek( existing.getFilePointer() - existingRead );
+                                    }
+                                }
+                            }
+
+                            if ( writing )
+                            {
+                                existing.write( newBytes.array(), 0, newBytes.remaining() );
+                            }
+
+                            newChars.clear();
+                            newBytes.clear();
+                            existingBytes.clear();
+                        }
+
+                        if ( existing.length() > existing.getFilePointer() )
+                        {
+                            existing.setLength( existing.getFilePointer() );
+                        }
+                    }
+                }
             }
         }
     }
