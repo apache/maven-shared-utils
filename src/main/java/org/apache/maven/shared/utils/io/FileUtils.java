@@ -1810,10 +1810,16 @@ public class FileUtils
                                  @Nullable FilterWrapper[] wrappers, boolean overwrite )
         throws IOException
     {
-        if ( wrappers != null && wrappers.length > 0 )
+        if ( wrappers == null || wrappers.length == 0 )
         {
-            
-            if ( encoding == null || encoding.isEmpty() ) 
+            if ( overwrite || to.lastModified() < from.lastModified() )
+            {
+                copyFile( from, to );
+            }
+        }
+        else
+        {
+            if ( encoding == null || encoding.isEmpty() )
             {
                 encoding = Charset.defaultCharset().name();
             }
@@ -1831,13 +1837,6 @@ public class FileUtils
                 }
 
                 IOUtil.copy( wrapped, fileWriter );
-            }
-        }
-        else
-        {
-            if ( to.lastModified() < from.lastModified() || overwrite )
-            {
-                copyFile( from, to );
             }
         }
     }
