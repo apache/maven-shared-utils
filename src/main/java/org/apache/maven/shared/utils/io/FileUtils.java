@@ -40,6 +40,7 @@ import java.io.RandomAccessFile;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.URL;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.channels.FileChannel;
@@ -1868,7 +1869,7 @@ public class FileUtils
                         int n;
                         while ( -1 != ( n = wrapped.read( newChars ) ) )
                         {
-                            newChars.flip();
+                            ( ( Buffer ) newChars ).flip();
 
                             coderResult = encoder.encode( newChars, newBytes, n != 0 );
                             if ( coderResult.isError() )
@@ -1876,13 +1877,13 @@ public class FileUtils
                                 coderResult.throwException();
                             }
 
-                            newBytes.flip();
+                            ( ( Buffer ) newBytes ).flip();
 
                             if ( !writing )
                             {
                                 existingRead = existing.read( existingBytes.array(), 0, newBytes.remaining() );
-                                existingBytes.position( existingRead );
-                                existingBytes.flip();
+                                ( ( Buffer ) existingBytes ).position( existingRead );
+                                ( ( Buffer ) existingBytes ).flip();
 
                                 if ( newBytes.compareTo( existingBytes ) != 0 )
                                 {
@@ -1899,9 +1900,9 @@ public class FileUtils
                                 existing.write( newBytes.array(), 0, newBytes.remaining() );
                             }
 
-                            newChars.clear();
-                            newBytes.clear();
-                            existingBytes.clear();
+                            ( ( Buffer ) newChars ).clear();
+                            ( ( Buffer ) newBytes ).clear();
+                            ( ( Buffer ) existingBytes ).clear();
                         }
 
                         if ( existing.length() > existing.getFilePointer() )
