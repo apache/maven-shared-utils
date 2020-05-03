@@ -19,6 +19,8 @@ package org.apache.maven.shared.utils.logging;
  * under the License.
  */
 
+import java.nio.file.Path;
+
 /**
  * Message builder that supports configurable styling.
  * @see MessageUtils
@@ -61,6 +63,15 @@ public interface MessageBuilder
      * By default, cyan
      */
     MessageBuilder project( Object message );
+
+    /**
+     * Append a {@link Path} in path style.
+     * The path will be transformed to an absolute path (path.absolutePath() will be called).
+     * The path will be split into three parts, the working directory, module and file.
+     * By default, black, green, blue, respectively.
+     * If splitting the path is not possible, the whole path is blue, by default.
+     */
+    MessageBuilder path ( Path path );
     
     //
     // message building methods modelled after Ansi methods
