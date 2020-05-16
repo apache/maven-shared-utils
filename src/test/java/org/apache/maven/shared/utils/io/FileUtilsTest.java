@@ -494,6 +494,20 @@ public class FileUtilsTest
     }
 
     @Test
+    public void copyFileWithPermissions()
+        throws Exception
+    {
+        File source = new File( "/bin/sh" );
+        assumeThat( "Need an executable to copy", source.exists(), is( true ) );
+
+        File destination = new File( tempFolder.getRoot(), "executable" );
+
+        FileUtils.copyFile( source, destination );
+
+        assertThat( "Check executable", destination.canExecute(), is( true ) );
+    }
+
+    @Test
     public void copyFile2()
         throws Exception
     {
