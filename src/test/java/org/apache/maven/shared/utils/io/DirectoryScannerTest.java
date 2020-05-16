@@ -153,7 +153,6 @@ public class DirectoryScannerTest
         throws IOException
     {
         assumeFalse( Os.isFamily( Os.FAMILY_WINDOWS ) );
-        assumeTrue( Java7Support.isAtLeastJava7() );
 
         File testDir = SymlinkTestSetup.createStandardSymlinkTestDir( new File( "target/test/symlinkTestCase" ) );
 
@@ -191,7 +190,6 @@ public class DirectoryScannerTest
         throws IOException
     {
         assumeFalse( Os.isFamily( Os.FAMILY_WINDOWS ) );
-        assumeTrue( Java7Support.isAtLeastJava7() );
 
         DirectoryScanner ds = new DirectoryScanner();
         File testDir = SymlinkTestSetup.createStandardSymlinkTestDir( new File( "target/test/symlinkTestCase" ) );

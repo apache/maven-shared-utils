@@ -21,6 +21,7 @@ package org.apache.maven.shared.utils.io;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -902,13 +903,7 @@ public class DirectoryScanner
     boolean isSymbolicLink( final File parent, final String name )
         throws IOException
     {
-        if ( Java7Support.isAtLeastJava7() )
-        {
-            return Java7Support.isSymLink( parent );
-        }
-        final File resolvedParent = new File( parent.getCanonicalPath() );
-        final File toTest = new File( resolvedParent, name );
-        return !toTest.getAbsolutePath().equals( toTest.getCanonicalPath() );
+        return Files.isSymbolicLink( parent.toPath() );
     }
 
     private void setupDefaultFilters()

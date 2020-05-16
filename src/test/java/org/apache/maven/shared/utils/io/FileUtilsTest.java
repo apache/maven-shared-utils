@@ -4,7 +4,9 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -21,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -442,7 +445,6 @@ public class FileUtilsTest
     public void copyFileThatIsSymlink()
         throws Exception
     {
-        assumeTrue( Java7Support.isAtLeastJava7() );
         assumeFalse( Os.isFamily( Os.FAMILY_WINDOWS ) );
 
         File destination = new File( tempFolder.getRoot(), "symCopy.txt" );
@@ -450,7 +452,8 @@ public class FileUtilsTest
         File testDir = SymlinkTestSetup.createStandardSymlinkTestDir( new File( "target/test/symlinkCopy" ) );
 
         FileUtils.copyFile( new File( testDir, "symR" ), destination );
-        assertTrue( Java7Support.isSymLink(  destination ));
+
+        assertTrue( Files.isSymbolicLink( destination.toPath() ) );
     }
 
 
@@ -1437,6 +1440,19 @@ public class FileUtilsTest
     {
         assumeThat( File.separatorChar, is( '/' ) );
         assertThat( FileUtils.extension( "/test/foo.bar.txt" ), is( "txt" ) );
+    }
+
+    @Test
+    public void createAndReadSymlink()
+        throws Exception
+    {
+        assumeThat( System.getProperty( "os.name" ), not( startsWith( "Windows" ) ) );
+        File file = new File( "target/fzz" );
+        FileUtils.createSymbolicLink(  file, new File("../target") );
+
+        final File file1 = Files.readSymbolicLink( file.toPath() ).toFile();
+        assertEquals( "target", file1.getName() );
+        Files.delete( file.toPath() );
     }
 
     //// constants for testing

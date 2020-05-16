@@ -22,92 +22,26 @@ package org.apache.maven.shared.utils.io;
 import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.nio.file.Files;
 
 /**
  * Java7 feature detection
  *
  * @author Kristian Rosenvold
+ *
+ * @deprecated no longer needed, prefer to use {@link java.nio.file.Files} methods directly.
  */
+@Deprecated
 public class Java7Support
 {
-
-    private static final boolean IS_JAVA7;
-
-    private static Method isSymbolicLink;
-
-    private static Method delete;
-
-    private static Method toPath;
-
-    private static Method exists;
-
-    private static Method toFile;
-
-    private static Method readSymlink;
-
-    private static Method createSymlink;
-
-    private static Object emptyLinkOpts;
-
-    private static Object emptyFileAttributes;
-
-    static
-    {
-        boolean isJava7x = true;
-        try
-        {
-            ClassLoader cl = Thread.currentThread().getContextClassLoader();
-            Class<?> files = cl.loadClass( "java.nio.file.Files" );
-            Class<?> path = cl.loadClass( "java.nio.file.Path" );
-            Class<?> fa = cl.loadClass( "java.nio.file.attribute.FileAttribute" );
-            Class<?> linkOption = cl.loadClass( "java.nio.file.LinkOption" );
-            isSymbolicLink = files.getMethod( "isSymbolicLink", path );
-            delete = files.getMethod( "delete", path );
-            readSymlink = files.getMethod( "readSymbolicLink", path );
-
-            emptyFileAttributes = Array.newInstance( fa, 0 );
-            final Object o = emptyFileAttributes;
-            createSymlink = files.getMethod( "createSymbolicLink", path, path, o.getClass() );
-            emptyLinkOpts = Array.newInstance( linkOption, 0 );
-            exists = files.getMethod( "exists", path, emptyLinkOpts.getClass() );
-            toPath = File.class.getMethod( "toPath" );
-            toFile = path.getMethod( "toFile" );
-        }
-        catch ( ClassNotFoundException e )
-        {
-            isJava7x = false;
-        }
-        catch ( NoSuchMethodException e )
-        {
-            isJava7x = false;
-        }
-        IS_JAVA7 = isJava7x;
-    }
-
     /**
      * @param file The file to check for being a symbolic link.
      * @return true if the file is a symlink false otherwise.
      */
     public static boolean isSymLink( @Nonnull File file )
     {
-        try
-        {
-            Object path = toPath.invoke( file );
-            return (Boolean) isSymbolicLink.invoke( null, path );
-        }
-        catch ( IllegalAccessException e )
-        {
-            throw new RuntimeException( e );
-        }
-        catch ( InvocationTargetException e )
-        {
-            throw new RuntimeException( e );
-        }
+        return Files.isSymbolicLink( file.toPath() );
     }
-
 
     /**
      * @param symlink The sym link.
@@ -117,22 +51,8 @@ public class Java7Support
     @Nonnull public static File readSymbolicLink( @Nonnull File symlink )
         throws IOException
     {
-        try
-        {
-            Object path = toPath.invoke( symlink );
-            Object resultPath =  readSymlink.invoke( null, path );
-            return (File) toFile.invoke( resultPath );
-        }
-        catch ( IllegalAccessException e )
-        {
-            throw new RuntimeException( e );
-        }
-        catch ( InvocationTargetException e )
-        {
-            throw new RuntimeException( e );
-        }
+        return Files.readSymbolicLink( symlink.toPath() ).toFile();
     }
-
 
     /**
      * @param file The file to check.
@@ -142,21 +62,7 @@ public class Java7Support
     public static boolean exists( @Nonnull File file )
         throws IOException
     {
-        try
-        {
-            Object path = toPath.invoke( file );
-            final Object invoke = exists.invoke( null, path, emptyLinkOpts );
-            return (Boolean) invoke;
-        }
-        catch ( IllegalAccessException e )
-        {
-            throw new RuntimeException( e );
-        }
-        catch ( InvocationTargetException e )
-        {
-            throw (RuntimeException) e.getTargetException();
-        }
-
+        return Files.exists( file.toPath() );
     }
 
     /**
@@ -168,40 +74,9 @@ public class Java7Support
     @Nonnull public static File createSymbolicLink( @Nonnull File symlink,  @Nonnull File target )
         throws IOException
     {
-        try
-        {
-            if ( !exists( symlink ) )
-            {
-                Object link = toPath.invoke( symlink );
-                Object path = createSymlink.invoke( null, link, toPath.invoke( target ), emptyFileAttributes );
-                return (File) toFile.invoke( path );
-            }
-            return symlink;
-        }
-        catch ( IllegalAccessException e )
-        {
-            throw new RuntimeException( e );
-        }
-        catch ( InvocationTargetException e )
-        {
-            final Throwable targetException = e.getTargetException();
-            if ( targetException instanceof IOException )
-            {
-                throw (IOException) targetException;
-            }
-            else if ( targetException instanceof RuntimeException )
-            {
-                // java.lang.UnsupportedOperationException: Symbolic links not supported on this operating system
-                // java.lang.SecurityException: denies certain permissions see Javadoc
-                throw ( RuntimeException ) targetException;
-            }
-            else
-            {
-                throw new IOException( targetException.getClass() + ": " + targetException.getLocalizedMessage() );
-            }
-        }
-
+        return FileUtils.createSymbolicLink( symlink, target );
     }
+
     /**
      * Performs a nio delete
      * @param file the file to delete
@@ -210,19 +85,7 @@ public class Java7Support
     public static void delete( @Nonnull File file )
         throws IOException
     {
-        try
-        {
-            Object path = toPath.invoke( file );
-            delete.invoke( null, path );
-        }
-        catch ( IllegalAccessException e )
-        {
-            throw new RuntimeException( e );
-        }
-        catch ( InvocationTargetException e )
-        {
-            throw (IOException) e.getTargetException();
-        }
+        Files.delete( file.toPath() );
     }
 
     /**
@@ -230,7 +93,7 @@ public class Java7Support
      */
     public static boolean isJava7()
     {
-        return IS_JAVA7;
+        return true;
     }
 
     /**
@@ -238,7 +101,6 @@ public class Java7Support
      */
     public static boolean isAtLeastJava7()
     {
-        return IS_JAVA7;
+        return true;
     }
-
 }
