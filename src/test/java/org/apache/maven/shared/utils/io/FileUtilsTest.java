@@ -4,7 +4,9 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -1437,6 +1439,22 @@ public class FileUtilsTest
     {
         assumeThat( File.separatorChar, is( '/' ) );
         assertThat( FileUtils.extension( "/test/foo.bar.txt" ), is( "txt" ) );
+    }
+
+    @Test
+    public void createAndReadSymlink()
+        throws Exception
+    {
+        assumeThat( System.getProperty( "os.name" ), not( startsWith( "Windows" ) ) );
+        File file = new File( "target/fzz" );
+        if ( Java7Support.isAtLeastJava7() )
+        {
+            FileUtils.createSymbolicLink(  file, new File("../target") );
+
+            final File file1 = Java7Support.readSymbolicLink( file );
+            assertEquals( "target", file1.getName());
+            Java7Support.delete(  file );
+        }
     }
 
     //// constants for testing

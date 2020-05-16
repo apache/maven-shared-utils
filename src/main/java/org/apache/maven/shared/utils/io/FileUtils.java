@@ -41,6 +41,7 @@ import java.io.Writer;
 import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.security.SecureRandom;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -1981,4 +1982,19 @@ public class FileUtils
         return !file.getAbsolutePath().equals( canonical.getPath() );
     }
 
+    /**
+     * @param symlink The link name.
+     * @param target The target.
+     * @return The linked file.
+     * @throws IOException in case of an error.
+     */
+    @Nonnull public static File createSymbolicLink( @Nonnull File symlink,  @Nonnull File target )
+            throws IOException
+    {
+        if ( !Files.exists( symlink.toPath() ) )
+        {
+            return Files.createSymbolicLink( symlink.toPath(), target.toPath() ).toFile();
+        }
+        return symlink;
+    }
 }

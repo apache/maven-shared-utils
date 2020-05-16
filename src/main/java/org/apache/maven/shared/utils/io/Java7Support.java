@@ -71,11 +71,7 @@ public class Java7Support
     @Nonnull public static File createSymbolicLink( @Nonnull File symlink,  @Nonnull File target )
         throws IOException
     {
-        if ( !exists( symlink ) )
-        {
-            return Files.createSymbolicLink( symlink.toPath(), target.toPath() ).toFile();
-        }
-        return symlink;
+        return FileUtils.createSymbolicLink( symlink, target );
     }
 
     /**
