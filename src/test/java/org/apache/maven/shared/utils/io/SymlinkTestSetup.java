@@ -51,14 +51,12 @@ public class SymlinkTestSetup
         write( new File( srcDir, "fileX.txt" ), "FileX payload", StandardCharsets.UTF_8 );
         // todo: set file attributes (not used here)
 
-        Java7Support.createSymbolicLink( new File( srcDir, "symDir" ), new File( "targetDir" ) );
-        Java7Support.createSymbolicLink( new File( srcDir, "symLinkToDirOnTheOutside" ),
-                                         new File( "../dirOnTheOutside" ) );
-        Java7Support.createSymbolicLink( new File( srcDir, "symLinkToFileOnTheOutside" ),
-                                         new File( "../onTheOutside.txt" ) );
-        Java7Support.createSymbolicLink( new File( srcDir, "symR" ), new File( "fileR.txt" ) );
-        Java7Support.createSymbolicLink( new File( srcDir, "symW" ), new File( "fileW.txt" ) );
-        Java7Support.createSymbolicLink( new File( srcDir, "symX" ), new File( "fileX.txt" ) );
+        FileUtils.createSymbolicLink( new File( srcDir, "symDir" ), new File( "targetDir" ) );
+        FileUtils.createSymbolicLink( new File( srcDir, "symLinkToDirOnTheOutside" ), new File( "../dirOnTheOutside" ) );
+        FileUtils.createSymbolicLink( new File( srcDir, "symLinkToFileOnTheOutside" ), new File( "../onTheOutside.txt" ) );
+        FileUtils.createSymbolicLink( new File( srcDir, "symR" ), new File( "fileR.txt" ) );
+        FileUtils.createSymbolicLink( new File( srcDir, "symW" ), new File( "fileW.txt" ) );
+        FileUtils.createSymbolicLink( new File( srcDir, "symX" ), new File( "fileX.txt" ) );
         return srcDir;
     }
 }

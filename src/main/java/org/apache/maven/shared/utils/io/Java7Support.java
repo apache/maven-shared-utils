@@ -28,7 +28,10 @@ import java.nio.file.Files;
  * Java7 feature detection
  *
  * @author Kristian Rosenvold
+ *
+ * @deprecated no longer needed, prefer to use {@link java.nio.file.Files} methods directly.
  */
+@Deprecated
 public class Java7Support
 {
     /**

@@ -27,7 +27,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assume.assumeThat;
 import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.startsWith;
 
 public class Java7SupportTest
 {
@@ -35,12 +34,8 @@ public class Java7SupportTest
     public void testIsSymLink()
         throws Exception
     {
-
         File file = new File( "." );
-        if ( Java7Support.isAtLeastJava7() )
-        {
-            assertFalse( Java7Support.isSymLink( file ) );
-        }
+        assertFalse( Java7Support.isSymLink( file ) );
     }
 
 }

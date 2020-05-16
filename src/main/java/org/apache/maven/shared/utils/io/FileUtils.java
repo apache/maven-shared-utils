@@ -765,10 +765,10 @@ public class FileUtils
             final String message = "File " + source + " does not exist";
             throw new IOException( message );
         }
-        if ( Java7Support.isAtLeastJava7() && Java7Support.isSymLink( source ) )
+        if ( Files.isSymbolicLink( source.toPath() ) )
         {
-            File target = Java7Support.readSymbolicLink( source );
-            Java7Support.createSymbolicLink( destination, target );
+            File target = Files.readSymbolicLink( source.toPath() ).toFile();
+            createSymbolicLink( destination, target );
             return;
         }
 
@@ -1102,17 +1102,7 @@ public class FileUtils
     public static void delete( @Nonnull File file )
         throws IOException
     {
-        if ( Java7Support.isAtLeastJava7() )
-        {
-            Java7Support.delete( file );
-        }
-        else
-        {
-            if ( !file.delete() )
-            {
-                throw new IOException( "Could not delete " + file.getName() );
-            }
-        }
+        Files.delete( file.toPath() );
     }
 
     /**
@@ -1121,21 +1111,14 @@ public class FileUtils
      */
     public static boolean deleteLegacyStyle( @Nonnull File file )
     {
-        if ( Java7Support.isAtLeastJava7() )
+        try
         {
-            try
-            {
-                Java7Support.delete( file );
-                return true;
-            }
-            catch ( IOException e )
-            {
-                return false;
-            }
+            Files.delete( file.toPath() );
+            return true;
         }
-        else
+        catch ( IOException e )
         {
-            return file.delete();
+            return false;
         }
     }
 
@@ -1935,11 +1918,7 @@ public class FileUtils
     public static boolean isSymbolicLink( @Nonnull final File file )
         throws IOException
     {
-        if ( Java7Support.isAtLeastJava7() )
-        {
-            return Java7Support.isSymLink( file );
-        }
-        return isSymbolicLinkLegacy( file );
+        return Files.isSymbolicLink( file.toPath() );
     }
 
     /**
@@ -1954,7 +1933,7 @@ public class FileUtils
     public static boolean isSymbolicLinkForSure( @Nonnull final File file )
         throws IOException
     {
-        return Java7Support.isAtLeastJava7() && Java7Support.isSymLink( file );
+        return Files.isSymbolicLink( file.toPath() );
     }
 
     /**
