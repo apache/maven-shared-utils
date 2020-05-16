@@ -41,6 +41,7 @@ import java.io.Writer;
 import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.security.SecureRandom;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -818,6 +819,8 @@ public class FileUtils
                 pos += output.transferFrom( input, pos, count );
             }
         }
+
+        copyFilePermissions( source, destination );
     }
 
     /**
@@ -1855,6 +1858,38 @@ public class FileUtils
             {
                 copyFile( from, to );
             }
+        }
+
+        copyFilePermissions( from, to );
+    }
+
+    /**
+     * Attempts to copy file permissions from the source to the destination file.
+     * Initially attempts to copy posix file permissions, assuming that the files are both on posix filesystems.
+     * If the initial attempts fail then a second attempt using less precise permissions model.
+     * Note that permissions are copied on a best-efforts basis,
+     * failure to copy permissions will not result in an exception.
+     *
+     * @param source the file to copy permissions from.
+     * @param destination the file to copy permissions to.
+     */
+    private static void copyFilePermissions( @Nonnull File source, @Nonnull File destination )
+        throws IOException
+    {
+        try
+        {
+            // attempt to copy posix file permissions
+            Files.setPosixFilePermissions(
+                destination.toPath(),
+                Files.getPosixFilePermissions( source.toPath() )
+            );
+        }
+        catch ( UnsupportedOperationException e )
+        {
+            // fallback to setting partial permissions
+            destination.setExecutable( source.canExecute() );
+            destination.setReadable( source.canRead() );
+            destination.setWritable( source.canWrite() );
         }
     }
 
