@@ -497,14 +497,20 @@ public class FileUtilsTest
     public void copyFileWithPermissions()
         throws Exception
     {
-        File source = new File( "/bin/sh" );
-        assumeThat( "Need an executable to copy", source.exists(), is( true ) );
+        File source = new File( "src/test/resources/executable" );
+        source.setExecutable( true );
+        assumeThat( "Need an existing file to copy", source.exists(), is( true ) );
+        assumeThat( "Need an executable file to copy", source.canExecute(), is( true ) );
 
-        File destination = new File( tempFolder.getRoot(), "executable" );
+        File destination = new File( tempFolder.getRoot(), "executable-copy" );
 
         FileUtils.copyFile( source, destination );
 
-        assertThat( "Check executable", destination.canExecute(), is( true ) );
+        assertThat( "destination not exists: " + destination.getAbsolutePath()
+                        + ", directory content: " + Arrays.asList( destination.getParentFile().list() ),
+                    Files.exists( destination.toPath() ), is( true ) );
+
+        assertThat( "Check copy executable", destination.canExecute(), is( true ) );
     }
 
     @Test
