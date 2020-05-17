@@ -142,6 +142,7 @@
           <excludes combine.children="append">
             <exclude>src/test/resources/directorywalker/**/*</exclude>
             <exclude>src/test/resources/symlinks/**/*</exclude>
+            <exclude>src/test/resources/executable</exclude>
           </excludes>
         </configuration>
       </plugin>
