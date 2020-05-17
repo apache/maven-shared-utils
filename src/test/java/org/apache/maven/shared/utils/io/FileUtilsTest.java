@@ -1475,6 +1475,30 @@ public class FileUtilsTest
         Files.delete( file.toPath() );
     }
 
+    @Test
+    public void createSymbolicLinkWithDifferentTargetOverwritesSymlink()
+            throws Exception
+    {
+        assumeThat( System.getProperty( "os.name" ), not( startsWith( "Windows" ) ) );
+
+        // Arrange
+
+        final File symlink1 = new File( tempFolder.getRoot(), "symlink" );
+
+        FileUtils.createSymbolicLink( symlink1, testFile1 );
+
+        // Act
+
+        final File symlink2 = FileUtils.createSymbolicLink( symlink1, testFile2 );
+
+        // Assert
+
+        assertThat(
+            Files.readSymbolicLink( symlink2.toPath() ).toFile(),
+            CoreMatchers.equalTo( testFile2 )
+        );
+    }
+
     //// constants for testing
 
     private static final String[] MINIMUM_DEFAULT_EXCLUDES = {
