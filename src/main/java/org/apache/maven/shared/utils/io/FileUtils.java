@@ -42,6 +42,7 @@ import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.SecureRandom;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -2004,10 +2005,18 @@ public class FileUtils
     @Nonnull public static File createSymbolicLink( @Nonnull File symlink,  @Nonnull File target )
             throws IOException
     {
-        if ( !Files.exists( symlink.toPath() ) )
+        final Path symlinkPath = symlink.toPath();
+
+        if ( Files.exists( symlinkPath ) )
         {
-            return Files.createSymbolicLink( symlink.toPath(), target.toPath() ).toFile();
+            if ( target.equals( Files.readSymbolicLink( symlinkPath ).toFile() ) )
+            {
+                return symlink;
+            }
+
+            Files.delete( symlinkPath );
         }
-        return symlink;
+
+        return Files.createSymbolicLink( symlinkPath, target.toPath() ).toFile();
     }
 }
