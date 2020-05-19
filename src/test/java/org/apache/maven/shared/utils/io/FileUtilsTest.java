@@ -1429,7 +1429,7 @@ public class FileUtilsTest
         throws IOException
     {
         // This testcase will pass when running under java7 or higher
-        assumeThat( Os.isFamily(Os.FAMILY_WINDOWS), is(false) );
+        assumeFalse( Os.isFamily( Os.FAMILY_WINDOWS ) );
 
         File file = new File( "src/test/resources/symlinks/src/symDir" );
         assertTrue(FileUtils.isSymbolicLink(file  ));
@@ -1466,7 +1466,8 @@ public class FileUtilsTest
     public void createAndReadSymlink()
         throws Exception
     {
-        assumeThat( System.getProperty( "os.name" ), not( startsWith( "Windows" ) ) );
+        assumeFalse( Os.isFamily( Os.FAMILY_WINDOWS ) );
+
         File file = new File( "target/fzz" );
         FileUtils.createSymbolicLink(  file, new File("../target") );
 
@@ -1479,7 +1480,7 @@ public class FileUtilsTest
     public void createSymbolicLinkWithDifferentTargetOverwritesSymlink()
             throws Exception
     {
-        assumeThat( System.getProperty( "os.name" ), not( startsWith( "Windows" ) ) );
+        assumeFalse( Os.isFamily( Os.FAMILY_WINDOWS ) );
 
         // Arrange
 
