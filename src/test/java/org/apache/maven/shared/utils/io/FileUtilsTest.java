@@ -156,10 +156,9 @@ public class FileUtilsTest
     void assertEqualContent( byte[] b0, File file )
         throws IOException
     {
-        InputStream is = new java.io.FileInputStream( file );
         int count = 0, numRead = 0;
         byte[] b1 = new byte[b0.length];
-        try
+        try ( InputStream is = new FileInputStream( file ) )
         {
             while ( count < b0.length && numRead >= 0 )
             {
@@ -171,10 +170,6 @@ public class FileUtilsTest
             {
                 assertThat( "byte " + i + " differs", b1[i], is( b0[i] ) );
             }
-        }
-        finally
-        {
-            is.close();
         }
     }
 
@@ -345,16 +340,11 @@ public class FileUtilsTest
         String resourceName = "/java/lang/Object.class";
         FileUtils.copyURLToFile( getClass().getResource( resourceName ), file );
 
-        // Tests that resuorce was copied correctly
-        FileInputStream fis = new FileInputStream( file );
-        try
+        // Tests that resource was copied correctly
+        try ( FileInputStream fis = new FileInputStream( file ) )
         {
             assertThat( "Content is not equal.",
                         IOUtil.contentEquals( getClass().getResourceAsStream( resourceName ), fis ), is( true ) );
-        }
-        finally
-        {
-            fis.close();
         }
         //TODO Maybe test copy to itself like for copyFile()
     }
@@ -1180,14 +1170,9 @@ public class FileUtilsTest
         String filename = file1.getAbsolutePath();
 
         //Create test file on-the-fly (used to be in CVS)
-        OutputStream out = new java.io.FileOutputStream( file1 );
-        try
+        try ( OutputStream out = new java.io.FileOutputStream( file1 ) )
         {
             out.write( "This is a test".getBytes( "UTF-8" ) );
-        }
-        finally
-        {
-            out.close();
         }
 
         File file2 = new File( tempFolder.getRoot(), "test2.txt" );
