@@ -45,6 +45,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -449,16 +450,14 @@ public class FileUtilsTest
             testFile1.lastModified() == destination.lastModified());*/
     }
 
-    private static long MILLIS_PER_DAY = 24 * 60 * 60 * 1000L;
-
     /** A time today, rounded down to the previous minute */
-    private static long MODIFIED_TODAY = (System.currentTimeMillis() / 60_000) * 60_000;
+    private static long MODIFIED_TODAY = (System.currentTimeMillis() / TimeUnit.MINUTES.toMillis( 1 )) * TimeUnit.MINUTES.toMillis( 1 );
 
     /** A time yesterday, rounded down to the previous minute */
-    private static long MODIFIED_YESTERDAY = MODIFIED_TODAY - MILLIS_PER_DAY;
+    private static long MODIFIED_YESTERDAY = MODIFIED_TODAY - TimeUnit.DAYS.toMillis( 1 );
 
     /** A time last week, rounded down to the previous minute */
-    private static long MODIFIED_LAST_WEEK = MODIFIED_TODAY - MILLIS_PER_DAY * 7;
+    private static long MODIFIED_LAST_WEEK = MODIFIED_TODAY - TimeUnit.DAYS.toMillis( 7 );
 
     @Test
     public void copyFileWithNoFiltersAndNoDestination()
