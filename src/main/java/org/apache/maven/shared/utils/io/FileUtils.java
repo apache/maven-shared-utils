@@ -277,13 +277,11 @@ public class FileUtils
     @Nonnull public static String fileRead( @Nonnull File file, @Nullable String encoding )
         throws IOException
     {
-        StringBuilder buf = new StringBuilder();   
-        if ( encoding == null ) 
-        {
-            encoding = Charset.defaultCharset().name();
-        }
+        Charset charset = charset( encoding );
 
-        try ( Reader reader = new InputStreamReader( new FileInputStream( file ), encoding ) )
+        StringBuilder buf = new StringBuilder();
+
+        try ( Reader reader = new InputStreamReader( new FileInputStream( file ), charset ) )
         {
             int count;
             char[] b = new char[512];
@@ -335,15 +333,11 @@ public class FileUtils
     public static void fileAppend( @Nonnull String fileName, @Nullable String encoding, @Nonnull String data )
         throws IOException
     {
-        
-        if ( encoding == null ) 
-        {
-            encoding = Charset.defaultCharset().name();
-        }
-        
+        Charset charset = charset( encoding );
+
         try ( OutputStream out = new FileOutputStream( fileName, true ) )
         {
-          out.write( data.getBytes( encoding ) );
+          out.write( data.getBytes( charset ) );
         }
     }
 
@@ -387,13 +381,9 @@ public class FileUtils
     public static void fileWrite( @Nonnull File file, @Nullable String encoding, @Nonnull String data )
         throws IOException
     {
-        
-        if ( encoding == null ) 
-        {
-            encoding = Charset.defaultCharset().name();
-        }
+        Charset charset = charset( encoding );
 
-        try ( Writer writer = new OutputStreamWriter( new FileOutputStream( file ), encoding ) ) 
+        try ( Writer writer = new OutputStreamWriter( new FileOutputStream( file ), charset ) )
         {
             writer.write( data );
         }
@@ -424,13 +414,9 @@ public class FileUtils
     public static void fileWriteArray( @Nonnull File file, @Nullable String encoding, @Nullable String... data )
         throws IOException
     {
-        
-        if ( encoding == null ) 
-        {
-            encoding = Charset.defaultCharset().name();
-        }
+        Charset charset = charset( encoding );
 
-        try ( Writer writer = new OutputStreamWriter( new FileOutputStream( file ), encoding ) )
+        try ( Writer writer = new OutputStreamWriter( new FileOutputStream( file ), charset ) )
         {
             for ( int i = 0; data != null && i < data.length; i++ )
             {
@@ -1825,14 +1811,11 @@ public class FileUtils
         }
         else
         {
-            if ( encoding == null || encoding.isEmpty() )
-            {
-                encoding = Charset.defaultCharset().name();
-            }
+            Charset charset = charset( encoding );
 
             // buffer so it isn't reading a byte at a time!
             try ( Reader fileReader =
-                    new BufferedReader( new InputStreamReader( new FileInputStream( from ), encoding ) ) )
+                    new BufferedReader( new InputStreamReader( new FileInputStream( from ), charset ) ) )
             {
                 Reader wrapped = fileReader;
                 for ( FilterWrapper wrapper : wrappers )
@@ -1842,14 +1825,14 @@ public class FileUtils
 
                 if ( overwrite || !to.exists() )
                 {
-                    try ( Writer fileWriter = new OutputStreamWriter( new FileOutputStream( to ), encoding ) )
+                    try ( Writer fileWriter = new OutputStreamWriter( new FileOutputStream( to ), charset ) )
                     {
                         IOUtil.copy( wrapped, fileWriter );
                     }
                 }
                 else
                 {
-                    CharsetEncoder encoder = Charset.forName( encoding ).newEncoder();
+                    CharsetEncoder encoder = charset.newEncoder();
 
                     int totalBufferSize = FILE_COPY_BUFFER_SIZE;
 
@@ -1944,6 +1927,23 @@ public class FileUtils
 
         return lines;
 
+    }
+
+    /**
+     * Returns the named charset or the default charset.
+     * @param encoding the name or alias of the charset, null or empty
+     * @return A charset object for the named or default charset.
+     */
+    private static Charset charset( String encoding )
+    {
+        if ( encoding == null || encoding.isEmpty() )
+        {
+            return Charset.defaultCharset();
+        }
+        else
+        {
+            return Charset.forName( encoding );
+        }
     }
 
     /**
