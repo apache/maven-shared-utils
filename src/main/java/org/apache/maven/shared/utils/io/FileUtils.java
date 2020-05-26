@@ -30,12 +30,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.RandomAccessFile;
 import java.io.Reader;
 import java.io.Writer;
@@ -281,7 +278,8 @@ public class FileUtils
 
         StringBuilder buf = new StringBuilder();
 
-        try ( Reader reader = new InputStreamReader( new FileInputStream( file ), charset ) )
+
+        try ( Reader reader = Files.newBufferedReader( file.toPath(), charset ) )
         {
             int count;
             char[] b = new char[512];
@@ -383,7 +381,7 @@ public class FileUtils
     {
         Charset charset = charset( encoding );
 
-        try ( Writer writer = new OutputStreamWriter( new FileOutputStream( file ), charset ) )
+        try ( Writer writer = Files.newBufferedWriter( file.toPath(), charset ) )
         {
             writer.write( data );
         }
@@ -416,7 +414,7 @@ public class FileUtils
     {
         Charset charset = charset( encoding );
 
-        try ( Writer writer = new OutputStreamWriter( new FileOutputStream( file ), charset ) )
+        try ( Writer writer = Files.newBufferedWriter( file.toPath(), charset ) )
         {
             for ( int i = 0; data != null && i < data.length; i++ )
             {
@@ -1814,8 +1812,7 @@ public class FileUtils
             Charset charset = charset( encoding );
 
             // buffer so it isn't reading a byte at a time!
-            try ( Reader fileReader =
-                    new BufferedReader( new InputStreamReader( new FileInputStream( from ), charset ) ) )
+            try ( Reader fileReader = Files.newBufferedReader( from.toPath(), charset ) )
             {
                 Reader wrapped = fileReader;
                 for ( FilterWrapper wrapper : wrappers )
@@ -1825,7 +1822,7 @@ public class FileUtils
 
                 if ( overwrite || !to.exists() )
                 {
-                    try ( Writer fileWriter = new OutputStreamWriter( new FileOutputStream( to ), charset ) )
+                    try ( Writer fileWriter = Files.newBufferedWriter( to.toPath(), charset ) )
                     {
                         IOUtil.copy( wrapped, fileWriter );
                     }
@@ -1912,7 +1909,7 @@ public class FileUtils
 
         if ( file.exists() )
         {
-            try ( BufferedReader reader = new BufferedReader( new FileReader( file ) ) )
+            try ( BufferedReader reader = Files.newBufferedReader( file.toPath(), Charset.defaultCharset() ) )
             {
                 for ( String line = reader.readLine(); line != null; line = reader.readLine() )
                 {
