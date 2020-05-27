@@ -2046,13 +2046,6 @@ public class FileUtils
     /**
      * Checks whether a given file is a symbolic link.
      *
-     * This only works reliably on java7 and higher. For earlier version we use a highly crappy heuristic
-     * that mostly does not work.
-     * <p>
-     * It doesn't really test for symbolic links but whether the canonical and absolute paths of the file are identical
-     * - this may lead to false positives on some platforms.
-     * </p>
-     *
      * @param file the file to check
      * @throws IOException in case of failure.
      * @return true if symbolic link false otherwise.
@@ -2068,10 +2061,9 @@ public class FileUtils
      * Checks whether a given file is a symbolic link.
      *
      * @param file the file to check
-     * @return true if and only if we reliably can say this is a symlink. This will
-     *         always return false for java versions prior to 1.7.
+     * @return true if and only if we reliably can say this is a symlink
      *
-     * @throws IOException in case of failure.
+     * @throws IOException in case of failure
      */
     public static boolean isSymbolicLinkForSure( @Nonnull final File file )
         throws IOException
