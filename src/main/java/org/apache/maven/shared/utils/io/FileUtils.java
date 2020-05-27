@@ -161,47 +161,52 @@ public class FileUtils
      * Returns the directory path portion of a file specification string.
      * Matches the equally named unix command.
      *
-     * @param filename the file path
+     * @param path the file path
      * @return the directory portion excluding the ending file separator
+     * @deprecated use {@code Paths.get(path).getParent().getName()}
      */
-    @Nonnull public static String dirname( @Nonnull String filename )
+    @Deprecated
+    @Nonnull public static String dirname( @Nonnull String path )
     {
-        int i = filename.lastIndexOf( File.separator );
-        return ( i >= 0 ? filename.substring( 0, i ) : "" );
+        int i = path.lastIndexOf( File.separator );
+        return ( i >= 0 ? path.substring( 0, i ) : "" );
     }
 
     /**
-     * Returns the filename portion of a file specification string.
+     * Returns the filename portion of a path.
      *
-     * @param filename the file path
+     * @param path the file path
      * @return the filename string with extension
+     * @deprecated use {@code Paths.get(path).getName()}
      */
-    @Nonnull public static String filename( @Nonnull String filename )
+    @Deprecated
+    @Nonnull public static String filename( @Nonnull String path )
     {
-        int i = filename.lastIndexOf( File.separator );
-        return ( i >= 0 ? filename.substring( i + 1 ) : filename );
+        int i = path.lastIndexOf( File.separator );
+        return ( i >= 0 ? path.substring( i + 1 ) : path );
     }
 
     /**
-     * Returns the extension portion of a file specification string.
-     * This everything after the last dot '.' in the filename (NOT including
-     * the dot).
+     * Returns the extension portion of a file path.
+     * This is everything after the last dot '.' in the path (NOT including the dot).
      *
-     * @param filename the file path
+     * @param path the file path
      * @return the extension of the file
+     * @deprecated use {@code org.apache.commons.io.FilenameUtils.getExtension}
      */
-    @Nonnull public static String extension( @Nonnull String filename )
+    @Deprecated
+    @Nonnull public static String extension( @Nonnull String path )
     {
         // Ensure the last dot is after the last file separator
-        int lastSep = filename.lastIndexOf( File.separatorChar );
+        int lastSep = path.lastIndexOf( File.separatorChar );
         int lastDot;
         if ( lastSep < 0 )
         {
-            lastDot = filename.lastIndexOf( '.' );
+            lastDot = path.lastIndexOf( '.' );
         }
         else
         {
-            lastDot = filename.substring( lastSep + 1 ).lastIndexOf( '.' );
+            lastDot = path.substring( lastSep + 1 ).lastIndexOf( '.' );
             if ( lastDot >= 0 )
             {
                 lastDot += lastSep + 1;
@@ -210,7 +215,7 @@ public class FileUtils
 
         if ( lastDot >= 0 && lastDot > lastSep )
         {
-            return filename.substring( lastDot + 1 );
+            return path.substring( lastDot + 1 );
         }
 
         return "";
@@ -221,7 +226,9 @@ public class FileUtils
      *
      * @param fileName the file path
      * @return true if file exists
+     * @deprecated use {@code java.io.File.exists()}
      */
+    @Deprecated
     public static boolean fileExists( @Nonnull String fileName )
     {
         File file = new File( fileName );
@@ -234,7 +241,9 @@ public class FileUtils
      * @param file the file path
      * @return the file content using the platform encoding
      * @throws IOException if any
+     * @deprecated use {@code new String(java.nio.files.Files.readAllBytes(file))}
      */
+    @Deprecated
     @Nonnull public static String fileRead( @Nonnull String file )
         throws IOException
     {
@@ -246,7 +255,9 @@ public class FileUtils
      * @param encoding the wanted encoding
      * @return the file content using the specified encoding
      * @throws IOException if any
+     * @deprecated use {@code new String(java.nio.files.Files.readAllBytes(Paths.get(file)), encoding)}
      */
+    @Deprecated
     @Nonnull private static String fileRead( @Nonnull String file, @Nullable String encoding )
         throws IOException
     {
@@ -259,7 +270,9 @@ public class FileUtils
      * @param file the file path
      * @return the file content using the platform encoding
      * @throws IOException if any
+     * @deprecated use {@code new String(java.nio.files.Files.readAllBytes(file.toPath()))}
      */
+    @Deprecated
     @Nonnull public static String fileRead( @Nonnull File file )
         throws IOException
     {
@@ -271,7 +284,9 @@ public class FileUtils
      * @param encoding the wanted encoding
      * @return the file content using the specified encoding
      * @throws IOException if any
+     * @deprecated use {@code new String(java.nio.files.Files.readAllBytes(file.toPath()), encoding)}
      */
+    @Deprecated
     @Nonnull public static String fileRead( @Nonnull File file, @Nullable String encoding )
         throws IOException
     {
@@ -298,7 +313,9 @@ public class FileUtils
      * @return the file content lines as String[] using the system default encoding.
      * An empty List if the file doesn't exist.
      * @throws IOException in case of failure
+     * @deprecated use {@code java.nio.files.Files.readAllLines()}
      */
+    @Deprecated
     @Nonnull public static String[] fileReadArray( @Nonnull File file )
         throws IOException
     {
@@ -314,7 +331,10 @@ public class FileUtils
      * @param fileName the path of the file to write
      * @param data     the content to write to the file
      * @throws IOException if any
+     * @deprecated use {@code java.nio.files.Files.write(filename, data.getBytes(),
+     *     StandardOpenOption.APPEND, StandardOpenOption.CREATE)}
      */
+    @Deprecated
     public static void fileAppend( @Nonnull String fileName, @Nonnull String data )
         throws IOException
     {
@@ -328,7 +348,10 @@ public class FileUtils
      * @param encoding the encoding of the file
      * @param data     the content to write to the file
      * @throws IOException if any
+     * @deprecated use {@code java.nio.files.Files.write(filename, data.getBytes(encoding),
+     *     StandardOpenOption.APPEND, StandardOpenOption.CREATE)}
      */
+    @Deprecated
     public static void fileAppend( @Nonnull String fileName, @Nullable String encoding, @Nonnull String data )
         throws IOException
     {
@@ -347,7 +370,10 @@ public class FileUtils
      * @param fileName the path of the file to write
      * @param data     the content to write to the file
      * @throws IOException if any
+     * @deprecated use {@code java.nio.files.Files.write(filename,
+     *     data.getBytes(), StandardOpenOption.CREATE)}
      */
+    @Deprecated
     public static void fileWrite( @Nonnull String fileName, @Nonnull String data )
         throws IOException
     {
@@ -361,7 +387,10 @@ public class FileUtils
      * @param encoding the encoding of the file
      * @param data     the content to write to the file
      * @throws IOException if any
+     * @deprecated use {@code java.nio.files.Files.write(Paths.get(filename),
+     *     data.getBytes(encoding), StandardOpenOption.CREATE)}
      */
+    @Deprecated
     public static void fileWrite( @Nonnull String fileName, @Nullable String encoding, @Nonnull String data )
         throws IOException
     {
@@ -376,7 +405,10 @@ public class FileUtils
      * @param encoding the encoding of the file
      * @param data     the content to write to the file
      * @throws IOException if any
+     * @deprecated use {@code java.nio.files.Files.write(file.toPath(),
+     *     data.getBytes(encoding), StandardOpenOption.CREATE)}
      */
+    @Deprecated
     public static void fileWrite( @Nonnull File file, @Nullable String encoding, @Nonnull String data )
         throws IOException
     {
@@ -395,7 +427,10 @@ public class FileUtils
      * @param file the path of the file to write
      * @param data the content to write to the file
      * @throws IOException if any
+     * @deprecated use {@code java.nio.files.Files.write(file.toPath(),
+     *     data.getBytes(encoding), StandardOpenOption.CREATE)}
      */
+    @Deprecated
     public static void fileWriteArray( @Nonnull File file, @Nullable String... data )
         throws IOException
     {
@@ -405,11 +440,14 @@ public class FileUtils
     /**
      * Writes String array data to a file. The file is created if it does not exist.
      *
-     * @param file     the path of the file to write
+     * @param file the path of the file to write
      * @param encoding the encoding of the file
-     * @param data     the content to write to the file
+     * @param data the content to write to the file
      * @throws IOException if any
+     * @deprecated use {@code java.nio.files.Files.write(file.toPath(),
+     *     data.getBytes(encoding), StandardOpenOption.CREATE)}
      */
+    @Deprecated
     public static void fileWriteArray( @Nonnull File file, @Nullable String encoding, @Nullable String... data )
         throws IOException
     {
@@ -744,7 +782,7 @@ public class FileUtils
      * @param destination a non-directory <code>File</code> to write bytes to (possibly
      *                    overwriting)
      * @throws IOException  if <code>source</code> does not exist, <code>destination</code> cannot be
-     *                      written to, or an IO error occurs during copying.
+     *                      written to, or an IO error occurs during copying
      * @throws java.io.FileNotFoundException if <code>destination</code> is a directory
      */
     public static void copyFile( @Nonnull final File source, @Nonnull final File destination )
@@ -970,8 +1008,8 @@ public class FileUtils
      *
      * @param baseFile Where to resolve <code>filename</code> from, if <code>filename</code> is
      *                 relative.
-     * @param filename Absolute or relative file path to resolve.
-     * @return The canonical <code>File</code> of <code>filename</code>.
+     * @param filename absolute or relative file path to resolve
+     * @return the canonical <code>File</code> of <code>filename</code>
      */
     @Nonnull public static File resolveFile( final File baseFile, @Nonnull String filename )
     {
@@ -1285,7 +1323,7 @@ public class FileUtils
      * Recursively count size of a directory.
      *
      * @param directory a directory
-     * @return size of directory in bytes.
+     * @return size of directory in bytes
      */
     public static long sizeOfDirectory( @Nonnull final String directory )
     {
@@ -1296,7 +1334,7 @@ public class FileUtils
      * Recursively count size of a directory.
      *
      * @param directory a directory
-     * @return size of directory in bytes.
+     * @return size of directory in bytes
      */
     public static long sizeOfDirectory( @Nonnull final File directory )
     {
@@ -2008,18 +2046,12 @@ public class FileUtils
     /**
      * Checks whether a given file is a symbolic link.
      *
-     * This only works reliably on java7 and higher. For earlier version we use a highly crappy heuristic
-     * that mostly does not work.
-     * <p>
-     * It doesn't really test for symbolic links but whether the canonical and absolute paths of the file are identical
-     * - this may lead to false positives on some platforms.
-     * </p>
-     *
      * @param file the file to check
      * @throws IOException in case of failure.
      * @return true if symbolic link false otherwise.
-     *
+     * @deprecated use {@code java.nio.file.Files.isSymbolicLink(file.toPath())}
      */
+    @Deprecated
     public static boolean isSymbolicLink( @Nonnull final File file )
         throws IOException
     {
@@ -2030,40 +2062,16 @@ public class FileUtils
      * Checks whether a given file is a symbolic link.
      *
      * @param file the file to check
-     * @return true if and only if we reliably can say this is a symlink. This will
-     *         always return false for java versions prior to 1.7.
+     * @return true if and only if we reliably can say this is a symlink
      *
-     * @throws IOException in case of failure.
+     * @throws IOException in case of failure
+     * @deprecated use {@code java.nio.file.Files.isSymbolicLink(file.toPath())}
      */
+    @Deprecated
     public static boolean isSymbolicLinkForSure( @Nonnull final File file )
         throws IOException
     {
         return Files.isSymbolicLink( file.toPath() );
-    }
-
-    /**
-     * Checks whether a given file is a symbolic link.
-     * <p>
-     * It doesn't really test for symbolic links but whether the canonical and absolute
-     * paths of the file are identical - this may lead to false positives on some platforms.
-     *
-     * It also returns true for any file that has been reached via a symbolic link,
-     * if you decide to traverse into the symlink.
-     *
-     * As can be seen from the "return" clause of this method, there is really no
-     * guarantee of any sort from this method. Small wonder this ever got used for
-     * anything.
-     * </p>
-     *
-     * @param file the file to check
-     * @return true if the file is a symbolic link or if we're on some crappy os.
-     *         false if the file is not a symlink or we're not able to detect it.
-     */
-    static boolean isSymbolicLinkLegacy( @Nonnull final File file )
-        throws IOException
-    {
-        final File canonical = new File( file.getCanonicalPath() );
-        return !file.getAbsolutePath().equals( canonical.getPath() );
     }
 
     /**
