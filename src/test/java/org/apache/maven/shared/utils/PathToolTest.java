@@ -23,21 +23,21 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Assume;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.Assert;
 import org.junit.rules.TemporaryFolder;
 
 
 import java.io.File;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 
 /**
  * Test the {@link PathTool} class.
  *
- * We don't need to test this
  * @author <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
-public class PathToolTest extends Assert
+public class PathToolTest
 {
 
     @Rule

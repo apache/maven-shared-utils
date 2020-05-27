@@ -27,6 +27,7 @@ import org.junit.Assert;
 import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * This class will test the 'Os' class which evaluates
@@ -35,7 +36,6 @@ import static org.hamcrest.CoreMatchers.*;
  * @author <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
 public class OsTest
-    extends Assert
 {
     private String origOsName;
     private String origOsArch;
@@ -70,34 +70,34 @@ public class OsTest
         Os os  = new Os();
         os.eval();
 
-        assertTrue( Os.isName( Os.FAMILY_OS2 ) );
+        Assert.assertTrue( Os.isName( Os.FAMILY_OS2 ) );
 
-        assertFalse( Os.isName( Os.FAMILY_DOS ) );
-        assertFalse( Os.isName( Os.FAMILY_MAC ) );
-        assertFalse( Os.isName( Os.FAMILY_NETWARE ) );
-        assertFalse( Os.isName( Os.FAMILY_OPENVMS ) );
-        assertFalse( Os.isName( Os.FAMILY_OS400 ) );
-        assertFalse( Os.isName( Os.FAMILY_TANDEM ) );
-        assertFalse( Os.isName( Os.FAMILY_UNIX ) );
-        assertFalse( Os.isName( Os.FAMILY_WIN9X ) );
-        assertFalse( Os.isName( Os.FAMILY_WINDOWS ) );
-        assertFalse( Os.isName( Os.FAMILY_ZOS ) );
+        Assert.assertFalse( Os.isName( Os.FAMILY_DOS ) );
+        Assert.assertFalse( Os.isName( Os.FAMILY_MAC ) );
+        Assert.assertFalse( Os.isName( Os.FAMILY_NETWARE ) );
+        Assert.assertFalse( Os.isName( Os.FAMILY_OPENVMS ) );
+        Assert.assertFalse( Os.isName( Os.FAMILY_OS400 ) );
+        Assert.assertFalse( Os.isName( Os.FAMILY_TANDEM ) );
+        Assert.assertFalse( Os.isName( Os.FAMILY_UNIX ) );
+        Assert.assertFalse( Os.isName( Os.FAMILY_WIN9X ) );
+        Assert.assertFalse( Os.isName( Os.FAMILY_WINDOWS ) );
+        Assert.assertFalse( Os.isName( Os.FAMILY_ZOS ) );
     }
 
     @Test
     public void testFamilyNames()
     {
-        assertEquals( Os.FAMILY_DOS, "dos" );
-        assertEquals( Os.FAMILY_MAC, "mac" );
-        assertEquals( Os.FAMILY_NETWARE, "netware" );
-        assertEquals( Os.FAMILY_OPENVMS, "openvms" );
-        assertEquals( Os.FAMILY_OS2, "os/2" );
-        assertEquals( Os.FAMILY_OS400, "os/400" );
-        assertEquals( Os.FAMILY_TANDEM, "tandem" );
-        assertEquals( Os.FAMILY_UNIX, "unix" );
-        assertEquals( Os.FAMILY_WIN9X, "win9x" );
-        assertEquals( Os.FAMILY_WINDOWS, "windows" );
-        assertEquals( Os.FAMILY_ZOS, "z/os" );
+        Assert.assertEquals( Os.FAMILY_DOS, "dos" );
+        Assert.assertEquals( Os.FAMILY_MAC, "mac" );
+        Assert.assertEquals( Os.FAMILY_NETWARE, "netware" );
+        Assert.assertEquals( Os.FAMILY_OPENVMS, "openvms" );
+        Assert.assertEquals( Os.FAMILY_OS2, "os/2" );
+        Assert.assertEquals( Os.FAMILY_OS400, "os/400" );
+        Assert.assertEquals( Os.FAMILY_TANDEM, "tandem" );
+        Assert.assertEquals( Os.FAMILY_UNIX, "unix" );
+        Assert.assertEquals( Os.FAMILY_WIN9X, "win9x" );
+        Assert.assertEquals( Os.FAMILY_WINDOWS, "windows" );
+        Assert.assertEquals( Os.FAMILY_ZOS, "z/os" );
     }
 
     @Test
@@ -105,20 +105,20 @@ public class OsTest
     {
         Set<String> osFamilies = Os.getValidFamilies();
 
-        assertTrue( "OsFamilies Set size"
+        Assert.assertTrue( "OsFamilies Set size"
                   , osFamilies.size() >= 11 );
         
-        assert( osFamilies.contains( Os.FAMILY_DOS ) );
-        assert( osFamilies.contains( Os.FAMILY_MAC ) );
-        assert( osFamilies.contains( Os.FAMILY_NETWARE ) );
-        assert( osFamilies.contains( Os.FAMILY_OPENVMS ) );
-        assert( osFamilies.contains( Os.FAMILY_OS2 ) );
-        assert( osFamilies.contains( Os.FAMILY_OS400 ) );
-        assert( osFamilies.contains( Os.FAMILY_TANDEM ) );
-        assert( osFamilies.contains( Os.FAMILY_UNIX ) );
-        assert( osFamilies.contains( Os.FAMILY_WIN9X ) );
-        assert( osFamilies.contains( Os.FAMILY_WINDOWS ) );
-        assert( osFamilies.contains( Os.FAMILY_ZOS ) );
+        Assert.assertTrue( osFamilies.contains( Os.FAMILY_DOS ) );
+        Assert.assertTrue( osFamilies.contains( Os.FAMILY_MAC ) );
+        Assert.assertTrue( osFamilies.contains( Os.FAMILY_NETWARE ) );
+        Assert.assertTrue( osFamilies.contains( Os.FAMILY_OPENVMS ) );
+        Assert.assertTrue( osFamilies.contains( Os.FAMILY_OS2 ) );
+        Assert.assertTrue( osFamilies.contains( Os.FAMILY_OS400 ) );
+        Assert.assertTrue( osFamilies.contains( Os.FAMILY_TANDEM ) );
+        Assert.assertTrue( osFamilies.contains( Os.FAMILY_UNIX ) );
+        Assert.assertTrue( osFamilies.contains( Os.FAMILY_WIN9X ) );
+        Assert.assertTrue( osFamilies.contains( Os.FAMILY_WINDOWS ) );
+        Assert.assertTrue( osFamilies.contains( Os.FAMILY_ZOS ) );
         
     }
 
