@@ -2049,8 +2049,9 @@ public class FileUtils
      * @param file the file to check
      * @throws IOException in case of failure.
      * @return true if symbolic link false otherwise.
-     *
+     * @deprecated use {@code java.nio.file.Files.isSymbolicLink(file.toPath())}
      */
+    @Deprecated
     public static boolean isSymbolicLink( @Nonnull final File file )
         throws IOException
     {
@@ -2064,36 +2065,13 @@ public class FileUtils
      * @return true if and only if we reliably can say this is a symlink
      *
      * @throws IOException in case of failure
+     * @deprecated use {@code java.nio.file.Files.isSymbolicLink(file.toPath())}
      */
+    @Deprecated
     public static boolean isSymbolicLinkForSure( @Nonnull final File file )
         throws IOException
     {
         return Files.isSymbolicLink( file.toPath() );
-    }
-
-    /**
-     * Checks whether a given file is a symbolic link.
-     * <p>
-     * It doesn't really test for symbolic links but whether the canonical and absolute
-     * paths of the file are identical - this may lead to false positives on some platforms.
-     *
-     * It also returns true for any file that has been reached via a symbolic link,
-     * if you decide to traverse into the symlink.
-     *
-     * As can be seen from the "return" clause of this method, there is really no
-     * guarantee of any sort from this method. Small wonder this ever got used for
-     * anything.
-     * </p>
-     *
-     * @param file the file to check
-     * @return true if the file is a symbolic link or if we're on some crappy os.
-     *         false if the file is not a symlink or we're not able to detect it.
-     */
-    static boolean isSymbolicLinkLegacy( @Nonnull final File file )
-        throws IOException
-    {
-        final File canonical = new File( file.getCanonicalPath() );
-        return !file.getAbsolutePath().equals( canonical.getPath() );
     }
 
     /**

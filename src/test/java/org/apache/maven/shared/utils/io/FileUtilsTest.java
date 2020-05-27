@@ -1715,7 +1715,6 @@ public class FileUtilsTest
 
         File file = new File( "src/test/resources/symlinks/src/symDir" );
         assertTrue(FileUtils.isSymbolicLink(file  ));
-        assertTrue(FileUtils.isSymbolicLinkLegacy(file  ));
     }
 
     @Test
@@ -1725,7 +1724,6 @@ public class FileUtilsTest
     {
         File file = new File( "src/test/resources/symlinks/src/" );
         assertFalse(FileUtils.isSymbolicLink(file  ));
-        assertFalse(FileUtils.isSymbolicLinkLegacy(file  ));
     }
 
     @Test
