@@ -14,19 +14,38 @@ import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeThat;
 import static org.junit.Assume.assumeTrue;
 
+import org.apache.maven.shared.utils.Os;
+import org.apache.maven.shared.utils.testhelpers.FileTestHelper;
+import org.codehaus.plexus.util.InterpolationFilterReader;
+import org.hamcrest.CoreMatchers;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+import org.junit.rules.TestName;
+
+import javax.annotation.Nonnull;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -46,16 +65,6 @@ import java.util.List;
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import org.apache.maven.shared.utils.Os;
-import org.apache.maven.shared.utils.testhelpers.FileTestHelper;
-import org.hamcrest.CoreMatchers;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.rules.TestName;
 
 /**
  * This is used to test FileUtils for correctness.
@@ -441,9 +450,298 @@ public class FileUtilsTest
             testFile1.lastModified() == destination.lastModified());*/
     }
 
+    /** A time today, rounded down to the previous minute */
+    private static long MODIFIED_TODAY = (System.currentTimeMillis() / TimeUnit.MINUTES.toMillis( 1 )) * TimeUnit.MINUTES.toMillis( 1 );
+
+    /** A time yesterday, rounded down to the previous minute */
+    private static long MODIFIED_YESTERDAY = MODIFIED_TODAY - TimeUnit.DAYS.toMillis( 1 );
+
+    /** A time last week, rounded down to the previous minute */
+    private static long MODIFIED_LAST_WEEK = MODIFIED_TODAY - TimeUnit.DAYS.toMillis( 7 );
+
+    @Test
+    public void copyFileWithNoFiltersAndNoDestination()
+        throws Exception
+    {
+        File from = write(
+            "from.txt",
+            MODIFIED_YESTERDAY,
+            "Hello World!"
+        );
+        File to = new File(
+            tempFolder.getRoot(),
+            "to.txt"
+        );
+
+        FileUtils.copyFile( from, to, null, ( FileUtils.FilterWrapper[] ) null);
+
+        assertTrue(
+            "to.txt did not exist so should have been written",
+            to.lastModified() >= MODIFIED_TODAY
+        );
+        assertFileContent( to, "Hello World!" );
+    }
+
+    @Test
+    public void copyFileWithNoFiltersAndOutdatedDestination()
+            throws Exception
+    {
+        File from = write(
+            "from.txt",
+            MODIFIED_YESTERDAY,
+            "Hello World!"
+        );
+        File to = write(
+            "to.txt",
+            MODIFIED_LAST_WEEK,
+            "Older content"
+        );
+
+        FileUtils.copyFile( from, to, null, ( FileUtils.FilterWrapper[] ) null);
+
+        assertTrue(
+            "to.txt was outdated so should have been overwritten",
+            to.lastModified() >= MODIFIED_TODAY
+        );
+        assertFileContent( to, "Hello World!" );
+    }
+
+    @Test
+    public void copyFileWithNoFiltersAndNewerDestination()
+            throws Exception
+    {
+        File from = write(
+            "from.txt",
+            MODIFIED_LAST_WEEK,
+            "Hello World!"
+        );
+        File to = write(
+            "to.txt",
+            MODIFIED_YESTERDAY,
+            "Older content"
+        );
+
+        FileUtils.copyFile( from, to, null, ( FileUtils.FilterWrapper[] ) null);
+
+        assertTrue(
+            "to.txt was newer so should have been left alone",
+            to.lastModified() < MODIFIED_TODAY
+        );
+        assertFileContent( to, "Older content" );
+    }
+
+    @Test
+    public void copyFileWithNoFiltersAndNewerDestinationButForcedOverwrite()
+            throws Exception
+    {
+        File from = write(
+            "from.txt",
+            MODIFIED_LAST_WEEK,
+            "Hello World!"
+        );
+        File to = write(
+            "to.txt",
+            MODIFIED_YESTERDAY,
+            "Older content"
+        );
+
+        FileUtils.copyFile( from, to, null, null, true);
+
+        assertTrue(
+            "to.txt was newer but the overwrite should have been forced",
+            to.lastModified() >= MODIFIED_TODAY
+        );
+        assertFileContent( to, "Hello World!" );
+    }
+
+    @Test
+    public void copyFileWithFilteringButNoFilters()
+            throws Exception
+    {
+        File from = write(
+            "from.txt",
+            MODIFIED_YESTERDAY,
+            "Hello ${name}!"
+        );
+        File to = write(
+            "to.txt",
+            MODIFIED_LAST_WEEK,
+            "Older content"
+        );
+
+        FileUtils.copyFile( from, to, null );
+
+        assertTrue(
+            "to.txt was outdated so should have been overwritten",
+            to.lastModified() >= MODIFIED_TODAY
+        );
+        assertFileContent( to, "Hello ${name}!" );
+    }
+
+    @Test
+    public void copyFileWithFilteringAndNoDestination()
+            throws Exception
+    {
+        File from = write(
+            "from.txt",
+            MODIFIED_YESTERDAY,
+            "Hello ${name}!"
+        );
+        File to = new File(
+            tempFolder.getRoot(),
+            "to.txt"
+        );
+
+        FileUtils.copyFile( from, to, null, wrappers( "name", "Bob" ) );
+
+        assertTrue(
+            "to.txt did not exist so should have been written",
+            to.lastModified() >= MODIFIED_TODAY
+        );
+        assertFileContent( to, "Hello Bob!" );
+    }
+
+    @Test
+    public void copyFileWithFilteringAndOutdatedDestination()
+            throws Exception
+    {
+        File from = write(
+            "from.txt",
+            MODIFIED_YESTERDAY,
+            "Hello ${name}!"
+        );
+        File to = write(
+            "to.txt",
+            MODIFIED_LAST_WEEK,
+            "Older content"
+        );
+
+        FileUtils.copyFile( from, to, null, wrappers( "name", "Bob" ) );
+
+        assertTrue(
+            "to.txt was outdated so should have been overwritten",
+            to.lastModified() >= MODIFIED_TODAY
+        );
+        assertFileContent( to, "Hello Bob!" );
+    }
+
+    @Test
+    public void copyFileWithFilteringAndNewerDestinationButForcedOverwrite()
+            throws Exception
+    {
+        File from = write(
+            "from.txt",
+            MODIFIED_LAST_WEEK,
+            "Hello ${name}!"
+        );
+        File to = write(
+            "to.txt",
+            MODIFIED_YESTERDAY,
+            "Older content"
+        );
+
+        FileUtils.copyFile( from, to, null, wrappers( "name", "Bob" ), true );
+
+        assertTrue(
+            "to.txt was newer but the overwrite should have been forced",
+            to.lastModified() >= MODIFIED_TODAY
+        );
+        assertFileContent( to, "Hello Bob!" );
+    }
+
+    @Test
+    public void copyFileWithFilteringAndNewerDestinationButModifiedContent()
+            throws Exception
+    {
+        File from = write(
+            "from.txt",
+            MODIFIED_LAST_WEEK,
+            "Hello ${name}!"
+        );
+        File to = write(
+            "to.txt",
+            MODIFIED_YESTERDAY,
+            "Hello Charlie!"
+        );
+
+        FileUtils.copyFile( from, to, null, wrappers( "name", "Bob" ) );
+
+        assertTrue(
+            "to.txt was outdated so should have been overwritten",
+            to.lastModified() >= MODIFIED_TODAY
+        );
+        assertFileContent( to, "Hello Bob!" );
+    }
+
+    @Test
+    public void copyFileWithFilteringAndNewerDestinationAndMatchingContent()
+            throws Exception
+    {
+        File from = write(
+            "from.txt",
+            MODIFIED_LAST_WEEK,
+            "Hello ${name}!"
+        );
+        File to = write(
+            "to.txt",
+            MODIFIED_YESTERDAY,
+            "Hello Bob!"
+        );
+
+        String encoding = null;
+
+        FileUtils.copyFile( from, to, null, wrappers( "name", "Bob" ) );
+
+        assertFileContent( to, "Hello Bob!" );
+        assertTrue(
+            "to.txt content should be unchanged and have been left alone",
+            to.lastModified() < MODIFIED_TODAY
+        );
+    }
+
+    private FileUtils.FilterWrapper[] wrappers( String key, String value )
+    {
+        final Map map = new HashMap();
+        map.put( key, value );
+        return new FileUtils.FilterWrapper[]
+            {
+                new FileUtils.FilterWrapper()
+                {
+                    @Override
+                    public Reader getReader( Reader reader )
+                    {
+                        return new InterpolationFilterReader( reader, map );
+                    }
+                }
+            };
+    }
+
+    private File write( @Nonnull String name, long lastModified, @Nonnull String text) throws IOException
+    {
+        final File file = new File( tempFolder.getRoot(), name );
+        try ( final Writer writer = new FileWriter( file ) ) {
+            writer.write(text);
+        }
+        assertTrue( file.setLastModified( lastModified ) );
+        assertEquals( "Failed to set lastModified date on " + file.getPath(), lastModified, file.lastModified() );
+        return file;
+    }
+
+    private static void assertFileContent( @Nonnull File file, @Nonnull String expected ) throws IOException
+    {
+        try ( Reader in = new FileReader( file ))
+        {
+            assertEquals(
+                "Expected " + file.getPath() + " to contain: " + expected,
+                expected,
+                IOUtil.toString( in )
+            );
+        }
+    }
+
     @Test
     public void copyFileThatIsSymlink()
-        throws Exception
+            throws Exception
     {
         assumeFalse( Os.isFamily( Os.FAMILY_WINDOWS ) );
 
@@ -455,7 +753,6 @@ public class FileUtilsTest
 
         assertTrue( Files.isSymbolicLink( destination.toPath() ) );
     }
-
 
 
     @Test

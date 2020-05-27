@@ -30,17 +30,20 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.RandomAccessFile;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.URL;
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
+import java.nio.charset.CoderResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.SecureRandom;
@@ -111,7 +114,7 @@ public class FileUtils
     /**
      * The file copy buffer size (30 MB)
      */
-    private static final long FILE_COPY_BUFFER_SIZE = ONE_MB * 30;
+    private static final int FILE_COPY_BUFFER_SIZE = ONE_MB * 30;
 
     /**
      * The vm line separator
@@ -272,13 +275,12 @@ public class FileUtils
     @Nonnull public static String fileRead( @Nonnull File file, @Nullable String encoding )
         throws IOException
     {
-        StringBuilder buf = new StringBuilder();   
-        if ( encoding == null ) 
-        {
-            encoding = Charset.defaultCharset().name();
-        }
+        Charset charset = charset( encoding );
 
-        try ( Reader reader = new InputStreamReader( new FileInputStream( file ), encoding ) )
+        StringBuilder buf = new StringBuilder();
+
+
+        try ( Reader reader = Files.newBufferedReader( file.toPath(), charset ) )
         {
             int count;
             char[] b = new char[512];
@@ -330,15 +332,11 @@ public class FileUtils
     public static void fileAppend( @Nonnull String fileName, @Nullable String encoding, @Nonnull String data )
         throws IOException
     {
-        
-        if ( encoding == null ) 
-        {
-            encoding = Charset.defaultCharset().name();
-        }
-        
+        Charset charset = charset( encoding );
+
         try ( OutputStream out = new FileOutputStream( fileName, true ) )
         {
-          out.write( data.getBytes( encoding ) );
+          out.write( data.getBytes( charset ) );
         }
     }
 
@@ -382,13 +380,9 @@ public class FileUtils
     public static void fileWrite( @Nonnull File file, @Nullable String encoding, @Nonnull String data )
         throws IOException
     {
-        
-        if ( encoding == null ) 
-        {
-            encoding = Charset.defaultCharset().name();
-        }
+        Charset charset = charset( encoding );
 
-        try ( Writer writer = new OutputStreamWriter( new FileOutputStream( file ), encoding ) ) 
+        try ( Writer writer = Files.newBufferedWriter( file.toPath(), charset ) )
         {
             writer.write( data );
         }
@@ -419,13 +413,9 @@ public class FileUtils
     public static void fileWriteArray( @Nonnull File file, @Nullable String encoding, @Nullable String... data )
         throws IOException
     {
-        
-        if ( encoding == null ) 
-        {
-            encoding = Charset.defaultCharset().name();
-        }
+        Charset charset = charset( encoding );
 
-        try ( Writer writer = new OutputStreamWriter( new FileOutputStream( file ), encoding ) )
+        try ( Writer writer = Files.newBufferedWriter( file.toPath(), charset ) )
         {
             for ( int i = 0; data != null && i < data.length; i++ )
             {
@@ -1813,34 +1803,97 @@ public class FileUtils
                                  @Nullable FilterWrapper[] wrappers, boolean overwrite )
         throws IOException
     {
-        if ( wrappers != null && wrappers.length > 0 )
+        if ( wrappers == null || wrappers.length == 0 )
         {
-            
-            if ( encoding == null || encoding.isEmpty() ) 
+            if ( overwrite || to.lastModified() < from.lastModified() )
             {
-                encoding = Charset.defaultCharset().name();
+                copyFile( from, to );
             }
-            
-            // buffer so it isn't reading a byte at a time!
-            try ( Reader fileReader =
-                new BufferedReader( new InputStreamReader( new FileInputStream( from ), encoding ) );
-                            Writer fileWriter = new OutputStreamWriter( new FileOutputStream( to ), encoding ) )
-            {
+        }
+        else
+        {
+            Charset charset = charset( encoding );
 
+            // buffer so it isn't reading a byte at a time!
+            try ( Reader fileReader = Files.newBufferedReader( from.toPath(), charset ) )
+            {
                 Reader wrapped = fileReader;
                 for ( FilterWrapper wrapper : wrappers )
                 {
                     wrapped = wrapper.getReader( wrapped );
                 }
 
-                IOUtil.copy( wrapped, fileWriter );
-            }
-        }
-        else
-        {
-            if ( to.lastModified() < from.lastModified() || overwrite )
-            {
-                copyFile( from, to );
+                if ( overwrite || !to.exists() )
+                {
+                    try ( Writer fileWriter = Files.newBufferedWriter( to.toPath(), charset ) )
+                    {
+                        IOUtil.copy( wrapped, fileWriter );
+                    }
+                }
+                else
+                {
+                    CharsetEncoder encoder = charset.newEncoder();
+
+                    int totalBufferSize = FILE_COPY_BUFFER_SIZE;
+
+                    int charBufferSize = ( int ) Math.floor( totalBufferSize / ( 2 + 2 * encoder.maxBytesPerChar() ) );
+                    int byteBufferSize = ( int ) Math.ceil( charBufferSize * encoder.maxBytesPerChar() );
+
+                    CharBuffer newChars = CharBuffer.allocate( charBufferSize );
+                    ByteBuffer newBytes = ByteBuffer.allocate( byteBufferSize );
+                    ByteBuffer existingBytes = ByteBuffer.allocate( byteBufferSize );
+
+                    CoderResult coderResult;
+                    int existingRead;
+                    boolean writing = false;
+
+                    try ( final RandomAccessFile existing = new RandomAccessFile( to, "rw" ) )
+                    {
+                        int n;
+                        while ( -1 != ( n = wrapped.read( newChars ) ) )
+                        {
+                            ( ( Buffer ) newChars ).flip();
+
+                            coderResult = encoder.encode( newChars, newBytes, n != 0 );
+                            if ( coderResult.isError() )
+                            {
+                                coderResult.throwException();
+                            }
+
+                            ( ( Buffer ) newBytes ).flip();
+
+                            if ( !writing )
+                            {
+                                existingRead = existing.read( existingBytes.array(), 0, newBytes.remaining() );
+                                ( ( Buffer ) existingBytes ).position( existingRead );
+                                ( ( Buffer ) existingBytes ).flip();
+
+                                if ( newBytes.compareTo( existingBytes ) != 0 )
+                                {
+                                    writing = true;
+                                    if ( existingRead > 0 )
+                                    {
+                                        existing.seek( existing.getFilePointer() - existingRead );
+                                    }
+                                }
+                            }
+
+                            if ( writing )
+                            {
+                                existing.write( newBytes.array(), 0, newBytes.remaining() );
+                            }
+
+                            ( ( Buffer ) newChars ).clear();
+                            ( ( Buffer ) newBytes ).clear();
+                            ( ( Buffer ) existingBytes ).clear();
+                        }
+
+                        if ( existing.length() > existing.getFilePointer() )
+                        {
+                            existing.setLength( existing.getFilePointer() );
+                        }
+                    }
+                }
             }
         }
 
@@ -1891,7 +1944,7 @@ public class FileUtils
 
         if ( file.exists() )
         {
-            try ( BufferedReader reader = new BufferedReader( new FileReader( file ) ) )
+            try ( BufferedReader reader = Files.newBufferedReader( file.toPath(), Charset.defaultCharset() ) )
             {
                 for ( String line = reader.readLine(); line != null; line = reader.readLine() )
                 {
@@ -1906,6 +1959,23 @@ public class FileUtils
 
         return lines;
 
+    }
+
+    /**
+     * Returns the named charset or the default charset.
+     * @param encoding the name or alias of the charset, null or empty
+     * @return A charset object for the named or default charset.
+     */
+    private static Charset charset( String encoding )
+    {
+        if ( encoding == null || encoding.isEmpty() )
+        {
+            return Charset.defaultCharset();
+        }
+        else
+        {
+            return Charset.forName( encoding );
+        }
     }
 
     /**
