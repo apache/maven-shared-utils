@@ -34,7 +34,7 @@ public class BourneShell
     private static final char DOUBLE_QUOTATION = '"';
 
     private static final char[] BASH_QUOTING_TRIGGER_CHARS =
-        { ' ', '$', ';', '&', '|', '<', '>', '*', '?', '(', ')', '[', ']', '{', '}', '`' };
+        { ' ', '$', ';', '&', '|', '<', '>', '*', '?', '(', ')', '[', ']', '{', '}', '`', '#' };
 
     /**
      * Create instance of BourneShell.

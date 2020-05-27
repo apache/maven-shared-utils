@@ -186,13 +186,14 @@ public class BourneShellTest
         commandline.createArg().setValue( "{" );
         commandline.createArg().setValue( "}" );
         commandline.createArg().setValue( "`" );
+        commandline.createArg().setValue( "#" );
 
         List<String> lines = commandline.getShell().getShellCommandLine( commandline.getArguments() );
         System.out.println( lines  );
 
         assertEquals( "/bin/sh", lines.get( 0 ) );
         assertEquals( "-c", lines.get( 1 ) );
-        assertEquals( "chmod \" \" \"|\" \"&&\" \"||\" \";\" \";;\" \"&\" \"()\" \"<\" \"<<\" \">\" \">>\" \"*\" \"?\" \"[\" \"]\" \"{\" \"}\" \"`\"",
+        assertEquals( "chmod \" \" \"|\" \"&&\" \"||\" \";\" \";;\" \"&\" \"()\" \"<\" \"<<\" \">\" \">>\" \"*\" \"?\" \"[\" \"]\" \"{\" \"}\" \"`\" \"#\"",
                       lines.get( 2 ) );
     }
 
