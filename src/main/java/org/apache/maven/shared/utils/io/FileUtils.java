@@ -580,7 +580,9 @@ public class FileUtils
      * @param dir the directory to create
      * @throws IllegalArgumentException if the dir contains illegal Windows characters under Windows OS
      * @see #INVALID_CHARACTERS_FOR_WINDOWS_FILE_NAME
+     * @deprecated use {@code java.nio.file.Files.createDirectories(Paths.get(dir))}
      */
+    @Deprecated
     public static void mkdir( @Nonnull String dir )
     {
         File file = new File( dir );
@@ -1105,7 +1107,7 @@ public class FileUtils
      *
      * @param file the file path
      * @throws IOException if any
-     * @deprecated use {@code java.nio.files.Files.delete(file.toPath())}
+     * @deprecated use {@code org.apache.commons.io.FileUtils.deleteQuietly()}
      */
     @Deprecated
     public static void forceDelete( @Nonnull final String file )
@@ -1115,11 +1117,13 @@ public class FileUtils
     }
 
     /**
-     * Delete a file. If file is directory delete it and all sub-directories.
+     * Delete a file. If file is directory, delete it and all sub-directories.
      *
      * @param file a file
      * @throws IOException if any
+     * @deprecated use {@code org.apache.commons.io.FileUtils.deleteQuietly()}
      */
+    @Deprecated
     public static void forceDelete( @Nonnull final File file )
         throws IOException
     {
@@ -1143,7 +1147,7 @@ public class FileUtils
     }
 
     /**
-     * deletes a file.
+     * Deletes a file.
      *
      * @param file the file to delete
      * @throws IOException if the file cannot be deleted
@@ -1996,7 +2000,9 @@ public class FileUtils
      * @param file the file
      * @return a List containing every every line not starting with # and not empty
      * @throws IOException if any
+     * @deprecated assumes the platform default character set
      */
+    @Deprecated
     @Nonnull public static List<String> loadFile( @Nonnull File file )
         throws IOException
     {
