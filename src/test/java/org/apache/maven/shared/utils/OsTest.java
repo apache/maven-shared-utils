@@ -30,8 +30,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * This class will test the 'Os' class which evaluates
- * operation system specific settings.
+ * Tests the 'Os' class which evaluates operation system specific settings.
  *
  * @author <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
