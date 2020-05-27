@@ -792,7 +792,8 @@ public class FileUtils
      * @throws IOException  if <code>source</code> does not exist, <code>destination</code> cannot be
      *                      written to, or an IO error occurs during copying
      * @throws java.io.FileNotFoundException if <code>destination</code> is a directory
-     * @deprecated use {@code org.apache.commons.io.FileUtils.copyFile()}
+     * @deprecated use {@code java.nio.Files.copy(source.toPath(), destination.toPath(), CopyOptions.NOFOLLOW_LINKS,
+     *     CopyOptions.REPLACE_EXISTING)}
      */
     @Deprecated
     public static void copyFile( @Nonnull final File source, @Nonnull final File destination )
@@ -901,6 +902,8 @@ public class FileUtils
      *                     <li><code>destination</code> cannot be written to</li>
      *                     <li>an IO error occurs during copying</li>
      *                     </ul>
+     * @deprecated use {@code java.nio.Files.copy(source.openStream(), destination.toPath(),
+     *     CopyOptions.REPLACE_EXISTING)}
      */
     public static void copyURLToFile( @Nonnull final URL source, @Nonnull final File destination )
         throws IOException
@@ -919,11 +922,12 @@ public class FileUtils
      *                    overwriting).
      * @throws IOException if
      *                     <ul>
-     *                     <li><code>source</code> URL cannot be opened</li>
+     *                     <li><code>source</code> cannot be opened</li>
      *                     <li><code>destination</code> cannot be written to</li>
-     *                     <li>an IO error occurs during copying</li>
+     *                     <li>an I/O error occurs during copying</li>
      *                     </ul>
-     * @deprecated use {@code org.apache.commons.io.FileUtils.copyInputStreamToFile()}
+     * @deprecated use {@code java.nio.Files.copy(source, destination.toPath(),
+     *     CopyOptions.REPLACE_EXISTING)}
      */
     @Deprecated
     private static void copyStreamToFile( @Nonnull @WillClose final InputStream source,
@@ -1097,11 +1101,13 @@ public class FileUtils
     }
 
     /**
-     * Delete a file. If file is directory delete it and all sub-directories.
+     * Delete a file. If file is directory, delete it and all sub-directories.
      *
      * @param file the file path
      * @throws IOException if any
+     * @deprecated use {@code java.nio.files.Files.delete(file.toPath())}
      */
+    @Deprecated
     public static void forceDelete( @Nonnull final String file )
         throws IOException
     {
