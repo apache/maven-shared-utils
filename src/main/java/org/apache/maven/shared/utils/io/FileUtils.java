@@ -470,7 +470,9 @@ public class FileUtils
      * Deletes a file.
      *
      * @param fileName the path of the file to delete
+     * @deprecated use {@code Files.delete(Paths.get(fileName))}
      */
+    @Deprecated
     public static void fileDelete( @Nonnull String fileName )
     {
         File file = new File( fileName );
@@ -481,11 +483,11 @@ public class FileUtils
     /**
      * Given a directory and an array of extensions return an array of compliant files.
      * <p/>
-     * The given extensions should be like "java" and not like ".java"
+     * The given extensions should be like "java" and not like ".java".
      *
      * @param directory  the path of the directory
      * @param extensions an array of expected extensions
-     * @return tn array of files for the wanted extensions
+     * @return an array of files for the wanted extensions
      */
     public static String[] getFilesFromExtension( @Nonnull String directory, @Nonnull String... extensions )
     {
@@ -573,10 +575,10 @@ public class FileUtils
     }
 
     /**
-     * Simple way to make a directory
+     * Simple way to make a directory.
      *
      * @param dir the directory to create
-     * @throws IllegalArgumentException if the dir contains illegal Windows characters under Windows OS.
+     * @throws IllegalArgumentException if the dir contains illegal Windows characters under Windows OS
      * @see #INVALID_CHARACTERS_FOR_WINDOWS_FILE_NAME
      */
     public static void mkdir( @Nonnull String dir )
@@ -682,7 +684,7 @@ public class FileUtils
     }
 
     /**
-     * Remove extension from filename. E.g.
+     * Remove extension from a path. E.g.
      * <pre>
      * foo.txt    --> foo
      * a\b\c.jpg --> a\b\c
@@ -691,7 +693,9 @@ public class FileUtils
      *
      * @param filename the path of the file
      * @return the filename minus extension
+     * @deprecated use {@code org.apache.commons.io.FilenameUtils.removeExtension()}
      */
+    @Deprecated
     @Nonnull public static String removeExtension( @Nonnull final String filename )
     {
         String ext = extension( filename );
@@ -706,7 +710,7 @@ public class FileUtils
     }
 
     /**
-     * Get extension from filename. E.g.
+     * Get extension from a path. E.g.
      *
      * <pre>
      * foo.txt    --> "txt"
@@ -716,7 +720,9 @@ public class FileUtils
      *
      * @param filename the path of the file
      * @return the extension of filename or "" if none
+     * @deprecated use {@code org.apache.commons.io.FilenameUtils.getExtension()}
      */
+    @Deprecated
     @Nonnull public static String getExtension( @Nonnull final String filename )
     {
         return extension( filename );
@@ -734,7 +740,9 @@ public class FileUtils
      * @throws IOException                   if <code>source</code> does not exist, the file in
      *                                       <code>destinationDirectory</code> cannot be written to, or an IO error
      *                                       occurs during copying.
+     * @deprecated use {@code org.apache.commons.io.FileUtils.copyFileToDirectory()}
      */
+    @Deprecated
     public static void copyFileToDirectory( @Nonnull final File source, @Nonnull final File destinationDirectory )
         throws IOException
     {
@@ -784,7 +792,9 @@ public class FileUtils
      * @throws IOException  if <code>source</code> does not exist, <code>destination</code> cannot be
      *                      written to, or an IO error occurs during copying
      * @throws java.io.FileNotFoundException if <code>destination</code> is a directory
+     * @deprecated use {@code org.apache.commons.io.FileUtils.copyFile()}
      */
+    @Deprecated
     public static void copyFile( @Nonnull final File source, @Nonnull final File destination )
         throws IOException
     {
@@ -913,7 +923,9 @@ public class FileUtils
      *                     <li><code>destination</code> cannot be written to</li>
      *                     <li>an IO error occurs during copying</li>
      *                     </ul>
+     * @deprecated use {@code org.apache.commons.io.FileUtils.copyInputStreamToFile()}
      */
+    @Deprecated
     private static void copyStreamToFile( @Nonnull @WillClose final InputStream source,
                                           @Nonnull final File destination )
         throws IOException
@@ -955,7 +967,9 @@ public class FileUtils
      *
      * @param path the path to normalize
      * @return the normalized String, or <code>null</code> if too many ..'s.
+     * @deprecated use {@code org.apache.commons.io.FileNameUtils.normalize()}
      */
+    @Deprecated
     @Nonnull public static String normalize( @Nonnull final String path )
     {
         String normalized = path;
@@ -1125,11 +1139,11 @@ public class FileUtils
     /**
      * deletes a file.
      *
-     * @param file The file to delete
+     * @param file the file to delete
      * @throws IOException if the file cannot be deleted
+     * @deprecated use {@code java.nio.files.Files.delete(file.toPath())}
      */
-
-
+    @Deprecated
     public static void delete( @Nonnull File file )
         throws IOException
     {
@@ -1137,9 +1151,11 @@ public class FileUtils
     }
 
     /**
-     * @param file The file.
+     * @param file the file
      * @return true / false
+     * @deprecated use {@code java.nio.files.Files.delete(file.toPath())}
      */
+    @Deprecated
     public static boolean deleteLegacyStyle( @Nonnull File file )
     {
         try
