@@ -440,7 +440,7 @@ public class FileUtils
      * @throws IOException if any
      * @deprecated use {@code java.nio.files.Files.write(file.toPath(), data.getBytes(encoding), StandardOpenOption.CREATE)}
      */
-   @Deprecated
+    @Deprecated
     public static void fileWriteArray( @Nonnull File file, @Nullable String encoding, @Nullable String... data )
         throws IOException
     {
