@@ -331,7 +331,8 @@ public class FileUtils
      * @param fileName the path of the file to write
      * @param data     the content to write to the file
      * @throws IOException if any
-     * @deprecated use {@code java.nio.files.Files.write(filename, data.getBytes(), StandardOpenOption.APPEND, StandardOpenOption.CREATE)}
+     * @deprecated use {@code java.nio.files.Files.write(filename, data.getBytes(),
+     *     StandardOpenOption.APPEND, StandardOpenOption.CREATE)}
      */
     @Deprecated
     public static void fileAppend( @Nonnull String fileName, @Nonnull String data )
@@ -347,7 +348,8 @@ public class FileUtils
      * @param encoding the encoding of the file
      * @param data     the content to write to the file
      * @throws IOException if any
-     * @deprecated use {@code java.nio.files.Files.write(filename, data.getBytes(encoding), StandardOpenOption.APPEND, StandardOpenOption.CREATE)}
+     * @deprecated use {@code java.nio.files.Files.write(filename, data.getBytes(encoding),
+     *     StandardOpenOption.APPEND, StandardOpenOption.CREATE)}
      */
     @Deprecated
     public static void fileAppend( @Nonnull String fileName, @Nullable String encoding, @Nonnull String data )
@@ -368,7 +370,8 @@ public class FileUtils
      * @param fileName the path of the file to write
      * @param data     the content to write to the file
      * @throws IOException if any
-     * @deprecated use {@code java.nio.files.Files.write(filename, data.getBytes(), StandardOpenOption.CREATE)}
+     * @deprecated use {@code java.nio.files.Files.write(filename,
+     *     data.getBytes(), StandardOpenOption.CREATE)}
      */
     @Deprecated
     public static void fileWrite( @Nonnull String fileName, @Nonnull String data )
@@ -384,7 +387,8 @@ public class FileUtils
      * @param encoding the encoding of the file
      * @param data     the content to write to the file
      * @throws IOException if any
-     * @deprecated use {@code java.nio.files.Files.write(Paths.get(filename), data.getBytes(encoding), StandardOpenOption.CREATE)}
+     * @deprecated use {@code java.nio.files.Files.write(Paths.get(filename),
+     *     data.getBytes(encoding), StandardOpenOption.CREATE)}
      */
     @Deprecated
     public static void fileWrite( @Nonnull String fileName, @Nullable String encoding, @Nonnull String data )
@@ -401,7 +405,8 @@ public class FileUtils
      * @param encoding the encoding of the file
      * @param data     the content to write to the file
      * @throws IOException if any
-     * @deprecated use {@code java.nio.files.Files.write(file.toPath(), data.getBytes(encoding), StandardOpenOption.CREATE)}
+     * @deprecated use {@code java.nio.files.Files.write(file.toPath(),
+     *     data.getBytes(encoding), StandardOpenOption.CREATE)}
      */
     @Deprecated
     public static void fileWrite( @Nonnull File file, @Nullable String encoding, @Nonnull String data )
@@ -422,7 +427,8 @@ public class FileUtils
      * @param file the path of the file to write
      * @param data the content to write to the file
      * @throws IOException if any
-     * @deprecated use {@code java.nio.files.Files.write(file.toPath(), data.getBytes(encoding), StandardOpenOption.CREATE)}
+     * @deprecated use {@code java.nio.files.Files.write(file.toPath(),
+     *     data.getBytes(encoding), StandardOpenOption.CREATE)}
      */
     @Deprecated
     public static void fileWriteArray( @Nonnull File file, @Nullable String... data )
@@ -434,11 +440,12 @@ public class FileUtils
     /**
      * Writes String array data to a file. The file is created if it does not exist.
      *
-     * @param file     the path of the file to write
+     * @param file the path of the file to write
      * @param encoding the encoding of the file
-     * @param data     the content to write to the file
+     * @param data the content to write to the file
      * @throws IOException if any
-     * @deprecated use {@code java.nio.files.Files.write(file.toPath(), data.getBytes(encoding), StandardOpenOption.CREATE)}
+     * @deprecated use {@code java.nio.files.Files.write(file.toPath(),
+     *     data.getBytes(encoding), StandardOpenOption.CREATE)}
      */
     @Deprecated
     public static void fileWriteArray( @Nonnull File file, @Nullable String encoding, @Nullable String... data )
@@ -775,7 +782,7 @@ public class FileUtils
      * @param destination a non-directory <code>File</code> to write bytes to (possibly
      *                    overwriting)
      * @throws IOException  if <code>source</code> does not exist, <code>destination</code> cannot be
-     *                      written to, or an IO error occurs during copying.
+     *                      written to, or an IO error occurs during copying
      * @throws java.io.FileNotFoundException if <code>destination</code> is a directory
      */
     public static void copyFile( @Nonnull final File source, @Nonnull final File destination )
@@ -1001,8 +1008,8 @@ public class FileUtils
      *
      * @param baseFile Where to resolve <code>filename</code> from, if <code>filename</code> is
      *                 relative.
-     * @param filename Absolute or relative file path to resolve.
-     * @return The canonical <code>File</code> of <code>filename</code>.
+     * @param filename absolute or relative file path to resolve
+     * @return the canonical <code>File</code> of <code>filename</code>
      */
     @Nonnull public static File resolveFile( final File baseFile, @Nonnull String filename )
     {
@@ -1316,7 +1323,7 @@ public class FileUtils
      * Recursively count size of a directory.
      *
      * @param directory a directory
-     * @return size of directory in bytes.
+     * @return size of directory in bytes
      */
     public static long sizeOfDirectory( @Nonnull final String directory )
     {
@@ -1327,7 +1334,7 @@ public class FileUtils
      * Recursively count size of a directory.
      *
      * @param directory a directory
-     * @return size of directory in bytes.
+     * @return size of directory in bytes
      */
     public static long sizeOfDirectory( @Nonnull final File directory )
     {
