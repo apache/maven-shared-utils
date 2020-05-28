@@ -128,10 +128,14 @@ public final class IOUtil
 
     /**
      * Copy bytes from an <code>InputStream</code> to an <code>OutputStream</code>.
-     * @param input the input size
-     * @param output the resulting output
+     * 
+     * @param input the stream to read from
+     * @param output the stream to write to
      * @throws IOException in case of an error
+     * @deprecated use {@code org.apache.commons.io.IOUtils.copy()} or in
+     *         Java 9 and later {@code InputStream.transferTo()}.
      */
+    @Deprecated
     public static void copy( @Nonnull final InputStream input, @Nonnull final OutputStream output )
         throws IOException
     {
@@ -141,11 +145,16 @@ public final class IOUtil
     /**
      * Copy bytes from an <code>InputStream</code> to an <code>OutputStream</code>.
      *
-     * @param input the input size
-     * @param output the resulting output
-     * @param bufferSize size of internal buffer to use
+     * In Java 9 and later this is replaced by {@code InputStream.transferTo()}.
+     * 
+     * @param input the stream to read from
+     * @param output the stream to write to
+     * @param bufferSize size of internal buffer
      * @throws IOException in case of an error
+     * @deprecated use {@code org.apache.commons.io.IOUtils.copy()} or in
+     *         Java 9 and later {@code InputStream.transferTo()}.
      */
+    @Deprecated
     public static void copy( @Nonnull final InputStream input, @Nonnull final OutputStream output,
                              final int bufferSize )
         throws IOException
@@ -160,10 +169,12 @@ public final class IOUtil
 
     /**
      * Copy chars from a <code>Reader</code> to a <code>Writer</code>.
-     * @param input The input size.
-     * @param output The resulting output.
-     * @throws IOException in case of failure.
+     * 
+     * @param input the reader to read from
+     * @param output the writer to write to
+     * @throws IOException in case of failure     * @deprecated use {@code org.apache.commons.io.IOUtils.copy()}.
      */
+    @Deprecated
     public static void copy( @Nonnull final Reader input, @Nonnull final Writer output )
         throws IOException
     {
@@ -173,11 +184,13 @@ public final class IOUtil
     /**
      * Copy chars from a <code>Reader</code> to a <code>Writer</code>.
      *
-     * @param input The input size.
-     * @param output The resulting output.
-     * @param bufferSize Size of internal buffer to use.
-     * @throws IOException in case of failure.
+     * @param input the reader to read from
+     * @param output the writer to write to
+     * @param bufferSize size of internal buffer
+     * @throws IOException in case of failure
+     * @deprecated use {@code org.apache.commons.io.IOUtils.copy()}.
      */
+    @Deprecated
     public static void copy( @Nonnull final Reader input, @Nonnull final Writer output, final int bufferSize )
         throws IOException
     {
@@ -201,11 +214,15 @@ public final class IOUtil
     /**
      * Copy and convert bytes from an <code>InputStream</code> to chars on a
      * <code>Writer</code>.
+     * 
      * The platform's default encoding is used for the byte-to-char conversion.
-     * @param input The input size.
-     * @param output The resulting output.
-     * @throws IOException in case of failure.
+     * 
+     * @param input the reader to read from
+     * @param output the writer to write to
+     * @throws IOException in case of failure
+     * @deprecated use {@code org.apache.commons.io.IOUtils.copy()}.
      */
+    @Deprecated
     public static void copy( @Nonnull final InputStream input, @Nonnull final Writer output )
         throws IOException
     {
@@ -217,11 +234,13 @@ public final class IOUtil
      * <code>Writer</code>.
      * The platform's default encoding is used for the byte-to-char conversion.
      *
-     * @param input The input size.
-     * @param output The resulting output.
-     * @param bufferSize Size of internal buffer to use.
-     * @throws IOException in case of failure.
+     * @param input the input stream to read from
+     * @param output the writer to write to
+     * @param bufferSize size of internal buffer
+     * @throws IOException in case of failure
+     * @deprecated use {@code org.apache.commons.io.IOUtils.copy()}.
      */
+    @Deprecated
     public static void copy( @Nonnull final InputStream input, @Nonnull final Writer output, final int bufferSize )
         throws IOException
     {
@@ -233,13 +252,15 @@ public final class IOUtil
      * Copy and convert bytes from an <code>InputStream</code> to chars on a
      * <code>Writer</code>, using the specified encoding.
      *
-     * @param input The input size.
-     * @param output The resulting output.
-     * @param encoding The name of a supported character encoding. See the
-     *                 <a href="http://www.iana.org/assignments/character-sets">IANA
+     * @param input the input stream to read from
+     * @param output the writer to write to
+     * @param encoding the name of a supported character encoding. See the
+     *                 <a href="https://www.iana.org/assignments/character-sets">IANA
      *                 Charset Registry</a> for a list of valid encoding types.
-     * @throws IOException in case of failure.
+     * @throws IOException in case of failure
+     * @deprecated use {@code org.apache.commons.io.IOUtils.copy()}.
      */
+    @Deprecated
     public static void copy( @Nonnull final InputStream input, @Nonnull final Writer output,
                              @Nonnull final String encoding )
         throws IOException
@@ -252,14 +273,16 @@ public final class IOUtil
      * Copy and convert bytes from an <code>InputStream</code> to chars on a
      * <code>Writer</code>, using the specified encoding.
      *
-     * @param encoding   The name of a supported character encoding. See the
-     *                   <a href="http://www.iana.org/assignments/character-sets">IANA
+     * @param encoding   the name of a supported character encoding. See the
+     *                   <a href="https://www.iana.org/assignments/character-sets">IANA
      *                   Charset Registry</a> for a list of valid encoding types.
-     * @param input The input size.
-     * @param output The resulting output.
-     * @param bufferSize Size of internal buffer to use.
-     * @throws IOException in case of failure.
+     * @param input the input stream to read from
+     * @param output the writer to write to
+     * @param bufferSize size of internal buffer
+     * @throws IOException in case of failure
+     * @deprecated use {@code org.apache.commons.io.IOUtils.copy()}.
      */
+    @Deprecated
     public static void copy( @Nonnull final InputStream input, @Nonnull final Writer output,
                              @Nonnull final String encoding, final int bufferSize )
         throws IOException
@@ -274,10 +297,13 @@ public final class IOUtil
     /**
      * Get the contents of an <code>InputStream</code> as a String.
      * The platform's default encoding is used for the byte-to-char conversion.
-     * @param input The input size.
-     * @return The resulting string.
-     * @throws IOException in case of failure.
+     * 
+     * @param input the InputStream to read from
+     * @return the resulting string
+     * @throws IOException in case of failure
+     * @deprecated always specify a character encoding
      */
+    @Deprecated
     @Nonnull public static String toString( @Nonnull final InputStream input )
         throws IOException
     {
@@ -288,11 +314,13 @@ public final class IOUtil
      * Get the contents of an <code>InputStream</code> as a String.
      * The platform's default encoding is used for the byte-to-char conversion.
      *
-     * @param input The input size.
-     * @param bufferSize Size of internal buffer to use.
-     * @return the resulting string.
-     * @throws IOException in case of failure.
+     * @param input the InputStream to read from
+     * @param bufferSize size of internal buffer
+     * @return the resulting string
+     * @throws IOException in case of failure
+     * @deprecated always specify a character encoding
      */
+    @Deprecated
     @Nonnull public static String toString( @Nonnull final InputStream input, final int bufferSize )
         throws IOException
     {
@@ -304,13 +332,15 @@ public final class IOUtil
     /**
      * Get the contents of an <code>InputStream</code> as a String.
      *
-     * @param input The input size.
-     * @param encoding The name of a supported character encoding. See the
-     *                 <a href="http://www.iana.org/assignments/character-sets">IANA
+     * @param input the InputStream to read from
+     * @param encoding the name of a supported character encoding. See the
+     *                 <a href="https://www.iana.org/assignments/character-sets">IANA
      *                 Charset Registry</a> for a list of valid encoding types.
-     * @return the converted string.
-     * @throws IOException in case of failure.
+     * @return the converted string
+     * @throws IOException in case of failure
+     * @deprecated use {@code org.apache.commons.io.IOUtils.toString()}.
      */
+    @Deprecated
     @Nonnull public static String toString( @Nonnull final InputStream input, @Nonnull final String encoding )
         throws IOException
     {
@@ -320,14 +350,16 @@ public final class IOUtil
     /**
      * Get the contents of an <code>InputStream</code> as a String.
      *
-     * @param input The input size.
-     * @param encoding   The name of a supported character encoding. See the
-     *                   <a href="http://www.iana.org/assignments/character-sets">IANA
+     * @param input the InputStream to read from
+     * @param encoding   the name of a supported character encoding. See the
+     *                   <a href="https://www.iana.org/assignments/character-sets">IANA
      *                   Charset Registry</a> for a list of valid encoding types.
-     * @param bufferSize Size of internal buffer to use.
+     * @param bufferSize size of internal buffer
      * @return The converted string.
-     * @throws IOException in case of failure.
+     * @throws IOException in case of failure
+     * @deprecated use {@code org.apache.commons.io.IOUtils.toString()}.
      */
+    @Deprecated
     @Nonnull public static String toString( @Nonnull final InputStream input, @Nonnull final String encoding,
                                             final int bufferSize )
         throws IOException
@@ -342,10 +374,13 @@ public final class IOUtil
 
     /**
      * Get the contents of an <code>InputStream</code> as a <code>byte[]</code>.
-     * @param input The input size.
+     * 
+     * @param input the InputStream to read from
      * @return the resulting byte array.
-     * @throws IOException in case of failure.
+     * @throws IOException in case of failure
+     * @deprecated use {@code org.apache.commons.io.IOUtils.readFully()}.
      */
+    @Deprecated
     @Nonnull public static byte[] toByteArray( @Nonnull final InputStream input )
         throws IOException
     {
@@ -355,11 +390,13 @@ public final class IOUtil
     /**
      * Get the contents of an <code>InputStream</code> as a <code>byte[]</code>.
      *
-     * @param input The input size.
-     * @param bufferSize Size of internal buffer to use.
+     * @param input the InputStream to read from
+     * @param bufferSize size of internal buffer
      * @return the resulting byte array.
-     * @throws IOException in case of failure.
+     * @throws IOException in case of failure
+     * @deprecated use {@code org.apache.commons.io.IOUtils.readFully()}.
      */
+    @Deprecated
     @Nonnull public static byte[] toByteArray( @Nonnull final InputStream input, final int bufferSize )
         throws IOException
     {
@@ -379,10 +416,13 @@ public final class IOUtil
     /**
      * Serialize chars from a <code>Reader</code> to bytes on an <code>OutputStream</code>, and
      * flush the <code>OutputStream</code>.
-     * @param input The input size.
-     * @param output The resulting output.
-     * @throws IOException in case of failure.
+     * 
+     * @param input the InputStream to read from
+     * @param output the output stream to write to
+     * @throws IOException in case of failure
+     * @deprecated always specify a character encoding
      */
+    @Deprecated
     public static void copy( @Nonnull final Reader input, @Nonnull final OutputStream output )
         throws IOException
     {
@@ -393,11 +433,13 @@ public final class IOUtil
      * Serialize chars from a <code>Reader</code> to bytes on an <code>OutputStream</code>, and
      * flush the <code>OutputStream</code>.
      *
-     * @param input The input size.
-     * @param output The resulting output.
-     * @param bufferSize Size of internal buffer to use.
-     * @throws IOException in case of failure.
+     * @param input the InputStream to read from
+     * @param output the output to write to
+     * @param bufferSize size of internal buffer
+     * @throws IOException in case of failure
+     * @deprecated always specify a character encoding
      */
+    @Deprecated
     public static void copy( @Nonnull final Reader input, @Nonnull final OutputStream output, final int bufferSize )
         throws IOException
     {
@@ -413,10 +455,12 @@ public final class IOUtil
 
     /**
      * Get the contents of a <code>Reader</code> as a String.
-     * @param input The input size.
+     * @param input the InputStream to read from
      * @return The converted string.
-     * @throws IOException in case of failure.
+     * @throws IOException in case of failure
+     * @deprecated use {@code org.apache.commons.io.IOUtils.toString()}.
      */
+    @Deprecated
     @Nonnull public static String toString( @Nonnull final Reader input )
         throws IOException
     {
@@ -426,11 +470,13 @@ public final class IOUtil
     /**
      * Get the contents of a <code>Reader</code> as a String.
      *
-     * @param input The input size.
-     * @param bufferSize Size of internal buffer to use.
+     * @param input the reader to read from
+     * @param bufferSize size of internal buffer
      * @return the resulting byte array.
-     * @throws IOException in case of failure.
+     * @throws IOException in case of failure
+     * @deprecated use {@code org.apache.commons.io.IOUtils.toString()}.
      */
+    @Deprecated
     @Nonnull public static String toString( @Nonnull final Reader input, final int bufferSize )
         throws IOException
     {
@@ -444,10 +490,13 @@ public final class IOUtil
 
     /**
      * Get the contents of a <code>Reader</code> as a <code>byte[]</code>.
-     * @param input The input size.
+     * 
+     * @param input the InputStream to read from
      * @return the resulting byte array.
-     * @throws IOException in case of failure.
+     * @throws IOException in case of failure
+     * @deprecated always specify a character encoding
      */
+    @Deprecated
     @Nonnull public static byte[] toByteArray( @Nonnull final Reader input )
         throws IOException
     {
@@ -457,11 +506,13 @@ public final class IOUtil
     /**
      * Get the contents of a <code>Reader</code> as a <code>byte[]</code>.
      *
-     * @param input The input size.
-     * @param bufferSize Size of internal buffer to use.
+     * @param input the InputStream to read from
+     * @param bufferSize size of internal buffer
      * @return the resulting byte array.
-     * @throws IOException in case of failure.
+     * @throws IOException in case of failure
+     * @deprecated always specify a character encoding
      */
+    @Deprecated
     @Nonnull public static byte[] toByteArray( @Nonnull final Reader input, final int bufferSize )
         throws IOException
     {
@@ -481,10 +532,12 @@ public final class IOUtil
     /**
      * Serialize chars from a <code>String</code> to bytes on an <code>OutputStream</code>, and
      * flush the <code>OutputStream</code>.
-     * @param input The input size.
-     * @param output The resulting output.
-     * @throws IOException in case of failure.
+     * @param input the InputStream to read from
+     * @param output the output to write to
+     * @throws IOException in case of failure
+     * @deprecated always specify a character encoding
      */
+    @Deprecated
     public static void copy( @Nonnull final String input, @Nonnull final OutputStream output )
         throws IOException
     {
@@ -495,11 +548,13 @@ public final class IOUtil
      * Serialize chars from a <code>String</code> to bytes on an <code>OutputStream</code>, and
      * flush the <code>OutputStream</code>.
      *
-     * @param input The input size.
-     * @param output The resulting output.
-     * @param bufferSize Size of internal buffer to use.
-     * @throws IOException in case of failure.
+     * @param input the InputStream to read from
+     * @param output the output to write to
+     * @param bufferSize size of internal buffer
+     * @throws IOException in case of failure
+     * @deprecated always specify a character encoding
      */
+    @Deprecated
     public static void copy( @Nonnull final String input, @Nonnull final OutputStream output, final int bufferSize )
         throws IOException
     {
@@ -516,10 +571,13 @@ public final class IOUtil
 
     /**
      * Copy chars from a <code>String</code> to a <code>Writer</code>.
-     * @param input Input string.
+     * 
+     * @param input the string to write
      * @param output resulting output {@link Writer}
-     * @throws IOException in case of failure.
+     * @throws IOException in case of failure
+     * @deprecated use {@code org.apache.commons.io.IOUtils.write()}.
      */
+    @Deprecated
     public static void copy( @Nonnull final String input, @Nonnull final Writer output )
         throws IOException
     {
@@ -531,10 +589,13 @@ public final class IOUtil
 
     /**
      * Get the contents of a <code>String</code> as a <code>byte[]</code>.
-     * @param input The input size.
-     * @return The resulting byte array.
-     * @throws IOException in case of failure.
+     * 
+     * @param input the String to read from
+     * @return the resulting byte array
+     * @throws IOException in case of failure
+     * @deprecated always specify a character encoding
      */
+    @Deprecated
     @Nonnull public static byte[] toByteArray( @Nonnull final String input )
         throws IOException
     {
@@ -544,11 +605,13 @@ public final class IOUtil
     /**
      * Get the contents of a <code>String</code> as a <code>byte[]</code>.
      *
-     * @param input The input size.
-     * @param bufferSize Size of internal buffer to use.
-     * @return The resulting byte array.
-     * @throws IOException in case of failure.
+     * @param input the InputStream to read from
+     * @param bufferSize size of internal buffer
+     * @return the resulting byte array
+     * @throws IOException in case of failure
+     * @deprecated always specify a character encoding
      */
+    @Deprecated
     @Nonnull public static byte[] toByteArray( @Nonnull final String input, final int bufferSize )
         throws IOException
     {
@@ -569,10 +632,13 @@ public final class IOUtil
      * Copy and convert bytes from a <code>byte[]</code> to chars on a
      * <code>Writer</code>.
      * The platform's default encoding is used for the byte-to-char conversion.
-     * @param input The input size.
-     * @param output The resulting output.
-     * @throws IOException in case of failure.
+     * 
+     * @param input the InputStream to read from
+     * @param output the output to write to
+     * @throws IOException in case of failure
+     * @deprecated always specify a character encoding
      */
+    @Deprecated
     public static void copy( @Nonnull final byte[] input, @Nonnull final Writer output )
         throws IOException
     {
@@ -584,11 +650,13 @@ public final class IOUtil
      * <code>Writer</code>.
      * The platform's default encoding is used for the byte-to-char conversion.
      *
-     * @param input The input size.
-     * @param output The resulting output.
-     * @param bufferSize Size of internal buffer to use.
-     * @throws IOException in case of failure.
+     * @param input the InputStream to read from
+     * @param output the output to write to
+     * @param bufferSize size of internal buffer
+     * @throws IOException in case of failure
+     * @deprecated always specify a character encoding
      */
+    @Deprecated
     public static void copy( @Nonnull final byte[] input, @Nonnull final Writer output, final int bufferSize )
         throws IOException
     {
@@ -600,13 +668,15 @@ public final class IOUtil
      * Copy and convert bytes from a <code>byte[]</code> to chars on a
      * <code>Writer</code>, using the specified encoding.
      *
-     * @param encoding The name of a supported character encoding. See the
-     *                 <a href="http://www.iana.org/assignments/character-sets">IANA
+     * @param encoding the name of a supported character encoding. See the
+     *                 <a href="https://www.iana.org/assignments/character-sets">IANA
      *                 Charset Registry</a> for a list of valid encoding types.
-     * @param input The input size.
-     * @param output The resulting output.
-     * @throws IOException in case of failure.
+     * @param input the data to write
+     * @param output the writer to write to
+     * @throws IOException in case of failure
+     * @deprecated use {@code org.apache.commons.io.IOUtils.write()}.
      */
+    @Deprecated
     public static void copy( @Nonnull final byte[] input, @Nonnull final Writer output, final String encoding )
         throws IOException
     {
@@ -618,14 +688,16 @@ public final class IOUtil
      * Copy and convert bytes from a <code>byte[]</code> to chars on a
      * <code>Writer</code>, using the specified encoding.
      *
-     * @param encoding   The name of a supported character encoding. See the
-     *                   <a href="http://www.iana.org/assignments/character-sets">IANA
+     * @param encoding   the name of a supported character encoding. See the
+     *                   <a href="https://www.iana.org/assignments/character-sets">IANA
      *                   Charset Registry</a> for a list of valid encoding types.
-     * @param input The input bytes.
+     * @param input the input bytes
      * @param output The output buffer {@link Writer}
-     * @param bufferSize Size of internal buffer to use.
-     * @throws IOException in case of failure.
+     * @param bufferSize size of internal buffer
+     * @throws IOException in case of failure
+     * @deprecated use {@code org.apache.commons.io.IOUtils.write()}.
      */
+    @Deprecated
     public static void copy( @Nonnull final byte[] input, @Nonnull final Writer output, @Nonnull final String encoding,
                              final int bufferSize )
         throws IOException
@@ -640,10 +712,12 @@ public final class IOUtil
     /**
      * Get the contents of a <code>byte[]</code> as a String.
      * The platform's default encoding is used for the byte-to-char conversion.
-     * @param input The input bytes.
-     * @return The resulting string.
-     * @throws IOException in case of failure.
+     * @param input the input bytes
+     * @return the resulting string
+     * @throws IOException in case of failure
+     * @deprecated always specify a character encoding
      */
+    @Deprecated
     @Nonnull public static String toString( @Nonnull final byte[] input )
         throws IOException
     {
@@ -654,11 +728,13 @@ public final class IOUtil
      * Get the contents of a <code>byte[]</code> as a String.
      * The platform's default encoding is used for the byte-to-char conversion.
      *
-     * @param bufferSize Size of internal buffer to use.
-     * @param input The input bytes.
-     * @return The created string.
-     * @throws IOException in case of failure.
+     * @param bufferSize size of internal buffer
+     * @param input the input bytes
+     * @return the created string
+     * @throws IOException in case of failure
+     * @deprecated always specify a character encoding
      */
+    @Deprecated
     @Nonnull public static String toString( @Nonnull final byte[] input, final int bufferSize )
         throws IOException
     {
@@ -670,13 +746,15 @@ public final class IOUtil
     /**
      * Get the contents of a <code>byte[]</code> as a String.
      *
-     * @param encoding The name of a supported character encoding. See the
-     *                 <a href="http://www.iana.org/assignments/character-sets">IANA
+     * @param encoding the name of a supported character encoding. See the
+     *                 <a href="https://www.iana.org/assignments/character-sets">IANA
      *                 Charset Registry</a> for a list of valid encoding types.
-     * @param input The input bytes.
-     * @return The resulting string.
-     * @throws IOException in case of failure.
+     * @param input the input bytes
+     * @return the resulting string
+     * @throws IOException in case of failure
+     * @deprecated use {@code new String(input, encoding)}
      */
+    @Deprecated
     @Nonnull public static String toString( @Nonnull final byte[] input, @Nonnull final String encoding )
         throws IOException
     {
@@ -686,14 +764,16 @@ public final class IOUtil
     /**
      * Get the contents of a <code>byte[]</code> as a String.
      *
-     * @param encoding   The name of a supported character encoding. See the
-     *                   <a href="http://www.iana.org/assignments/character-sets">IANA
+     * @param encoding   the name of a supported character encoding. See the
+     *                   <a href="https://www.iana.org/assignments/character-sets">IANA
      *                   Charset Registry</a> for a list of valid encoding types.
-     * @param bufferSize Size of internal buffer to use.
-     * @param input Input bytes.
-     * @return The resulting string.
-     * @throws IOException in case of failure.
+     * @param bufferSize size of internal buffer
+     * @param input input bytes
+     * @return the resulting string
+     * @throws IOException in case of failure
+     * @deprecated use {@code new String(input, encoding)}
      */
+    @Deprecated
     @Nonnull public static String toString( @Nonnull final byte[] input, @Nonnull final String encoding,
                                             final int bufferSize )
         throws IOException
@@ -708,10 +788,13 @@ public final class IOUtil
 
     /**
      * Copy bytes from a <code>byte[]</code> to an <code>OutputStream</code>.
+     * 
      * @param input Input byte array.
      * @param output output stream {@link OutputStream}
-     * @throws IOException in case of failure.
+     * @throws IOException in case of failure
+     * @deprecated inline this method
      */
+    @Deprecated
     public static void copy( @Nonnull final byte[] input, @Nonnull final OutputStream output )
         throws IOException
     {
@@ -719,13 +802,15 @@ public final class IOUtil
     }
 
     /**
-     * Compare the contents of two Streams to determine if they are equal or not.
+     * Compare the contents of two streams to determine if they are equal or not.
      *
      * @param input1 the first stream
      * @param input2 the second stream
      * @return true if the content of the streams are equal or they both don't exist, false otherwise
-     * @throws IOException in case of failure.
+     * @throws IOException in case of failure
+     * @deprecated use {@code org.apache.commons.io.IOUtils.contentEquals()}
      */
+    @Deprecated
     public static boolean contentEquals( @Nonnull final InputStream input1, @Nonnull final InputStream input2 )
         throws IOException
     {
