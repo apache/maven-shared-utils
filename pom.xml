@@ -24,7 +24,6 @@
     <groupId>org.apache.maven.shared</groupId>
     <artifactId>maven-shared-components</artifactId>
     <version>34</version>
-    <relativePath>../../pom/maven/maven-shared-components/pom.xml</relativePath>
   </parent>
 
   <artifactId>maven-shared-utils</artifactId>
