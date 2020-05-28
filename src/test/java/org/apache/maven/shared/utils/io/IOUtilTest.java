@@ -40,6 +40,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+@SuppressWarnings( "deprecation" )
 public class IOUtilTest
 {
 
