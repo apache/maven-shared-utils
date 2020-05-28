@@ -43,41 +43,36 @@ import java.nio.channels.Channel;
  * copying between sources (<code>InputStream</code>, <code>Reader</code>, <code>String</code> and
  * <code>byte[]</code>) and destinations (<code>OutputStream</code>, <code>Writer</code>,
  * <code>String</code> and <code>byte[]</code>).
- * </p>
- * <p/>
+ * 
  * <p>Unless otherwise noted, these <code>copy</code> methods do <em>not</em> flush or close the
  * streams. Often, doing so would require making non-portable assumptions about the streams' origin
  * and further use. This means that both streams' <code>close()</code> methods must be called after
  * copying. if one omits this step, then the stream resources (sockets, file descriptors) are
  * released when the associated Stream is garbage-collected. It is not a good idea to rely on this
- * mechanism. For a good overview of the distinction between "memory management" and "resource
- * management", see <a href="http://www.unixreview.com/articles/1998/9804/9804ja/ja.htm">this
- * UnixReview article</a></p>
- * <p/>
+ * mechanism.</p>
+ * 
  * <p>For each <code>copy</code> method, a variant is provided that allows the caller to specify the
  * buffer size (the default is 4k). As the buffer size can have a fairly large impact on speed, this
  * may be worth tweaking. Often "large buffer -&gt; faster" does not hold, even for large data
  * transfers.</p>
- * <p/>
  * <p>For byte-to-char methods, a <code>copy</code> variant allows the encoding to be selected
  * (otherwise the platform default is used).</p>
- * <p/>
  * <p>The <code>copy</code> methods use an internal buffer when copying. It is therefore advisable
  * <em>not</em> to deliberately wrap the stream arguments to the <code>copy</code> methods in
  * <code>Buffered*</code> streams. For example, don't do the
  * following:</p>
- * <p/>
+ * <p>
  * <code>copy( new BufferedInputStream( in ), new BufferedOutputStream( out ) );</code>
- * <p/>
+ * </p>
  * <p>The rationale is as follows:</p>
- * <p/>
+ * 
  * <p>Imagine that an InputStream's read() is a very expensive operation, which would usually suggest
  * wrapping in a BufferedInputStream. The BufferedInputStream works by issuing infrequent
  * {@link java.io.InputStream#read(byte[] b, int off, int len)} requests on the underlying InputStream, to
  * fill an internal buffer, from which further <code>read</code> requests can inexpensively get
  * their data (until the buffer runs out).</p>
  * <p>However, the <code>copy</code> methods do the same thing, keeping an internal buffer,
- * populated by {@link InputStream#read(byte[] b, int off, int len)} requests. Having two buffers
+ * populated by {@link InputStream#read(byte[] b, int offset, int len)} requests. Having two buffers
  * (or three if the destination stream is also buffered) is pointless, and the unnecessary buffer
  * management hurts performance slightly (about 3%, according to some simple experiments).</p>
  *
@@ -133,9 +128,9 @@ public final class IOUtil
 
     /**
      * Copy bytes from an <code>InputStream</code> to an <code>OutputStream</code>.
-     * @param input The input size.
-     * @param output The resulting output.
-     * @throws IOException in case of an error.
+     * @param input the input size
+     * @param output the resulting output
+     * @throws IOException in case of an error
      */
     public static void copy( @Nonnull final InputStream input, @Nonnull final OutputStream output )
         throws IOException
@@ -146,10 +141,10 @@ public final class IOUtil
     /**
      * Copy bytes from an <code>InputStream</code> to an <code>OutputStream</code>.
      *
-     * @param input The input size.
-     * @param output The resulting output.
-     * @param bufferSize Size of internal buffer to use.
-     * @throws IOException in case of an error.
+     * @param input the input size
+     * @param output the resulting output
+     * @param bufferSize size of internal buffer to use
+     * @throws IOException in case of an error
      */
     public static void copy( @Nonnull final InputStream input, @Nonnull final OutputStream output,
                              final int bufferSize )
@@ -759,8 +754,8 @@ public final class IOUtil
     /**
      * Closes a {@code Channel} suppressing any {@code IOException}.
      * <p>
-     * <b>Note:</b><br/>The usecase justifying this method is a shortcoming of the Java language up to but not including
-     * Java 7. For any code targetting Java 7 or later use of this method is highly discouraged and the
+     * <b>Note:</b> The use case justifying this method is a shortcoming of the Java language up to but not including
+     * Java 7. For any code targeting Java 7 or later use of this method is highly discouraged and the
      * {@code try-with-resources} statement should be used instead. Care must be taken to not use this method in a way
      * {@code IOException}s get suppressed incorrectly.
      * <strong>You must close all resources in use inside the {@code try} block to not suppress exceptions in the
@@ -844,7 +839,9 @@ public final class IOUtil
      * </p>
      *
      * @param channel The channel to close or {@code null}.
+     * @deprecated use try-with-resources
      */
+    @Deprecated
     public static void close( @Nullable Channel channel )
     {
         try
@@ -863,7 +860,7 @@ public final class IOUtil
     /**
      * Closes an {@code InputStream} suppressing any {@code IOException}.
      * <p>
-     * <b>Note:</b><br/>The usecase justifying this method is a shortcoming of the Java language up to but not including
+     * <b>Note:</b> The use case justifying this method is a shortcoming of the Java language up to but not including
      * Java 7. For any code targeting Java 7 or later use of this method is highly discouraged and the
      * {@code try-with-resources} statement should be used instead. Care must be taken to not use this method in a way
      * {@code IOException}s get suppressed incorrectly.
@@ -948,7 +945,9 @@ public final class IOUtil
      * </p>
      *
      * @param inputStream The stream to close or {@code null}.
+     * @deprecated use try-with-resources
      */
+    @Deprecated
     public static void close( @Nullable InputStream inputStream )
     {
         try
@@ -967,7 +966,7 @@ public final class IOUtil
     /**
      * Closes an {@code OutputStream} suppressing any {@code IOException}.
      * <p>
-     * <b>Note:</b><br/>The usecase justifying this method is a shortcoming of the Java language up to but not including
+     * <b>Note:</b> The use case justifying this method is a shortcoming of the Java language up to but not including
      * Java 7. For any code targeting Java 7 or later use of this method is highly discouraged and the
      * {@code try-with-resources} statement should be used instead. Care must be taken to not use this method in a way
      * {@code IOException}s get suppressed incorrectly.
@@ -1052,7 +1051,9 @@ public final class IOUtil
      * </p>
      *
      * @param outputStream The stream to close or {@code null}.
+     * @deprecated use try-with-resources
      */
+    @Deprecated
     public static void close( @Nullable OutputStream outputStream )
     {
         try
@@ -1071,7 +1072,7 @@ public final class IOUtil
     /**
      * Closes a {@code Reader} suppressing any {@code IOException}.
      * <p>
-     * <b>Note:</b><br/>The usecase justifying this method is a shortcoming of the Java language up to but not including
+     * <b>Note:</b> The use case justifying this method is a shortcoming of the Java language up to but not including
      * Java 7. For any code targeting Java 7 or later use of this method is highly discouraged and the
      * {@code try-with-resources} statement should be used instead. Care must be taken to not use this method in a way
      * {@code IOException}s get suppressed incorrectly.
@@ -1156,7 +1157,9 @@ public final class IOUtil
      * </p>
      *
      * @param reader The reader to close or {@code null}.
+     * @deprecated use try-with-resources
      */
+    @Deprecated
     public static void close( @Nullable Reader reader )
     {
         try
@@ -1175,7 +1178,7 @@ public final class IOUtil
     /**
      * Closes a {@code Writer} suppressing any {@code IOException}.
      * <p>
-     * <b>Note:</b><br/>The usecase justifying this method is a shortcoming of the Java language up to but not including
+     * <b>Note:</b> The use case justifying this method is a shortcoming of the Java language up to but not including
      * Java 7. For any code targeting Java 7 or later use of this method is highly discouraged and the
      * {@code try-with-resources} statement should be used instead. Care must be taken to not use this method in a way
      * {@code IOException}s get suppressed incorrectly.
@@ -1260,7 +1263,9 @@ public final class IOUtil
      * </p>
      *
      * @param writer The writer to close or {@code null}.
+     * @deprecated use try-with-resources
      */
+    @Deprecated
     public static void close( @Nullable Writer writer )
     {
         try
