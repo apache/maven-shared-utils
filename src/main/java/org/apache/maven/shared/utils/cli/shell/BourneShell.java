@@ -105,13 +105,8 @@ public class BourneShell
         }
 
         String dir = getWorkingDirectoryAsString();
-        StringBuilder sb = new StringBuilder();
-        sb.append( "cd " );
 
-        sb.append( quoteOneItem( dir, false ) );
-        sb.append( " && " );
-
-        return sb.toString();
+        return "cd " + quoteOneItem( dir, false ) + " && ";
     }
 
     /**
@@ -138,10 +133,6 @@ public class BourneShell
             return null;
         }
 
-        StringBuilder sb = new StringBuilder();
-        sb.append( "'" );
-        sb.append( path.replace( "'", "'\"'\"'" ) );
-        sb.append( "'" );
-        return sb.toString();
+        return "'" + path.replace( "'", "'\"'\"'" ) + "'";
     }
 }

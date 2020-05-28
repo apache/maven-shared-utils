@@ -42,7 +42,7 @@ public class BourneShellTest
         sh.setWorkingDirectory( "/usr/local/bin" );
         sh.setExecutable( "chmod" );
 
-        String executable = StringUtils.join( sh.getShellCommandLine( new String[]{} ).iterator(), " " );
+        String executable = StringUtils.join( sh.getShellCommandLine().iterator(), " " );
 
         assertEquals( "/bin/sh -c cd '/usr/local/bin' && 'chmod'", executable );
     }
@@ -54,7 +54,7 @@ public class BourneShellTest
         sh.setWorkingDirectory( "/usr/local/'something else'" );
         sh.setExecutable( "chmod" );
 
-        String executable = StringUtils.join( sh.getShellCommandLine( new String[]{} ).iterator(), " " );
+        String executable = StringUtils.join( sh.getShellCommandLine().iterator(), " " );
 
         assertEquals( "/bin/sh -c cd '/usr/local/'\"'\"'something else'\"'\"'' && 'chmod'", executable );
     }
@@ -66,7 +66,7 @@ public class BourneShellTest
         sh.setWorkingDirectory( "\\usr\\local\\'something else'" );
         sh.setExecutable( "chmod" );
 
-        String executable = StringUtils.join( sh.getShellCommandLine( new String[]{} ).iterator(), " " );
+        String executable = StringUtils.join( sh.getShellCommandLine().iterator(), " " );
 
         assertEquals( "/bin/sh -c cd '\\usr\\local\\'\"'\"'something else'\"'\"'' && 'chmod'", executable );
     }
@@ -78,9 +78,7 @@ public class BourneShellTest
         sh.setWorkingDirectory( "/usr/bin" );
         sh.setExecutable( "chmod" );
 
-        final String[] args = { "\"some arg with spaces\"" };
-
-        List<String> shellCommandLine = sh.getShellCommandLine( args );
+        List<String> shellCommandLine = sh.getShellCommandLine("\"some arg with spaces\"");
 
         String cli = StringUtils.join( shellCommandLine.iterator(), " " );
         System.out.println( cli );
@@ -94,9 +92,7 @@ public class BourneShellTest
         sh.setWorkingDirectory( "/usr/bin" );
         sh.setExecutable( "chmod" );
 
-        String[] args = { "some arg with spaces" };
-
-        List<String> shellCommandLine = sh.getShellCommandLine( args );
+        List<String> shellCommandLine = sh.getShellCommandLine("some arg with spaces");
 
         String cli = StringUtils.join( shellCommandLine.iterator(), " " );
         System.out.println( cli );
@@ -110,9 +106,7 @@ public class BourneShellTest
         sh.setWorkingDirectory( "/usr/bin" );
         sh.setExecutable( "chmod" );
 
-        String[] args = { "arg'withquote" };
-
-        List<String> shellCommandLine = sh.getShellCommandLine( args );
+        List<String> shellCommandLine = sh.getShellCommandLine("arg'withquote");
 
         assertEquals("cd '/usr/bin' && 'chmod' 'arg'\"'\"'withquote'", shellCommandLine.get(shellCommandLine.size() - 1));
     }
@@ -127,9 +121,7 @@ public class BourneShellTest
         sh.setWorkingDirectory( "/usr/bin" );
         sh.setExecutable( "chmod" );
 
-        String[] args = { ";some&argwithunix$chars" };
-
-        List<String> shellCommandLine = sh.getShellCommandLine( args );
+        List<String> shellCommandLine = sh.getShellCommandLine(";some&argwithunix$chars");
 
         String cli = StringUtils.join( shellCommandLine.iterator(), " " );
         System.out.println( cli );

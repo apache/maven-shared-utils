@@ -148,8 +148,8 @@ public class CommandLineUtilsTest
     public void givenAnEscapedSingleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenTheQuotationMarkRemainsEscaped()
         throws Exception
     {
-        final String command = "echo \"let\\\'s go\"";
-        final String[] expected = new String[] { "echo", "let\\\'s go" };
+        final String command = "echo \"let\\'s go\"";
+        final String[] expected = new String[] { "echo", "let\\'s go"};
         assertCmdLineArgs( expected, command );
     }
 
@@ -168,5 +168,4 @@ public class CommandLineUtilsTest
         assertEquals( expected.length, actual.length );
         assertEquals( Arrays.asList( expected ), Arrays.asList( actual ) );
     }
-
 }
