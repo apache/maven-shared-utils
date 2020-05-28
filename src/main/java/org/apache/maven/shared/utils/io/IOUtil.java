@@ -802,13 +802,15 @@ public final class IOUtil
     }
 
     /**
-     * Compare the contents of two Streams to determine if they are equal or not.
+     * Compare the contents of two streams to determine if they are equal or not.
      *
      * @param input1 the first stream
      * @param input2 the second stream
      * @return true if the content of the streams are equal or they both don't exist, false otherwise
      * @throws IOException in case of failure
+     * @deprecated use {@code org.apache.commons.io.IOUtils.contentEquals()}
      */
+    @Deprecated
     public static boolean contentEquals( @Nonnull final InputStream input1, @Nonnull final InputStream input2 )
         throws IOException
     {
