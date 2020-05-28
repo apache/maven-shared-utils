@@ -104,13 +104,13 @@ public class Shell
      */
     String[] getShellArgs()
     {
-        if ( ( shellArgs == null ) || shellArgs.isEmpty() )
+        if ( shellArgs.isEmpty() )
         {
             return null;
         }
         else
         {
-            return shellArgs.toArray( new String[shellArgs.size()] );
+            return shellArgs.toArray( new String[0] );
         }
     }
 
@@ -146,7 +146,7 @@ public class Shell
      */
     List<String> getRawCommandLine( String executableParameter, String... argumentsParameter )
     {
-        List<String> commandLine = new ArrayList<String>();
+        List<String> commandLine = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
 
         if ( executableParameter != null )
@@ -280,7 +280,7 @@ public class Shell
     public List<String> getShellCommandLine( String... arguments )
     {
 
-        List<String> commandLine = new ArrayList<String>();
+        List<String> commandLine = new ArrayList<>();
 
         if ( getShellCommand() != null )
         {
