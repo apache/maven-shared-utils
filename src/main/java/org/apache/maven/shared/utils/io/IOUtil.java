@@ -72,7 +72,7 @@ import java.nio.channels.Channel;
  * fill an internal buffer, from which further <code>read</code> requests can inexpensively get
  * their data (until the buffer runs out).</p>
  * <p>However, the <code>copy</code> methods do the same thing, keeping an internal buffer,
- * populated by {@link InputStream#read(byte[] b, int offset, int len)} requests. Having two buffers
+ * populated by {@link InputStream#read(byte[] b, int off, int len)} requests. Having two buffers
  * (or three if the destination stream is also buffered) is pointless, and the unnecessary buffer
  * management hurts performance slightly (about 3%, according to some simple experiments).</p>
  *
