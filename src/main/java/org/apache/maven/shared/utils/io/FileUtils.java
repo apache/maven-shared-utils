@@ -1221,8 +1221,7 @@ public class FileUtils
      * Make a directory.
      *
      * @param file not null
-     * @throws IOException              If there already exists a file with specified name or
-     *                                  the directory is unable to be created
+     * @throws IOException if a file already exists with the specified name or the directory is unable to be created
      * @throws IllegalArgumentException if the file contains illegal Windows characters under Windows OS.
      * @see #INVALID_CHARACTERS_FOR_WINDOWS_FILE_NAME
      */
@@ -1260,7 +1259,9 @@ public class FileUtils
      *
      * @param directory a directory
      * @throws IOException if any
+     * @deprecated use {@code org.apache.commons.io.FileUtils.deleteDirectory()}
      */
+    @Deprecated
     public static void deleteDirectory( @Nonnull final String directory )
         throws IOException
     {
@@ -1272,7 +1273,9 @@ public class FileUtils
      *
      * @param directory a directory
      * @throws IOException if any
+     * @deprecated use {@code org.apache.commons.io.FileUtils.deleteDirectory()}
      */
+    @Deprecated
     public static void deleteDirectory( @Nonnull final File directory )
         throws IOException
     {
@@ -1298,11 +1301,14 @@ public class FileUtils
     }
 
     /**
-     * Clean a directory without deleting it.
+     * Remove all files from a directory without deleting it.
      *
      * @param directory a directory
-     * @throws IOException if any
+     * @throws IOException if any. This can leave cleaning in a half-finished state where
+     *         some but not all files have been deleted.
+     * @deprecated use {@code org.apache.commons.io.FileUtils.cleanDirectory()}
      */
+    @Deprecated
     public static void cleanDirectory( @Nonnull final File directory )
         throws IOException
     {
@@ -1350,7 +1356,9 @@ public class FileUtils
      *
      * @param directory a directory
      * @return size of directory in bytes
+     * @deprecated use {@code org.apache.commons.io.FileUtils.sizeOf()}
      */
+    @Deprecated
     public static long sizeOfDirectory( @Nonnull final String directory )
     {
         return sizeOfDirectory( new File( directory ) );
@@ -1361,7 +1369,9 @@ public class FileUtils
      *
      * @param directory a directory
      * @return size of directory in bytes
+     * @deprecated use {@code org.apache.commons.io.FileUtils.sizeOf()}
      */
+    @Deprecated
     public static long sizeOfDirectory( @Nonnull final File directory )
     {
         if ( !directory.exists() )
@@ -1404,8 +1414,8 @@ public class FileUtils
      * including the directory name in each of the files
      *
      * @param directory the directory to scan
-     * @param includes  the includes pattern, comma separated
-     * @param excludes  the excludes pattern, comma separated
+     * @param includes  the Ant includes pattern, comma separated
+     * @param excludes  the Ant excludes pattern, comma separated
      * @return a list of File objects
      * @throws IOException in case of failure.
      * @see #getFileNames(File, String, String, boolean)
@@ -1450,11 +1460,11 @@ public class FileUtils
      * This method use case sensitive file name.
      *
      * @param directory      the directory to scan
-     * @param includes       the includes pattern, comma separated
-     * @param excludes       the excludes pattern, comma separated
-     * @param includeBasedir true to include the base dir in each String of file
-     * @return a list of files as String
-     * @throws IOException in case of failure.
+     * @param includes       the Ant includes pattern, comma separated
+     * @param excludes       the Ant excludes pattern, comma separated
+     * @param includeBasedir true to include the base directory in each String of file
+     * @return a list of file names
+     * @throws IOException in case of failure
      */
     @Nonnull public static List<String> getFileNames( @Nonnull File directory, @Nullable String includes,
                                                       @Nullable String excludes, boolean includeBasedir )
@@ -1467,8 +1477,8 @@ public class FileUtils
      * Return a list of files as String depending options.
      *
      * @param directory       the directory to scan
-     * @param includes        the includes pattern, comma separated
-     * @param excludes        the excludes pattern, comma separated
+     * @param includes        the Ant includes pattern, comma separated
+     * @param excludes        the Ant excludes pattern, comma separated
      * @param includeBasedir  true to include the base dir in each String of file
      * @param isCaseSensitive true if case sensitive
      * @return a list of files as String
@@ -1487,8 +1497,8 @@ public class FileUtils
      * This method use case sensitive file name.
      *
      * @param directory      the directory to scan
-     * @param includes       the includes pattern, comma separated
-     * @param excludes       the excludes pattern, comma separated
+     * @param includes       the Ant includes pattern, comma separated
+     * @param excludes       the Ant excludes pattern, comma separated
      * @param includeBasedir true to include the base dir in each String of file
      * @return a list of directories as String
      * @throws IOException in case of failure.
@@ -1501,15 +1511,15 @@ public class FileUtils
     }
 
     /**
-     * Return a list of directories as String depending options.
+     * Return a list of directories as Strings.
      *
      * @param directory       the directory to scan
-     * @param includes        the includes pattern, comma separated
-     * @param excludes        the excludes pattern, comma separated
-     * @param includeBasedir  true to include the base dir in each String of file
+     * @param includes        the Ant includes pattern, comma separated
+     * @param excludes        the Ant excludes pattern, comma separated
+     * @param includeBasedir  true to include the base directory in each String of file
      * @param isCaseSensitive true if case sensitive
      * @return a list of directories as String
-     * @throws IOException in case of failure.
+     * @throws IOException in case of failure
      */
     @Nonnull public static List<String> getDirectoryNames( @Nonnull File directory, @Nullable String includes,
                                                            @Nullable String excludes, boolean includeBasedir,
@@ -1520,16 +1530,16 @@ public class FileUtils
     }
 
     /**
-     * Return a list of files as String depending options.
+     * Return a list of file names as Strings.
      *
      * @param directory       the directory to scan
-     * @param includes        the includes pattern, comma separated
-     * @param excludes        the excludes pattern, comma separated
-     * @param includeBasedir  true to include the base dir in each String of file
+     * @param includes        the Ant includes pattern, comma separated
+     * @param excludes        the Ant excludes pattern, comma separated
+     * @param includeBasedir  true to include the base directory in each String of file
      * @param isCaseSensitive true if case sensitive
-     * @param getFiles        true if get files
-     * @param getDirectories  true if get directories
-     * @return a list of files as String
+     * @param getFiles        true to include regular files
+     * @param getDirectories  true to include directories
+     * @return a list of file names
      */
     @Nonnull public static List<String> getFileAndDirectoryNames( File directory, @Nullable String includes,
                                                                   @Nullable String excludes, boolean includeBasedir,
@@ -1594,10 +1604,10 @@ public class FileUtils
     }
 
     /**
-     * Copy a directory to an other one.
+     * Copy the contents of a directory into another one.
      *
-     * @param sourceDirectory      the source dir
-     * @param destinationDirectory the target dir
+     * @param sourceDirectory      the source directory
+     * @param destinationDirectory the target directory
      * @throws IOException if any
      */
     public static void copyDirectory( @Nonnull File sourceDirectory, @Nonnull File destinationDirectory )
@@ -1607,12 +1617,12 @@ public class FileUtils
     }
 
     /**
-     * Copy a directory to an other one.
+     * Copy the contents of a directory into another one.
      *
-     * @param sourceDirectory      the source dir
-     * @param destinationDirectory the target dir
-     * @param includes             include pattern
-     * @param excludes             exlucde pattern
+     * @param sourceDirectory      the source directory
+     * @param destinationDirectory the target directory
+     * @param includes             Ant include pattern
+     * @param excludes             Ant exclude pattern
      * @throws IOException if any
      * @see #getFiles(File, String, String)
      */
@@ -1634,18 +1644,20 @@ public class FileUtils
     }
 
     /**
-     * Copies a entire directory structure.
+     * Copies an entire directory structure.
      * <p/>
      * Note:
      * <ul>
      * <li>It will include empty directories.
-     * <li>The <code>sourceDirectory</code> must exists.
+     * <li>The <code>sourceDirectory</code> must exist.
      * </ul>
      *
      * @param sourceDirectory      the source dir
      * @param destinationDirectory the target dir
      * @throws IOException if any
+     * @deprecated use {@code org.apache.commons.io.FileUtils.copyDirectory()}
      */
+    @Deprecated
     public static void copyDirectoryStructure( @Nonnull File sourceDirectory, @Nonnull File destinationDirectory )
         throws IOException
     {
@@ -1743,7 +1755,9 @@ public class FileUtils
      * @param to   the new file name
      * @throws IOException if anything bad happens during this process.
      *                     Note that <code>to</code> may have been deleted already when this happens.
+     * @deprecated use {@code java.nio.Files.move()}
      */
+    @Deprecated
     public static void rename( @Nonnull File from, @Nonnull File to )
         throws IOException
     {
@@ -1774,23 +1788,24 @@ public class FileUtils
      * <p>The file denoted by the returned abstract pathname did not
      * exist before this method was invoked, any subsequent invocation
      * of this method will yield a different file name.</p>
-     * <p/>
+     * <p>
      * The filename is prefixNNNNNsuffix where NNNN is a random number
      * </p>
-     * <p>This method is different to {@link File#createTempFile(String, String, File)} of JDK 1.2
+     * <p>This method is different to {@link File#createTempFile(String, String, File)}
      * as it doesn't create the file itself.
      * It uses the location pointed to by java.io.tmpdir
-     * when the parentDir attribute is
-     * null.</p>
-     * <p>To delete automatically the file created by this method, use the
+     * when the parentDir attribute is null.</p>
+     * <p>To automatically delete the file created by this method, use the
      * {@link File#deleteOnExit()} method.</p>
      *
      * @param prefix    prefix before the random number
      * @param suffix    file extension; include the '.'
-     * @param parentDir Directory to create the temporary file in <code>-java.io.tmpdir</code>
-     *                  used if not specificed
+     * @param parentDir directory to create the temporary file in <code>-java.io.tmpdir</code>
+     *                  used if not specified
      * @return a File reference to the new temporary file.
+     * @deprecated use {@code java.nio.Files.createTempFile()}
      */
+    @Deprecated
     public static File createTempFile( @Nonnull String prefix, @Nonnull String suffix, @Nullable File parentDir )
     {
         File result;
@@ -1823,7 +1838,7 @@ public class FileUtils
     }
 
     /**
-     * <b>If wrappers is null or empty, the file will be copy only if to.lastModified() < from.lastModified()</b>
+     * <b>If wrappers is null or empty, the file will be copied only if to.lastModified() < from.lastModified()</b>
      *
      * @param from     the file to copy
      * @param to       the destination file
@@ -1840,13 +1855,12 @@ public class FileUtils
 
     /**
      * Wrapper class for Filter.
-     *
      */
     public abstract static class FilterWrapper
     {
         /**
          * @param fileReader {@link Reader}
-         * @return The Reader instance.
+         * @return the Reader instance
          */
         public abstract Reader getReader( Reader fileReader );
     }
@@ -1859,8 +1873,8 @@ public class FileUtils
      * @param to the destination file
      * @param encoding the file output encoding (only if wrappers is not empty)
      * @param wrappers array of {@link FilterWrapper}
-     * @param overwrite if true and f wrappers is null or empty, the file will be copy enven if to.lastModified() <
-     *            from.lastModified()
+     * @param overwrite if true and wrappers is null or empty, the file will be copied even if
+     *         to.lastModified() < from.lastModified()
      * @throws IOException if an IO error occurs during copying or filtering
      */
     public static void copyFile( @Nonnull File from, @Nonnull File to, @Nullable String encoding,
@@ -2103,10 +2117,14 @@ public class FileUtils
     }
 
     /**
-     * @param symlink The link name.
-     * @param target The target.
-     * @return The linked file.
-     * @throws IOException in case of an error.
+     * Create a new symbolic link, possibly replacing an existing symbolic link.
+     * 
+     * @param symlink the link name
+     * @param target the target
+     * @return the linked file
+     * @throws IOException in case of an error
+     * @see {@code java.nio.file.Files.createSymbolicLink(Path)} which creates a new
+     *         symbolic link but does not replace exsiting symbolic links
      */
     @Nonnull public static File createSymbolicLink( @Nonnull File symlink,  @Nonnull File target )
             throws IOException
