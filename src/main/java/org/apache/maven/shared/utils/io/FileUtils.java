@@ -2117,10 +2117,14 @@ public class FileUtils
     }
 
     /**
+     * Create a new symbolic link, possibly replacing an existing symbolic link.
+     * 
      * @param symlink the link name
      * @param target the target
      * @return the linked file
      * @throws IOException in case of an error
+     * @see {@code java.nio.file.Files.createSymbolicLink(Path)} which creates a new
+     *         symbolic link but does not replace exsiting symbolic links
      */
     @Nonnull public static File createSymbolicLink( @Nonnull File symlink,  @Nonnull File target )
             throws IOException
