@@ -40,7 +40,6 @@ import javax.annotation.Nonnull;
  * @author Hervé Boutemy
  * @see java.nio.charset.Charset
  * @see <a href="http://docs.oracle.com/javase/1.5.0/docs/guide/intl/encoding.doc.html">Supported encodings</a>
- * @version $Id$
  */
 public class WriterFactory
 {

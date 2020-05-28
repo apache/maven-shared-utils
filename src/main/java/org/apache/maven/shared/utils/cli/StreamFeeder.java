@@ -28,7 +28,6 @@ import java.util.concurrent.atomic.AtomicReference;
  * Read from an InputStream and write the output to an OutputStream.
  *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id$
  */
 class StreamFeeder
     extends AbstractStreamHandler

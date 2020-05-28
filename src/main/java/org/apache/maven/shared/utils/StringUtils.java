@@ -49,7 +49,6 @@ import javax.annotation.Nullable;
  * @author <a href="mailto:fredrik@westermarck.com">Fredrik Westermarck</a>
  * @author Holger Krauth
  * @author <a href="mailto:alex@purpletech.com">Alexander Day Chaffee</a>
- * @version $Id$
  * 
  */
 public class StringUtils
