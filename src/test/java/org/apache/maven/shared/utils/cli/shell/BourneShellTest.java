@@ -44,7 +44,7 @@ public class BourneShellTest
 
         String executable = StringUtils.join( sh.getShellCommandLine( new String[]{} ).iterator(), " " );
 
-        assertEquals( "/bin/sh -c cd /usr/local/bin && chmod", executable );
+        assertEquals( "/bin/sh -c cd '/usr/local/bin' && 'chmod'", executable );
     }
 
     public void testQuoteWorkingDirectoryAndExecutable_WDPathWithSingleQuotes()
@@ -56,7 +56,7 @@ public class BourneShellTest
 
         String executable = StringUtils.join( sh.getShellCommandLine( new String[]{} ).iterator(), " " );
 
-        assertEquals( "/bin/sh -c cd \"/usr/local/\'something else\'\" && chmod", executable );
+        assertEquals( "/bin/sh -c cd '/usr/local/'\"'\"'something else'\"'\"'' && 'chmod'", executable );
     }
 
     public void testQuoteWorkingDirectoryAndExecutable_WDPathWithSingleQuotes_BackslashFileSep()
@@ -68,7 +68,7 @@ public class BourneShellTest
 
         String executable = StringUtils.join( sh.getShellCommandLine( new String[]{} ).iterator(), " " );
 
-        assertEquals( "/bin/sh -c cd \"\\usr\\local\\\'something else\'\" && chmod", executable );
+        assertEquals( "/bin/sh -c cd '\\usr\\local\\'\"'\"'something else'\"'\"'' && 'chmod'", executable );
     }
 
     public void testPreserveSingleQuotesOnArgument()
@@ -84,7 +84,7 @@ public class BourneShellTest
 
         String cli = StringUtils.join( shellCommandLine.iterator(), " " );
         System.out.println( cli );
-        assertTrue( cli.endsWith( args[0] ) );
+        assertTrue( cli.endsWith( "'\"some arg with spaces\"'" ) );
     }
 
     public void testAddSingleQuotesOnArgumentWithSpaces()
@@ -100,7 +100,21 @@ public class BourneShellTest
 
         String cli = StringUtils.join( shellCommandLine.iterator(), " " );
         System.out.println( cli );
-        assertTrue( cli.endsWith( "\"" + args[0] + "\"" ) );
+        assertTrue( cli.endsWith("'some arg with spaces'"));
+    }
+
+    public void testAddArgumentWithSingleQuote()
+    {
+        Shell sh = newShell();
+
+        sh.setWorkingDirectory( "/usr/bin" );
+        sh.setExecutable( "chmod" );
+
+        String[] args = { "arg'withquote" };
+
+        List<String> shellCommandLine = sh.getShellCommandLine( args );
+
+        assertEquals("cd '/usr/bin' && 'chmod' 'arg'\"'\"'withquote'", shellCommandLine.get(shellCommandLine.size() - 1));
     }
 
     public void testArgumentsWithSemicolon()
@@ -119,7 +133,7 @@ public class BourneShellTest
 
         String cli = StringUtils.join( shellCommandLine.iterator(), " " );
         System.out.println( cli );
-        assertTrue( cli.endsWith( "\"" + args[0] + "\"" ) );
+        assertTrue( cli.endsWith( "';some&argwithunix$chars'" ) );
 
         Commandline commandline = new Commandline( newShell() );
         commandline.setExecutable( "chmod" );
@@ -132,7 +146,7 @@ public class BourneShellTest
 
         assertEquals( "/bin/sh", lines.get( 0 ) );
         assertEquals( "-c", lines.get( 1 ) );
-        assertEquals( "chmod --password \";password\"", lines.get( 2 ) );
+        assertEquals( "'chmod' '--password' ';password'", lines.get( 2 ) );
 
         commandline = new Commandline( newShell() );
         commandline.setExecutable( "chmod" );
@@ -144,7 +158,7 @@ public class BourneShellTest
 
         assertEquals( "/bin/sh", lines.get( 0) );
         assertEquals( "-c", lines.get( 1 ) );
-        assertEquals( "chmod --password \";password\"", lines.get( 2 ) );
+        assertEquals( "'chmod' '--password' ';password'", lines.get( 2 ) );
 
         commandline = new Commandline( new CmdShell() );
         commandline.getShell().setQuotedArgumentsEnabled( true );
@@ -193,7 +207,7 @@ public class BourneShellTest
 
         assertEquals( "/bin/sh", lines.get( 0 ) );
         assertEquals( "-c", lines.get( 1 ) );
-        assertEquals( "chmod \" \" \"|\" \"&&\" \"||\" \";\" \";;\" \"&\" \"()\" \"<\" \"<<\" \">\" \">>\" \"*\" \"?\" \"[\" \"]\" \"{\" \"}\" \"`\" \"#\"",
+        assertEquals( "'chmod' ' ' '|' '&&' '||' ';' ';;' '&' '()' '<' '<<' '>' '>>' '*' '?' '[' ']' '{' '}' '`' '#'",
                       lines.get( 2 ) );
     }
 

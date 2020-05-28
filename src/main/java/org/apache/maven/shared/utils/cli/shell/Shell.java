@@ -49,6 +49,8 @@ public class Shell
 
     private boolean quotedArgumentsEnabled = true;
 
+    private boolean unconditionalQuoting = false;
+
     private String executable;
 
     private String workingDir;
@@ -112,6 +114,19 @@ public class Shell
         }
     }
 
+    protected String quoteOneItem( String inputString, boolean isExecutable )
+    {
+        char[] escapeChars = getEscapeChars( isSingleQuotedExecutableEscaped(), isDoubleQuotedExecutableEscaped() );
+        return StringUtils.quoteAndEscape(
+                inputString,
+                isExecutable ? getExecutableQuoteDelimiter() : getArgumentQuoteDelimiter(),
+                escapeChars,
+                getQuotingTriggerChars(),
+                '\\',
+                unconditionalQuoting
+        );
+    }
+
     /**
      * Get the command line for the provided executable and arguments in this shell
      *
@@ -144,15 +159,11 @@ public class Shell
 
             if ( isQuotedExecutableEnabled() )
             {
-                char[] escapeChars =
-                    getEscapeChars( isSingleQuotedExecutableEscaped(), isDoubleQuotedExecutableEscaped() );
-
-                sb.append( StringUtils.quoteAndEscape( getExecutable(), getExecutableQuoteDelimiter(), escapeChars,
-                                                       getQuotingTriggerChars(), '\\', false ) );
+                sb.append( quoteOneItem( executableParameter, true ) );
             }
             else
             {
-                sb.append( getExecutable() );
+                sb.append( executableParameter );
             }
         }
         for ( String argument : argumentsParameter )
@@ -164,10 +175,7 @@ public class Shell
 
             if ( isQuotedArgumentsEnabled() )
             {
-                char[] escapeChars = getEscapeChars( isSingleQuotedArgumentEscaped(), isDoubleQuotedArgumentEscaped() );
-
-                sb.append( StringUtils.quoteAndEscape( argument, getArgumentQuoteDelimiter(), escapeChars,
-                                                       getQuotingTriggerChars(), '\\', false ) );
+                sb.append( quoteOneItem( argument, false ) );
             }
             else
             {
@@ -284,7 +292,7 @@ public class Shell
             commandLine.addAll( getShellArgsList() );
         }
 
-        commandLine.addAll( getCommandLine( getExecutable(), arguments ) );
+        commandLine.addAll( getCommandLine( executable, arguments ) );
 
         return commandLine;
 
@@ -398,4 +406,13 @@ public class Shell
         this.singleQuotedExecutableEscaped = singleQuotedExecutableEscaped;
     }
 
+    public boolean isUnconditionalQuoting()
+    {
+        return unconditionalQuoting;
+    }
+
+    public void setUnconditionalQuoting( boolean unconditionalQuoting )
+    {
+        this.unconditionalQuoting = unconditionalQuoting;
+    }
 }
