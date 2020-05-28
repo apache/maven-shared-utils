@@ -74,6 +74,7 @@ import java.util.concurrent.TimeUnit;
  * @version $Id: FileUtilsTestCase.java 1081025 2011-03-13 00:45:10Z niallp $
  * @see FileUtils
  */
+@SuppressWarnings( "deprecation" )
 public class FileUtilsTest
 {
 
@@ -89,11 +90,6 @@ public class FileUtilsTest
      * Size of test directory.
      */
     private static final int TEST_DIRECTORY_SIZE = 0;
-
-    /**
-     * Delay in milliseconds to make sure test for "last modified date" are accurate
-     */
-    //private static final int LAST_MODIFIED_DELAY = 600;
 
     private File testFile1;
 
@@ -132,18 +128,10 @@ public class FileUtilsTest
         {
             throw new IOException( "Cannot create file " + file + " as the parent directory does not exist" );
         }
-
-        OutputStream out = null;
-        try
+        
+        try (OutputStream out = new BufferedOutputStream( new FileOutputStream( file ) ) )
         {
-            out = new BufferedOutputStream( new FileOutputStream( file ) );
             FileTestHelper.generateTestData( out, size );
-            out.close();
-            out = null;
-        }
-        finally
-        {
-            IOUtil.close( out );
         }
     }
 
@@ -257,26 +245,6 @@ public class FileUtilsTest
         assertThat( urls[2].toExternalForm().startsWith( "file:" ), is( true ) );
         assertThat( urls[2].toExternalForm(), containsString( "test%20file.txt" ) );
     }
-
-//    @Test public void toURLs2() throws Exception {
-//        File[] files = new File[] {
-//            new File(getTestDirectory(), "file1.txt"),
-//            null,
-//        };
-//        URL[] urls = FileUtils.toURLs(files);
-//
-//        assertEquals(files.length, urls.length);
-//        assertEquals(true, urls[0].toExternalForm().startsWith("file:"));
-//        assertEquals(true, urls[0].toExternalForm().indexOf("file1.txt") > 0);
-//        assertEquals(null, urls[1]);
-//    }
-//
-//    @Test public void toURLs3() throws Exception {
-//        File[] files = null;
-//        URL[] urls = FileUtils.toURLs(files);
-//
-//        assertEquals(0, urls.length);
-//    }
 
     // contentEquals
 
@@ -676,8 +644,6 @@ public class FileUtilsTest
             "Hello Bob!"
         );
 
-        String encoding = null;
-
         FileUtils.copyFile( from, to, null, wrappers( "name", "Bob" ) );
 
         assertFileContent( to, "Hello Bob!" );
@@ -689,7 +655,7 @@ public class FileUtilsTest
 
     private FileUtils.FilterWrapper[] wrappers( String key, String value )
     {
-        final Map map = new HashMap();
+        final Map<String, String> map = new HashMap<>();
         map.put( key, value );
         return new FileUtils.FilterWrapper[]
             {
@@ -1416,7 +1382,6 @@ public class FileUtilsTest
     //// getDefaultExcludesAsList
 
     @Test
-    @SuppressWarnings( "unchecked" )
     public void getDefaultExcludesAsList()
         throws Exception
     {
