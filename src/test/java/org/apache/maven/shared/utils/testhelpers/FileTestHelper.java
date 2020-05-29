@@ -20,7 +20,6 @@ package org.apache.maven.shared.utils.testhelpers;
  */
 
 import org.apache.maven.shared.utils.io.FileUtils;
-import org.apache.maven.shared.utils.io.IOUtil;
 import org.junit.rules.TemporaryFolder;
 
 import java.io.*;
@@ -71,20 +70,12 @@ public final class FileTestHelper
             throw new IOException( "Cannot create file " + file + " as the parent directory does not exist" );
         }
 
-        PrintWriter out = null;
-        try
+        try ( PrintWriter out = new PrintWriter( new OutputStreamWriter( new FileOutputStream( file ), "UTF-8" ) ) )
         {
-            out = new PrintWriter( new OutputStreamWriter( new FileOutputStream( file ), "UTF-8" ) );
             for ( String aData : data )
             {
                 out.println( aData );
             }
-            out.close();
-            out = null;
-        }
-        finally
-        {
-            IOUtil.close( out );
         }
     }
 
