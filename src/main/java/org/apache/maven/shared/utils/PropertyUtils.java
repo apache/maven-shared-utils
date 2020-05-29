@@ -43,7 +43,6 @@ public class PropertyUtils
     @Deprecated
     public PropertyUtils()
     {
-        // should throw new IllegalAccessError( "Utility class" );
     }
 
     /**
