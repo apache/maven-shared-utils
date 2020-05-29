@@ -1688,7 +1688,7 @@ public class StringUtils
      *
      * @param str the String to check
      * @param sub the substring to count
-     * @return the number of occurances, 0 if the String is <code>null</code>
+     * @return the number of occurrences, 0 if the String is <code>null</code>
      * @throws NullPointerException if sub is <code>null</code>
      */
     public static int countMatches( @Nullable String str, @Nonnull String sub )
@@ -1715,7 +1715,7 @@ public class StringUtils
     //--------------------------------------------------------------------------
 
     /**
-     * <p>Checks if the String contains only unicode letters.</p>
+     * <p>Checks if the String contains only Unicode letters.</p>
      * <p/>
      * <p><code>null</code> will return <code>false</code>.
      * An empty String will return <code>true</code>.</p>
@@ -1767,7 +1767,7 @@ public class StringUtils
     }
 
     /**
-     * <p>Checks if the String contains only unicode letters and
+     * <p>Checks if the String contains only Unicode letters and
      * space (<code>' '</code>).</p>
      * <p/>
      * <p><code>null</code> will return <code>false</code>. An
@@ -1795,7 +1795,7 @@ public class StringUtils
     }
 
     /**
-     * <p>Checks if the String contains only unicode letters or digits.</p>
+     * <p>Checks if the String contains only Unicode letters or digits.</p>
      * <p/>
      * <p><code>null</code> will return <code>false</code>. An empty
      * String will return <code>true</code>.</p>
@@ -1822,7 +1822,7 @@ public class StringUtils
     }
 
     /**
-     * <p>Checks if the String contains only unicode letters, digits
+     * <p>Checks if the String contains only Unicode letters, digits
      * or space (<code>' '</code>).</p>
      * <p/>
      * <p><code>null</code> will return <code>false</code>. An empty
@@ -1850,7 +1850,7 @@ public class StringUtils
     }
 
     /**
-     * <p>Checks if the String contains only unicode digits.</p>
+     * <p>Checks if the String contains only Unicode digits.</p>
      * <p/>
      * <p><code>null</code> will return <code>false</code>.
      * An empty String will return <code>true</code>.</p>
