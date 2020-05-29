@@ -108,7 +108,9 @@ import javax.annotation.Nullable;
  * @author Magesh Umasankar
  * @author <a href="mailto:bruce@callenish.com">Bruce Atherton</a>
  * @author <a href="mailto:levylambert@tiscali-dsl.de">Antoine Levy-Lambert</a>
+ * @deprecated use {@code java.nio.file.DirectoryStream} and related classes
  */
+@Deprecated
 public class DirectoryScanner
 {
     /**
@@ -452,9 +454,9 @@ public class DirectoryScanner
     }
 
     /**
-     * @param oldFiles array of old files.
-     * @param newFiles array of new files.
-     * @return calculated differerence.
+     * @param oldFiles array of old files
+     * @param newFiles array of new files
+     * @return calculated difference
      */
     public static DirectoryScanResult diffFiles( @Nullable String[] oldFiles, @Nullable  String[] newFiles )
     {

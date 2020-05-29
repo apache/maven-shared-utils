@@ -23,7 +23,10 @@ package org.apache.maven.shared.utils.io;
 /**
  * Scan for files in a directory at a given time and reports removed and added files
  * between captures.
+ * 
+ * @deprecated use {@code java.nio.file.DirectoryStream} and related classes
  */
+@Deprecated
 public class DirectoryScanResult
 {
     private final String[] filesAdded;
