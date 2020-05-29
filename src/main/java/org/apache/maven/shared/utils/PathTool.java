@@ -35,6 +35,17 @@ import javax.annotation.Nullable;
  */
 public class PathTool
 {
+    
+    /**
+     * The constructor.
+     *
+     * @deprecated This is a utility class with only static methods. Don't create instances of it.
+     */
+    @Deprecated
+    public PathTool()
+    {
+    }    
+    
     /**
      * Determines the relative path of a filename from a base directory.
      * This method is useful in building relative links within pages of
