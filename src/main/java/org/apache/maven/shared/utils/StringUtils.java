@@ -69,7 +69,7 @@ public class StringUtils
     //--------------------------------------------------------------------------
 
     /**
-     * <p>Removes control characters, including whitespace, from both
+     * <p>Removes C0 control characters, including ASCII whitespace, from both
      * ends of this String, handling <code>null</code> by returning
      * an empty String.</p>
      *
@@ -83,7 +83,7 @@ public class StringUtils
     }
 
     /**
-     * <p>Removes control characters, including whitespace, from both
+     * <p>Removes C0 control characters, including ASCII whitespace, from both
      * ends of this String, handling <code>null</code> by returning
      * <code>null</code>.</p>
      *
@@ -530,10 +530,10 @@ public class StringUtils
      * <p>Splits the provided text into a array, based on a given separator.</p>
      * <p/>
      * <p>The separator is not included in the returned String array. The
-     * maximum number of splits to perfom can be controlled. A <code>null</code>
-     * separator will cause parsing to be on whitespace.</p>
+     * maximum number of splits to perform can be controlled. A <code>null</code>
+     * separator causes splitting on whitespace.</p>
      * <p/>
-     * <p>This is useful for quickly splitting a String directly into
+     * <p>This is useful for quickly splitting a String  into
      * an array of tokens, instead of an enumeration of tokens (as
      * <code>StringTokenizer</code> does).</p>
      *
