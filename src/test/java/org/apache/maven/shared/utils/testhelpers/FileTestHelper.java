@@ -19,20 +19,26 @@ package org.apache.maven.shared.utils.testhelpers;
  * under the License.
  */
 
-import org.apache.maven.shared.utils.io.FileUtils;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+
+import org.apache.commons.io.FileUtils;
+
 import org.junit.rules.TemporaryFolder;
 
-import java.io.*;
-
 /**
- * A few utility methods for file based tests
+ * A few utility methods for file based tests.
  */
 public final class FileTestHelper
 {
 
     private FileTestHelper()
     {
-        // utility function doesn't need a public ct
+        // utility function doesn't need a public constructor
     }
 
     public static void generateTestData( OutputStream out, long size )
@@ -54,13 +60,11 @@ public final class FileTestHelper
             testfile.delete();
         }
 
-        OutputStream os = new FileOutputStream( testfile );
-        generateTestData( os, size );
-        os.flush();
-        os.close();
+        try ( OutputStream os = new FileOutputStream( testfile ) ) {
+            generateTestData( os, size );
+            os.flush();
+        }
     }
-
-
 
     public static void createLineBasedFile( File file, String[] data )
         throws IOException
@@ -70,11 +74,12 @@ public final class FileTestHelper
             throw new IOException( "Cannot create file " + file + " as the parent directory does not exist" );
         }
 
-        try ( PrintWriter out = new PrintWriter( new OutputStreamWriter( new FileOutputStream( file ), "UTF-8" ) ) )
+        try ( Writer out = new OutputStreamWriter( new FileOutputStream( file ), "UTF-8" ) )
         {
             for ( String aData : data )
             {
-                out.println( aData );
+                out.write( aData );
+                out.write( System.getProperty( "line.separator" ) );
             }
         }
     }
@@ -92,7 +97,7 @@ public final class FileTestHelper
 
         if ( destination.exists() )
         {
-            FileUtils.forceDelete( destination );
+            FileUtils.deleteQuietly( destination );
         }
         return destination;
     }
