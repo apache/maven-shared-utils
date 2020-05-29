@@ -33,7 +33,6 @@ import java.lang.annotation.Target;
 import java.net.URL;
 import java.util.Properties;
 
-import org.apache.maven.shared.utils.io.IOUtil;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -166,22 +165,14 @@ public class PropertyUtilsTest
     @SuppressWarnings( "deprecation" )
     public void loadValidFile() throws IOException
     {
-        OutputStream out = null;
-        try
+        File valid = tempFolder.newFile( "valid" );
+        Properties value = new Properties();
+        value.setProperty( "a", "b" );
+        try ( OutputStream out = new FileOutputStream( valid ) )
         {
-            File valid = tempFolder.newFile( "valid" );
-            Properties value = new Properties();
-            value.setProperty( "a", "b" );
-            out = new FileOutputStream( valid );
             value.store( out, "a test" );
-            out.close();
-            out = null;
             assertThat( PropertyUtils.loadProperties( valid ), is( value ) );
             assertThat( PropertyUtils.loadOptionalProperties( valid ), is( value ) );
-        }
-        finally
-        {
-            IOUtil.close( out );
         }
     }
 
@@ -190,22 +181,14 @@ public class PropertyUtilsTest
     @SuppressWarnings( "deprecation" )
     public void loadValidURL() throws IOException
     {
-        OutputStream out = null;
-        try
+        File valid = tempFolder.newFile( "valid" );
+        Properties value = new Properties();
+        value.setProperty( "a", "b" );
+        try ( OutputStream out = new FileOutputStream( valid ) )
         {
-            File valid = tempFolder.newFile( "valid" );
-            Properties value = new Properties();
-            value.setProperty( "a", "b" );
-            out = new FileOutputStream( valid );
-            value.store( out, "a test" );
-            out.close();
-            out = null;
-            assertThat( PropertyUtils.loadProperties( valid.toURI().toURL() ), is( value ) );
-            assertThat( PropertyUtils.loadOptionalProperties( valid.toURI().toURL() ), is( value ) );
-        }
-        finally
-        {
-            IOUtil.close( out );
+          value.store( out, "a test" );
+          assertThat( PropertyUtils.loadProperties( valid.toURI().toURL() ), is( value ) );
+          assertThat( PropertyUtils.loadOptionalProperties( valid.toURI().toURL() ), is( value ) );
         }
     }
 

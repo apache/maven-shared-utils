@@ -29,26 +29,27 @@ import java.util.Properties;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.apache.maven.shared.utils.io.IOUtil;
-
 /**
- *
+ * Static utility methods for loading properties.
  */
 public class PropertyUtils
 {
 
     /**
      * The constructor.
+     *
+     * @deprecated This is a utility class with only static methods. Don't create instances of it.
      */
+    @Deprecated
     public PropertyUtils()
     {
         // should throw new IllegalAccessError( "Utility class" );
     }
 
     /**
-     * @param url The URL which should be used to load the properties.
-     * @return The loaded properties.
-     * @deprecated As of 3.1.0, please use method {@link #loadOptionalProperties(java.net.URL)}. This method should not
+     * @param url the URL which should be used to load the properties
+     * @return the loaded properties
+     * @deprecated use {@link #loadOptionalProperties(java.net.URL)} instead. This method should not
      *             be used as it suppresses exceptions silently when loading properties fails and returns {@code null}
      *             instead of an empty {@code Properties} instance when the given {@code URL} is {@code null}.
      */
@@ -67,9 +68,9 @@ public class PropertyUtils
     }
 
     /**
-     * @param file The file from which the properties will be loaded.
-     * @return The loaded properties.
-     * @deprecated As of 3.1.0, please use method {@link #loadOptionalProperties(java.io.File)}. This method should not
+     * @param file the file from which the properties will be loaded
+     * @return the loaded properties
+     * @deprecated use {@link #loadOptionalProperties(java.io.File)} instead. This method should not
      *             be used as it suppresses exceptions silently when loading properties fails and returns {@code null}
      *             instead of an empty {@code Properties} instance when the given {@code File} is {@code null}.
      */
@@ -89,8 +90,8 @@ public class PropertyUtils
 
     /**
      * @param is {@link InputStream}
-     * @return The loaded properties.
-     * @deprecated As of 3.1.0, please use method {@link #loadOptionalProperties(java.io.InputStream)}. This method
+     * @return the loaded properties
+     * @deprecated use {@link #loadOptionalProperties(java.io.InputStream)} instead. This method
      *             should not be used as it suppresses exceptions silently when loading properties fails.
      */
     @Deprecated
@@ -98,13 +99,12 @@ public class PropertyUtils
     {
         try
         {
-            // to make this the same behaviour as the others we should really return null on any error
             Properties result = new Properties();
             if ( is != null )
             {
-                try
+                try ( InputStream in = is )
                 {
-                    result.load( is );
+                    result.load( in );
                 }
                 catch ( IOException e )
                 {
@@ -116,10 +116,6 @@ public class PropertyUtils
         catch ( Exception e )
         {
             // ignore
-        }
-        finally
-        {
-            IOUtil.close( is );
         }
         return null;
     }
@@ -154,7 +150,7 @@ public class PropertyUtils
     }
 
     /**
-     * Loads {@code Properties} from a given {@code File}.
+     * Loads {@code Properties} from a {@code File}.
      * <p>
      * If the given {@code File} is {@code null} or the properties file can't be read, an empty properties object is
      * returned.
@@ -185,7 +181,7 @@ public class PropertyUtils
     }
 
     /**
-     * Loads {@code Properties} from a given {@code InputStream}.
+     * Loads {@code Properties} from an {@code InputStream}.
      * <p>
      * If the given {@code InputStream} is {@code null} or the properties can't be read, an empty properties object is
      * returned.
@@ -203,17 +199,13 @@ public class PropertyUtils
 
         if ( inputStream != null )
         {
-            try
+            try ( InputStream in = inputStream ) // reassign inputStream to autoclose
             {
-                properties.load( inputStream );
+                properties.load( in );
             }
             catch ( IllegalArgumentException | IOException ex )
             {
                 // ignore and return empty properties
-            }
-            finally
-            {
-                IOUtil.close( inputStream );
             }
         }
 
