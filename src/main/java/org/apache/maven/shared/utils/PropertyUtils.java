@@ -55,9 +55,9 @@ public class PropertyUtils
     @Deprecated
     public static java.util.Properties loadProperties( @Nonnull URL url )
     {
-        try
+        try ( InputStream in = url.openStream() )
         {
-            return loadProperties( url.openStream() );
+            return loadProperties( in );
         }
         catch ( Exception e )
         {
@@ -76,9 +76,9 @@ public class PropertyUtils
     @Deprecated
     public static Properties loadProperties( @Nonnull File file )
     {
-        try
+        try  ( InputStream in = new FileInputStream( file ) )
         {
-            return loadProperties( new FileInputStream( file ) );
+            return loadProperties( in );
         }
         catch ( Exception e )
         {
