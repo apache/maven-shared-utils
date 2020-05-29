@@ -48,16 +48,18 @@ public class ReaderFactory
      * ISO Latin Alphabet #1, also known as ISO-LATIN-1.
      * Every implementation of the Java platform is required to support this character encoding.
      *
-     * @see java.nio.charset.Charset
+     * @deprecated use {@code java.nio.charset.StandardCharset.ISO_8859_1}
      */
+    @Deprecated
     public static final String ISO_8859_1 = "ISO-8859-1";
 
     /**
      * Seven-bit ASCII, also known as ISO646-US, also known as the Basic Latin block of the Unicode character set.
      * Every implementation of the Java platform is required to support this character encoding.
      *
-     * @see java.nio.charset.Charset
+     * @deprecated use {@code java.nio.charset.StandardCharset.US_ASCII}
      */
+    @Deprecated
     public static final String US_ASCII = "US-ASCII";
 
     /**
@@ -65,32 +67,36 @@ public class ReaderFactory
      * order accepted on input, big-endian used on output).
      * Every implementation of the Java platform is required to support this character encoding.
      *
-     * @see java.nio.charset.Charset
+     * @deprecated use {@code java.nio.charset.StandardCharset.UTF_16}
      */
+    @Deprecated
     public static final String UTF_16 = "UTF-16";
 
     /**
      * Sixteen-bit Unicode Transformation Format, big-endian byte order.
      * Every implementation of the Java platform is required to support this character encoding.
      *
-     * @see java.nio.charset.Charset
+     * @deprecated use {@code java.nio.charset.StandardCharset.UTF_16BE}
      */
+    @Deprecated
     public static final String UTF_16BE = "UTF-16BE";
 
     /**
      * Sixteen-bit Unicode Transformation Format, little-endian byte order.
      * Every implementation of the Java platform is required to support this character encoding.
      *
-     * @see java.nio.charset.Charset
+     * @deprecated use {@code java.nio.charset.StandardCharset.UTF_16LE}
      */
+    @Deprecated
     public static final String UTF_16LE = "UTF-16LE";
 
     /**
      * Eight-bit Unicode Transformation Format.
      * Every implementation of the Java platform is required to support this character encoding.
      *
-     * @see java.nio.charset.Charset
+     * @deprecated use {@code java.nio.charset.StandardCharset.UTF_8}
      */
+    @Deprecated
     public static final String UTF_8 = "UTF-8";
 
     /**
@@ -101,9 +107,9 @@ public class ReaderFactory
     /**
      * Create a new Reader with XML encoding detection rules.
      *
-     * @param in not null input stream.
-     * @return an XML reader instance for the input stream.
-     * @throws IOException if any.
+     * @param in not null input stream
+     * @return an XML reader instance for the input stream
+     * @throws IOException if any
      * @see XmlStreamReader
      */
     public static Reader newXmlReader( @Nonnull InputStream in )
@@ -115,9 +121,9 @@ public class ReaderFactory
     /**
      * Create a new Reader with XML encoding detection rules.
      *
-     * @param file not null file.
-     * @return an XML reader instance for the input file.
-     * @throws IOException if any.
+     * @param file not null file
+     * @return an XML reader instance for the input file
+     * @throws IOException if any
      * @see XmlStreamReader
      */
     public static Reader newXmlReader( @Nonnull File file )
@@ -129,9 +135,9 @@ public class ReaderFactory
     /**
      * Create a new Reader with XML encoding detection rules.
      *
-     * @param url not null url.
-     * @return an XML reader instance for the input url.
-     * @throws IOException if any.
+     * @param url not null url
+     * @return an XML reader instance for the input URL
+     * @throws IOException if any
      * @see XmlStreamReader
      */
     public static Reader newXmlReader( @Nonnull URL url )
@@ -141,13 +147,15 @@ public class ReaderFactory
     }
 
     /**
-     * Create a new Reader with default plaform encoding.
+     * Create a new Reader with default platform encoding.
      *
      * @param file not null file.
-     * @return a reader instance for the input file using the default platform charset.
-     * @throws FileNotFoundException if any.
+     * @return a reader instance for the input file using the default platform character set
+     * @throws FileNotFoundException if any
      * @see java.nio.charset.Charset#defaultCharset()
+     * @deprecated always specify an encoding. Do not depend on the default platform character set.
      */
+    @Deprecated
     public static Reader newPlatformReader( @Nonnull File file )
         throws FileNotFoundException
     {
@@ -157,11 +165,12 @@ public class ReaderFactory
     /**
      * Create a new Reader with specified encoding.
      *
-     * @param in       not null input stream.
-     * @param encoding not null supported encoding.
-     * @return a reader instance for the input stream using the given encoding.
-     * @throws UnsupportedEncodingException if any.
-     * @see <a href="http://docs.oracle.com/javase/1.5.0/docs/guide/intl/encoding.doc.html">Supported encodings</a>
+     * @param in       not null input stream
+     * @param encoding not null supported encoding
+     * @return a reader instance for the input stream using the given encoding
+     * @throws UnsupportedEncodingException if any
+     * @see <a href="https://docs.oracle.com/javase/7/docs/technotes/guides/intl/encoding.doc.html">Supported
+     *         encodings</a>
      */
     public static Reader newReader( @Nonnull InputStream in, @Nonnull String encoding )
         throws UnsupportedEncodingException
@@ -172,12 +181,13 @@ public class ReaderFactory
     /**
      * Create a new Reader with specified encoding.
      *
-     * @param file     not null file.
-     * @param encoding not null supported encoding.
-     * @return a reader instance for the input file using the given encoding.
-     * @throws FileNotFoundException        if any.
-     * @throws UnsupportedEncodingException if any.
-     * @see <a href="http://docs.oracle.com/javase/1.5.0/docs/guide/intl/encoding.doc.html">Supported encodings</a>
+     * @param file     not null file
+     * @param encoding not null supported encoding
+     * @return a reader instance for the input file using the given encoding
+     * @throws FileNotFoundException        if any
+     * @throws UnsupportedEncodingException if any
+     * @see <a href="https://docs.oracle.com/javase/7/docs/technotes/guides/intl/encoding.doc.html">Supported
+     *         encodings</a>
      */
     public static Reader newReader( @Nonnull File file, @Nonnull String encoding )
         throws FileNotFoundException, UnsupportedEncodingException
@@ -188,11 +198,12 @@ public class ReaderFactory
     /**
      * Create a new Reader with specified encoding.
      *
-     * @param url      not null url.
-     * @param encoding not null supported encoding.
-     * @return a reader instance for the input url using the given encoding.
-     * @throws IOException if any.
-     * @see <a href="http://docs.oracle.com/javase/1.5.0/docs/guide/intl/encoding.doc.html">Supported encodings</a>
+     * @param url      not null URL
+     * @param encoding not null supported encoding
+     * @return a reader instance for the input URL using the given encoding
+     * @throws IOException if any
+     * @see <a href="https://docs.oracle.com/javase/7/docs/technotes/guides/intl/encoding.doc.html">Supported
+     *         encodings</a>
      */
     public static Reader newReader( @Nonnull URL url, @Nonnull String encoding )
         throws IOException
