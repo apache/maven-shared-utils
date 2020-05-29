@@ -39,7 +39,9 @@ import javax.annotation.Nonnull;
  * @author Magesh Umasankar
  * @author <a href="mailto:bruce@callenish.com">Bruce Atherton</a>
  * 
+ * @deprecated use {@code java.nio.file.Files.walkFileTree()} and related classes
  */
+@Deprecated
 public final class SelectorUtils
 {
 

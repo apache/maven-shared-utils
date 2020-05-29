@@ -33,7 +33,9 @@ import javax.annotation.Nonnull;
  * Significantly more efficient than using strings, since re-evaluation and re-tokenizing is avoided.
  *
  * @author Kristian Rosenvold
+ * @deprecated use {@code java.nio.filejava.nio.file.DirectoryStream.Filter<T>} and related classes
  */
+@Deprecated
 public class MatchPattern
 {
     private final String source;
@@ -98,7 +100,7 @@ public class MatchPattern
     {
         if ( regexPattern != null )
         {
-            // FIXME: ICK! But we can't do partial matches for regex, so we have to reserve judgement until we have
+            // FIXME: ICK! But we can't do partial matches for regex, so we have to reserve judgment until we have
             // a file to deal with, or we can definitely say this is an exclusion...
             return true;
         }

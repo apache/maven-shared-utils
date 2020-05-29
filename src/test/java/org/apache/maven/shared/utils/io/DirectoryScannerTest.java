@@ -37,6 +37,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeFalse;
 
+@SuppressWarnings( "deprecation" )
 public class DirectoryScannerTest
 {
     private static final String[] NONE = new String[0];
@@ -214,7 +215,6 @@ public class DirectoryScannerTest
     /*
         Creates a standard directory layout with symlinks and files.
      */
-
     @Test
     public void testSimpleExcludes()
         throws Exception
@@ -243,7 +243,7 @@ public class DirectoryScannerTest
                 /* expExclDirs     */ NONE );
     }
 
-    public void testIsSymLin()
+    public void testIsSymbolicLink()
         throws IOException
     {
         File file = new File( "." );
