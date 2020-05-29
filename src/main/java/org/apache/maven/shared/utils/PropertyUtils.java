@@ -88,6 +88,10 @@ public class PropertyUtils
     }
 
     /**
+     * Loads {@code Properties} from an {@code InputStream} and closes the stream.
+     * In a future release, this will no longer close the stream, so callers
+     * should close the stream themselves.  
+     * 
      * @param is {@link InputStream}
      * @return the loaded properties
      * @deprecated use {@link #loadOptionalProperties(java.io.InputStream)} instead. This method
@@ -180,11 +184,10 @@ public class PropertyUtils
     }
 
     /**
-     * Loads {@code Properties} from an {@code InputStream}.
-     * <p>
+     * Loads {@code Properties} from an {@code InputStream} and closes the stream.
      * If the given {@code InputStream} is {@code null} or the properties can't be read, an empty properties object is
-     * returned.
-     * </p>
+     * returned. In a future release, this will no longer close the stream, so callers
+     * should close the stream themselves.  
      *
      * @param inputStream the properties resource to load or {@code null}
      * @return the loaded properties or an empty {@code Properties} instance if properties fail to load
