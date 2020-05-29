@@ -106,9 +106,9 @@ public class WriterFactory
     /**
      * Create a new Writer with XML encoding detection rules.
      *
-     * @param out not null output stream.
-     * @return an XML writer instance for the output stream.
-     * @throws IOException if any.
+     * @param out not null output stream
+     * @return an XML writer instance for the output stream
+     * @throws IOException if any
      * @see XmlStreamWriter
      */
     public static XmlStreamWriter newXmlWriter( @Nonnull OutputStream out )
@@ -120,9 +120,9 @@ public class WriterFactory
     /**
      * Create a new Writer with XML encoding detection rules.
      *
-     * @param file not null file.
-     * @return an XML writer instance for the output file.
-     * @throws IOException if any.
+     * @param file not null file
+     * @return an XML writer instance for the output file
+     * @throws IOException if any
      * @see XmlStreamWriter
      */
     public static XmlStreamWriter newXmlWriter( @Nonnull File file )
@@ -134,10 +134,11 @@ public class WriterFactory
     /**
      * Create a new Writer with default platform encoding.
      *
-     * @param out not null output stream.
-     * @return a writer instance for the output stream using the default platform charset.
-     * @see java.nio.charset.Charset#defaultCharset()
+     * @param out not null output stream
+     * @return a writer instance for the output stream using the default platform charset
+     * @deprecated always specify an encoding. Do not depend on the default platform character set.
      */
+    @Deprecated
     public static Writer newPlatformWriter( @Nonnull OutputStream out )
     {
         return new OutputStreamWriter( out );
@@ -146,11 +147,12 @@ public class WriterFactory
     /**
      * Create a new Writer with default platform encoding.
      *
-     * @param file not null file.
-     * @return a writer instance for the output file using the default platform charset.
-     * @throws IOException if any.
-     * @see java.nio.charset.Charset#defaultCharset()
+     * @param file not null file
+     * @return a writer instance for the output file using the default platform charset
+     * @throws IOException if any
+     * @deprecated always specify an encoding. Do not depend on the default platform character set.
      */
+    @Deprecated
     public static Writer newPlatformWriter( @Nonnull File file )
         throws IOException
     {
