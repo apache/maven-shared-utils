@@ -79,7 +79,7 @@ public final class FileTestHelper
             for ( String aData : data )
             {
                 out.write( aData );
-                out.write( System.getProperty( "line.separator" ) );
+                out.write( System.lineSeparator() );
             }
         }
     }
