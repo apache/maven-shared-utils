@@ -25,11 +25,11 @@ import static org.junit.Assert.*;
 /**
  * @author Kristian Rosenvold
  */
+@SuppressWarnings( "deprecation" )
 public class MatchPatternTest
 {
     @Test
     public void matchPath()
-        throws Exception
     {
         MatchPattern mp = MatchPattern.fromString( "ABC*" );
         assertTrue( mp.matchPath( "ABCD", true ) );

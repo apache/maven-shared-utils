@@ -26,11 +26,9 @@ import java.util.ArrayList;
 import org.apache.maven.shared.utils.Os;
 
 /**
- * XMLWriter with nice indentation
- */
-/**
+ * XMLWriter with nice indentation.
+ * 
  * @author kama
- *
  */
 public class PrettyPrintXMLWriter
     implements XMLWriter

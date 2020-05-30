@@ -27,7 +27,8 @@ import java.io.SequenceInputStream;
 
 import junit.framework.ComparisonFailure;
 import junit.framework.TestCase;
-import org.apache.maven.shared.utils.io.IOUtil;
+
+import org.apache.commons.io.IOUtils;
 import org.apache.maven.shared.utils.xml.XmlStreamReader;
 
 /**
@@ -66,8 +67,7 @@ public class XmlStreamReaderTest
         return xmlDecl + "\n<text>" + text + "</text>";
     }
 
-    private static void checkXmlContent( String xml, String encoding )
-    throws IOException
+    private static void checkXmlContent( String xml, String encoding ) throws IOException
     {
         checkXmlContent( xml, encoding, null );
     }
@@ -76,7 +76,7 @@ public class XmlStreamReaderTest
     {
         byte[] xmlContent = xml.getBytes( encoding );
         InputStream in = new ByteArrayInputStream( xmlContent );
-
+        
         if ( bom != null )
         {
             in = new SequenceInputStream( new ByteArrayInputStream( bom ), in );
@@ -84,7 +84,7 @@ public class XmlStreamReaderTest
 
         XmlStreamReader reader = new XmlStreamReader( in );
         assertEquals( encoding, reader.getEncoding() );
-        String result = IOUtil.toString( reader );
+        String result = IOUtils.toString( reader );
         assertEquals( xml, result );
     }
 
