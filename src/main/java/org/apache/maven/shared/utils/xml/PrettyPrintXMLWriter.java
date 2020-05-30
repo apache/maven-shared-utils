@@ -20,17 +20,15 @@ package org.apache.maven.shared.utils.xml;
  */
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import org.apache.maven.shared.utils.Os;
 
 /**
- * XMLWriter with nice indentation
- */
-/**
+ * XMLWriter with nice indentation. This class does minimal checking of its input
+ * and can produce malformed XML.
+ * 
  * @author kama
- *
  */
 public class PrettyPrintXMLWriter
     implements XMLWriter
@@ -41,7 +39,7 @@ public class PrettyPrintXMLWriter
 
     private static final char[] DEFAULT_LINE_INDENT = new char[]{ ' ', ' ' };
 
-    private PrintWriter writer;
+    private Writer writer;
 
     private ArrayList<String> elementStack = new ArrayList<String>();
 
@@ -63,28 +61,11 @@ public class PrettyPrintXMLWriter
 
     /**
      * @param writer not null
-     * @param lineIndent could be null, but the normal way is some spaces.
-     */
-    public PrettyPrintXMLWriter( PrintWriter writer, String lineIndent )
-    {
-        this( writer, lineIndent, null, null );
-    }
-
-    /**
-     * @param writer not null
-     * @param lineIndent could be null, but the normal way is some spaces.
+     * @param lineIndent can be null, but the normal way is some spaces
      */
     public PrettyPrintXMLWriter( Writer writer, String lineIndent )
     {
-        this( new PrintWriter( writer ), lineIndent );
-    }
-
-    /**
-     * @param writer not null
-     */
-    public PrettyPrintXMLWriter( PrintWriter writer )
-    {
-        this( writer, null, null );
+        this( writer, lineIndent.toCharArray(), Os.LINE_SEP.toCharArray(), null, null );
     }
 
     /**
@@ -92,75 +73,40 @@ public class PrettyPrintXMLWriter
      */
     public PrettyPrintXMLWriter( Writer writer )
     {
-        this( new PrintWriter( writer ) );
+        this( writer, DEFAULT_LINE_INDENT, Os.LINE_SEP.toCharArray(), null, null );
     }
 
     /**
      * @param writer not null
-     * @param lineIndent could be null, but the normal way is some spaces.
-     * @param encoding could be null or invalid.
-     * @param doctype could be null.
+     * @param lineIndent can be null, but the normal way is some spaces
+     * @param encoding can be null or invalid
+     * @param doctype can be null
      */
-    public PrettyPrintXMLWriter( PrintWriter writer, String lineIndent, String encoding, String doctype )
+    public PrettyPrintXMLWriter( Writer writer, String lineIndent, String encoding, String doctype )
     {
         this( writer, lineIndent.toCharArray(), Os.LINE_SEP.toCharArray(), encoding, doctype );
     }
 
     /**
      * @param writer not null
-     * @param lineIndent could be null, but the normal way is some spaces.
-     * @param encoding could be null or invalid.
-     * @param doctype could be null.
+     * @param encoding can be null or invalid
+     * @param doctype can be null
      */
-    public PrettyPrintXMLWriter( Writer writer, String lineIndent, String encoding, String doctype )
-    {
-        this( new PrintWriter( writer ), lineIndent, encoding, doctype );
-    }
-
-    /**
-     * @param writer not null
-     * @param encoding could be null or invalid.
-     * @param doctype could be null.
-     */
-    public PrettyPrintXMLWriter( PrintWriter writer, String encoding, String doctype )
+    public PrettyPrintXMLWriter( Writer writer, String encoding, String doctype )
     {
         this( writer, DEFAULT_LINE_INDENT, Os.LINE_SEP.toCharArray(), encoding, doctype );
     }
 
     /**
-     * @param writer not null
-     * @param encoding could be null or invalid.
-     * @param doctype could be null.
-     */
-    public PrettyPrintXMLWriter( Writer writer, String encoding, String doctype )
-    {
-        this( new PrintWriter( writer ), encoding, doctype );
-    }
-
-    /**
-     * @param writer not null
-     * @param lineIndent could be null, but the normal way is some spaces.
-     * @param lineSeparator could be null, but the normal way is valid line separator
-     * @param encoding could be null or the encoding to use.
-     * @param doctype could be null.
-     */
-    public PrettyPrintXMLWriter( PrintWriter writer, String lineIndent, String lineSeparator, String encoding,
-                                 String doctype )
-    {
-        this( writer, lineIndent.toCharArray(), lineSeparator.toCharArray(), encoding, doctype );
-    }
-
-    /**
      * @param writer        not null
-     * @param lineIndent    could be null, but the normal way is some spaces.
-     * @param lineSeparator could be null, but the normal way is valid line separator
-     * @param encoding      could be null or the encoding to use.
-     * @param doctype       could be null.
+     * @param lineIndent    can be null, but the normal way is some spaces
+     * @param lineSeparator can be null, but the normal way is valid line separator
+     * @param encoding      can be null or the encoding to use
+     * @param doctype       can be null
      */
-    private PrettyPrintXMLWriter( PrintWriter writer, char[] lineIndent, char[] lineSeparator, String encoding,
+    private PrettyPrintXMLWriter( Writer writer, char[] lineIndent, char[] lineSeparator, String encoding,
                                   String doctype )
     {
-        super();
         this.writer = writer;
         this.lineIndent = lineIndent;
         this.lineSeparator = lineSeparator;
@@ -168,9 +114,6 @@ public class PrettyPrintXMLWriter
         this.docType = doctype;
 
         depth = 0;
-
-        // Fail early with assertions enabled. Issue is in the calling code not having checked for any errors.
-        assert !writer.checkError() : "Unexpected error state PrintWriter passed to PrettyPrintXMLWriter.";
     }
 
     /** {@inheritDoc} */
@@ -185,10 +128,6 @@ public class PrettyPrintXMLWriter
         writer.write( key );
         writer.write( '=' );
         XMLEncode.xmlEncodeTextAsPCDATA( value, true, '"', writer );
-        if ( writer.checkError() )
-        {
-            throw new IOException( "Failure adding attribute '" + key + "' with value '" + value + "'" );
-        }
     }
 
     /** {@inheritDoc} */
@@ -253,10 +192,6 @@ public class PrettyPrintXMLWriter
 
         writer.write( '<' );
         writer.write( elementName );
-        if ( writer.checkError() )
-        {
-            throw new IOException( "Failure starting element '" + elementName + "'." );
-        }
 
         processingElement = true;
 
@@ -273,11 +208,6 @@ public class PrettyPrintXMLWriter
         XMLEncode.xmlEncodeText( text, writer );
 
         endOnSameLine = true;
-        
-        if ( writer.checkError() )
-        {
-            throw new IOException( "Failure writing text." );
-        }
     }
 
     /** {@inheritDoc} */
@@ -288,11 +218,6 @@ public class PrettyPrintXMLWriter
         completePreviouslyOpenedElement();
 
         writer.write( markup );
-
-        if ( writer.checkError() )
-        {
-            throw new IOException( "Failure writing markup." );
-        }
     }
 
     /** {@inheritDoc} */
@@ -320,19 +245,14 @@ public class PrettyPrintXMLWriter
         }
 
         endOnSameLine = false;
-
-        if ( writer.checkError() )
-        {
-            throw new IOException( "Failure ending element." );
-        }
     }
 
     /**
      * Write the documents if not already done.
      *
-     * @return <code>true</code> if the document headers have freshly been written.
+     * @return <code>true</code> if the document headers have freshly been written
      */
-    private boolean ensureDocumentStarted()
+    private boolean ensureDocumentStarted() throws IOException
     {
         if ( !documentStarted )
         {
@@ -349,7 +269,7 @@ public class PrettyPrintXMLWriter
         return false;
     }
 
-    private void writeDocumentHeader()
+    private void writeDocumentHeader() throws IOException
     {
         writer.write( "<?xml version=\"1.0\"" );
 
@@ -373,7 +293,7 @@ public class PrettyPrintXMLWriter
         }
     }
 
-    private void newLine()
+    private void newLine() throws IOException
     {
         writer.write( lineSeparator );
 
@@ -383,7 +303,7 @@ public class PrettyPrintXMLWriter
         }
     }
 
-    private void completePreviouslyOpenedElement()
+    private void completePreviouslyOpenedElement() throws IOException
     {
         if ( processingElement )
         {

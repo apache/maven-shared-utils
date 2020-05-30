@@ -1,8 +1,9 @@
 package org.apache.maven.shared.utils.xml;
 
-import java.io.IOException;
-import javax.swing.text.html.HTML;
-import java.io.StringWriter;
+import static org.junit.Assert.fail;
+
+import java.io.File;
+import java.io.FileOutputStream;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -23,11 +24,18 @@ import java.io.StringWriter;
  * under the License.
  */
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 
+import javax.swing.text.html.HTML;
+import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import org.apache.maven.shared.utils.Os;
 import org.apache.maven.shared.utils.StringUtils;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,26 +48,9 @@ import org.junit.Test;
  */
 public class PrettyPrintXmlWriterTest
 {
-    StringWriter w;
-
-    PrettyPrintXMLWriter writer;
-
-    @Before
-    public void before()
-            throws Exception
-    {
-        w = new StringWriter();
-        writer = new PrettyPrintXMLWriter( w );
-    }
-
-    @After
-    public void after()
-            throws Exception
-    {
-        writer = null;
-        w = null;
-    }
-
+    private StringWriter w = new StringWriter();
+    private PrettyPrintXMLWriter writer = new PrettyPrintXMLWriter( w );
+    
     @Test
     public void testDefaultPrettyPrintXMLWriter() throws IOException
     {
@@ -178,12 +169,12 @@ public class PrettyPrintXmlWriterTest
         writer.endElement(); // Tag.BODY
     }
 
-    private String expectedResult( String lineSeparator )
+    private static String expectedResult( String lineSeparator )
     {
         return expectedResult( "  ", lineSeparator );
     }
 
-    private String expectedResult( String lineIndenter, String lineSeparator )
+    private static String expectedResult( String lineIndenter, String lineSeparator )
     {
         StringBuilder expected = new StringBuilder();
 
