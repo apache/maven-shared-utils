@@ -39,7 +39,7 @@ final class XMLEncode
      * Checks if this text purely consists of the white space characters
      * ' ',  TAB, NEWLINE.
      */
-    static boolean isWhiteSpace( String text )
+    public static boolean isWhiteSpace( String text )
     {
         for ( int i = 0; i < text.length(); i++ )
         {
@@ -55,7 +55,7 @@ final class XMLEncode
     /**
      * Makes any text fit into XML attributes.
      */
-    static String xmlEncodeTextForAttribute( String text, char quoteChar ) throws IOException
+    public static String xmlEncodeTextForAttribute( String text, char quoteChar )
     {
         if ( text == null )
         {
@@ -67,7 +67,7 @@ final class XMLEncode
     /**
      * Encodes text as XML in the most suitable way, either CDATA block or PCDATA.
      */
-    static String xmlEncodeText( String text ) throws IOException
+    public static String xmlEncodeText( String text )
     {
         if ( text == null )
         {
@@ -78,29 +78,36 @@ final class XMLEncode
         return writer.toString();
     }
 
-    static void xmlEncodeText( String text, Writer writer ) throws IOException
+    public static void xmlEncodeText( String text, Writer writer )
     {
         if ( text == null )
         {
             return;
         }
-        if ( !needsEncoding( text ) )
+        try
         {
-            writer.write( text );
-            return;
-        }
-        else
-        {
-            // only encode as cdata if is is longer than CDATA block overhead:
-            if ( text.length() > CDATA_BLOCK_THRESHOLD_LENGTH )
+            if ( !needsEncoding( text ) )
             {
-                String cdata = xmlEncodeTextAsCDATABlock( text );
-                if ( cdata != null )
+                writer.write( text );
+                return;
+            }
+            else
+            {
+                // only encode as cdata if is is longer than CDATA block overhead:
+                if ( text.length() > CDATA_BLOCK_THRESHOLD_LENGTH )
                 {
-                    writer.write( cdata );
-                    return;
+                    String cdata = xmlEncodeTextAsCDATABlock( text );
+                    if ( cdata != null )
+                    {
+                        writer.write( cdata );
+                        return;
+                    }
                 }
             }
+        }
+        catch ( IOException e )
+        {
+            throw new RuntimeException( e );
         }
         // if every thing else fails, do it the save way...
         xmlEncodeTextAsPCDATA( text, false, DEFAULT_QUOTE_CHAR, writer );
@@ -108,9 +115,8 @@ final class XMLEncode
 
     /**
      * Encodes any text as PCDATA.
-     * @throws IOException 
      */
-    static String xmlEncodeTextAsPCDATA( String text ) throws IOException
+    public static String xmlEncodeTextAsPCDATA( String text )
     {
         if ( text == null )
         {
@@ -125,7 +131,7 @@ final class XMLEncode
      * @param forAttribute if you want
      *                     quotes and apostrophes specially treated for attributes
      */
-    static String xmlEncodeTextAsPCDATA( String text, boolean forAttribute ) throws IOException
+    public static String xmlEncodeTextAsPCDATA( String text, boolean forAttribute )
     {
         return xmlEncodeTextAsPCDATA( text, forAttribute, DEFAULT_QUOTE_CHAR );
     }
@@ -136,10 +142,8 @@ final class XMLEncode
      * @param forAttribute if you want
      *                     quotes and apostrophes specially treated for attributes
      * @param quoteChar    if this is for attributes this <code>char</code> is used to quote the attribute value
-     * @throws IOException 
      */
-    static String xmlEncodeTextAsPCDATA( String text, boolean forAttribute, char quoteChar )
-                    throws IOException
+    public static String xmlEncodeTextAsPCDATA( String text, boolean forAttribute, char quoteChar )
     {
         if ( text == null )
         {
@@ -150,91 +154,99 @@ final class XMLEncode
         return writer.toString();
     }
 
-    static void xmlEncodeTextAsPCDATA( String text, boolean forAttribute, char quoteChar, Writer n )
-                    throws IOException
+    public static void xmlEncodeTextAsPCDATA( String text, boolean forAttribute, char quoteChar, Writer n )
     {
         if ( text == null )
         {
             return;
         }
-        int length = text.length();
-        if ( forAttribute )
+        try
         {
-            n.append( quoteChar );
-        }
-
-        for ( int i = 0; i < length; i++ )
-        {
-            char c = text.charAt( i );
-            switch ( c )
+            char c;
+            int length = text.length();
+            if ( forAttribute )
             {
-                case '&':
-                    n.append( "&amp;" );
-                    break;
-                case '<':
-                    n.append( "&lt;" );
-                    break;
-                case '>': // FIX for sourceforge bug #802520 ("]]>" needs encoding)
-                    n.append( "&gt;" );
-                    break;
-                case '"':
-                    if ( forAttribute )
-                    {
-                        n.append( "&quot;" );
-                    }
-                    else
-                    {
-                        n.append( c );
-                    }
-                    break;
-                case '\'':
-                    if ( forAttribute )
-                    {
-                        n.append( "&apos;" );
-                    }
-                    else
-                    {
-                        n.append( c );
-                    }
-                    break;
-                case '\r':
-                    if ( forAttribute )
-                    {
-                        if ( i == ( length - 1 ) || text.charAt( i + 1 ) != '\n' )
+                n.append( quoteChar );
+            }
+
+            for ( int i = 0; i < length; i++ )
+            {
+                c = text.charAt( i );
+                switch ( c )
+                {
+                    case '&':
+                        n.append( "&amp;" );
+                        break;
+                    case '<':
+                        n.append( "&lt;" );
+                        break;
+                    case '>': // FIX for sourceforge bug #802520 ("]]>" needs encoding)
+                        n.append( "&gt;" );
+                        break;
+                    case '"':
+                        if ( forAttribute )
                         {
-                            n.append( "&#13;" );
+                            n.append( "&quot;" );
                         }
-                    }
-                    else
-                    {
+                        else
+                        {
+                            n.append( c );
+                        }
+                        break;
+                    case '\'':
+                        if ( forAttribute )
+                        {
+                            n.append( "&apos;" );
+                        }
+                        else
+                        {
+                            n.append( c );
+                        }
+                        break;
+                    case '\r':
+                        if ( forAttribute )
+                        {
+                            if ( i == ( length - 1 ) || text.charAt( i + 1 ) != '\n' )
+                            {
+                                n.append( "&#13;" );
+                            }
+                        }
+                        else
+                        {
+                            n.append( c );
+                        }
+                        // but skip the \r in \r\n
+
+                        break;
+                    case '\n':
+                        if ( forAttribute )
+                        {
+                            n.append( "&#10;" );
+                        }
+                        break;
+
+                    default:
                         n.append( c );
-                    }
-                    // but skip the \r in \r\n
+                        break;
+                }
+            }
 
-                    break;
-                case '\n':
-                    if ( forAttribute )
-                    {
-                        n.append( "&#10;" );
-                    }
-                    break;
-
-                default:
-                    n.append( c );
-                    break;
+            if ( forAttribute )
+            {
+                n.append( quoteChar );
             }
         }
-
-        if ( forAttribute )
+        catch ( IOException e )
         {
-            n.append( quoteChar );
+            throw new RuntimeException( e );
         }
+
     }
 
     /**
      * Returns string as CDATA block if possible, otherwise null.
      */
-    static String xmlEncodeTextAsCDATABlock( String text )
+    public static String xmlEncodeTextAsCDATABlock( String text )
     {
         if ( text == null )
         {
@@ -253,7 +265,7 @@ final class XMLEncode
     /**
      * Checks if this text needs encoding in order to be represented in XML.
      */
-    static boolean needsEncoding( String text )
+    public static boolean needsEncoding( String text )
     {
         return needsEncoding( text, false );
     }
@@ -264,7 +276,7 @@ final class XMLEncode
      * Set <code>checkForAttr</code> if you want to check for storability in
      * an attribute.
      */
-    static boolean needsEncoding( String data, boolean checkForAttr )
+    public static boolean needsEncoding( String data, boolean checkForAttr )
     {
         if ( data == null )
         {
@@ -283,9 +295,9 @@ final class XMLEncode
     }
 
     /**
-     * Can this text be stored in a CDATA block?
+     * Can this text be stored into a CDATA block?
      */
-    static boolean isCompatibleWithCDATABlock( String text )
+    public static boolean isCompatibleWithCDATABlock( String text )
     {
         return text != null && ( !text.contains( "]]>" ) );
     }
@@ -294,7 +306,7 @@ final class XMLEncode
      * Make CDATA out of possibly encoded PCDATA. <br>
      * E.g. make '&amp;' out of '&amp;amp;'
      */
-    static String xmlDecodeTextToCDATA( String pcdata )
+    public static String xmlDecodeTextToCDATA( String pcdata )
     {
         if ( pcdata == null )
         {
