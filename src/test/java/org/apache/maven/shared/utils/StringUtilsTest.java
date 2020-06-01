@@ -24,9 +24,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -34,16 +32,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Test the {@link StringUtils} class.
- *
- * We don't need to test this
+ * 
  * @author <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
 public class StringUtilsTest
 {
-
-    @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
-
 
     @Test( expected = NullPointerException.class )
     public void testAbbreviate_NPE()
