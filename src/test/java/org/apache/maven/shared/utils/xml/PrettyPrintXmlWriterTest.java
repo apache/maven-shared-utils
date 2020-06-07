@@ -1,10 +1,5 @@
 package org.apache.maven.shared.utils.xml;
 
-import static org.junit.Assert.fail;
-
-import java.io.File;
-import java.io.FileOutputStream;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
