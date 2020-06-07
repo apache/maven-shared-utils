@@ -1886,7 +1886,9 @@ public class StringUtils
      * @param obj the Object to check
      * @return the passed in Object's toString, or blank if it was
      *         <code>null</code>
+     * @deprecated use {@code java.lang.Objects.toString()}
      */
+    @Deprecated
     @Nonnull public static String defaultString( Object obj )
     {
         return defaultString( obj, "" );
@@ -1902,7 +1904,9 @@ public class StringUtils
      *                      <code>null</code>
      * @return the passed in string, or the default if it was
      *         <code>null</code>
+     * @deprecated use {@code java.lang.Objects.toString()}
      */
+    @Deprecated
     @Nonnull public static String defaultString( Object obj, @Nonnull String defaultString )
     {
         return ( obj == null ) ? defaultString : obj.toString();
