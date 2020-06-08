@@ -220,7 +220,9 @@ public class StringUtils
      * @return <code>true</code> if the Strings are equal, case sensitive, or
      *         both <code>null</code>
      * @see java.lang.String#equals(Object)
+     * @deprecated use {@code java.lang.Objects.equals()}
      */
+    @Deprecated
     public static boolean equals( @Nullable String str1, @Nullable String str2 )
     {
         return ( str1 == null ? str2 == null : str1.equals( str2 ) );
@@ -315,7 +317,7 @@ public class StringUtils
 
     /**
      * <p>Gets a substring from the specified string avoiding exceptions.</p>
-     * <p/>
+     *
      * <p>A negative start position can be used to start <code>n</code>
      * characters from the end of the String.</p>
      *
@@ -351,7 +353,7 @@ public class StringUtils
 
     /**
      * <p>Gets a substring from the specified String avoiding exceptions.</p>
-     * <p/>
+     * 
      * <p>A negative start position can be used to start/end <code>n</code>
      * characters from the end of the String.</p>
      *
@@ -360,7 +362,7 @@ public class StringUtils
      *              count back from the end of the string by this many characters
      * @param end   the position to end at (exclusive), negative means
      *              count back from the end of the String by this many characters
-     * @return substring from start position to end positon
+     * @return substring from start position to end position
      */
     public static String substring( String str, int start, int end )
     {
@@ -406,7 +408,7 @@ public class StringUtils
 
     /**
      * <p>Gets the leftmost <code>n</code> characters of a String.</p>
-     * <p/>
+     * 
      * <p>If <code>n</code> characters are not available, or the
      * String is <code>null</code>, the String will be returned without
      * an exception.</p>
@@ -434,7 +436,7 @@ public class StringUtils
 
     /**
      * <p>Gets the rightmost <code>n</code> characters of a String.</p>
-     * <p/>
+     * 
      * <p>If <code>n</code> characters are not available, or the String
      * is <code>null</code>, the String will be returned without an
      * exception.</p>
@@ -462,7 +464,7 @@ public class StringUtils
 
     /**
      * <p>Gets <code>n</code> characters from the middle of a String.</p>
-     * <p/>
+     * 
      * <p>If <code>n</code> characters are not available, the remainder
      * of the String will be returned without an exception. If the
      * String is <code>null</code>, <code>null</code> will be returned.</p>
@@ -504,7 +506,7 @@ public class StringUtils
     /**
      * <p>Splits the provided text into a array, using whitespace as the
      * separator.</p>
-     * <p/>
+     * 
      * <p>The separator is not included in the returned String array.</p>
      *
      * @param str the String to parse
@@ -516,9 +518,9 @@ public class StringUtils
     }
 
     /**
-     * @param text The text to be split.
-     * @param separator The separator at which the text will be split.
-     * @return The resulting array.
+     * @param text the text to be split
+     * @param separator the separator at which the text will be split
+     * @return the resulting array
      * @see #split(String, String, int)
      */
     @Nonnull public static String[] split( @Nonnull String text, @Nullable String separator )
@@ -528,19 +530,19 @@ public class StringUtils
 
     /**
      * <p>Splits the provided text into a array, based on a given separator.</p>
-     * <p/>
+     * 
      * <p>The separator is not included in the returned String array. The
      * maximum number of splits to perform can be controlled. A <code>null</code>
      * separator causes splitting on whitespace.</p>
-     * <p/>
+     * 
      * <p>This is useful for quickly splitting a String  into
      * an array of tokens, instead of an enumeration of tokens (as
      * <code>StringTokenizer</code> does).</p>
      *
-     * @param str       The string to parse.
-     * @param separator Characters used as the delimiters. If
+     * @param str       the string to parse
+     * @param separatorcCharacters used as the delimiters. If
      *                  <code>null</code>, splits on whitespace.
-     * @param max       The maximum number of elements to include in the
+     * @param max       the maximum number of elements to include in the
      *                  array.  A zero or negative value implies no limit.
      * @return an array of parsed Strings
      */
@@ -2375,11 +2377,10 @@ public class StringUtils
     }
 
     /**
-     * Remove all duplicate whitespace characters and line terminators are replaced with a single
-     * space.
+     * Remove all duplicate whitespace characters and replace line terminators with a single space.
      *
      * @param s a not null String
-     * @return a string with unique whitespace.
+     * @return a string with unique whitespace
      * 
      */
     @Nonnull public static String removeDuplicateWhitespace( @Nonnull String s )
