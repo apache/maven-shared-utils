@@ -220,7 +220,9 @@ public class StringUtils
      * @return <code>true</code> if the Strings are equal, case sensitive, or
      *         both <code>null</code>
      * @see java.lang.String#equals(Object)
+     * @deprecated use {@code java.lang.Objects.equals()}
      */
+    @Deprecated
     public static boolean equals( @Nullable String str1, @Nullable String str2 )
     {
         return ( str1 == null ? str2 == null : str1.equals( str2 ) );
@@ -315,7 +317,7 @@ public class StringUtils
 
     /**
      * <p>Gets a substring from the specified string avoiding exceptions.</p>
-     * 
+     *
      * <p>A negative start position can be used to start <code>n</code>
      * characters from the end of the String.</p>
      *
@@ -360,7 +362,7 @@ public class StringUtils
      *              count back from the end of the string by this many characters
      * @param end   the position to end at (exclusive), negative means
      *              count back from the end of the String by this many characters
-     * @return substring from start position to end positon
+     * @return substring from start position to end position
      */
     public static String substring( String str, int start, int end )
     {
@@ -516,9 +518,9 @@ public class StringUtils
     }
 
     /**
-     * @param text The text to be split.
-     * @param separator The separator at which the text will be split.
-     * @return The resulting array.
+     * @param text the text to be split
+     * @param separator the separator at which the text will be split
+     * @return the resulting array
      * @see #split(String, String, int)
      */
     @Nonnull public static String[] split( @Nonnull String text, @Nullable String separator )
@@ -537,10 +539,10 @@ public class StringUtils
      * an array of tokens, instead of an enumeration of tokens (as
      * <code>StringTokenizer</code> does).</p>
      *
-     * @param str       The string to parse.
-     * @param separator Characters used as the delimiters. If
+     * @param str       the string to parse
+     * @param separatorcCharacters used as the delimiters. If
      *                  <code>null</code>, splits on whitespace.
-     * @param max       The maximum number of elements to include in the
+     * @param max       the maximum number of elements to include in the
      *                  array.  A zero or negative value implies no limit.
      * @return an array of parsed Strings
      */
@@ -792,9 +794,9 @@ public class StringUtils
      *
      * @param text    String to do overlaying in
      * @param overlay String to overlay
-     * @param start   int to start overlaying at
-     * @param end     int to stop overlaying before
-     * @return String with overlayed text
+     * @param start   position to start overlaying at
+     * @param end     position to stop overlaying before
+     * @return String with overlaid text
      * @throws NullPointerException if text or overlay is <code>null</code>
      */
     @Nonnull public static String overlayString( @Nonnull String text, @Nonnull String overlay, int start, int end )
@@ -1886,7 +1888,9 @@ public class StringUtils
      * @param obj the Object to check
      * @return the passed in Object's toString, or blank if it was
      *         <code>null</code>
+     * @deprecated use {@code java.lang.Objects.toString()}
      */
+    @Deprecated
     @Nonnull public static String defaultString( Object obj )
     {
         return defaultString( obj, "" );
@@ -1902,7 +1906,9 @@ public class StringUtils
      *                      <code>null</code>
      * @return the passed in string, or the default if it was
      *         <code>null</code>
+     * @deprecated use {@code java.lang.Objects.toString()}
      */
+    @Deprecated
     @Nonnull public static String defaultString( Object obj, @Nonnull String defaultString )
     {
         return ( obj == null ) ? defaultString : obj.toString();
@@ -2366,8 +2372,7 @@ public class StringUtils
     }
 
     /**
-     * Remove all duplicate whitespace characters and line terminators are replaced with a single
-     * space.
+     * Remove all duplicate whitespace characters and replace line terminators with a single space.
      *
      * @param s a not null String
      * @return a string with unique whitespace
