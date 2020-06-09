@@ -540,7 +540,7 @@ public class StringUtils
      * <code>StringTokenizer</code> does).</p>
      *
      * @param str       the string to parse
-     * @param separatorcCharacters used as the delimiters. If
+     * @param separator Characters used as the delimiters. If
      *                  <code>null</code>, splits on whitespace.
      * @param max       the maximum number of elements to include in the
      *                  array.  A zero or negative value implies no limit.
