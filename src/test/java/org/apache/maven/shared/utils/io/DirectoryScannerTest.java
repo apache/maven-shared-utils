@@ -162,7 +162,7 @@ public class DirectoryScannerTest
         ds.scan();
         List<String> included = Arrays.asList( ds.getIncludedFiles() );
         assertAlwaysIncluded( included );
-        assertEquals( 9, included.size() );
+        assertEquals( included.toString(), 9, included.size() );
         List<String> includedDirs = Arrays.asList( ds.getIncludedDirectories() );
         assertTrue( includedDirs.contains( "" ) );
         assertTrue( includedDirs.contains( "aRegularDir" ) );
@@ -241,14 +241,6 @@ public class DirectoryScannerTest
                 /* expNotInclDirs  */ NONE,
                 /* expExclFiles    */ new String[]{ "file3.dat", "folder1/file5.dat" },
                 /* expExclDirs     */ NONE );
-    }
-
-    public void testIsSymbolicLink()
-        throws IOException
-    {
-        File file = new File( "." );
-        DirectoryScanner ds = new DirectoryScanner();
-        ds.isSymbolicLink( file, "abc" );
     }
 
     /**

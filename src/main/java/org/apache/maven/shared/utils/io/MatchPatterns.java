@@ -27,9 +27,7 @@ import javax.annotation.Nonnull;
  * A list of patterns to be matched
  *
  * @author Kristian Rosenvold
- * @deprecated use {@code java.nio.filejava.nio.file.DirectoryStream.Filter<T>} and related classes
  */
-@Deprecated
 public class MatchPatterns
 {
     private final MatchPattern[] patterns;
