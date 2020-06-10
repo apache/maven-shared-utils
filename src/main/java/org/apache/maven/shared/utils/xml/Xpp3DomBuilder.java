@@ -24,7 +24,6 @@ import org.apache.maven.shared.utils.xml.pull.XmlPullParserException;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -193,14 +192,6 @@ public class Xpp3DomBuilder
 
         private final List<StringBuilder> values = new ArrayList<StringBuilder>();
 
-        // Todo: Use these for something smart !
-        private final List<SAXParseException> warnings = new ArrayList<SAXParseException>();
-
-        private final List<SAXParseException> errors = new ArrayList<SAXParseException>();
-
-        private final List<SAXParseException> fatals = new ArrayList<SAXParseException>();
-
-
         Xpp3Dom result = null;
 
         private final boolean trim;
@@ -248,27 +239,6 @@ public class Xpp3DomBuilder
             {
                 elemStack.get( depth - 1 ).addChild( child );
             }
-        }
-
-        @Override
-        public void warning( SAXParseException e )
-            throws SAXException
-        {
-            warnings.add( e );
-        }
-
-        @Override
-        public void error( SAXParseException e )
-            throws SAXException
-        {
-            errors.add( e );
-        }
-
-        @Override
-        public void fatalError( SAXParseException e )
-            throws SAXException
-        {
-            fatals.add( e );
         }
 
         private Xpp3Dom pop()
