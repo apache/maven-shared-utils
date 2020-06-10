@@ -87,6 +87,6 @@ public class EnforceExcludesOverIncludesTest
     private void touch( final File file ) throws IOException
     {
         file.getParentFile().mkdirs();
-        new FileWriter( file ).close();
+        file.createNewFile();
     }
 }
