@@ -102,7 +102,7 @@ public class Shell
      */
     String[] getShellArgs()
     {
-        if ( ( shellArgs == null ) || shellArgs.isEmpty() )
+        if ( shellArgs.isEmpty() )
         {
             return null;
         }
