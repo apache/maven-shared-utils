@@ -33,9 +33,7 @@ import javax.annotation.Nonnull;
  * Significantly more efficient than using strings, since re-evaluation and re-tokenizing is avoided.
  *
  * @author Kristian Rosenvold
- * @deprecated use {@code java.nio.filejava.nio.file.DirectoryStream.Filter<T>} and related classes
  */
-@Deprecated
 public class MatchPattern
 {
     private final String source;
