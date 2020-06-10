@@ -27,7 +27,7 @@ import org.apache.maven.shared.utils.io.ScannerAware;
 import java.io.File;
 
 /**
- * If an exclude is defined on a folder it will bypass the visit of the children
+ * If an exclude is defined on a folder it does not visit of the children
  * even if some include can match children.
  */
 public class EnforceExcludesOverIncludes implements ScanConductor, ScannerAware
