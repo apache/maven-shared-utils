@@ -135,7 +135,7 @@ public class ReaderFactory
     /**
      * Create a new Reader with XML encoding detection rules.
      *
-     * @param url not null url
+     * @param url not null URL
      * @return an XML reader instance for the input URL
      * @throws IOException if any
      * @see XmlStreamReader
