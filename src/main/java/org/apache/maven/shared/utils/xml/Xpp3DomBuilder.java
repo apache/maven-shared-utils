@@ -19,7 +19,6 @@ package org.apache.maven.shared.utils.xml;
  * under the License.
  */
 
-import org.apache.maven.shared.utils.io.IOUtil;
 import org.apache.maven.shared.utils.xml.pull.XmlPullParserException;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -95,10 +94,10 @@ public class Xpp3DomBuilder
      * @return the built dom
      * @throws XmlPullParserException in case of an error
      */
-    public static Xpp3Dom build( @WillClose Reader reader, boolean trim )
+    public static Xpp3Dom build( @WillClose Reader in, boolean trim )
         throws XmlPullParserException
     {
-        try
+        try ( Reader reader = in )  
         {
             DocHandler docHandler = parseSax( new InputSource( reader ), trim );
             reader.close();
@@ -107,10 +106,6 @@ public class Xpp3DomBuilder
         catch ( final IOException e )
         {
             throw new XmlPullParserException( e );
-        }
-        finally
-        {
-            IOUtil.close( reader );
         }
     }
 
