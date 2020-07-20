@@ -110,8 +110,9 @@ public class ReaderFactory
      * @param in not null input stream
      * @return an XML reader instance for the input stream
      * @throws IOException if any
-     * @see XmlStreamReader
+     * @deprecated use org.apache.commons.io.input.XmlStreamReader instead
      */
+    @Deprecated
     public static Reader newXmlReader( @Nonnull InputStream in )
         throws IOException
     {
@@ -124,8 +125,9 @@ public class ReaderFactory
      * @param file not null file
      * @return an XML reader instance for the input file
      * @throws IOException if any
-     * @see XmlStreamReader
+     * @deprecated use org.apache.commons.io.input.XmlStreamReader instead
      */
+    @Deprecated
     public static Reader newXmlReader( @Nonnull File file )
         throws IOException
     {
@@ -138,8 +140,9 @@ public class ReaderFactory
      * @param url not null URL
      * @return an XML reader instance for the input URL
      * @throws IOException if any
-     * @see XmlStreamReader
+     * @deprecated use {@code org.apache.commons.io.input.XmlStreamReader} instead
      */
+    @Deprecated
     public static Reader newXmlReader( @Nonnull URL url )
         throws IOException
     {
