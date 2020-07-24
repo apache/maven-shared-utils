@@ -280,11 +280,11 @@ public abstract class CommandLineUtils
                         inputFeeder.start();
                     }
 
-                    outputPumper = new StreamPumper( p.getInputStream(), systemOut );
+                    outputPumper = new StreamPumper( p.getInputStream(), systemOut , streamCharset );
                     outputPumper.setName( "StreamPumper-systemOut" );
                     outputPumper.start();
 
-                    errorPumper = new StreamPumper( p.getErrorStream(), systemErr );
+                    errorPumper = new StreamPumper( p.getErrorStream(), systemErr , streamCharset );
                     errorPumper.setName( "StreamPumper-systemErr" );
                     errorPumper.start();
 
