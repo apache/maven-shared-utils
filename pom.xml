@@ -27,7 +27,7 @@
   </parent>
 
   <artifactId>maven-shared-utils</artifactId>
-  <version>3.3.1-SNAPSHOT</version>
+  <version>3.3.1</version>
 
   <name>Apache Maven Shared Utils</name>
   <description>Shared utilities for use by Maven core and plugins</description>
@@ -36,7 +36,7 @@
     <connection>scm:git:https://gitbox.apache.org/repos/asf/maven-shared-utils.git</connection>
     <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-shared-utils.git</developerConnection>
     <url>https://github.com/apache/maven-shared-utils/tree/${project.scm.tag}</url>
-    <tag>HEAD</tag>
+    <tag>maven-shared-utils-3.3.1</tag>
  </scm>
   <issueManagement>
     <system>jira</system>
