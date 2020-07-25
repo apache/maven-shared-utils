@@ -61,7 +61,7 @@
 
   <properties>
     <checkstyle.violation.ignore>RedundantThrows,NewlineAtEndOfFile,ParameterNumber,MethodLength,FileLength,ModifierOrder</checkstyle.violation.ignore>
-
+    <project.build.outputTimestamp>2020-04-04T09:03:59Z</project.build.outputTimestamp>
     <javaVersion>7</javaVersion>
     <mavenVersion>3.1.0</mavenVersion>
   </properties>
