@@ -174,7 +174,7 @@ public class CommandLineUtilsTest
     public void testChineseEncodingIssue()
         throws Exception
     {
-        Commandline commandline = new Commandline( "ping www.baidu.com" );
+        Commandline commandline = new Commandline( "echo 金色传说" );
         StreamConsumer err = new StreamConsumer() {
             @Override
             public void consumeLine( String line ) {
