@@ -19,7 +19,6 @@ package org.apache.maven.shared.utils.xml;
  * under the License.
  */
 
-import org.apache.maven.shared.utils.StringUtils;
 import org.apache.maven.shared.utils.xml.pull.XmlPullParserException;
 
 import org.junit.Test;
@@ -43,9 +42,7 @@ import static org.junit.Assert.fail;
 public class Xpp3DomBuilderTest
 {
 
-    private static final String LS = System.getProperty( "line.separator" );
-
-    private static final String xmlDeclaration = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+    private static final String XML_DECLARATION = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 
     @Test
     public void selfClosingTag()
@@ -137,9 +134,9 @@ public class Xpp3DomBuilderTest
     {
         StringBuilder domString = new StringBuilder();
         domString.append( "<root>" );
-        domString.append( LS );
+        domString.append( "\n" );
         domString.append( "  <el att=\"&lt;foo&gt;\">bar</el>" );
-        domString.append( LS );
+        domString.append( "\n" );
         domString.append( "</root>" );
 
         return domString.toString();
@@ -161,13 +158,13 @@ public class Xpp3DomBuilderTest
     {
         StringBuilder domString = new StringBuilder();
         domString.append( "<root>" );
-        domString.append( LS );
+        domString.append( "\n" );
         domString.append( "  <a1>\"msg\"</a1>" );
-        domString.append( LS );
+        domString.append( "\n" );
         domString.append( "  <a2>&lt;b&gt;\"msg\"&lt;/b&gt;</a2>" );
-        domString.append( LS );
+        domString.append( "\n" );
         domString.append( "  <a3>&lt;b&gt;\"msg\"&lt;/b&gt;</a3>" );
-        domString.append( LS );
+        domString.append( "\n" );
         domString.append( "</root>" );
         return domString.toString();
     }
@@ -195,12 +192,12 @@ public class Xpp3DomBuilderTest
         buf.append( "  <el4></el4>\n" );
         buf.append( "  <el5></el5>\n" );
         buf.append( "</root>" );
-        return StringUtils.unifyLineSeparators( buf.toString() );
+        return buf.toString();
     }
 
     private static String expectedSelfClosingTag()
     {
-        return StringUtils.unifyLineSeparators( xmlDeclaration + selfClosingTagSource() );
+        return XML_DECLARATION + selfClosingTagSource();
     }
 
 }
