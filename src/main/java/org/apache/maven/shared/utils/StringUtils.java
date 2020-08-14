@@ -2403,8 +2403,11 @@ public class StringUtils
      * @param s a not null String
      * @return a String that contains only System line separators
      * @see #unifyLineSeparators(String, String)
-     * 
+     * @deprecated this method produces platform dependent code and contributes to 
+     *     non-reproducible builds. In the context of Maven, this is almost never what's needed.
+     *     Remove calls to this method and do not replace them.
      */
+    @Deprecated
     public static String unifyLineSeparators( @Nullable String s )
     {
         return unifyLineSeparators( s, System.getProperty( "line.separator" ) );
