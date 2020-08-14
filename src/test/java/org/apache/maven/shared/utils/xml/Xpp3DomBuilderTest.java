@@ -24,11 +24,16 @@ import org.apache.maven.shared.utils.xml.pull.XmlPullParserException;
 
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 
@@ -42,7 +47,7 @@ public class Xpp3DomBuilderTest
 
     private static final String xmlDeclaration = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 
-        @Test
+    @Test
     public void selfClosingTag()
         throws Exception
     {
@@ -57,6 +62,22 @@ public class Xpp3DomBuilderTest
         assertEquals( "check DOMs match", expected, dom1Str );
     }
 
+    @Test
+    public void testUnrecognizedEncoding()
+    {
+
+        byte[] data = "<foo/>".getBytes(StandardCharsets.UTF_8);
+        InputStream in = new ByteArrayInputStream( data );
+        try {
+            Xpp3DomBuilder.build( in , "nosuch encoding" );
+            fail();
+        } catch ( XmlPullParserException expected ) {
+            assertTrue( expected.getCause() instanceof UnsupportedEncodingException );
+        }
+
+    }
+
+    
     @Test
     public void trimming()
         throws Exception
