@@ -20,7 +20,7 @@ package org.apache.maven.shared.utils.xml;
  */
 
 import org.apache.maven.shared.utils.xml.pull.XmlPullParserException;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -93,11 +93,15 @@ public class Xpp3DomBuilderTest
         assertEquals( "  preserve space  ", dom.getChild( "element6" ).getValue() );
     }
 
-    @Test(expected = XmlPullParserException.class)
-    public void malformedXml()
+    @Test
+    public void testMalformedXml()
     {
-        Xpp3DomBuilder.build( new StringReader( "<newRoot>" + createDomString() ) );
-        fail( "We're supposed to fail" );
+        try {
+            Xpp3DomBuilder.build( new StringReader( "<newRoot>" + createDomString() ) );
+            fail( "We're supposed to fail" );
+        } catch (XmlPullParserException ex) {
+            Assert.assertNotNull( ex.getMessage() );
+        }
     }
 
     @Test
