@@ -42,7 +42,7 @@ import static org.junit.Assert.fail;
 public class Xpp3DomBuilderTest
 {
 
-    private static final String XML_DECLARATION = "<?xml version='1.0' encoding='UTF-8'?>\n";
+    private static final String XML_DECLARATION = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 
     @Test
     public void selfClosingTag()
