@@ -42,14 +42,13 @@ import static org.junit.Assert.fail;
 public class Xpp3DomBuilderTest
 {
 
-    private static final String XML_DECLARATION = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+    private static final String XML_DECLARATION = "<?xml version='1.0' encoding='UTF-8'?>\n";
 
     @Test
     public void selfClosingTag()
         throws Exception
     {
 
-        // Todo:  http://stackoverflow.com/questions/12968390/detecting-self-closing-tags-in-sax
         String domString = selfClosingTagSource();
 
         Xpp3Dom dom = Xpp3DomBuilder.build( new StringReader( domString ) );
