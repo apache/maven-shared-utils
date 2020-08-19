@@ -24,7 +24,6 @@ import java.io.IOException;
 import javax.swing.text.html.HTML;
 import java.io.StringWriter;
 
-import org.apache.maven.shared.utils.Os;
 import org.apache.maven.shared.utils.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -51,7 +50,7 @@ public class PrettyPrintXmlWriterTest
 
         writer.endElement(); // Tag.HTML
 
-        Assert.assertEquals( expectedResult( Os.LINE_SEP ), w.toString() );
+        Assert.assertEquals( expectedResult(), w.toString() );
     }
 
     @Test
@@ -67,7 +66,7 @@ public class PrettyPrintXmlWriterTest
 
         writer.endElement(); // Tag.HTML
 
-        Assert.assertEquals( expectedResult( "\n" ), w.toString() );
+        Assert.assertEquals( expectedResult(), w.toString() );
     }
 
     @Test
@@ -83,7 +82,7 @@ public class PrettyPrintXmlWriterTest
 
         writer.endElement(); // Tag.HTML
 
-        Assert.assertEquals( expectedResult( "    ", Os.LINE_SEP ), w.toString() );
+        Assert.assertEquals( expectedResult( "    " ), w.toString() );
     }
 
     @Test
@@ -158,13 +157,15 @@ public class PrettyPrintXmlWriterTest
         writer.endElement(); // Tag.BODY
     }
 
-    private static String expectedResult( String lineSeparator )
+    private static String expectedResult()
     {
-        return expectedResult( "  ", lineSeparator );
+        return expectedResult( "  " );
     }
 
-    private static String expectedResult( String lineIndenter, String lineSeparator )
+    private static String expectedResult( String lineIndenter )
     {
+        
+        String lineSeparator = "\n";
         StringBuilder expected = new StringBuilder();
 
         expected.append( "<html>" ).append( lineSeparator );
