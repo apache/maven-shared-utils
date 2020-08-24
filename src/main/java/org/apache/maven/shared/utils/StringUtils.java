@@ -2398,7 +2398,7 @@ public class StringUtils
 
     /**
      * Parses the given String and replaces all occurrences of
-     * '\n', '\r' and '\r\n' with the system line separator.
+     * '\n', '\r', and "\r\n" with the system line separator.
      *
      * @param s a not null String
      * @return a String that contains only System line separators
@@ -2421,7 +2421,7 @@ public class StringUtils
      * @param s  a not null String
      * @param ls the wanted line separator ("\n" on UNIX), if null using the System line separator
      * @return a String that contains only System line separators
-     * @throws IllegalArgumentException if s is not '\n', '\r' or "\r\n"
+     * @throws IllegalArgumentException if s is not '\n', '\r', or "\r\n"
      * 
      */
     public static String unifyLineSeparators( @Nullable String s, @Nullable String ls )
