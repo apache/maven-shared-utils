@@ -2406,7 +2406,7 @@ public class StringUtils
      * @deprecated this method produces platform dependent code and contributes to 
      *     non-reproducible builds. In the context of Maven, this is almost never what's needed.
      *     Remove calls to this method and do not replace them. That is, change
-     *     {@code Stringutils.unifyLineSeparators(s)} with simply {@code s}.
+     *     {@code Stringutils.unifyLineSeparators(s)} to simply {@code s}.
      */
     @Deprecated
     public static String unifyLineSeparators( @Nullable String s )
@@ -2419,9 +2419,9 @@ public class StringUtils
      * '\n', '\r' and '\r\n' with the system line separator.
      *
      * @param s  a not null String
-     * @param ls the wanted line separator ("\n" on UNIX), if null using the System line separator.
+     * @param ls the wanted line separator ("\n" on UNIX), if null using the System line separator
      * @return a String that contains only System line separators
-     * @throws IllegalArgumentException if ls is not '\n', '\r' and '\r\n' characters.
+     * @throws IllegalArgumentException if s is not '\n', '\r' or "\r\n"
      * 
      */
     public static String unifyLineSeparators( @Nullable String s, @Nullable String ls )
