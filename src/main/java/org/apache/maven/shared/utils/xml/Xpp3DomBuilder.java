@@ -208,8 +208,6 @@ public class Xpp3DomBuilder
             attachToParent( child );
             pushOnStack( child );
 
-            // Todo: Detecting tags that close immediately seem to be impossible in sax ?
-            // http://stackoverflow.com/questions/12968390/detecting-self-closing-tags-in-sax
             values.add( new StringBuilder() );
 
             int size = attributes.getLength();
