@@ -69,8 +69,8 @@ import java.util.Random;
  * <p/>
  * <h3>File-related methods</h3>
  * <p/>
- * There are methods to  create a {@link #toFile File from a URL}, copy a
- * copy a {@link #copyFile File to another File},
+ * There are methods to create a {@link #toFile File from a URL}, copy a
+ * {@link #copyFile File to another File},
  * copy a {@link #copyURLToFile URL's contents to a File},
  * as well as methods to {@link #deleteDirectory(File) delete} and {@link #cleanDirectory(File)
  * clean} a directory.
@@ -741,7 +741,7 @@ public class FileUtils
      * @throws IllegalArgumentException      if <code>destinationDirectory</code> isn't a directory
      * @throws IOException                   if <code>source</code> does not exist, the file in
      *                                       <code>destinationDirectory</code> cannot be written to, or an IO error
-     *                                       occurs during copying.
+     *                                       occurs during copying
      * @deprecated use {@code org.apache.commons.io.FileUtils.copyFileToDirectory()}
      */
     @Deprecated
@@ -791,11 +791,11 @@ public class FileUtils
      * @param source      an existing non-directory <code>File</code> to copy bytes from
      * @param destination a non-directory <code>File</code> to write bytes to (possibly
      *                    overwriting)
-     * @throws IOException  if <code>source</code> does not exist, <code>destination</code> cannot be
-     *                      written to, or an IO error occurs during copying
+     * @throws IOException if <code>source</code> does not exist, <code>destination</code> cannot be
+     *                     written to, or an IO error occurs during copying
      * @throws java.io.FileNotFoundException if <code>destination</code> is a directory
-     * @deprecated use {@code java.nio.Files.copy(source.toPath(), destination.toPath(), CopyOptions.NOFOLLOW_LINKS,
-     *     CopyOptions.REPLACE_EXISTING)}
+     * @deprecated use {@code java.nio.Files.copy(source.toPath(), destination.toPath(), LinkOption.NOFOLLOW_LINKS,
+     *     StandardCopyOption.REPLACE_EXISTING)}
      */
     @Deprecated
     public static void copyFile( @Nonnull final File source, @Nonnull final File destination )
@@ -873,7 +873,7 @@ public class FileUtils
      * @param source      An existing non-directory <code>File</code> to copy bytes from.
      * @param destination A non-directory <code>File</code> to write bytes to (possibly
      *                    overwriting).
-     * @return true if no problem occured
+     * @return true if no problem occurred
      * @throws IOException if <code>source</code> does not exist, <code>destination</code> cannot be
      *                     written to, or an IO error occurs during copying.
      */
@@ -895,9 +895,9 @@ public class FileUtils
      * The directories up to <code>destination</code> will be created if they don't already exist.
      * <code>destination</code> will be overwritten if it already exists.
      *
-     * @param source      A <code>URL</code> to copy bytes from.
-     * @param destination A non-directory <code>File</code> to write bytes to (possibly
-     *                    overwriting).
+     * @param source      a <code>URL</code> to copy bytes from
+     * @param destination a non-directory <code>File</code> to write bytes to (possibly
+     *                    overwriting)
      * @throws IOException if
      *                     <ul>
      *                     <li><code>source</code> URL cannot be opened</li>
@@ -905,7 +905,7 @@ public class FileUtils
      *                     <li>an IO error occurs during copying</li>
      *                     </ul>
      * @deprecated use {@code java.nio.Files.copy(source.openStream(), destination.toPath(),
-     *     CopyOptions.REPLACE_EXISTING)}
+     *     StandardCopyOption.REPLACE_EXISTING)}
      */
     public static void copyURLToFile( @Nonnull final URL source, @Nonnull final File destination )
         throws IOException
@@ -918,10 +918,10 @@ public class FileUtils
      * The directories up to <code>destination</code> will be created if they don't already exist.
      * <code>destination</code> will be overwritten if it already exists.
      *
-     * @param source      An {@link InputStream} to copy bytes from. This stream is
+     * @param source      an {@link InputStream} to copy bytes from. This stream is
      *                    guaranteed to be closed.
-     * @param destination A non-directory <code>File</code> to write bytes to (possibly
-     *                    overwriting).
+     * @param destination a non-directory <code>File</code> to write bytes to (possibly
+     *                    overwriting)
      * @throws IOException if
      *                     <ul>
      *                     <li><code>source</code> cannot be opened</li>
@@ -929,7 +929,7 @@ public class FileUtils
      *                     <li>an I/O error occurs during copying</li>
      *                     </ul>
      * @deprecated use {@code java.nio.Files.copy(source, destination.toPath(),
-     *     CopyOptions.REPLACE_EXISTING)}
+     *     StandardCopyOption.REPLACE_EXISTING)}
      */
     @Deprecated
     private static void copyStreamToFile( @Nonnull @WillClose final InputStream source,
@@ -972,7 +972,7 @@ public class FileUtils
      * </pre>
      *
      * @param path the path to normalize
-     * @return the normalized String, or <code>null</code> if too many ..'s.
+     * @return the normalized String, or <code>null</code> if too many ..'s
      * @deprecated use {@code org.apache.commons.io.FileNameUtils.normalize()}
      */
     @Deprecated
@@ -1026,8 +1026,7 @@ public class FileUtils
      * relative (doesn't start with <code>/</code>), it will be resolved relative to
      * <code>baseFile</code>, otherwise it is treated as a normal root-relative path.
      *
-     * @param baseFile Where to resolve <code>filename</code> from, if <code>filename</code> is
-     *                 relative.
+     * @param baseFile where to resolve <code>filename</code> from, if <code>filename</code> is relative
      * @param filename absolute or relative file path to resolve
      * @return the canonical <code>File</code> of <code>filename</code>
      */
