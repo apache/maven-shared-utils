@@ -147,6 +147,12 @@ class AnsiMessageBuilder
         ansi.format( pattern, args );
         return this;
     }
+    
+    @Override
+    public MessageBuilder fill( char c )
+    {
+        throw new UnsupportedOperationException();
+    }
 
     @Override
     public String toString()

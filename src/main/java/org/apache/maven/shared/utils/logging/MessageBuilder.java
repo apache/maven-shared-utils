@@ -100,4 +100,6 @@ public interface MessageBuilder
      * @see String#format(String, Object...)
      */
     MessageBuilder format( String pattern, Object... args );
+    
+    MessageBuilder fill( char c );
 }

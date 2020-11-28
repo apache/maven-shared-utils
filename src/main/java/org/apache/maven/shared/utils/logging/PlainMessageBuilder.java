@@ -19,27 +19,33 @@ package org.apache.maven.shared.utils.logging;
  * under the License.
  */
 
+import java.util.Arrays;
+
 /**
  * Message builder implementation that just ignores styling, for Maven version earlier than 3.5.0.
  */
 class PlainMessageBuilder
     implements MessageBuilder, LoggerLevelRenderer
 {
-    private StringBuilder buffer;
+    private StringBuilder prefill;
+    
+    private StringBuilder postFill;
+    
+    private Character fillChar = null;
 
     PlainMessageBuilder()
     {
-        buffer = new StringBuilder();
+        prefill = new StringBuilder();
     }
 
     PlainMessageBuilder( StringBuilder builder )
     {
-        buffer = builder;
+        prefill = builder;
     }
 
-    PlainMessageBuilder( int size )
+    PlainMessageBuilder( int capacity )
     {
-        buffer = new StringBuilder( size );
+        prefill = new StringBuilder( capacity );
     }
 
     public String debug( String level )
@@ -94,49 +100,94 @@ class PlainMessageBuilder
 
     public PlainMessageBuilder a( char[] value, int offset, int len )
     {
-        buffer.append( value, offset, len );
+        
+        buffer().append( value, offset, len );
         return this;
     }
 
     public PlainMessageBuilder a( char[] value )
     {
-        buffer.append( value );
+        buffer().append( value );
         return this;
     }
 
     public PlainMessageBuilder a( CharSequence value, int start, int end )
     {
-        buffer.append( value, start, end );
+        buffer().append( value, start, end );
         return this;
     }
 
     public PlainMessageBuilder a( CharSequence value )
     {
-        buffer.append( value );
+        buffer().append( value );
         return this;
     }
 
     public PlainMessageBuilder a( Object value )
     {
-        buffer.append( value );
+        buffer().append( value );
         return this;
     }
 
     public PlainMessageBuilder newline()
     {
-        buffer.append( System.getProperty( "line.separator" ) );
+        buffer().append( System.getProperty( "line.separator" ) );
         return this;
     }
 
     public PlainMessageBuilder format( String pattern, Object... args )
     {
-        buffer.append( String.format( pattern, args ) );
+        buffer().append( String.format( pattern, args ) );
+        return this;
+    }
+    
+    private StringBuilder buffer() 
+    {
+        return ( fillChar == null ? prefill : postFill );
+    } 
+    
+    /**
+     * When calling {@link #toString()} the result will be filled with c for the capacity.
+     * 
+     *  @throws IllegalStateException when called more than once
+     */
+    public PlainMessageBuilder fill( char c )
+    {
+        if ( fillChar != null )
+        {
+            throw new IllegalStateException( "fill can only be called once" );
+        }
+        this.fillChar = c;
+        this.postFill = new StringBuilder();
         return this;
     }
 
     @Override
     public String toString()
     {
-        return buffer.toString();
+        if ( fillChar == null )
+        {
+            return prefill.toString();
+        }
+        else
+        {
+            int capacity = prefill.capacity();
+            int size = prefill.length() + postFill.length();
+
+            char[] fillChars;
+            if ( size >= capacity )
+            {
+                fillChars = new char[] { fillChar };
+            }
+            else
+            {
+                fillChars = new char[( capacity - size )];
+            }
+
+            Arrays.fill( fillChars, 0, fillChars.length, fillChar );
+
+            return prefill.append( fillChars ).append( postFill ).toString();
+
+        }
     }
 }
