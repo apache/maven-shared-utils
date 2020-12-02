@@ -21,6 +21,7 @@ package org.apache.maven.shared.utils.logging;
 
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
+import org.fusesource.jansi.AnsiMode;
 
 /**
  * Colored message utils, to manage colors consistently across plugins (only if Maven version is at least 3.5.0).
@@ -81,17 +82,13 @@ public class MessageUtils
             // hook can only set when JANSI is true 
             if ( shutdownHook != null )
             {
-                // if out and system_out are same instance again, ansi is assumed to be uninstalled 
-                if ( AnsiConsole.out == AnsiConsole.system_out )
+                try
                 {
-                    try
-                    {
-                        Runtime.getRuntime().removeShutdownHook( shutdownHook );
-                    }
-                    catch ( IllegalStateException ex )
-                    {
-                        // ignore - VM is already shutting down
-                    }
+                    Runtime.getRuntime().removeShutdownHook( shutdownHook );
+                }
+                catch ( IllegalStateException ex )
+                {
+                    // ignore - VM is already shutting down
                 }
             }
         }
@@ -113,6 +110,7 @@ public class MessageUtils
     {
         if ( JANSI )
         {
+            AnsiConsole.out().setMode( flag ? AnsiMode.Force : AnsiMode.Strip );
             Ansi.setEnabled( flag );
         }
     }
@@ -194,7 +192,10 @@ public class MessageUtils
                 {
                     synchronized ( STARTUP_SHUTDOWN_MONITOR )
                     {
-                        doSystemUninstall();
+                        while ( AnsiConsole.isInstalled() )
+                        {
+                            doSystemUninstall();
+                        }
                     }
                 }
             };
