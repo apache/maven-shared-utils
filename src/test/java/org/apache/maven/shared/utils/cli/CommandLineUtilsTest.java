@@ -19,6 +19,9 @@ package org.apache.maven.shared.utils.cli;
  * under the License.
  */
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItemInArray;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -168,4 +171,40 @@ public class CommandLineUtilsTest
         assertEquals( expected.length, actual.length );
         assertEquals( Arrays.asList( expected ), Arrays.asList( actual ) );
     }
+
+    @Test
+    public void environmentVariableWithNullShouldNotBeSet() {
+
+        Commandline commandline = new Commandline();
+        commandline.addEnvironment("TEST_NULL_ENV", null);
+
+        String[] environmentVariables = commandline.getEnvironmentVariables();
+
+        assertNotNull( environmentVariables );
+        assertThat( environmentVariables, not( hasItemInArray( "TEST_NULL_ENV=null" ) ) );
+    }
+
+    @Test
+    public void environmentVariableFromSystemIsCopied() {
+
+        Commandline commandline = new Commandline();
+
+        String[] environmentVariables = commandline.getEnvironmentVariables();
+
+        assertNotNull(environmentVariables);
+        assertThat(environmentVariables, hasItemInArray( "TEST_SHARED_ENV=TestValue" ) );
+    }
+
+    @Test
+    public void environmentVariableFromSystemIsRemoved() {
+
+        Commandline commandline = new Commandline();
+        commandline.addEnvironment("TEST_SHARED_ENV", null);
+
+        String[] environmentVariables = commandline.getEnvironmentVariables();
+
+        assertNotNull(environmentVariables);
+        assertThat(environmentVariables, not ( hasItemInArray( "TEST_SHARED_ENV=TestValue" ) ) );
+    }
+
 }
