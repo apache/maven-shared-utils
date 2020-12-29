@@ -241,15 +241,16 @@ public class Commandline
     public String[] getEnvironmentVariables()
     {
         addSystemEnvironment();
-        String[] environmentVars = new String[envVars.size()];
-        int i = 0;
+        List<String> environmentVars = new ArrayList<>();
         for ( String name : envVars.keySet() )
         {
             String value = envVars.get( name );
-            environmentVars[i] = name + "=" + value;
-            i++;
+            if ( value != null )
+            {
+                environmentVars.add( name + "=" + value );
+            }
         }
-        return environmentVars;
+        return environmentVars.toArray( new String[0] );
     }
 
     /**

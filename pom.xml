@@ -156,6 +156,9 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <reuseForks>false</reuseForks>
+          <environmentVariables>
+            <TEST_SHARED_ENV>TestValue</TEST_SHARED_ENV>
+          </environmentVariables>
         </configuration>
       </plugin>
     </plugins>
