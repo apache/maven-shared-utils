@@ -112,6 +112,17 @@ public class MessageUtils
         {
             AnsiConsole.out().setMode( flag ? AnsiMode.Force : AnsiMode.Strip );
             Ansi.setEnabled( flag );
+            System.setProperty( AnsiConsole.JANSI_MODE,
+                    flag ? AnsiConsole.JANSI_MODE_FORCE : AnsiConsole.JANSI_MODE_STRIP );
+            boolean installed = AnsiConsole.isInstalled();
+            while ( AnsiConsole.isInstalled() )
+            {
+                AnsiConsole.systemUninstall();
+            }
+            if ( installed )
+            {
+                AnsiConsole.systemInstall();
+            }
         }
     }
 
