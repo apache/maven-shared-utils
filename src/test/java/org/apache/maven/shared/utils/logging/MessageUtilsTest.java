@@ -22,9 +22,18 @@ package org.apache.maven.shared.utils.logging;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
 
+import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 
+import org.fusesource.jansi.AnsiColors;
+import org.fusesource.jansi.AnsiConsole;
+import org.fusesource.jansi.AnsiMode;
+import org.fusesource.jansi.AnsiPrintStream;
+import org.fusesource.jansi.AnsiType;
+import org.fusesource.jansi.io.AnsiOutputStream;
 import org.junit.Test;
 
 public class MessageUtilsTest
@@ -44,5 +53,25 @@ public class MessageUtilsTest
         {
             System.setOut( currentOut );
         }
+    }
+
+    @Test
+    public void testTerminalWidth()
+    {
+        AnsiOutputStream.WidthSupplier width = new AnsiOutputStream.WidthSupplier()
+        {
+            @Override
+            public int getTerminalWidth()
+            {
+                return 33;
+            }
+        };
+        AnsiOutputStream aos = new AnsiOutputStream( new ByteArrayOutputStream(), width, AnsiMode.Default,
+                null, AnsiType.Emulation, AnsiColors.Colors256, StandardCharsets.UTF_8,
+                null, null, false );
+        AnsiConsole.systemInstall();
+        AnsiConsole.out = new AnsiPrintStream( aos, true );
+        assertEquals( 33, MessageUtils.getTerminalWidth() );
+        AnsiConsole.systemUninstall();
     }
 }

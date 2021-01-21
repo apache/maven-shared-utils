@@ -201,4 +201,22 @@ public class MessageUtils
             Runtime.getRuntime().addShutdownHook( shutdownHook );
         }
     }
+
+    /**
+     * Get the terminal width or -1 if the width cannot be determined.
+     *
+     * @return the terminal width
+     */
+    public static int getTerminalWidth()
+    {
+        if ( JANSI )
+        {
+            int width = AnsiConsole.getTerminalWidth();
+            return width > 0 ? width : -1;
+        }
+        else
+        {
+            return -1;
+        }
+    }
 }
