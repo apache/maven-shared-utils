@@ -27,24 +27,24 @@ import java.io.File;
 public interface Arg
 {
     /**
-     * @param value Set the value.
+     * @param value the value to be set
      */
     void setValue( String value );
 
     /**
-     * @param line The line of arguments.
+     * @param line the line of arguments
      */
     void setLine( String line ) throws CommandLineException;
 
     /**
-     * @param value The file to be set.
+     * @param file the file to be set
      */
-    void setFile( File value );
+    void setFile( File file );
 
     /**
-     * To mask the argument value when a command line ask to print his arguments.
+     * Whether to hide the argument value when a command line prints the arguments.
      *
-     * @param mask new state of the {@code maks} property
+     * @param mask new state of the {@code mask} property
      * @since 0.6
      */
     void setMask( boolean mask );

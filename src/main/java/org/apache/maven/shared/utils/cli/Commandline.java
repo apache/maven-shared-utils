@@ -115,7 +115,7 @@ public class Commandline
     }
 
     /**
-     * <p>Sets the shell or command-line interpretor for the detected operating system,
+     * <p>Sets the shell or command-line interpreter for the detected operating system,
      * and the shell arguments.</p>
      */
     private void setDefaultShell()
@@ -139,11 +139,7 @@ public class Commandline
     }
 
     /**
-     * Creates an argument object.
-     * <p/>
-     * <p>Each commandline object has at most one instance of the
-     * argument class.  This method calls
-     * <code>this.createArgument(false)</code>.</p>
+     * Creates an empty argument object and inserts it at the end of the argument list.
      *
      * @return the argument object
      */
@@ -154,13 +150,10 @@ public class Commandline
 
     /**
      * Creates an argument object and adds it to the list of args.
-     * 
-     * <p>Each commandline object has at most one instance of the
-     * argument class.</p>
      *
      * @param insertAtStart if true, the argument is inserted at the
      *                      beginning of the list of args. Otherwise it is appended.
-     * @return the arguments
+     * @return the argument
      */
     public Arg createArg( boolean insertAtStart )
     {
@@ -457,6 +450,9 @@ public class Commandline
         return shell;
     }
 
+    /**
+     * A single command line argument
+     */
     public static class Argument
         implements Arg
     {
@@ -484,15 +480,7 @@ public class Commandline
             {
                 return;
             }
-            try
-            {
-                parts = CommandLineUtils.translateCommandline( line );
-            }
-            catch ( CommandLineException e )
-            {
-                System.err.println( "Error translating Commandline." );
-                throw( e );
-            }
+            parts = CommandLineUtils.translateCommandline( line );
         }
 
         /**
