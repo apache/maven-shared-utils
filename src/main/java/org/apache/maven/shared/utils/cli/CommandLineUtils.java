@@ -584,8 +584,8 @@ public abstract class CommandLineUtils
     }
 
     /**
-     * @param line The line
-     * @return The concatenate lines.
+     * @param line the lines
+     * @return the concatenated lines, quoted and escaped, separated by spaces
      */
     public static String toString( String... line )
     {
@@ -595,7 +595,6 @@ public abstract class CommandLineUtils
             return "";
         }
 
-        // path containing one or more elements
         final StringBuilder result = new StringBuilder();
         for ( int i = 0; i < line.length; i++ )
         {
@@ -603,14 +602,7 @@ public abstract class CommandLineUtils
             {
                 result.append( ' ' );
             }
-            try
-            {
-                result.append( StringUtils.quoteAndEscape( line[i], '\"' ) );
-            }
-            catch ( Exception e )
-            {
-                System.err.println( "Error quoting argument: " + e.getMessage() );
-            }
+            result.append( StringUtils.quoteAndEscape( line[i], '\"' ) );
         }
         return result.toString();
     }
