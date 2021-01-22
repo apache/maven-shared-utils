@@ -82,7 +82,7 @@ public class MessageUtils
             if ( shutdownHook != null )
             {
                 // if out and system_out are same instance again, ansi is assumed to be uninstalled 
-                if ( AnsiConsole.out == AnsiConsole.system_out )
+                if ( AnsiConsole.out() == AnsiConsole.sysOut() )
                 {
                     try
                     {
