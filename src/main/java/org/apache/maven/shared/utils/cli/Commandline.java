@@ -482,15 +482,7 @@ public class Commandline
             {
                 return;
             }
-            try
-            {
-                parts = CommandLineUtils.translateCommandline( line );
-            }
-            catch ( CommandLineException e )
-            {
-                System.err.println( "Error translating Commandline." );
-                throw( e );
-            }
+            parts = CommandLineUtils.translateCommandline( line );
         }
 
         /**
