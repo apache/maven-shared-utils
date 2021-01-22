@@ -421,9 +421,9 @@ public abstract class CommandLineUtils
      * with case-insensitive environment variables like Windows, all variable names will be normalized to upper case.
      *
      * @return The shell environment variables, can be empty but never <code>null</code>.
-     * @see System#getenv() System.getenv() API, new in JDK 5.0, to get the same result
-     *      <b>since 2.0.2 System#getenv() will be used if available in the current running jvm.</b>
+     * @deprecated use System#getenv()
      */
+    @Deprecated
     public static Properties getSystemEnvVars()
     {
         return getSystemEnvVars( !Os.isFamily( Os.FAMILY_WINDOWS ) );
@@ -435,9 +435,9 @@ public abstract class CommandLineUtils
      *
      * @param caseSensitive Whether environment variable keys should be treated case-sensitively.
      * @return Properties object of (possibly modified) envar keys mapped to their values.
-     * @see System#getenv() System.getenv() API, new in JDK 5.0, to get the same result
-     *      <b>since 2.0.2 System#getenv() will be used if available in the current running jvm.</b>
+     * @deprecated use System#getenv()
      */
+    @Deprecated
     public static Properties getSystemEnvVars( boolean caseSensitive )
     {
         Map<String, String> envs = System.getenv();
