@@ -34,7 +34,6 @@ import org.apache.maven.shared.utils.Os;
 import org.apache.maven.shared.utils.StringUtils;
 import org.apache.maven.shared.utils.cli.shell.BourneShell;
 import org.apache.maven.shared.utils.cli.shell.CmdShell;
-import org.apache.maven.shared.utils.cli.shell.CommandShell;
 import org.apache.maven.shared.utils.cli.shell.Shell;
 
 /**
@@ -124,14 +123,7 @@ public class Commandline
         //If this is windows set the shell to command.com or cmd.exe with correct arguments.
         if ( Os.isFamily( Os.FAMILY_WINDOWS ) )
         {
-            if ( Os.isFamily( Os.FAMILY_WIN9X ) )
-            {
-                setShell( new CommandShell() );
-            }
-            else
-            {
-                setShell( new CmdShell() );
-            }
+            setShell( new CmdShell() );
         }
         else
         {
