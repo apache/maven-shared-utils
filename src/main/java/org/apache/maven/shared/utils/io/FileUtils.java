@@ -1618,11 +1618,15 @@ public class FileUtils
     public static void copyDirectory( @Nonnull File sourceDirectory, @Nonnull File destinationDirectory )
         throws IOException
     {
+        Objects.requireNonNull( sourceDirectory );
         Objects.requireNonNull( destinationDirectory );
         if ( destinationDirectory.equals( sourceDirectory ) ) {
             throw new IOException( "Can't copy directory " + sourceDirectory + " to itself." );
         }
-        copyDirectory( sourceDirectory, destinationDirectory, "**", null );
+        else if ( !destinationDirectory.exists() ) {
+            throw new IOException( "Can't copy directory " + sourceDirectory + " to non-existing " + destinationDirectory );
+        }
+        copyDirectoryStructure( sourceDirectory, destinationDirectory );
     }
 
     /**
@@ -1666,8 +1670,8 @@ public class FileUtils
      * <li>The <code>sourceDirectory</code> must exist.
      * </ul>
      *
-     * @param sourceDirectory      the source dir
-     * @param destinationDirectory the target dir
+     * @param sourceDirectory the existing directory to be copied
+     * @param destinationDirectory the new directory to be created
      * @throws IOException if any
      * @deprecated use {@code org.apache.commons.io.FileUtils.copyDirectory()}
      */
