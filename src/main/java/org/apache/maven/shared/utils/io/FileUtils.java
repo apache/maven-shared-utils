@@ -58,9 +58,9 @@ import java.util.Random;
 
 /**
  * This class provides basic facilities for manipulating files and file paths.
- * <p/>
+ *
  * <h3>Path-related methods</h3>
- * <p/>
+ * 
  * <p>Methods exist to retrieve the components of a typical file path. For example
  * <code>/www/hosted/mysite/index.html</code>, can be broken into:
  * <ul>
@@ -70,13 +70,12 @@ import java.util.Random;
  * </p>
  * <p/>
  * <h3>File-related methods</h3>
- * <p/>
+ * 
  * There are methods to create a {@link #toFile File from a URL}, copy a
  * {@link #copyFile File to another File},
  * copy a {@link #copyURLToFile URL's contents to a File},
  * as well as methods to {@link #deleteDirectory(File) delete} and {@link #cleanDirectory(File)
  * clean} a directory.
- * </p>
  * <p/>
  * Common {@link java.io.File} manipulation routines.
  * <p/>
@@ -91,7 +90,6 @@ import java.util.Random;
  * @author <a href="mailto:Christoph.Reck@dlr.de">Christoph.Reck</a>
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- *
  */
 public class FileUtils
 {
