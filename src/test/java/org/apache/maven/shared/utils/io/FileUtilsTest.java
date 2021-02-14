@@ -783,9 +783,7 @@ public class FileUtilsTest
     }
 
     @Test
-    @Ignore( "Commons test case that is failing for plexus" )
-    public void copyToSelf()
-        throws Exception
+    public void copyToSelf() throws IOException
     {
         File destination = new File( tempFolder.getRoot(), "copy3.txt" );
         //Prepare a test file
@@ -795,7 +793,6 @@ public class FileUtilsTest
     }
 
     @Test
-    @Ignore( "Commons test case that is failing for plexus" )
     public void copyDirectoryToDirectory_NonExistingDest()
         throws Exception
     {
