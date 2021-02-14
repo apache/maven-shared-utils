@@ -1,7 +1,5 @@
 package org.apache.maven.shared.utils.io;
 
-import org.apache.commons.io.IOUtils;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -21,6 +19,7 @@ import org.apache.commons.io.IOUtils;
  * under the License.
  */
 
+import org.apache.commons.io.IOUtils;
 import org.apache.maven.shared.utils.Os;
 import org.apache.maven.shared.utils.StringUtils;
 
