@@ -655,7 +655,7 @@ public class FileUtilsTest
 
     private FileUtils.FilterWrapper[] wrappers( String key, String value )
     {
-        final Map<String, String> map = new HashMap<>();
+        final Map<String, Object> map = new HashMap<>();
         map.put( key, value );
         return new FileUtils.FilterWrapper[]
             {
@@ -912,19 +912,6 @@ public class FileUtilsTest
         assertThat( FileUtils.sizeOfDirectory( grandParentDir ), is( expectedSize ) );
     }
 
-    /**
-     * Test for IO-217 FileUtils.copyDirectoryToDirectory makes infinite loops
-     */
-    @Test
-    public void copyDirectoryToItself()
-        throws Exception
-    {
-        File dir = new File( tempFolder.getRoot(), "itself" );
-        dir.mkdirs();
-        FileUtils.copyDirectory( dir, dir );
-        assertThat( FileUtils.getFileAndDirectoryNames( dir, null, null, true, true, true, true ).size(), is( 1 ) );
-    }
-
     private void createFilesForTestCopyDirectory( File grandParentDir, File parentDir, File childDir )
         throws Exception
     {
@@ -949,21 +936,36 @@ public class FileUtilsTest
     }
 
     @Test
-    @Ignore( "Commons test case that is failing for plexus" )
-    public void copyDirectoryErrors()
-        throws Exception
-    {
+    public void copyDirectoryErrors_nullDestination() throws IOException {
         try
         {
-            FileUtils.copyDirectory( null, null );
+            FileUtils.copyDirectory( new File( "a" ), null );
             fail();
         }
         catch ( NullPointerException ex )
         {
         }
+    }
+
+    @Test
+    public void copyDirectoryErrors_copyToSelf() {
         try
         {
-            FileUtils.copyDirectory( new File( "a" ), null );
+            FileUtils.copyDirectory( tempFolder.getRoot(), tempFolder.getRoot() );
+            fail();
+        }
+        catch ( IOException ex )
+        {
+        }
+    }
+
+    @Test
+    public void copyDirectoryErrors()
+        throws IOException
+    {
+        try
+        {
+            FileUtils.copyDirectory( null, null );
             fail();
         }
         catch ( NullPointerException ex )
@@ -979,14 +981,6 @@ public class FileUtilsTest
         }
         try
         {
-            FileUtils.copyDirectory( new File( "doesnt-exist" ), new File( "a" ) );
-            fail();
-        }
-        catch ( IOException ex )
-        {
-        }
-        try
-        {
             FileUtils.copyDirectory( testFile1, new File( "a" ) );
             fail();
         }
@@ -996,14 +990,6 @@ public class FileUtilsTest
         try
         {
             FileUtils.copyDirectory( tempFolder.getRoot(), testFile1 );
-            fail();
-        }
-        catch ( IOException ex )
-        {
-        }
-        try
-        {
-            FileUtils.copyDirectory( tempFolder.getRoot(), tempFolder.getRoot() );
             fail();
         }
         catch ( IOException ex )
