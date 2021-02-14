@@ -12,6 +12,7 @@ import static org.junit.Assert.fail;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeThat;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.maven.shared.utils.Os;
 import org.apache.maven.shared.utils.testhelpers.FileTestHelper;
 import org.codehaus.plexus.util.InterpolationFilterReader;
@@ -653,7 +654,7 @@ public class FileUtilsTest
         );
     }
 
-    private FileUtils.FilterWrapper[] wrappers( String key, String value )
+    private static FileUtils.FilterWrapper[] wrappers( String key, String value )
     {
         final Map<String, Object> map = new HashMap<>();
         map.put( key, value );
@@ -688,7 +689,7 @@ public class FileUtilsTest
             assertEquals(
                 "Expected " + file.getPath() + " to contain: " + expected,
                 expected,
-                IOUtil.toString( in )
+                IOUtils.toString( in )
             );
         }
     }
