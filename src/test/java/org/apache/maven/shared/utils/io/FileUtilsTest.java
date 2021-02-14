@@ -793,32 +793,6 @@ public class FileUtilsTest
     }
 
     @Test
-    public void copyDirectoryToDirectory_NonExistingDest()
-        throws Exception
-    {
-        createFile( testFile1, 1234 );
-        createFile( testFile2, 4321 );
-        File srcDir = tempFolder.getRoot();
-        File subDir = new File( srcDir, "sub" );
-        subDir.mkdir();
-        File subFile = new File( subDir, "A.txt" );
-        FileUtils.fileWrite( subFile, "UTF8", "HELLO WORLD" );
-        File destDir = new File( System.getProperty( "java.io.tmpdir" ), "tmp-FileUtilsTestCase" );
-        FileUtils.deleteDirectory( destDir );
-        File actualDestDir = new File( destDir, srcDir.getName() );
-
-        FileUtils.copyDirectory( srcDir, destDir );
-
-        assertThat( "Check exists", destDir.exists(), is( true ) );
-        assertThat( "Check exists", actualDestDir.exists(), is( true ) );
-        assertThat( "Check size", FileUtils.sizeOfDirectory( actualDestDir ),
-                    is( FileUtils.sizeOfDirectory( srcDir ) ) );
-        assertThat( new File( actualDestDir, "sub/A.txt" ).exists(), is( true ) );
-        FileUtils.deleteDirectory( destDir );
-    }
-
-    @Test
-    @Ignore( "Commons test case that is failing for plexus" )
     public void copyDirectoryToNonExistingDest()
         throws Exception
     {
@@ -834,9 +808,9 @@ public class FileUtilsTest
 
         FileUtils.copyDirectory( srcDir, destDir );
 
-        assertThat( "Check exists", destDir.exists(), is( true ) );
-        assertThat( "Check size", FileUtils.sizeOfDirectory( destDir ), is( FileUtils.sizeOfDirectory( srcDir ) ) );
-        assertThat( new File( destDir, "sub/A.txt" ).exists(), is( true ) );
+        assertTrue( destDir.exists() );
+        assertEquals( FileUtils.sizeOfDirectory( destDir ), FileUtils.sizeOfDirectory( srcDir ) );
+        assertTrue( new File( destDir, "sub/A.txt" ).exists() );
         FileUtils.deleteDirectory( destDir );
     }
 
@@ -947,18 +921,6 @@ public class FileUtilsTest
         try
         {
             FileUtils.copyDirectory( tempFolder.getRoot(), tempFolder.getRoot() );
-            fail();
-        }
-        catch ( IOException ex )
-        {
-        }
-    }
-    
-    @Test
-    public void copyDirectoryErrors_destDoesNotExist() {
-        try
-        {
-            FileUtils.copyDirectory( testFile1, new File( "a" ) );
             fail();
         }
         catch ( IOException ex )

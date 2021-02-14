@@ -1610,7 +1610,7 @@ public class FileUtils
      *
      * @param sourceDirectory the source directory. If the source does not exist,
      *     the method simply returns.
-     * @param destinationDirectory the target directory
+     * @param destinationDirectory the target directory; will be created if it doesn't exist
      * @throws IOException if any
      * @deprecated use {@code org.apache.commons.io.FileUtils.copyDirectory()}
      */
@@ -1624,7 +1624,9 @@ public class FileUtils
             throw new IOException( "Can't copy directory " + sourceDirectory + " to itself." );
         }
         else if ( !destinationDirectory.exists() ) {
-            throw new IOException( "Can't copy directory " + sourceDirectory + " to non-existing " + destinationDirectory );
+            if ( !destinationDirectory.mkdirs() ) {
+                throw new IOException( "Can't create directory " + destinationDirectory );
+            }
         }
         copyDirectoryStructure( sourceDirectory, destinationDirectory );
     }
