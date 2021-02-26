@@ -1617,11 +1617,14 @@ public class FileUtils
     {
         Objects.requireNonNull( sourceDirectory );
         Objects.requireNonNull( destinationDirectory );
-        if ( destinationDirectory.equals( sourceDirectory ) ) {
+        if ( destinationDirectory.equals( sourceDirectory ) )
+        {
             throw new IOException( "Can't copy directory " + sourceDirectory + " to itself." );
         }
-        else if ( !destinationDirectory.exists() ) {
-            if ( !destinationDirectory.mkdirs() ) {
+        else if ( !destinationDirectory.exists() )
+        {
+            if ( !destinationDirectory.mkdirs() )
+            {
                 throw new IOException( "Can't create directory " + destinationDirectory );
             }
         }
@@ -1648,7 +1651,8 @@ public class FileUtils
         {
             return;
         }
-        else if ( !sourceDirectory.isDirectory() ) {
+        else if ( !sourceDirectory.isDirectory() )
+        {
             throw new IOException( sourceDirectory + " is not a directory." );
         }
 
