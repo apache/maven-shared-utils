@@ -19,6 +19,7 @@ package org.apache.maven.shared.utils.io;
  * under the License.
  */
 
+import org.apache.commons.io.IOUtils;
 import org.apache.maven.shared.utils.Os;
 import org.apache.maven.shared.utils.StringUtils;
 
@@ -52,13 +53,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 /**
  * This class provides basic facilities for manipulating files and file paths.
- * <p/>
+ *
  * <h3>Path-related methods</h3>
- * <p/>
+ * 
  * <p>Methods exist to retrieve the components of a typical file path. For example
  * <code>/www/hosted/mysite/index.html</code>, can be broken into:
  * <ul>
@@ -68,13 +70,12 @@ import java.util.Random;
  * </p>
  * <p/>
  * <h3>File-related methods</h3>
- * <p/>
+ * 
  * There are methods to create a {@link #toFile File from a URL}, copy a
  * {@link #copyFile File to another File},
  * copy a {@link #copyURLToFile URL's contents to a File},
  * as well as methods to {@link #deleteDirectory(File) delete} and {@link #cleanDirectory(File)
  * clean} a directory.
- * </p>
  * <p/>
  * Common {@link java.io.File} manipulation routines.
  * <p/>
@@ -89,7 +90,6 @@ import java.util.Random;
  * @author <a href="mailto:Christoph.Reck@dlr.de">Christoph.Reck</a>
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- *
  */
 public class FileUtils
 {
@@ -633,7 +633,7 @@ public class FileUtils
         try ( InputStream input1 = new FileInputStream( file1 );
             InputStream  input2 = new FileInputStream( file2 ) )
         { 
-            return IOUtil.contentEquals( input1, input2 );
+            return IOUtils.contentEquals( input1, input2 );
         }
     }
 
@@ -750,7 +750,7 @@ public class FileUtils
     {
         if ( destinationDirectory.exists() && !destinationDirectory.isDirectory() )
         {
-            throw new IllegalArgumentException( "Destination is not a directory" );
+            throw new IOException( "Destination is not a directory" );
         }
 
         copyFile( source, new File( destinationDirectory, source.getName() ) );
@@ -1022,9 +1022,9 @@ public class FileUtils
     }
 
     /**
-     * Resolve a file <code>filename</code> to it's canonical form. If <code>filename</code> is
-     * relative (doesn't start with <code>/</code>), it will be resolved relative to
-     * <code>baseFile</code>, otherwise it is treated as a normal root-relative path.
+     * Resolve a file <code>filename</code> to its canonical form. If <code>filename</code> is
+     * relative (doesn't start with <code>/</code>), it is resolved relative to
+     * <code>baseFile</code>. Otherwise it is treated as a normal root-relative path.
      *
      * @param baseFile where to resolve <code>filename</code> from, if <code>filename</code> is relative
      * @param filename absolute or relative file path to resolve
@@ -1605,14 +1605,30 @@ public class FileUtils
     /**
      * Copy the contents of a directory into another one.
      *
-     * @param sourceDirectory      the source directory
-     * @param destinationDirectory the target directory
+     * @param sourceDirectory the source directory. If the source does not exist,
+     *     the method simply returns.
+     * @param destinationDirectory the target directory; will be created if it doesn't exist
      * @throws IOException if any
+     * @deprecated use {@code org.apache.commons.io.FileUtils.copyDirectory()}
      */
+    @Deprecated
     public static void copyDirectory( @Nonnull File sourceDirectory, @Nonnull File destinationDirectory )
         throws IOException
     {
-        copyDirectory( sourceDirectory, destinationDirectory, "**", null );
+        Objects.requireNonNull( sourceDirectory );
+        Objects.requireNonNull( destinationDirectory );
+        if ( destinationDirectory.equals( sourceDirectory ) )
+        {
+            throw new IOException( "Can't copy directory " + sourceDirectory + " to itself." );
+        }
+        else if ( !destinationDirectory.exists() )
+        {
+            if ( !destinationDirectory.mkdirs() )
+            {
+                throw new IOException( "Can't create directory " + destinationDirectory );
+            }
+        }
+        copyDirectoryStructure( sourceDirectory, destinationDirectory );
     }
 
     /**
@@ -1622,9 +1638,11 @@ public class FileUtils
      * @param destinationDirectory the target directory
      * @param includes             Ant include pattern
      * @param excludes             Ant exclude pattern
-     * @throws IOException if any
+     * @throws IOException if the source is a file or cannot be copied
      * @see #getFiles(File, String, String)
+     * @deprecated use {@code org.apache.commons.io.FileUtils.copyDirectory()}
      */
+    @Deprecated
     public static void copyDirectory( @Nonnull File sourceDirectory, @Nonnull File destinationDirectory,
                                       @Nullable String includes, @Nullable String excludes )
         throws IOException
@@ -1632,6 +1650,10 @@ public class FileUtils
         if ( !sourceDirectory.exists() )
         {
             return;
+        }
+        else if ( !sourceDirectory.isDirectory() )
+        {
+            throw new IOException( sourceDirectory + " is not a directory." );
         }
 
         List<File> files = getFiles( sourceDirectory, includes, excludes );
@@ -1651,8 +1673,8 @@ public class FileUtils
      * <li>The <code>sourceDirectory</code> must exist.
      * </ul>
      *
-     * @param sourceDirectory      the source dir
-     * @param destinationDirectory the target dir
+     * @param sourceDirectory the existing directory to be copied
+     * @param destinationDirectory the new directory to be created
      * @throws IOException if any
      * @deprecated use {@code org.apache.commons.io.FileUtils.copyDirectory()}
      */
@@ -1686,7 +1708,7 @@ public class FileUtils
 
         if ( !sourceDirectory.exists() )
         {
-            throw new IOException( "Source directory doesn't exists (" + sourceDirectory.getAbsolutePath() + ")." );
+            throw new IOException( "Source directory doesn't exist (" + sourceDirectory.getAbsolutePath() + ")." );
         }
 
         File[] files = sourceDirectory.listFiles();
@@ -2123,7 +2145,7 @@ public class FileUtils
      * @return the linked file
      * @throws IOException in case of an error
      * @see {@code java.nio.file.Files.createSymbolicLink(Path)} which creates a new
-     *         symbolic link but does not replace exsiting symbolic links
+     *         symbolic link but does not replace existing symbolic links
      */
     @Nonnull public static File createSymbolicLink( @Nonnull File symlink,  @Nonnull File target )
             throws IOException

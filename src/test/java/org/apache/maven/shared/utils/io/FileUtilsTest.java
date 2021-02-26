@@ -122,7 +122,7 @@ public class FileUtilsTest
         createFile( testFile2, testFile2Size );
     }
 
-    void createFile( File file, long size )
+    private static void createFile( File file, long size )
         throws IOException
     {
         if ( !file.getParentFile().exists() )
@@ -140,7 +140,7 @@ public class FileUtilsTest
     /**
      * Assert that the content of a file is equal to that in a byte[].
      */
-    void assertEqualContent( byte[] b0, File file )
+    private void assertEqualContent( byte[] b0, File file )
         throws IOException
     {
         int count = 0, numRead = 0;
@@ -155,16 +155,16 @@ public class FileUtilsTest
             assertThat( "Different number of bytes: ", count, is( b0.length ) );
             for ( int i = 0; i < count; i++ )
             {
-                assertThat( "byte " + i + " differs", b1[i], is( b0[i] ) );
+                assertEquals( "byte " + i + " differs", b1[i], b0[i] );
             }
         }
     }
 
-    void deleteFile( File file )
+    private void deleteFile( File file )
     {
         if ( file.exists() )
         {
-            assertThat( "Couldn't delete file: " + file, file.delete(), is( true ) );
+            assertTrue( "Couldn't delete file: " + file, file.delete() );
         }
     }
 
@@ -784,9 +784,7 @@ public class FileUtilsTest
     }
 
     @Test
-    @Ignore( "Commons test case that is failing for plexus" )
-    public void copyToSelf()
-        throws Exception
+    public void copyToSelf() throws IOException
     {
         File destination = new File( tempFolder.getRoot(), "copy3.txt" );
         //Prepare a test file
@@ -796,33 +794,6 @@ public class FileUtilsTest
     }
 
     @Test
-    @Ignore( "Commons test case that is failing for plexus" )
-    public void copyDirectoryToDirectory_NonExistingDest()
-        throws Exception
-    {
-        createFile( testFile1, 1234 );
-        createFile( testFile2, 4321 );
-        File srcDir = tempFolder.getRoot();
-        File subDir = new File( srcDir, "sub" );
-        subDir.mkdir();
-        File subFile = new File( subDir, "A.txt" );
-        FileUtils.fileWrite( subFile, "UTF8", "HELLO WORLD" );
-        File destDir = new File( System.getProperty( "java.io.tmpdir" ), "tmp-FileUtilsTestCase" );
-        FileUtils.deleteDirectory( destDir );
-        File actualDestDir = new File( destDir, srcDir.getName() );
-
-        FileUtils.copyDirectory( srcDir, destDir );
-
-        assertThat( "Check exists", destDir.exists(), is( true ) );
-        assertThat( "Check exists", actualDestDir.exists(), is( true ) );
-        assertThat( "Check size", FileUtils.sizeOfDirectory( actualDestDir ),
-                    is( FileUtils.sizeOfDirectory( srcDir ) ) );
-        assertThat( new File( actualDestDir, "sub/A.txt" ).exists(), is( true ) );
-        FileUtils.deleteDirectory( destDir );
-    }
-
-    @Test
-    @Ignore( "Commons test case that is failing for plexus" )
     public void copyDirectoryToNonExistingDest()
         throws Exception
     {
@@ -838,133 +809,63 @@ public class FileUtilsTest
 
         FileUtils.copyDirectory( srcDir, destDir );
 
-        assertThat( "Check exists", destDir.exists(), is( true ) );
-        assertThat( "Check size", FileUtils.sizeOfDirectory( destDir ), is( FileUtils.sizeOfDirectory( srcDir ) ) );
-        assertThat( new File( destDir, "sub/A.txt" ).exists(), is( true ) );
+        assertTrue( destDir.exists() );
+        assertEquals( FileUtils.sizeOfDirectory( destDir ), FileUtils.sizeOfDirectory( srcDir ) );
+        assertTrue( new File( destDir, "sub/A.txt" ).exists() );
         FileUtils.deleteDirectory( destDir );
     }
 
     @Test
-    @Ignore( "Commons test case that is failing for plexus" )
-    public void copyDirectoryToExistingDest()
-        throws Exception
+    public void copyDirectoryToExistingDest() throws IOException
     {
         createFile( testFile1, 1234 );
         createFile( testFile2, 4321 );
         File srcDir = tempFolder.getRoot();
         File subDir = new File( srcDir, "sub" );
-        subDir.mkdir();
+        assertTrue( subDir.mkdir() );
         File subFile = new File( subDir, "A.txt" );
         FileUtils.fileWrite( subFile, "UTF8", "HELLO WORLD" );
         File destDir = new File( System.getProperty( "java.io.tmpdir" ), "tmp-FileUtilsTestCase" );
         FileUtils.deleteDirectory( destDir );
-        destDir.mkdirs();
+        assertTrue ( destDir.mkdirs() );
 
         FileUtils.copyDirectory( srcDir, destDir );
 
-        assertThat( FileUtils.sizeOfDirectory( destDir ), is( FileUtils.sizeOfDirectory( srcDir ) ) );
-        assertThat( new File( destDir, "sub/A.txt" ).exists(), is( true ) );
-    }
-
-    /**
-     * Test for IO-141
-     */
-    @Test
-    @Ignore( "Commons test case that is failing for plexus" )
-    public void copyDirectoryToChild()
-        throws Exception
-    {
-        File grandParentDir = new File( tempFolder.getRoot(), "grandparent" );
-        File parentDir = new File( grandParentDir, "parent" );
-        File childDir = new File( parentDir, "child" );
-        createFilesForTestCopyDirectory( grandParentDir, parentDir, childDir );
-
-        long expectedCount =
-            FileUtils.getFileAndDirectoryNames( grandParentDir, null, null, true, true, true, true ).size()
-                + FileUtils.getFileAndDirectoryNames( parentDir, null, null, true, true, true, true ).size();
-        long expectedSize = FileUtils.sizeOfDirectory( grandParentDir ) + FileUtils.sizeOfDirectory( parentDir );
-        FileUtils.copyDirectory( parentDir, childDir );
-        assertThat(
-            1L * FileUtils.getFileAndDirectoryNames( grandParentDir, null, null, true, true, true, true ).size(),
-            is( expectedCount ) );
-        assertThat( FileUtils.sizeOfDirectory( grandParentDir ), is( expectedSize ) );
-    }
-
-    /**
-     * Test for IO-141
-     */
-    @Test
-    @Ignore( "Commons test case that is failing for plexus" )
-    public void copyDirectoryToGrandChild()
-        throws Exception
-    {
-        File grandParentDir = new File( tempFolder.getRoot(), "grandparent" );
-        File parentDir = new File( grandParentDir, "parent" );
-        File childDir = new File( parentDir, "child" );
-        createFilesForTestCopyDirectory( grandParentDir, parentDir, childDir );
-
-        long expectedCount =
-            ( FileUtils.getFileAndDirectoryNames( grandParentDir, null, null, true, true, true, true ).size() * 2 );
-        long expectedSize = ( FileUtils.sizeOfDirectory( grandParentDir ) * 2 );
-        FileUtils.copyDirectory( grandParentDir, childDir );
-        assertThat(
-            1L * FileUtils.getFileAndDirectoryNames( grandParentDir, null, null, true, true, true, true ).size(),
-            is( expectedCount ) );
-        assertThat( FileUtils.sizeOfDirectory( grandParentDir ), is( expectedSize ) );
-    }
-
-    /**
-     * Test for IO-217 FileUtils.copyDirectoryToDirectory makes infinite loops
-     */
-    @Test
-    public void copyDirectoryToItself()
-        throws Exception
-    {
-        File dir = new File( tempFolder.getRoot(), "itself" );
-        dir.mkdirs();
-        FileUtils.copyDirectory( dir, dir );
-        assertThat( FileUtils.getFileAndDirectoryNames( dir, null, null, true, true, true, true ).size(), is( 1 ) );
-    }
-
-    private void createFilesForTestCopyDirectory( File grandParentDir, File parentDir, File childDir )
-        throws Exception
-    {
-        File childDir2 = new File( parentDir, "child2" );
-        File grandChildDir = new File( childDir, "grandChild" );
-        File grandChild2Dir = new File( childDir2, "grandChild2" );
-        File file1 = new File( grandParentDir, "file1.txt" );
-        File file2 = new File( parentDir, "file2.txt" );
-        File file3 = new File( childDir, "file3.txt" );
-        File file4 = new File( childDir2, "file4.txt" );
-        File file5 = new File( grandChildDir, "file5.txt" );
-        File file6 = new File( grandChild2Dir, "file6.txt" );
-        FileUtils.deleteDirectory( grandParentDir );
-        grandChildDir.mkdirs();
-        grandChild2Dir.mkdirs();
-        FileUtils.fileWrite( file1, "UTF8", "File 1 in grandparent" );
-        FileUtils.fileWrite( file2, "UTF8", "File 2 in parent" );
-        FileUtils.fileWrite( file3, "UTF8", "File 3 in child" );
-        FileUtils.fileWrite( file4, "UTF8", "File 4 in child2" );
-        FileUtils.fileWrite( file5, "UTF8", "File 5 in grandChild" );
-        FileUtils.fileWrite( file6, "UTF8", "File 6 in grandChild2" );
+        assertEquals( FileUtils.sizeOfDirectory( destDir ), FileUtils.sizeOfDirectory( srcDir ) );
+        assertTrue( new File( destDir, "sub/A.txt" ).exists() );
     }
 
     @Test
-    @Ignore( "Commons test case that is failing for plexus" )
-    public void copyDirectoryErrors()
-        throws Exception
-    {
+    public void copyDirectoryErrors_nullDestination() throws IOException {
         try
         {
-            FileUtils.copyDirectory( null, null );
+            FileUtils.copyDirectory( new File( "a" ), null );
             fail();
         }
         catch ( NullPointerException ex )
         {
         }
+    }
+
+    @Test
+    public void copyDirectoryErrors_copyToSelf() {
         try
         {
-            FileUtils.copyDirectory( new File( "a" ), null );
+            FileUtils.copyDirectory( tempFolder.getRoot(), tempFolder.getRoot() );
+            fail();
+        }
+        catch ( IOException ex )
+        {
+        }
+    }
+
+    @Test
+    public void copyDirectoryErrors()
+        throws IOException
+    {
+        try
+        {
+            FileUtils.copyDirectory( null, null );
             fail();
         }
         catch ( NullPointerException ex )
@@ -980,31 +881,7 @@ public class FileUtilsTest
         }
         try
         {
-            FileUtils.copyDirectory( new File( "doesnt-exist" ), new File( "a" ) );
-            fail();
-        }
-        catch ( IOException ex )
-        {
-        }
-        try
-        {
-            FileUtils.copyDirectory( testFile1, new File( "a" ) );
-            fail();
-        }
-        catch ( IOException ex )
-        {
-        }
-        try
-        {
             FileUtils.copyDirectory( tempFolder.getRoot(), testFile1 );
-            fail();
-        }
-        catch ( IOException ex )
-        {
-        }
-        try
-        {
-            FileUtils.copyDirectory( tempFolder.getRoot(), tempFolder.getRoot() );
             fail();
         }
         catch ( IOException ex )
@@ -1020,9 +897,9 @@ public class FileUtilsTest
     {
         File destination = new File( tempFolder.getRoot(), "copy1.txt" );
         destination.createNewFile();
-        assertThat( "Copy1.txt doesn't exist to delete", destination.exists(), is( true ) );
+        assertTrue( "Copy1.txt doesn't exist to delete", destination.exists() );
         FileUtils.forceDelete( destination );
-        assertThat( "Check No Exist", !destination.exists(), is( true ) );
+        assertFalse( destination.exists() );
     }
 
     @Test
