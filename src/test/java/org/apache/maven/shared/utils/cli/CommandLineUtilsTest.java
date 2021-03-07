@@ -24,6 +24,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
@@ -167,5 +168,26 @@ public class CommandLineUtilsTest
         assertNotNull( actual );
         assertEquals( expected.length, actual.length );
         assertEquals( Arrays.asList( expected ), Arrays.asList( actual ) );
+    }
+
+    @Test
+    public void testChineseEncodingIssue()
+        throws Exception
+    {
+        Commandline commandline = new Commandline( "echo 金色传说" );
+        StreamConsumer err = new StreamConsumer() {
+            @Override
+            public void consumeLine( String line ) {
+
+            }
+        };
+        StreamConsumer out = new StreamConsumer() {
+            @Override
+            public void consumeLine( String line ) {
+                System.out.println( line );
+            }
+        };
+        CommandLineCallable commandLineCallable = CommandLineUtils.executeCommandLineAsCallable( commandline, null, out, err, 10, null, Charset.forName("GBK") );
+        commandLineCallable.call();
     }
 }
