@@ -60,7 +60,7 @@ public class PrettyPrintXMLWriter
 
     /**
      * @param writer not null
-     * @param lineIndent could be null, but the normal way is some spaces.
+     * @param lineIndent can be null, but the normal way is some spaces
      */
     public PrettyPrintXMLWriter( PrintWriter writer, String lineIndent )
     {
@@ -69,7 +69,7 @@ public class PrettyPrintXMLWriter
 
     /**
      * @param writer not null
-     * @param lineIndent could be null, but the normal way is some spaces.
+     * @param lineIndent can be null, but the normal way is some spaces.
      */
     public PrettyPrintXMLWriter( Writer writer, String lineIndent )
     {
@@ -94,9 +94,9 @@ public class PrettyPrintXMLWriter
 
     /**
      * @param writer not null
-     * @param lineIndent could be null, but the normal way is some spaces.
-     * @param encoding could be null or invalid.
-     * @param doctype could be null.
+     * @param lineIndent can be null, but the normal way is some spaces
+     * @param encoding can be null or invalid
+     * @param doctype can be null
      */
     public PrettyPrintXMLWriter( PrintWriter writer, String lineIndent, String encoding, String doctype )
     {
@@ -105,9 +105,9 @@ public class PrettyPrintXMLWriter
 
     /**
      * @param writer not null
-     * @param lineIndent could be null, but the normal way is some spaces.
-     * @param encoding could be null or invalid.
-     * @param doctype could be null.
+     * @param lineIndent can be null, but the normal way is some spaces
+     * @param encoding can be null or invalid
+     * @param doctype can be null
      */
     public PrettyPrintXMLWriter( Writer writer, String lineIndent, String encoding, String doctype )
     {
@@ -116,8 +116,8 @@ public class PrettyPrintXMLWriter
 
     /**
      * @param writer not null
-     * @param encoding could be null or invalid.
-     * @param doctype could be null.
+     * @param encoding can be null or invalid
+     * @param doctype can be null
      */
     public PrettyPrintXMLWriter( PrintWriter writer, String encoding, String doctype )
     {
@@ -126,8 +126,8 @@ public class PrettyPrintXMLWriter
 
     /**
      * @param writer not null
-     * @param encoding could be null or invalid.
-     * @param doctype could be null.
+     * @param encoding can be null or invalid
+     * @param doctype can be null
      */
     public PrettyPrintXMLWriter( Writer writer, String encoding, String doctype )
     {
@@ -136,10 +136,10 @@ public class PrettyPrintXMLWriter
 
     /**
      * @param writer not null
-     * @param lineIndent could be null, but the normal way is some spaces.
-     * @param lineSeparator could be null, but the normal way is valid line separator
-     * @param encoding could be null or the encoding to use.
-     * @param doctype could be null.
+     * @param lineIndent can be null, but the normal way is some spaces.
+     * @param lineSeparator can be null, but the normal way is valid line separator
+     * @param encoding can be null or the encoding to use.
+     * @param doctype can be null
      */
     public PrettyPrintXMLWriter( PrintWriter writer, String lineIndent, String lineSeparator, String encoding,
                                  String doctype )
@@ -149,10 +149,10 @@ public class PrettyPrintXMLWriter
 
     /**
      * @param writer        not null
-     * @param lineIndent    could be null, but the normal way is some spaces.
-     * @param lineSeparator could be null, but the normal way is valid line separator
-     * @param encoding      could be null or the encoding to use.
-     * @param doctype       could be null.
+     * @param lineIndent    can be null, but the normal way is some spaces
+     * @param lineSeparator can be null, but the normal way is valid line separator
+     * @param encoding      can be null or the encoding to use
+     * @param doctype       can be null
      */
     private PrettyPrintXMLWriter( PrintWriter writer, char[] lineIndent, char[] lineSeparator, String encoding,
                                   String doctype )
@@ -240,8 +240,9 @@ public class PrettyPrintXMLWriter
     public void startElement( String elementName ) throws IOException
     {
         
-        if (elementName.isEmpty()) {
-            throw new IllegalArgumentException("Element name cannot be empty");
+        if ( elementName.isEmpty() )
+        {
+            throw new IllegalArgumentException( "Element name cannot be empty" );
         }
         
         boolean firstLine = ensureDocumentStarted();
