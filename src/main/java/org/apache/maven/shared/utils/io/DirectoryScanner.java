@@ -21,6 +21,7 @@ package org.apache.maven.shared.utils.io;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -107,7 +108,9 @@ import javax.annotation.Nullable;
  * @author Magesh Umasankar
  * @author <a href="mailto:bruce@callenish.com">Bruce Atherton</a>
  * @author <a href="mailto:levylambert@tiscali-dsl.de">Antoine Levy-Lambert</a>
+ * @deprecated use {@code java.nio.file.DirectoryStream} and related classes
  */
+@Deprecated
 public class DirectoryScanner
 {
     /**
@@ -451,9 +454,9 @@ public class DirectoryScanner
     }
 
     /**
-     * @param oldFiles array of old files.
-     * @param newFiles array of new files.
-     * @return calculated differerence.
+     * @param oldFiles array of old files
+     * @param newFiles array of new files
+     * @return calculated difference
      */
     public static DirectoryScanResult diffFiles( @Nullable String[] oldFiles, @Nullable  String[] newFiles )
     {
@@ -784,9 +787,11 @@ public class DirectoryScanner
      * Returns the names of the files which matched at least one of the include patterns and none of the exclude
      * patterns. The names are relative to the base directory.
      *
+     * @deprecated this method does not work correctly on Windows. 
      * @return the names of the files which matched at least one of the include patterns and none of the exclude
      *         patterns. May also contain symbolic links to files.
      */
+    @Deprecated
     public String[] getIncludedFiles()
     {
         if ( filesIncluded == null )
@@ -828,9 +833,11 @@ public class DirectoryScanner
      * Returns the names of the directories which matched at least one of the include patterns and none of the exclude
      * patterns. The names are relative to the base directory.
      *
+     * @deprecated this method is buggy. Do not depend on it. 
      * @return the names of the directories which matched at least one of the include patterns and none of the exclude
      *         patterns. May also contain symbolic links to directories.
      */
+    @Deprecated
     public String[] getIncludedDirectories()
     {
         return dirsIncluded.toArray( new String[dirsIncluded.size()] );
@@ -898,13 +905,7 @@ public class DirectoryScanner
     boolean isSymbolicLink( final File parent, final String name )
         throws IOException
     {
-        if ( Java7Support.isAtLeastJava7() )
-        {
-            return Java7Support.isSymLink( parent );
-        }
-        final File resolvedParent = new File( parent.getCanonicalPath() );
-        final File toTest = new File( resolvedParent, name );
-        return !toTest.getAbsolutePath().equals( toTest.getCanonicalPath() );
+        return Files.isSymbolicLink( parent.toPath() );
     }
 
     private void setupDefaultFilters()

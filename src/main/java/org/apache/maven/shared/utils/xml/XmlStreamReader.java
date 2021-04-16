@@ -29,8 +29,9 @@ import java.net.URLConnection;
 import java.util.regex.Pattern;
 
 /**
- * 
+ * @deprecated use org.apache.commons.io.input.XmlStreamReader instead
  */
+@Deprecated
 public class XmlStreamReader
         extends Reader
 {
@@ -56,7 +57,7 @@ public class XmlStreamReader
 
     /**
      * @param file The file to create it from.
-     * @throws IOException in case of an error.
+     * @throws IOException in case of an error
      */
     public XmlStreamReader( File file )
             throws IOException
@@ -66,7 +67,7 @@ public class XmlStreamReader
 
     /**
      * @param is {@link InputStream}
-     * @throws IOException in case of an error.
+     * @throws IOException in case of an error
      */
     public XmlStreamReader( InputStream is )
             throws IOException
@@ -77,8 +78,8 @@ public class XmlStreamReader
     /**
      * @param is {@link InputStream}
      * @param lenient yes/no
-     * @throws IOException in case of an error.
-     * @throws XmlStreamReaderException in case of an error.
+     * @throws IOException in case of an error
+     * @throws XmlStreamReaderException in case of an error
      */
     public XmlStreamReader( InputStream is, boolean lenient )
             throws IOException, XmlStreamReaderException
@@ -88,7 +89,7 @@ public class XmlStreamReader
 
     /**
      * @param url {@link URL}
-     * @throws IOException in case of error.
+     * @throws IOException in case of error
      */
     public XmlStreamReader( URL url )
             throws IOException
@@ -97,8 +98,8 @@ public class XmlStreamReader
     }
 
     /**
-     * @param conn The URL connection {@link URLConnection}.
-     * @throws IOException in case of error.
+     * @param conn The URL connection {@link URLConnection}
+     * @throws IOException in case of error
      */
     public XmlStreamReader( URLConnection conn )
             throws IOException
@@ -108,8 +109,8 @@ public class XmlStreamReader
 
     /**
      * @param is {@link InputStream}
-     * @param httpContentType content type.
-     * @throws IOException in case of error.
+     * @param httpContentType content type
+     * @throws IOException in case of error
      */
     public XmlStreamReader( InputStream is, String httpContentType )
             throws IOException
@@ -119,11 +120,11 @@ public class XmlStreamReader
 
     /**
      * @param is {@link InputStream}
-     * @param httpContentType content type.
-     * @param lenient yes/no.
-     * @param defaultEncoding The default encoding.
-     * @throws IOException in case of error.
-     * @throws XmlStreamReaderException in case of error.
+     * @param httpContentType content type
+     * @param lenient yes/no
+     * @param defaultEncoding the default encoding
+     * @throws IOException in case of error
+     * @throws XmlStreamReaderException in case of error
      */
     public XmlStreamReader( InputStream is, String httpContentType, boolean lenient, String defaultEncoding )
             throws IOException, XmlStreamReaderException
@@ -136,10 +137,10 @@ public class XmlStreamReader
 
     /**
      * @param is {@link InputStream}
-     * @param httpContentType content type.
-     * @param lenient yes/no.
-     * @throws IOException in case of error.
-     * @throws XmlStreamReaderException in case of error.
+     * @param httpContentType content type
+     * @param lenient yes/no
+     * @throws IOException in case of error
+     * @throws XmlStreamReaderException in case of error
      */
     public XmlStreamReader( InputStream is, String httpContentType, boolean lenient )
             throws IOException, XmlStreamReaderException
@@ -148,7 +149,7 @@ public class XmlStreamReader
     }
 
     /**
-     * @return The current encoding.
+     * @return the current encoding
      */
     public String getEncoding()
     {

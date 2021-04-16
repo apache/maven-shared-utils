@@ -40,22 +40,13 @@ ${project.name}
 
 Why?
 
-   plexus-utils consisted mostly of code that was forked from various apache projects. 
+   plexus-utils consisted mostly of code that was forked from various Apache projects. 
    maven-shared-utils is based on the original from the Apache sources.
 
 Why not commons?
 
-    We would prefer code to use commons-* code where appropriate, but the plexus-utils became
+    We would prefer code to use commons-* where appropriate, but the plexus-utils became
     slightly incompatible (different) from the commons over the years, so migrating is not
     always a 1:1 operation. Migrating to maven-shared-utils is a 1:1 operation in most cases.
-
-Relation to Commons-*
-
-  maven-shared-utils internally use {{{http://commons.apache.org/io/}commons-io}}. We shade all commons
-  classes into our own private package to prevent classpath clashes.
-
-  This is the reason why any public API in maven-shared-utils must
-  avoid to expose commons-io classes directly. Most times it's sufficient
-  to just create an empty subclass and expose that instead.
 
   []

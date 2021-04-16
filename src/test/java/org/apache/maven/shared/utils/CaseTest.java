@@ -21,7 +21,7 @@ package org.apache.maven.shared.utils;
 
 import java.util.Locale;
 
-import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.ComparisonFailure;

@@ -42,9 +42,9 @@ public class BourneShellTest
         sh.setWorkingDirectory( "/usr/local/bin" );
         sh.setExecutable( "chmod" );
 
-        String executable = StringUtils.join( sh.getShellCommandLine( new String[]{} ).iterator(), " " );
+        String executable = StringUtils.join( sh.getShellCommandLine().iterator(), " " );
 
-        assertEquals( "/bin/sh -c cd /usr/local/bin && chmod", executable );
+        assertEquals( "/bin/sh -c cd '/usr/local/bin' && 'chmod'", executable );
     }
 
     public void testQuoteWorkingDirectoryAndExecutable_WDPathWithSingleQuotes()
@@ -54,9 +54,9 @@ public class BourneShellTest
         sh.setWorkingDirectory( "/usr/local/'something else'" );
         sh.setExecutable( "chmod" );
 
-        String executable = StringUtils.join( sh.getShellCommandLine( new String[]{} ).iterator(), " " );
+        String executable = StringUtils.join( sh.getShellCommandLine().iterator(), " " );
 
-        assertEquals( "/bin/sh -c cd \"/usr/local/\'something else\'\" && chmod", executable );
+        assertEquals( "/bin/sh -c cd '/usr/local/'\"'\"'something else'\"'\"'' && 'chmod'", executable );
     }
 
     public void testQuoteWorkingDirectoryAndExecutable_WDPathWithSingleQuotes_BackslashFileSep()
@@ -66,9 +66,9 @@ public class BourneShellTest
         sh.setWorkingDirectory( "\\usr\\local\\'something else'" );
         sh.setExecutable( "chmod" );
 
-        String executable = StringUtils.join( sh.getShellCommandLine( new String[]{} ).iterator(), " " );
+        String executable = StringUtils.join( sh.getShellCommandLine().iterator(), " " );
 
-        assertEquals( "/bin/sh -c cd \"\\usr\\local\\\'something else\'\" && chmod", executable );
+        assertEquals( "/bin/sh -c cd '\\usr\\local\\'\"'\"'something else'\"'\"'' && 'chmod'", executable );
     }
 
     public void testPreserveSingleQuotesOnArgument()
@@ -78,13 +78,11 @@ public class BourneShellTest
         sh.setWorkingDirectory( "/usr/bin" );
         sh.setExecutable( "chmod" );
 
-        final String[] args = { "\"some arg with spaces\"" };
-
-        List<String> shellCommandLine = sh.getShellCommandLine( args );
+        List<String> shellCommandLine = sh.getShellCommandLine("\"some arg with spaces\"");
 
         String cli = StringUtils.join( shellCommandLine.iterator(), " " );
         System.out.println( cli );
-        assertTrue( cli.endsWith( args[0] ) );
+        assertTrue( cli.endsWith( "'\"some arg with spaces\"'" ) );
     }
 
     public void testAddSingleQuotesOnArgumentWithSpaces()
@@ -94,13 +92,23 @@ public class BourneShellTest
         sh.setWorkingDirectory( "/usr/bin" );
         sh.setExecutable( "chmod" );
 
-        String[] args = { "some arg with spaces" };
-
-        List<String> shellCommandLine = sh.getShellCommandLine( args );
+        List<String> shellCommandLine = sh.getShellCommandLine("some arg with spaces");
 
         String cli = StringUtils.join( shellCommandLine.iterator(), " " );
         System.out.println( cli );
-        assertTrue( cli.endsWith( "\"" + args[0] + "\"" ) );
+        assertTrue( cli.endsWith("'some arg with spaces'"));
+    }
+
+    public void testAddArgumentWithSingleQuote()
+    {
+        Shell sh = newShell();
+
+        sh.setWorkingDirectory( "/usr/bin" );
+        sh.setExecutable( "chmod" );
+
+        List<String> shellCommandLine = sh.getShellCommandLine("arg'withquote");
+
+        assertEquals("cd '/usr/bin' && 'chmod' 'arg'\"'\"'withquote'", shellCommandLine.get(shellCommandLine.size() - 1));
     }
 
     public void testArgumentsWithSemicolon()
@@ -113,13 +121,11 @@ public class BourneShellTest
         sh.setWorkingDirectory( "/usr/bin" );
         sh.setExecutable( "chmod" );
 
-        String[] args = { ";some&argwithunix$chars" };
-
-        List<String> shellCommandLine = sh.getShellCommandLine( args );
+        List<String> shellCommandLine = sh.getShellCommandLine(";some&argwithunix$chars");
 
         String cli = StringUtils.join( shellCommandLine.iterator(), " " );
         System.out.println( cli );
-        assertTrue( cli.endsWith( "\"" + args[0] + "\"" ) );
+        assertTrue( cli.endsWith( "';some&argwithunix$chars'" ) );
 
         Commandline commandline = new Commandline( newShell() );
         commandline.setExecutable( "chmod" );
@@ -132,7 +138,7 @@ public class BourneShellTest
 
         assertEquals( "/bin/sh", lines.get( 0 ) );
         assertEquals( "-c", lines.get( 1 ) );
-        assertEquals( "chmod --password \";password\"", lines.get( 2 ) );
+        assertEquals( "'chmod' '--password' ';password'", lines.get( 2 ) );
 
         commandline = new Commandline( newShell() );
         commandline.setExecutable( "chmod" );
@@ -144,7 +150,7 @@ public class BourneShellTest
 
         assertEquals( "/bin/sh", lines.get( 0) );
         assertEquals( "-c", lines.get( 1 ) );
-        assertEquals( "chmod --password \";password\"", lines.get( 2 ) );
+        assertEquals( "'chmod' '--password' ';password'", lines.get( 2 ) );
 
         commandline = new Commandline( new CmdShell() );
         commandline.getShell().setQuotedArgumentsEnabled( true );
@@ -186,13 +192,14 @@ public class BourneShellTest
         commandline.createArg().setValue( "{" );
         commandline.createArg().setValue( "}" );
         commandline.createArg().setValue( "`" );
+        commandline.createArg().setValue( "#" );
 
         List<String> lines = commandline.getShell().getShellCommandLine( commandline.getArguments() );
         System.out.println( lines  );
 
         assertEquals( "/bin/sh", lines.get( 0 ) );
         assertEquals( "-c", lines.get( 1 ) );
-        assertEquals( "chmod \" \" \"|\" \"&&\" \"||\" \";\" \";;\" \"&\" \"()\" \"<\" \"<<\" \">\" \">>\" \"*\" \"?\" \"[\" \"]\" \"{\" \"}\" \"`\"",
+        assertEquals( "'chmod' ' ' '|' '&&' '||' ';' ';;' '&' '()' '<' '<<' '>' '>>' '*' '?' '[' ']' '{' '}' '`' '#'",
                       lines.get( 2 ) );
     }
 

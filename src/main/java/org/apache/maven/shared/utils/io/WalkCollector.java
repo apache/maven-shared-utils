@@ -23,9 +23,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 
+/** 
+ * @deprecated use {@code java.nio.file.FileVisitor} and related classes
  */
+@Deprecated
 public class WalkCollector
     implements DirectoryWalkListener
 {

@@ -21,7 +21,6 @@ package org.apache.maven.shared.utils.cli;
 
 /**
  * @author Olivier Lamy
- * @version $Id$
  * 
  */
 public class CommandLineTimeOutException

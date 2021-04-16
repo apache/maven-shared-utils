@@ -19,7 +19,9 @@ package org.apache.maven.shared.utils.cli;
  * under the License.
  */
 
-import static org.junit.Assert.assertArrayEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItemInArray;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -128,33 +130,37 @@ public class CommandLineUtilsTest
     }
 
     @Test
-    public void givenASingleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenTheQuotationMarkIsNotEscaped() throws Exception
+    public void givenASingleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenTheQuotationMarkIsNotEscaped()
+        throws Exception
     {
         final String command = "echo \"let's go\"";
-        final String[] expected = new String[]{"echo", "let's go"};
-        assertCmdLineArgs(expected, command);
+        final String[] expected = new String[] { "echo", "let's go" };
+        assertCmdLineArgs( expected, command );
     }
 
     @Test
-    public void givenAnEscapedDoubleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenTheQuotationMarkRemainsEscaped() throws Exception
+    public void givenAnEscapedDoubleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenTheQuotationMarkRemainsEscaped()
+        throws Exception
     {
         final String command = "echo \"let\\\"s go\"";
-        final String[] expected = new String[]{"echo", "let\\\"s go"};
-        assertCmdLineArgs(expected, command);
+        final String[] expected = new String[] { "echo", "let\\\"s go" };
+        assertCmdLineArgs( expected, command );
     }
 
     @Test
-    public void givenAnEscapedSingleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenTheQuotationMarkRemainsEscaped() throws Exception
+    public void givenAnEscapedSingleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenTheQuotationMarkRemainsEscaped()
+        throws Exception
     {
-        final String command = "echo \"let\\\'s go\"";
-        final String[] expected = new String[]{"echo", "let\\\'s go"};
-        assertCmdLineArgs(expected, command);
+        final String command = "echo \"let\\'s go\"";
+        final String[] expected = new String[] { "echo", "let\\'s go"};
+        assertCmdLineArgs( expected, command );
     }
 
     @Test
-    public void givenAnEscapedDoubleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenNoExceptionIsThrown() throws Exception
+    public void givenAnEscapedDoubleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenNoExceptionIsThrown()
+        throws Exception
     {
-        new Commandline("echo \"let\\\"s go\"").execute();
+        new Commandline( "echo \"let\\\"s go\"" ).execute();
     }
 
     private void assertCmdLineArgs( final String[] expected, final String cmdLine )
@@ -164,6 +170,41 @@ public class CommandLineUtilsTest
         assertNotNull( actual );
         assertEquals( expected.length, actual.length );
         assertEquals( Arrays.asList( expected ), Arrays.asList( actual ) );
+    }
+
+    @Test
+    public void environmentVariableWithNullShouldNotBeSet() {
+
+        Commandline commandline = new Commandline();
+        commandline.addEnvironment("TEST_NULL_ENV", null);
+
+        String[] environmentVariables = commandline.getEnvironmentVariables();
+
+        assertNotNull( environmentVariables );
+        assertThat( environmentVariables, not( hasItemInArray( "TEST_NULL_ENV=null" ) ) );
+    }
+
+    @Test
+    public void environmentVariableFromSystemIsCopied() {
+
+        Commandline commandline = new Commandline();
+
+        String[] environmentVariables = commandline.getEnvironmentVariables();
+
+        assertNotNull(environmentVariables);
+        assertThat(environmentVariables, hasItemInArray( "TEST_SHARED_ENV=TestValue" ) );
+    }
+
+    @Test
+    public void environmentVariableFromSystemIsRemoved() {
+
+        Commandline commandline = new Commandline();
+        commandline.addEnvironment("TEST_SHARED_ENV", null);
+
+        String[] environmentVariables = commandline.getEnvironmentVariables();
+
+        assertNotNull(environmentVariables);
+        assertThat(environmentVariables, not ( hasItemInArray( "TEST_SHARED_ENV=TestValue" ) ) );
     }
 
 }

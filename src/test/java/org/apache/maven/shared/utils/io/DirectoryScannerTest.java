@@ -36,8 +36,8 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeFalse;
-import static org.junit.Assume.assumeTrue;
 
+@SuppressWarnings( "deprecation" )
 public class DirectoryScannerTest
 {
     private static final String[] NONE = new String[0];
@@ -50,7 +50,10 @@ public class DirectoryScannerTest
     {
         File rootDir = tempFolder.getRoot();
         File folder1 = new File( rootDir, "folder1" );
-        folder1.mkdirs();
+        if ( !folder1.mkdirs() )
+        {
+            Assert.fail();
+        }
 
         FileTestHelper.generateTestFile( new File( rootDir, "file1.txt" ), 11 );
         FileTestHelper.generateTestFile( new File( rootDir, "file2.txt" ), 12 );
@@ -60,7 +63,10 @@ public class DirectoryScannerTest
         FileTestHelper.generateTestFile( new File( folder1, "file5.dat" ), 15 );
 
         File folder2 = new File( folder1, "ignorefolder" );
-        folder2.mkdirs();
+        if ( !folder2.mkdirs() )
+        {
+            Assert.fail();
+        }
         FileTestHelper.generateTestFile( new File( folder2, "file7.txt" ), 17 );
     }
 
@@ -129,13 +135,17 @@ public class DirectoryScannerTest
         ds.setBasedir( new File( "src/test/resources/symlinks/src" ) );
         ds.setFollowSymlinks( false );
         ds.scan();
-        String[] includedDirectories = ds.getIncludedDirectories();
-        String[] files = ds.getIncludedFiles();
         
-        //FIXME: This should be changed to some kind of assert...WhatEver()...
-        System.out.println( "files = " + files );
-
-
+        String[] includedDirectories = ds.getIncludedDirectories();
+        // FIXME 3 (Windows) and 5 (Linux) are both wrong. The correct answer is 4.
+        // This method is broken in different ways on different operating systems.
+        assertTrue( includedDirectories.length == 3 || includedDirectories.length == 5);  
+        
+        String[] files = ds.getIncludedFiles();
+        assertAlwaysIncluded( Arrays.asList( files ) );
+        
+        // FIXME getIncludedFiles is broken on Windows; correct answer is 9
+        assertTrue("files.length is " + files.length, files.length == 9 || files.length == 11 );
     }
 
     @Test
@@ -143,7 +153,6 @@ public class DirectoryScannerTest
         throws IOException
     {
         assumeFalse( Os.isFamily( Os.FAMILY_WINDOWS ) );
-        assumeTrue( Java7Support.isAtLeastJava7() );
 
         File testDir = SymlinkTestSetup.createStandardSymlinkTestDir( new File( "target/test/symlinkTestCase" ) );
 
@@ -155,7 +164,7 @@ public class DirectoryScannerTest
         assertAlwaysIncluded( included );
         assertEquals( 9, included.size() );
         List<String> includedDirs = Arrays.asList( ds.getIncludedDirectories() );
-        assertTrue( includedDirs.contains( "" ) ); // w00t !
+        assertTrue( includedDirs.contains( "" ) );
         assertTrue( includedDirs.contains( "aRegularDir" ) );
         assertTrue( includedDirs.contains( "symDir" ) );
         assertTrue( includedDirs.contains( "symLinkToDirOnTheOutside" ) );
@@ -165,8 +174,8 @@ public class DirectoryScannerTest
 
     private void assertAlwaysIncluded( List<String> included )
     {
-        assertTrue( included.contains( "aRegularDir/aRegularFile.txt" ) );
-        assertTrue( included.contains( "targetDir/targetFile.txt" ) );
+        assertTrue( included.contains( "aRegularDir" + File.separator + "aRegularFile.txt" ) );
+        assertTrue( included.contains( "targetDir" + File.separator + "targetFile.txt" ) );
         assertTrue( included.contains( "fileR.txt" ) );
         assertTrue( included.contains( "fileW.txt" ) );
         assertTrue( included.contains( "fileX.txt" ) );
@@ -181,7 +190,6 @@ public class DirectoryScannerTest
         throws IOException
     {
         assumeFalse( Os.isFamily( Os.FAMILY_WINDOWS ) );
-        assumeTrue( Java7Support.isAtLeastJava7() );
 
         DirectoryScanner ds = new DirectoryScanner();
         File testDir = SymlinkTestSetup.createStandardSymlinkTestDir( new File( "target/test/symlinkTestCase" ) );
@@ -207,7 +215,6 @@ public class DirectoryScannerTest
     /*
         Creates a standard directory layout with symlinks and files.
      */
-
     @Test
     public void testSimpleExcludes()
         throws Exception
@@ -236,7 +243,7 @@ public class DirectoryScannerTest
                 /* expExclDirs     */ NONE );
     }
 
-    public void testIsSymLin()
+    public void testIsSymbolicLink()
         throws IOException
     {
         File file = new File( "." );

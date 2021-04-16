@@ -27,8 +27,8 @@ import org.junit.Test;
 
 /**
  * Test the {@link SelectorUtils} class.
- *
  */
+@SuppressWarnings( "deprecation" )
 public class SelectorUtilsTest
 {
 
@@ -66,7 +66,6 @@ public class SelectorUtilsTest
         assertAntDoesNotMatch( "/aaa/**", "\\ccc\\bbb" );
         assertAntDoesNotMatch( "/aaa/", "\\aaa\\bbb" );
     }
-
 
     private void assertAntDoesNotMatch( String pattern, String target )
     {

@@ -22,16 +22,17 @@ package org.apache.maven.shared.utils.io;
 import java.io.File;
 
 /**
- * DirectoryWalkListener
- *
- * @version $Id$
+ * DirectoryWalkListener.
+ * 
+ * @deprecated use {@code java.nio.file.FileVisitor} and related classes
  */
+@Deprecated
 public interface DirectoryWalkListener
 {
     /**
      * The directory walking has begun.
      *
-     * @param basedir the basedir that walk started in.
+     * @param basedir the basedir that walk started in
      */
     void directoryWalkStarting( File basedir );
 
@@ -39,7 +40,7 @@ public interface DirectoryWalkListener
      * The included entry that was encountered.
      *
      * @param percentage rough percentage of the walk completed. (inaccurate)
-     * @param file       the file that was included.
+     * @param file       the file that was included
      */
     void directoryWalkStep( int percentage, File file );
 
@@ -49,7 +50,7 @@ public interface DirectoryWalkListener
     void directoryWalkFinished();
 
     /**
-     * @param message The message for the debugging output.
+     * @param message the message for the debugging output
      */
     void debug( String message );
 }

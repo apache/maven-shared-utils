@@ -1,3 +1,4 @@
+package org.apache.maven.shared.utils.xml;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -18,13 +19,10 @@
  * under the License.
  */
 
-package org.apache.maven.shared.utils.xml;
-
 import java.io.IOException;
-import javax.swing.text.html.HTML;
 import java.io.StringWriter;
+import javax.swing.text.html.HTML;
 
-import org.apache.maven.shared.utils.Os;
 import org.apache.maven.shared.utils.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -33,14 +31,11 @@ import org.junit.Test;
  * Test of {@link PrettyPrintXMLWriter}
  *
  * @author <a href="mailto:vincent.siveton@gmail.com">Vincent Siveton</a>
- * @version $Id$
  */
 public class PrettyPrintXmlWriterTest
 {
     private StringWriter w = new StringWriter();;
-
     private PrettyPrintXMLWriter writer = new PrettyPrintXMLWriter( w );
-
     
     @Test
     public void testNoStartTag() throws IOException
@@ -66,7 +61,7 @@ public class PrettyPrintXmlWriterTest
 
         writer.endElement(); // Tag.HTML
 
-        Assert.assertEquals( expectedResult( Os.LINE_SEP ), w.toString() );
+        Assert.assertEquals( expectedResult(), w.toString() );
     }
 
     @Test
@@ -82,7 +77,7 @@ public class PrettyPrintXmlWriterTest
 
         writer.endElement(); // Tag.HTML
 
-        Assert.assertEquals( expectedResult( "\n" ), w.toString() );
+        Assert.assertEquals( expectedResult(), w.toString() );
     }
 
     @Test
@@ -98,7 +93,7 @@ public class PrettyPrintXmlWriterTest
 
         writer.endElement(); // Tag.HTML
 
-        Assert.assertEquals( expectedResult( "    ", Os.LINE_SEP ), w.toString() );
+        Assert.assertEquals( expectedResult( "    " ), w.toString() );
     }
 
     @Test
@@ -173,13 +168,15 @@ public class PrettyPrintXmlWriterTest
         writer.endElement(); // Tag.BODY
     }
 
-    private String expectedResult( String lineSeparator )
+    private static String expectedResult()
     {
-        return expectedResult( "  ", lineSeparator );
+        return expectedResult( "  " );
     }
 
-    private String expectedResult( String lineIndenter, String lineSeparator )
+    private static String expectedResult( String lineIndenter )
     {
+        
+        String lineSeparator = "\n";
         StringBuilder expected = new StringBuilder();
 
         expected.append( "<html>" ).append( lineSeparator );

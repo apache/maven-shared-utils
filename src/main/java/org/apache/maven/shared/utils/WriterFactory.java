@@ -39,52 +39,63 @@ import javax.annotation.Nonnull;
  *
  * @author Hervé Boutemy
  * @see java.nio.charset.Charset
- * @see <a href="http://docs.oracle.com/javase/1.5.0/docs/guide/intl/encoding.doc.html">Supported encodings</a>
- * @version $Id$
+ * @see <a href="https://docs.oracle.com/javase/7/docs/technotes/guides/intl/encoding.doc.html">Supported encodings</a>
  */
 public class WriterFactory
 {
     /**
      * ISO Latin Alphabet #1, also known as ISO-LATIN-1.
      * Every implementation of the Java platform is required to support this character encoding.
-     * @see java.nio.charset.Charset
+     *
+     * @deprecated use {@code java.nio.charset.StandardCharset.ISO_8859_1}
      */
+    @Deprecated
     public static final String ISO_8859_1 = "ISO-8859-1";
 
     /**
      * Seven-bit ASCII, also known as ISO646-US, also known as the Basic Latin block of the Unicode character set.
      * Every implementation of the Java platform is required to support this character encoding.
-     * @see java.nio.charset.Charset
+     *
+     * @deprecated use {@code java.nio.charset.StandardCharset.US_ASCII}
      */
+    @Deprecated
     public static final String US_ASCII = "US-ASCII";
 
     /**
      * Sixteen-bit Unicode Transformation Format, byte order specified by a mandatory initial byte-order mark (either
      * order accepted on input, big-endian used on output).
      * Every implementation of the Java platform is required to support this character encoding.
-     * @see java.nio.charset.Charset
+     *
+     * @deprecated use {@code java.nio.charset.StandardCharset.UTF_16}
      */
+    @Deprecated
     public static final String UTF_16 = "UTF-16";
 
     /**
      * Sixteen-bit Unicode Transformation Format, big-endian byte order.
      * Every implementation of the Java platform is required to support this character encoding.
-     * @see java.nio.charset.Charset
+     *
+     * @deprecated use {@code java.nio.charset.StandardCharset.UTF_16BE}
      */
+    @Deprecated
     public static final String UTF_16BE = "UTF-16BE";
 
     /**
      * Sixteen-bit Unicode Transformation Format, little-endian byte order.
      * Every implementation of the Java platform is required to support this character encoding.
-     * @see java.nio.charset.Charset
+     *
+     * @deprecated use {@code java.nio.charset.StandardCharset.UTF_16LE}
      */
+    @Deprecated
     public static final String UTF_16LE = "UTF-16LE";
 
     /**
      * Eight-bit Unicode Transformation Format.
      * Every implementation of the Java platform is required to support this character encoding.
-     * @see java.nio.charset.Charset
+     *
+     * @deprecated use {@code java.nio.charset.StandardCharset.UTF_8}
      */
+    @Deprecated
     public static final String UTF_8 = "UTF-8";
 
     /**
@@ -95,9 +106,9 @@ public class WriterFactory
     /**
      * Create a new Writer with XML encoding detection rules.
      *
-     * @param out not null output stream.
-     * @return an XML writer instance for the output stream.
-     * @throws IOException if any.
+     * @param out not null output stream
+     * @return an XML writer instance for the output stream
+     * @throws IOException if any
      * @see XmlStreamWriter
      */
     public static XmlStreamWriter newXmlWriter( @Nonnull OutputStream out )
@@ -109,9 +120,9 @@ public class WriterFactory
     /**
      * Create a new Writer with XML encoding detection rules.
      *
-     * @param file not null file.
-     * @return an XML writer instance for the output file.
-     * @throws IOException if any.
+     * @param file not null file
+     * @return an XML writer instance for the output file
+     * @throws IOException if any
      * @see XmlStreamWriter
      */
     public static XmlStreamWriter newXmlWriter( @Nonnull File file )
@@ -123,10 +134,11 @@ public class WriterFactory
     /**
      * Create a new Writer with default platform encoding.
      *
-     * @param out not null output stream.
-     * @return a writer instance for the output stream using the default platform charset.
-     * @see java.nio.charset.Charset#defaultCharset()
+     * @param out not null output stream
+     * @return a writer instance for the output stream using the default platform charset
+     * @deprecated always specify an encoding. Do not depend on the default platform character set.
      */
+    @Deprecated
     public static Writer newPlatformWriter( @Nonnull OutputStream out )
     {
         return new OutputStreamWriter( out );
@@ -135,11 +147,12 @@ public class WriterFactory
     /**
      * Create a new Writer with default platform encoding.
      *
-     * @param file not null file.
-     * @return a writer instance for the output file using the default platform charset.
-     * @throws IOException if any.
-     * @see java.nio.charset.Charset#defaultCharset()
+     * @param file not null file
+     * @return a writer instance for the output file using the default platform charset
+     * @throws IOException if any
+     * @deprecated always specify an encoding. Do not depend on the default platform character set.
      */
+    @Deprecated
     public static Writer newPlatformWriter( @Nonnull File file )
         throws IOException
     {
@@ -149,11 +162,12 @@ public class WriterFactory
     /**
      * Create a new Writer with specified encoding.
      *
-     * @param out not null output stream.
-     * @param encoding not null supported encoding.
-     * @return a writer instance for the output stream using the given encoding.
-     * @throws UnsupportedEncodingException if any.
-     * @see <a href="http://docs.oracle.com/javase/1.5.0/docs/guide/intl/encoding.doc.html">Supported encodings</a>
+     * @param out not null output stream
+     * @param encoding not null supported encoding
+     * @return a writer instance for the output stream using the given encoding
+     * @throws UnsupportedEncodingException if any
+     * @see <a href="https://docs.oracle.com/javase/7/docs/technotes/guides/intl/encoding.doc.html">Supported
+     *         encodings</a>
      */
     public static Writer newWriter( @Nonnull OutputStream out, @Nonnull String encoding )
         throws UnsupportedEncodingException
@@ -164,12 +178,13 @@ public class WriterFactory
     /**
      * Create a new Writer with specified encoding.
      *
-     * @param file not null file.
-     * @param encoding not null supported encoding.
-     * @return a writer instance for the output file using the given encoding.
-     * @throws UnsupportedEncodingException if any.
-     * @throws FileNotFoundException if any.
-     * @see <a href="http://docs.oracle.com/javase/1.5.0/docs/guide/intl/encoding.doc.html">Supported encodings</a>
+     * @param file not null file
+     * @param encoding not null supported encoding
+     * @return a writer instance for the output file using the given encoding
+     * @throws UnsupportedEncodingException if any
+     * @throws FileNotFoundException if any
+     * @see <a href="https://docs.oracle.com/javase/7/docs/technotes/guides/intl/encoding.doc.html">Supported
+     *         encodings</a>
      */
     public static Writer newWriter( @Nonnull File file, @Nonnull String encoding )
         throws UnsupportedEncodingException, FileNotFoundException

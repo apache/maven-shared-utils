@@ -22,8 +22,10 @@ package org.apache.maven.shared.utils;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -31,14 +33,13 @@ import java.lang.annotation.Target;
 import java.net.URL;
 import java.util.Properties;
 
-import org.apache.maven.shared.utils.io.IOUtil;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class PropertyUtilsTest
 {
@@ -66,6 +67,15 @@ public class PropertyUtilsTest
         throws Exception
     {
         assertThat( PropertyUtils.loadOptionalProperties( (InputStream) null ), is( new Properties() ) );
+    }
+    
+
+    @Test
+    public void loadOptionalProperties_ioException()
+        throws Exception
+    {
+        URL url = new URL( "https://nonesuch12344.foo.bar.com" );
+        assertThat( PropertyUtils.loadOptionalProperties( url ), is( new Properties() ) );
     }
 
     @Test
@@ -137,8 +147,7 @@ public class PropertyUtilsTest
 
     @Test
     @SuppressWarnings( "deprecation" )
-    public void loadValidInputStream()
-        throws Exception
+    public void loadValidInputStream() throws UnsupportedEncodingException
     {
         Properties value = new Properties();
         value.setProperty( "a", "b" );
@@ -154,50 +163,32 @@ public class PropertyUtilsTest
     @Test
     @NeedsTemporaryFolder
     @SuppressWarnings( "deprecation" )
-    public void loadValidFile()
-        throws Exception
+    public void loadValidFile() throws IOException
     {
-        OutputStream out = null;
-        try
+        File valid = tempFolder.newFile( "valid" );
+        Properties value = new Properties();
+        value.setProperty( "a", "b" );
+        try ( OutputStream out = new FileOutputStream( valid ) )
         {
-            File valid = tempFolder.newFile( "valid" );
-            Properties value = new Properties();
-            value.setProperty( "a", "b" );
-            out = new FileOutputStream( valid );
             value.store( out, "a test" );
-            out.close();
-            out = null;
             assertThat( PropertyUtils.loadProperties( valid ), is( value ) );
             assertThat( PropertyUtils.loadOptionalProperties( valid ), is( value ) );
-        }
-        finally
-        {
-            IOUtil.close( out );
         }
     }
 
     @Test
     @NeedsTemporaryFolder
     @SuppressWarnings( "deprecation" )
-    public void loadValidURL()
-        throws Exception
+    public void loadValidURL() throws IOException
     {
-        OutputStream out = null;
-        try
+        File valid = tempFolder.newFile( "valid" );
+        Properties value = new Properties();
+        value.setProperty( "a", "b" );
+        try ( OutputStream out = new FileOutputStream( valid ) )
         {
-            File valid = tempFolder.newFile( "valid" );
-            Properties value = new Properties();
-            value.setProperty( "a", "b" );
-            out = new FileOutputStream( valid );
-            value.store( out, "a test" );
-            out.close();
-            out = null;
-            assertThat( PropertyUtils.loadProperties( valid.toURI().toURL() ), is( value ) );
-            assertThat( PropertyUtils.loadOptionalProperties( valid.toURI().toURL() ), is( value ) );
-        }
-        finally
-        {
-            IOUtil.close( out );
+          value.store( out, "a test" );
+          assertThat( PropertyUtils.loadProperties( valid.toURI().toURL() ), is( value ) );
+          assertThat( PropertyUtils.loadOptionalProperties( valid.toURI().toURL() ), is( value ) );
         }
     }
 

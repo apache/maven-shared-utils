@@ -4,26 +4,47 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeThat;
-import static org.junit.Assume.assumeTrue;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.maven.shared.utils.Os;
+import org.apache.maven.shared.utils.testhelpers.FileTestHelper;
+import org.codehaus.plexus.util.InterpolationFilterReader;
+import org.hamcrest.CoreMatchers;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+import org.junit.rules.TestName;
+
+import javax.annotation.Nonnull;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -44,16 +65,6 @@ import java.util.List;
  * under the License.
  */
 
-import org.apache.maven.shared.utils.Os;
-import org.apache.maven.shared.utils.testhelpers.FileTestHelper;
-import org.hamcrest.CoreMatchers;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.rules.TestName;
-
 /**
  * This is used to test FileUtils for correctness.
  *
@@ -64,6 +75,7 @@ import org.junit.rules.TestName;
  * @version $Id: FileUtilsTestCase.java 1081025 2011-03-13 00:45:10Z niallp $
  * @see FileUtils
  */
+@SuppressWarnings( "deprecation" )
 public class FileUtilsTest
 {
 
@@ -79,11 +91,6 @@ public class FileUtilsTest
      * Size of test directory.
      */
     private static final int TEST_DIRECTORY_SIZE = 0;
-
-    /**
-     * Delay in milliseconds to make sure test for "last modified date" are accurate
-     */
-    //private static final int LAST_MODIFIED_DELAY = 600;
 
     private File testFile1;
 
@@ -115,25 +122,17 @@ public class FileUtilsTest
         createFile( testFile2, testFile2Size );
     }
 
-    void createFile( File file, long size )
+    private static void createFile( File file, long size )
         throws IOException
     {
         if ( !file.getParentFile().exists() )
         {
             throw new IOException( "Cannot create file " + file + " as the parent directory does not exist" );
         }
-
-        OutputStream out = null;
-        try
+        
+        try (OutputStream out = new BufferedOutputStream( new FileOutputStream( file ) ) )
         {
-            out = new BufferedOutputStream( new FileOutputStream( file ) );
             FileTestHelper.generateTestData( out, size );
-            out.close();
-            out = null;
-        }
-        finally
-        {
-            IOUtil.close( out );
         }
     }
 
@@ -141,13 +140,12 @@ public class FileUtilsTest
     /**
      * Assert that the content of a file is equal to that in a byte[].
      */
-    void assertEqualContent( byte[] b0, File file )
+    private void assertEqualContent( byte[] b0, File file )
         throws IOException
     {
-        InputStream is = new java.io.FileInputStream( file );
         int count = 0, numRead = 0;
         byte[] b1 = new byte[b0.length];
-        try
+        try ( InputStream is = new FileInputStream( file ) )
         {
             while ( count < b0.length && numRead >= 0 )
             {
@@ -157,20 +155,16 @@ public class FileUtilsTest
             assertThat( "Different number of bytes: ", count, is( b0.length ) );
             for ( int i = 0; i < count; i++ )
             {
-                assertThat( "byte " + i + " differs", b1[i], is( b0[i] ) );
+                assertEquals( "byte " + i + " differs", b1[i], b0[i] );
             }
-        }
-        finally
-        {
-            is.close();
         }
     }
 
-    void deleteFile( File file )
+    private void deleteFile( File file )
     {
         if ( file.exists() )
         {
-            assertThat( "Couldn't delete file: " + file, file.delete(), is( true ) );
+            assertTrue( "Couldn't delete file: " + file, file.delete() );
         }
     }
 
@@ -253,26 +247,6 @@ public class FileUtilsTest
         assertThat( urls[2].toExternalForm(), containsString( "test%20file.txt" ) );
     }
 
-//    @Test public void toURLs2() throws Exception {
-//        File[] files = new File[] {
-//            new File(getTestDirectory(), "file1.txt"),
-//            null,
-//        };
-//        URL[] urls = FileUtils.toURLs(files);
-//
-//        assertEquals(files.length, urls.length);
-//        assertEquals(true, urls[0].toExternalForm().startsWith("file:"));
-//        assertEquals(true, urls[0].toExternalForm().indexOf("file1.txt") > 0);
-//        assertEquals(null, urls[1]);
-//    }
-//
-//    @Test public void toURLs3() throws Exception {
-//        File[] files = null;
-//        URL[] urls = FileUtils.toURLs(files);
-//
-//        assertEquals(0, urls.length);
-//    }
-
     // contentEquals
 
     @Test
@@ -333,16 +307,11 @@ public class FileUtilsTest
         String resourceName = "/java/lang/Object.class";
         FileUtils.copyURLToFile( getClass().getResource( resourceName ), file );
 
-        // Tests that resuorce was copied correctly
-        FileInputStream fis = new FileInputStream( file );
-        try
+        // Tests that resource was copied correctly
+        try ( FileInputStream fis = new FileInputStream( file ) )
         {
             assertThat( "Content is not equal.",
                         IOUtil.contentEquals( getClass().getResourceAsStream( resourceName ), fis ), is( true ) );
-        }
-        finally
-        {
-            fis.close();
         }
         //TODO Maybe test copy to itself like for copyFile()
     }
@@ -438,11 +407,297 @@ public class FileUtilsTest
             testFile1.lastModified() == destination.lastModified());*/
     }
 
+    /** A time today, rounded down to the previous minute */
+    private static long MODIFIED_TODAY = (System.currentTimeMillis() / TimeUnit.MINUTES.toMillis( 1 )) * TimeUnit.MINUTES.toMillis( 1 );
+
+    /** A time yesterday, rounded down to the previous minute */
+    private static long MODIFIED_YESTERDAY = MODIFIED_TODAY - TimeUnit.DAYS.toMillis( 1 );
+
+    /** A time last week, rounded down to the previous minute */
+    private static long MODIFIED_LAST_WEEK = MODIFIED_TODAY - TimeUnit.DAYS.toMillis( 7 );
+
     @Test
-    public void copyFileThatIsSymlink()
+    public void copyFileWithNoFiltersAndNoDestination()
         throws Exception
     {
-        assumeTrue( Java7Support.isAtLeastJava7() );
+        File from = write(
+            "from.txt",
+            MODIFIED_YESTERDAY,
+            "Hello World!"
+        );
+        File to = new File(
+            tempFolder.getRoot(),
+            "to.txt"
+        );
+
+        FileUtils.copyFile( from, to, null, ( FileUtils.FilterWrapper[] ) null);
+
+        assertTrue(
+            "to.txt did not exist so should have been written",
+            to.lastModified() >= MODIFIED_TODAY
+        );
+        assertFileContent( to, "Hello World!" );
+    }
+
+    @Test
+    public void copyFileWithNoFiltersAndOutdatedDestination()
+            throws Exception
+    {
+        File from = write(
+            "from.txt",
+            MODIFIED_YESTERDAY,
+            "Hello World!"
+        );
+        File to = write(
+            "to.txt",
+            MODIFIED_LAST_WEEK,
+            "Older content"
+        );
+
+        FileUtils.copyFile( from, to, null, ( FileUtils.FilterWrapper[] ) null);
+
+        assertTrue(
+            "to.txt was outdated so should have been overwritten",
+            to.lastModified() >= MODIFIED_TODAY
+        );
+        assertFileContent( to, "Hello World!" );
+    }
+
+    @Test
+    public void copyFileWithNoFiltersAndNewerDestination()
+            throws Exception
+    {
+        File from = write(
+            "from.txt",
+            MODIFIED_LAST_WEEK,
+            "Hello World!"
+        );
+        File to = write(
+            "to.txt",
+            MODIFIED_YESTERDAY,
+            "Older content"
+        );
+
+        FileUtils.copyFile( from, to, null, ( FileUtils.FilterWrapper[] ) null);
+
+        assertTrue(
+            "to.txt was newer so should have been left alone",
+            to.lastModified() < MODIFIED_TODAY
+        );
+        assertFileContent( to, "Older content" );
+    }
+
+    @Test
+    public void copyFileWithNoFiltersAndNewerDestinationButForcedOverwrite()
+            throws Exception
+    {
+        File from = write(
+            "from.txt",
+            MODIFIED_LAST_WEEK,
+            "Hello World!"
+        );
+        File to = write(
+            "to.txt",
+            MODIFIED_YESTERDAY,
+            "Older content"
+        );
+
+        FileUtils.copyFile( from, to, null, null, true);
+
+        assertTrue(
+            "to.txt was newer but the overwrite should have been forced",
+            to.lastModified() >= MODIFIED_TODAY
+        );
+        assertFileContent( to, "Hello World!" );
+    }
+
+    @Test
+    public void copyFileWithFilteringButNoFilters()
+            throws Exception
+    {
+        File from = write(
+            "from.txt",
+            MODIFIED_YESTERDAY,
+            "Hello ${name}!"
+        );
+        File to = write(
+            "to.txt",
+            MODIFIED_LAST_WEEK,
+            "Older content"
+        );
+
+        FileUtils.copyFile( from, to, null );
+
+        assertTrue(
+            "to.txt was outdated so should have been overwritten",
+            to.lastModified() >= MODIFIED_TODAY
+        );
+        assertFileContent( to, "Hello ${name}!" );
+    }
+
+    @Test
+    public void copyFileWithFilteringAndNoDestination()
+            throws Exception
+    {
+        File from = write(
+            "from.txt",
+            MODIFIED_YESTERDAY,
+            "Hello ${name}!"
+        );
+        File to = new File(
+            tempFolder.getRoot(),
+            "to.txt"
+        );
+
+        FileUtils.copyFile( from, to, null, wrappers( "name", "Bob" ) );
+
+        assertTrue(
+            "to.txt did not exist so should have been written",
+            to.lastModified() >= MODIFIED_TODAY
+        );
+        assertFileContent( to, "Hello Bob!" );
+    }
+
+    @Test
+    public void copyFileWithFilteringAndOutdatedDestination()
+            throws Exception
+    {
+        File from = write(
+            "from.txt",
+            MODIFIED_YESTERDAY,
+            "Hello ${name}!"
+        );
+        File to = write(
+            "to.txt",
+            MODIFIED_LAST_WEEK,
+            "Older content"
+        );
+
+        FileUtils.copyFile( from, to, null, wrappers( "name", "Bob" ) );
+
+        assertTrue(
+            "to.txt was outdated so should have been overwritten",
+            to.lastModified() >= MODIFIED_TODAY
+        );
+        assertFileContent( to, "Hello Bob!" );
+    }
+
+    @Test
+    public void copyFileWithFilteringAndNewerDestinationButForcedOverwrite()
+            throws Exception
+    {
+        File from = write(
+            "from.txt",
+            MODIFIED_LAST_WEEK,
+            "Hello ${name}!"
+        );
+        File to = write(
+            "to.txt",
+            MODIFIED_YESTERDAY,
+            "Older content"
+        );
+
+        FileUtils.copyFile( from, to, null, wrappers( "name", "Bob" ), true );
+
+        assertTrue(
+            "to.txt was newer but the overwrite should have been forced",
+            to.lastModified() >= MODIFIED_TODAY
+        );
+        assertFileContent( to, "Hello Bob!" );
+    }
+
+    @Test
+    public void copyFileWithFilteringAndNewerDestinationButModifiedContent()
+            throws Exception
+    {
+        File from = write(
+            "from.txt",
+            MODIFIED_LAST_WEEK,
+            "Hello ${name}!"
+        );
+        File to = write(
+            "to.txt",
+            MODIFIED_YESTERDAY,
+            "Hello Charlie!"
+        );
+
+        FileUtils.copyFile( from, to, null, wrappers( "name", "Bob" ) );
+
+        assertTrue(
+            "to.txt was outdated so should have been overwritten",
+            to.lastModified() >= MODIFIED_TODAY
+        );
+        assertFileContent( to, "Hello Bob!" );
+    }
+
+    @Test
+    public void copyFileWithFilteringAndNewerDestinationAndMatchingContent()
+            throws Exception
+    {
+        File from = write(
+            "from.txt",
+            MODIFIED_LAST_WEEK,
+            "Hello ${name}!"
+        );
+        File to = write(
+            "to.txt",
+            MODIFIED_YESTERDAY,
+            "Hello Bob!"
+        );
+
+        FileUtils.copyFile( from, to, null, wrappers( "name", "Bob" ) );
+
+        assertFileContent( to, "Hello Bob!" );
+        assertTrue(
+            "to.txt content should be unchanged and have been left alone",
+            to.lastModified() < MODIFIED_TODAY
+        );
+    }
+
+    private static FileUtils.FilterWrapper[] wrappers( String key, String value )
+    {
+        final Map<String, Object> map = new HashMap<>();
+        map.put( key, value );
+        return new FileUtils.FilterWrapper[]
+            {
+                new FileUtils.FilterWrapper()
+                {
+                    @Override
+                    public Reader getReader( Reader reader )
+                    {
+                        return new InterpolationFilterReader( reader, map );
+                    }
+                }
+            };
+    }
+
+    private File write( @Nonnull String name, long lastModified, @Nonnull String text) throws IOException
+    {
+        final File file = new File( tempFolder.getRoot(), name );
+        try ( final Writer writer = new FileWriter( file ) ) {
+            writer.write(text);
+        }
+        assertTrue( file.setLastModified( lastModified ) );
+        assertEquals( "Failed to set lastModified date on " + file.getPath(), lastModified, file.lastModified() );
+        return file;
+    }
+
+    private static void assertFileContent( @Nonnull File file, @Nonnull String expected ) throws IOException
+    {
+        try ( Reader in = new FileReader( file ))
+        {
+            assertEquals(
+                "Expected " + file.getPath() + " to contain: " + expected,
+                expected,
+                IOUtils.toString( in )
+            );
+        }
+    }
+
+    @Test
+    public void copyFileThatIsSymlink()
+            throws Exception
+    {
         assumeFalse( Os.isFamily( Os.FAMILY_WINDOWS ) );
 
         File destination = new File( tempFolder.getRoot(), "symCopy.txt" );
@@ -450,9 +705,9 @@ public class FileUtilsTest
         File testDir = SymlinkTestSetup.createStandardSymlinkTestDir( new File( "target/test/symlinkCopy" ) );
 
         FileUtils.copyFile( new File( testDir, "symR" ), destination );
-        assertTrue( Java7Support.isSymLink(  destination ));
-    }
 
+        assertTrue( Files.isSymbolicLink( destination.toPath() ) );
+    }
 
 
     @Test
@@ -491,6 +746,26 @@ public class FileUtilsTest
     }
 
     @Test
+    public void copyFileWithPermissions()
+        throws Exception
+    {
+        File source = new File( "src/test/resources/executable" );
+        source.setExecutable( true );
+        assumeThat( "Need an existing file to copy", source.exists(), is( true ) );
+        assumeThat( "Need an executable file to copy", source.canExecute(), is( true ) );
+
+        File destination = new File( tempFolder.getRoot(), "executable-copy" );
+
+        FileUtils.copyFile( source, destination );
+
+        assertThat( "destination not exists: " + destination.getAbsolutePath()
+                        + ", directory content: " + Arrays.asList( destination.getParentFile().list() ),
+                    Files.exists( destination.toPath() ), is( true ) );
+
+        assertThat( "Check copy executable", destination.canExecute(), is( true ) );
+    }
+
+    @Test
     public void copyFile2()
         throws Exception
     {
@@ -509,9 +784,7 @@ public class FileUtilsTest
     }
 
     @Test
-    @Ignore( "Commons test case that is failing for plexus" )
-    public void copyToSelf()
-        throws Exception
+    public void copyToSelf() throws IOException
     {
         File destination = new File( tempFolder.getRoot(), "copy3.txt" );
         //Prepare a test file
@@ -521,33 +794,6 @@ public class FileUtilsTest
     }
 
     @Test
-    @Ignore( "Commons test case that is failing for plexus" )
-    public void copyDirectoryToDirectory_NonExistingDest()
-        throws Exception
-    {
-        createFile( testFile1, 1234 );
-        createFile( testFile2, 4321 );
-        File srcDir = tempFolder.getRoot();
-        File subDir = new File( srcDir, "sub" );
-        subDir.mkdir();
-        File subFile = new File( subDir, "A.txt" );
-        FileUtils.fileWrite( subFile, "UTF8", "HELLO WORLD" );
-        File destDir = new File( System.getProperty( "java.io.tmpdir" ), "tmp-FileUtilsTestCase" );
-        FileUtils.deleteDirectory( destDir );
-        File actualDestDir = new File( destDir, srcDir.getName() );
-
-        FileUtils.copyDirectory( srcDir, destDir );
-
-        assertThat( "Check exists", destDir.exists(), is( true ) );
-        assertThat( "Check exists", actualDestDir.exists(), is( true ) );
-        assertThat( "Check size", FileUtils.sizeOfDirectory( actualDestDir ),
-                    is( FileUtils.sizeOfDirectory( srcDir ) ) );
-        assertThat( new File( actualDestDir, "sub/A.txt" ).exists(), is( true ) );
-        FileUtils.deleteDirectory( destDir );
-    }
-
-    @Test
-    @Ignore( "Commons test case that is failing for plexus" )
     public void copyDirectoryToNonExistingDest()
         throws Exception
     {
@@ -563,133 +809,63 @@ public class FileUtilsTest
 
         FileUtils.copyDirectory( srcDir, destDir );
 
-        assertThat( "Check exists", destDir.exists(), is( true ) );
-        assertThat( "Check size", FileUtils.sizeOfDirectory( destDir ), is( FileUtils.sizeOfDirectory( srcDir ) ) );
-        assertThat( new File( destDir, "sub/A.txt" ).exists(), is( true ) );
+        assertTrue( destDir.exists() );
+        assertEquals( FileUtils.sizeOfDirectory( destDir ), FileUtils.sizeOfDirectory( srcDir ) );
+        assertTrue( new File( destDir, "sub/A.txt" ).exists() );
         FileUtils.deleteDirectory( destDir );
     }
 
     @Test
-    @Ignore( "Commons test case that is failing for plexus" )
-    public void copyDirectoryToExistingDest()
-        throws Exception
+    public void copyDirectoryToExistingDest() throws IOException
     {
         createFile( testFile1, 1234 );
         createFile( testFile2, 4321 );
         File srcDir = tempFolder.getRoot();
         File subDir = new File( srcDir, "sub" );
-        subDir.mkdir();
+        assertTrue( subDir.mkdir() );
         File subFile = new File( subDir, "A.txt" );
         FileUtils.fileWrite( subFile, "UTF8", "HELLO WORLD" );
         File destDir = new File( System.getProperty( "java.io.tmpdir" ), "tmp-FileUtilsTestCase" );
         FileUtils.deleteDirectory( destDir );
-        destDir.mkdirs();
+        assertTrue ( destDir.mkdirs() );
 
         FileUtils.copyDirectory( srcDir, destDir );
 
-        assertThat( FileUtils.sizeOfDirectory( destDir ), is( FileUtils.sizeOfDirectory( srcDir ) ) );
-        assertThat( new File( destDir, "sub/A.txt" ).exists(), is( true ) );
-    }
-
-    /**
-     * Test for IO-141
-     */
-    @Test
-    @Ignore( "Commons test case that is failing for plexus" )
-    public void copyDirectoryToChild()
-        throws Exception
-    {
-        File grandParentDir = new File( tempFolder.getRoot(), "grandparent" );
-        File parentDir = new File( grandParentDir, "parent" );
-        File childDir = new File( parentDir, "child" );
-        createFilesForTestCopyDirectory( grandParentDir, parentDir, childDir );
-
-        long expectedCount =
-            FileUtils.getFileAndDirectoryNames( grandParentDir, null, null, true, true, true, true ).size()
-                + FileUtils.getFileAndDirectoryNames( parentDir, null, null, true, true, true, true ).size();
-        long expectedSize = FileUtils.sizeOfDirectory( grandParentDir ) + FileUtils.sizeOfDirectory( parentDir );
-        FileUtils.copyDirectory( parentDir, childDir );
-        assertThat(
-            1L * FileUtils.getFileAndDirectoryNames( grandParentDir, null, null, true, true, true, true ).size(),
-            is( expectedCount ) );
-        assertThat( FileUtils.sizeOfDirectory( grandParentDir ), is( expectedSize ) );
-    }
-
-    /**
-     * Test for IO-141
-     */
-    @Test
-    @Ignore( "Commons test case that is failing for plexus" )
-    public void copyDirectoryToGrandChild()
-        throws Exception
-    {
-        File grandParentDir = new File( tempFolder.getRoot(), "grandparent" );
-        File parentDir = new File( grandParentDir, "parent" );
-        File childDir = new File( parentDir, "child" );
-        createFilesForTestCopyDirectory( grandParentDir, parentDir, childDir );
-
-        long expectedCount =
-            ( FileUtils.getFileAndDirectoryNames( grandParentDir, null, null, true, true, true, true ).size() * 2 );
-        long expectedSize = ( FileUtils.sizeOfDirectory( grandParentDir ) * 2 );
-        FileUtils.copyDirectory( grandParentDir, childDir );
-        assertThat(
-            1L * FileUtils.getFileAndDirectoryNames( grandParentDir, null, null, true, true, true, true ).size(),
-            is( expectedCount ) );
-        assertThat( FileUtils.sizeOfDirectory( grandParentDir ), is( expectedSize ) );
-    }
-
-    /**
-     * Test for IO-217 FileUtils.copyDirectoryToDirectory makes infinite loops
-     */
-    @Test
-    public void copyDirectoryToItself()
-        throws Exception
-    {
-        File dir = new File( tempFolder.getRoot(), "itself" );
-        dir.mkdirs();
-        FileUtils.copyDirectory( dir, dir );
-        assertThat( FileUtils.getFileAndDirectoryNames( dir, null, null, true, true, true, true ).size(), is( 1 ) );
-    }
-
-    private void createFilesForTestCopyDirectory( File grandParentDir, File parentDir, File childDir )
-        throws Exception
-    {
-        File childDir2 = new File( parentDir, "child2" );
-        File grandChildDir = new File( childDir, "grandChild" );
-        File grandChild2Dir = new File( childDir2, "grandChild2" );
-        File file1 = new File( grandParentDir, "file1.txt" );
-        File file2 = new File( parentDir, "file2.txt" );
-        File file3 = new File( childDir, "file3.txt" );
-        File file4 = new File( childDir2, "file4.txt" );
-        File file5 = new File( grandChildDir, "file5.txt" );
-        File file6 = new File( grandChild2Dir, "file6.txt" );
-        FileUtils.deleteDirectory( grandParentDir );
-        grandChildDir.mkdirs();
-        grandChild2Dir.mkdirs();
-        FileUtils.fileWrite( file1, "UTF8", "File 1 in grandparent" );
-        FileUtils.fileWrite( file2, "UTF8", "File 2 in parent" );
-        FileUtils.fileWrite( file3, "UTF8", "File 3 in child" );
-        FileUtils.fileWrite( file4, "UTF8", "File 4 in child2" );
-        FileUtils.fileWrite( file5, "UTF8", "File 5 in grandChild" );
-        FileUtils.fileWrite( file6, "UTF8", "File 6 in grandChild2" );
+        assertEquals( FileUtils.sizeOfDirectory( destDir ), FileUtils.sizeOfDirectory( srcDir ) );
+        assertTrue( new File( destDir, "sub/A.txt" ).exists() );
     }
 
     @Test
-    @Ignore( "Commons test case that is failing for plexus" )
-    public void copyDirectoryErrors()
-        throws Exception
-    {
+    public void copyDirectoryErrors_nullDestination() throws IOException {
         try
         {
-            FileUtils.copyDirectory( null, null );
+            FileUtils.copyDirectory( new File( "a" ), null );
             fail();
         }
         catch ( NullPointerException ex )
         {
         }
+    }
+
+    @Test
+    public void copyDirectoryErrors_copyToSelf() {
         try
         {
-            FileUtils.copyDirectory( new File( "a" ), null );
+            FileUtils.copyDirectory( tempFolder.getRoot(), tempFolder.getRoot() );
+            fail();
+        }
+        catch ( IOException ex )
+        {
+        }
+    }
+
+    @Test
+    public void copyDirectoryErrors()
+        throws IOException
+    {
+        try
+        {
+            FileUtils.copyDirectory( null, null );
             fail();
         }
         catch ( NullPointerException ex )
@@ -705,31 +881,7 @@ public class FileUtilsTest
         }
         try
         {
-            FileUtils.copyDirectory( new File( "doesnt-exist" ), new File( "a" ) );
-            fail();
-        }
-        catch ( IOException ex )
-        {
-        }
-        try
-        {
-            FileUtils.copyDirectory( testFile1, new File( "a" ) );
-            fail();
-        }
-        catch ( IOException ex )
-        {
-        }
-        try
-        {
             FileUtils.copyDirectory( tempFolder.getRoot(), testFile1 );
-            fail();
-        }
-        catch ( IOException ex )
-        {
-        }
-        try
-        {
-            FileUtils.copyDirectory( tempFolder.getRoot(), tempFolder.getRoot() );
             fail();
         }
         catch ( IOException ex )
@@ -745,9 +897,9 @@ public class FileUtilsTest
     {
         File destination = new File( tempFolder.getRoot(), "copy1.txt" );
         destination.createNewFile();
-        assertThat( "Copy1.txt doesn't exist to delete", destination.exists(), is( true ) );
+        assertTrue( "Copy1.txt doesn't exist to delete", destination.exists() );
         FileUtils.forceDelete( destination );
-        assertThat( "Check No Exist", !destination.exists(), is( true ) );
+        assertFalse( destination.exists() );
     }
 
     @Test
@@ -860,14 +1012,9 @@ public class FileUtilsTest
         String filename = file1.getAbsolutePath();
 
         //Create test file on-the-fly (used to be in CVS)
-        OutputStream out = new java.io.FileOutputStream( file1 );
-        try
+        try ( OutputStream out = new java.io.FileOutputStream( file1 ) )
         {
             out.write( "This is a test".getBytes( "UTF-8" ) );
-        }
-        finally
-        {
-            out.close();
         }
 
         File file2 = new File( tempFolder.getRoot(), "test2.txt" );
@@ -1113,7 +1260,6 @@ public class FileUtilsTest
     //// getDefaultExcludesAsList
 
     @Test
-    @SuppressWarnings( "unchecked" )
     public void getDefaultExcludesAsList()
         throws Exception
     {
@@ -1406,11 +1552,10 @@ public class FileUtilsTest
         throws IOException
     {
         // This testcase will pass when running under java7 or higher
-        assumeThat( Os.isFamily(Os.FAMILY_WINDOWS), is(false) );
+        assumeFalse( Os.isFamily( Os.FAMILY_WINDOWS ) );
 
         File file = new File( "src/test/resources/symlinks/src/symDir" );
         assertTrue(FileUtils.isSymbolicLink(file  ));
-        assertTrue(FileUtils.isSymbolicLinkLegacy(file  ));
     }
 
     @Test
@@ -1420,7 +1565,6 @@ public class FileUtilsTest
     {
         File file = new File( "src/test/resources/symlinks/src/" );
         assertFalse(FileUtils.isSymbolicLink(file  ));
-        assertFalse(FileUtils.isSymbolicLinkLegacy(file  ));
     }
 
     @Test
@@ -1437,6 +1581,44 @@ public class FileUtilsTest
     {
         assumeThat( File.separatorChar, is( '/' ) );
         assertThat( FileUtils.extension( "/test/foo.bar.txt" ), is( "txt" ) );
+    }
+
+    @Test
+    public void createAndReadSymlink()
+        throws Exception
+    {
+        assumeFalse( Os.isFamily( Os.FAMILY_WINDOWS ) );
+
+        File file = new File( "target/fzz" );
+        FileUtils.createSymbolicLink(  file, new File("../target") );
+
+        final File file1 = Files.readSymbolicLink( file.toPath() ).toFile();
+        assertEquals( "target", file1.getName() );
+        Files.delete( file.toPath() );
+    }
+
+    @Test
+    public void createSymbolicLinkWithDifferentTargetOverwritesSymlink()
+            throws Exception
+    {
+        assumeFalse( Os.isFamily( Os.FAMILY_WINDOWS ) );
+
+        // Arrange
+
+        final File symlink1 = new File( tempFolder.getRoot(), "symlink" );
+
+        FileUtils.createSymbolicLink( symlink1, testFile1 );
+
+        // Act
+
+        final File symlink2 = FileUtils.createSymbolicLink( symlink1, testFile2 );
+
+        // Assert
+
+        assertThat(
+            Files.readSymbolicLink( symlink2.toPath() ).toFile(),
+            CoreMatchers.equalTo( testFile2 )
+        );
     }
 
     //// constants for testing

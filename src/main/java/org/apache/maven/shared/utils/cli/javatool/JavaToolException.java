@@ -27,7 +27,7 @@ package org.apache.maven.shared.utils.cli.javatool;
  * non-zero exit code.
  *
  * @author Tony Chemit <chemit@codelutin.com>
- * @version $Id$
+ *
  * @see JavaToolResult#getExitCode()
  * @since 0.5
  */

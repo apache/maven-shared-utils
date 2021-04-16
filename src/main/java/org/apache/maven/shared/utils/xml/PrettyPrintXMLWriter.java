@@ -23,10 +23,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.ArrayList;
-import org.apache.maven.shared.utils.Os;
 
 /**
- * XMLWriter with nice indentation
+ * XMLWriter with nice indentation.
  * 
  * @author kama
  */
@@ -101,7 +100,7 @@ public class PrettyPrintXMLWriter
      */
     public PrettyPrintXMLWriter( PrintWriter writer, String lineIndent, String encoding, String doctype )
     {
-        this( writer, lineIndent.toCharArray(), Os.LINE_SEP.toCharArray(), encoding, doctype );
+        this( writer, lineIndent.toCharArray(), "\n".toCharArray(), encoding, doctype );
     }
 
     /**
@@ -122,7 +121,7 @@ public class PrettyPrintXMLWriter
      */
     public PrettyPrintXMLWriter( PrintWriter writer, String encoding, String doctype )
     {
-        this( writer, DEFAULT_LINE_INDENT, Os.LINE_SEP.toCharArray(), encoding, doctype );
+        this( writer, DEFAULT_LINE_INDENT, "\n".toCharArray(), encoding, doctype );
     }
 
     /**

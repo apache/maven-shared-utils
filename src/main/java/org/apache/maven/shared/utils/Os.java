@@ -39,7 +39,6 @@ import java.util.Set;
  * @author Magesh Umasankar
  * @author Brian Fox
  * @author Mark Struberg
- * @version $Revision$
  * 
  */
 public class Os

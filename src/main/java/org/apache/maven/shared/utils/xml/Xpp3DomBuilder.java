@@ -19,12 +19,10 @@ package org.apache.maven.shared.utils.xml;
  * under the License.
  */
 
-import org.apache.maven.shared.utils.io.IOUtil;
 import org.apache.maven.shared.utils.xml.pull.XmlPullParserException;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -48,8 +46,8 @@ public class Xpp3DomBuilder
 
     /**
      * @param reader {@link Reader}
-     * @return the built dom.
-     * @throws XmlPullParserException in case of an error.
+     * @return the built DOM
+     * @throws XmlPullParserException in case of an error
      */
     public static Xpp3Dom build( @WillClose @Nonnull Reader reader )
         throws XmlPullParserException
@@ -59,9 +57,9 @@ public class Xpp3DomBuilder
 
     /**
      * @param is {@link InputStream}
-     * @param encoding The encoding.
-     * @return the built dom.
-     * @throws XmlPullParserException in case of an error.
+     * @param encoding the encoding
+     * @return the built DOM
+     * @throws XmlPullParserException in case of an error
      */
     public static Xpp3Dom build( @WillClose InputStream is, @Nonnull String encoding )
         throws XmlPullParserException
@@ -71,10 +69,10 @@ public class Xpp3DomBuilder
 
     /**
      * @param is {@link InputStream}
-     * @param encoding The encoding.
-     * @param trim true/false.
-     * @return the built dom.
-     * @throws XmlPullParserException in case of an error.
+     * @param encoding the encoding
+     * @param trim true/false
+     * @return the built DOM
+     * @throws XmlPullParserException in case of an error
      */
     public static Xpp3Dom build( @WillClose InputStream is, @Nonnull String encoding, boolean trim )
         throws XmlPullParserException
@@ -86,33 +84,28 @@ public class Xpp3DomBuilder
         }
         catch ( UnsupportedEncodingException e )
         {
-            throw new RuntimeException( e );
+            throw new XmlPullParserException( e );
         }
     }
 
     /**
-     * @param reader {@link Reader}
-     * @param trim true/false.
-     * @return the built dom.
-     * @throws XmlPullParserException in case of an error.
+     * @param in {@link Reader}
+     * @param trim true/false
+     * @return the built DOM
+     * @throws XmlPullParserException in case of an error
      */
-    public static Xpp3Dom build( @WillClose Reader reader, boolean trim )
+    public static Xpp3Dom build( @WillClose Reader in, boolean trim )
         throws XmlPullParserException
     {
-        try
+        try ( Reader reader = in )  
         {
             DocHandler docHandler = parseSax( new InputSource( reader ), trim );
             reader.close();
-            reader = null;
             return docHandler.result;
         }
         catch ( final IOException e )
         {
             throw new XmlPullParserException( e );
-        }
-        finally
-        {
-            IOUtil.close( reader );
         }
     }
 
@@ -194,14 +187,6 @@ public class Xpp3DomBuilder
 
         private final List<StringBuilder> values = new ArrayList<StringBuilder>();
 
-        // Todo: Use these for something smart !
-        private final List<SAXParseException> warnings = new ArrayList<SAXParseException>();
-
-        private final List<SAXParseException> errors = new ArrayList<SAXParseException>();
-
-        private final List<SAXParseException> fatals = new ArrayList<SAXParseException>();
-
-
         Xpp3Dom result = null;
 
         private final boolean trim;
@@ -223,8 +208,6 @@ public class Xpp3DomBuilder
             attachToParent( child );
             pushOnStack( child );
 
-            // Todo: Detecting tags that close immediately seem to be impossible in sax ?
-            // http://stackoverflow.com/questions/12968390/detecting-self-closing-tags-in-sax
             values.add( new StringBuilder() );
 
             int size = attributes.getLength();
@@ -249,27 +232,6 @@ public class Xpp3DomBuilder
             {
                 elemStack.get( depth - 1 ).addChild( child );
             }
-        }
-
-        @Override
-        public void warning( SAXParseException e )
-            throws SAXException
-        {
-            warnings.add( e );
-        }
-
-        @Override
-        public void error( SAXParseException e )
-            throws SAXException
-        {
-            errors.add( e );
-        }
-
-        @Override
-        public void fatalError( SAXParseException e )
-            throws SAXException
-        {
-            fatals.add( e );
         }
 
         private Xpp3Dom pop()

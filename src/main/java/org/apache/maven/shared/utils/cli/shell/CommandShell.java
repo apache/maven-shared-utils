@@ -21,13 +21,12 @@ package org.apache.maven.shared.utils.cli.shell;
 
 
 /**
- * <p>
  * Implementation to call the Command.com Shell present on Windows 95, 98 and Me
- * </p>
  *
  * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
- * 
+ * @deprecated Windows ME is long dead. Update to Windows 10 and use {@link CmdShell}.
  */
+@Deprecated
 public class CommandShell
     extends Shell
 {

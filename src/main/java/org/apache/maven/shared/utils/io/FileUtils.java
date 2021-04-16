@@ -19,6 +19,7 @@ package org.apache.maven.shared.utils.io;
  * under the License.
  */
 
+import org.apache.commons.io.IOUtils;
 import org.apache.maven.shared.utils.Os;
 import org.apache.maven.shared.utils.StringUtils;
 
@@ -30,30 +31,36 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.RandomAccessFile;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.URL;
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
+import java.nio.charset.CoderResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.SecureRandom;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 /**
  * This class provides basic facilities for manipulating files and file paths.
- * <p/>
+ *
  * <h3>Path-related methods</h3>
- * <p/>
+ * 
  * <p>Methods exist to retrieve the components of a typical file path. For example
  * <code>/www/hosted/mysite/index.html</code>, can be broken into:
  * <ul>
@@ -63,13 +70,12 @@ import java.util.Random;
  * </p>
  * <p/>
  * <h3>File-related methods</h3>
- * <p/>
- * There are methods to  create a {@link #toFile File from a URL}, copy a
- * copy a {@link #copyFile File to another File},
+ * 
+ * There are methods to create a {@link #toFile File from a URL}, copy a
+ * {@link #copyFile File to another File},
  * copy a {@link #copyURLToFile URL's contents to a File},
  * as well as methods to {@link #deleteDirectory(File) delete} and {@link #cleanDirectory(File)
  * clean} a directory.
- * </p>
  * <p/>
  * Common {@link java.io.File} manipulation routines.
  * <p/>
@@ -84,7 +90,6 @@ import java.util.Random;
  * @author <a href="mailto:Christoph.Reck@dlr.de">Christoph.Reck</a>
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
- * @version $Id$
  */
 public class FileUtils
 {
@@ -93,7 +98,7 @@ public class FileUtils
      */
     protected FileUtils()
     {
-        // This is a utility class.  Normally dont instantiate
+        // This is a utility class.  Normally don't instantiate
     }
 
     /**
@@ -107,14 +112,9 @@ public class FileUtils
     private static final int ONE_MB = ONE_KB * ONE_KB;
 
     /**
-     * The number of bytes in a gigabyte.
-     */
-    private static final int ONE_GB = ONE_KB * ONE_MB;
-
-    /**
      * The file copy buffer size (30 MB)
      */
-    private static final long FILE_COPY_BUFFER_SIZE = ONE_MB * 30;
+    private static final int FILE_COPY_BUFFER_SIZE = ONE_MB * 30;
 
     /**
      * The vm line separator
@@ -139,7 +139,7 @@ public class FileUtils
     }
 
     /**
-     * @return the default excludes pattern as list.
+     * @return the default excludes pattern as list
      * @see #getDefaultExcludes()
      */
     @Nonnull public static List<String> getDefaultExcludesAsList()
@@ -161,47 +161,52 @@ public class FileUtils
      * Returns the directory path portion of a file specification string.
      * Matches the equally named unix command.
      *
-     * @param filename the file path
-     * @return The directory portion excluding the ending file separator.
+     * @param path the file path
+     * @return the directory portion excluding the ending file separator
+     * @deprecated use {@code Paths.get(path).getParent().getName()}
      */
-    @Nonnull public static String dirname( @Nonnull String filename )
+    @Deprecated
+    @Nonnull public static String dirname( @Nonnull String path )
     {
-        int i = filename.lastIndexOf( File.separator );
-        return ( i >= 0 ? filename.substring( 0, i ) : "" );
+        int i = path.lastIndexOf( File.separator );
+        return ( i >= 0 ? path.substring( 0, i ) : "" );
     }
 
     /**
-     * Returns the filename portion of a file specification string.
+     * Returns the filename portion of a path.
      *
-     * @param filename the file path
-     * @return The filename string with extension.
+     * @param path the file path
+     * @return the filename string with extension
+     * @deprecated use {@code Paths.get(path).getName()}
      */
-    @Nonnull public static String filename( @Nonnull String filename )
+    @Deprecated
+    @Nonnull public static String filename( @Nonnull String path )
     {
-        int i = filename.lastIndexOf( File.separator );
-        return ( i >= 0 ? filename.substring( i + 1 ) : filename );
+        int i = path.lastIndexOf( File.separator );
+        return ( i >= 0 ? path.substring( i + 1 ) : path );
     }
 
     /**
-     * Returns the extension portion of a file specification string.
-     * This everything after the last dot '.' in the filename (NOT including
-     * the dot).
+     * Returns the extension portion of a file path.
+     * This is everything after the last dot '.' in the path (NOT including the dot).
      *
-     * @param filename the file path
+     * @param path the file path
      * @return the extension of the file
+     * @deprecated use {@code org.apache.commons.io.FilenameUtils.getExtension}
      */
-    @Nonnull public static String extension( @Nonnull String filename )
+    @Deprecated
+    @Nonnull public static String extension( @Nonnull String path )
     {
         // Ensure the last dot is after the last file separator
-        int lastSep = filename.lastIndexOf( File.separatorChar );
+        int lastSep = path.lastIndexOf( File.separatorChar );
         int lastDot;
         if ( lastSep < 0 )
         {
-            lastDot = filename.lastIndexOf( '.' );
+            lastDot = path.lastIndexOf( '.' );
         }
         else
         {
-            lastDot = filename.substring( lastSep + 1 ).lastIndexOf( '.' );
+            lastDot = path.substring( lastSep + 1 ).lastIndexOf( '.' );
             if ( lastDot >= 0 )
             {
                 lastDot += lastSep + 1;
@@ -210,18 +215,20 @@ public class FileUtils
 
         if ( lastDot >= 0 && lastDot > lastSep )
         {
-            return filename.substring( lastDot + 1 );
+            return path.substring( lastDot + 1 );
         }
 
         return "";
     }
 
     /**
-     * Check if a file exits.
+     * Check if a file exists.
      *
-     * @param fileName the file path.
-     * @return true if file exists.
+     * @param fileName the file path
+     * @return true if file exists
+     * @deprecated use {@code java.io.File.exists()}
      */
+    @Deprecated
     public static boolean fileExists( @Nonnull String fileName )
     {
         File file = new File( fileName );
@@ -232,9 +239,11 @@ public class FileUtils
      * Note: the file content is read with platform encoding.
      *
      * @param file the file path
-     * @return the file content using the platform encoding.
+     * @return the file content using the platform encoding
      * @throws IOException if any
+     * @deprecated use {@code new String(java.nio.files.Files.readAllBytes(file))}
      */
+    @Deprecated
     @Nonnull public static String fileRead( @Nonnull String file )
         throws IOException
     {
@@ -244,9 +253,11 @@ public class FileUtils
     /**
      * @param file     the file path
      * @param encoding the wanted encoding
-     * @return the file content using the specified encoding.
+     * @return the file content using the specified encoding
      * @throws IOException if any
+     * @deprecated use {@code new String(java.nio.files.Files.readAllBytes(Paths.get(file)), encoding)}
      */
+    @Deprecated
     @Nonnull private static String fileRead( @Nonnull String file, @Nullable String encoding )
         throws IOException
     {
@@ -254,12 +265,14 @@ public class FileUtils
     }
 
     /**
-     * Note: the file content is read with platform encoding
+     * Note: the file content is read with platform encoding.
      *
      * @param file the file path
-     * @return the file content using the platform encoding.
+     * @return the file content using the platform encoding
      * @throws IOException if any
+     * @deprecated use {@code new String(java.nio.files.Files.readAllBytes(file.toPath()))}
      */
+    @Deprecated
     @Nonnull public static String fileRead( @Nonnull File file )
         throws IOException
     {
@@ -269,38 +282,27 @@ public class FileUtils
     /**
      * @param file     the file path
      * @param encoding the wanted encoding
-     * @return the file content using the specified encoding.
+     * @return the file content using the specified encoding
      * @throws IOException if any
+     * @deprecated use {@code new String(java.nio.files.Files.readAllBytes(file.toPath()), encoding)}
      */
+    @Deprecated
     @Nonnull public static String fileRead( @Nonnull File file, @Nullable String encoding )
         throws IOException
     {
+        Charset charset = charset( encoding );
+
         StringBuilder buf = new StringBuilder();
 
-        Reader reader = null;
 
-        try
+        try ( Reader reader = Files.newBufferedReader( file.toPath(), charset ) )
         {
-            if ( encoding != null )
-            {
-                reader = new InputStreamReader( new FileInputStream( file ), encoding );
-            }
-            else
-            {
-                reader = new InputStreamReader( new FileInputStream( file ) );
-            }
             int count;
             char[] b = new char[512];
             while ( ( count = reader.read( b ) ) >= 0 )  // blocking read
             {
                 buf.append( b, 0, count );
             }
-            reader.close();
-            reader = null;
-        }
-        finally
-        {
-            IOUtil.close( reader );
         }
 
         return buf.toString();
@@ -308,10 +310,12 @@ public class FileUtils
 
     /**
      * @param file the file path
-     * @return the file content lines as String[] using the systems default encoding.
-     * An empty List if the file didn't exist.
-     * @throws IOException in case of failure.
+     * @return the file content lines as String[] using the system default encoding.
+     * An empty List if the file doesn't exist.
+     * @throws IOException in case of failure
+     * @deprecated use {@code java.nio.files.Files.readAllLines()}
      */
+    @Deprecated
     @Nonnull public static String[] fileReadArray( @Nonnull File file )
         throws IOException
     {
@@ -321,13 +325,16 @@ public class FileUtils
     }
 
     /**
-     * Appends data to a file. The file will be created if it does not exist.
-     * Note: the data is written with platform encoding
+     * Appends data to a file. The file is created if it does not exist.
+     * Note: the data is written with platform encoding.
      *
-     * @param fileName The path of the file to write.
-     * @param data     The content to write to the file.
+     * @param fileName the path of the file to write
+     * @param data     the content to write to the file
      * @throws IOException if any
+     * @deprecated use {@code java.nio.files.Files.write(filename, data.getBytes(),
+     *     StandardOpenOption.APPEND, StandardOpenOption.CREATE)}
      */
+    @Deprecated
     public static void fileAppend( @Nonnull String fileName, @Nonnull String data )
         throws IOException
     {
@@ -337,32 +344,22 @@ public class FileUtils
     /**
      * Appends data to a file. The file will be created if it does not exist.
      *
-     * @param fileName The path of the file to write.
-     * @param encoding The encoding of the file.
-     * @param data     The content to write to the file.
+     * @param fileName the path of the file to write
+     * @param encoding the encoding of the file
+     * @param data     the content to write to the file
      * @throws IOException if any
+     * @deprecated use {@code java.nio.files.Files.write(filename, data.getBytes(encoding),
+     *     StandardOpenOption.APPEND, StandardOpenOption.CREATE)}
      */
+    @Deprecated
     public static void fileAppend( @Nonnull String fileName, @Nullable String encoding, @Nonnull String data )
         throws IOException
     {
-        FileOutputStream out = null;
-        try
+        Charset charset = charset( encoding );
+
+        try ( OutputStream out = new FileOutputStream( fileName, true ) )
         {
-            out = new FileOutputStream( fileName, true );
-            if ( encoding != null )
-            {
-                out.write( data.getBytes( encoding ) );
-            }
-            else
-            {
-                out.write( data.getBytes() );
-            }
-            out.close();
-            out = null;
-        }
-        finally
-        {
-            IOUtil.close( out );
+          out.write( data.getBytes( charset ) );
         }
     }
 
@@ -370,10 +367,13 @@ public class FileUtils
      * Writes data to a file. The file will be created if it does not exist.
      * Note: the data is written with platform encoding
      *
-     * @param fileName The path of the file to write.
-     * @param data     The content to write to the file.
+     * @param fileName the path of the file to write
+     * @param data     the content to write to the file
      * @throws IOException if any
+     * @deprecated use {@code java.nio.files.Files.write(filename,
+     *     data.getBytes(), StandardOpenOption.CREATE)}
      */
+    @Deprecated
     public static void fileWrite( @Nonnull String fileName, @Nonnull String data )
         throws IOException
     {
@@ -383,11 +383,14 @@ public class FileUtils
     /**
      * Writes data to a file. The file will be created if it does not exist.
      *
-     * @param fileName The path of the file to write.
-     * @param encoding The encoding of the file.
-     * @param data     The content to write to the file.
+     * @param fileName the path of the file to write
+     * @param encoding the encoding of the file
+     * @param data     the content to write to the file
      * @throws IOException if any
+     * @deprecated use {@code java.nio.files.Files.write(Paths.get(filename),
+     *     data.getBytes(encoding), StandardOpenOption.CREATE)}
      */
+    @Deprecated
     public static void fileWrite( @Nonnull String fileName, @Nullable String encoding, @Nonnull String data )
         throws IOException
     {
@@ -398,32 +401,22 @@ public class FileUtils
     /**
      * Writes data to a file. The file will be created if it does not exist.
      *
-     * @param file     The path of the file to write.
-     * @param encoding The encoding of the file.
-     * @param data     The content to write to the file.
+     * @param file     the path of the file to write
+     * @param encoding the encoding of the file
+     * @param data     the content to write to the file
      * @throws IOException if any
+     * @deprecated use {@code java.nio.files.Files.write(file.toPath(),
+     *     data.getBytes(encoding), StandardOpenOption.CREATE)}
      */
+    @Deprecated
     public static void fileWrite( @Nonnull File file, @Nullable String encoding, @Nonnull String data )
         throws IOException
     {
-        Writer writer = null;
-        try
+        Charset charset = charset( encoding );
+
+        try ( Writer writer = Files.newBufferedWriter( file.toPath(), charset ) )
         {
-            if ( encoding != null )
-            {
-                writer = new OutputStreamWriter( new FileOutputStream( file ), encoding );
-            }
-            else
-            {
-                writer = new OutputStreamWriter( new FileOutputStream( file ) );
-            }
             writer.write( data );
-            writer.close();
-            writer = null;
-        }
-        finally
-        {
-            IOUtil.close( writer );
         }
     }
 
@@ -431,10 +424,13 @@ public class FileUtils
      * Writes String array data to a file in the systems default encoding.
      * The file will be created if it does not exist.
      *
-     * @param file The path of the file to write.
-     * @param data The content to write to the file.
+     * @param file the path of the file to write
+     * @param data the content to write to the file
      * @throws IOException if any
+     * @deprecated use {@code java.nio.files.Files.write(file.toPath(),
+     *     data.getBytes(encoding), StandardOpenOption.CREATE)}
      */
+    @Deprecated
     public static void fileWriteArray( @Nonnull File file, @Nullable String... data )
         throws IOException
     {
@@ -442,28 +438,23 @@ public class FileUtils
     }
 
     /**
-     * Writes String array data to a file. The file will be created if it does not exist.
+     * Writes String array data to a file. The file is created if it does not exist.
      *
-     * @param file     The path of the file to write.
-     * @param encoding The encoding of the file.
-     * @param data     The content to write to the file.
+     * @param file the path of the file to write
+     * @param encoding the encoding of the file
+     * @param data the content to write to the file
      * @throws IOException if any
+     * @deprecated use {@code java.nio.files.Files.write(file.toPath(),
+     *     data.getBytes(encoding), StandardOpenOption.CREATE)}
      */
+    @Deprecated
     public static void fileWriteArray( @Nonnull File file, @Nullable String encoding, @Nullable String... data )
         throws IOException
     {
-        Writer writer = null;
-        try
-        {
-            if ( encoding != null )
-            {
-                writer = new OutputStreamWriter( new FileOutputStream( file ), encoding );
-            }
-            else
-            {
-                writer = new OutputStreamWriter( new FileOutputStream( file ) );
-            }
+        Charset charset = charset( encoding );
 
+        try ( Writer writer = Files.newBufferedWriter( file.toPath(), charset ) )
+        {
             for ( int i = 0; data != null && i < data.length; i++ )
             {
                 writer.write( data[i] );
@@ -472,21 +463,16 @@ public class FileUtils
                     writer.write( "\n" );
                 }
             }
-
-            writer.close();
-            writer = null;
-        }
-        finally
-        {
-            IOUtil.close( writer );
         }
     }
 
     /**
      * Deletes a file.
      *
-     * @param fileName The path of the file to delete.
+     * @param fileName the path of the file to delete
+     * @deprecated use {@code Files.delete(Paths.get(fileName))}
      */
+    @Deprecated
     public static void fileDelete( @Nonnull String fileName )
     {
         File file = new File( fileName );
@@ -497,14 +483,11 @@ public class FileUtils
     /**
      * Given a directory and an array of extensions return an array of compliant files.
      * <p/>
-     * TODO Should an ignore list be passed in?
-     * TODO Should a recurse flag be passed in?
-     * <p/>
-     * The given extensions should be like "java" and not like ".java"
+     * The given extensions should be like "java" and not like ".java".
      *
-     * @param directory  The path of the directory.
-     * @param extensions an array of expected extensions.
-     * @return An array of files for the wanted extensions.
+     * @param directory  the path of the directory
+     * @param extensions an array of expected extensions
+     * @return an array of files for the wanted extensions
      */
     public static String[] getFilesFromExtension( @Nonnull String directory, @Nonnull String... extensions )
     {
@@ -532,7 +515,7 @@ public class FileUtils
                     continue;
                 }
 
-                // ok... transverse into this directory and get all the files... then combine
+                // ok... traverse into this directory and get all the files... then combine
                 // them with the current list.
 
                 String[] fetchFiles = getFilesFromExtension( currentFileName, extensions );
@@ -592,12 +575,14 @@ public class FileUtils
     }
 
     /**
-     * Simple way to make a directory
+     * Simple way to make a directory.
      *
      * @param dir the directory to create
-     * @throws IllegalArgumentException if the dir contains illegal Windows characters under Windows OS.
+     * @throws IllegalArgumentException if the dir contains illegal Windows characters under Windows OS
      * @see #INVALID_CHARACTERS_FOR_WINDOWS_FILE_NAME
+     * @deprecated use {@code java.nio.file.Files.createDirectories(Paths.get(dir))}
      */
+    @Deprecated
     public static void mkdir( @Nonnull String dir )
     {
         File file = new File( dir );
@@ -645,33 +630,19 @@ public class FileUtils
             return false;
         }
 
-        InputStream input1 = null;
-        InputStream input2 = null;
-        boolean equals = false;
-        try
-        {
-            input1 = new FileInputStream( file1 );
-            input2 = new FileInputStream( file2 );
-            equals = IOUtil.contentEquals( input1, input2 );
-            input1.close();
-            input1 = null;
-            input2.close();
-            input2 = null;
+        try ( InputStream input1 = new FileInputStream( file1 );
+            InputStream  input2 = new FileInputStream( file2 ) )
+        { 
+            return IOUtils.contentEquals( input1, input2 );
         }
-        finally
-        {
-            IOUtil.close( input1 );
-            IOUtil.close( input2 );
-        }
-        return equals;
     }
 
     /**
      * Convert from a <code>URL</code> to a <code>File</code>.
      *
-     * @param url File URL.
-     * @return The equivalent <code>File</code> object, or <code>null</code> if the URL's protocol
-     * is not <code>file</code>
+     * @param url file URL
+     * @return the equivalent <code>File</code> object, or <code>null</code> if the URL's protocol
+     *     is not <code>file</code>
      */
     @Nullable public static File toFile( @Nullable final URL url )
     {
@@ -715,8 +686,7 @@ public class FileUtils
     }
 
     /**
-     * Remove extension from filename.
-     * ie
+     * Remove extension from a path. E.g.
      * <pre>
      * foo.txt    --> foo
      * a\b\c.jpg --> a\b\c
@@ -725,7 +695,9 @@ public class FileUtils
      *
      * @param filename the path of the file
      * @return the filename minus extension
+     * @deprecated use {@code org.apache.commons.io.FilenameUtils.removeExtension()}
      */
+    @Deprecated
     @Nonnull public static String removeExtension( @Nonnull final String filename )
     {
         String ext = extension( filename );
@@ -740,8 +712,8 @@ public class FileUtils
     }
 
     /**
-     * Get extension from filename.
-     * ie
+     * Get extension from a path. E.g.
+     *
      * <pre>
      * foo.txt    --> "txt"
      * a\b\c.jpg --> "jpg"
@@ -750,7 +722,9 @@ public class FileUtils
      *
      * @param filename the path of the file
      * @return the extension of filename or "" if none
+     * @deprecated use {@code org.apache.commons.io.FilenameUtils.getExtension()}
      */
+    @Deprecated
     @Nonnull public static String getExtension( @Nonnull final String filename )
     {
         return extension( filename );
@@ -761,20 +735,22 @@ public class FileUtils
      * (and any parent directories) will be created. If a file <code>source</code> in
      * <code>destinationDirectory</code> exists, it will be overwritten.
      *
-     * @param source               An existing <code>File</code> to copy.
-     * @param destinationDirectory A directory to copy <code>source</code> into.
-     * @throws java.io.FileNotFoundException if <code>source</code> isn't a normal file.
-     * @throws IllegalArgumentException      if <code>destinationDirectory</code> isn't a directory.
+     * @param source               an existing <code>File</code> to copy
+     * @param destinationDirectory a directory to copy <code>source</code> into
+     * @throws java.io.FileNotFoundException if <code>source</code> isn't a normal file
+     * @throws IllegalArgumentException      if <code>destinationDirectory</code> isn't a directory
      * @throws IOException                   if <code>source</code> does not exist, the file in
      *                                       <code>destinationDirectory</code> cannot be written to, or an IO error
-     *                                       occurs during copying.
+     *                                       occurs during copying
+     * @deprecated use {@code org.apache.commons.io.FileUtils.copyFileToDirectory()}
      */
+    @Deprecated
     public static void copyFileToDirectory( @Nonnull final File source, @Nonnull final File destinationDirectory )
         throws IOException
     {
         if ( destinationDirectory.exists() && !destinationDirectory.isDirectory() )
         {
-            throw new IllegalArgumentException( "Destination is not a directory" );
+            throw new IOException( "Destination is not a directory" );
         }
 
         copyFile( source, new File( destinationDirectory, source.getName() ) );
@@ -783,16 +759,16 @@ public class FileUtils
     /**
      * Copy file from source to destination only if source is newer than the target file.
      * If <code>destinationDirectory</code> does not exist, it
-     * (and any parent directories) will be created. If a file <code>source</code> in
-     * <code>destinationDirectory</code> exists, it will be overwritten.
+     * (and any parent directories) is created. If a file <code>source</code> in
+     * <code>destinationDirectory</code> exists, it is overwritten.
      *
-     * @param source               An existing <code>File</code> to copy.
-     * @param destinationDirectory A directory to copy <code>source</code> into.
-     * @throws java.io.FileNotFoundException if <code>source</code> isn't a normal file.
-     * @throws IllegalArgumentException      if <code>destinationDirectory</code> isn't a directory.
+     * @param source               an existing <code>File</code> to copy
+     * @param destinationDirectory a directory to copy <code>source</code> into
+     * @throws java.io.FileNotFoundException if <code>source</code> isn't a normal file
+     * @throws IllegalArgumentException      if <code>destinationDirectory</code> isn't a directory
      * @throws IOException                   if <code>source</code> does not exist, the file in
      *                                       <code>destinationDirectory</code> cannot be written to, or an IO error
-     *                                       occurs during copying.
+     *                                       occurs during copying
      */
     private static void copyFileToDirectoryIfModified( @Nonnull final File source,
                                                        @Nonnull final File destinationDirectory )
@@ -812,13 +788,16 @@ public class FileUtils
      * created if they don't already exist. <code>destination</code> will be overwritten if it
      * already exists.
      *
-     * @param source      An existing non-directory <code>File</code> to copy bytes from.
-     * @param destination A non-directory <code>File</code> to write bytes to (possibly
-     *                    overwriting).
-     * @throws IOException                   if <code>source</code> does not exist, <code>destination</code> cannot be
-     *                                       written to, or an IO error occurs during copying.
+     * @param source      an existing non-directory <code>File</code> to copy bytes from
+     * @param destination a non-directory <code>File</code> to write bytes to (possibly
+     *                    overwriting)
+     * @throws IOException if <code>source</code> does not exist, <code>destination</code> cannot be
+     *                     written to, or an IO error occurs during copying
      * @throws java.io.FileNotFoundException if <code>destination</code> is a directory
+     * @deprecated use {@code java.nio.Files.copy(source.toPath(), destination.toPath(), LinkOption.NOFOLLOW_LINKS,
+     *     StandardCopyOption.REPLACE_EXISTING)}
      */
+    @Deprecated
     public static void copyFile( @Nonnull final File source, @Nonnull final File destination )
         throws IOException
     {
@@ -828,10 +807,10 @@ public class FileUtils
             final String message = "File " + source + " does not exist";
             throw new IOException( message );
         }
-        if ( Java7Support.isAtLeastJava7() && Java7Support.isSymLink( source ) )
+        if ( Files.isSymbolicLink( source.toPath() ) )
         {
-            File target = Java7Support.readSymbolicLink( source );
-            Java7Support.createSymbolicLink( destination, target );
+            File target = Files.readSymbolicLink( source.toPath() ).toFile();
+            createSymbolicLink( destination, target );
             return;
         }
 
@@ -866,16 +845,13 @@ public class FileUtils
     private static void doCopyFile( @Nonnull File source, @Nonnull File destination )
         throws IOException
     {
-        FileInputStream fis = null;
-        FileOutputStream fos = null;
-        FileChannel input = null;
-        FileChannel output = null;
-        try
+
+        try ( FileInputStream fis = new FileInputStream( source );
+              FileOutputStream fos = new FileOutputStream( destination );
+              FileChannel input = fis.getChannel();
+              FileChannel output = fos.getChannel() )
         {
-            fis = new FileInputStream( source );
-            fos = new FileOutputStream( destination );
-            input = fis.getChannel();
-            output = fos.getChannel();
+            
             long size = input.size();
             long pos = 0;
             long count;
@@ -884,22 +860,9 @@ public class FileUtils
                 count = size - pos > FILE_COPY_BUFFER_SIZE ? FILE_COPY_BUFFER_SIZE : size - pos;
                 pos += output.transferFrom( input, pos, count );
             }
-            output.close();
-            output = null;
-            fos.close();
-            fos = null;
-            input.close();
-            input = null;
-            fis.close();
-            fis = null;
         }
-        finally
-        {
-            IOUtil.close( output );
-            IOUtil.close( fos );
-            IOUtil.close( input );
-            IOUtil.close( fis );
-        }
+
+        copyFilePermissions( source, destination );
     }
 
     /**
@@ -910,7 +873,7 @@ public class FileUtils
      * @param source      An existing non-directory <code>File</code> to copy bytes from.
      * @param destination A non-directory <code>File</code> to write bytes to (possibly
      *                    overwriting).
-     * @return true if no problem occured
+     * @return true if no problem occurred
      * @throws IOException if <code>source</code> does not exist, <code>destination</code> cannot be
      *                     written to, or an IO error occurs during copying.
      */
@@ -932,15 +895,17 @@ public class FileUtils
      * The directories up to <code>destination</code> will be created if they don't already exist.
      * <code>destination</code> will be overwritten if it already exists.
      *
-     * @param source      A <code>URL</code> to copy bytes from.
-     * @param destination A non-directory <code>File</code> to write bytes to (possibly
-     *                    overwriting).
+     * @param source      a <code>URL</code> to copy bytes from
+     * @param destination a non-directory <code>File</code> to write bytes to (possibly
+     *                    overwriting)
      * @throws IOException if
      *                     <ul>
      *                     <li><code>source</code> URL cannot be opened</li>
      *                     <li><code>destination</code> cannot be written to</li>
      *                     <li>an IO error occurs during copying</li>
      *                     </ul>
+     * @deprecated use {@code java.nio.Files.copy(source.openStream(), destination.toPath(),
+     *     StandardCopyOption.REPLACE_EXISTING)}
      */
     public static void copyURLToFile( @Nonnull final URL source, @Nonnull final File destination )
         throws IOException
@@ -953,50 +918,41 @@ public class FileUtils
      * The directories up to <code>destination</code> will be created if they don't already exist.
      * <code>destination</code> will be overwritten if it already exists.
      *
-     * @param source      An {@link InputStream} to copy bytes from. This stream is
+     * @param source      an {@link InputStream} to copy bytes from. This stream is
      *                    guaranteed to be closed.
-     * @param destination A non-directory <code>File</code> to write bytes to (possibly
-     *                    overwriting).
+     * @param destination a non-directory <code>File</code> to write bytes to (possibly
+     *                    overwriting)
      * @throws IOException if
      *                     <ul>
-     *                     <li><code>source</code> URL cannot be opened</li>
+     *                     <li><code>source</code> cannot be opened</li>
      *                     <li><code>destination</code> cannot be written to</li>
-     *                     <li>an IO error occurs during copying</li>
+     *                     <li>an I/O error occurs during copying</li>
      *                     </ul>
+     * @deprecated use {@code java.nio.Files.copy(source, destination.toPath(),
+     *     StandardCopyOption.REPLACE_EXISTING)}
      */
+    @Deprecated
     private static void copyStreamToFile( @Nonnull @WillClose final InputStream source,
                                           @Nonnull final File destination )
         throws IOException
     {
-        InputStream in = source;
-        OutputStream out = null;
-        try
+        // does destination directory exist ?
+        if ( destination.getParentFile() != null && !destination.getParentFile().exists() )
         {
-            //does destination directory exist ?
-            if ( destination.getParentFile() != null && !destination.getParentFile().exists() )
-            {
-                //noinspection ResultOfMethodCallIgnored
-                destination.getParentFile().mkdirs();
-            }
-
-            //make sure we can write to destination
-            if ( destination.exists() && !destination.canWrite() )
-            {
-                final String message = "Unable to open file " + destination + " for writing.";
-                throw new IOException( message );
-            }
-
-            out = new FileOutputStream( destination );
-            IOUtil.copy( in, out );
-            out.close();
-            out = null;
-            in.close();
-            in = null;
+            // noinspection ResultOfMethodCallIgnored
+            destination.getParentFile().mkdirs();
         }
-        finally
+
+        // make sure we can write to destination
+        if ( destination.exists() && !destination.canWrite() )
         {
-            IOUtil.close( out );
-            IOUtil.close( in );
+            final String message = "Unable to open file " + destination + " for writing.";
+            throw new IOException( message );
+        }
+
+        try ( OutputStream out = new FileOutputStream( destination ); InputStream in = source )
+        {
+            IOUtil.copy( in, out );
         }
     }
 
@@ -1016,8 +972,10 @@ public class FileUtils
      * </pre>
      *
      * @param path the path to normalize
-     * @return the normalized String, or <code>null</code> if too many ..'s.
+     * @return the normalized String, or <code>null</code> if too many ..'s
+     * @deprecated use {@code org.apache.commons.io.FileNameUtils.normalize()}
      */
+    @Deprecated
     @Nonnull public static String normalize( @Nonnull final String path )
     {
         String normalized = path;
@@ -1064,14 +1022,13 @@ public class FileUtils
     }
 
     /**
-     * Resolve a file <code>filename</code> to it's canonical form. If <code>filename</code> is
-     * relative (doesn't start with <code>/</code>), it will be resolved relative to
-     * <code>baseFile</code>, otherwise it is treated as a normal root-relative path.
+     * Resolve a file <code>filename</code> to its canonical form. If <code>filename</code> is
+     * relative (doesn't start with <code>/</code>), it is resolved relative to
+     * <code>baseFile</code>. Otherwise it is treated as a normal root-relative path.
      *
-     * @param baseFile Where to resolve <code>filename</code> from, if <code>filename</code> is
-     *                 relative.
-     * @param filename Absolute or relative file path to resolve.
-     * @return The canonical <code>File</code> of <code>filename</code>.
+     * @param baseFile where to resolve <code>filename</code> from, if <code>filename</code> is relative
+     * @param filename absolute or relative file path to resolve
+     * @return the canonical <code>File</code> of <code>filename</code>
      */
     @Nonnull public static File resolveFile( final File baseFile, @Nonnull String filename )
     {
@@ -1145,11 +1102,13 @@ public class FileUtils
     }
 
     /**
-     * Delete a file. If file is directory delete it and all sub-directories.
+     * Delete a file. If file is directory, delete it and all sub-directories.
      *
      * @param file the file path
      * @throws IOException if any
+     * @deprecated use {@code org.apache.commons.io.FileUtils.deleteQuietly()}
      */
+    @Deprecated
     public static void forceDelete( @Nonnull final String file )
         throws IOException
     {
@@ -1157,11 +1116,13 @@ public class FileUtils
     }
 
     /**
-     * Delete a file. If file is directory delete it and all sub-directories.
+     * Delete a file. If file is directory, delete it and all sub-directories.
      *
      * @param file a file
      * @throws IOException if any
+     * @deprecated use {@code org.apache.commons.io.FileUtils.deleteQuietly()}
      */
+    @Deprecated
     public static void forceDelete( @Nonnull final File file )
         throws IOException
     {
@@ -1185,50 +1146,35 @@ public class FileUtils
     }
 
     /**
-     * deletes a file.
+     * Deletes a file.
      *
-     * @param file The file to delete
-     * @throws IOException If the file cannot be delted.
+     * @param file the file to delete
+     * @throws IOException if the file cannot be deleted
+     * @deprecated use {@code java.nio.files.Files.delete(file.toPath())}
      */
-
-
+    @Deprecated
     public static void delete( @Nonnull File file )
         throws IOException
     {
-        if ( Java7Support.isAtLeastJava7() )
-        {
-            Java7Support.delete( file );
-        }
-        else
-        {
-            if ( !file.delete() )
-            {
-                throw new IOException( "Could not delete " + file.getName() );
-            }
-        }
+        Files.delete( file.toPath() );
     }
 
     /**
-     * @param file The file.
+     * @param file the file
      * @return true / false
+     * @deprecated use {@code java.nio.files.Files.delete(file.toPath())}
      */
+    @Deprecated
     public static boolean deleteLegacyStyle( @Nonnull File file )
     {
-        if ( Java7Support.isAtLeastJava7() )
+        try
         {
-            try
-            {
-                Java7Support.delete( file );
-                return true;
-            }
-            catch ( IOException e )
-            {
-                return false;
-            }
+            Files.delete( file.toPath() );
+            return true;
         }
-        else
+        catch ( IOException e )
         {
-            return file.delete();
+            return false;
         }
     }
 
@@ -1274,8 +1220,7 @@ public class FileUtils
      * Make a directory.
      *
      * @param file not null
-     * @throws IOException              If there already exists a file with specified name or
-     *                                  the directory is unable to be created
+     * @throws IOException if a file already exists with the specified name or the directory is unable to be created
      * @throws IllegalArgumentException if the file contains illegal Windows characters under Windows OS.
      * @see #INVALID_CHARACTERS_FOR_WINDOWS_FILE_NAME
      */
@@ -1313,7 +1258,9 @@ public class FileUtils
      *
      * @param directory a directory
      * @throws IOException if any
+     * @deprecated use {@code org.apache.commons.io.FileUtils.deleteDirectory()}
      */
+    @Deprecated
     public static void deleteDirectory( @Nonnull final String directory )
         throws IOException
     {
@@ -1325,7 +1272,9 @@ public class FileUtils
      *
      * @param directory a directory
      * @throws IOException if any
+     * @deprecated use {@code org.apache.commons.io.FileUtils.deleteDirectory()}
      */
+    @Deprecated
     public static void deleteDirectory( @Nonnull final File directory )
         throws IOException
     {
@@ -1351,11 +1300,14 @@ public class FileUtils
     }
 
     /**
-     * Clean a directory without deleting it.
+     * Remove all files from a directory without deleting it.
      *
      * @param directory a directory
-     * @throws IOException if any
+     * @throws IOException if any. This can leave cleaning in a half-finished state where
+     *         some but not all files have been deleted.
+     * @deprecated use {@code org.apache.commons.io.FileUtils.cleanDirectory()}
      */
+    @Deprecated
     public static void cleanDirectory( @Nonnull final File directory )
         throws IOException
     {
@@ -1402,8 +1354,10 @@ public class FileUtils
      * Recursively count size of a directory.
      *
      * @param directory a directory
-     * @return size of directory in bytes.
+     * @return size of directory in bytes
+     * @deprecated use {@code org.apache.commons.io.FileUtils.sizeOf()}
      */
+    @Deprecated
     public static long sizeOfDirectory( @Nonnull final String directory )
     {
         return sizeOfDirectory( new File( directory ) );
@@ -1413,8 +1367,10 @@ public class FileUtils
      * Recursively count size of a directory.
      *
      * @param directory a directory
-     * @return size of directory in bytes.
+     * @return size of directory in bytes
+     * @deprecated use {@code org.apache.commons.io.FileUtils.sizeOf()}
      */
+    @Deprecated
     public static long sizeOfDirectory( @Nonnull final File directory )
     {
         if ( !directory.exists() )
@@ -1457,8 +1413,8 @@ public class FileUtils
      * including the directory name in each of the files
      *
      * @param directory the directory to scan
-     * @param includes  the includes pattern, comma separated
-     * @param excludes  the excludes pattern, comma separated
+     * @param includes  the Ant includes pattern, comma separated
+     * @param excludes  the Ant excludes pattern, comma separated
      * @return a list of File objects
      * @throws IOException in case of failure.
      * @see #getFileNames(File, String, String, boolean)
@@ -1503,11 +1459,11 @@ public class FileUtils
      * This method use case sensitive file name.
      *
      * @param directory      the directory to scan
-     * @param includes       the includes pattern, comma separated
-     * @param excludes       the excludes pattern, comma separated
-     * @param includeBasedir true to include the base dir in each String of file
-     * @return a list of files as String
-     * @throws IOException in case of failure.
+     * @param includes       the Ant includes pattern, comma separated
+     * @param excludes       the Ant excludes pattern, comma separated
+     * @param includeBasedir true to include the base directory in each String of file
+     * @return a list of file names
+     * @throws IOException in case of failure
      */
     @Nonnull public static List<String> getFileNames( @Nonnull File directory, @Nullable String includes,
                                                       @Nullable String excludes, boolean includeBasedir )
@@ -1520,8 +1476,8 @@ public class FileUtils
      * Return a list of files as String depending options.
      *
      * @param directory       the directory to scan
-     * @param includes        the includes pattern, comma separated
-     * @param excludes        the excludes pattern, comma separated
+     * @param includes        the Ant includes pattern, comma separated
+     * @param excludes        the Ant excludes pattern, comma separated
      * @param includeBasedir  true to include the base dir in each String of file
      * @param isCaseSensitive true if case sensitive
      * @return a list of files as String
@@ -1540,8 +1496,8 @@ public class FileUtils
      * This method use case sensitive file name.
      *
      * @param directory      the directory to scan
-     * @param includes       the includes pattern, comma separated
-     * @param excludes       the excludes pattern, comma separated
+     * @param includes       the Ant includes pattern, comma separated
+     * @param excludes       the Ant excludes pattern, comma separated
      * @param includeBasedir true to include the base dir in each String of file
      * @return a list of directories as String
      * @throws IOException in case of failure.
@@ -1554,15 +1510,15 @@ public class FileUtils
     }
 
     /**
-     * Return a list of directories as String depending options.
+     * Return a list of directories as Strings.
      *
      * @param directory       the directory to scan
-     * @param includes        the includes pattern, comma separated
-     * @param excludes        the excludes pattern, comma separated
-     * @param includeBasedir  true to include the base dir in each String of file
+     * @param includes        the Ant includes pattern, comma separated
+     * @param excludes        the Ant excludes pattern, comma separated
+     * @param includeBasedir  true to include the base directory in each String of file
      * @param isCaseSensitive true if case sensitive
      * @return a list of directories as String
-     * @throws IOException in case of failure.
+     * @throws IOException in case of failure
      */
     @Nonnull public static List<String> getDirectoryNames( @Nonnull File directory, @Nullable String includes,
                                                            @Nullable String excludes, boolean includeBasedir,
@@ -1573,16 +1529,16 @@ public class FileUtils
     }
 
     /**
-     * Return a list of files as String depending options.
+     * Return a list of file names as Strings.
      *
      * @param directory       the directory to scan
-     * @param includes        the includes pattern, comma separated
-     * @param excludes        the excludes pattern, comma separated
-     * @param includeBasedir  true to include the base dir in each String of file
+     * @param includes        the Ant includes pattern, comma separated
+     * @param excludes        the Ant excludes pattern, comma separated
+     * @param includeBasedir  true to include the base directory in each String of file
      * @param isCaseSensitive true if case sensitive
-     * @param getFiles        true if get files
-     * @param getDirectories  true if get directories
-     * @return a list of files as String
+     * @param getFiles        true to include regular files
+     * @param getDirectories  true to include directories
+     * @return a list of file names
      */
     @Nonnull public static List<String> getFileAndDirectoryNames( File directory, @Nullable String includes,
                                                                   @Nullable String excludes, boolean includeBasedir,
@@ -1647,28 +1603,46 @@ public class FileUtils
     }
 
     /**
-     * Copy a directory to an other one.
+     * Copy the contents of a directory into another one.
      *
-     * @param sourceDirectory      the source dir
-     * @param destinationDirectory the target dir
+     * @param sourceDirectory the source directory. If the source does not exist,
+     *     the method simply returns.
+     * @param destinationDirectory the target directory; will be created if it doesn't exist
      * @throws IOException if any
+     * @deprecated use {@code org.apache.commons.io.FileUtils.copyDirectory()}
      */
+    @Deprecated
     public static void copyDirectory( @Nonnull File sourceDirectory, @Nonnull File destinationDirectory )
         throws IOException
     {
-        copyDirectory( sourceDirectory, destinationDirectory, "**", null );
+        Objects.requireNonNull( sourceDirectory );
+        Objects.requireNonNull( destinationDirectory );
+        if ( destinationDirectory.equals( sourceDirectory ) )
+        {
+            throw new IOException( "Can't copy directory " + sourceDirectory + " to itself." );
+        }
+        else if ( !destinationDirectory.exists() )
+        {
+            if ( !destinationDirectory.mkdirs() )
+            {
+                throw new IOException( "Can't create directory " + destinationDirectory );
+            }
+        }
+        copyDirectoryStructure( sourceDirectory, destinationDirectory );
     }
 
     /**
-     * Copy a directory to an other one.
+     * Copy the contents of a directory into another one.
      *
-     * @param sourceDirectory      the source dir
-     * @param destinationDirectory the target dir
-     * @param includes             include pattern
-     * @param excludes             exlucde pattern
-     * @throws IOException if any
+     * @param sourceDirectory      the source directory
+     * @param destinationDirectory the target directory
+     * @param includes             Ant include pattern
+     * @param excludes             Ant exclude pattern
+     * @throws IOException if the source is a file or cannot be copied
      * @see #getFiles(File, String, String)
+     * @deprecated use {@code org.apache.commons.io.FileUtils.copyDirectory()}
      */
+    @Deprecated
     public static void copyDirectory( @Nonnull File sourceDirectory, @Nonnull File destinationDirectory,
                                       @Nullable String includes, @Nullable String excludes )
         throws IOException
@@ -1676,6 +1650,10 @@ public class FileUtils
         if ( !sourceDirectory.exists() )
         {
             return;
+        }
+        else if ( !sourceDirectory.isDirectory() )
+        {
+            throw new IOException( sourceDirectory + " is not a directory." );
         }
 
         List<File> files = getFiles( sourceDirectory, includes, excludes );
@@ -1687,18 +1665,20 @@ public class FileUtils
     }
 
     /**
-     * Copies a entire directory structure.
+     * Copies an entire directory structure.
      * <p/>
      * Note:
      * <ul>
      * <li>It will include empty directories.
-     * <li>The <code>sourceDirectory</code> must exists.
+     * <li>The <code>sourceDirectory</code> must exist.
      * </ul>
      *
-     * @param sourceDirectory      the source dir
-     * @param destinationDirectory the target dir
+     * @param sourceDirectory the existing directory to be copied
+     * @param destinationDirectory the new directory to be created
      * @throws IOException if any
+     * @deprecated use {@code org.apache.commons.io.FileUtils.copyDirectory()}
      */
+    @Deprecated
     public static void copyDirectoryStructure( @Nonnull File sourceDirectory, @Nonnull File destinationDirectory )
         throws IOException
     {
@@ -1728,7 +1708,7 @@ public class FileUtils
 
         if ( !sourceDirectory.exists() )
         {
-            throw new IOException( "Source directory doesn't exists (" + sourceDirectory.getAbsolutePath() + ")." );
+            throw new IOException( "Source directory doesn't exist (" + sourceDirectory.getAbsolutePath() + ")." );
         }
 
         File[] files = sourceDirectory.listFiles();
@@ -1796,7 +1776,9 @@ public class FileUtils
      * @param to   the new file name
      * @throws IOException if anything bad happens during this process.
      *                     Note that <code>to</code> may have been deleted already when this happens.
+     * @deprecated use {@code java.nio.Files.move()}
      */
+    @Deprecated
     public static void rename( @Nonnull File from, @Nonnull File to )
         throws IOException
     {
@@ -1827,23 +1809,24 @@ public class FileUtils
      * <p>The file denoted by the returned abstract pathname did not
      * exist before this method was invoked, any subsequent invocation
      * of this method will yield a different file name.</p>
-     * <p/>
+     * <p>
      * The filename is prefixNNNNNsuffix where NNNN is a random number
      * </p>
-     * <p>This method is different to {@link File#createTempFile(String, String, File)} of JDK 1.2
+     * <p>This method is different to {@link File#createTempFile(String, String, File)}
      * as it doesn't create the file itself.
      * It uses the location pointed to by java.io.tmpdir
-     * when the parentDir attribute is
-     * null.</p>
-     * <p>To delete automatically the file created by this method, use the
+     * when the parentDir attribute is null.</p>
+     * <p>To automatically delete the file created by this method, use the
      * {@link File#deleteOnExit()} method.</p>
      *
      * @param prefix    prefix before the random number
      * @param suffix    file extension; include the '.'
-     * @param parentDir Directory to create the temporary file in <code>-java.io.tmpdir</code>
-     *                  used if not specificed
+     * @param parentDir directory to create the temporary file in <code>-java.io.tmpdir</code>
+     *                  used if not specified
      * @return a File reference to the new temporary file.
+     * @deprecated use {@code java.nio.Files.createTempFile()}
      */
+    @Deprecated
     public static File createTempFile( @Nonnull String prefix, @Nonnull String suffix, @Nullable File parentDir )
     {
         File result;
@@ -1876,7 +1859,7 @@ public class FileUtils
     }
 
     /**
-     * <b>If wrappers is null or empty, the file will be copy only if to.lastModified() < from.lastModified()</b>
+     * <b>If wrappers is null or empty, the file will be copied only if to.lastModified() < from.lastModified()</b>
      *
      * @param from     the file to copy
      * @param to       the destination file
@@ -1893,13 +1876,12 @@ public class FileUtils
 
     /**
      * Wrapper class for Filter.
-     *
      */
     public abstract static class FilterWrapper
     {
         /**
          * @param fileReader {@link Reader}
-         * @return The Reader instance.
+         * @return the Reader instance
          */
         public abstract Reader getReader( Reader fileReader );
     }
@@ -1912,65 +1894,150 @@ public class FileUtils
      * @param to the destination file
      * @param encoding the file output encoding (only if wrappers is not empty)
      * @param wrappers array of {@link FilterWrapper}
-     * @param overwrite if true and f wrappers is null or empty, the file will be copy enven if to.lastModified() <
-     *            from.lastModified()
+     * @param overwrite if true and wrappers is null or empty, the file will be copied even if
+     *         to.lastModified() < from.lastModified()
      * @throws IOException if an IO error occurs during copying or filtering
      */
     public static void copyFile( @Nonnull File from, @Nonnull File to, @Nullable String encoding,
                                  @Nullable FilterWrapper[] wrappers, boolean overwrite )
         throws IOException
     {
-        if ( wrappers != null && wrappers.length > 0 )
+        if ( wrappers == null || wrappers.length == 0 )
         {
-            // buffer so it isn't reading a byte at a time!
-            Reader fileReader = null;
-            Writer fileWriter = null;
-            try
-            {
-                if ( encoding == null || encoding.length() < 1 )
-                {
-                    fileReader = new BufferedReader( new FileReader( from ) );
-                    fileWriter = new FileWriter( to );
-                }
-                else
-                {
-                    fileReader = new BufferedReader( new InputStreamReader( new FileInputStream( from ), encoding ) );
-                    fileWriter = new OutputStreamWriter( new FileOutputStream( to ), encoding );
-                }
-
-                for ( FilterWrapper wrapper : wrappers )
-                {
-                    fileReader = wrapper.getReader( fileReader );
-                }
-
-                IOUtil.copy( fileReader, fileWriter );
-                fileWriter.close();
-                fileWriter = null;
-                fileReader.close();
-                fileReader = null;
-            }
-            finally
-            {
-                IOUtil.close( fileReader );
-                IOUtil.close( fileWriter );
-            }
-        }
-        else
-        {
-            if ( to.lastModified() < from.lastModified() || overwrite )
+            if ( overwrite || to.lastModified() < from.lastModified() )
             {
                 copyFile( from, to );
             }
         }
+        else
+        {
+            Charset charset = charset( encoding );
+
+            // buffer so it isn't reading a byte at a time!
+            try ( Reader fileReader = Files.newBufferedReader( from.toPath(), charset ) )
+            {
+                Reader wrapped = fileReader;
+                for ( FilterWrapper wrapper : wrappers )
+                {
+                    wrapped = wrapper.getReader( wrapped );
+                }
+
+                if ( overwrite || !to.exists() )
+                {
+                    try ( Writer fileWriter = Files.newBufferedWriter( to.toPath(), charset ) )
+                    {
+                        IOUtil.copy( wrapped, fileWriter );
+                    }
+                }
+                else
+                {
+                    CharsetEncoder encoder = charset.newEncoder();
+
+                    int totalBufferSize = FILE_COPY_BUFFER_SIZE;
+
+                    int charBufferSize = ( int ) Math.floor( totalBufferSize / ( 2 + 2 * encoder.maxBytesPerChar() ) );
+                    int byteBufferSize = ( int ) Math.ceil( charBufferSize * encoder.maxBytesPerChar() );
+
+                    CharBuffer newChars = CharBuffer.allocate( charBufferSize );
+                    ByteBuffer newBytes = ByteBuffer.allocate( byteBufferSize );
+                    ByteBuffer existingBytes = ByteBuffer.allocate( byteBufferSize );
+
+                    CoderResult coderResult;
+                    int existingRead;
+                    boolean writing = false;
+
+                    try ( final RandomAccessFile existing = new RandomAccessFile( to, "rw" ) )
+                    {
+                        int n;
+                        while ( -1 != ( n = wrapped.read( newChars ) ) )
+                        {
+                            ( ( Buffer ) newChars ).flip();
+
+                            coderResult = encoder.encode( newChars, newBytes, n != 0 );
+                            if ( coderResult.isError() )
+                            {
+                                coderResult.throwException();
+                            }
+
+                            ( ( Buffer ) newBytes ).flip();
+
+                            if ( !writing )
+                            {
+                                existingRead = existing.read( existingBytes.array(), 0, newBytes.remaining() );
+                                ( ( Buffer ) existingBytes ).position( existingRead );
+                                ( ( Buffer ) existingBytes ).flip();
+
+                                if ( newBytes.compareTo( existingBytes ) != 0 )
+                                {
+                                    writing = true;
+                                    if ( existingRead > 0 )
+                                    {
+                                        existing.seek( existing.getFilePointer() - existingRead );
+                                    }
+                                }
+                            }
+
+                            if ( writing )
+                            {
+                                existing.write( newBytes.array(), 0, newBytes.remaining() );
+                            }
+
+                            ( ( Buffer ) newChars ).clear();
+                            ( ( Buffer ) newBytes ).clear();
+                            ( ( Buffer ) existingBytes ).clear();
+                        }
+
+                        if ( existing.length() > existing.getFilePointer() )
+                        {
+                            existing.setLength( existing.getFilePointer() );
+                        }
+                    }
+                }
+            }
+        }
+
+        copyFilePermissions( from, to );
     }
 
     /**
-     * Note: the file content is read with platform encoding
+     * Attempts to copy file permissions from the source to the destination file.
+     * Initially attempts to copy posix file permissions, assuming that the files are both on posix filesystems.
+     * If the initial attempts fail then a second attempt using less precise permissions model.
+     * Note that permissions are copied on a best-efforts basis,
+     * failure to copy permissions will not result in an exception.
+     *
+     * @param source the file to copy permissions from.
+     * @param destination the file to copy permissions to.
+     */
+    private static void copyFilePermissions( @Nonnull File source, @Nonnull File destination )
+        throws IOException
+    {
+        try
+        {
+            // attempt to copy posix file permissions
+            Files.setPosixFilePermissions(
+                destination.toPath(),
+                Files.getPosixFilePermissions( source.toPath() )
+            );
+        }
+        catch ( UnsupportedOperationException e )
+        {
+            // fallback to setting partial permissions
+            destination.setExecutable( source.canExecute() );
+            destination.setReadable( source.canRead() );
+            destination.setWritable( source.canWrite() );
+        }
+    }
+
+    /**
+     * Note: the file content is read with platform encoding.
      *
      * @param file the file
      * @return a List containing every every line not starting with # and not empty
      * @throws IOException if any
+     * @deprecated assumes the platform default character set
      */
+    @Deprecated
     @Nonnull public static List<String> loadFile( @Nonnull File file )
         throws IOException
     {
@@ -1978,31 +2045,38 @@ public class FileUtils
 
         if ( file.exists() )
         {
-            BufferedReader reader = null;
-            try
+            try ( BufferedReader reader = Files.newBufferedReader( file.toPath(), Charset.defaultCharset() ) )
             {
-                reader = new BufferedReader( new FileReader( file ) );
-
                 for ( String line = reader.readLine(); line != null; line = reader.readLine() )
                 {
                     line = line.trim();
-
                     if ( !line.startsWith( "#" ) && line.length() != 0 )
                     {
                         lines.add( line );
                     }
                 }
-
-                reader.close();
-                reader = null;
-            }
-            finally
-            {
-                IOUtil.close( reader );
             }
         }
 
         return lines;
+
+    }
+
+    /**
+     * Returns the named charset or the default charset.
+     * @param encoding the name or alias of the charset, null or empty
+     * @return A charset object for the named or default charset.
+     */
+    private static Charset charset( String encoding )
+    {
+        if ( encoding == null || encoding.isEmpty() )
+        {
+            return Charset.defaultCharset();
+        }
+        else
+        {
+            return Charset.forName( encoding );
+        }
     }
 
     /**
@@ -2035,66 +2109,59 @@ public class FileUtils
     /**
      * Checks whether a given file is a symbolic link.
      *
-     * This only works reliably on java7 and higher. For earlier version we use a highly crappy heuristic
-     * that mostly does not work.
-     * <p>
-     * It doesn't really test for symbolic links but whether the canonical and absolute paths of the file are identical
-     * - this may lead to false positives on some platforms.
-     * </p>
-     *
      * @param file the file to check
      * @throws IOException in case of failure.
      * @return true if symbolic link false otherwise.
-     *
+     * @deprecated use {@code java.nio.file.Files.isSymbolicLink(file.toPath())}
      */
+    @Deprecated
     public static boolean isSymbolicLink( @Nonnull final File file )
         throws IOException
     {
-        if ( Java7Support.isAtLeastJava7() )
-        {
-            return Java7Support.isSymLink( file );
-        }
-        return isSymbolicLinkLegacy( file );
+        return Files.isSymbolicLink( file.toPath() );
     }
 
     /**
      * Checks whether a given file is a symbolic link.
      *
      * @param file the file to check
-     * @return true if and only if we reliably can say this is a symlink. This will
-     *         always return false for java versions prior to 1.7.
+     * @return true if and only if we reliably can say this is a symlink
      *
-     * @throws IOException in case of failure.
+     * @throws IOException in case of failure
+     * @deprecated use {@code java.nio.file.Files.isSymbolicLink(file.toPath())}
      */
+    @Deprecated
     public static boolean isSymbolicLinkForSure( @Nonnull final File file )
         throws IOException
     {
-        return Java7Support.isAtLeastJava7() && Java7Support.isSymLink( file );
+        return Files.isSymbolicLink( file.toPath() );
     }
 
     /**
-     * Checks whether a given file is a symbolic link.
-     * <p>
-     * It doesn't really test for symbolic links but whether the canonical and absolute
-     * paths of the file are identical - this may lead to false positives on some platforms.
-     *
-     * It also returns true for any file that has been reached via a symbolic link,
-     * if you decide to traverse into the symlink.
-     *
-     * As can be seen from the "return" clause of this method, there is really no
-     * guarantee of any sort from this method. Small wonder this ever got used for
-     * anything.
-     * </p>
-     *
-     * @param file the file to check
-     * @return true if the file is a symbolic link or if we're on some crappy os.
-     *         false if the file is not a symlink or we're not able to detect it.
+     * Create a new symbolic link, possibly replacing an existing symbolic link.
+     * 
+     * @param symlink the link name
+     * @param target the target
+     * @return the linked file
+     * @throws IOException in case of an error
+     * @see {@code java.nio.file.Files.createSymbolicLink(Path)} which creates a new
+     *         symbolic link but does not replace existing symbolic links
      */
-    static boolean isSymbolicLinkLegacy( @Nonnull final File file )
-        throws IOException
+    @Nonnull public static File createSymbolicLink( @Nonnull File symlink,  @Nonnull File target )
+            throws IOException
     {
-        final File canonical = new File( file.getCanonicalPath() );
-        return !file.getAbsolutePath().equals( canonical.getPath() );
-    }
+        final Path symlinkPath = symlink.toPath();
 
+        if ( Files.exists( symlinkPath ) )
+        {
+            if ( target.equals( Files.readSymbolicLink( symlinkPath ).toFile() ) )
+            {
+                return symlink;
+            }
+
+            Files.delete( symlinkPath );
+        }
+
+        return Files.createSymbolicLink( symlinkPath, target.toPath() ).toFile();
+    }
 }

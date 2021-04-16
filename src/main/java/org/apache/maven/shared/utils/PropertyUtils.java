@@ -29,37 +29,35 @@ import java.util.Properties;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.apache.maven.shared.utils.io.IOUtil;
-
 /**
- *
+ * Static utility methods for loading properties.
  */
 public class PropertyUtils
 {
 
     /**
      * The constructor.
+     *
+     * @deprecated This is a utility class with only static methods. Don't create instances of it.
      */
+    @Deprecated
     public PropertyUtils()
     {
-        // should throw new IllegalAccessError( "Utility class" );
     }
 
     /**
-     * @param url The URL which should be used to load the properties.
-     *
-     * @return The loaded properties.
-     *
-     * @deprecated As of 3.1.0, please use method {@link #loadOptionalProperties(java.net.URL)}. This method should not
-     * be used as it suppresses exceptions silently when loading properties fails and returns {@code null} instead of an
-     * empty {@code Properties} instance when the given {@code URL} is {@code null}.
+     * @param url the URL which should be used to load the properties
+     * @return the loaded properties
+     * @deprecated use {@link #loadOptionalProperties(java.net.URL)} instead. This method should not
+     *             be used as it suppresses exceptions silently when loading properties fails and returns {@code null}
+     *             instead of an empty {@code Properties} instance when the given {@code URL} is {@code null}.
      */
     @Deprecated
     public static java.util.Properties loadProperties( @Nonnull URL url )
     {
-        try
+        try ( InputStream in = url.openStream() )
         {
-            return loadProperties( url.openStream() );
+            return loadProperties( in );
         }
         catch ( Exception e )
         {
@@ -69,20 +67,18 @@ public class PropertyUtils
     }
 
     /**
-     * @param file The file from which the properties will be loaded.
-     *
-     * @return The loaded properties.
-     *
-     * @deprecated As of 3.1.0, please use method {@link #loadOptionalProperties(java.io.File)}. This method should not
-     * be used as it suppresses exceptions silently when loading properties fails and returns {@code null} instead of an
-     * empty {@code Properties} instance when the given {@code File} is {@code null}.
+     * @param file the file from which the properties will be loaded
+     * @return the loaded properties
+     * @deprecated use {@link #loadOptionalProperties(java.io.File)} instead. This method should not
+     *             be used as it suppresses exceptions silently when loading properties fails and returns {@code null}
+     *             instead of an empty {@code Properties} instance when the given {@code File} is {@code null}.
      */
     @Deprecated
     public static Properties loadProperties( @Nonnull File file )
     {
-        try
+        try  ( InputStream in = new FileInputStream( file ) )
         {
-            return loadProperties( new FileInputStream( file ) );
+            return loadProperties( in );
         }
         catch ( Exception e )
         {
@@ -92,25 +88,26 @@ public class PropertyUtils
     }
 
     /**
+     * Loads {@code Properties} from an {@code InputStream} and closes the stream.
+     * In a future release, this will no longer close the stream, so callers
+     * should close the stream themselves.  
+     * 
      * @param is {@link InputStream}
-     *
-     * @return The loaded properties.
-     *
-     * @deprecated As of 3.1.0, please use method {@link #loadOptionalProperties(java.io.InputStream)}. This method
-     * should not be used as it suppresses exceptions silently when loading properties fails.
+     * @return the loaded properties
+     * @deprecated use {@link #loadOptionalProperties(java.io.InputStream)} instead. This method
+     *             should not be used as it suppresses exceptions silently when loading properties fails.
      */
     @Deprecated
     public static Properties loadProperties( @Nullable InputStream is )
     {
         try
         {
-            // to make this the same behaviour as the others we should really return null on any error
             Properties result = new Properties();
             if ( is != null )
             {
-                try
+                try ( InputStream in = is )
                 {
-                    result.load( is );
+                    result.load( in );
                 }
                 catch ( IOException e )
                 {
@@ -123,131 +120,99 @@ public class PropertyUtils
         {
             // ignore
         }
-        finally
-        {
-            IOUtil.close( is );
-        }
         return null;
     }
 
     /**
      * Loads {@code Properties} from a given {@code URL}.
      * <p>
-     * If the given {@code URL} is not {@code null}, it is asserted to represent a valid and loadable properties
-     * resource.
+     * If the given {@code URL} is {@code null} or the properties can't be read, an empty properties object is returned.
      * </p>
      *
-     * @param url The {@code URL} of the properties resource to load or {@code null}.
-     *
-     * @return The loaded properties or an empty {@code Properties} instance if {@code url} is {@code null}.
-     *
+     * @param url the {@code URL} of the properties resource to load or {@code null}
+     * @return the loaded properties or an empty {@code Properties} instance if properties fail to load
      * @since 3.1.0
      */
-    @Nonnull public static Properties loadOptionalProperties( final @Nullable URL url )
+    @Nonnull
+    public static Properties loadOptionalProperties( final @Nullable URL url )
     {
-        InputStream in = null;
-        try
-        {
-            final Properties properties = new Properties();
 
-            if ( url != null )
+        Properties properties = new Properties();
+        if ( url != null )
+        {
+            try ( InputStream in = url.openStream() )
             {
-                in = url.openStream();
                 properties.load( in );
-                in.close();
-                in = null;
             }
-
-            return properties;
+            catch ( IllegalArgumentException | IOException ex )
+            {
+                // ignore and return empty properties
+            }
         }
-        catch ( final IOException e )
-        {
-            throw new AssertionError( e );
-        }
-        finally
-        {
-            IOUtil.close( in );
-        }
+        return properties;
     }
 
     /**
-     * Loads {@code Properties} from a given {@code File}.
+     * Loads {@code Properties} from a {@code File}.
      * <p>
-     * If the given {@code File} is not {@code null}, it is asserted to represent a valid and loadable properties
-     * resource.
+     * If the given {@code File} is {@code null} or the properties file can't be read, an empty properties object is
+     * returned.
      * </p>
      *
-     * @param file The {@code File} of the properties resource to load or {@code null}.
-     *
-     * @return The loaded properties or an empty {@code Properties} instance if {@code file} is {@code null}.
-     *
+     * @param file the {@code File} of the properties resource to load or {@code null}
+     * @return the loaded properties or an empty {@code Properties} instance if properties fail to load
      * @since 3.1.0
      */
-    @Nonnull public static Properties loadOptionalProperties( final @Nullable File file )
+    @Nonnull
+    public static Properties loadOptionalProperties( final @Nullable File file )
     {
-        InputStream in = null;
-        try
+        Properties properties = new Properties();
+        if ( file != null )
         {
-            final Properties properties = new Properties();
-
-            if ( file != null )
+            try ( InputStream in = new FileInputStream( file ) )
             {
-                in = new FileInputStream( file );
                 properties.load( in );
-                in.close();
-                in = null;
             }
+            catch ( IllegalArgumentException | IOException ex )
+            {
+                // ignore and return empty properties
+            }
+        }
 
-            return properties;
-        }
-        catch ( final IOException e )
-        {
-            throw new AssertionError( e );
-        }
-        finally
-        {
-            IOUtil.close( in );
-        }
+        return properties;
+
     }
 
     /**
-     * Loads {@code Properties} from a given {@code InputStream}.
-     * <p>
-     * If the given {@code InputStream} is not {@code null}, it is asserted to represent a valid and loadable properties
-     * resource.
-     * </p>
+     * Loads {@code Properties} from an {@code InputStream} and closes the stream.
+     * If the given {@code InputStream} is {@code null} or the properties can't be read, an empty properties object is
+     * returned. In a future release, this will no longer close the stream, so callers
+     * should close the stream themselves.  
      *
-     * @param inputStream The {@code InputStream} of the properties resource to load or {@code null}.
-     *
-     * @return The loaded properties or an empty {@code Properties} instance if {@code inputStream} is {@code null}.
-     *
+     * @param inputStream the properties resource to load or {@code null}
+     * @return the loaded properties or an empty {@code Properties} instance if properties fail to load
      * @since 3.1.0
      */
-    @Nonnull public static Properties loadOptionalProperties( final @Nullable InputStream inputStream )
+    @Nonnull
+    public static Properties loadOptionalProperties( final @Nullable InputStream inputStream )
     {
-        InputStream in = null;
-        try
-        {
-            final Properties properties = new Properties();
 
-            if ( inputStream != null )
+        Properties properties = new Properties();
+
+        if ( inputStream != null )
+        {
+            try ( InputStream in = inputStream ) // reassign inputStream to autoclose
             {
-                in = inputStream;
                 properties.load( in );
-                in.close();
-                in = null;
             }
+            catch ( IllegalArgumentException | IOException ex )
+            {
+                // ignore and return empty properties
+            }
+        }
 
-            return properties;
-        }
-        catch ( final IOException e )
-        {
-            throw new AssertionError( e );
-        }
-        finally
-        {
-            IOUtil.close( in );
-        }
+        return properties;
+
     }
 
 }
