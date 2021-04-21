@@ -20,9 +20,8 @@ package org.apache.maven.shared.utils.xml;
  */
 
 import java.io.IOException;
-
-import javax.swing.text.html.HTML;
 import java.io.StringWriter;
+import javax.swing.text.html.HTML;
 
 import org.apache.maven.shared.utils.StringUtils;
 import org.junit.Assert;
@@ -32,12 +31,24 @@ import org.junit.Test;
  * Test of {@link PrettyPrintXMLWriter}
  *
  * @author <a href="mailto:vincent.siveton@gmail.com">Vincent Siveton</a>
- *
  */
 public class PrettyPrintXmlWriterTest
 {
-    private StringWriter w = new StringWriter();
+    private StringWriter w = new StringWriter();;
     private PrettyPrintXMLWriter writer = new PrettyPrintXMLWriter( w );
+    
+    @Test
+    public void testNoStartTag() throws IOException
+    {
+        
+        try {
+            writer.startElement( "" );
+            Assert.fail( "allowed empty name" );
+        } catch ( IllegalArgumentException ex ) {
+            Assert.assertEquals( "Element name cannot be empty", ex.getMessage() );
+        }
+        
+    }
     
     @Test
     public void testDefaultPrettyPrintXMLWriter() throws IOException
