@@ -28,7 +28,7 @@ import org.apache.maven.shared.utils.StringUtils;
 
 /**
  * Class that abstracts the Shell functionality,
- * with subclasses for shells that behave particularly, like<p>
+ * with subclasses for shells that behave particularly, like
  * 
  * <ul>
  * <li><code>command.com</code></li>

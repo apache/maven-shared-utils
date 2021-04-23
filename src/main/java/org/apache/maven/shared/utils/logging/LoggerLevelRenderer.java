@@ -28,26 +28,30 @@ package org.apache.maven.shared.utils.logging;
 public interface LoggerLevelRenderer
 {
     /**
-     * Render DEBUG level.
-     * By default, bold cyan
+     * Render a message at DEBUG level.
+     * @param message the message to render.
+     * @return the formatted message.
      */
-    String debug( String level );
+    String debug( String message );
     
     /**
-     * Render INFO level.
-     * By default, bold blue
+     * Render a message at INFO level.
+     * @param message the message to render.
+     * @return the formatted message.
      */
-    String info( String level );
+    String info( String message );
     
     /**
-     * Render WARNING level.
-     * By default, bold yellow
+     * Render a message at WARNING level.
+     * @param message the message to render.
+     * @return the formatted message.
      */
-    String warning( String level );
+    String warning( String message );
     
     /**
-     * Render ERROR level.
-     * By default, bold red
+     * Render a message at ERROR level.
+     * @param message the message to render.
+     * @return the formatted message.
      */
-    String error( String level );
+    String error( String message );
 }

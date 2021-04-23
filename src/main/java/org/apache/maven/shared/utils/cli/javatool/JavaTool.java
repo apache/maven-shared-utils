@@ -20,26 +20,23 @@ package org.apache.maven.shared.utils.cli.javatool;
  */
 
 /**
- * Describes a java tool, means a executable available in the jdk.
- * <p/>
- * The name of the tool ({@link #getJavaToolName()}) reflects the name of the executable that should exists as an
- * executable in the jdk, like {@code jarsigner, keytool, javadoc, ...}.
- * <p/>
- * An abstract implementation of the {@link JavaTool} named {@link AbstractJavaTool} use the command line API to execute
- * any user requests of this tool.
+ * <p>Describes a java tool, means a executable available in the jdk.</p>
+ * <p>The name of the tool ({@link #getJavaToolName()}) reflects the name of the executable that should exists as an
+ * executable in the jdk, like {@code jarsigner, keytool, javadoc, ...}.</p>
+ * <p>An abstract implementation of the {@link JavaTool} named {@link AbstractJavaTool} use the command line API to
+ * execute any user requests of this tool.</p>
  *
- * @author Tony Chemit <chemit@codelutin.com>
+ * @author <a href="mailto:chemit@codelutin.com">Tony Chemit</a>
  * @since 0.5
- * @param <Request>
+ * @param <Request> Tool-specific request type
  */
 public interface JavaTool<Request extends JavaToolRequest>
 {
 
     /**
-     * Return the name of the java tool. This is exactly the name (without his extension) of the executable to
-     * find in the {@code jdk/bin} directory.
-     * <p/>
-     * For example: {@code jarsigner, keytool, javadoc, ...}
+     * <p>Return the name of the java tool. This is exactly the name (without his extension) of the executable to
+     * find in the {@code jdk/bin} directory.</p>
+     * <p>For example: {@code jarsigner, keytool, javadoc, ...}</p>
      *
      * @return the name of the java tool.
      */
@@ -55,13 +52,11 @@ public interface JavaTool<Request extends JavaToolRequest>
     void setToolchain( Object toolchain );
 
     /**
-     * Execute the input request and then returns the result of the execution.
-     * <p/>
-     * If could not create the java tool invocation, a {@link JavaToolException} will be thrown.
-     * <p/>
-     * If execution fails, then the result will have a none-zero {@link JavaToolResult#getExitCode()} and his
+     * <p>Execute the input request and then returns the result of the execution.</p>
+     * <p>If could not create the java tool invocation, a {@link JavaToolException} will be thrown.</p>
+     * <p>If execution fails, then the result will have a none-zero {@link JavaToolResult#getExitCode()} and his
      * {@link JavaToolResult#getExecutionException()} will be filled with the error, otherwise the exist code will be
-     * zero.
+     * zero.</p>
      *
      * @param request the request to perform
      * @return the result of the tool execution

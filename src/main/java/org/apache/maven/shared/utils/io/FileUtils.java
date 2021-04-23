@@ -61,28 +61,28 @@ import java.util.Random;
  *
  * <h3>Path-related methods</h3>
  * 
- * <p>Methods exist to retrieve the components of a typical file path. For example
+ * Methods exist to retrieve the components of a typical file path. For example
  * <code>/www/hosted/mysite/index.html</code>, can be broken into:
  * <ul>
  * <li><code>/www/hosted/mysite/index</code> -- retrievable through {@link #removeExtension}</li>
  * <li><code>html</code> -- retrievable through {@link #getExtension}</li>
  * </ul>
- * </p>
- * <p/>
+ *
  * <h3>File-related methods</h3>
  * 
- * There are methods to create a {@link #toFile File from a URL}, copy a
+ * <p>There are methods to create a {@link #toFile File from a URL}, copy a
  * {@link #copyFile File to another File},
  * copy a {@link #copyURLToFile URL's contents to a File},
  * as well as methods to {@link #deleteDirectory(File) delete} and {@link #cleanDirectory(File)
  * clean} a directory.
- * <p/>
- * Common {@link java.io.File} manipulation routines.
- * <p/>
+ * </p>
+ * <p>Common {@link java.io.File} manipulation routines.</p>
+ * <p>
  * Taken from the commons-utils repo.
  * Also code from Alexandria's FileUtils.
  * And from Avalon Excalibur's IO.
  * And from Ant.
+ * </p>
  *
  * @author <a href="mailto:burton@relativity.yi.org">Kevin A. Burton</A>
  * @author <a href="mailto:sanders@apache.org">Scott Sanders</a>
@@ -482,8 +482,8 @@ public class FileUtils
 
     /**
      * Given a directory and an array of extensions return an array of compliant files.
-     * <p/>
-     * The given extensions should be like "java" and not like ".java".
+     *
+     * <p>The given extensions should be like "java" and not like ".java".</p>
      *
      * @param directory  the path of the directory
      * @param extensions an array of expected extensions
@@ -688,9 +688,9 @@ public class FileUtils
     /**
      * Remove extension from a path. E.g.
      * <pre>
-     * foo.txt    --> foo
-     * a\b\c.jpg --> a\b\c
-     * a\b\c     --> a\b\c
+     * foo.txt    &rarr; foo
+     * a\b\c.jpg  &rarr; a\b\c
+     * a\b\c      &rarr; a\b\c
      * </pre>
      *
      * @param filename the path of the file
@@ -715,9 +715,9 @@ public class FileUtils
      * Get extension from a path. E.g.
      *
      * <pre>
-     * foo.txt    --> "txt"
-     * a\b\c.jpg --> "jpg"
-     * a\b\c     --> ""
+     * foo.txt    &rarr; "txt"
+     * a\b\c.jpg  &rarr; "jpg"
+     * a\b\c      &rarr; ""
      * </pre>
      *
      * @param filename the path of the file
@@ -962,13 +962,13 @@ public class FileUtils
      * root.
      * Eg:
      * <pre>
-     * /foo//               -->     /foo/
-     * /foo/./              -->     /foo/
-     * /foo/../bar          -->     /bar
-     * /foo/../bar/         -->     /bar/
-     * /foo/../bar/../baz   -->     /baz
-     * //foo//./bar         -->     /foo/bar
-     * /../                 -->     null
+     * /foo//               &rarr;     /foo/
+     * /foo/./              &rarr;     /foo/
+     * /foo/../bar          &rarr;     /bar
+     * /foo/../bar/         &rarr;     /bar/
+     * /foo/../bar/../baz   &rarr;     /baz
+     * //foo//./bar         &rarr;     /foo/bar
+     * /../                 &rarr;     null
      * </pre>
      *
      * @param path the path to normalize
@@ -1666,8 +1666,7 @@ public class FileUtils
 
     /**
      * Copies an entire directory structure.
-     * <p/>
-     * Note:
+     * <p>Note:</p>
      * <ul>
      * <li>It will include empty directories.
      * <li>The <code>sourceDirectory</code> must exist.
@@ -1766,7 +1765,6 @@ public class FileUtils
 
     /**
      * Renames a file, even if that involves crossing file system boundaries.
-     * <p/>
      * <p>This will remove <code>to</code> (if it exists), ensure that
      * <code>to</code>'s parent directory exists and move
      * <code>from</code>, which involves deleting <code>from</code> as
@@ -1804,8 +1802,7 @@ public class FileUtils
     }
 
     /**
-     * Create a temporary file in a given directory.
-     * <p/>
+     * <p>Create a temporary file in a given directory.</p>
      * <p>The file denoted by the returned abstract pathname did not
      * exist before this method was invoked, any subsequent invocation
      * of this method will yield a different file name.</p>
@@ -1859,7 +1856,7 @@ public class FileUtils
     }
 
     /**
-     * <b>If wrappers is null or empty, the file will be copied only if to.lastModified() < from.lastModified()</b>
+     * <b>If wrappers is null or empty, the file will be copied only if to.lastModified() &lt; from.lastModified()</b>
      *
      * @param from     the file to copy
      * @param to       the destination file
@@ -1887,7 +1884,7 @@ public class FileUtils
     }
 
     /**
-     * <b>If wrappers is null or empty, the file will be copy only if to.lastModified() < from.lastModified() or if
+     * <b>If wrappers is null or empty, the file will be copy only if to.lastModified() &lt; from.lastModified() or if
      * overwrite is true</b>
      *
      * @param from the file to copy
@@ -1895,7 +1892,7 @@ public class FileUtils
      * @param encoding the file output encoding (only if wrappers is not empty)
      * @param wrappers array of {@link FilterWrapper}
      * @param overwrite if true and wrappers is null or empty, the file will be copied even if
-     *         to.lastModified() < from.lastModified()
+     *         to.lastModified() &lt; from.lastModified()
      * @throws IOException if an IO error occurs during copying or filtering
      */
     public static void copyFile( @Nonnull File from, @Nonnull File to, @Nullable String encoding,
@@ -2144,8 +2141,8 @@ public class FileUtils
      * @param target the target
      * @return the linked file
      * @throws IOException in case of an error
-     * @see {@code java.nio.file.Files.createSymbolicLink(Path)} which creates a new
-     *         symbolic link but does not replace existing symbolic links
+     * @see Files#createSymbolicLink(Path, Path, FileAttribute[]) which creates a new symbolic link but does
+     * not replace existing symbolic links
      */
     @Nonnull public static File createSymbolicLink( @Nonnull File symlink,  @Nonnull File target )
             throws IOException

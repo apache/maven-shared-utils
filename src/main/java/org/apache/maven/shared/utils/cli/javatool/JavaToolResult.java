@@ -25,7 +25,7 @@ import org.apache.maven.shared.utils.cli.Commandline;
 /**
  * Describes the result of a {@link JavaTool} invocation.
  *
- * @author Tony Chemit <chemit@codelutin.com>
+ * @author <a href="mailto:chemit@codelutin.com">Tony Chemit</a>
  * @since 0.5
  */
 public class JavaToolResult

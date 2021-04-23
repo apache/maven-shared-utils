@@ -32,56 +32,62 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Class for scanning a directory for files/directories which match certain criteria.
- * <p/>
+ * <p>Class for scanning a directory for files/directories which match certain criteria.</p>
+ * <p>
  * These criteria consist of selectors and patterns which have been specified. With the selectors you can select which
  * files you want to have included. Files which are not selected are excluded. With patterns you can include or exclude
  * files based on their filename.
- * <p/>
+ * </p>
+ * <p>
  * The idea is simple. A given directory is recursively scanned for all files and directories. Each file/directory is
  * matched against a set of selectors, including special support for matching against filenames with include and and
  * exclude patterns. Only files/directories which match at least one pattern of the include pattern list or other file
  * selector, and don't match any pattern of the exclude pattern list or fail to match against a required selector will
  * be placed in the list of files/directories found.
- * <p/>
+ * </p>
+ * <p>
  * When no list of include patterns is supplied, "**" will be used, which means that everything will be matched. When no
  * list of exclude patterns is supplied, an empty list is used, such that nothing will be excluded. When no selectors
  * are supplied, none are applied.
- * <p/>
+ * </p>
+ * <p>
  * The filename pattern matching is done as follows: The name to be matched is split up in path segments. A path segment
  * is the name of a directory or file, which is bounded by <code>File.separator</code> ('/' under UNIX, '\' under
  * Windows). For example, "abc/def/ghi/xyz.java" is split up in the segments "abc", "def","ghi" and "xyz.java". The same
  * is done for the pattern against which should be matched.
- * <p/>
+ * </p>
+ * <p>
  * The segments of the name and the pattern are then matched against each other. When '**' is used for a path segment in
  * the pattern, it matches zero or more path segments of the name.
- * <p/>
+ * </p>
+ * <p>
  * There is a special case regarding the use of <code>File.separator</code>s at the beginning of the pattern and the
  * string to match:<br>
  * When a pattern starts with a <code>File.separator</code>, the string to match must also start with a
  * <code>File.separator</code>. When a pattern does not start with a <code>File.separator</code>, the string to match
  * may not start with a <code>File.separator</code>. When one of these rules is not obeyed, the string will not match.
- * <p/>
+ * </p>
+ * <p>
  * When a name path segment is matched against a pattern path segment, the following special characters can be used:<br>
  * '*' matches zero or more characters<br>
  * '?' matches one character.
- * <p/>
+ * </p>
+ * <p>
  * Examples:
- * <p/>
- * "**\*.class" matches all .class files/dirs in a directory tree.
- * <p/>
- * "test\a??.java" matches all files/dirs which start with an 'a', then two more characters and then ".java", in a
- * directory called test.
- * <p/>
- * "**" matches everything in a directory tree.
- * <p/>
- * "**\test\**\XYZ*" matches all files/dirs which start with "XYZ" and where there is a parent directory called test
- * (e.g. "abc\test\def\ghi\XYZ123").
- * <p/>
+ * <ul>
+ * <li>"**\*.class" matches all .class files/dirs in a directory tree.</li>
+ * <li>"test\a??.java" matches all files/dirs which start with an 'a', then two more characters and then ".java", in a
+ * directory called test.</li>
+ * <li>"**" matches everything in a directory tree.</li>
+ * <li>"**\test\**\XYZ*" matches all files/dirs which start with "XYZ" and where there is a parent directory called test
+ * (e.g. "abc\test\def\ghi\XYZ123").</li>
+ * </ul>
+ * <p>
  * Case sensitivity may be turned off if necessary. By default, it is turned on.
- * <p/>
+ * </p>
+ * <p>
  * Example of usage:
- * <p/>
+ * </p>
  * <pre>
  * String[] includes = { &quot;**\\*.class&quot; };
  * String[] excludes = { &quot;modules\\*\\**&quot; };
@@ -98,11 +104,13 @@ import javax.annotation.Nullable;
  *     System.out.println( files[i] );
  * }
  * </pre>
- * <p/>
+ * <p>
  * This will scan a directory called test for .class files, but excludes all files in all proper subdirectories of a
  * directory called "modules"
- * <p/>
+ * </p>
+ * <p>
  * This class must not be used from multiple Threads concurrently!
+ * </p>
  *
  * @author Arnout J. Kuiper <a href="mailto:ajkuiper@wxs.nl">ajkuiper@wxs.nl</a>
  * @author Magesh Umasankar
@@ -295,8 +303,9 @@ public class DirectoryScanner
     /**
      * Sets the list of include patterns to use. All '/' and '\' characters are replaced by
      * <code>File.separatorChar</code>, so the separator used need not match <code>File.separatorChar</code>.
-     * <p/>
+     * <p>
      * When a pattern ends with a '/' or '\', "**" is appended.
+     * </p>
      *
      * @param includes A list of include patterns. May be <code>null</code>, indicating that all files should be
      *                 included. If a non-<code>null</code> list is given, all elements must be non-<code>null</code>.
@@ -326,8 +335,9 @@ public class DirectoryScanner
     /**
      * Sets the list of exclude patterns to use. All '/' and '\' characters are replaced by
      * <code>File.separatorChar</code>, so the separator used need not match <code>File.separatorChar</code>.
-     * <p/>
+     * <p>
      * When a pattern ends with a '/' or '\', "**" is appended.
+     * </p>
      *
      * @param excludes A list of exclude patterns. May be <code>null</code>, indicating that no files should be
      *                 excluded. If a non-<code>null</code> list is given, all elements must be non-<code>null</code>.
@@ -431,13 +441,15 @@ public class DirectoryScanner
      * a previously captured list of files.
      * This method will not look for a changed in content but sole in the
      * list of files given.
-     * <p/>
+     * <p>
      * The method will compare the given array of file Strings with the result
      * of the last directory scan. It will execute a {@link #scan()} if no
      * result of a previous scan could be found.
-     * <p/>
+     * </p>
+     * <p>
      * The result of the diff can be queried by the methods
      * {@link DirectoryScanResult#getFilesAdded()} and {@link DirectoryScanResult#getFilesRemoved()}
+     * </p>
      *
      * @param oldFiles the list of previously captured files names.
      * @return the result of the directory scan.

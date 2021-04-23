@@ -29,36 +29,48 @@ public interface MessageBuilder
     /**
      * Append message content in success style.
      * By default, bold green
+     * @param message the message to append
+     * @return the current builder
      */
     MessageBuilder success( Object message );
     
     /**
      * Append message content in warning style.
      * By default, bold yellow
+     * @param message the message to append
+     * @return the current builder
      */
     MessageBuilder warning( Object message );
     
     /**
      * Append message content in failure style.
      * By default, bold red
+     * @param message the message to append
+     * @return the current builder
      */
     MessageBuilder failure( Object message );
 
     /**
      * Append message content in strong style.
      * By default, bold
+     * @param message the message to append
+     * @return the current builder
      */
     MessageBuilder strong( Object message );
     
     /**
      * Append message content in mojo style.
      * By default, green
+     * @param message the message to append
+     * @return the current builder
      */
     MessageBuilder mojo( Object message );
     
     /**
      * Append message content in project style.
      * By default, cyan
+     * @param message the message to append
+     * @return the current builder
      */
     MessageBuilder project( Object message );
     
@@ -67,37 +79,55 @@ public interface MessageBuilder
     //
     /**
      * Append content to the message buffer.
+     * @param value the content to append
+     * @param offset the index of the first {@code char} to append
+     * @param len the number of {@code char}s to append
+     * @return the current builder
      */
     MessageBuilder a( char[] value, int offset, int len );
 
     /**
      * Append content to the message buffer.
+     * @param value the content to append
+     * @return the current builder
      */
     MessageBuilder a( char[] value );
 
     /**
      * Append content to the message buffer.
+     * @param value the content to append
+     * @param start the starting index of the subsequence to be appended
+     * @param end the end index of the subsequence to be appended
+     * @return the current builder
      */
     MessageBuilder a( CharSequence value, int start, int end );
 
     /**
      * Append content to the message buffer.
+     * @param value the content to append
+     * @return the current builder
      */
     MessageBuilder a( CharSequence value );
 
     /**
      * Append content to the message buffer.
+     * @param value the content to append
+     * @return the current builder
      */
     MessageBuilder a( Object value );
 
     /**
      * Append newline to the message buffer.
+     * @return the current builder
      */
     MessageBuilder newline();
 
     /**
      * Append formatted content to the buffer.
      * @see String#format(String, Object...)
+     * @param pattern a <a href="../util/Formatter.html#syntax">format string</a>
+     * @param args arguments referenced by the format specifiers in the format string.
+     * @return the current builder
      */
     MessageBuilder format( String pattern, Object... args );
 }

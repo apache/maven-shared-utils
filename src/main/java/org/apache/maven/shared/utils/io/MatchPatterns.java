@@ -40,9 +40,8 @@ public class MatchPatterns
     }
 
     /**
-     * Checks these MatchPatterns against a specified string.
-     * <p/>
-     * Uses far less string tokenization than any of the alternatives.
+     * <p>Checks these MatchPatterns against a specified string.</p>
+     * <p>Uses far less string tokenization than any of the alternatives.</p>
      *
      * @param name            The name to look for
      * @param isCaseSensitive If the comparison is case sensitive

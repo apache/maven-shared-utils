@@ -42,24 +42,24 @@ class PlainMessageBuilder
         buffer = new StringBuilder( size );
     }
 
-    public String debug( String level )
+    public String debug( String message )
     {
-        return a( level ).toString();
+        return a( message ).toString();
     }
 
-    public String info( String level )
+    public String info( String message )
     {
-        return a( level ).toString();
+        return a( message ).toString();
     }
 
-    public String warning( String level )
+    public String warning( String message )
     {
-        return a( level ).toString();
+        return a( message ).toString();
     }
 
-    public String error( String level )
+    public String error( String message )
     {
-        return a( level ).toString();
+        return a( message ).toString();
     }
 
     public PlainMessageBuilder success( Object message )

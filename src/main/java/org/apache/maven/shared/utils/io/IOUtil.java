@@ -37,12 +37,12 @@ import java.io.Writer;
 import java.nio.channels.Channel;
 
 /**
- * General IO Stream manipulation.
+ * <p>General IO Stream manipulation.</p>
  * <p>
  * This class provides static utility methods for input/output operations, particularly buffered
  * copying between sources (<code>InputStream</code>, <code>Reader</code>, <code>String</code> and
  * <code>byte[]</code>) and destinations (<code>OutputStream</code>, <code>Writer</code>,
- * <code>String</code> and <code>byte[]</code>).
+ * <code>String</code> and <code>byte[]</code>).</p>
  * 
  * <p>Unless otherwise noted, these <code>copy</code> methods do <em>not</em> flush or close the
  * streams. Often, doing so would require making non-portable assumptions about the streams' origin
@@ -837,7 +837,7 @@ public final class IOUtil
     // ----------------------------------------------------------------------
 
     /**
-     * Closes a {@code Channel} suppressing any {@code IOException}.
+     * <p>Closes a {@code Channel} suppressing any {@code IOException}.</p>
      * <p>
      * <b>Note:</b> The use case justifying this method is a shortcoming of the Java language up to but not including
      * Java 7. For any code targeting Java 7 or later use of this method is highly discouraged and the
@@ -847,7 +847,8 @@ public final class IOUtil
      * {@code finally} block incorrectly by using this method.</strong>
      * </p>
      * <p>
-     * <b>Example:</b><br/>
+     * <b>Example:</b>
+     * </p>
      * <pre>
      * // Introduce variables for the resources and initialize them to null. This cannot throw an exception.
      * Closeable resource1 = null;
@@ -921,7 +922,6 @@ public final class IOUtil
      *     // }
      * }
      * </pre>
-     * </p>
      *
      * @param channel The channel to close or {@code null}.
      * @deprecated use try-with-resources
@@ -943,7 +943,7 @@ public final class IOUtil
     }
 
     /**
-     * Closes an {@code InputStream} suppressing any {@code IOException}.
+     * <p>Closes an {@code InputStream} suppressing any {@code IOException}.</p>
      * <p>
      * <b>Note:</b> The use case justifying this method is a shortcoming of the Java language up to but not including
      * Java 7. For any code targeting Java 7 or later use of this method is highly discouraged and the
@@ -953,7 +953,8 @@ public final class IOUtil
      * {@code finally} block incorrectly by using this method.</strong>
      * </p>
      * <p>
-     * <b>Example:</b><br/>
+     * <b>Example:</b>
+     * </p>
      * <pre>
      * // Introduce variables for the resources and initialize them to null. This cannot throw an exception.
      * Closeable resource1 = null;
@@ -1027,7 +1028,6 @@ public final class IOUtil
      *     // }
      * }
      * </pre>
-     * </p>
      *
      * @param inputStream The stream to close or {@code null}.
      * @deprecated use try-with-resources
@@ -1049,7 +1049,7 @@ public final class IOUtil
     }
 
     /**
-     * Closes an {@code OutputStream} suppressing any {@code IOException}.
+     * <p>Closes an {@code OutputStream} suppressing any {@code IOException}.</p>
      * <p>
      * <b>Note:</b> The use case justifying this method is a shortcoming of the Java language up to but not including
      * Java 7. For any code targeting Java 7 or later use of this method is highly discouraged and the
@@ -1059,7 +1059,8 @@ public final class IOUtil
      * {@code finally} block incorrectly by using this method.</strong>
      * </p>
      * <p>
-     * <b>Example:</b><br/>
+     * <b>Example:</b>
+     * </p>
      * <pre>
      * // Introduce variables for the resources and initialize them to null. This cannot throw an exception.
      * Closeable resource1 = null;
@@ -1133,7 +1134,6 @@ public final class IOUtil
      *     // }
      * }
      * </pre>
-     * </p>
      *
      * @param outputStream The stream to close or {@code null}.
      * @deprecated use try-with-resources
@@ -1155,7 +1155,7 @@ public final class IOUtil
     }
 
     /**
-     * Closes a {@code Reader} suppressing any {@code IOException}.
+     * <p>Closes a {@code Reader} suppressing any {@code IOException}.</p>
      * <p>
      * <b>Note:</b> The use case justifying this method is a shortcoming of the Java language up to but not including
      * Java 7. For any code targeting Java 7 or later use of this method is highly discouraged and the
@@ -1165,7 +1165,8 @@ public final class IOUtil
      * {@code finally} block incorrectly by using this method.</strong>
      * </p>
      * <p>
-     * <b>Example:</b><br/>
+     * <b>Example:</b>
+     * </p>
      * <pre>
      * // Introduce variables for the resources and initialize them to null. This cannot throw an exception.
      * Closeable resource1 = null;
@@ -1239,7 +1240,6 @@ public final class IOUtil
      *     // }
      * }
      * </pre>
-     * </p>
      *
      * @param reader The reader to close or {@code null}.
      * @deprecated use try-with-resources
@@ -1261,7 +1261,7 @@ public final class IOUtil
     }
 
     /**
-     * Closes a {@code Writer} suppressing any {@code IOException}.
+     * <p>Closes a {@code Writer} suppressing any {@code IOException}.</p>
      * <p>
      * <b>Note:</b> The use case justifying this method is a shortcoming of the Java language up to but not including
      * Java 7. For any code targeting Java 7 or later use of this method is highly discouraged and the
@@ -1271,7 +1271,8 @@ public final class IOUtil
      * {@code finally} block incorrectly by using this method.</strong>
      * </p>
      * <p>
-     * <b>Example:</b><br/>
+     * <b>Example:</b>
+     * </p>
      * <pre>
      * // Introduce variables for the resources and initialize them to null. This cannot throw an exception.
      * Closeable resource1 = null;
@@ -1345,7 +1346,6 @@ public final class IOUtil
      *     // }
      * }
      * </pre>
-     * </p>
      *
      * @param writer The writer to close or {@code null}.
      * @deprecated use try-with-resources

@@ -28,9 +28,9 @@ import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 
 /**
- * Describes a match target for SelectorUtils.
- * <p/>
- * Significantly more efficient than using strings, since re-evaluation and re-tokenizing is avoided.
+ * <p>Describes a match target for SelectorUtils.</p>
+ * <p>
+ * Significantly more efficient than using strings, since re-evaluation and re-tokenizing is avoided.</p>
  *
  * @author Kristian Rosenvold
  * @deprecated use {@code java.nio.filejava.nio.file.DirectoryStream.Filter<T>} and related classes

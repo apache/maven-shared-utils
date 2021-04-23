@@ -22,13 +22,11 @@ package org.apache.maven.shared.utils.xml;
 import java.io.InputStream;
 
 /**
- * The XmlStreamReaderException is thrown by the XmlStreamReader constructors if the charset encoding can not be
- * determined according to the XML 1.0 specification and RFC 3023.
- * <p/>
- * The exception returns the unconsumed InputStream to allow the application to do an alternate processing with the
+ * <p>The XmlStreamReaderException is thrown by the XmlStreamReader constructors if the charset encoding can not be
+ * determined according to the XML 1.0 specification and RFC 3023.</p>
+ * <p>The exception returns the unconsumed InputStream to allow the application to do an alternate processing with the
  * stream. Note that the original InputStream given to the XmlStreamReader cannot be used as that one has been already
- * read.
- * <p/>
+ * read.</p>
  *
  * @author Alejandro Abdelnur
  * @version revision 1.1 taken on 26/06/2007 from Rome (see

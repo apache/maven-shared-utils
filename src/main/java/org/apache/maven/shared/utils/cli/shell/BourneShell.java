@@ -111,7 +111,6 @@ public class BourneShell
 
     /**
      * <p>Unify quotes in a path for the Bourne Shell.</p>
-     * <p/>
      * <pre>
      * BourneShell.quoteOneItem(null)                       = null
      * BourneShell.quoteOneItem("")                         = ''

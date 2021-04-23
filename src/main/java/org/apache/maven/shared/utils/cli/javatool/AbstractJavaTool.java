@@ -36,9 +36,9 @@ import java.util.Map;
 /**
  * Abstract implementation of a {@link JavaTool}.
  *
- * @author Tony Chemit <chemit@codelutin.com>
+ * @author <a href="mailto:chemit@codelutin.com">Tony Chemit</a>
  * @since 0.5
- * @param <Request>
+ * @param <Request> Tool-specific request type
  */
 public abstract class AbstractJavaTool<Request extends JavaToolRequest>
     extends AbstractLogEnabled

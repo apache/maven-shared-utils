@@ -50,24 +50,24 @@ class AnsiMessageBuilder
         this.ansi = ansi;
     }
 
-    public String debug( String level )
+    public String debug( String message )
     {
-        return Style.DEBUG.apply( ansi ).a( level ).reset().toString();
+        return Style.DEBUG.apply( ansi ).a( message ).reset().toString();
     }
 
-    public String info( String level )
+    public String info( String message )
     {
-        return Style.INFO.apply( ansi ).a( level ).reset().toString();
+        return Style.INFO.apply( ansi ).a( message ).reset().toString();
     }
 
-    public String warning( String level )
+    public String warning( String message )
     {
-        return Style.WARNING.apply( ansi ).a( level ).reset().toString();
+        return Style.WARNING.apply( ansi ).a( message ).reset().toString();
     }
 
-    public String error( String level )
+    public String error( String message )
     {
-        return Style.ERROR.apply( ansi ).a( level ).reset().toString();
+        return Style.ERROR.apply( ansi ).a( message ).reset().toString();
     }
 
     public AnsiMessageBuilder success( Object message )

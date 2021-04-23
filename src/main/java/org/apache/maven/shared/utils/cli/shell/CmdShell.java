@@ -51,7 +51,6 @@ public class CmdShell
      * <p>
      * From cmd.exe /? output:
      * </p>
-     * <p/>
      * <pre>
      *      If /C or /K is specified, then the remainder of the command line after
      *      the switch is processed as a command line, where the following logic is
@@ -74,7 +73,6 @@ public class CmdShell
      *      remove the last quote character on the command line, preserving
      *      any text after the last quote character.
      * </pre>
-     * <p/>
      * <p>
      * Always quoting the entire command line, regardless of these conditions
      * appears to make Windows processes invoke successfully.
