@@ -46,7 +46,7 @@ public class MessageUtils
         boolean jansi = true;
         try
         {
-            // JAnsi is provided by Maven core since 3.5.0
+            // Jansi is provided by Maven core since 3.5.0
             Class.forName( "org.fusesource.jansi.Ansi" );
         }
         catch ( ClassNotFoundException cnfe )
@@ -79,7 +79,7 @@ public class MessageUtils
         {
             doSystemUninstall();
 
-            // hook can only set when JANSI is true 
+            // hook can only set when Jansi is true
             if ( shutdownHook != null )
             {
                 try
@@ -103,8 +103,8 @@ public class MessageUtils
     }
 
     /**
-     * Enables message color (if JAnsi is available).
-     * @param flag To enable JANSI
+     * Enables message color (if Jansi is available).
+     * @param flag to enable Jansi
      */
     public static void setColorEnabled( boolean flag )
     {
@@ -127,7 +127,7 @@ public class MessageUtils
     }
 
     /**
-     * Is message color enabled: requires JAnsi available (through Maven) and the color has not been disabled.
+     * Is message color enabled: requires Jansi available (through Maven) and the color has not been disabled.
      * @return whether colored messages are enabled
      */
     public static boolean isColorEnabled()
