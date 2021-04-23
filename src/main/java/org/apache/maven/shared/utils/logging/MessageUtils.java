@@ -104,7 +104,7 @@ public class MessageUtils
 
     /**
      * Enables message color (if JAnsi is available).
-     * @param flag
+     * @param flag To enable JANSI
      */
     public static void setColorEnabled( boolean flag )
     {
@@ -128,6 +128,7 @@ public class MessageUtils
 
     /**
      * Is message color enabled: requires JAnsi available (through Maven) and the color has not been disabled.
+     * @return whether colored messages are enabled
      */
     public static boolean isColorEnabled()
     {
@@ -145,6 +146,7 @@ public class MessageUtils
 
     /**
      * Create a message buffer with defined String builder.
+     * @param builder Initial content of the message buffer
      * @return a new buffer
      */
     public static MessageBuilder buffer( StringBuilder builder )
@@ -154,6 +156,7 @@ public class MessageUtils
 
     /**
      * Create a message buffer with an internal buffer of defined size.
+     * @param size size of the buffer
      * @return a new buffer
      */
     public static MessageBuilder buffer( int size )

@@ -20,17 +20,15 @@ package org.apache.maven.shared.utils.cli.javatool;
  */
 
 /**
- * Describes a java tool, means a executable available in the jdk.
- * <p/>
- * The name of the tool ({@link #getJavaToolName()}) reflects the name of the executable that should exists as an
- * executable in the jdk, like {@code jarsigner, keytool, javadoc, ...}.
- * <p/>
- * An abstract implementation of the {@link JavaTool} named {@link AbstractJavaTool} use the command line API to execute
- * any user requests of this tool.
+ * <p>Describes a java tool, means a executable available in the jdk.</p>
+ * <p>The name of the tool ({@link #getJavaToolName()}) reflects the name of the executable that should exists as an
+ * executable in the jdk, like {@code jarsigner, keytool, javadoc, ...}.</p>
+ * <p>An abstract implementation of the {@link JavaTool} named {@link AbstractJavaTool} use the command line API to
+ * execute any user requests of this tool.</p>
  *
- * @author Tony Chemit <chemit@codelutin.com>
+ * @author <a href="mailto:chemit@codelutin.com">Tony Chemit</a>
  * @since 0.5
- * @param <Request>
+ * @param <Request> Tool-specific request type
  */
 public interface JavaTool<Request extends JavaToolRequest>
 {
