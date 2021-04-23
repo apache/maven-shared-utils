@@ -146,7 +146,7 @@ public class MessageUtils
 
     /**
      * Create a message buffer with defined String builder.
-     * @param builder Initial content of the message buffer
+     * @param builder initial content of the message buffer
      * @return a new buffer
      */
     public static MessageBuilder buffer( StringBuilder builder )
