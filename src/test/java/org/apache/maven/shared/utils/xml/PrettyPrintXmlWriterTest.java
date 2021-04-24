@@ -34,7 +34,7 @@ import org.junit.Test;
  */
 public class PrettyPrintXmlWriterTest
 {
-    private StringWriter w = new StringWriter();;
+    private StringWriter w = new StringWriter();
     private PrettyPrintXMLWriter writer = new PrettyPrintXMLWriter( w );
     
     @Test
