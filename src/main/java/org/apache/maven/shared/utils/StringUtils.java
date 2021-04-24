@@ -104,7 +104,6 @@ public class StringUtils
      *
      * @param str String target to delete whitespace from
      * @return the String without whitespace
-     * @throws NullPointerException
      */
     @Nonnull public static String deleteWhitespace( @Nonnull String str )
     {
@@ -122,7 +121,7 @@ public class StringUtils
 
     /**
      * <p>Checks if a String is non <code>null</code> and is
-     * not empty (<code>length > 0</code>).</p>
+     * not empty (<code>length &gt; 0</code>).</p>
      *
      * @param str the String to check
      * @return true if the String is non-null, and not length zero
@@ -816,7 +815,7 @@ public class StringUtils
     //--------------------------------------------------------------------------
 
     /**
-     * <p>Center a String in a larger String of size <code>n</code>.<p>
+     * <p>Center a String in a larger String of size <code>n</code>.</p>
      *
      * <p>Uses spaces as the value to buffer the String with.
      * Equivalent to <code>center(str, size, " ")</code>.</p>
@@ -1174,7 +1173,7 @@ public class StringUtils
      * @param str    String to repeat
      * @param repeat number of times to repeat str
      * @return String with repeated String
-     * @throws NegativeArraySizeException if <code>repeat < 0</code>
+     * @throws NegativeArraySizeException if <code>repeat &lt; 0</code>
      * @throws NullPointerException       if str is <code>null</code>
      */
     @Nonnull public static String repeat( @Nonnull String str, int repeat )
@@ -1979,14 +1978,12 @@ public class StringUtils
     //--------------------------------------------------------------------------
 
     /**
-     * Turn "Now is the time for all good men" into "Now is the time for..."
-     * <p/>
-     * Specifically:
-     * <p/>
-     * If str is less than max characters long, return it.
+     * <p>Turn "Now is the time for all good men" into "Now is the time for..."</p>
+     * <p>Specifically:</p>
+     * <p>If str is less than max characters long, return it.
      * Else abbreviate it to (substring(str, 0, max-3) + "...").
      * If maxWidth is less than 3, throw an IllegalArgumentException.
-     * In no case will it return a string of length greater than maxWidth.
+     * In no case will it return a string of length greater than maxWidth.</p>
      * 
      * @param s The string to be abbreviated.
      * @param maxWidth maximum length of result string
@@ -1999,12 +1996,13 @@ public class StringUtils
 
     /**
      * Turn "Now is the time for all good men" into "...is the time for..."
-     * <p/>
+     * <p>
      * Works like abbreviate(String, int), but allows you to specify a "left edge"
      * offset.  Note that this left edge is not necessarily going to be the leftmost
      * character in the result, or the first
      * character following the ellipses, but it will appear somewhere in the result.
      * In no case will it return a string of length greater than maxWidth.
+     * </p>
      * 
      * @param s        String to abbreviate.
      * @param offset   left edge of source string
@@ -2051,8 +2049,9 @@ public class StringUtils
      * Compare two strings, and return the portion where they differ.
      * (More precisely, return the remainder of the second string,
      * starting from where it's different from the first.)
-     * <p/>
-     * E.g. strdiff("i am a machine", "i am a robot") -> "robot"
+     * <p>
+     * E.g. strdiff("i am a machine", "i am a robot") &rarr; "robot"
+     * </p>
      *
      * @param s1 The first string.
      * @param s2 The second string.
@@ -2071,7 +2070,7 @@ public class StringUtils
     /**
      * Compare two strings, and return the index at which the strings begin to differ.
      * <p>
-     * E.g. strdiff("i am a machine", "i am a robot") -> 7
+     * E.g. strdiff("i am a machine", "i am a robot") &rarr; 7
      * </p>
      *
      * @param s1 The first string.
@@ -2188,7 +2187,6 @@ public class StringUtils
     /**
      * Converts the first character of the given String to lowercase.
      * This method does <i>not</i> trim spaces!
-     * <p/>
      *
      * @param data the String to get it's first character lower-cased.
      * @return data string with the first character transformed to lowercase
@@ -2205,9 +2203,8 @@ public class StringUtils
     }
 
     /**
-     * Take the input string and un-camel-case it.
-     * <p/>
-     * 'ThisIsIt' will become 'this-is-it'.
+     * <p>Take the input string and un-camel-case it.</p>
+     * <p>'ThisIsIt' will become 'this-is-it'.</p>
      *
      * @param view the view
      * @return deHumped String
@@ -2519,7 +2516,6 @@ public class StringUtils
 
     /**
      * <p>Checks if String ends with a search String, handling <code>null</code>.</p>
-     * <p/>
      * <p>A <code>null</code> String will return <code>false</code>.</p>
      *
      * <pre>
