@@ -20,13 +20,12 @@ package org.apache.maven.shared.utils.cli.javatool;
  */
 
 /**
- * Signals an error during the construction of the command line used to invoke java tool, e.g. illegal invocation
- * arguments.
- * <p/>
- * This should not be confused with a failure of the invoked java tool build itself which will be reported by means of a
- * non-zero exit code.
+ * <p>Signals an error during the construction of the command line used to invoke java tool, e.g. illegal invocation
+ * arguments.</p>
+ * <p>This should not be confused with a failure of the invoked java tool build itself which will be reported by means of a
+ * non-zero exit code.</p>
  *
- * @author Tony Chemit <chemit@codelutin.com>
+ * @author <a href="mailto:chemit@codelutin.com">Tony Chemit</a>
  *
  * @see JavaToolResult#getExitCode()
  * @since 0.5

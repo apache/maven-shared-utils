@@ -47,6 +47,7 @@ import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.FileAttribute;
 import java.security.SecureRandom;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -68,21 +69,21 @@ import java.util.Random;
  * <li><code>html</code> -- retrievable through {@link #getExtension}</li>
  * </ul>
  * </p>
- * <p/>
  * <h3>File-related methods</h3>
  * 
- * There are methods to create a {@link #toFile File from a URL}, copy a
+ * <p>There are methods to create a {@link #toFile File from a URL}, copy a
  * {@link #copyFile File to another File},
  * copy a {@link #copyURLToFile URL's contents to a File},
  * as well as methods to {@link #deleteDirectory(File) delete} and {@link #cleanDirectory(File)
  * clean} a directory.
- * <p/>
- * Common {@link java.io.File} manipulation routines.
- * <p/>
+ * </p>
+ * <p>Common {@link java.io.File} manipulation routines.</p>
+ * <p>
  * Taken from the commons-utils repo.
  * Also code from Alexandria's FileUtils.
  * And from Avalon Excalibur's IO.
  * And from Ant.
+ * </p>
  *
  * @author <a href="mailto:burton@relativity.yi.org">Kevin A. Burton</A>
  * @author <a href="mailto:sanders@apache.org">Scott Sanders</a>
@@ -1804,8 +1805,7 @@ public class FileUtils
     }
 
     /**
-     * Create a temporary file in a given directory.
-     * <p/>
+     * <p>Create a temporary file in a given directory.</p>
      * <p>The file denoted by the returned abstract pathname did not
      * exist before this method was invoked, any subsequent invocation
      * of this method will yield a different file name.</p>
@@ -1895,7 +1895,7 @@ public class FileUtils
      * @param encoding the file output encoding (only if wrappers is not empty)
      * @param wrappers array of {@link FilterWrapper}
      * @param overwrite if true and wrappers is null or empty, the file will be copied even if
-     *         to.lastModified() < from.lastModified()
+     *         to.lastModified() &lt; from.lastModified()
      * @throws IOException if an IO error occurs during copying or filtering
      */
     public static void copyFile( @Nonnull File from, @Nonnull File to, @Nullable String encoding,
@@ -2144,8 +2144,8 @@ public class FileUtils
      * @param target the target
      * @return the linked file
      * @throws IOException in case of an error
-     * @see {@code java.nio.file.Files.createSymbolicLink(Path)} which creates a new
-     *         symbolic link but does not replace existing symbolic links
+     * @see Files#createSymbolicLink(Path, Path, FileAttribute[]) which creates a new symbolic link but does
+     * not replace existing symbolic links
      */
     @Nonnull public static File createSymbolicLink( @Nonnull File symlink,  @Nonnull File target )
             throws IOException

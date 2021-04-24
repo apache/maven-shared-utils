@@ -33,6 +33,7 @@ public interface Arg
 
     /**
      * @param line the line of arguments
+     * @throws CommandLineException in case of unbalanced quotes.
      */
     void setLine( String line ) throws CommandLineException;
 

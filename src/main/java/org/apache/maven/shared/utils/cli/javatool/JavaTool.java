@@ -34,10 +34,9 @@ public interface JavaTool<Request extends JavaToolRequest>
 {
 
     /**
-     * Return the name of the java tool. This is exactly the name (without his extension) of the executable to
-     * find in the {@code jdk/bin} directory.
-     * <p/>
-     * For example: {@code jarsigner, keytool, javadoc, ...}
+     * <p>Return the name of the java tool. This is exactly the name (without his extension) of the executable to
+     * find in the {@code jdk/bin} directory.</p>
+     * <p>For example: {@code jarsigner, keytool, javadoc, ...}</p>
      *
      * @return the name of the java tool.
      */
@@ -53,13 +52,11 @@ public interface JavaTool<Request extends JavaToolRequest>
     void setToolchain( Object toolchain );
 
     /**
-     * Execute the input request and then returns the result of the execution.
-     * <p/>
-     * If could not create the java tool invocation, a {@link JavaToolException} will be thrown.
-     * <p/>
-     * If execution fails, then the result will have a none-zero {@link JavaToolResult#getExitCode()} and his
+     * <p>Execute the input request and then returns the result of the execution.</p>
+     * <p>If could not create the java tool invocation, a {@link JavaToolException} will be thrown.</p>
+     * <p>If execution fails, then the result will have a none-zero {@link JavaToolResult#getExitCode()} and his
      * {@link JavaToolResult#getExecutionException()} will be filled with the error, otherwise the exist code will be
-     * zero.
+     * zero.</p>
      *
      * @param request the request to perform
      * @return the result of the tool execution

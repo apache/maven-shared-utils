@@ -24,27 +24,25 @@ import org.apache.maven.shared.utils.cli.StreamConsumer;
 /**
  * Specifies the minimum parameters used to control a {@link JavaTool} invocation.
  *
- * @author Tony Chemit <chemit@codelutin.com>
+ * @author <a href="mailto:chemit@codelutin.com">Tony Chemit</a>
  * @since 0.5
  */
 public interface JavaToolRequest
 {
 
     /**
-     * Gets the value of the {@code systemOutStreamConsumer} field.
-     * <p/>
-     * This option field if filled is used by the commandline tool to consume system ouput stream of the jarsigner
-     * command.
+     * <p>Gets the value of the {@code systemOutStreamConsumer} field.</p>
+     * <p>This option field if filled is used by the commandline tool to consume system ouput stream of the jarsigner
+     * command.</p>
      *
      * @return the value of the {@code systemOutStreamConsumer} field.
      */
     StreamConsumer getSystemOutStreamConsumer();
 
     /**
-     * Gets the value of the {@code systemErrorStreamConsumer} field.
-     * <p/>
-     * This option field if filled is used by the commandline tool to consume system error stream of the jarsigner
-     * command.
+     * <p>Gets the value of the {@code systemErrorStreamConsumer} field.</p>
+     * <p>This option field if filled is used by the commandline tool to consume system error stream of the jarsigner
+     * command.</p>
      *
      * @return the value of the {@code systemErrorStreamConsumer} field.
      */

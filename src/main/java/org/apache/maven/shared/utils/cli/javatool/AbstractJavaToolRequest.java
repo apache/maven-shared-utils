@@ -24,7 +24,7 @@ import org.apache.maven.shared.utils.cli.StreamConsumer;
 /**
  * Abstract implementation of a {@link JavaToolRequest}.
  *
- * @author Tony Chemit <chemit@codelutin.com>
+ * @author <a href="mailto:chemit@codelutin.com">Tony Chemit</a>
  * @since 0.5
  */
 public class AbstractJavaToolRequest

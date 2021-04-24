@@ -30,24 +30,28 @@ public interface LoggerLevelRenderer
     /**
      * Render a message at DEBUG level.
      * @param message the message to render.
+     * @return the formatted message.
      */
     String debug( String message );
     
     /**
      * Render a message at INFO level.
      * @param message the message to render.
+     * @return the formatted message.
      */
     String info( String message );
     
     /**
      * Render a message at WARNING level.
      * @param message the message to render.
+     * @return the formatted message.
      */
     String warning( String message );
     
     /**
      * Render a message at ERROR level.
      * @param message the message to render.
+     * @return the formatted message.
      */
     String error( String message );
 }

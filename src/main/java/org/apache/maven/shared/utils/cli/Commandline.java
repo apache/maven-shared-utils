@@ -37,15 +37,14 @@ import org.apache.maven.shared.utils.cli.shell.CmdShell;
 import org.apache.maven.shared.utils.cli.shell.Shell;
 
 /**
- * <p/>
+ * <p>
  * Commandline objects help handling command lines specifying processes to
  * execute.
  * </p>
- * <p/>
+ * <p>
  * The class can be used to define a command line as nested elements or as a
  * helper to define a command line by an application.
  * </p>
- * <p/>
  * <code>
  * &lt;someelement&gt;<br>
  * &nbsp;&nbsp;&lt;acommandline executable="/executable/to/run"&gt;<br>
@@ -55,8 +54,7 @@ import org.apache.maven.shared.utils.cli.shell.Shell;
  * &nbsp;&nbsp;&lt;/acommandline&gt;<br>
  * &lt;/someelement&gt;<br>
  * </code>
- * </p>
- * <p/>
+ * <p>
  * The element <code>someelement</code> must provide a method
  * <code>createAcommandline</code> which returns an instance of this class.
  * </p>
@@ -89,6 +87,7 @@ public class Commandline
      * Shell is autodetected from operating system.
      *
      * @param toProcess the command to process
+     * @throws CommandLineException in case of unbalanced quotes.
      */
     public Commandline( String toProcess ) throws CommandLineException
     {
