@@ -27,7 +27,7 @@
   </parent>
 
   <artifactId>maven-shared-utils</artifactId>
-  <version>3.3.4</version>
+  <version>3.3.5-SNAPSHOT</version>
 
   <name>Apache Maven Shared Utils</name>
   <description>Shared utilities for use by Maven core and plugins</description>
@@ -36,7 +36,7 @@
     <connection>scm:git:https://gitbox.apache.org/repos/asf/maven-shared-utils.git</connection>
     <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-shared-utils.git</developerConnection>
     <url>https://github.com/apache/maven-shared-utils/tree/${project.scm.tag}</url>
-    <tag>maven-shared-utils-3.3.4</tag>
+    <tag>HEAD</tag>
  </scm>
   <issueManagement>
     <system>jira</system>
@@ -61,7 +61,7 @@
 
   <properties>
     <checkstyle.violation.ignore>RedundantThrows,NewlineAtEndOfFile,ParameterNumber,MethodLength,FileLength,ModifierOrder</checkstyle.violation.ignore>
-    <project.build.outputTimestamp>2021-04-26T13:53:43Z</project.build.outputTimestamp>
+    <project.build.outputTimestamp>2021-04-26T13:54:25Z</project.build.outputTimestamp>
     <javaVersion>7</javaVersion>
     <mavenVersion>3.1.0</mavenVersion>
   </properties>
