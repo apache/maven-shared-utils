@@ -75,6 +75,7 @@ public class XmlWriterUtilTest
     {
         XmlWriterUtil.writeLineBreak( xmlWriter, 10 );
         writer.close();
+        assertEquals( 10, StringUtils.countMatches( output.toString(), XmlWriterUtil.LS ) );
     }
 
     /**
