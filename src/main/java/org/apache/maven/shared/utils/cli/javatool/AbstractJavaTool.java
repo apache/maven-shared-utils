@@ -25,7 +25,8 @@ import org.apache.maven.shared.utils.cli.CommandLineException;
 import org.apache.maven.shared.utils.cli.CommandLineUtils;
 import org.apache.maven.shared.utils.cli.Commandline;
 import org.apache.maven.shared.utils.cli.StreamConsumer;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.InputStream;
@@ -41,9 +42,9 @@ import java.util.Map;
  * @param <Request> Tool-specific request type
  */
 public abstract class AbstractJavaTool<Request extends JavaToolRequest>
-    extends AbstractLogEnabled
     implements JavaTool<Request>
 {
+    private final Logger logger = LoggerFactory.getLogger( getClass() );
 
     /**
      * The java tool name to find out in the jdk.
@@ -78,6 +79,11 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest>
      */
     protected abstract Commandline createCommandLine( Request request, String javaToolFileLocation )
         throws JavaToolException;
+
+    protected Logger getLogger()
+    {
+        return logger;
+    }
 
     /**
      * {@inheritDoc}
