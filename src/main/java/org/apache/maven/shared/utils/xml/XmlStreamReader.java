@@ -79,10 +79,9 @@ public class XmlStreamReader
      * @param is {@link InputStream}
      * @param lenient yes/no
      * @throws IOException in case of an error
-     * @throws XmlStreamReaderException in case of an error
      */
     public XmlStreamReader( InputStream is, boolean lenient )
-            throws IOException, XmlStreamReaderException
+            throws IOException
     {
         reader = new org.apache.commons.io.input.XmlStreamReader( is, lenient, staticDefaultEncoding );
     }
@@ -124,10 +123,9 @@ public class XmlStreamReader
      * @param lenient yes/no
      * @param defaultEncoding the default encoding
      * @throws IOException in case of error
-     * @throws XmlStreamReaderException in case of error
      */
     public XmlStreamReader( InputStream is, String httpContentType, boolean lenient, String defaultEncoding )
-            throws IOException, XmlStreamReaderException
+            throws IOException
     {
         reader = new org.apache.commons.io.input.XmlStreamReader( is, httpContentType, lenient,
                 ( defaultEncoding == null )
@@ -140,10 +138,9 @@ public class XmlStreamReader
      * @param httpContentType content type
      * @param lenient yes/no
      * @throws IOException in case of error
-     * @throws XmlStreamReaderException in case of error
      */
     public XmlStreamReader( InputStream is, String httpContentType, boolean lenient )
-            throws IOException, XmlStreamReaderException
+            throws IOException
     {
         this( is, httpContentType, lenient, null );
     }
