@@ -140,7 +140,7 @@ public class XmlWriterUtil
     }
 
     /**
-     * Convenience method to write XML comment line. The <code>comment</code> is splitted to have a size of
+     * Convenience method to write XML comment line. The <code>comment</code> is split to have a size of
      * <code>80</code>.
      *
      * @param writer not null
