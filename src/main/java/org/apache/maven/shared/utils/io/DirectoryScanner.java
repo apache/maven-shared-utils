@@ -19,17 +19,27 @@ package org.apache.maven.shared.utils.io;
  * under the License.
  */
 
+import org.apache.maven.shared.utils.io.conductor.EnforceExcludesOverIncludes;
+
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileVisitOption;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import static java.nio.file.FileVisitOption.FOLLOW_LINKS;
 
 /**
  * <p>Class for scanning a directory for files/directories which match certain criteria.</p>
@@ -116,9 +126,7 @@ import javax.annotation.Nullable;
  * @author Magesh Umasankar
  * @author <a href="mailto:bruce@callenish.com">Bruce Atherton</a>
  * @author <a href="mailto:levylambert@tiscali-dsl.de">Antoine Levy-Lambert</a>
- * @deprecated use {@code java.nio.file.DirectoryStream} and related classes
  */
-@Deprecated
 public class DirectoryScanner
 {
     /**
@@ -166,7 +174,7 @@ public class DirectoryScanner
     /**
      * The base directory to be scanned.
      */
-    private File basedir;
+    private Path basedir;
 
     /**
      * The patterns for the files to be included.
@@ -225,8 +233,6 @@ public class DirectoryScanner
 
     /**
      * Whether or not symbolic links should be followed.
-     *
-     * 
      */
     private boolean followSymlinks = true;
 
@@ -235,11 +241,6 @@ public class DirectoryScanner
      * A {@link ScanConductor} an control the scanning process.
      */
     private ScanConductor scanConductor = null;
-
-    /**
-     * The last ScanAction. We need to store this in the instance as the scan() method doesn't return
-     */
-    private ScanConductor.ScanAction scanAction = null;
 
     /**
      * Sole constructor.
@@ -267,6 +268,16 @@ public class DirectoryScanner
      */
     public void setBasedir( @Nonnull final File basedir )
     {
+        setBasedir( basedir.toPath() );
+    }
+
+    /**
+     * Sets the base directory to be scanned. This is the directory which is scanned recursively.
+     *
+     * @param basedir The base directory for scanning. Should not be <code>null</code>.
+     */
+    public void setBasedir( @Nonnull final Path basedir )
+    {
         this.basedir = basedir;
     }
 
@@ -277,7 +288,7 @@ public class DirectoryScanner
      */
     public File getBasedir()
     {
-        return basedir;
+        return basedir.toFile();
     }
 
     /**
@@ -373,6 +384,15 @@ public class DirectoryScanner
     }
 
     /**
+     * Set {@link EnforceExcludesOverIncludes} scan conductor for a faster scanning
+     * and generally no functional side effect.
+     */
+    public void setEnforceExcludesOverIncludes()
+    {
+        setScanConductor( new EnforceExcludesOverIncludes() );
+    }
+
+    /**
      * Scans the base directory for files which match at least one include pattern and don't match any exclude patterns.
      * If there are selectors then the files must pass muster there, as well.
      *
@@ -386,11 +406,11 @@ public class DirectoryScanner
         {
             throw new IllegalStateException( "No basedir set" );
         }
-        if ( !basedir.exists() )
+        if ( !Files.exists( basedir ) )
         {
             throw new IllegalStateException( "basedir " + basedir + " does not exist" );
         }
-        if ( !basedir.isDirectory() )
+        if ( !Files.isDirectory( basedir ) )
         {
             throw new IllegalStateException( "basedir " + basedir + " is not a directory" );
         }
@@ -398,42 +418,164 @@ public class DirectoryScanner
         setupDefaultFilters();
         setupMatchPatterns();
 
-        filesIncluded = new ArrayList<String>();
-        filesNotIncluded = new ArrayList<String>();
-        filesExcluded = new ArrayList<String>();
-        dirsIncluded = new ArrayList<String>();
-        dirsNotIncluded = new ArrayList<String>();
-        dirsExcluded = new ArrayList<String>();
-        scanAction = ScanConductor.ScanAction.CONTINUE;
-
-        if ( isIncluded( "" ) )
+        if ( scanConductor instanceof ScannerAware ) // after the init
         {
-            if ( !isExcluded( "" ) )
-            {
-                if ( scanConductor != null )
-                {
-                    scanAction = scanConductor.visitDirectory( "", basedir );
+            ( ( ScannerAware ) scanConductor ).setDirectoryScanner( this );
+        }
 
-                    if ( ScanConductor.ScanAction.ABORT.equals( scanAction )
-                        || ScanConductor.ScanAction.ABORT_DIRECTORY.equals( scanAction )
-                        || ScanConductor.ScanAction.NO_RECURSE.equals( scanAction ) )
+        filesIncluded = new ArrayList<>();
+        filesNotIncluded = new ArrayList<>();
+        filesExcluded = new ArrayList<>();
+        dirsIncluded = new ArrayList<>();
+        dirsNotIncluded = new ArrayList<>();
+        dirsExcluded = new ArrayList<>();
+
+        doScan( basedir, followSymlinks ? EnumSet.of( FOLLOW_LINKS ) : EnumSet.noneOf( FileVisitOption.class ), true );
+    }
+
+    private void doScan( final Path root, final Set<FileVisitOption> options, final boolean fast )
+    {
+        try
+        {
+            Files.walkFileTree( root, options, Integer.MAX_VALUE, new SimpleFileVisitor<Path>()
+            {
+                @Override
+                public FileVisitResult preVisitDirectory( final Path dir, final BasicFileAttributes attrs )
+                        throws IOException
+                {
+                    final String name = root.relativize( dir ).toString();
+                    if ( isIncluded( name ) )
                     {
-                        return;
+                        if ( !isExcluded( name ) )
+                        {
+                            if ( scanConductor != null )
+                            {
+                                final ScanConductor.ScanAction scanAction = scanConductor.visitDirectory(
+                                        name, dir.toFile() );
+                                if ( ScanConductor.ScanAction.ABORT.equals( scanAction )
+                                        || ScanConductor.ScanAction.ABORT_DIRECTORY.equals( scanAction ) )
+                                {
+                                    return FileVisitResult.SKIP_SIBLINGS;
+                                }
+                                if ( ScanConductor.ScanAction.NO_RECURSE.equals( scanAction ) )
+                                {
+                                    return FileVisitResult.SKIP_SUBTREE;
+                                }
+                            }
+                            dirsIncluded.add( name );
+                        }
+                        else
+                        {
+                            dirsExcluded.add( name );
+                            if ( fast && !couldHoldIncluded( name ) )
+                            {
+                                return FileVisitResult.SKIP_SUBTREE;
+                            }
+                            if ( scanConductor != null )
+                            {
+                                final FileVisitResult result = toVisitResult( dir, name );
+                                if ( result != null )
+                                {
+                                    return result;
+                                }
+                            }
+                            // else continue to visit
+                        }
                     }
+                    else
+                    {
+                        if ( fast && couldHoldIncluded( name ) )
+                        {
+                            if ( scanConductor != null )
+                            {
+                                final FileVisitResult result = toVisitResult( dir, name );
+                                if ( result != null )
+                                {
+                                    return result;
+                                }
+                            }
+                            dirsNotIncluded.add( name );
+                        }
+                        else if ( !fast )
+                        {
+                            final FileVisitResult result = toVisitResult( dir, name );
+                            if ( result != null )
+                            {
+                                return result;
+                            }
+                        }
+                    }
+                    return super.preVisitDirectory( dir, attrs );
                 }
 
-                dirsIncluded.add( "" );
-            }
-            else
-            {
-                dirsExcluded.add( "" );
-            }
+                @Override
+                public FileVisitResult visitFile( final Path file, final BasicFileAttributes attrs ) throws IOException
+                {
+                    final String name = root.relativize( file ).toString();
+                    if ( !followSymlinks && Files.isSymbolicLink( file ) )
+                    {
+                        final Path resolved = file.toRealPath( );
+                        if ( Files.isDirectory( resolved ) )
+                        {
+                            dirsIncluded.add( name );
+                            return FileVisitResult.SKIP_SUBTREE;
+                        }
+                    }
+                    if ( isIncluded( name ) )
+                    {
+                        if ( !isExcluded( name ) )
+                        {
+                            final ScanConductor.ScanAction scanAction;
+                            if ( scanConductor != null )
+                            {
+                                scanAction = scanConductor.visitFile( name, file.toFile() );
+                            }
+                            else
+                            {
+                                scanAction = null;
+                            }
+
+                            if ( ScanConductor.ScanAction.ABORT.equals( scanAction )
+                                    || ScanConductor.ScanAction.ABORT_DIRECTORY.equals( scanAction ) )
+                            {
+                                return FileVisitResult.SKIP_SIBLINGS;
+                            }
+
+                            filesIncluded.add( name );
+                        }
+                        else
+                        {
+                            filesExcluded.add( name );
+                        }
+                    }
+                    else
+                    {
+                        filesNotIncluded.add( name );
+                    }
+                    return super.visitFile( file, attrs );
+                }
+            } );
         }
-        else
+        catch ( final IOException e )
         {
-            dirsNotIncluded.add( "" );
+            throw new IllegalStateException( e );
         }
-        scandir( basedir, "", true );
+    }
+
+    private FileVisitResult toVisitResult( final Path dir, final String name )
+    {
+        final ScanConductor.ScanAction scanAction = scanConductor.visitDirectory(
+                name, dir.toFile() );
+        if ( ScanConductor.ScanAction.ABORT.equals( scanAction )
+                || ScanConductor.ScanAction.ABORT_DIRECTORY.equals( scanAction ) )
+        {
+            return FileVisitResult.SKIP_SIBLINGS;
+        }
+        if ( ScanConductor.ScanAction.NO_RECURSE.equals( scanAction ) )
+        {
+            return FileVisitResult.SKIP_SUBTREE;
+        }
+        return null;
     }
 
     /**
@@ -535,15 +677,18 @@ public class DirectoryScanner
             return;
         }
 
-        final String[] excl = dirsExcluded.toArray( new String[dirsExcluded.size()] );
+        final String[] excl = dirsExcluded.toArray( new String[ 0 ] );
 
-        final String[] notIncl = dirsNotIncluded.toArray( new String[dirsNotIncluded.size()] );
+        final String[] notIncl = dirsNotIncluded.toArray( new String[ 0 ] );
+
+        final EnumSet<FileVisitOption> opts = followSymlinks
+                ? EnumSet.of( FOLLOW_LINKS ) : EnumSet.noneOf( FileVisitOption.class );
 
         for ( String anExcl : excl )
         {
             if ( !couldHoldIncluded( anExcl ) )
             {
-                scandir( new File( basedir, anExcl ), anExcl + File.separator, false );
+                doScan( basedir.resolve( anExcl ), opts, false );
             }
         }
 
@@ -551,212 +696,11 @@ public class DirectoryScanner
         {
             if ( !couldHoldIncluded( aNotIncl ) )
             {
-                scandir( new File( basedir, aNotIncl ), aNotIncl + File.separator, false );
+                doScan( basedir.resolve( aNotIncl ), opts, false );
             }
         }
 
         haveSlowResults = true;
-    }
-
-    /**
-     * Scans the given directory for files and directories. Found files and directories are placed in their respective
-     * collections, based on the matching of includes, excludes, and the selectors. When a directory is found, it is
-     * scanned recursively.
-     *
-     * @param dir   The directory to scan. Must not be <code>null</code>.
-     * @param vpath The path relative to the base directory (needed to prevent problems with an absolute path when using
-     *              dir). Must not be <code>null</code>.
-     * @param fast  Whether or not this call is part of a fast scan.
-     * @see #filesIncluded
-     * @see #filesNotIncluded
-     * @see #filesExcluded
-     * @see #dirsIncluded
-     * @see #dirsNotIncluded
-     * @see #dirsExcluded
-     * @see #slowScan
-     */
-    void scandir( @Nonnull final File dir, @Nonnull final String vpath, final boolean fast )
-    {
-        String[] newfiles = dir.list();
-
-        if ( newfiles == null )
-        {
-            /*
-             * two reasons are mentioned in the API docs for File.list (1) dir is not a directory. This is impossible as
-             * we wouldn't get here in this case. (2) an IO error occurred (why doesn't it throw an exception then???)
-             */
-
-            /*
-             * [jdcasey] (2) is apparently happening to me, as this is killing one of my tests... this is affecting the
-             * assembly plugin, fwiw. I will initialize the newfiles array as zero-length for now. NOTE: I can't find
-             * the problematic code, as it appears to come from a native method in UnixFileSystem...
-             */
-            newfiles = new String[0];
-
-            // throw new IOException( "IO error scanning directory " + dir.getAbsolutePath() );
-        }
-
-        if ( !followSymlinks )
-        {
-            newfiles = doNotFollowSymbolicLinks( dir, vpath, newfiles );
-        }
-
-        for ( final String newfile : newfiles )
-        {
-            final String name = vpath + newfile;
-            final File file = new File( dir, newfile );
-            if ( file.isDirectory() )
-            {
-                if ( isIncluded( name ) )
-                {
-                    if ( !isExcluded( name ) )
-                    {
-                        if ( scanConductor != null )
-                        {
-                            scanAction = scanConductor.visitDirectory( name, file );
-
-                            if ( ScanConductor.ScanAction.ABORT.equals( scanAction )
-                                || ScanConductor.ScanAction.ABORT_DIRECTORY.equals( scanAction ) )
-                            {
-                                return;
-                            }
-                        }
-
-                        if ( !ScanConductor.ScanAction.NO_RECURSE.equals( scanAction ) )
-                        {
-                            dirsIncluded.add( name );
-                            if ( fast )
-                            {
-                                scandir( file, name + File.separator, fast );
-
-                                if ( ScanConductor.ScanAction.ABORT.equals( scanAction ) )
-                                {
-                                    return;
-                                }
-                            }
-                        }
-                        scanAction = null;
-
-                    }
-                    else
-                    {
-                        dirsExcluded.add( name );
-                        if ( fast && couldHoldIncluded( name ) )
-                        {
-                            scandir( file, name + File.separator, fast );
-                            if ( ScanConductor.ScanAction.ABORT.equals( scanAction ) )
-                            {
-                                return;
-                            }
-                            scanAction = null;
-                        }
-                    }
-                }
-                else
-                {
-                    if ( fast && couldHoldIncluded( name ) )
-                    {
-                        if ( scanConductor != null )
-                        {
-                            scanAction = scanConductor.visitDirectory( name, file );
-
-                            if ( ScanConductor.ScanAction.ABORT.equals( scanAction )
-                                || ScanConductor.ScanAction.ABORT_DIRECTORY.equals( scanAction ) )
-                            {
-                                return;
-                            }
-                        }
-                        if ( !ScanConductor.ScanAction.NO_RECURSE.equals( scanAction ) )
-                        {
-                            dirsNotIncluded.add( name );
-
-                            scandir( file, name + File.separator, fast );
-                            if ( ScanConductor.ScanAction.ABORT.equals( scanAction ) )
-                            {
-                                return;
-                            }
-                        }
-                        scanAction = null;
-                    }
-                }
-                if ( !fast )
-                {
-                    scandir( file, name + File.separator, fast );
-                    if ( ScanConductor.ScanAction.ABORT.equals( scanAction ) )
-                    {
-                        return;
-                    }
-                    scanAction = null;
-                }
-            }
-            else if ( file.isFile() )
-            {
-                if ( isIncluded( name ) )
-                {
-                    if ( !isExcluded( name ) )
-                    {
-                        if ( scanConductor != null )
-                        {
-                            scanAction = scanConductor.visitFile( name, file );
-                        }
-
-                        if ( ScanConductor.ScanAction.ABORT.equals( scanAction )
-                            || ScanConductor.ScanAction.ABORT_DIRECTORY.equals( scanAction ) )
-                        {
-                            return;
-                        }
-
-                        filesIncluded.add( name );
-                    }
-                    else
-                    {
-                        filesExcluded.add( name );
-                    }
-                }
-                else
-                {
-                    filesNotIncluded.add( name );
-                }
-            }
-        }
-    }
-
-    private String[] doNotFollowSymbolicLinks( final File dir, final String vpath, String[] newfiles )
-    {
-        final List<String> noLinks = new ArrayList<String>();
-        for ( final String newfile : newfiles )
-        {
-            try
-            {
-                if ( isSymbolicLink( dir, newfile ) )
-                {
-                    final String name = vpath + newfile;
-                    final File file = new File( dir, newfile );
-                    if ( file.isDirectory() )
-                    {
-                        dirsExcluded.add( name );
-                    }
-                    else
-                    {
-                        filesExcluded.add( name );
-                    }
-                }
-                else
-                {
-                    noLinks.add( newfile );
-                }
-            }
-            catch ( final IOException ioe )
-            {
-                final String msg =
-                    "IOException caught while checking " + "for links, couldn't get cannonical path!";
-                // will be caught and redirected to Ant's logging system
-                System.err.println( msg );
-                noLinks.add( newfile );
-            }
-        }
-        newfiles = noLinks.toArray( new String[noLinks.size()] );
-        return newfiles;
     }
 
     /**
@@ -799,18 +743,16 @@ public class DirectoryScanner
      * Returns the names of the files which matched at least one of the include patterns and none of the exclude
      * patterns. The names are relative to the base directory.
      *
-     * @deprecated this method does not work correctly on Windows. 
      * @return the names of the files which matched at least one of the include patterns and none of the exclude
      *         patterns. May also contain symbolic links to files.
      */
-    @Deprecated
     public String[] getIncludedFiles()
     {
         if ( filesIncluded == null )
         {
             return new String[0];
         }
-        return filesIncluded.toArray( new String[filesIncluded.size()] );
+        return filesIncluded.toArray( new String[0] );
     }
 
     /**
@@ -903,21 +845,16 @@ public class DirectoryScanner
         excludes = newExcludes;
     }
 
-    /**
-     * Checks whether a given file is a symbolic link.
-     * <p>
-     * It doesn't really test for symbolic links but whether the canonical and absolute paths of the file are identical
-     * - this may lead to false positives on some platforms.
-     * </p>
-     *
-     * @param parent the parent directory of the file to test
-     * @param name   the name of the file to test.
-     * 
-     */
-    boolean isSymbolicLink( final File parent, final String name )
-        throws IOException
+    public MatchPatterns getExcludesPatterns()
     {
-        return Files.isSymbolicLink( parent.toPath() );
+        setupDefaultFilters();
+        return excludesPatterns;
+    }
+
+    public MatchPatterns getIncludesPatterns()
+    {
+        setupDefaultFilters();
+        return includesPatterns;
     }
 
     private void setupDefaultFilters()

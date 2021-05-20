@@ -32,9 +32,7 @@ import java.io.File;
  *
  * @author <a href="mailto:struberg@apache.org">Mark Struberg</a>
  * 
- * @deprecated use {@code java.nio.file.Files.walkFileTree()} and related classes
  */
-@Deprecated
 public interface ScanConductor
 {
     /**
