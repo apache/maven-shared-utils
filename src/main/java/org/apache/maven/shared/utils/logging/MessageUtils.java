@@ -102,9 +102,9 @@ public class MessageUtils
             {
                 AnsiConsole.systemUninstall();
             }
-            catch ( Throwable ex )
+            catch ( RuntimeException ex )
             {
-                // make uninstall resilient to any errors thrown by Jansi
+                // make uninstall resilient to any runtime exceptions thrown by Jansi
             }
         }
     }
