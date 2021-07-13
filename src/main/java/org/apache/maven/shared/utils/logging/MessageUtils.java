@@ -98,7 +98,14 @@ public class MessageUtils
     {
         if ( JANSI )
         {
-            AnsiConsole.systemUninstall();
+            try
+            {
+                AnsiConsole.systemUninstall();
+            }
+            catch ( RuntimeException ex )
+            {
+                // make uninstall resilient to any runtime exceptions thrown by Jansi
+            }
         }
     }
 
