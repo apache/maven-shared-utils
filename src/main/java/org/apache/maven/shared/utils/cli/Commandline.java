@@ -65,11 +65,13 @@ import org.apache.maven.shared.utils.cli.shell.Shell;
 public class Commandline
     implements Cloneable
 {
-    private final List<Arg> arguments = new Vector<Arg>();
+    private final List<Arg> arguments = new Vector<>();
 
     private final Map<String, String> envVars = Collections.synchronizedMap( new LinkedHashMap<String, String>() );
 
     private Shell shell;
+
+    private boolean shellEnvironmentInherited = true;
 
     /**
      * Create a new command line object.
@@ -198,14 +200,13 @@ public class Commandline
      */
     public void addEnvironment( String name, String value )
     {
-        //envVars.add( name + "=" + value );
         envVars.put( name, value );
     }
 
     /**
      * Add system environment variables.
      */
-    public void addSystemEnvironment()
+    private void addSystemEnvironment()
     {
         Properties systemEnvVars = CommandLineUtils.getSystemEnvVars();
 
@@ -226,7 +227,11 @@ public class Commandline
      */
     public String[] getEnvironmentVariables()
     {
-        addSystemEnvironment();
+        if ( isShellEnvironmentInherited() )
+        {
+            addSystemEnvironment();
+        }
+
         List<String> environmentVars = new ArrayList<>();
         for ( String name : envVars.keySet() )
         {
@@ -297,7 +302,7 @@ public class Commandline
      */
     public String[] getArguments( boolean mask )
     {
-        List<String> result = new ArrayList<String>( arguments.size() * 2 );
+        List<String> result = new ArrayList<>( arguments.size() * 2 );
         for ( Arg argument : arguments )
         {
             Argument arg = (Argument) argument;
@@ -375,6 +380,29 @@ public class Commandline
     public void clearArgs()
     {
         arguments.clear();
+    }
+
+    /**
+     * Indicates whether the environment variables of the current process
+     * should are propagated to the executing Command.
+     * By default, the current environment variables are inherited by the new Command line execution.
+     *
+     * @return <code>true</code> if the environment variables should be propagated, <code>false</code> otherwise.
+     */
+    public boolean isShellEnvironmentInherited()
+    {
+        return shellEnvironmentInherited;
+    }
+
+    /**
+     * Specifies whether the environment variables of the current process should be propagated to the executing Command.
+     *
+     * @param shellEnvironmentInherited <code>true</code> if the environment variables should be propagated,
+     *            <code>false</code> otherwise.
+     */
+    public void setShellEnvironmentInherited( boolean shellEnvironmentInherited )
+    {
+        this.shellEnvironmentInherited = shellEnvironmentInherited;
     }
 
     /**
