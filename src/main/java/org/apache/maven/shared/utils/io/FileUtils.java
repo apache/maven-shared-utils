@@ -59,7 +59,7 @@ import java.util.Random;
 /**
  * This class provides basic facilities for manipulating files and file paths.
  *
- * <h3>Path-related methods</h3>
+ * <p><strong>Path-related methods</strong></p>
  * 
  * Methods exist to retrieve the components of a typical file path. For example
  * <code>/www/hosted/mysite/index.html</code>, can be broken into:
@@ -68,7 +68,7 @@ import java.util.Random;
  * <li><code>html</code> -- retrievable through {@link #getExtension}</li>
  * </ul>
  *
- * <h3>File-related methods</h3>
+ * <p><strong>File-related methods</strong></p>
  * 
  * <p>There are methods to create a {@link #toFile File from a URL}, copy a
  * {@link #copyFile File to another File},
