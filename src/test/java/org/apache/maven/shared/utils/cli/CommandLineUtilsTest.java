@@ -56,9 +56,8 @@ public class CommandLineUtilsTest
 
     @Test
     public void testEnsureCaseSensitivity()
-        throws Exception
     {
-        Map<String, String> data = new HashMap<String, String>();
+        Map<String, String> data = new HashMap<>();
         data.put( "abz", "cool" );
         assertTrue( CommandLineUtils.ensureCaseSensitivity( data, false ).containsKey( "ABZ" ) );
         assertTrue( CommandLineUtils.ensureCaseSensitivity( data, true ).containsKey( "abz" ) );
@@ -69,7 +68,6 @@ public class CommandLineUtilsTest
      */
     @Test
     public void testGetSystemEnvVarsWindows()
-        throws Exception
     {
         if ( !Os.isFamily( Os.FAMILY_WINDOWS ) )
         {
@@ -103,14 +101,9 @@ public class CommandLineUtilsTest
         assertCmdLineArgs( new String[] { "foo", " ' ", "bar" }, "foo \" ' \" bar" );
     }
 
-
     @Test
-    public void givenASingleQuoteMarkInArgument_whenExecutingCode_thenNoExceptionIsThrown() throws Exception {
-        new Commandline("echo \"let's go\"").execute();
-    }
-
-    @Test
-    public void givenADoubleQuoteMarkInArgument_whenExecutingCode_thenCommandLineExceptionIsThrown() throws Exception {
+    public void givenADoubleQuoteMarkInArgument_whenExecutingCode_thenCommandLineExceptionIsThrown()
+    {
         try {
             new Commandline("echo \"let\"s go\"").execute();
         } catch (CommandLineException e) {
@@ -124,8 +117,7 @@ public class CommandLineUtilsTest
     @Test
     public void givenASingleQuoteMarkInArgument_whenExecutingCode_thenExitCode0Returned() throws Exception {
         final Process p = new Commandline("echo \"let's go\"").execute();
-        // Note, this sleep should be removed when java version reaches Java 8
-        Thread.sleep(1000);
+        p.waitFor();
         assertEquals(0, p.exitValue());
     }
 
@@ -160,7 +152,9 @@ public class CommandLineUtilsTest
     public void givenAnEscapedDoubleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenNoExceptionIsThrown()
         throws Exception
     {
-        new Commandline( "echo \"let\\\"s go\"" ).execute();
+        Process p = new Commandline( "echo \"let\\\"s go\"" ).execute();
+        p.waitFor();
+        assertEquals(0, p.exitValue());
     }
 
     private void assertCmdLineArgs( final String[] expected, final String cmdLine )
@@ -185,7 +179,7 @@ public class CommandLineUtilsTest
     }
 
     @Test
-    public void environmentVariableFromSystemIsCopied() {
+    public void environmentVariableFromSystemIsCopiedByDefault() {
 
         Commandline commandline = new Commandline();
 
@@ -193,6 +187,18 @@ public class CommandLineUtilsTest
 
         assertNotNull(environmentVariables);
         assertThat(environmentVariables, hasItemInArray( "TEST_SHARED_ENV=TestValue" ) );
+    }
+
+    @Test
+    public void environmentVariableFromSystemIsNotCopiedIfInheritedIsFalse() {
+
+        Commandline commandline = new Commandline();
+        commandline.setShellEnvironmentInherited( false );
+
+        String[] environmentVariables = commandline.getEnvironmentVariables();
+
+        assertNotNull(environmentVariables);
+        assertEquals(0, environmentVariables.length );
     }
 
     @Test
