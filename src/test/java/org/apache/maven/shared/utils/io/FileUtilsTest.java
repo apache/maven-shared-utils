@@ -674,7 +674,7 @@ public class FileUtilsTest
     private File write( @Nonnull String name, long lastModified, @Nonnull String text) throws IOException
     {
         final File file = new File( tempFolder.getRoot(), name );
-        try ( final Writer writer = new FileWriter( file ) ) {
+        try ( Writer writer = new FileWriter( file ) ) {
             writer.write(text);
         }
         assertTrue( file.setLastModified( lastModified ) );
