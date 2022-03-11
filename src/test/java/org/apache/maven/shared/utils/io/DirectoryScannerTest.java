@@ -25,6 +25,7 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
@@ -120,6 +121,40 @@ public class DirectoryScannerTest
         fitScanTest( true, false, true,
                 /* includes        */ new String[]{ "**/*.dat", "*.somethingelse" },
                 /* excludes        */ null,
+                /* expInclFiles    */ new String[]{ "file3.dat", "folder1/file5.dat" },
+                /* expInclDirs     */ NONE,
+                /* expNotInclFiles */ new String[]{ "file1.txt", "file2.txt", "folder1/file4.txt" },
+                /* expNotInclDirs  */ new String[]{ "", "folder1" },
+                /* expExclFiles    */ NONE,
+                /* expExclDirs     */ NONE );
+    }
+
+    @Rule
+    public ExpectedException xcludesNPExRule = ExpectedException.none();
+
+    @Test
+    public void testIncludesWithNull()
+        throws Exception
+    {
+        testXcludesWithNull( new String[]{ null }, null );
+    }
+
+    @Test
+    public void testExcludesWithNull()
+        throws Exception
+    {
+        testXcludesWithNull( null, new String[]{ null } );
+    }
+
+    private void testXcludesWithNull( String[] includes, String[] excludes )
+        throws Exception
+    {
+        createTestData();
+        xcludesNPExRule.expect( NullPointerException.class );
+
+        fitScanTest( true, true, true,
+                /* includes        */ includes,
+                /* excludes        */ excludes,
                 /* expInclFiles    */ new String[]{ "file3.dat", "folder1/file5.dat" },
                 /* expInclDirs     */ NONE,
                 /* expNotInclFiles */ new String[]{ "file1.txt", "file2.txt", "folder1/file4.txt" },
