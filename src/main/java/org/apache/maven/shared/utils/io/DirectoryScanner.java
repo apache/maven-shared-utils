@@ -321,6 +321,10 @@ public class DirectoryScanner
             this.includes = new String[includes.length];
             for ( int i = 0; i < includes.length; i++ )
             {
+                if ( includes[i] == null )
+                {
+                    throw new NullPointerException( messageForNullListElement( "includes" ) );
+                }
                 String pattern;
                 pattern = includes[i].trim().replace( '/', File.separatorChar ).replace( '\\', File.separatorChar );
                 if ( pattern.endsWith( File.separator ) )
@@ -353,6 +357,10 @@ public class DirectoryScanner
             this.excludes = new String[excludes.length];
             for ( int i = 0; i < excludes.length; i++ )
             {
+                if ( excludes[i] == null )
+                {
+                    throw new NullPointerException( messageForNullListElement( "excludes" ) );
+                }
                 String pattern;
                 pattern = excludes[i].trim().replace( '/', File.separatorChar ).replace( '\\', File.separatorChar );
                 if ( pattern.endsWith( File.separator ) )
@@ -362,6 +370,11 @@ public class DirectoryScanner
                 this.excludes[i] = pattern;
             }
         }
+    }
+
+    private static String messageForNullListElement( String listName )
+    {
+        return "If a non-null " + listName + " list is given, all elements must be non-null";
     }
 
     /**
