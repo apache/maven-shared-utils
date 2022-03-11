@@ -136,21 +136,22 @@ public class DirectoryScannerTest
     public void testIncludesWithNull()
         throws Exception
     {
-        testXcludesWithNull( new String[]{ null }, null );
+        testXcludesWithNull( new String[]{ null }, null, "includes" );
     }
 
     @Test
     public void testExcludesWithNull()
         throws Exception
     {
-        testXcludesWithNull( null, new String[]{ null } );
+        testXcludesWithNull( null, new String[]{ null }, "excludes" );
     }
 
-    private void testXcludesWithNull( String[] includes, String[] excludes )
+    private void testXcludesWithNull( String[] includes, String[] excludes, String listName )
         throws Exception
     {
         createTestData();
         xcludesNPExRule.expect( NullPointerException.class );
+        xcludesNPExRule.expectMessage( "If a non-null " + listName + " list is given, all elements must be non-null" );
 
         fitScanTest( true, true, true,
                 /* includes        */ includes,
