@@ -151,6 +151,12 @@ class AnsiMessageBuilder
     @Override
     public String toString()
     {
+        return build();
+    }
+
+    @Override
+    public String build()
+    {
         return ansi.toString();
     }
 }

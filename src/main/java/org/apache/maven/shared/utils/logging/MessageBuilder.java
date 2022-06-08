@@ -19,8 +19,13 @@ package org.apache.maven.shared.utils.logging;
  * under the License.
  */
 
+import java.util.Formatter;
+
 /**
  * Message builder that supports configurable styling.
+ * An instance of this interface can be retrieved with {@link MessageUtils#buffer()}.
+ * After the message has been constructed with any of the append methods its content can be retrieved
+ * with {@link #build()}.
  * @see MessageUtils
  * @since 3.1.0
  */
@@ -125,9 +130,25 @@ public interface MessageBuilder
     /**
      * Append formatted content to the buffer.
      * @see String#format(String, Object...)
-     * @param pattern a <a href="../util/Formatter.html#syntax">format string</a>
+     * @param pattern a format string according to the {@link Formatter} syntax
      * @param args arguments referenced by the format specifiers in the format string.
      * @return the current builder
      */
     MessageBuilder format( String pattern, Object... args );
+
+    /**
+     * Get the message constructed by this builder.
+     * The underlying buffer is not reset with this method, i.e. if you continue using this builder you just
+     * append content to the existing one.
+     * @return the message
+     * @since 4.0.0
+     */
+    String build();
+
+    /**
+     * Same as {@link MessageBuilder#build()}.
+     * @deprecated Rather use {@link MessageBuilder#build()}
+     */
+    @Deprecated
+    String toString();
 }
