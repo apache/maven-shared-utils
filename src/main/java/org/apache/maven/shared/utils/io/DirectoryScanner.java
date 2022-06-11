@@ -762,7 +762,7 @@ public class DirectoryScanner
             catch ( final IOException ioe )
             {
                 final String msg =
-                    "IOException caught while checking " + "for links, couldn't get cannonical path!";
+                    "IOException caught while checking " + "for links, couldn't get canonical path!";
                 // will be caught and redirected to Ant's logging system
                 System.err.println( msg );
                 noLinks.add( newfile );
