@@ -63,7 +63,6 @@
     <checkstyle.violation.ignore>RedundantThrows,NewlineAtEndOfFile,ParameterNumber,MethodLength,FileLength,ModifierOrder</checkstyle.violation.ignore>
     <project.build.outputTimestamp>2021-04-26T13:54:25Z</project.build.outputTimestamp>
     <javaVersion>7</javaVersion>
-    <mavenVersion>3.1.0</mavenVersion>
   </properties>
 
   <dependencies>
@@ -110,24 +109,9 @@
       <version>3.0.2</version>
       <scope>provided</scope>
     </dependency>
-    <!--
-      ! Maven Core was used in context with Maven cause for Toolchain access: avoided through reflection.
-    -->
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-core</artifactId>
-      <version>${mavenVersion}</version>
-      <scope>test</scope>
-    </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
-      <version>3.3.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.plugin-testing</groupId>
-      <artifactId>maven-plugin-testing-harness</artifactId>
       <version>3.3.0</version>
       <scope>test</scope>
     </dependency>
