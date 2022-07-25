@@ -430,7 +430,7 @@ public class FileUtilsTest
             "to.txt"
         );
 
-        FileUtils.copyFile( from, to, null, ( FileUtils.FilterWrapper[] ) null);
+        FileUtils.copyFile( from, to, null, (FileUtils.FilterWrapper[]) null );
 
         assertTrue(
             "to.txt did not exist so should have been written",
@@ -454,7 +454,7 @@ public class FileUtilsTest
         );
 
         from.setLastModified( 0 );
-        FileUtils.copyFile( from, to, null, ( FileUtils.FilterWrapper[] ) null);
+        FileUtils.copyFile( from, to, null, (FileUtils.FilterWrapper[]) null );
 
         assertTrue(
             "to.txt did not exist so should have been written",
@@ -478,7 +478,7 @@ public class FileUtilsTest
             "Older content"
         );
 
-        FileUtils.copyFile( from, to, null, ( FileUtils.FilterWrapper[] ) null);
+        FileUtils.copyFile( from, to, null, (FileUtils.FilterWrapper[]) null );
 
         assertTrue(
             "to.txt was outdated so should have been overwritten",
@@ -502,7 +502,7 @@ public class FileUtilsTest
             "Older content"
         );
 
-        FileUtils.copyFile( from, to, null, ( FileUtils.FilterWrapper[] ) null);
+        FileUtils.copyFile( from, to, null, (FileUtils.FilterWrapper[]) null );
 
         assertTrue(
             "to.txt was newer so should have been left alone",
@@ -526,7 +526,7 @@ public class FileUtilsTest
             "Older content"
         );
 
-        FileUtils.copyFile( from, to, null, null, true);
+        FileUtils.copyFile( from, to, null, null, true );
 
         assertTrue(
             "to.txt was newer but the overwrite should have been forced",
@@ -695,7 +695,7 @@ public class FileUtilsTest
             };
     }
 
-    private File write( @Nonnull String name, long lastModified, @Nonnull String text) throws IOException
+    private File write( @Nonnull String name, long lastModified, @Nonnull String text ) throws IOException
     {
         final File file = new File( tempFolder.getRoot(), name );
         try ( final Writer writer = new FileWriter( file ) ) {
@@ -744,7 +744,7 @@ public class FileUtilsTest
         assertThat( "Check Exist", destination.exists(), is( false ) );
     }
 
-    @Test(expected = IOException.class)
+    @Test( expected = IOException.class )
     public void deleteFileNofile()
         throws Exception
     {
@@ -1035,7 +1035,7 @@ public class FileUtilsTest
         File file1 = new File( tempFolder.getRoot(), "test.txt" );
         String filename = file1.getAbsolutePath();
 
-        //Create test file on-the-fly (used to be in CVS)
+        //Create test file on-the-fly
         try ( OutputStream out = new java.io.FileOutputStream( file1 ) )
         {
             out.write( "This is a test".getBytes( "UTF-8" ) );
@@ -1571,7 +1571,7 @@ public class FileUtilsTest
     }
 
     @Test
-    @Ignore("Wait until we can run with assembly 2.5 which will support symlinks properly")
+    @Ignore( "Wait until we can run with assembly 2.5 which will support symlinks properly" )
     public void isASymbolicLink()
         throws IOException
     {
@@ -1579,16 +1579,16 @@ public class FileUtilsTest
         assumeFalse( Os.isFamily( Os.FAMILY_WINDOWS ) );
 
         File file = new File( "src/test/resources/symlinks/src/symDir" );
-        assertTrue(FileUtils.isSymbolicLink(file  ));
+        assertTrue( FileUtils.isSymbolicLink( file ) );
     }
 
     @Test
-    @Ignore("Wait until we can run with assembly 2.5 which will support symlinks properly")
+    @Ignore( "Wait until we can run with assembly 2.5 which will support symlinks properly" )
     public void notASymbolicLink()
         throws IOException
     {
         File file = new File( "src/test/resources/symlinks/src/" );
-        assertFalse(FileUtils.isSymbolicLink(file  ));
+        assertFalse( FileUtils.isSymbolicLink( file ) );
     }
 
     @Test
