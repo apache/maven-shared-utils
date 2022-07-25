@@ -47,7 +47,6 @@ public class MessageUtilsTest
         {
             MessageUtils.systemInstall();
             assertThat( System.out, not( sameInstance( currentOut ) ) );
-            assertThat( System.out, sameInstance( currentOut ) );
         }
         catch( LinkageError e )
         {
@@ -66,6 +65,7 @@ public class MessageUtilsTest
                 // ignore any thrown exception like NPE here
             }
         }
+        assertThat( System.out, sameInstance( currentOut ) );
     }
 
     @Test
