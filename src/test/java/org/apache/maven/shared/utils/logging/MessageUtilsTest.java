@@ -23,6 +23,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assume.assumeNoException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -46,12 +47,24 @@ public class MessageUtilsTest
         {
             MessageUtils.systemInstall();
             assertThat( System.out, not( sameInstance( currentOut ) ) );
-            MessageUtils.systemUninstall();
             assertThat( System.out, sameInstance( currentOut ) );
+        }
+        catch( LinkageError e )
+        {
+            assumeNoException( "JAnsi not supported for this platform", e );
         }
         finally
         {
-            System.setOut( currentOut );
+            try
+            {
+                // uninstall is always necessary due to https://github.com/fusesource/jansi/issues/242 
+                // but might throw exceptions
+                MessageUtils.systemUninstall();
+            }
+            catch ( Throwable t )
+            {
+                // ignore any thrown exception like NPE here
+            }
         }
     }
 
@@ -69,9 +82,28 @@ public class MessageUtilsTest
         AnsiOutputStream aos = new AnsiOutputStream( new ByteArrayOutputStream(), width, AnsiMode.Default,
                 null, AnsiType.Emulation, AnsiColors.Colors256, StandardCharsets.UTF_8,
                 null, null, false );
-        AnsiConsole.systemInstall();
-        AnsiConsole.out = new AnsiPrintStream( aos, true );
-        assertEquals( 33, MessageUtils.getTerminalWidth() );
-        AnsiConsole.systemUninstall();
+        try
+        {
+            AnsiConsole.systemInstall();
+            AnsiConsole.out = new AnsiPrintStream( aos, true );
+            assertEquals( 33, MessageUtils.getTerminalWidth() );
+        }
+        catch( LinkageError e )
+        {
+            assumeNoException( "JAnsi not supported for this platform", e );
+        }
+        finally
+        {
+            try
+            {
+                // uninstall is always necessary due to https://github.com/fusesource/jansi/issues/242 
+                // but might throw exceptions
+                AnsiConsole.systemUninstall();
+            }
+            catch ( Throwable t )
+            {
+                // ignore any thrown exception like NPE here
+            }
+        }
     }
 }
