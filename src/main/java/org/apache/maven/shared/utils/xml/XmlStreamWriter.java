@@ -24,9 +24,9 @@ import java.io.FileNotFoundException;
 import java.io.OutputStream;
 
 /**
- * We just wrap the commons StreamWriter to not get into troubles
- * by exposing shaded commons-io packages
+ * @deprecated use org.apache.commons.io.input.XmlStreamWriter instead
  */
+@Deprecated
 public class XmlStreamWriter
     extends org.apache.commons.io.output.XmlStreamWriter
 {
