@@ -1901,7 +1901,7 @@ public class FileUtils
     {
         if ( wrappers == null || wrappers.length == 0 )
         {
-            if ( overwrite || to.lastModified() < from.lastModified() )
+            if ( overwrite || !to.exists() || to.lastModified() < from.lastModified() )
             {
                 copyFile( from, to );
             }

@@ -440,6 +440,30 @@ public class FileUtilsTest
     }
 
     @Test
+    public void copyFileWithNoFiltersAndLastModifiedDateOfZeroAndNoDestination()
+        throws Exception
+    {
+        File from = write(
+            "from.txt",
+            MODIFIED_YESTERDAY,
+            "Hello World!"
+        );
+        File to = new File(
+            tempFolder.getRoot(),
+            "to.txt"
+        );
+
+        from.setLastModified( 0 );
+        FileUtils.copyFile( from, to, null, ( FileUtils.FilterWrapper[] ) null);
+
+        assertTrue(
+            "to.txt did not exist so should have been written",
+            to.lastModified() >= MODIFIED_TODAY
+        );
+        assertFileContent( to, "Hello World!" );
+    }
+
+    @Test
     public void copyFileWithNoFiltersAndOutdatedDestination()
             throws Exception
     {
