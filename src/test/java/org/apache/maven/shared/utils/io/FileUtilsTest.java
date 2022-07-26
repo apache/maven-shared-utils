@@ -39,6 +39,8 @@ import java.io.Reader;
 import java.io.Writer;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -445,7 +447,7 @@ public class FileUtilsTest
     {
         File from = write(
             "from.txt",
-            MODIFIED_YESTERDAY,
+            0,
             "Hello World!"
         );
         File to = new File(
@@ -453,7 +455,6 @@ public class FileUtilsTest
             "to.txt"
         );
 
-        from.setLastModified( 0 );
         FileUtils.copyFile( from, to, null, (FileUtils.FilterWrapper[]) null );
 
         assertTrue(
@@ -461,6 +462,28 @@ public class FileUtilsTest
             to.lastModified() >= MODIFIED_TODAY
         );
         assertFileContent( to, "Hello World!" );
+    }
+
+    @Test
+    public void copyRelativeSymbolicLinkFileWithNonExistingTargetWithNoFiltersAndNoDestination()
+        throws Exception
+    {
+        
+        File target = write(
+            "target.txt",
+            MODIFIED_YESTERDAY,
+            "Hello World!"
+        );
+        // must be a relative symbolic link
+        Path from = Files.createSymbolicLink( new File(tempFolder.getRoot(), "symLink").toPath(), Paths.get( "target.txt" ) );
+        File to = new File(
+            tempFolder.newFolder( "destDirectory" ),
+            "toSymLink"
+        );
+        // this create a symlink in a newfolder pointing to a non-existing relative target "./target.txt"
+        FileUtils.copyFile( from.toFile(), to, null, (FileUtils.FilterWrapper[]) null );
+
+        // this should not fail
     }
 
     @Test
