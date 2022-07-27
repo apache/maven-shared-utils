@@ -22,7 +22,7 @@ package org.apache.maven.shared.utils.cli;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.Objects;
 
 /**
  * Read from an InputStream and write the output to an OutputStream.
@@ -30,86 +30,70 @@ import java.util.concurrent.atomic.AtomicReference;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
 class StreamFeeder
-    extends AbstractStreamHandler
+    extends Thread
 {
 
-    private final AtomicReference<InputStream> input;
+    private final InputStream input;
 
-    private final AtomicReference<OutputStream> output;
+    private final OutputStream output;
 
-    private volatile Throwable exception;
+    private Throwable exception;
+    private boolean done;
+
+    private final Object lock = new Object();
 
     /**
      * Create a new StreamFeeder
      *
-     * @param input Stream to read from
+     * @param input  Stream to read from
      * @param output Stream to write to
      */
     StreamFeeder( InputStream input, OutputStream output )
     {
-        super();
-        this.input = new AtomicReference<InputStream>( input );
-        this.output = new AtomicReference<OutputStream>( output );
+        this.input = Objects.requireNonNull( input );
+        this.output = Objects.requireNonNull( output );
+        this.done = false;
     }
 
     @Override
+    @SuppressWarnings( "checkstyle:innerassignment" )
     public void run()
     {
         try
         {
-            feed();
-        }
-        catch ( Throwable e )
-        {
-            // Catch everything so the streams will be closed and flagged as done.
-            if ( this.exception != null )
+            for ( int data; !isInterrupted() && ( data = input.read() ) != -1; )
             {
-                this.exception = e;
+                output.write( data );
             }
+            output.flush();
+        }
+        catch ( IOException e )
+        {
+            exception = e;
         }
         finally
         {
             close();
+        }
 
-            synchronized ( this )
-            {
-                notifyAll();
-            }
+        synchronized ( lock )
+        {
+            done = true;
+            lock.notifyAll();
         }
     }
 
-    public void close()
+    private void close()
     {
-        setDone();
-        final InputStream is = input.getAndSet( null );
-        if ( is != null )
+        try
         {
-            try
-            {
-                is.close();
-            }
-            catch ( IOException ex )
-            {
-                if ( this.exception != null )
-                {
-                    this.exception = ex;
-                }
-            }
+            output.close();
         }
-
-        final OutputStream os = output.getAndSet( null );
-        if ( os != null )
+        catch ( IOException e )
         {
-            try
+            if ( exception == null )
             {
-                os.close();
-            }
-            catch ( IOException ex )
-            {
-                if ( this.exception != null )
-                {
-                    this.exception = ex;
-                }
+                exception = e;
             }
         }
     }
@@ -122,30 +106,22 @@ class StreamFeeder
         return this.exception;
     }
 
-    @SuppressWarnings( "checkstyle:innerassignment" )
-    private void feed()
-        throws IOException
+    public void waitUntilDone()
     {
-        InputStream is = input.get();
-        OutputStream os = output.get();
-        boolean flush = false;
-
-        if ( is != null && os != null )
+        interrupt();
+        synchronized ( lock )
         {
-            for ( int data; !isDone() && ( data = is.read() ) != -1; )
+            while ( !done )
             {
-                if ( !isDisabled() )
+                try
                 {
-                    os.write( data );
-                    flush = true;
+                    lock.wait();
                 }
-            }
-
-            if ( flush )
-            {
-                os.flush();
+                catch ( InterruptedException e )
+                {
+                    Thread.currentThread().interrupt();
+                }
             }
         }
     }
-
 }

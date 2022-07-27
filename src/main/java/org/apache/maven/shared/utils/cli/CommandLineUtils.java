@@ -27,6 +27,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -49,7 +50,7 @@ public abstract class CommandLineUtils
         implements StreamConsumer
     {
 
-        private final StringBuffer string = new StringBuffer();
+        private final StringBuilder string = new StringBuilder();
 
         private static final String LS = System.getProperty( "line.separator", "\n" );
 
@@ -71,16 +72,6 @@ public abstract class CommandLineUtils
         }
 
     }
-
-    /**
-     * Number of milliseconds per second.
-     */
-    private static final long MILLIS_PER_SECOND = 1000L;
-
-    /**
-     * Number of nanoseconds per second.
-     */
-    private static final long NANOS_PER_SECOND = 1000000000L;
 
     /**
      * @param cl The command line {@link Commandline}
@@ -288,31 +279,13 @@ public abstract class CommandLineUtils
                     errorPumper.setName( "StreamPumper-systemErr" );
                     errorPumper.start();
 
-                    int returnValue;
-                    if ( timeoutInSeconds <= 0 )
+                    if ( timeoutInSeconds > 0 && !p.waitFor( timeoutInSeconds, TimeUnit.SECONDS ) )
                     {
-                        returnValue = p.waitFor();
+                        throw new CommandLineTimeOutException(
+                            String.format( "Process timed out after %d seconds.", timeoutInSeconds ) );
                     }
-                    else
-                    {
-                        final long now = System.nanoTime();
-                        final long timeout = now + NANOS_PER_SECOND * timeoutInSeconds;
-                        while ( isAlive( p ) && ( System.nanoTime() < timeout ) )
-                        {
-                            // The timeout is specified in seconds. Therefore we must not sleep longer than one second
-                            // but we should sleep as long as possible to reduce the number of iterations performed.
-                            Thread.sleep( MILLIS_PER_SECOND - 1L );
-                        }
 
-                        if ( isAlive( p ) )
-                        {
-                            throw new InterruptedException( String.format( "Process timed out after %d seconds.",
-                                                                           timeoutInSeconds ) );
-
-                        }
-
-                        returnValue = p.exitValue();
-                    }
+                    int returnValue = p.waitFor();
 
 // TODO Find out if waitUntilDone needs to be called using a try-finally construct. The method may throw an
 //      InterruptedException so that calls to waitUntilDone may be skipped.
@@ -342,14 +315,9 @@ public abstract class CommandLineUtils
                     outputPumper.waitUntilDone();
                     errorPumper.waitUntilDone();
 
-                    if ( inputFeeder != null )
+                    if ( inputFeeder != null && inputFeeder.getException() != null )
                     {
-                        inputFeeder.close();
-
-                        if ( inputFeeder.getException() != null )
-                        {
-                            throw new CommandLineException( "Failure processing stdin.", inputFeeder.getException() );
-                        }
+                        throw new CommandLineException( "Failure processing stdin.", inputFeeder.getException() );
                     }
 
                     if ( outputPumper.getException() != null )
@@ -366,16 +334,12 @@ public abstract class CommandLineUtils
                 }
                 catch ( InterruptedException ex )
                 {
+                    Thread.currentThread().interrupt();
                     throw new CommandLineTimeOutException( "Error while executing external command, process killed.",
                                                            ex );
-
                 }
                 finally
                 {
-                    if ( inputFeeder != null )
-                    {
-                        inputFeeder.disable();
-                    }
                     if ( outputPumper != null )
                     {
                         outputPumper.disable();
@@ -395,18 +359,7 @@ public abstract class CommandLineUtils
                     finally
                     {
                         ShutdownHookUtils.removeShutdownHook( processHook );
-
-                        try
-                        {
-                            processHook.run();
-                        }
-                        finally
-                        {
-                            if ( inputFeeder != null )
-                            {
-                                inputFeeder.close();
-                            }
-                        }
+                        processHook.run();
                     }
                 }
             }
@@ -444,24 +397,6 @@ public abstract class CommandLineUtils
         return ensureCaseSensitivity( envs, caseSensitive );
     }
 
-    private static boolean isAlive( Process p )
-    {
-        if ( p == null )
-        {
-            return false;
-        }
-
-        try
-        {
-            p.exitValue();
-            return false;
-        }
-        catch ( IllegalThreadStateException e )
-        {
-            return true;
-        }
-    }
-
     /**
      * @param toProcess The command line to translate.
      * @return The array of translated parts.
@@ -482,7 +417,7 @@ public abstract class CommandLineUtils
         boolean inEscape = false;
         int state = normal;
         final StringTokenizer tok = new StringTokenizer( toProcess, "\"\' \\", true );
-        List<String> tokens = new ArrayList<String>();
+        List<String> tokens = new ArrayList<>();
         StringBuilder current = new StringBuilder();
 
         while ( tok.hasMoreTokens() )
