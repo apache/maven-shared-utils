@@ -468,19 +468,34 @@ public class FileUtilsTest
     public void copyRelativeSymbolicLinkFileWithNonExistingTargetWithNoFiltersAndNoDestination()
         throws Exception
     {
-        
-        File target = write(
+        write(
             "target.txt",
             MODIFIED_YESTERDAY,
             "Hello World!"
         );
-        // must be a relative symbolic link
+        // must be a relative symbolic link to existing target
         Path from = Files.createSymbolicLink( new File(tempFolder.getRoot(), "symLink").toPath(), Paths.get( "target.txt" ) );
         File to = new File(
             tempFolder.newFolder( "destDirectory" ),
             "toSymLink"
         );
-        // this create a symlink in a newfolder pointing to a non-existing relative target "./target.txt"
+        // this creates a symlink in a new folder pointing to a non-existing relative target "./target.txt"
+        FileUtils.copyFile( from.toFile(), to, null, (FileUtils.FilterWrapper[]) null );
+
+        // this should not fail
+    }
+
+    @Test
+    public void copySymbolicLinkFileWithNonExistingTargetWithNoFiltersAndNoDestination()
+        throws Exception
+    {
+        // link to non existing target
+        Path from = Files.createSymbolicLink( new File(tempFolder.getRoot(), "symLink").toPath(), Paths.get( "non-existing.txt" ) );
+        File to = new File(
+            tempFolder.getRoot(),
+            "toSymLink"
+        );
+        // this creates a symlink in a new folder pointing to a non-existing relative target "./target.txt"
         FileUtils.copyFile( from.toFile(), to, null, (FileUtils.FilterWrapper[]) null );
 
         // this should not fail
