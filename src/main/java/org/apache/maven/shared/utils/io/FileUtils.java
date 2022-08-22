@@ -815,7 +815,7 @@ public class FileUtils
         }
 
         //check source != destination, see PLXUTILS-10
-        if ( source.getCanonicalPath().equals( destination.getCanonicalPath() ) )
+        if ( destination.exists() && Files.isSameFile( source.toPath(), destination.toPath() ) )
         {
             //if they are equal, we can exit the method without doing any work
             return;
