@@ -248,8 +248,8 @@ public class Xpp3DomBuilder
 
             Xpp3Dom element = pop();
 
-            /* this Object could be null if it is a singleton tag */
-            Object accumulatedValue = values.remove( depth );
+            /* this StringBuilder could be null if it is a singleton tag */
+            StringBuilder accumulatedValue = values.remove( depth );
 
             if ( element.getChildCount() == 0 )
             {
