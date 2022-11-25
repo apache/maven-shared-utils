@@ -259,7 +259,8 @@ public class Xpp3DomBuilder
                 }
                 else
                 {
-                    element.setValue( accumulatedValue.toString() );
+                    String text = accumulatedValue.toString();
+                    element.setValue( ( trim && !spacePreserve ) ? text.trim() : text );
                 }
             }
 
@@ -274,7 +275,7 @@ public class Xpp3DomBuilder
             throws SAXException
         {
             String text = new String( ch, start, length );
-            appendToTopValue( ( trim && !spacePreserve ) ? text.trim() : text );
+            appendToTopValue( text );
         }
 
         private void appendToTopValue( String toAppend )
