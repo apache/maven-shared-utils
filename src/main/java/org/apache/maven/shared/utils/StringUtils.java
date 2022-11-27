@@ -618,7 +618,9 @@ public class StringUtils
      * @param array     the array of values to join together
      * @param separator the separator character to use
      * @return the joined String
+     * @deprecated use <code>java.lang.String.join(</code>) instead
      */
+    @Deprecated
     @Nonnull public static String join( @Nonnull Object[] array, @Nullable String separator )
     {
         if ( separator == null )
@@ -650,7 +652,9 @@ public class StringUtils
      * @param iterator  the <code>Iterator</code> of values to join together
      * @param separator the separator character to use
      * @return the joined String
+     * @deprecated use <code>java.lang.String.join(</code>) instead
      */
+    @Deprecated
     @Nonnull public static String join( @Nonnull Iterator<?> iterator, String separator )
     {
         if ( separator == null )
@@ -689,7 +693,7 @@ public class StringUtils
     }
 
     /**
-     * <p>Replace all occurances of a char within another char.</p>
+     * <p>Replace all occurrences of a char within a string with another char.</p>
      *
      * <p>A <code>null</code> reference passed to this method is a no-op.</p>
      *
