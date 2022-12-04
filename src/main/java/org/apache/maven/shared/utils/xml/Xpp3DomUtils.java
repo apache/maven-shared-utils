@@ -148,8 +148,8 @@ public class Xpp3DomUtils
     }
 
     /**
-     * @deprecated use <code>String.isBlank(str)</code> (Java 11+) 
-     *             or <code>str == null || org.apache.commons.lang3.StringUtils.isBlank(str)</code>
+     * @deprecated use <code>str == null || String.isBlank(str)</code> (Java 11+) 
+     *             or <code>org.apache.commons.lang3.StringUtils.isBlank(str)</code>
      * @param str the string to be checked
      * @return <code>true</code> if the string is null, empty, or whitespace only; <code>false</code> otherwise
      */
