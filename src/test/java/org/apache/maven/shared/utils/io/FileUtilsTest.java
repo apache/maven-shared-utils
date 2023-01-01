@@ -495,7 +495,7 @@ public class FileUtilsTest
             tempFolder.getRoot(),
             "toSymLink"
         );
-        // this creates a symlink in a new folder pointing to a non-existing relative target "./target.txt"
+        // this creates a symlink in a new folder pointing to a non-existing relative target "./non-existing.txt"
         FileUtils.copyFile( from.toFile(), to, null, (FileUtils.FilterWrapper[]) null );
 
         // this should not fail
