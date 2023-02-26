@@ -110,7 +110,9 @@ public class WriterFactory
      * @return an XML writer instance for the output stream
      * @throws IOException if any
      * @see XmlStreamWriter
+     * @deprecated use org.apache.commons.io.input.XmlStreamWriter instead
      */
+    @Deprecated
     public static XmlStreamWriter newXmlWriter( @Nonnull OutputStream out )
         throws IOException
     {
@@ -124,7 +126,9 @@ public class WriterFactory
      * @return an XML writer instance for the output file
      * @throws IOException if any
      * @see XmlStreamWriter
+     * @deprecated use org.apache.commons.io.input.XmlStreamWriter instead
      */
+    @Deprecated
     public static XmlStreamWriter newXmlWriter( @Nonnull File file )
         throws IOException
     {
