@@ -1,3 +1,21 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.apache.maven.shared.utils.xml;
 
 /*
@@ -19,10 +37,6 @@ package org.apache.maven.shared.utils.xml;
  * under the License.
  */
 
-import org.apache.maven.shared.utils.xml.pull.XmlPullParserException;
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,176 +45,159 @@ import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
+import org.apache.maven.shared.utils.xml.pull.XmlPullParserException;
+import org.junit.Assert;
+import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-
 /**
  * @author Kristian Rosenvold
  */
-public class Xpp3DomBuilderTest
-{
+public class Xpp3DomBuilderTest {
 
     private static final String XML_DECLARATION = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 
     @Test
-    public void selfClosingTag()
-        throws Exception
-    {
+    public void selfClosingTag() throws Exception {
 
         String domString = selfClosingTagSource();
 
-        Xpp3Dom dom = Xpp3DomBuilder.build( new StringReader( domString ) );
+        Xpp3Dom dom = Xpp3DomBuilder.build(new StringReader(domString));
 
         String expected = expectedSelfClosingTag();
         String dom1Str = dom.toString();
-        assertEquals( "check DOMs match", expected, dom1Str );
+        assertEquals("check DOMs match", expected, dom1Str);
     }
 
     @Test
-    public void testUnrecognizedEncoding()
-    {
+    public void testUnrecognizedEncoding() {
 
         byte[] data = "<foo/>".getBytes(StandardCharsets.UTF_8);
-        InputStream in = new ByteArrayInputStream( data );
+        InputStream in = new ByteArrayInputStream(data);
         try {
-            Xpp3DomBuilder.build( in , "nosuch encoding" );
+            Xpp3DomBuilder.build(in, "nosuch encoding");
             fail();
-        } catch ( XmlPullParserException expected ) {
-            assertTrue( expected.getCause() instanceof UnsupportedEncodingException );
+        } catch (XmlPullParserException expected) {
+            assertTrue(expected.getCause() instanceof UnsupportedEncodingException);
         }
-
     }
 
-    
     @Test
-    public void trimming()
-        throws Exception
-    {
+    public void trimming() throws Exception {
         String domString = createDomString();
 
-        Xpp3Dom dom = Xpp3DomBuilder.build( new StringReader( domString ), true );
+        Xpp3Dom dom = Xpp3DomBuilder.build(new StringReader(domString), true);
 
-        assertEquals( "element1value", dom.getChild( "element1" ).getValue() );
+        assertEquals("element1value", dom.getChild("element1").getValue());
 
-        assertEquals( "  preserve space  ", dom.getChild( "element6" ).getValue() );
+        assertEquals("  preserve space  ", dom.getChild("element6").getValue());
 
-        dom = Xpp3DomBuilder.build( new StringReader( domString ), false );
+        dom = Xpp3DomBuilder.build(new StringReader(domString), false);
 
-        assertEquals( " element1value\n ", dom.getChild( "element1" ).getValue() );
+        assertEquals(" element1value\n ", dom.getChild("element1").getValue());
 
-        assertEquals( "  preserve space  ", dom.getChild( "element6" ).getValue() );
+        assertEquals("  preserve space  ", dom.getChild("element6").getValue());
     }
 
     @Test
-    public void testMalformedXml()
-    {
+    public void testMalformedXml() {
         try {
-            Xpp3DomBuilder.build( new StringReader( "<newRoot>" + createDomString() ) );
-            fail( "We're supposed to fail" );
+            Xpp3DomBuilder.build(new StringReader("<newRoot>" + createDomString()));
+            fail("We're supposed to fail");
         } catch (XmlPullParserException ex) {
-            Assert.assertNotNull( ex.getMessage() );
+            Assert.assertNotNull(ex.getMessage());
         }
     }
 
     @Test
-    public void attributeEscaping()
-        throws IOException, XmlPullParserException
-    {
+    public void attributeEscaping() throws IOException, XmlPullParserException {
         String s = getAttributeEncodedString();
-        Xpp3Dom dom = Xpp3DomBuilder.build( new StringReader( s ) );
+        Xpp3Dom dom = Xpp3DomBuilder.build(new StringReader(s));
 
-        assertEquals( "<foo>", dom.getChild( "el" ).getAttribute( "att" ) );
+        assertEquals("<foo>", dom.getChild("el").getAttribute("att"));
         StringWriter w = new StringWriter();
-        Xpp3DomWriter.write( w, dom );
+        Xpp3DomWriter.write(w, dom);
         String newString = w.toString();
-        assertEquals( newString, s );
+        assertEquals(newString, s);
     }
 
     @Test
-    public void contentEscaping()
-        throws IOException, XmlPullParserException
-    {
-        Xpp3Dom dom = Xpp3DomBuilder.build( new StringReader( getEncodedString() ) );
+    public void contentEscaping() throws IOException, XmlPullParserException {
+        Xpp3Dom dom = Xpp3DomBuilder.build(new StringReader(getEncodedString()));
 
-        assertEquals( "\"msg\"", dom.getChild( "a1" ).getValue() );
-        assertEquals( "<b>\"msg\"</b>", dom.getChild( "a2" ).getValue() );
-        assertEquals( "<b>\"msg\"</b>", dom.getChild( "a3" ).getValue() );
+        assertEquals("\"msg\"", dom.getChild("a1").getValue());
+        assertEquals("<b>\"msg\"</b>", dom.getChild("a2").getValue());
+        assertEquals("<b>\"msg\"</b>", dom.getChild("a3").getValue());
 
         StringWriter w = new StringWriter();
-        Xpp3DomWriter.write( w, dom );
-        assertEquals( getExpectedString(), w.toString() );
+        Xpp3DomWriter.write(w, dom);
+        assertEquals(getExpectedString(), w.toString());
     }
 
-    private static String getAttributeEncodedString()
-    {
+    private static String getAttributeEncodedString() {
         StringBuilder domString = new StringBuilder();
-        domString.append( "<root>" );
-        domString.append( "\n" );
-        domString.append( "  <el att=\"&lt;foo&gt;\">bar</el>" );
-        domString.append( "\n" );
-        domString.append( "</root>" );
+        domString.append("<root>");
+        domString.append("\n");
+        domString.append("  <el att=\"&lt;foo&gt;\">bar</el>");
+        domString.append("\n");
+        domString.append("</root>");
 
         return domString.toString();
     }
 
-    private static String getEncodedString()
-    {
+    private static String getEncodedString() {
         StringBuilder domString = new StringBuilder();
-        domString.append( "<root>\n" );
-        domString.append( "  <a1>\"msg\"</a1>\n" );
-        domString.append( "  <a2><![CDATA[<b>\"msg\"</b>]]></a2>\n" );
-        domString.append( "  <a3>&lt;b&gt;&quot;msg&quot;&lt;/b&gt;</a3>\n" );
-        domString.append( "</root>" );
+        domString.append("<root>\n");
+        domString.append("  <a1>\"msg\"</a1>\n");
+        domString.append("  <a2><![CDATA[<b>\"msg\"</b>]]></a2>\n");
+        domString.append("  <a3>&lt;b&gt;&quot;msg&quot;&lt;/b&gt;</a3>\n");
+        domString.append("</root>");
 
         return domString.toString();
     }
 
-    private static String getExpectedString()
-    {
+    private static String getExpectedString() {
         StringBuilder domString = new StringBuilder();
-        domString.append( "<root>" );
-        domString.append( "\n" );
-        domString.append( "  <a1>\"msg\"</a1>" );
-        domString.append( "\n" );
-        domString.append( "  <a2>&lt;b&gt;\"msg\"&lt;/b&gt;</a2>" );
-        domString.append( "\n" );
-        domString.append( "  <a3>&lt;b&gt;\"msg\"&lt;/b&gt;</a3>" );
-        domString.append( "\n" );
-        domString.append( "</root>" );
+        domString.append("<root>");
+        domString.append("\n");
+        domString.append("  <a1>\"msg\"</a1>");
+        domString.append("\n");
+        domString.append("  <a2>&lt;b&gt;\"msg\"&lt;/b&gt;</a2>");
+        domString.append("\n");
+        domString.append("  <a3>&lt;b&gt;\"msg\"&lt;/b&gt;</a3>");
+        domString.append("\n");
+        domString.append("</root>");
         return domString.toString();
     }
 
-    private static String createDomString()
-    {
+    private static String createDomString() {
         StringBuilder buf = new StringBuilder();
-        buf.append( "<root>\n" );
-        buf.append( " <element1> element1value\n </element1>\n" );
-        buf.append( " <element2 att2='attribute2&#10;nextline'>\n" );
-        buf.append( "  <element3 att3='attribute3'>element3value</element3>\n" );
-        buf.append( " </element2>\n" );
-        buf.append( " <element4></element4>\n" );
-        buf.append( " <element5/>\n" );
-        buf.append( " <element6 xml:space=\"preserve\">  preserve space  </element6>\n" );
-        buf.append( "</root>\n" );
+        buf.append("<root>\n");
+        buf.append(" <element1> element1value\n </element1>\n");
+        buf.append(" <element2 att2='attribute2&#10;nextline'>\n");
+        buf.append("  <element3 att3='attribute3'>element3value</element3>\n");
+        buf.append(" </element2>\n");
+        buf.append(" <element4></element4>\n");
+        buf.append(" <element5/>\n");
+        buf.append(" <element6 xml:space=\"preserve\">  preserve space  </element6>\n");
+        buf.append("</root>\n");
 
         return buf.toString();
     }
 
-    private static String selfClosingTagSource()
-    {
+    private static String selfClosingTagSource() {
         StringBuilder buf = new StringBuilder();
-        buf.append( "<root>\n" );
-        buf.append( "  <el4></el4>\n" );
-        buf.append( "  <el5></el5>\n" );
-        buf.append( "</root>" );
+        buf.append("<root>\n");
+        buf.append("  <el4></el4>\n");
+        buf.append("  <el5></el5>\n");
+        buf.append("</root>");
         return buf.toString();
     }
 
-    private static String expectedSelfClosingTag()
-    {
+    private static String expectedSelfClosingTag() {
         return XML_DECLARATION + selfClosingTagSource();
     }
-
 }

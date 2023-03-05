@@ -1,3 +1,21 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.apache.maven.shared.utils.cli;
 
 /*
@@ -19,6 +37,9 @@ package org.apache.maven.shared.utils.cli;
  * under the License.
  */
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -28,48 +49,39 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.apache.maven.shared.utils.Os;
 import org.apache.maven.shared.utils.StringUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l </a>
  */
-public abstract class CommandLineUtils
-{
+public abstract class CommandLineUtils {
 
     /**
      * A {@code StreamConsumer} providing consumed lines as a {@code String}.
      *
      * @see #getOutput()
      */
-    public static class StringStreamConsumer
-        implements StreamConsumer
-    {
+    public static class StringStreamConsumer implements StreamConsumer {
 
         private final StringBuffer string = new StringBuffer();
 
-        private static final String LS = System.getProperty( "line.separator", "\n" );
+        private static final String LS = System.getProperty("line.separator", "\n");
 
         /**
          * {@inheritDoc}
          */
         @Override
-        public void consumeLine( String line )
-        {
-            string.append( line ).append( LS );
+        public void consumeLine(String line) {
+            string.append(line).append(LS);
         }
 
         /**
          * @return The output.
          */
-        public String getOutput()
-        {
+        public String getOutput() {
             return string.toString();
         }
-
     }
 
     /**
@@ -89,10 +101,9 @@ public abstract class CommandLineUtils
      * @return return code.
      * @throws CommandLineException in case of a problem.
      */
-    public static int executeCommandLine( @Nonnull Commandline cl, StreamConsumer systemOut, StreamConsumer systemErr )
-        throws CommandLineException
-    {
-        return executeCommandLine( cl, null, systemOut, systemErr, 0 );
+    public static int executeCommandLine(@Nonnull Commandline cl, StreamConsumer systemOut, StreamConsumer systemErr)
+            throws CommandLineException {
+        return executeCommandLine(cl, null, systemOut, systemErr, 0);
     }
 
     /**
@@ -103,11 +114,10 @@ public abstract class CommandLineUtils
      * @return return code.
      * @throws CommandLineException in case of a problem.
      */
-    public static int executeCommandLine( @Nonnull Commandline cl, StreamConsumer systemOut, StreamConsumer systemErr,
-                                          int timeoutInSeconds )
-        throws CommandLineException
-    {
-        return executeCommandLine( cl, null, systemOut, systemErr, timeoutInSeconds );
+    public static int executeCommandLine(
+            @Nonnull Commandline cl, StreamConsumer systemOut, StreamConsumer systemErr, int timeoutInSeconds)
+            throws CommandLineException {
+        return executeCommandLine(cl, null, systemOut, systemErr, timeoutInSeconds);
     }
 
     /**
@@ -118,11 +128,10 @@ public abstract class CommandLineUtils
      * @return return code.
      * @throws CommandLineException in case of a problem.
      */
-    public static int executeCommandLine( @Nonnull Commandline cl, InputStream systemIn, StreamConsumer systemOut,
-                                          StreamConsumer systemErr )
-        throws CommandLineException
-    {
-        return executeCommandLine( cl, systemIn, systemOut, systemErr, 0 );
+    public static int executeCommandLine(
+            @Nonnull Commandline cl, InputStream systemIn, StreamConsumer systemOut, StreamConsumer systemErr)
+            throws CommandLineException {
+        return executeCommandLine(cl, systemIn, systemOut, systemErr, 0);
     }
 
     /**
@@ -134,11 +143,14 @@ public abstract class CommandLineUtils
      * @return A return value, see {@link Process#exitValue()}
      * @throws CommandLineException or CommandLineTimeOutException if time out occurs
      */
-    public static int executeCommandLine( @Nonnull Commandline cl, InputStream systemIn, StreamConsumer systemOut,
-                                          StreamConsumer systemErr, int timeoutInSeconds )
-        throws CommandLineException
-    {
-        return executeCommandLine( cl, systemIn, systemOut, systemErr, timeoutInSeconds, null );
+    public static int executeCommandLine(
+            @Nonnull Commandline cl,
+            InputStream systemIn,
+            StreamConsumer systemOut,
+            StreamConsumer systemErr,
+            int timeoutInSeconds)
+            throws CommandLineException {
+        return executeCommandLine(cl, systemIn, systemOut, systemErr, timeoutInSeconds, null);
     }
 
     /**
@@ -152,13 +164,16 @@ public abstract class CommandLineUtils
      * @return A return value, see {@link Process#exitValue()}
      * @throws CommandLineException or CommandLineTimeOutException if time out occurs
      */
-    public static int executeCommandLine( @Nonnull Commandline cl, InputStream systemIn, StreamConsumer systemOut,
-                                          StreamConsumer systemErr, int timeoutInSeconds,
-                                          @Nullable Runnable runAfterProcessTermination )
-        throws CommandLineException
-    {
-        return executeCommandLine( cl, systemIn, systemOut, systemErr, timeoutInSeconds, runAfterProcessTermination,
-                                   null );
+    public static int executeCommandLine(
+            @Nonnull Commandline cl,
+            InputStream systemIn,
+            StreamConsumer systemOut,
+            StreamConsumer systemErr,
+            int timeoutInSeconds,
+            @Nullable Runnable runAfterProcessTermination)
+            throws CommandLineException {
+        return executeCommandLine(
+                cl, systemIn, systemOut, systemErr, timeoutInSeconds, runAfterProcessTermination, null);
     }
 
     /**
@@ -173,15 +188,17 @@ public abstract class CommandLineUtils
      * @return A return value, see {@link Process#exitValue()}
      * @throws CommandLineException or CommandLineTimeOutException if time out occurs
      */
-    public static int executeCommandLine( @Nonnull Commandline cl, InputStream systemIn, StreamConsumer systemOut,
-                                          StreamConsumer systemErr, int timeoutInSeconds,
-                                          @Nullable Runnable runAfterProcessTermination,
-                                          @Nullable final Charset streamCharset )
-        throws CommandLineException
-    {
-        final CommandLineCallable future =
-            executeCommandLineAsCallable( cl, systemIn, systemOut, systemErr, timeoutInSeconds,
-                                          runAfterProcessTermination, streamCharset );
+    public static int executeCommandLine(
+            @Nonnull Commandline cl,
+            InputStream systemIn,
+            StreamConsumer systemOut,
+            StreamConsumer systemErr,
+            int timeoutInSeconds,
+            @Nullable Runnable runAfterProcessTermination,
+            @Nullable final Charset streamCharset)
+            throws CommandLineException {
+        final CommandLineCallable future = executeCommandLineAsCallable(
+                cl, systemIn, systemOut, systemErr, timeoutInSeconds, runAfterProcessTermination, streamCharset);
         return future.call();
     }
 
@@ -199,16 +216,16 @@ public abstract class CommandLineUtils
      *         any internal state before after the completion of the call statements
      * @throws CommandLineException or CommandLineTimeOutException if time out occurs
      */
-    public static CommandLineCallable executeCommandLineAsCallable( @Nonnull final Commandline cl,
-                                                                    @Nullable final InputStream systemIn,
-                                                                    final StreamConsumer systemOut,
-                                                                    final StreamConsumer systemErr,
-                                                                    final int timeoutInSeconds,
-                                                                  @Nullable final Runnable runAfterProcessTermination )
-        throws CommandLineException
-    {
-        return executeCommandLineAsCallable( cl, systemIn, systemOut, systemErr, timeoutInSeconds,
-                                             runAfterProcessTermination, null );
+    public static CommandLineCallable executeCommandLineAsCallable(
+            @Nonnull final Commandline cl,
+            @Nullable final InputStream systemIn,
+            final StreamConsumer systemOut,
+            final StreamConsumer systemErr,
+            final int timeoutInSeconds,
+            @Nullable final Runnable runAfterProcessTermination)
+            throws CommandLineException {
+        return executeCommandLineAsCallable(
+                cl, systemIn, systemOut, systemErr, timeoutInSeconds, runAfterProcessTermination, null);
     }
 
     /**
@@ -226,191 +243,156 @@ public abstract class CommandLineUtils
      *         any internal state before after the completion of the call statements
      * @throws CommandLineException or CommandLineTimeOutException if time out occurs
      */
-    public static CommandLineCallable executeCommandLineAsCallable( @Nonnull final Commandline cl,
-                                                                    @Nullable final InputStream systemIn,
-                                                                    final StreamConsumer systemOut,
-                                                                    final StreamConsumer systemErr,
-                                                                    final int timeoutInSeconds,
-                                                                    @Nullable final Runnable runAfterProcessTermination,
-                                                                    @Nullable final Charset streamCharset )
-        throws CommandLineException
-    {
+    public static CommandLineCallable executeCommandLineAsCallable(
+            @Nonnull final Commandline cl,
+            @Nullable final InputStream systemIn,
+            final StreamConsumer systemOut,
+            final StreamConsumer systemErr,
+            final int timeoutInSeconds,
+            @Nullable final Runnable runAfterProcessTermination,
+            @Nullable final Charset streamCharset)
+            throws CommandLineException {
         //noinspection ConstantConditions
-        if ( cl == null )
-        {
-            throw new IllegalArgumentException( "cl cannot be null." );
+        if (cl == null) {
+            throw new IllegalArgumentException("cl cannot be null.");
         }
 
         final Process p = cl.execute();
 
-        final Thread processHook = new Thread()
-        {
+        final Thread processHook = new Thread() {
 
             {
-                this.setName( "CommandLineUtils process shutdown hook" );
-                this.setContextClassLoader( null );
+                this.setName("CommandLineUtils process shutdown hook");
+                this.setContextClassLoader(null);
             }
 
             @Override
-            public void run()
-            {
+            public void run() {
                 p.destroy();
             }
-
         };
 
-        ShutdownHookUtils.addShutDownHook( processHook );
+        ShutdownHookUtils.addShutDownHook(processHook);
 
-        return new CommandLineCallable()
-        {
+        return new CommandLineCallable() {
 
             @Override
-            public Integer call()
-                throws CommandLineException
-            {
+            public Integer call() throws CommandLineException {
                 StreamFeeder inputFeeder = null;
                 StreamPumper outputPumper = null;
                 StreamPumper errorPumper = null;
-                try
-                {
-                    if ( systemIn != null )
-                    {
-                        inputFeeder = new StreamFeeder( systemIn, p.getOutputStream() );
-                        inputFeeder.setName( "StreamFeeder-systemIn" );
+                try {
+                    if (systemIn != null) {
+                        inputFeeder = new StreamFeeder(systemIn, p.getOutputStream());
+                        inputFeeder.setName("StreamFeeder-systemIn");
                         inputFeeder.start();
                     }
 
-                    outputPumper = new StreamPumper( p.getInputStream(), systemOut );
-                    outputPumper.setName( "StreamPumper-systemOut" );
+                    outputPumper = new StreamPumper(p.getInputStream(), systemOut);
+                    outputPumper.setName("StreamPumper-systemOut");
                     outputPumper.start();
 
-                    errorPumper = new StreamPumper( p.getErrorStream(), systemErr );
-                    errorPumper.setName( "StreamPumper-systemErr" );
+                    errorPumper = new StreamPumper(p.getErrorStream(), systemErr);
+                    errorPumper.setName("StreamPumper-systemErr");
                     errorPumper.start();
 
                     int returnValue;
-                    if ( timeoutInSeconds <= 0 )
-                    {
+                    if (timeoutInSeconds <= 0) {
                         returnValue = p.waitFor();
-                    }
-                    else
-                    {
+                    } else {
                         final long now = System.nanoTime();
                         final long timeout = now + NANOS_PER_SECOND * timeoutInSeconds;
-                        while ( isAlive( p ) && ( System.nanoTime() < timeout ) )
-                        {
+                        while (isAlive(p) && (System.nanoTime() < timeout)) {
                             // The timeout is specified in seconds. Therefore we must not sleep longer than one second
                             // but we should sleep as long as possible to reduce the number of iterations performed.
-                            Thread.sleep( MILLIS_PER_SECOND - 1L );
+                            Thread.sleep(MILLIS_PER_SECOND - 1L);
                         }
 
-                        if ( isAlive( p ) )
-                        {
-                            throw new InterruptedException( String.format( "Process timed out after %d seconds.",
-                                                                           timeoutInSeconds ) );
-
+                        if (isAlive(p)) {
+                            throw new InterruptedException(
+                                    String.format("Process timed out after %d seconds.", timeoutInSeconds));
                         }
 
                         returnValue = p.exitValue();
                     }
 
-// TODO Find out if waitUntilDone needs to be called using a try-finally construct. The method may throw an
-//      InterruptedException so that calls to waitUntilDone may be skipped.
-//                    try
-//                    {
-//                        if ( inputFeeder != null )
-//                        {
-//                            inputFeeder.waitUntilDone();
-//                        }
-//                    }
-//                    finally
-//                    {
-//                        try
-//                        {
-//                            outputPumper.waitUntilDone();
-//                        }
-//                        finally
-//                        {
-//                            errorPumper.waitUntilDone();
-//                        }
-//                    }
-                    if ( inputFeeder != null )
-                    {
+                    // TODO Find out if waitUntilDone needs to be called using a try-finally construct. The method may
+                    // throw an
+                    //      InterruptedException so that calls to waitUntilDone may be skipped.
+                    //                    try
+                    //                    {
+                    //                        if ( inputFeeder != null )
+                    //                        {
+                    //                            inputFeeder.waitUntilDone();
+                    //                        }
+                    //                    }
+                    //                    finally
+                    //                    {
+                    //                        try
+                    //                        {
+                    //                            outputPumper.waitUntilDone();
+                    //                        }
+                    //                        finally
+                    //                        {
+                    //                            errorPumper.waitUntilDone();
+                    //                        }
+                    //                    }
+                    if (inputFeeder != null) {
                         inputFeeder.waitUntilDone();
                     }
 
                     outputPumper.waitUntilDone();
                     errorPumper.waitUntilDone();
 
-                    if ( inputFeeder != null )
-                    {
+                    if (inputFeeder != null) {
                         inputFeeder.close();
 
-                        if ( inputFeeder.getException() != null )
-                        {
-                            throw new CommandLineException( "Failure processing stdin.", inputFeeder.getException() );
+                        if (inputFeeder.getException() != null) {
+                            throw new CommandLineException("Failure processing stdin.", inputFeeder.getException());
                         }
                     }
 
-                    if ( outputPumper.getException() != null )
-                    {
-                        throw new CommandLineException( "Failure processing stdout.", outputPumper.getException() );
+                    if (outputPumper.getException() != null) {
+                        throw new CommandLineException("Failure processing stdout.", outputPumper.getException());
                     }
 
-                    if ( errorPumper.getException() != null )
-                    {
-                        throw new CommandLineException( "Failure processing stderr.", errorPumper.getException() );
+                    if (errorPumper.getException() != null) {
+                        throw new CommandLineException("Failure processing stderr.", errorPumper.getException());
                     }
 
                     return returnValue;
-                }
-                catch ( InterruptedException ex )
-                {
-                    throw new CommandLineTimeOutException( "Error while executing external command, process killed.",
-                                                           ex );
+                } catch (InterruptedException ex) {
+                    throw new CommandLineTimeOutException(
+                            "Error while executing external command, process killed.", ex);
 
-                }
-                finally
-                {
-                    if ( inputFeeder != null )
-                    {
+                } finally {
+                    if (inputFeeder != null) {
                         inputFeeder.disable();
                     }
-                    if ( outputPumper != null )
-                    {
+                    if (outputPumper != null) {
                         outputPumper.disable();
                     }
-                    if ( errorPumper != null )
-                    {
+                    if (errorPumper != null) {
                         errorPumper.disable();
                     }
 
-                    try
-                    {
-                        if ( runAfterProcessTermination != null )
-                        {
+                    try {
+                        if (runAfterProcessTermination != null) {
                             runAfterProcessTermination.run();
                         }
-                    }
-                    finally
-                    {
-                        ShutdownHookUtils.removeShutdownHook( processHook );
+                    } finally {
+                        ShutdownHookUtils.removeShutdownHook(processHook);
 
-                        try
-                        {
+                        try {
                             processHook.run();
-                        }
-                        finally
-                        {
-                            if ( inputFeeder != null )
-                            {
+                        } finally {
+                            if (inputFeeder != null) {
                                 inputFeeder.close();
                             }
                         }
                     }
                 }
             }
-
         };
     }
 
@@ -424,9 +406,8 @@ public abstract class CommandLineUtils
      * @deprecated use System#getenv()
      */
     @Deprecated
-    public static Properties getSystemEnvVars()
-    {
-        return getSystemEnvVars( !Os.isFamily( Os.FAMILY_WINDOWS ) );
+    public static Properties getSystemEnvVars() {
+        return getSystemEnvVars(!Os.isFamily(Os.FAMILY_WINDOWS));
     }
 
     /**
@@ -438,26 +419,20 @@ public abstract class CommandLineUtils
      * @deprecated use System#getenv()
      */
     @Deprecated
-    public static Properties getSystemEnvVars( boolean caseSensitive )
-    {
+    public static Properties getSystemEnvVars(boolean caseSensitive) {
         Map<String, String> envs = System.getenv();
-        return ensureCaseSensitivity( envs, caseSensitive );
+        return ensureCaseSensitivity(envs, caseSensitive);
     }
 
-    private static boolean isAlive( Process p )
-    {
-        if ( p == null )
-        {
+    private static boolean isAlive(Process p) {
+        if (p == null) {
             return false;
         }
 
-        try
-        {
+        try {
             p.exitValue();
             return false;
-        }
-        catch ( IllegalThreadStateException e )
-        {
+        } catch (IllegalThreadStateException e) {
             return true;
         }
     }
@@ -467,10 +442,8 @@ public abstract class CommandLineUtils
      * @return The array of translated parts.
      * @throws CommandLineException in case of unbalanced quotes.
      */
-    public static String[] translateCommandline( String toProcess ) throws CommandLineException
-    {
-        if ( ( toProcess == null ) || ( toProcess.length() == 0 ) )
-        {
+    public static String[] translateCommandline(String toProcess) throws CommandLineException {
+        if ((toProcess == null) || (toProcess.length() == 0)) {
             return new String[0];
         }
 
@@ -481,139 +454,103 @@ public abstract class CommandLineUtils
         final int inDoubleQuote = 2;
         boolean inEscape = false;
         int state = normal;
-        final StringTokenizer tok = new StringTokenizer( toProcess, "\"\' \\", true );
+        final StringTokenizer tok = new StringTokenizer(toProcess, "\"\' \\", true);
         List<String> tokens = new ArrayList<String>();
         StringBuilder current = new StringBuilder();
 
-        while ( tok.hasMoreTokens() )
-        {
+        while (tok.hasMoreTokens()) {
             String nextTok = tok.nextToken();
-            switch ( state )
-            {
+            switch (state) {
                 case inQuote:
-                    if ( "\'".equals( nextTok ) )
-                    {
-                        if ( inEscape )
-                        {
-                            current.append( nextTok );
+                    if ("\'".equals(nextTok)) {
+                        if (inEscape) {
+                            current.append(nextTok);
                             inEscape = false;
-                        }
-                        else
-                        {
+                        } else {
                             state = normal;
                         }
-                    }
-                    else
-                    {
-                        current.append( nextTok );
-                        inEscape = "\\".equals( nextTok );
+                    } else {
+                        current.append(nextTok);
+                        inEscape = "\\".equals(nextTok);
                     }
                     break;
                 case inDoubleQuote:
-                    if ( "\"".equals( nextTok ) )
-                    {
-                        if ( inEscape )
-                        {
-                            current.append( nextTok );
+                    if ("\"".equals(nextTok)) {
+                        if (inEscape) {
+                            current.append(nextTok);
                             inEscape = false;
-                        }
-                        else
-                        {
+                        } else {
                             state = normal;
                         }
-                    }
-                    else
-                    {
-                        current.append( nextTok );
-                        inEscape = "\\".equals( nextTok );
+                    } else {
+                        current.append(nextTok);
+                        inEscape = "\\".equals(nextTok);
                     }
                     break;
                 default:
-                    if ( "\'".equals( nextTok ) )
-                    {
-                        if ( inEscape )
-                        {
+                    if ("\'".equals(nextTok)) {
+                        if (inEscape) {
                             inEscape = false;
-                            current.append( nextTok );
-                        }
-                        else
-                        {
+                            current.append(nextTok);
+                        } else {
                             state = inQuote;
                         }
-                    }
-                    else if ( "\"".equals( nextTok ) )
-                    {
-                        if ( inEscape )
-                        {
+                    } else if ("\"".equals(nextTok)) {
+                        if (inEscape) {
                             inEscape = false;
-                            current.append( nextTok );
-                        }
-                        else
-                            {
+                            current.append(nextTok);
+                        } else {
                             state = inDoubleQuote;
                         }
-                    }
-                    else if ( " ".equals( nextTok ) )
-                    {
-                        if ( current.length() != 0 )
-                        {
-                            tokens.add( current.toString() );
-                            current.setLength( 0 );
+                    } else if (" ".equals(nextTok)) {
+                        if (current.length() != 0) {
+                            tokens.add(current.toString());
+                            current.setLength(0);
                         }
-                    }
-                    else
-                    {
-                        current.append( nextTok );
-                        inEscape = "\\".equals( nextTok );
+                    } else {
+                        current.append(nextTok);
+                        inEscape = "\\".equals(nextTok);
                     }
                     break;
             }
         }
 
-        if ( current.length() != 0 )
-        {
-            tokens.add( current.toString() );
+        if (current.length() != 0) {
+            tokens.add(current.toString());
         }
 
-        if ( ( state == inQuote ) || ( state == inDoubleQuote ) )
-        {
-            throw new CommandLineException( "unbalanced quotes in " + toProcess );
+        if ((state == inQuote) || (state == inDoubleQuote)) {
+            throw new CommandLineException("unbalanced quotes in " + toProcess);
         }
 
-        return tokens.toArray( new String[tokens.size()] );
+        return tokens.toArray(new String[tokens.size()]);
     }
 
     /**
      * @param line the lines
      * @return the concatenated lines, quoted and escaped, separated by spaces
      */
-    public static String toString( String... line )
-    {
+    public static String toString(String... line) {
         // empty path return empty string
-        if ( ( line == null ) || ( line.length == 0 ) )
-        {
+        if ((line == null) || (line.length == 0)) {
             return "";
         }
 
         final StringBuilder result = new StringBuilder();
-        for ( int i = 0; i < line.length; i++ )
-        {
-            if ( i > 0 )
-            {
-                result.append( ' ' );
+        for (int i = 0; i < line.length; i++) {
+            if (i > 0) {
+                result.append(' ');
             }
-            result.append( StringUtils.quoteAndEscape( line[i], '\"' ) );
+            result.append(StringUtils.quoteAndEscape(line[i], '\"'));
         }
         return result.toString();
     }
 
-    static Properties ensureCaseSensitivity( Map<String, String> envs, boolean preserveKeyCase )
-    {
+    static Properties ensureCaseSensitivity(Map<String, String> envs, boolean preserveKeyCase) {
         Properties envVars = new Properties();
-        for ( Map.Entry<String, String> entry : envs.entrySet() )
-        {
-            envVars.put( !preserveKeyCase ? entry.getKey().toUpperCase( Locale.ENGLISH ) : entry.getKey(),
-                         entry.getValue() );
+        for (Map.Entry<String, String> entry : envs.entrySet()) {
+            envVars.put(
+                    !preserveKeyCase ? entry.getKey().toUpperCase(Locale.ENGLISH) : entry.getKey(), entry.getValue());
         }
         return envVars;
     }

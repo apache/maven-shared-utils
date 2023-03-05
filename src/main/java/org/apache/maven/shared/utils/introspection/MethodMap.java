@@ -1,3 +1,21 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.apache.maven.shared.utils.introspection;
 
 /*
@@ -35,8 +53,7 @@ import java.util.Map;
  * @author <a href="mailto:szegedia@freemail.hu">Attila Szegedi</a>
  *
  */
-class MethodMap
-{
+class MethodMap {
     private static final int MORE_SPECIFIC = 0;
 
     private static final int LESS_SPECIFIC = 1;
@@ -55,19 +72,17 @@ class MethodMap
      *
      * @param method The method
      */
-    void add( Method method )
-    {
+    void add(Method method) {
         String methodName = method.getName();
 
-        List<Method> l = get( methodName );
+        List<Method> l = get(methodName);
 
-        if ( l == null )
-        {
+        if (l == null) {
             l = new ArrayList<Method>();
-            methodByNameMap.put( methodName, l );
+            methodByNameMap.put(methodName, l);
         }
 
-        l.add( method );
+        l.add(method);
     }
 
     /**
@@ -76,9 +91,8 @@ class MethodMap
      * @param key The name of the method.
      * @return List list of methods
      */
-    List<Method> get( String key )
-    {
-        return methodByNameMap.get( key );
+    List<Method> get(String key) {
+        return methodByNameMap.get(key);
     }
 
     /**
@@ -109,21 +123,17 @@ class MethodMap
      * @throws AmbiguousException if there is more than one maximally
      *                            specific applicable method
      */
-    Method find( String methodName, Object... args )
-        throws AmbiguousException
-    {
-        List<Method> methodList = get( methodName );
+    Method find(String methodName, Object... args) throws AmbiguousException {
+        List<Method> methodList = get(methodName);
 
-        if ( methodList == null )
-        {
+        if (methodList == null) {
             return null;
         }
 
         int l = args.length;
         Class<?>[] classes = new Class[l];
 
-        for ( int i = 0; i < l; ++i )
-        {
+        for (int i = 0; i < l; ++i) {
             Object arg = args[i];
 
             /*
@@ -133,33 +143,26 @@ class MethodMap
             classes[i] = arg == null ? null : arg.getClass();
         }
 
-        return getMostSpecific( methodList, classes );
+        return getMostSpecific(methodList, classes);
     }
 
     /**
      * simple distinguishable exception, used when
      * we run across ambiguous overloading
      */
-    static class AmbiguousException
-        extends Exception
-    {
+    static class AmbiguousException extends Exception {
 
         private static final long serialVersionUID = 751688436639650618L;
     }
 
+    private static Method getMostSpecific(List<Method> methods, Class<?>... classes) throws AmbiguousException {
+        LinkedList<Method> applicables = getApplicables(methods, classes);
 
-    private static Method getMostSpecific( List<Method> methods, Class<?>... classes )
-        throws AmbiguousException
-    {
-        LinkedList<Method> applicables = getApplicables( methods, classes );
-
-        if ( applicables.isEmpty() )
-        {
+        if (applicables.isEmpty()) {
             return null;
         }
 
-        if ( applicables.size() == 1 )
-        {
+        if (applicables.size() == 1) {
             return applicables.getFirst();
         }
 
@@ -171,17 +174,14 @@ class MethodMap
 
         LinkedList<Method> maximals = new LinkedList<Method>();
 
-        for ( Method app : applicables )
-        {
+        for (Method app : applicables) {
             Class<?>[] appArgs = app.getParameterTypes();
             boolean lessSpecific = false;
 
-            for ( Iterator<Method> maximal = maximals.iterator(); !lessSpecific && maximal.hasNext(); )
-            {
+            for (Iterator<Method> maximal = maximals.iterator(); !lessSpecific && maximal.hasNext(); ) {
                 Method max = maximal.next();
 
-                switch ( moreSpecific( appArgs, max.getParameterTypes() ) )
-                {
+                switch (moreSpecific(appArgs, max.getParameterTypes())) {
                     case MORE_SPECIFIC:
                         /*
                          * This method is more specific than the previously
@@ -206,14 +206,12 @@ class MethodMap
                 }
             }
 
-            if ( !lessSpecific )
-            {
-                maximals.addLast( app );
+            if (!lessSpecific) {
+                maximals.addLast(app);
             }
         }
 
-        if ( maximals.size() > 1 )
-        {
+        if (maximals.size() > 1) {
             // We have more than one maximally specific method
             throw new AmbiguousException();
         }
@@ -230,24 +228,19 @@ class MethodMap
      * @return MORE_SPECIFIC if c1 is more specific than c2, LESS_SPECIFIC if
      *         c1 is less specific than c2, INCOMPARABLE if they are incomparable.
      */
-    private static int moreSpecific( Class<?>[] c1, Class<?>[] c2 )
-    {
+    private static int moreSpecific(Class<?>[] c1, Class<?>[] c2) {
         boolean c1MoreSpecific = false;
         boolean c2MoreSpecific = false;
 
-        for ( int i = 0; i < c1.length; ++i )
-        {
-            if ( c1[i] != c2[i] )
-            {
-                c1MoreSpecific = c1MoreSpecific || isStrictMethodInvocationConvertible( c2[i], c1[i] );
-                c2MoreSpecific = c2MoreSpecific || isStrictMethodInvocationConvertible( c1[i], c2[i] );
+        for (int i = 0; i < c1.length; ++i) {
+            if (c1[i] != c2[i]) {
+                c1MoreSpecific = c1MoreSpecific || isStrictMethodInvocationConvertible(c2[i], c1[i]);
+                c2MoreSpecific = c2MoreSpecific || isStrictMethodInvocationConvertible(c1[i], c2[i]);
             }
         }
 
-        if ( c1MoreSpecific )
-        {
-            if ( c2MoreSpecific )
-            {
+        if (c1MoreSpecific) {
+            if (c2MoreSpecific) {
                 /*
                  *  Incomparable due to cross-assignable arguments (i.e.
                  * foo(String, Object) vs. foo(Object, String))
@@ -259,8 +252,7 @@ class MethodMap
             return MORE_SPECIFIC;
         }
 
-        if ( c2MoreSpecific )
-        {
+        if (c2MoreSpecific) {
             return LESS_SPECIFIC;
         }
 
@@ -281,15 +273,12 @@ class MethodMap
      *         formal and actual arguments matches, and argument types are assignable
      *         to formal types through a method invocation conversion).
      */
-    private static LinkedList<Method> getApplicables( List<Method> methods, Class<?>... classes )
-    {
+    private static LinkedList<Method> getApplicables(List<Method> methods, Class<?>... classes) {
         LinkedList<Method> list = new LinkedList<Method>();
 
-        for ( Method method : methods )
-        {
-            if ( isApplicable( method, classes ) )
-            {
-                list.add( method );
+        for (Method method : methods) {
+            if (isApplicable(method, classes)) {
+                list.add(method);
             }
         }
         return list;
@@ -303,19 +292,15 @@ class MethodMap
      * @param classes The arguments
      * @return true if the method applies to the parameter types
      */
-    private static boolean isApplicable( Method method, Class<?>... classes )
-    {
+    private static boolean isApplicable(Method method, Class<?>... classes) {
         Class<?>[] methodArgs = method.getParameterTypes();
 
-        if ( methodArgs.length != classes.length )
-        {
+        if (methodArgs.length != classes.length) {
             return false;
         }
 
-        for ( int i = 0; i < classes.length; ++i )
-        {
-            if ( !isMethodInvocationConvertible( methodArgs[i], classes[i] ) )
-            {
+        for (int i = 0; i < classes.length; ++i) {
+            if (!isMethodInvocationConvertible(methodArgs[i], classes[i])) {
                 return false;
             }
         }
@@ -341,13 +326,11 @@ class MethodMap
      *         type or an object type of a primitive type that can be converted to
      *         the formal type.
      */
-    private static boolean isMethodInvocationConvertible( Class<?> formal, Class<?> actual )
-    {
+    private static boolean isMethodInvocationConvertible(Class<?> formal, Class<?> actual) {
         /*
          * if it's a null, it means the arg was null
          */
-        if ( actual == null && !formal.isPrimitive() )
-        {
+        if (actual == null && !formal.isPrimitive()) {
             return true;
         }
 
@@ -355,8 +338,7 @@ class MethodMap
          *  Check for identity or widening reference conversion
          */
 
-        if ( actual != null && formal.isAssignableFrom( actual ) )
-        {
+        if (actual != null && formal.isAssignableFrom(actual)) {
             return true;
         }
 
@@ -365,45 +347,44 @@ class MethodMap
          * actual parameters are never primitives.
          */
 
-        if ( formal.isPrimitive() )
-        {
-            if ( formal == Boolean.TYPE && actual == Boolean.class )
-            {
+        if (formal.isPrimitive()) {
+            if (formal == Boolean.TYPE && actual == Boolean.class) {
                 return true;
             }
-            if ( formal == Character.TYPE && actual == Character.class )
-            {
+            if (formal == Character.TYPE && actual == Character.class) {
                 return true;
             }
-            if ( formal == Byte.TYPE && actual == Byte.class )
-            {
+            if (formal == Byte.TYPE && actual == Byte.class) {
                 return true;
             }
-            if ( formal == Short.TYPE && ( actual == Short.class || actual == Byte.class ) )
-            {
+            if (formal == Short.TYPE && (actual == Short.class || actual == Byte.class)) {
                 return true;
             }
-            if ( formal == Integer.TYPE
-                && ( actual == Integer.class || actual == Short.class || actual == Byte.class ) )
-            {
+            if (formal == Integer.TYPE && (actual == Integer.class || actual == Short.class || actual == Byte.class)) {
                 return true;
             }
-            if ( formal == Long.TYPE
-                && ( actual == Long.class || actual == Integer.class || actual == Short.class
-                    || actual == Byte.class ) )
-            {
+            if (formal == Long.TYPE
+                    && (actual == Long.class
+                            || actual == Integer.class
+                            || actual == Short.class
+                            || actual == Byte.class)) {
                 return true;
             }
-            if ( formal == Float.TYPE
-                && ( actual == Float.class || actual == Long.class || actual == Integer.class
-                    || actual == Short.class || actual == Byte.class ) )
-            {
+            if (formal == Float.TYPE
+                    && (actual == Float.class
+                            || actual == Long.class
+                            || actual == Integer.class
+                            || actual == Short.class
+                            || actual == Byte.class)) {
                 return true;
             }
-            if ( formal == Double.TYPE
-                && ( actual == Double.class || actual == Float.class || actual == Long.class || actual == Integer.class
-                    || actual == Short.class || actual == Byte.class ) )
-            {
+            if (formal == Double.TYPE
+                    && (actual == Double.class
+                            || actual == Float.class
+                            || actual == Long.class
+                            || actual == Integer.class
+                            || actual == Short.class
+                            || actual == Byte.class)) {
                 return true;
             }
         }
@@ -425,13 +406,11 @@ class MethodMap
      *         or formal and actual are both primitive types and actual can be
      *         subject to widening conversion to formal.
      */
-    private static boolean isStrictMethodInvocationConvertible( Class<?> formal, Class<?> actual )
-    {
+    private static boolean isStrictMethodInvocationConvertible(Class<?> formal, Class<?> actual) {
         /*
          * we shouldn't get a null into, but if so
          */
-        if ( actual == null && !formal.isPrimitive() )
-        {
+        if (actual == null && !formal.isPrimitive()) {
             return true;
         }
 
@@ -439,8 +418,7 @@ class MethodMap
          *  Check for identity or widening reference conversion
          */
 
-        if ( formal.isAssignableFrom( actual ) )
-        {
+        if (formal.isAssignableFrom(actual)) {
             return true;
         }
 
@@ -448,29 +426,26 @@ class MethodMap
          *  Check for widening primitive conversion.
          */
 
-        if ( formal.isPrimitive() )
-        {
-            if ( formal == Short.TYPE && ( actual == Byte.TYPE ) )
-            {
+        if (formal.isPrimitive()) {
+            if (formal == Short.TYPE && (actual == Byte.TYPE)) {
                 return true;
             }
-            if ( formal == Integer.TYPE && ( actual == Short.TYPE || actual == Byte.TYPE ) )
-            {
+            if (formal == Integer.TYPE && (actual == Short.TYPE || actual == Byte.TYPE)) {
                 return true;
             }
-            if ( formal == Long.TYPE && ( actual == Integer.TYPE || actual == Short.TYPE || actual == Byte.TYPE ) )
-            {
+            if (formal == Long.TYPE && (actual == Integer.TYPE || actual == Short.TYPE || actual == Byte.TYPE)) {
                 return true;
             }
-            if ( formal == Float.TYPE
-                && ( actual == Long.TYPE || actual == Integer.TYPE || actual == Short.TYPE || actual == Byte.TYPE ) )
-            {
+            if (formal == Float.TYPE
+                    && (actual == Long.TYPE || actual == Integer.TYPE || actual == Short.TYPE || actual == Byte.TYPE)) {
                 return true;
             }
-            if ( formal == Double.TYPE
-                && ( actual == Float.TYPE || actual == Long.TYPE || actual == Integer.TYPE || actual == Short.TYPE
-                    || actual == Byte.TYPE ) )
-            {
+            if (formal == Double.TYPE
+                    && (actual == Float.TYPE
+                            || actual == Long.TYPE
+                            || actual == Integer.TYPE
+                            || actual == Short.TYPE
+                            || actual == Byte.TYPE)) {
                 return true;
             }
         }

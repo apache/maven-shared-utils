@@ -1,3 +1,21 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.apache.maven.shared.utils.xml;
 
 /*
@@ -26,17 +44,15 @@ import java.util.ArrayList;
 
 /**
  * XMLWriter with nice indentation.
- * 
+ *
  * @author kama
  */
-public class PrettyPrintXMLWriter
-    implements XMLWriter
-{
+public class PrettyPrintXMLWriter implements XMLWriter {
     private static final char[] CLOSE_1 = "/>".toCharArray();
 
     private static final char[] CLOSE_2 = "</".toCharArray();
 
-    private static final char[] DEFAULT_LINE_INDENT = new char[]{ ' ', ' ' };
+    private static final char[] DEFAULT_LINE_INDENT = new char[] {' ', ' '};
 
     private PrintWriter writer;
 
@@ -62,45 +78,30 @@ public class PrettyPrintXMLWriter
      * @param writer not null
      * @param lineIndent can be null, but the normal way is some spaces
      */
-    public PrettyPrintXMLWriter( PrintWriter writer, String lineIndent )
-    {
-        this( writer, lineIndent, null, null );
+    public PrettyPrintXMLWriter(PrintWriter writer, String lineIndent) {
+        this(writer, lineIndent, null, null);
     }
 
     /**
      * @param writer not null
      * @param lineIndent can be null, but the normal way is some spaces.
      */
-    public PrettyPrintXMLWriter( Writer writer, String lineIndent )
-    {
-        this( new PrintWriter( writer ), lineIndent );
+    public PrettyPrintXMLWriter(Writer writer, String lineIndent) {
+        this(new PrintWriter(writer), lineIndent);
     }
 
     /**
      * @param writer not null
      */
-    public PrettyPrintXMLWriter( PrintWriter writer )
-    {
-        this( writer, null, null );
+    public PrettyPrintXMLWriter(PrintWriter writer) {
+        this(writer, null, null);
     }
 
     /**
      * @param writer not null
      */
-    public PrettyPrintXMLWriter( Writer writer )
-    {
-        this( new PrintWriter( writer ) );
-    }
-
-    /**
-     * @param writer not null
-     * @param lineIndent can be null, but the normal way is some spaces
-     * @param encoding can be null or invalid
-     * @param doctype can be null
-     */
-    public PrettyPrintXMLWriter( PrintWriter writer, String lineIndent, String encoding, String doctype )
-    {
-        this( writer, lineIndent.toCharArray(), "\n".toCharArray(), encoding, doctype );
+    public PrettyPrintXMLWriter(Writer writer) {
+        this(new PrintWriter(writer));
     }
 
     /**
@@ -109,9 +110,18 @@ public class PrettyPrintXMLWriter
      * @param encoding can be null or invalid
      * @param doctype can be null
      */
-    public PrettyPrintXMLWriter( Writer writer, String lineIndent, String encoding, String doctype )
-    {
-        this( new PrintWriter( writer ), lineIndent, encoding, doctype );
+    public PrettyPrintXMLWriter(PrintWriter writer, String lineIndent, String encoding, String doctype) {
+        this(writer, lineIndent.toCharArray(), "\n".toCharArray(), encoding, doctype);
+    }
+
+    /**
+     * @param writer not null
+     * @param lineIndent can be null, but the normal way is some spaces
+     * @param encoding can be null or invalid
+     * @param doctype can be null
+     */
+    public PrettyPrintXMLWriter(Writer writer, String lineIndent, String encoding, String doctype) {
+        this(new PrintWriter(writer), lineIndent, encoding, doctype);
     }
 
     /**
@@ -119,9 +129,8 @@ public class PrettyPrintXMLWriter
      * @param encoding can be null or invalid
      * @param doctype can be null
      */
-    public PrettyPrintXMLWriter( PrintWriter writer, String encoding, String doctype )
-    {
-        this( writer, DEFAULT_LINE_INDENT, "\n".toCharArray(), encoding, doctype );
+    public PrettyPrintXMLWriter(PrintWriter writer, String encoding, String doctype) {
+        this(writer, DEFAULT_LINE_INDENT, "\n".toCharArray(), encoding, doctype);
     }
 
     /**
@@ -129,9 +138,8 @@ public class PrettyPrintXMLWriter
      * @param encoding can be null or invalid
      * @param doctype can be null
      */
-    public PrettyPrintXMLWriter( Writer writer, String encoding, String doctype )
-    {
-        this( new PrintWriter( writer ), encoding, doctype );
+    public PrettyPrintXMLWriter(Writer writer, String encoding, String doctype) {
+        this(new PrintWriter(writer), encoding, doctype);
     }
 
     /**
@@ -141,10 +149,9 @@ public class PrettyPrintXMLWriter
      * @param encoding can be null or the encoding to use.
      * @param doctype can be null
      */
-    public PrettyPrintXMLWriter( PrintWriter writer, String lineIndent, String lineSeparator, String encoding,
-                                 String doctype )
-    {
-        this( writer, lineIndent.toCharArray(), lineSeparator.toCharArray(), encoding, doctype );
+    public PrettyPrintXMLWriter(
+            PrintWriter writer, String lineIndent, String lineSeparator, String encoding, String doctype) {
+        this(writer, lineIndent.toCharArray(), lineSeparator.toCharArray(), encoding, doctype);
     }
 
     /**
@@ -154,9 +161,8 @@ public class PrettyPrintXMLWriter
      * @param encoding      can be null or the encoding to use
      * @param doctype       can be null
      */
-    private PrettyPrintXMLWriter( PrintWriter writer, char[] lineIndent, char[] lineSeparator, String encoding,
-                                  String doctype )
-    {
+    private PrettyPrintXMLWriter(
+            PrintWriter writer, char[] lineIndent, char[] lineSeparator, String encoding, String doctype) {
         super();
         this.writer = writer;
         this.lineIndent = lineIndent;
@@ -171,40 +177,33 @@ public class PrettyPrintXMLWriter
     }
 
     /** {@inheritDoc} */
-    public void addAttribute( String key, String value ) throws IOException
-    {
-        if ( !processingElement )
-        {
-            throw new IllegalStateException( "currently processing no element" );
+    public void addAttribute(String key, String value) throws IOException {
+        if (!processingElement) {
+            throw new IllegalStateException("currently processing no element");
         }
 
-        writer.write( ' ' );
-        writer.write( key );
-        writer.write( '=' );
-        XMLEncode.xmlEncodeTextAsPCDATA( value, true, '"', writer );
-        if ( writer.checkError() )
-        {
-            throw new IOException( "Failure adding attribute '" + key + "' with value '" + value + "'" );
+        writer.write(' ');
+        writer.write(key);
+        writer.write('=');
+        XMLEncode.xmlEncodeTextAsPCDATA(value, true, '"', writer);
+        if (writer.checkError()) {
+            throw new IOException("Failure adding attribute '" + key + "' with value '" + value + "'");
         }
     }
 
     /** {@inheritDoc} */
-    public void setEncoding( String encoding )
-    {
-        if ( documentStarted )
-        {
-            throw new IllegalStateException( "Document headers already written!" );
+    public void setEncoding(String encoding) {
+        if (documentStarted) {
+            throw new IllegalStateException("Document headers already written!");
         }
 
         this.encoding = encoding;
     }
 
     /** {@inheritDoc} */
-    public void setDocType( String docType )
-    {
-        if ( documentStarted )
-        {
-            throw new IllegalStateException( "Document headers already written!" );
+    public void setDocType(String docType) {
+        if (documentStarted) {
+            throw new IllegalStateException("Document headers already written!");
         }
 
         this.docType = docType;
@@ -213,11 +212,9 @@ public class PrettyPrintXMLWriter
     /**
      * @param lineSeparator the line separator to be output
      */
-    public void setLineSeparator( String lineSeparator )
-    {
-        if ( documentStarted )
-        {
-            throw new IllegalStateException( "Document headers already written!" );
+    public void setLineSeparator(String lineSeparator) {
+        if (documentStarted) {
+            throw new IllegalStateException("Document headers already written!");
         }
 
         this.lineSeparator = lineSeparator.toCharArray();
@@ -226,107 +223,91 @@ public class PrettyPrintXMLWriter
     /**
      * @param lineIndentParameter the line indent parameter
      */
-    public void setLineIndenter( String lineIndentParameter )
-    {
-        if ( documentStarted )
-        {
-            throw new IllegalStateException( "Document headers already written!" );
+    public void setLineIndenter(String lineIndentParameter) {
+        if (documentStarted) {
+            throw new IllegalStateException("Document headers already written!");
         }
 
         this.lineIndent = lineIndentParameter.toCharArray();
     }
 
     /** {@inheritDoc} */
-    public void startElement( String elementName ) throws IOException
-    {
-        
-        if ( elementName.isEmpty() )
-        {
-            throw new IllegalArgumentException( "Element name cannot be empty" );
+    public void startElement(String elementName) throws IOException {
+
+        if (elementName.isEmpty()) {
+            throw new IllegalArgumentException("Element name cannot be empty");
         }
-        
+
         boolean firstLine = ensureDocumentStarted();
 
         completePreviouslyOpenedElement();
 
-        if ( !firstLine )
-        {
+        if (!firstLine) {
             newLine();
         }
 
-        writer.write( '<' );
-        writer.write( elementName );
-        if ( writer.checkError() )
-        {
-            throw new IOException( "Failure starting element '" + elementName + "'." );
+        writer.write('<');
+        writer.write(elementName);
+        if (writer.checkError()) {
+            throw new IOException("Failure starting element '" + elementName + "'.");
         }
 
         processingElement = true;
 
-        elementStack.add( depth++, elementName );
+        elementStack.add(depth++, elementName);
     }
 
     /** {@inheritDoc} */
-    public void writeText( String text ) throws IOException
-    {
+    public void writeText(String text) throws IOException {
         ensureDocumentStarted();
 
         completePreviouslyOpenedElement();
 
-        XMLEncode.xmlEncodeText( text, writer );
+        XMLEncode.xmlEncodeText(text, writer);
 
         endOnSameLine = true;
-        
-        if ( writer.checkError() )
-        {
-            throw new IOException( "Failure writing text." );
+
+        if (writer.checkError()) {
+            throw new IOException("Failure writing text.");
         }
     }
 
     /** {@inheritDoc} */
-    public void writeMarkup( String markup ) throws IOException
-    {
+    public void writeMarkup(String markup) throws IOException {
         ensureDocumentStarted();
 
         completePreviouslyOpenedElement();
 
-        writer.write( markup );
+        writer.write(markup);
 
-        if ( writer.checkError() )
-        {
-            throw new IOException( "Failure writing markup." );
+        if (writer.checkError()) {
+            throw new IOException("Failure writing markup.");
         }
     }
 
     /** {@inheritDoc} */
-    public void endElement() throws IOException
-    {
-        String chars = elementStack.get( --depth );
-        if ( processingElement )
-        {
+    public void endElement() throws IOException {
+        String chars = elementStack.get(--depth);
+        if (processingElement) {
             // this means we don't have any content yet so we just add a />
-            writer.write( CLOSE_1 );
+            writer.write(CLOSE_1);
 
             processingElement = false;
-        }
-        else
-        {
-            if ( !endOnSameLine )
-            {
+        } else {
+            if (!endOnSameLine) {
                 newLine();
             }
 
             // otherwise we need a full closing tag for that element
-            writer.write( CLOSE_2 );
-            writer.write( chars );
-            writer.write( '>' );
+            writer.write(CLOSE_2);
+            writer.write(chars);
+            writer.write('>');
         }
 
         endOnSameLine = false;
 
-        if ( writer.checkError() )
-        {
-            throw new IOException( "Failure ending element." );
+        if (writer.checkError()) {
+            throw new IOException("Failure ending element.");
         }
     }
 
@@ -335,12 +316,9 @@ public class PrettyPrintXMLWriter
      *
      * @return <code>true</code> if the document headers have freshly been written.
      */
-    private boolean ensureDocumentStarted()
-    {
-        if ( !documentStarted )
-        {
-            if ( docType != null || encoding != null )
-            {
+    private boolean ensureDocumentStarted() {
+        if (!documentStarted) {
+            if (docType != null || encoding != null) {
                 writeDocumentHeader();
             }
 
@@ -352,47 +330,39 @@ public class PrettyPrintXMLWriter
         return false;
     }
 
-    private void writeDocumentHeader()
-    {
-        writer.write( "<?xml version=\"1.0\"" );
+    private void writeDocumentHeader() {
+        writer.write("<?xml version=\"1.0\"");
 
-        if ( encoding != null )
-        {
-            writer.write( " encoding=\"" );
-            writer.write( encoding );
-            writer.write( '\"' );
+        if (encoding != null) {
+            writer.write(" encoding=\"");
+            writer.write(encoding);
+            writer.write('\"');
         }
 
-        writer.write( "?>" );
+        writer.write("?>");
 
         newLine();
 
-        if ( docType != null )
-        {
-            writer.write( "<!DOCTYPE " );
-            writer.write( docType );
-            writer.write( '>' );
+        if (docType != null) {
+            writer.write("<!DOCTYPE ");
+            writer.write(docType);
+            writer.write('>');
             newLine();
         }
     }
 
-    private void newLine()
-    {
-        writer.write( lineSeparator );
+    private void newLine() {
+        writer.write(lineSeparator);
 
-        for ( int i = 0; i < depth; i++ )
-        {
-            writer.write( lineIndent );
+        for (int i = 0; i < depth; i++) {
+            writer.write(lineIndent);
         }
     }
 
-    private void completePreviouslyOpenedElement()
-    {
-        if ( processingElement )
-        {
-            writer.write( '>' );
+    private void completePreviouslyOpenedElement() {
+        if (processingElement) {
+            writer.write('>');
             processingElement = false;
         }
     }
-
 }

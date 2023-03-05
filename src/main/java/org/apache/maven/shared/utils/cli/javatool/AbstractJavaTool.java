@@ -1,3 +1,21 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.apache.maven.shared.utils.cli.javatool;
 
 /*
@@ -19,6 +37,12 @@ package org.apache.maven.shared.utils.cli.javatool;
  * under the License.
  */
 
+import java.io.File;
+import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Map;
+
 import org.apache.maven.shared.utils.Os;
 import org.apache.maven.shared.utils.StringUtils;
 import org.apache.maven.shared.utils.cli.CommandLineException;
@@ -28,12 +52,6 @@ import org.apache.maven.shared.utils.cli.StreamConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Map;
-
 /**
  * Abstract implementation of a {@link JavaTool}.
  *
@@ -41,10 +59,8 @@ import java.util.Map;
  * @since 0.5
  * @param <Request> Tool-specific request type
  */
-public abstract class AbstractJavaTool<Request extends JavaToolRequest>
-    implements JavaTool<Request>
-{
-    private final Logger logger = LoggerFactory.getLogger( getClass() );
+public abstract class AbstractJavaTool<Request extends JavaToolRequest> implements JavaTool<Request> {
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      * The java tool name to find out in the jdk.
@@ -64,8 +80,7 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest>
     /**
      * @param javaToolName The name of the java tool.
      */
-    protected AbstractJavaTool( String javaToolName )
-    {
+    protected AbstractJavaTool(String javaToolName) {
         this.javaToolName = javaToolName;
     }
 
@@ -77,57 +92,48 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest>
      * @return the command line
      * @throws JavaToolException if could not create the command line from the request
      */
-    protected abstract Commandline createCommandLine( Request request, String javaToolFileLocation )
-        throws JavaToolException;
+    protected abstract Commandline createCommandLine(Request request, String javaToolFileLocation)
+            throws JavaToolException;
 
-    protected Logger getLogger()
-    {
+    protected Logger getLogger() {
         return logger;
     }
 
     /**
      * {@inheritDoc}
      */
-    public String getJavaToolName()
-    {
+    public String getJavaToolName() {
         return javaToolName;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setToolchain( Object toolchain )
-    {
+    public void setToolchain(Object toolchain) {
         this.toolchain = toolchain;
     }
 
     /**
      * {@inheritDoc}
      */
-    public JavaToolResult execute( Request request )
-        throws JavaToolException
-    {
+    public JavaToolResult execute(Request request) throws JavaToolException {
 
-        if ( javaToolFile == null )
-        {
+        if (javaToolFile == null) {
 
             // find the java tool file to use
-            try
-            {
+            try {
                 javaToolFile = findJavaToolExecutable();
-            }
-            catch ( Exception e )
-            {
-                throw new JavaToolException( "Error finding " + javaToolName + " executable. Reason: " + e.getMessage(),
-                                             e );
+            } catch (Exception e) {
+                throw new JavaToolException(
+                        "Error finding " + javaToolName + " executable. Reason: " + e.getMessage(), e);
             }
         }
 
         // creates the command line from the given request
-        Commandline cli = createCommandLine( request, javaToolFile );
+        Commandline cli = createCommandLine(request, javaToolFile);
 
         // execute it
-        JavaToolResult result = executeCommandLine( cli, request );
+        JavaToolResult result = executeCommandLine(cli, request);
 
         // return result
         return result;
@@ -136,19 +142,15 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest>
     /**
      * @return {@link InputStream}
      */
-    protected InputStream createSystemInputStream()
-    {
-        InputStream systemIn = new InputStream()
-        {
+    protected InputStream createSystemInputStream() {
+        InputStream systemIn = new InputStream() {
 
             /**
              * {@inheritDoc}
              */
-            public int read()
-            {
+            public int read() {
                 return -1;
             }
-
         };
         return systemIn;
     }
@@ -158,32 +160,27 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest>
      * @param request The request.
      * @return {@link JavaToolRequest}
      */
-    protected JavaToolResult executeCommandLine( Commandline cli, Request request )
-    {
-        if ( getLogger().isDebugEnabled() )
-        {
-            getLogger().debug( "Executing: " + cli );
+    protected JavaToolResult executeCommandLine(Commandline cli, Request request) {
+        if (getLogger().isDebugEnabled()) {
+            getLogger().debug("Executing: " + cli);
         }
 
         JavaToolResult result = createResult();
 
-        result.setCommandline( cli );
+        result.setCommandline(cli);
 
         InputStream systemIn = createSystemInputStream();
 
-        StreamConsumer systemOut = createSystemOutStreamConsumer( request );
+        StreamConsumer systemOut = createSystemOutStreamConsumer(request);
 
-        StreamConsumer systemErr = createSystemErrorStreamConsumer( request );
+        StreamConsumer systemErr = createSystemErrorStreamConsumer(request);
 
-        try
-        {
-            int resultCode = CommandLineUtils.executeCommandLine( cli, systemIn, systemOut, systemErr );
+        try {
+            int resultCode = CommandLineUtils.executeCommandLine(cli, systemIn, systemOut, systemErr);
 
-            result.setExitCode( resultCode );
-        }
-        catch ( CommandLineException e )
-        {
-            result.setExecutionException( e );
+            result.setExitCode(resultCode);
+        } catch (CommandLineException e) {
+            result.setExecutionException(e);
         }
 
         return result;
@@ -193,24 +190,19 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest>
      * @param request The request.
      * @return {@link StreamConsumer}
      */
-    protected StreamConsumer createSystemErrorStreamConsumer( Request request )
-    {
+    protected StreamConsumer createSystemErrorStreamConsumer(Request request) {
         StreamConsumer systemErr = request.getSystemErrorStreamConsumer();
 
-        if ( systemErr == null )
-        {
-            systemErr = new StreamConsumer()
-            {
+        if (systemErr == null) {
+            systemErr = new StreamConsumer() {
 
                 /**
                  * {@inheritDoc}
                  */
                 @Override
-                public void consumeLine( final String line )
-                {
-                    getLogger().warn( line );
+                public void consumeLine(final String line) {
+                    getLogger().warn(line);
                 }
-
             };
         }
         return systemErr;
@@ -220,26 +212,20 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest>
      * @param request The request.
      * @return {@link StreamConsumer}
      */
-    protected StreamConsumer createSystemOutStreamConsumer( Request request )
-    {
+    protected StreamConsumer createSystemOutStreamConsumer(Request request) {
         StreamConsumer systemOut = request.getSystemOutStreamConsumer();
 
-        if ( systemOut == null )
-        {
+        if (systemOut == null) {
 
-            systemOut = new StreamConsumer()
-            {
+            systemOut = new StreamConsumer() {
 
                 /**
                  * {@inheritDoc}
                  */
                 @Override
-                public void consumeLine( final String line )
-                {
-                    getLogger().info( line );
-
+                public void consumeLine(final String line) {
+                    getLogger().info(line);
                 }
-
             };
         }
         return systemOut;
@@ -248,49 +234,41 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest>
     /**
      * @return The JavaToolResult.
      */
-    protected JavaToolResult createResult()
-    {
+    protected JavaToolResult createResult() {
         return new JavaToolResult();
     }
 
     /**
      * @return The location of the java tool executable.
      */
-    protected String findJavaToolExecutable()
-    {
+    protected String findJavaToolExecutable() {
         String executable = null;
 
-        if ( toolchain != null )
-        {
+        if (toolchain != null) {
             executable = findToolchainExecutable();
         }
 
-        String command = javaToolName + ( Os.isFamily( Os.FAMILY_WINDOWS ) ? ".exe" : "" );
+        String command = javaToolName + (Os.isFamily(Os.FAMILY_WINDOWS) ? ".exe" : "");
 
-        if ( executable == null )
-        {
-            executable = findExecutable( command, System.getProperty( "java.home" ), "../bin", "bin", "../sh" );
+        if (executable == null) {
+            executable = findExecutable(command, System.getProperty("java.home"), "../bin", "bin", "../sh");
         }
 
-        if ( executable == null )
-        {
+        if (executable == null) {
 
             Map<String, String> env = System.getenv();
 
-            String[] variables = { "JDK_HOME", "JAVA_HOME" };
+            String[] variables = {"JDK_HOME", "JAVA_HOME"};
 
-            for ( String variable : variables )
-            {
-                executable = findExecutable( command, env.get( variable ), "bin", "sh" );
-                if ( executable != null )
-                {
+            for (String variable : variables) {
+                executable = findExecutable(command, env.get(variable), "bin", "sh");
+                if (executable != null) {
                     break;
                 }
             }
         }
 
-        if ( executable == null )
-        {
+        if (executable == null) {
             executable = command;
         }
 
@@ -301,37 +279,25 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest>
      * Run toolchain.findTool( javaToolName ); through reflection to avoid compile dependency on
      * Maven core.
      */
-    private String findToolchainExecutable()
-    {
-        try
-        {
-            Method m = toolchain.getClass().getMethod( "findTool", String.class );
-            return (String) m.invoke( toolchain, javaToolName );
-        }
-        catch ( NoSuchMethodException e )
-        {
+    private String findToolchainExecutable() {
+        try {
+            Method m = toolchain.getClass().getMethod("findTool", String.class);
+            return (String) m.invoke(toolchain, javaToolName);
+        } catch (NoSuchMethodException e) {
             // should not happen if toolchain is really a Toolchain object
-            getLogger().warn( "unexpected NoSuchMethodException", e );
-        }
-        catch ( SecurityException e )
-        {
+            getLogger().warn("unexpected NoSuchMethodException", e);
+        } catch (SecurityException e) {
             // should not happen
-            getLogger().warn( "unexpected SecurityException", e );
-        }
-        catch ( IllegalAccessException e )
-        {
+            getLogger().warn("unexpected SecurityException", e);
+        } catch (IllegalAccessException e) {
             // should not happen
-            getLogger().warn( "unexpected IllegalAccessException", e );
-        }
-        catch ( IllegalArgumentException e )
-        {
+            getLogger().warn("unexpected IllegalAccessException", e);
+        } catch (IllegalArgumentException e) {
             // should not happen: parameter is the right type
-            getLogger().warn( "unexpected IllegalArgumentException", e );
-        }
-        catch ( InvocationTargetException e )
-        {
+            getLogger().warn("unexpected IllegalArgumentException", e);
+        } catch (InvocationTargetException e) {
             // not expected...
-            getLogger().warn( "unexpected InvocationTargetException", e );
+            getLogger().warn("unexpected InvocationTargetException", e);
         }
         return null;
     }
@@ -344,17 +310,13 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest>
      * @param subDirs The sub directories of the home directory to search in, must not be <code>null</code>.
      * @return The (absolute) path to the command if found, <code>null</code> otherwise.
      */
-    private String findExecutable( String command, String homeDir, String... subDirs )
-    {
+    private String findExecutable(String command, String homeDir, String... subDirs) {
         String result = null;
-        if ( StringUtils.isNotEmpty( homeDir ) )
-        {
-            for ( String subDir : subDirs )
-            {
-                File file = new File( new File( homeDir, subDir ), command );
+        if (StringUtils.isNotEmpty(homeDir)) {
+            for (String subDir : subDirs) {
+                File file = new File(new File(homeDir, subDir), command);
 
-                if ( file.isFile() )
-                {
+                if (file.isFile()) {
                     result = file.getAbsolutePath();
                     break;
                 }

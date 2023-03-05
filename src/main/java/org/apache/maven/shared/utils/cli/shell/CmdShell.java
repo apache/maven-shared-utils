@@ -1,3 +1,21 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.apache.maven.shared.utils.cli.shell;
 
 /*
@@ -26,19 +44,16 @@ import java.util.List;
  * Implementation to call the CMD Shell present on Windows NT, 2000, XP, 7, 8, and 10.
  *
  * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
- * 
+ *
  */
-public class CmdShell
-    extends Shell
-{
+public class CmdShell extends Shell {
     /**
      * Create an instance of CmdShell.
      */
-    public CmdShell()
-    {
-        setShellCommand( "cmd.exe" );
-        setQuotedExecutableEnabled( true );
-        setShellArgs( new String[]{ "/X", "/C" } );
+    public CmdShell() {
+        setShellCommand("cmd.exe");
+        setQuotedExecutableEnabled(true);
+        setShellArgs(new String[] {"/X", "/C"});
     }
 
     /**
@@ -77,19 +92,17 @@ public class CmdShell
      * Always quoting the entire command line, regardless of these conditions
      * appears to make Windows processes invoke successfully.
      * </p>
-     * 
+     *
      * @param executable The executable.
      * @param arguments The arguments for the executable.
      * @return The resulting command line.
      */
-    public List<String> getCommandLine( String executable, String... arguments )
-    {
+    public List<String> getCommandLine(String executable, String... arguments) {
         StringBuilder sb = new StringBuilder();
-        sb.append( '"' );
-        sb.append( super.getCommandLine( executable, arguments ).get( 0 ) );
-        sb.append( '"' );
+        sb.append('"');
+        sb.append(super.getCommandLine(executable, arguments).get(0));
+        sb.append('"');
 
-        return Arrays.asList( sb.toString() );
+        return Arrays.asList(sb.toString());
     }
-
 }

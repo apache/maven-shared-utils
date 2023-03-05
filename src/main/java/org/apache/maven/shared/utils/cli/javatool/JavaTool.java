@@ -1,3 +1,21 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.apache.maven.shared.utils.cli.javatool;
 
 /*
@@ -30,8 +48,7 @@ package org.apache.maven.shared.utils.cli.javatool;
  * @since 0.5
  * @param <Request> Tool-specific request type
  */
-public interface JavaTool<Request extends JavaToolRequest>
-{
+public interface JavaTool<Request extends JavaToolRequest> {
 
     /**
      * <p>Return the name of the java tool. This is exactly the name (without his extension) of the executable to
@@ -49,7 +66,7 @@ public interface JavaTool<Request extends JavaToolRequest>
      * To avoid direct dependency on Maven core, this parameter is an Object that will be
      * used as Toolchain through reflection
      */
-    void setToolchain( Object toolchain );
+    void setToolchain(Object toolchain);
 
     /**
      * <p>Execute the input request and then returns the result of the execution.</p>
@@ -62,6 +79,5 @@ public interface JavaTool<Request extends JavaToolRequest>
      * @return the result of the tool execution
      * @throws JavaToolException if could not create the java tool invocation
      */
-    JavaToolResult execute( Request request )
-        throws JavaToolException;
+    JavaToolResult execute(Request request) throws JavaToolException;
 }

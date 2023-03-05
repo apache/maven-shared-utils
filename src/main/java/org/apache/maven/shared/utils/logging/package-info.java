@@ -48,4 +48,3 @@
  * @since 3.1.0
  */
 package org.apache.maven.shared.utils.logging;
-

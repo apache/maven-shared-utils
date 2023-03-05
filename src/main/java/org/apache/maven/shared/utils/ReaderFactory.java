@@ -1,3 +1,21 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.apache.maven.shared.utils;
 
 /*
@@ -19,6 +37,8 @@ package org.apache.maven.shared.utils;
  * under the License.
  */
 
+import javax.annotation.Nonnull;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -29,10 +49,8 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
+
 import org.apache.commons.io.input.XmlStreamReader;
-
-import javax.annotation.Nonnull;
-
 
 /**
  * Utility to create Readers from streams, with explicit encoding choice: platform default,
@@ -42,8 +60,7 @@ import javax.annotation.Nonnull;
  * @see java.nio.charset.Charset
  * @see <a href="https://docs.oracle.com/javase/7/docs/technotes/guides/intl/encoding.doc.html">Supported encodings</a>
  */
-public class ReaderFactory
-{
+public class ReaderFactory {
     /**
      * ISO Latin Alphabet #1, also known as ISO-LATIN-1.
      * Every implementation of the Java platform is required to support this character encoding.
@@ -102,7 +119,7 @@ public class ReaderFactory
     /**
      * The <code>file.encoding</code> System Property.
      */
-    public static final String FILE_ENCODING = System.getProperty( "file.encoding" );
+    public static final String FILE_ENCODING = System.getProperty("file.encoding");
 
     /**
      * Create a new Reader with XML encoding detection rules.
@@ -113,10 +130,8 @@ public class ReaderFactory
      * @deprecated use org.apache.commons.io.input.XmlStreamReader instead
      */
     @Deprecated
-    public static Reader newXmlReader( @Nonnull InputStream in )
-        throws IOException
-    {
-        return new XmlStreamReader( in );
+    public static Reader newXmlReader(@Nonnull InputStream in) throws IOException {
+        return new XmlStreamReader(in);
     }
 
     /**
@@ -128,10 +143,8 @@ public class ReaderFactory
      * @deprecated use org.apache.commons.io.input.XmlStreamReader instead
      */
     @Deprecated
-    public static Reader newXmlReader( @Nonnull File file )
-        throws IOException
-    {
-        return new XmlStreamReader( file );
+    public static Reader newXmlReader(@Nonnull File file) throws IOException {
+        return new XmlStreamReader(file);
     }
 
     /**
@@ -143,10 +156,8 @@ public class ReaderFactory
      * @deprecated use {@code org.apache.commons.io.input.XmlStreamReader} instead
      */
     @Deprecated
-    public static Reader newXmlReader( @Nonnull URL url )
-        throws IOException
-    {
-        return new XmlStreamReader( url );
+    public static Reader newXmlReader(@Nonnull URL url) throws IOException {
+        return new XmlStreamReader(url);
     }
 
     /**
@@ -159,10 +170,8 @@ public class ReaderFactory
      * @deprecated always specify an encoding. Do not depend on the default platform character set.
      */
     @Deprecated
-    public static Reader newPlatformReader( @Nonnull File file )
-        throws FileNotFoundException
-    {
-        return new FileReader( file );
+    public static Reader newPlatformReader(@Nonnull File file) throws FileNotFoundException {
+        return new FileReader(file);
     }
 
     /**
@@ -175,10 +184,9 @@ public class ReaderFactory
      * @see <a href="https://docs.oracle.com/javase/7/docs/technotes/guides/intl/encoding.doc.html">Supported
      *         encodings</a>
      */
-    public static Reader newReader( @Nonnull InputStream in, @Nonnull String encoding )
-        throws UnsupportedEncodingException
-    {
-        return new InputStreamReader( in, encoding );
+    public static Reader newReader(@Nonnull InputStream in, @Nonnull String encoding)
+            throws UnsupportedEncodingException {
+        return new InputStreamReader(in, encoding);
     }
 
     /**
@@ -192,10 +200,9 @@ public class ReaderFactory
      * @see <a href="https://docs.oracle.com/javase/7/docs/technotes/guides/intl/encoding.doc.html">Supported
      *         encodings</a>
      */
-    public static Reader newReader( @Nonnull File file, @Nonnull String encoding )
-        throws FileNotFoundException, UnsupportedEncodingException
-    {
-        return new InputStreamReader( new FileInputStream( file ), encoding );
+    public static Reader newReader(@Nonnull File file, @Nonnull String encoding)
+            throws FileNotFoundException, UnsupportedEncodingException {
+        return new InputStreamReader(new FileInputStream(file), encoding);
     }
 
     /**
@@ -208,9 +215,7 @@ public class ReaderFactory
      * @see <a href="https://docs.oracle.com/javase/7/docs/technotes/guides/intl/encoding.doc.html">Supported
      *         encodings</a>
      */
-    public static Reader newReader( @Nonnull URL url, @Nonnull String encoding )
-        throws IOException
-    {
-        return new InputStreamReader( url.openStream(), encoding );
+    public static Reader newReader(@Nonnull URL url, @Nonnull String encoding) throws IOException {
+        return new InputStreamReader(url.openStream(), encoding);
     }
 }
