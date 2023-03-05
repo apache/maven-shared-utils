@@ -115,7 +115,8 @@ import java.util.Set;
  * @author Magesh Umasankar
  * @author <a href="mailto:bruce@callenish.com">Bruce Atherton</a>
  * @author <a href="mailto:levylambert@tiscali-dsl.de">Antoine Levy-Lambert</a>
- * @deprecated use {@code java.nio.file.DirectoryStream} and related classes
+ * @deprecated use {@code java.nio.file.DirectoryStream} or {@code java.nio.Files.walkFileTree()}
+ *             and related classes
  */
 @Deprecated
 public class DirectoryScanner {
