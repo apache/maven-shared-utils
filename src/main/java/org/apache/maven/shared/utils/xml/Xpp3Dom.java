@@ -409,7 +409,7 @@ public class Xpp3Dom
      *
      * @param str the string to be checked
      * @return true if the string is not empty (length &gt; 0) and not <code>null</code>
-     * @deprecated use <code>str != null && !str.isEmpty()</code>
+     * @deprecated use <code>str != null &amp;&amp; !str.isEmpty()</code>
      */
     @Deprecated
     public static boolean isNotEmpty( String str )
