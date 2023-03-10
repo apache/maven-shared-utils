@@ -404,18 +404,28 @@ public class Xpp3Dom
     }
 
     /**
-     * @param str The string to be checked.
-     * @return true if the string is not empty (length &gt; 0) and not <code>null</code>.
+     * Warning: this is not the reverse of {@link #isEmpty()}.
+     * Whitespace only strings are both empty and not empty.
+     *
+     * @param str the string to be checked
+     * @return true if the string is not empty (length &gt; 0) and not <code>null</code>
+     * @deprecated use <code>str != null && !str.isEmpty()</code>
      */
+    @Deprecated
     public static boolean isNotEmpty( String str )
     {
         return str != null && str.length() > 0;
     }
 
     /**
-     * @param str The string to be checked.
-     * @return true if the string is empty or <code>null</code>.
+     * Warning: this is not the reverse of {@link #isNotEmpty}.
+     * Whitespace only strings are both empty and not empty.
+     *
+     * @param str the string to be checked
+     * @return true if the string only contains whitespace or is <code>null</code>
+     * @deprecated use <code>str == null || str.trim().isEmpty()</code>
      */
+    @Deprecated
     public static boolean isEmpty( String str )
     {
         return str == null || str.trim().length() == 0;
