@@ -404,7 +404,7 @@ public class Xpp3Dom
     }
 
     /**
-     * Warning: this is not the reverse of {@link #isEmpty()}.
+     * Warning: this is not the reverse of {@link #isEmpty}.
      * Whitespace only strings are both empty and not empty.
      *
      * @param str the string to be checked
