@@ -72,7 +72,6 @@ public class BourneShellTest extends TestCase {
         List<String> shellCommandLine = sh.getShellCommandLine("\"some arg with spaces\"");
 
         String cli = StringUtils.join(shellCommandLine.iterator(), " ");
-        System.out.println(cli);
         assertTrue(cli.endsWith("'\"some arg with spaces\"'"));
     }
 
@@ -85,7 +84,6 @@ public class BourneShellTest extends TestCase {
         List<String> shellCommandLine = sh.getShellCommandLine("some arg with spaces");
 
         String cli = StringUtils.join(shellCommandLine.iterator(), " ");
-        System.out.println(cli);
         assertTrue(cli.endsWith("'some arg with spaces'"));
     }
 
@@ -102,9 +100,6 @@ public class BourneShellTest extends TestCase {
     }
 
     public void testArgumentsWithSemicolon() {
-
-        System.out.println("---- semi colon tests ----");
-
         Shell sh = newShell();
 
         sh.setWorkingDirectory("/usr/bin");
@@ -113,7 +108,6 @@ public class BourneShellTest extends TestCase {
         List<String> shellCommandLine = sh.getShellCommandLine(";some&argwithunix$chars");
 
         String cli = StringUtils.join(shellCommandLine.iterator(), " ");
-        System.out.println(cli);
         assertTrue(cli.endsWith("';some&argwithunix$chars'"));
 
         Commandline commandline = new Commandline(newShell());
@@ -123,7 +117,6 @@ public class BourneShellTest extends TestCase {
         commandline.createArg().setValue(";password");
 
         List<String> lines = commandline.getShell().getShellCommandLine(commandline.getArguments());
-        System.out.println(lines);
 
         assertEquals("/bin/sh", lines.get(0));
         assertEquals("-c", lines.get(1));
@@ -135,7 +128,6 @@ public class BourneShellTest extends TestCase {
         commandline.createArg().setValue("--password");
         commandline.createArg().setValue(";password");
         lines = commandline.getShell().getShellCommandLine(commandline.getArguments());
-        System.out.println(lines);
 
         assertEquals("/bin/sh", lines.get(0));
         assertEquals("-c", lines.get(1));
@@ -146,7 +138,6 @@ public class BourneShellTest extends TestCase {
         commandline.createArg().setValue("--password");
         commandline.createArg().setValue(";password");
         lines = commandline.getShell().getShellCommandLine(commandline.getArguments());
-        System.out.println(lines);
 
         assertEquals("cmd.exe", lines.get(0));
         assertEquals("/X", lines.get(1));
@@ -156,7 +147,7 @@ public class BourneShellTest extends TestCase {
 
     public void testBourneShellQuotingCharacters() throws Exception {
         // { ' ', '$', ';', '&', '|', '<', '>', '*', '?', '(', ')' };
-        // test with values http://steve-parker.org/sh/bourne.shtml Appendix B - Meta-characters and Reserved Words
+        // test with values https://steve-parker.org/sh/bourne.shtml Appendix B - Meta-characters and Reserved Words
         Commandline commandline = new Commandline(newShell());
         commandline.setExecutable("chmod");
         commandline.getShell().setQuotedArgumentsEnabled(true);
@@ -182,7 +173,6 @@ public class BourneShellTest extends TestCase {
         commandline.createArg().setValue("#");
 
         List<String> lines = commandline.getShell().getShellCommandLine(commandline.getArguments());
-        System.out.println(lines);
 
         assertEquals("/bin/sh", lines.get(0));
         assertEquals("-c", lines.get(1));
