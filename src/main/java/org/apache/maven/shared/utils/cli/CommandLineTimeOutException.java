@@ -1,5 +1,3 @@
-package org.apache.maven.shared.utils.cli;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,17 +16,16 @@ package org.apache.maven.shared.utils.cli;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.utils.cli;
 
 /**
  * @author Olivier Lamy
- * 
+ *
  */
-public class CommandLineTimeOutException
-    extends CommandLineException
-{
+public class CommandLineTimeOutException extends CommandLineException {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 7322428741683224481L;
 
@@ -36,9 +33,7 @@ public class CommandLineTimeOutException
      * @param message The message of the exception.
      * @param cause The cause of the exception.
      */
-    public CommandLineTimeOutException( String message, Throwable cause )
-    {
-        super( message, cause );
+    public CommandLineTimeOutException(String message, Throwable cause) {
+        super(message, cause);
     }
-
 }

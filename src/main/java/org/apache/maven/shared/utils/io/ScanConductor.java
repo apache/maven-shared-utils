@@ -1,5 +1,3 @@
-package org.apache.maven.shared.utils.io;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.shared.utils.io;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.utils.io;
 
 import java.io.File;
 
@@ -31,17 +30,15 @@ import java.io.File;
  * cleaned between two scan() invocations.</p>
  *
  * @author <a href="mailto:struberg@apache.org">Mark Struberg</a>
- * 
+ *
  * @deprecated use {@code java.nio.file.Files.walkFileTree()} and related classes
  */
 @Deprecated
-public interface ScanConductor
-{
+public interface ScanConductor {
     /**
-     * 
+     *
      */
-    enum ScanAction
-    {
+    enum ScanAction {
         /**
          * Abort the whole scanning process. The current file will not
          * be added anymore.
@@ -75,7 +72,7 @@ public interface ScanConductor
      * @param directory The directory.
      * @return the ScanAction to control how to proceed with the scanning
      */
-    ScanAction visitDirectory( String name, File directory );
+    ScanAction visitDirectory(String name, File directory);
 
     /**
      * This method will get invoked for every detected file.
@@ -84,5 +81,5 @@ public interface ScanConductor
      * @param file The file.
      * @return the ScanAction to control how to proceed with the scanning
      */
-    ScanAction visitFile( String name, File file );
+    ScanAction visitFile(String name, File file);
 }

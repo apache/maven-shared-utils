@@ -1,5 +1,3 @@
-package org.apache.maven.shared.utils.cli;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,27 +16,23 @@ package org.apache.maven.shared.utils.cli;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.utils.cli;
 
 import java.io.IOException;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  */
-public class DefaultConsumer
-    implements StreamConsumer
-{
+public class DefaultConsumer implements StreamConsumer {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void consumeLine( String line ) throws IOException
-    {
-        System.out.println( line );
-        if ( System.out.checkError() )
-        {
-            throw new IOException( String.format( "Failure writing line '%s' to stdout.", line ) );
+    public void consumeLine(String line) throws IOException {
+        System.out.println(line);
+        if (System.out.checkError()) {
+            throw new IOException(String.format("Failure writing line '%s' to stdout.", line));
         }
     }
-
 }

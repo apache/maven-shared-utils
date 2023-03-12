@@ -1,5 +1,3 @@
-package org.apache.maven.shared.utils.logging;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -9,7 +7,7 @@ package org.apache.maven.shared.utils.logging;
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *  http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -18,6 +16,7 @@ package org.apache.maven.shared.utils.logging;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.utils;
 
 import java.util.Formatter;
 
@@ -26,34 +25,34 @@ import java.util.Formatter;
  * An instance of this interface can be retrieved with {@link MessageUtils#buffer()}.
  * After the message has been constructed with any of the append methods its content can be retrieved
  * with {@link #build()}.
+ *
  * @see MessageUtils
  * @since 3.1.0
  */
-public interface MessageBuilder
-{
+public interface MessageBuilder {
     /**
      * Append message content in success style.
      * By default, bold green
      * @param message the message to append
      * @return the current builder
      */
-    MessageBuilder success( Object message );
-    
+    MessageBuilder success(Object message);
+
     /**
      * Append message content in warning style.
      * By default, bold yellow
      * @param message the message to append
      * @return the current builder
      */
-    MessageBuilder warning( Object message );
-    
+    MessageBuilder warning(Object message);
+
     /**
      * Append message content in failure style.
      * By default, bold red
      * @param message the message to append
      * @return the current builder
      */
-    MessageBuilder failure( Object message );
+    MessageBuilder failure(Object message);
 
     /**
      * Append message content in strong style.
@@ -61,24 +60,24 @@ public interface MessageBuilder
      * @param message the message to append
      * @return the current builder
      */
-    MessageBuilder strong( Object message );
-    
+    MessageBuilder strong(Object message);
+
     /**
      * Append message content in mojo style.
      * By default, green
      * @param message the message to append
      * @return the current builder
      */
-    MessageBuilder mojo( Object message );
-    
+    MessageBuilder mojo(Object message);
+
     /**
      * Append message content in project style.
      * By default, cyan
      * @param message the message to append
      * @return the current builder
      */
-    MessageBuilder project( Object message );
-    
+    MessageBuilder project(Object message);
+
     //
     // message building methods modelled after Ansi methods
     //
@@ -89,14 +88,14 @@ public interface MessageBuilder
      * @param len the number of {@code char}s to append
      * @return the current builder
      */
-    MessageBuilder a( char[] value, int offset, int len );
+    MessageBuilder a(char[] value, int offset, int len);
 
     /**
      * Append content to the message buffer.
      * @param value the content to append
      * @return the current builder
      */
-    MessageBuilder a( char[] value );
+    MessageBuilder a(char[] value);
 
     /**
      * Append content to the message buffer.
@@ -105,21 +104,21 @@ public interface MessageBuilder
      * @param end the end index of the subsequence to be appended
      * @return the current builder
      */
-    MessageBuilder a( CharSequence value, int start, int end );
+    MessageBuilder a(CharSequence value, int start, int end);
 
     /**
      * Append content to the message buffer.
      * @param value the content to append
      * @return the current builder
      */
-    MessageBuilder a( CharSequence value );
+    MessageBuilder a(CharSequence value);
 
     /**
      * Append content to the message buffer.
      * @param value the content to append
      * @return the current builder
      */
-    MessageBuilder a( Object value );
+    MessageBuilder a(Object value);
 
     /**
      * Append newline to the message buffer.
@@ -134,7 +133,7 @@ public interface MessageBuilder
      * @param args arguments referenced by the format specifiers in the format string.
      * @return the current builder
      */
-    MessageBuilder format( String pattern, Object... args );
+    MessageBuilder format(String pattern, Object... args);
 
     /**
      * Get the message constructed by this builder.

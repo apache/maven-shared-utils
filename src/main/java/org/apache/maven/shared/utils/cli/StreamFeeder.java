@@ -1,5 +1,3 @@
-package org.apache.maven.shared.utils.cli;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.shared.utils.cli;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.utils.cli;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,9 +28,7 @@ import java.util.concurrent.atomic.AtomicReference;
  *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-class StreamFeeder
-    extends AbstractStreamHandler
-{
+class StreamFeeder extends AbstractStreamHandler {
 
     private final AtomicReference<InputStream> input;
 
@@ -45,69 +42,49 @@ class StreamFeeder
      * @param input Stream to read from
      * @param output Stream to write to
      */
-    StreamFeeder( InputStream input, OutputStream output )
-    {
+    StreamFeeder(InputStream input, OutputStream output) {
         super();
-        this.input = new AtomicReference<InputStream>( input );
-        this.output = new AtomicReference<OutputStream>( output );
+        this.input = new AtomicReference<InputStream>(input);
+        this.output = new AtomicReference<OutputStream>(output);
     }
 
     @Override
-    public void run()
-    {
-        try
-        {
+    public void run() {
+        try {
             feed();
-        }
-        catch ( Throwable e )
-        {
+        } catch (Throwable e) {
             // Catch everything so the streams will be closed and flagged as done.
-            if ( this.exception != null )
-            {
+            if (this.exception != null) {
                 this.exception = e;
             }
-        }
-        finally
-        {
+        } finally {
             close();
 
-            synchronized ( this )
-            {
+            synchronized (this) {
                 notifyAll();
             }
         }
     }
 
-    public void close()
-    {
+    public void close() {
         setDone();
-        final InputStream is = input.getAndSet( null );
-        if ( is != null )
-        {
-            try
-            {
+        final InputStream is = input.getAndSet(null);
+        if (is != null) {
+            try {
                 is.close();
-            }
-            catch ( IOException ex )
-            {
-                if ( this.exception != null )
-                {
+            } catch (IOException ex) {
+                if (this.exception != null) {
                     this.exception = ex;
                 }
             }
         }
 
-        final OutputStream os = output.getAndSet( null );
-        if ( os != null )
-        {
-            try
-            {
+        final OutputStream os = output.getAndSet(null);
+        if (os != null) {
+            try {
                 os.close();
-            }
-            catch ( IOException ex )
-            {
-                if ( this.exception != null )
-                {
+            } catch (IOException ex) {
+                if (this.exception != null) {
                     this.exception = ex;
                 }
             }
@@ -117,35 +94,27 @@ class StreamFeeder
     /**
      * @since 3.2.0
      */
-    public Throwable getException()
-    {
+    public Throwable getException() {
         return this.exception;
     }
 
-    @SuppressWarnings( "checkstyle:innerassignment" )
-    private void feed()
-        throws IOException
-    {
+    @SuppressWarnings("checkstyle:innerassignment")
+    private void feed() throws IOException {
         InputStream is = input.get();
         OutputStream os = output.get();
         boolean flush = false;
 
-        if ( is != null && os != null )
-        {
-            for ( int data; !isDone() && ( data = is.read() ) != -1; )
-            {
-                if ( !isDisabled() )
-                {
-                    os.write( data );
+        if (is != null && os != null) {
+            for (int data; !isDone() && (data = is.read()) != -1; ) {
+                if (!isDisabled()) {
+                    os.write(data);
                     flush = true;
                 }
             }
 
-            if ( flush )
-            {
+            if (flush) {
                 os.flush();
             }
         }
     }
-
 }

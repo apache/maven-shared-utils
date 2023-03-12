@@ -1,5 +1,3 @@
-package org.apache.maven.shared.utils.cli.javatool;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.shared.utils.cli.javatool;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.utils.cli.javatool;
 
 /**
  * <p>Describes a java tool, means a executable available in the jdk.</p>
@@ -30,8 +29,7 @@ package org.apache.maven.shared.utils.cli.javatool;
  * @since 0.5
  * @param <Request> Tool-specific request type
  */
-public interface JavaTool<Request extends JavaToolRequest>
-{
+public interface JavaTool<Request extends JavaToolRequest> {
 
     /**
      * <p>Return the name of the java tool. This is exactly the name (without his extension) of the executable to
@@ -49,7 +47,7 @@ public interface JavaTool<Request extends JavaToolRequest>
      * To avoid direct dependency on Maven core, this parameter is an Object that will be
      * used as Toolchain through reflection
      */
-    void setToolchain( Object toolchain );
+    void setToolchain(Object toolchain);
 
     /**
      * <p>Execute the input request and then returns the result of the execution.</p>
@@ -62,6 +60,5 @@ public interface JavaTool<Request extends JavaToolRequest>
      * @return the result of the tool execution
      * @throws JavaToolException if could not create the java tool invocation
      */
-    JavaToolResult execute( Request request )
-        throws JavaToolException;
+    JavaToolResult execute(Request request) throws JavaToolException;
 }

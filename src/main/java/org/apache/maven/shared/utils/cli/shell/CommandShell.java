@@ -1,5 +1,3 @@
-package org.apache.maven.shared.utils.cli.shell;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,7 +16,7 @@ package org.apache.maven.shared.utils.cli.shell;
  * specific language governing permissions and limitations
  * under the License.
  */
-
+package org.apache.maven.shared.utils.cli.shell;
 
 /**
  * Implementation to call the Command.com Shell present on Windows 95, 98 and Me
@@ -27,16 +25,12 @@ package org.apache.maven.shared.utils.cli.shell;
  * @deprecated Windows ME is long dead. Update to Windows 10 and use {@link CmdShell}.
  */
 @Deprecated
-public class CommandShell
-    extends Shell
-{
+public class CommandShell extends Shell {
     /**
      * Create an instance.
      */
-    public CommandShell()
-    {
-        setShellCommand( "command.com" );
-        setShellArgs( new String[]{ "/C" } );
+    public CommandShell() {
+        setShellCommand("command.com");
+        setShellArgs(new String[] {"/C"});
     }
-
 }
