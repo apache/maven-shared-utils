@@ -1,5 +1,3 @@
-package org.apache.maven.shared.utils;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -9,7 +7,7 @@ package org.apache.maven.shared.utils;
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *  http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -18,6 +16,9 @@ package org.apache.maven.shared.utils;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.utils;
+
+import javax.annotation.Nonnull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -28,10 +29,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+
 import org.apache.maven.shared.utils.xml.XmlStreamWriter;
-
-
-import javax.annotation.Nonnull;
 
 /**
  * Utility to create Writers, with explicit encoding choice: platform default,
@@ -41,8 +40,7 @@ import javax.annotation.Nonnull;
  * @see java.nio.charset.Charset
  * @see <a href="https://docs.oracle.com/javase/7/docs/technotes/guides/intl/encoding.doc.html">Supported encodings</a>
  */
-public class WriterFactory
-{
+public class WriterFactory {
     /**
      * ISO Latin Alphabet #1, also known as ISO-LATIN-1.
      * Every implementation of the Java platform is required to support this character encoding.
@@ -101,7 +99,7 @@ public class WriterFactory
     /**
      * The <code>file.encoding</code> System Property.
      */
-    public static final String FILE_ENCODING = System.getProperty( "file.encoding" );
+    public static final String FILE_ENCODING = System.getProperty("file.encoding");
 
     /**
      * Create a new Writer with XML encoding detection rules.
@@ -110,11 +108,11 @@ public class WriterFactory
      * @return an XML writer instance for the output stream
      * @throws IOException if any
      * @see XmlStreamWriter
+     * @deprecated use org.apache.commons.io.input.XmlStreamWriter instead
      */
-    public static XmlStreamWriter newXmlWriter( @Nonnull OutputStream out )
-        throws IOException
-    {
-        return new XmlStreamWriter( out );
+    @Deprecated
+    public static XmlStreamWriter newXmlWriter(@Nonnull OutputStream out) throws IOException {
+        return new XmlStreamWriter(out);
     }
 
     /**
@@ -124,11 +122,11 @@ public class WriterFactory
      * @return an XML writer instance for the output file
      * @throws IOException if any
      * @see XmlStreamWriter
+     * @deprecated use org.apache.commons.io.input.XmlStreamWriter instead
      */
-    public static XmlStreamWriter newXmlWriter( @Nonnull File file )
-        throws IOException
-    {
-        return new XmlStreamWriter( file );
+    @Deprecated
+    public static XmlStreamWriter newXmlWriter(@Nonnull File file) throws IOException {
+        return new XmlStreamWriter(file);
     }
 
     /**
@@ -139,9 +137,8 @@ public class WriterFactory
      * @deprecated always specify an encoding. Do not depend on the default platform character set.
      */
     @Deprecated
-    public static Writer newPlatformWriter( @Nonnull OutputStream out )
-    {
-        return new OutputStreamWriter( out );
+    public static Writer newPlatformWriter(@Nonnull OutputStream out) {
+        return new OutputStreamWriter(out);
     }
 
     /**
@@ -153,10 +150,8 @@ public class WriterFactory
      * @deprecated always specify an encoding. Do not depend on the default platform character set.
      */
     @Deprecated
-    public static Writer newPlatformWriter( @Nonnull File file )
-        throws IOException
-    {
-        return new FileWriter( file );
+    public static Writer newPlatformWriter(@Nonnull File file) throws IOException {
+        return new FileWriter(file);
     }
 
     /**
@@ -169,10 +164,9 @@ public class WriterFactory
      * @see <a href="https://docs.oracle.com/javase/7/docs/technotes/guides/intl/encoding.doc.html">Supported
      *         encodings</a>
      */
-    public static Writer newWriter( @Nonnull OutputStream out, @Nonnull String encoding )
-        throws UnsupportedEncodingException
-    {
-        return new OutputStreamWriter( out, encoding );
+    public static Writer newWriter(@Nonnull OutputStream out, @Nonnull String encoding)
+            throws UnsupportedEncodingException {
+        return new OutputStreamWriter(out, encoding);
     }
 
     /**
@@ -186,9 +180,8 @@ public class WriterFactory
      * @see <a href="https://docs.oracle.com/javase/7/docs/technotes/guides/intl/encoding.doc.html">Supported
      *         encodings</a>
      */
-    public static Writer newWriter( @Nonnull File file, @Nonnull String encoding )
-        throws UnsupportedEncodingException, FileNotFoundException
-    {
-        return newWriter( new FileOutputStream( file ), encoding );
+    public static Writer newWriter(@Nonnull File file, @Nonnull String encoding)
+            throws UnsupportedEncodingException, FileNotFoundException {
+        return newWriter(new FileOutputStream(file), encoding);
     }
 }

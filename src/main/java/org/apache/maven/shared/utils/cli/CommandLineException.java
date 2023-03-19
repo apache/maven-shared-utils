@@ -1,5 +1,3 @@
-package org.apache.maven.shared.utils.cli;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,32 +16,29 @@ package org.apache.maven.shared.utils.cli;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.utils.cli;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-public class CommandLineException
-    extends Exception
-{
+public class CommandLineException extends Exception {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1344773066470228441L;
 
     /**
      * @param message The message of the exception.
      */
-    public CommandLineException( String message )
-    {
-        super( message );
+    public CommandLineException(String message) {
+        super(message);
     }
 
     /**
      * @param message The message of the exception.
      * @param cause The problem which caused the exception.
      */
-    public CommandLineException( String message, Throwable cause )
-    {
-        super( message, cause );
+    public CommandLineException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

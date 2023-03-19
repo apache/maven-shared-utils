@@ -1,5 +1,3 @@
-package org.apache.maven.shared.utils.cli.javatool;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.shared.utils.cli.javatool;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.utils.cli.javatool;
 
 import org.apache.maven.shared.utils.cli.StreamConsumer;
 
@@ -27,8 +26,7 @@ import org.apache.maven.shared.utils.cli.StreamConsumer;
  * @author <a href="mailto:chemit@codelutin.com">Tony Chemit</a>
  * @since 0.5
  */
-public interface JavaToolRequest
-{
+public interface JavaToolRequest {
 
     /**
      * <p>Gets the value of the {@code systemOutStreamConsumer} field.</p>
@@ -53,12 +51,12 @@ public interface JavaToolRequest
      *
      * @param systemOutStreamConsumer the new value of the field {@code systemOutStreamConsumer}.
      */
-    void setSystemOutStreamConsumer( StreamConsumer systemOutStreamConsumer );
+    void setSystemOutStreamConsumer(StreamConsumer systemOutStreamConsumer);
 
     /**
      * Sets the new given value to the field {@code systemErrorStreamConsumer} of the request.
      *
      * @param systemErrorStreamConsumer the new value of the field {@code systemErrorStreamConsumer}.
      */
-    void setSystemErrorStreamConsumer( StreamConsumer systemErrorStreamConsumer );
+    void setSystemErrorStreamConsumer(StreamConsumer systemErrorStreamConsumer);
 }

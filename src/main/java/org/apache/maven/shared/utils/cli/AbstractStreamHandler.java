@@ -1,5 +1,3 @@
-package org.apache.maven.shared.utils.cli;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,45 +16,35 @@ package org.apache.maven.shared.utils.cli;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.utils.cli;
 
 /**
  * @author <a href="mailto:kristian.rosenvold@gmail.com">Kristian Rosenvold</a>
  */
-class AbstractStreamHandler
-    extends Thread
-{
+class AbstractStreamHandler extends Thread {
     private volatile boolean done;
 
     private volatile boolean disabled;
 
-    boolean isDone()
-    {
+    boolean isDone() {
         return done;
     }
 
-    public synchronized void waitUntilDone()
-        throws InterruptedException
-    {
-        while ( !isDone() )
-        {
+    public synchronized void waitUntilDone() throws InterruptedException {
+        while (!isDone()) {
             wait();
         }
     }
 
-
-    boolean isDisabled()
-    {
+    boolean isDisabled() {
         return disabled;
     }
 
-    public void disable()
-    {
+    public void disable() {
         disabled = true;
     }
 
-    protected void setDone()
-    {
+    protected void setDone() {
         done = true;
     }
-
 }
