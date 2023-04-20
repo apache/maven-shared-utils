@@ -1,5 +1,3 @@
-package org.apache.maven.shared.utils.cli;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.shared.utils.cli;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.utils.cli;
 
 import java.io.IOException;
 
@@ -31,12 +30,11 @@ import java.io.IOException;
  * @author <a href="mailto:fvancea@maxiq.com">Florin Vancea</a>
  * @author <a href="mailto:pj@thoughtworks.com">Paul Julius</a>
  */
-public interface StreamConsumer
-{
+public interface StreamConsumer {
     /**
      * Called when the StreamPumper pumps a line from the Stream.
      * @param line The line to be consumed.
      * @throws IOException if consuming {@code line} fails.
      */
-    void consumeLine( String line ) throws IOException;
+    void consumeLine(String line) throws IOException;
 }

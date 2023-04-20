@@ -1,5 +1,3 @@
-package org.apache.maven.shared.utils.cli;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.shared.utils.cli;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.utils.cli;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,9 +28,7 @@ import java.util.Objects;
  *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-class StreamFeeder
-    extends Thread
-{
+class StreamFeeder extends Thread {
 
     private final InputStream input;
 
@@ -48,51 +45,37 @@ class StreamFeeder
      * @param input  Stream to read from
      * @param output Stream to write to
      */
-    StreamFeeder( InputStream input, OutputStream output )
-    {
-        this.input = Objects.requireNonNull( input );
-        this.output = Objects.requireNonNull( output );
+    StreamFeeder(InputStream input, OutputStream output) {
+        this.input = Objects.requireNonNull(input);
+        this.output = Objects.requireNonNull(output);
         this.done = false;
     }
 
     @Override
-    @SuppressWarnings( "checkstyle:innerassignment" )
-    public void run()
-    {
-        try
-        {
-            for ( int data; !isInterrupted() && ( data = input.read() ) != -1; )
-            {
-                output.write( data );
+    @SuppressWarnings("checkstyle:innerassignment")
+    public void run() {
+        try {
+            for (int data; !isInterrupted() && (data = input.read()) != -1; ) {
+                output.write(data);
             }
             output.flush();
-        }
-        catch ( IOException e )
-        {
+        } catch (IOException e) {
             exception = e;
-        }
-        finally
-        {
+        } finally {
             close();
         }
 
-        synchronized ( lock )
-        {
+        synchronized (lock) {
             done = true;
             lock.notifyAll();
         }
     }
 
-    private void close()
-    {
-        try
-        {
+    private void close() {
+        try {
             output.close();
-        }
-        catch ( IOException e )
-        {
-            if ( exception == null )
-            {
+        } catch (IOException e) {
+            if (exception == null) {
                 exception = e;
             }
         }
@@ -101,24 +84,17 @@ class StreamFeeder
     /**
      * @since 3.2.0
      */
-    public Throwable getException()
-    {
+    public Throwable getException() {
         return this.exception;
     }
 
-    public void waitUntilDone()
-    {
+    public void waitUntilDone() {
         interrupt();
-        synchronized ( lock )
-        {
-            while ( !done )
-            {
-                try
-                {
+        synchronized (lock) {
+            while (!done) {
+                try {
                     lock.wait();
-                }
-                catch ( InterruptedException e )
-                {
+                } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
             }

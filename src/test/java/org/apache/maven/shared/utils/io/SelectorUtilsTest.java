@@ -1,5 +1,3 @@
-package org.apache.maven.shared.utils.io;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -9,7 +7,7 @@ package org.apache.maven.shared.utils.io;
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *  http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -18,67 +16,62 @@ package org.apache.maven.shared.utils.io;
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import static org.junit.Assert.*;
+package org.apache.maven.shared.utils.io;
 
 import java.io.File;
 
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 /**
  * Test the {@link SelectorUtils} class.
  */
-@SuppressWarnings( "deprecation" )
-public class SelectorUtilsTest
-{
+@SuppressWarnings("deprecation")
+public class SelectorUtilsTest {
 
-    @Test( expected = NullPointerException.class )
-    public void testMatchPatternStart()
-    {
-        SelectorUtils.matchPatternStart( null, null );
+    @Test(expected = NullPointerException.class)
+    public void testMatchPatternStart() {
+        SelectorUtils.matchPatternStart(null, null);
     }
 
     @Test
-    public void testEmptyStrings()
-    {
-        assertTrue( SelectorUtils.matchPatternStart( "", "" ) );
+    public void testEmptyStrings() {
+        assertTrue(SelectorUtils.matchPatternStart("", ""));
     }
 
     @Test
-    public void testRegexPrefix()
-        throws Exception
-    {
-        assertEquals( true,
-                      SelectorUtils.matchPatternStart( SelectorUtils.REGEX_HANDLER_PREFIX + File.separator + "aaa"
-                          + SelectorUtils.PATTERN_HANDLER_SUFFIX, "" ) );
+    public void testRegexPrefix() throws Exception {
+        assertEquals(
+                true,
+                SelectorUtils.matchPatternStart(
+                        SelectorUtils.REGEX_HANDLER_PREFIX + File.separator + "aaa"
+                                + SelectorUtils.PATTERN_HANDLER_SUFFIX,
+                        ""));
     }
 
     @Test
-    public void testAntPatternStrings()
-    {
-        assertAntDoesNotMatch( "/aaa", "" );
-        assertAntDoesNotMatch( "\\aaa", "" );
-        assertAntMatch( "aaa", "" );
-        assertAntMatch( "/aaa/bbb", "/aaa/bbb" );
-        assertAntMatch( "/aaa/**", "/aaa/bbb" );
-        assertAntDoesNotMatch( "/aaa/**", "/ccc/bbb" );
-        assertAntMatch( "/aaa/**", "\\aaa\\bbb" );
-        assertAntDoesNotMatch( "/aaa/**", "\\ccc\\bbb" );
-        assertAntDoesNotMatch( "/aaa/", "\\aaa\\bbb" );
+    public void testAntPatternStrings() {
+        assertAntDoesNotMatch("/aaa", "");
+        assertAntDoesNotMatch("\\aaa", "");
+        assertAntMatch("aaa", "");
+        assertAntMatch("/aaa/bbb", "/aaa/bbb");
+        assertAntMatch("/aaa/**", "/aaa/bbb");
+        assertAntDoesNotMatch("/aaa/**", "/ccc/bbb");
+        assertAntMatch("/aaa/**", "\\aaa\\bbb");
+        assertAntDoesNotMatch("/aaa/**", "\\ccc\\bbb");
+        assertAntDoesNotMatch("/aaa/", "\\aaa\\bbb");
     }
 
-    private void assertAntDoesNotMatch( String pattern, String target )
-    {
-        assertEquals( false, SelectorUtils.matchPatternStart( wrapWithAntHandler( pattern ), target ) );
+    private void assertAntDoesNotMatch(String pattern, String target) {
+        assertEquals(false, SelectorUtils.matchPatternStart(wrapWithAntHandler(pattern), target));
     }
 
-    private void assertAntMatch( String pattern, String target )
-    {
-        assertEquals( true, SelectorUtils.matchPatternStart( wrapWithAntHandler( pattern ), target ) );
+    private void assertAntMatch(String pattern, String target) {
+        assertEquals(true, SelectorUtils.matchPatternStart(wrapWithAntHandler(pattern), target));
     }
 
-    private String wrapWithAntHandler( String val )
-    {
+    private String wrapWithAntHandler(String val) {
         return SelectorUtils.ANT_HANDLER_PREFIX + val + SelectorUtils.PATTERN_HANDLER_SUFFIX;
     }
 }
