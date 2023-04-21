@@ -46,9 +46,6 @@ import static org.junit.Assert.assertEquals;
 
 public class StreamFeederTest {
     static class BlockingInputStream extends ByteArrayInputStream {
-        boolean endStream = false;
-        final Object lock = new Object();
-
         public BlockingInputStream(byte[] buf) {
             super(buf);
         }
@@ -61,8 +58,6 @@ public class StreamFeederTest {
             }
 
             // end test data ... block
-            endStream = true;
-
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -70,29 +65,27 @@ public class StreamFeederTest {
             }
             return -1;
         }
-
-        public synchronized void waitForEndStream() throws InterruptedException {
-            while (!endStream) {
-                wait(100);
-            }
-        }
     }
 
     @Test
     public void waitUntilFeederDone() throws InterruptedException {
 
-        BlockingInputStream inputStream = new BlockingInputStream("TestData".getBytes());
+        String TEST_DATA = "TestData";
+
+        BlockingInputStream inputStream = new BlockingInputStream(TEST_DATA.getBytes());
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         StreamFeeder streamFeeder = new StreamFeeder(inputStream, outputStream);
 
         streamFeeder.start();
 
-        // wait until input stream will be in block mode
-        inputStream.waitForEndStream();
+        // wait until all data from steam will be read
+        while (outputStream.size() < TEST_DATA.length()) {
+            Thread.sleep(10);
+        }
 
         streamFeeder.waitUntilDone(); // wait until process finish
 
-        assertEquals("TestData", outputStream.toString());
+        assertEquals(TEST_DATA, outputStream.toString());
     }
 }

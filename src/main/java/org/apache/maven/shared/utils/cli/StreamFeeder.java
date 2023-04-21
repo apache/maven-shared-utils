@@ -89,7 +89,7 @@ class StreamFeeder extends Thread {
     }
 
     public void waitUntilDone() {
-        interrupt();
+        this.interrupt();
         synchronized (lock) {
             while (!done) {
                 try {
