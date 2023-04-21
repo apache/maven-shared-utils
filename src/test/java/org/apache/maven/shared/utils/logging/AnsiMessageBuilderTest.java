@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.maven.shared.utils;
+package org.apache.maven.shared.utils.logging;
 
 import org.junit.Before;
 import org.junit.Test;

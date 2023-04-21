@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.maven.shared.utils;
+package org.apache.maven.shared.utils.logging;
 
 /**
  * Message builder implementation that just ignores styling, for Maven version earlier than 3.5.0.
