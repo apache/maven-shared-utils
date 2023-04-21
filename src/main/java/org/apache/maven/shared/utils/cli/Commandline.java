@@ -183,8 +183,13 @@ public class Commandline implements Cloneable {
 
     /**
      * Add system environment variables.
+     *
+     * @deprecated please use {@link #setShellEnvironmentInherited(boolean)}
      */
-    private void addSystemEnvironment() {
+    @Deprecated
+    public void addSystemEnvironment() {}
+
+    private void copySystemEnvironment() {
         Properties systemEnvVars = CommandLineUtils.getSystemEnvVars();
 
         for (Object o : systemEnvVars.keySet()) {
@@ -202,7 +207,7 @@ public class Commandline implements Cloneable {
      */
     public String[] getEnvironmentVariables() {
         if (isShellEnvironmentInherited()) {
-            addSystemEnvironment();
+            copySystemEnvironment();
         }
 
         List<String> environmentVars = new ArrayList<>();
