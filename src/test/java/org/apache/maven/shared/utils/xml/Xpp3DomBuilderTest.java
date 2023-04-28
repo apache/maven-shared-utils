@@ -71,15 +71,10 @@ public class Xpp3DomBuilderTest {
         String domString = createDomString();
 
         Xpp3Dom dom = Xpp3DomBuilder.build(new StringReader(domString), true);
-
-        assertEquals("element1value", dom.getChild("element1").getValue());
-
-        assertEquals("  preserve space  ", dom.getChild("element6").getValue());
-
-        dom = Xpp3DomBuilder.build(new StringReader(domString), false);
-
         assertEquals(" element1value\n ", dom.getChild("element1").getValue());
-
+        assertEquals("  preserve space  ", dom.getChild("element6").getValue());
+        dom = Xpp3DomBuilder.build(new StringReader(domString), false);
+        assertEquals(" element1value\n ", dom.getChild("element1").getValue());
         assertEquals("  preserve space  ", dom.getChild("element6").getValue());
     }
 

@@ -40,7 +40,6 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author Kristian Rosenvold
  */
 public class Xpp3DomBuilder {
-    private static final boolean DEFAULT_TRIM = true;
 
     /**
      * @param reader {@link Reader}
@@ -48,7 +47,7 @@ public class Xpp3DomBuilder {
      * @throws XmlPullParserException in case of an error
      */
     public static Xpp3Dom build(@WillClose @Nonnull Reader reader) throws XmlPullParserException {
-        return build(reader, DEFAULT_TRIM);
+        return build(reader, false);
     }
 
     /**
@@ -58,21 +57,23 @@ public class Xpp3DomBuilder {
      * @throws XmlPullParserException in case of an error
      */
     public static Xpp3Dom build(@WillClose InputStream is, @Nonnull String encoding) throws XmlPullParserException {
-        return build(is, encoding, DEFAULT_TRIM);
+        return build(is, encoding, false);
     }
 
     /**
      * @param is {@link InputStream}
      * @param encoding the encoding
-     * @param trim true/false
+     * @param noop vestigial argument with no effect
      * @return the built DOM
      * @throws XmlPullParserException in case of an error
+     * @deprecated use the two-arg variant
      */
-    public static Xpp3Dom build(@WillClose InputStream is, @Nonnull String encoding, boolean trim)
+    @Deprecated
+    public static Xpp3Dom build(@WillClose InputStream is, @Nonnull String encoding, boolean noop)
             throws XmlPullParserException {
         try {
             Reader reader = new InputStreamReader(is, encoding);
-            return build(reader, trim);
+            return build(reader);
         } catch (UnsupportedEncodingException e) {
             throw new XmlPullParserException(e);
         }
@@ -80,13 +81,15 @@ public class Xpp3DomBuilder {
 
     /**
      * @param in {@link Reader}
-     * @param trim true/false
+     * @param noop vestigial argument with no effect
      * @return the built DOM
      * @throws XmlPullParserException in case of an error
+     * @deprecated use {#build(java.io.Reader)}
      */
-    public static Xpp3Dom build(@WillClose Reader in, boolean trim) throws XmlPullParserException {
+    @Deprecated
+    public static Xpp3Dom build(@WillClose Reader in, boolean noop) throws XmlPullParserException {
         try (Reader reader = in) {
-            DocHandler docHandler = parseSax(new InputSource(reader), trim);
+            DocHandler docHandler = parseSax(new InputSource(reader));
             reader.close();
             return docHandler.result;
         } catch (final IOException e) {
@@ -94,9 +97,9 @@ public class Xpp3DomBuilder {
         }
     }
 
-    private static DocHandler parseSax(@Nonnull InputSource inputSource, boolean trim) throws XmlPullParserException {
+    private static DocHandler parseSax(@Nonnull InputSource inputSource) throws XmlPullParserException {
         try {
-            DocHandler ch = new DocHandler(trim);
+            DocHandler ch = new DocHandler();
             XMLReader parser = createXmlReader();
             parser.setContentHandler(ch);
             parser.parse(inputSource);
@@ -147,13 +150,7 @@ public class Xpp3DomBuilder {
 
         Xpp3Dom result = null;
 
-        private final boolean trim;
-
         private boolean spacePreserve = false;
-
-        DocHandler(boolean trim) {
-            this.trim = trim;
-        }
 
         @Override
         public void startElement(String uri, String localName, String qName, Attributes attributes)
@@ -216,7 +213,7 @@ public class Xpp3DomBuilder {
         @Override
         public void characters(char[] ch, int start, int length) throws SAXException {
             String text = new String(ch, start, length);
-            appendToTopValue((trim && !spacePreserve) ? text.trim() : text);
+            appendToTopValue(text);
         }
 
         private void appendToTopValue(String toAppend) {
