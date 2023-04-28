@@ -1,5 +1,3 @@
-package org.apache.maven.shared.utils.cli;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.shared.utils.cli;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.utils.cli;
 
 import java.util.concurrent.Callable;
 
@@ -26,12 +25,9 @@ import java.util.concurrent.Callable;
  *
  * @author Kristian Rosenvold
  */
-public interface CommandLineCallable
-    extends Callable<Integer>
-{
+public interface CommandLineCallable extends Callable<Integer> {
     /**
      * {@inheritDoc}
      */
-    Integer call()
-        throws CommandLineException;
+    Integer call() throws CommandLineException;
 }

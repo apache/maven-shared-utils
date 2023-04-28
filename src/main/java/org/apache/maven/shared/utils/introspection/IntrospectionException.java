@@ -1,5 +1,3 @@
-package org.apache.maven.shared.utils.introspection;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -9,7 +7,7 @@ package org.apache.maven.shared.utils.introspection;
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *  http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -18,24 +16,20 @@ package org.apache.maven.shared.utils.introspection;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.utils.introspection;
 
-class IntrospectionException
-    extends Exception
-{
+class IntrospectionException extends Exception {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -6090771282553728784L;
 
-    IntrospectionException( String message )
-    {
-        super( message );
+    IntrospectionException(String message) {
+        super(message);
     }
 
-    IntrospectionException( Throwable cause )
-    {
-        super( cause );
+    IntrospectionException(Throwable cause) {
+        super(cause);
     }
-    
 }

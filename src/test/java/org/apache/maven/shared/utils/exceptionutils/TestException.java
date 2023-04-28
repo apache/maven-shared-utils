@@ -1,5 +1,3 @@
-package org.apache.maven.shared.utils.exceptionutils;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -9,7 +7,7 @@ package org.apache.maven.shared.utils.exceptionutils;
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *  http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -18,39 +16,33 @@ package org.apache.maven.shared.utils.exceptionutils;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.utils.exceptionutils;
 
 /**
  *
  * @author <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
-public class TestException
-    extends Exception
-{
+public class TestException extends Exception {
     private Throwable cause;
     private Throwable specialCause;
 
-    public TestException()
-    {
+    public TestException() {
         super();
     }
 
-    public void setSourceException( Throwable cause )
-    {
+    public void setSourceException(Throwable cause) {
         this.cause = cause;
     }
 
-    public Throwable getSourceException()
-    {
+    public Throwable getSourceException() {
         return cause;
     }
 
-    public Throwable getSpecialCause()
-    {
+    public Throwable getSpecialCause() {
         return specialCause;
     }
 
-    public void setSpecialCause( Throwable specialCause )
-    {
+    public void setSpecialCause(Throwable specialCause) {
         this.specialCause = specialCause;
     }
 }

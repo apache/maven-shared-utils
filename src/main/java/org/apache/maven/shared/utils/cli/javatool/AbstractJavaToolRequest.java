@@ -1,5 +1,3 @@
-package org.apache.maven.shared.utils.cli.javatool;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.shared.utils.cli.javatool;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.utils.cli.javatool;
 
 import org.apache.maven.shared.utils.cli.StreamConsumer;
 
@@ -27,9 +26,7 @@ import org.apache.maven.shared.utils.cli.StreamConsumer;
  * @author <a href="mailto:chemit@codelutin.com">Tony Chemit</a>
  * @since 0.5
  */
-public class AbstractJavaToolRequest
-    implements JavaToolRequest
-{
+public class AbstractJavaToolRequest implements JavaToolRequest {
 
     /**
      * Optional system out stream consumer used by the commandline execution.
@@ -44,32 +41,28 @@ public class AbstractJavaToolRequest
     /**
      * {@inheritDoc}
      */
-    public StreamConsumer getSystemOutStreamConsumer()
-    {
+    public StreamConsumer getSystemOutStreamConsumer() {
         return systemOutStreamConsumer;
     }
 
     /**
      * {@inheritDoc}
      */
-    public StreamConsumer getSystemErrorStreamConsumer()
-    {
+    public StreamConsumer getSystemErrorStreamConsumer() {
         return systemErrorStreamConsumer;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setSystemOutStreamConsumer( StreamConsumer systemOutStreamConsumer )
-    {
+    public void setSystemOutStreamConsumer(StreamConsumer systemOutStreamConsumer) {
         this.systemOutStreamConsumer = systemOutStreamConsumer;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setSystemErrorStreamConsumer( StreamConsumer systemErrorStreamConsumer )
-    {
+    public void setSystemErrorStreamConsumer(StreamConsumer systemErrorStreamConsumer) {
         this.systemErrorStreamConsumer = systemErrorStreamConsumer;
     }
 }

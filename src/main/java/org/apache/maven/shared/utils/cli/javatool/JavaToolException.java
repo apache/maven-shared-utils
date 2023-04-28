@@ -1,5 +1,3 @@
-package org.apache.maven.shared.utils.cli.javatool;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.shared.utils.cli.javatool;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.utils.cli.javatool;
 
 /**
  * <p>Signals an error during the construction of the command line used to invoke java tool, e.g. illegal invocation
@@ -30,25 +29,21 @@ package org.apache.maven.shared.utils.cli.javatool;
  * @see JavaToolResult#getExitCode()
  * @since 0.5
  */
-public class JavaToolException
-    extends Exception
-{
+public class JavaToolException extends Exception {
     private static final long serialVersionUID = 1L;
 
     /**
      * @param message The message of the exception.
      */
-    public JavaToolException( String message )
-    {
-        super( message );
+    public JavaToolException(String message) {
+        super(message);
     }
 
     /**
      * @param message The message of the exception.
      * @param cause The cause of the exception.
      */
-    public JavaToolException( String message, Throwable cause )
-    {
-        super( message, cause );
+    public JavaToolException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

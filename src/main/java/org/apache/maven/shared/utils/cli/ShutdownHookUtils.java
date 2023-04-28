@@ -1,5 +1,3 @@
-package org.apache.maven.shared.utils.cli;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.shared.utils.cli;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.utils.cli;
 
 import java.security.AccessControlException;
 
@@ -29,24 +28,17 @@ import java.security.AccessControlException;
  *
  * @author Kristian Rosenvold
  */
-public class ShutdownHookUtils
-{
+public class ShutdownHookUtils {
 
     /**
      * @param hook The thread hook.
      */
-    public static void addShutDownHook( Thread hook )
-    {
-        try
-        {
-            Runtime.getRuntime().addShutdownHook( hook );
-        }
-        catch ( IllegalStateException ignore )
-        {
+    public static void addShutDownHook(Thread hook) {
+        try {
+            Runtime.getRuntime().addShutdownHook(hook);
+        } catch (IllegalStateException ignore) {
             // ignore
-        }
-        catch ( AccessControlException ignore )
-        {
+        } catch (AccessControlException ignore) {
             // ignore
         }
     }
@@ -54,20 +46,13 @@ public class ShutdownHookUtils
     /**
      * @param hook The hook which should be removed.
      */
-    public static void removeShutdownHook( Thread hook )
-    {
-        try
-        {
-            Runtime.getRuntime().removeShutdownHook( hook );
-        }
-        catch ( IllegalStateException ignore )
-        {
+    public static void removeShutdownHook(Thread hook) {
+        try {
+            Runtime.getRuntime().removeShutdownHook(hook);
+        } catch (IllegalStateException ignore) {
             // ignore
-        }
-        catch ( AccessControlException ignore )
-        {
+        } catch (AccessControlException ignore) {
             // ignore
         }
     }
-
 }

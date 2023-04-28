@@ -1,5 +1,3 @@
-package org.apache.maven.shared.utils.logging;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -9,7 +7,7 @@ package org.apache.maven.shared.utils.logging;
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *  http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -18,6 +16,7 @@ package org.apache.maven.shared.utils.logging;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.utils.logging;
 
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
@@ -31,8 +30,7 @@ import org.fusesource.jansi.AnsiMode;
  * <a href="https://en.wikipedia.org/wiki/ANSI_escape_code#Colors">ANSI colors</a> on any platform.
  * @since 3.1.0
  */
-public class MessageUtils
-{
+public class MessageUtils {
     private static final boolean JANSI;
 
     /** Reference to the JVM shutdown hook, if registered */
@@ -41,16 +39,12 @@ public class MessageUtils
     /** Synchronization monitor for the "uninstall" */
     private static final Object STARTUP_SHUTDOWN_MONITOR = new Object();
 
-    static
-    {
+    static {
         boolean jansi = true;
-        try
-        {
+        try {
             // Jansi is provided by Maven core since 3.5.0
-            Class.forName( "org.fusesource.jansi.Ansi" );
-        }
-        catch ( ClassNotFoundException cnfe )
-        {
+            Class.forName("org.fusesource.jansi.Ansi");
+        } catch (ClassNotFoundException cnfe) {
             jansi = false;
         }
         JANSI = jansi;
@@ -60,10 +54,8 @@ public class MessageUtils
      * Install color support.
      * This method is called by Maven core, and calling it is not necessary in plugins.
      */
-    public static void systemInstall()
-    {
-        if ( JANSI )
-        {
+    public static void systemInstall() {
+        if (JANSI) {
             AnsiConsole.systemInstall();
         }
     }
@@ -73,31 +65,23 @@ public class MessageUtils
      * multiple times, {@link #systemUninstall()} must be called call the same number of times before
      * it is actually uninstalled.
      */
-    public static void systemUninstall()
-    {
-        synchronized ( STARTUP_SHUTDOWN_MONITOR )
-        {
+    public static void systemUninstall() {
+        synchronized (STARTUP_SHUTDOWN_MONITOR) {
             doSystemUninstall();
 
             // hook can only set when Jansi is true
-            if ( shutdownHook != null )
-            {
-                try
-                {
-                    Runtime.getRuntime().removeShutdownHook( shutdownHook );
-                }
-                catch ( IllegalStateException ex )
-                {
+            if (shutdownHook != null) {
+                try {
+                    Runtime.getRuntime().removeShutdownHook(shutdownHook);
+                } catch (IllegalStateException ex) {
                     // ignore - VM is already shutting down
                 }
             }
         }
     }
 
-    private static void doSystemUninstall()
-    {
-        if ( JANSI )
-        {
+    private static void doSystemUninstall() {
+        if (JANSI) {
             AnsiConsole.systemUninstall();
         }
     }
@@ -106,21 +90,17 @@ public class MessageUtils
      * Enables message color (if Jansi is available).
      * @param flag to enable Jansi
      */
-    public static void setColorEnabled( boolean flag )
-    {
-        if ( JANSI )
-        {
-            AnsiConsole.out().setMode( flag ? AnsiMode.Force : AnsiMode.Strip );
-            Ansi.setEnabled( flag );
-            System.setProperty( AnsiConsole.JANSI_MODE,
-                    flag ? AnsiConsole.JANSI_MODE_FORCE : AnsiConsole.JANSI_MODE_STRIP );
+    public static void setColorEnabled(boolean flag) {
+        if (JANSI) {
+            AnsiConsole.out().setMode(flag ? AnsiMode.Force : AnsiMode.Strip);
+            Ansi.setEnabled(flag);
+            System.setProperty(
+                    AnsiConsole.JANSI_MODE, flag ? AnsiConsole.JANSI_MODE_FORCE : AnsiConsole.JANSI_MODE_STRIP);
             boolean installed = AnsiConsole.isInstalled();
-            while ( AnsiConsole.isInstalled() )
-            {
+            while (AnsiConsole.isInstalled()) {
                 AnsiConsole.systemUninstall();
             }
-            if ( installed )
-            {
+            if (installed) {
                 AnsiConsole.systemInstall();
             }
         }
@@ -130,8 +110,7 @@ public class MessageUtils
      * Is message color enabled: requires Jansi available (through Maven) and the color has not been disabled.
      * @return whether colored messages are enabled
      */
-    public static boolean isColorEnabled()
-    {
+    public static boolean isColorEnabled() {
         return JANSI ? Ansi.isEnabled() : false;
     }
 
@@ -139,8 +118,7 @@ public class MessageUtils
      * Create a default message buffer.
      * @return a new buffer
      */
-    public static MessageBuilder buffer()
-    {
+    public static MessageBuilder buffer() {
         return JANSI ? new AnsiMessageBuilder() : new PlainMessageBuilder();
     }
 
@@ -149,9 +127,8 @@ public class MessageUtils
      * @param builder initial content of the message buffer
      * @return a new buffer
      */
-    public static MessageBuilder buffer( StringBuilder builder )
-    {
-        return JANSI ? new AnsiMessageBuilder( builder ) : new PlainMessageBuilder( builder );
+    public static MessageBuilder buffer(StringBuilder builder) {
+        return JANSI ? new AnsiMessageBuilder(builder) : new PlainMessageBuilder(builder);
     }
 
     /**
@@ -159,9 +136,8 @@ public class MessageUtils
      * @param size size of the buffer
      * @return a new buffer
      */
-    public static MessageBuilder buffer( int size )
-    {
-        return JANSI ? new AnsiMessageBuilder( size ) : new PlainMessageBuilder( size );
+    public static MessageBuilder buffer(int size) {
+        return JANSI ? new AnsiMessageBuilder(size) : new PlainMessageBuilder(size);
     }
 
     /**
@@ -169,10 +145,9 @@ public class MessageUtils
      * @return a logger level renderer
      * @since 3.2.0
      */
-    @SuppressWarnings( "checkstyle:magicnumber" )
-    public static LoggerLevelRenderer level()
-    {
-        return JANSI ? new AnsiMessageBuilder( 20 ) : new PlainMessageBuilder( 7 );
+    @SuppressWarnings("checkstyle:magicnumber")
+    public static LoggerLevelRenderer level() {
+        return JANSI ? new AnsiMessageBuilder(20) : new PlainMessageBuilder(7);
     }
 
     /**
@@ -180,40 +155,33 @@ public class MessageUtils
      * @param msg message eventually containing ANSI codes
      * @return the message with ANSI codes removed
      */
-    public static String stripAnsiCodes( String msg )
-    {
-        return msg.replaceAll( "\u001B\\[[;\\d]*[ -/]*[@-~]", "" );
+    public static String stripAnsiCodes(String msg) {
+        return msg.replaceAll("\u001B\\[[;\\d]*[ -/]*[@-~]", "");
     }
 
     /**
      * Register a shutdown hook with the JVM runtime, uninstalling Ansi support on
      * JVM shutdown unless is has already been uninstalled at that time.
      * <p>Delegates to {@link #doSystemUninstall()} for the actual uninstall procedure
-     * 
+     *
      * @see Runtime#addShutdownHook(Thread)
      * @see MessageUtils#systemUninstall()
      * @see #doSystemUninstall()
      */
-    public static void registerShutdownHook()
-    {
-        if ( JANSI && shutdownHook == null )
-        {
+    public static void registerShutdownHook() {
+        if (JANSI && shutdownHook == null) {
             // No shutdown hook registered yet.
-            shutdownHook = new Thread()
-            {
+            shutdownHook = new Thread() {
                 @Override
-                public void run()
-                {
-                    synchronized ( STARTUP_SHUTDOWN_MONITOR )
-                    {
-                        while ( AnsiConsole.isInstalled() )
-                        {
+                public void run() {
+                    synchronized (STARTUP_SHUTDOWN_MONITOR) {
+                        while (AnsiConsole.isInstalled()) {
                             doSystemUninstall();
                         }
                     }
                 }
             };
-            Runtime.getRuntime().addShutdownHook( shutdownHook );
+            Runtime.getRuntime().addShutdownHook(shutdownHook);
         }
     }
 
@@ -222,15 +190,11 @@ public class MessageUtils
      *
      * @return the terminal width
      */
-    public static int getTerminalWidth()
-    {
-        if ( JANSI )
-        {
+    public static int getTerminalWidth() {
+        if (JANSI) {
             int width = AnsiConsole.getTerminalWidth();
             return width > 0 ? width : -1;
-        }
-        else
-        {
+        } else {
             return -1;
         }
     }
