@@ -1,5 +1,3 @@
-package org.apache.maven.shared.utils.cli;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,29 +16,29 @@ package org.apache.maven.shared.utils.cli;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.utils.cli;
 
 import java.io.File;
 
 /**
- * 
+ *
  */
-public interface Arg
-{
+public interface Arg {
     /**
      * @param value the value to be set
      */
-    void setValue( String value );
+    void setValue(String value);
 
     /**
      * @param line the line of arguments
      * @throws CommandLineException in case of unbalanced quotes.
      */
-    void setLine( String line ) throws CommandLineException;
+    void setLine(String line) throws CommandLineException;
 
     /**
      * @param file the file to be set
      */
-    void setFile( File file );
+    void setFile(File file);
 
     /**
      * Whether to hide the argument value when a command line prints the arguments.
@@ -48,6 +46,5 @@ public interface Arg
      * @param mask new state of the {@code mask} property
      * @since 0.6
      */
-    void setMask( boolean mask );
-
+    void setMask(boolean mask);
 }

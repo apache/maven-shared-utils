@@ -1,5 +1,3 @@
-package org.apache.maven.shared.utils.io;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.shared.utils.io;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.utils.io;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -43,14 +42,14 @@ import java.nio.channels.Channel;
  * copying between sources (<code>InputStream</code>, <code>Reader</code>, <code>String</code> and
  * <code>byte[]</code>) and destinations (<code>OutputStream</code>, <code>Writer</code>,
  * <code>String</code> and <code>byte[]</code>).</p>
- * 
+ *
  * <p>Unless otherwise noted, these <code>copy</code> methods do <em>not</em> flush or close the
  * streams. Often, doing so would require making non-portable assumptions about the streams' origin
  * and further use. This means that both streams' <code>close()</code> methods must be called after
  * copying. if one omits this step, then the stream resources (sockets, file descriptors) are
  * released when the associated Stream is garbage-collected. It is not a good idea to rely on this
  * mechanism.</p>
- * 
+ *
  * <p>For each <code>copy</code> method, a variant is provided that allows the caller to specify the
  * buffer size (the default is 4k). As the buffer size can have a fairly large impact on speed, this
  * may be worth tweaking. Often "large buffer -&gt; faster" does not hold, even for large data
@@ -65,7 +64,7 @@ import java.nio.channels.Channel;
  * <code>copy( new BufferedInputStream( in ), new BufferedOutputStream( out ) );</code>
  * </p>
  * <p>The rationale is as follows:</p>
- * 
+ *
  * <p>Imagine that an InputStream's read() is a very expensive operation, which would usually suggest
  * wrapping in a BufferedInputStream. The BufferedInputStream works by issuing infrequent
  * {@link java.io.InputStream#read(byte[] b, int off, int len)} requests on the underlying InputStream, to
@@ -118,9 +117,7 @@ public final class IOUtil
     /**
      * Private constructor to prevent instantiation.
      */
-    private IOUtil()
-    {
-    }
+    private IOUtil() {}
 
     ///////////////////////////////////////////////////////////////
     // Core copy methods
@@ -128,7 +125,7 @@ public final class IOUtil
 
     /**
      * Copy bytes from an <code>InputStream</code> to an <code>OutputStream</code>.
-     * 
+     *
      * @param input the stream to read from
      * @param output the stream to write to
      * @throws IOException in case of an error
@@ -136,17 +133,15 @@ public final class IOUtil
      *         Java 9 and later {@code InputStream.transferTo()}.
      */
     @Deprecated
-    public static void copy( @Nonnull final InputStream input, @Nonnull final OutputStream output )
-        throws IOException
-    {
-        copy( input, output, DEFAULT_BUFFER_SIZE );
+    public static void copy(@Nonnull final InputStream input, @Nonnull final OutputStream output) throws IOException {
+        copy(input, output, DEFAULT_BUFFER_SIZE);
     }
 
     /**
      * Copy bytes from an <code>InputStream</code> to an <code>OutputStream</code>.
      *
      * In Java 9 and later this is replaced by {@code InputStream.transferTo()}.
-     * 
+     *
      * @param input the stream to read from
      * @param output the stream to write to
      * @param bufferSize size of internal buffer
@@ -155,30 +150,25 @@ public final class IOUtil
      *         Java 9 and later {@code InputStream.transferTo()}.
      */
     @Deprecated
-    public static void copy( @Nonnull final InputStream input, @Nonnull final OutputStream output,
-                             final int bufferSize )
-        throws IOException
-    {
+    public static void copy(@Nonnull final InputStream input, @Nonnull final OutputStream output, final int bufferSize)
+            throws IOException {
         final byte[] buffer = new byte[bufferSize];
         int n;
-        while ( -1 != ( n = input.read( buffer ) ) )
-        {
-            output.write( buffer, 0, n );
+        while (-1 != (n = input.read(buffer))) {
+            output.write(buffer, 0, n);
         }
     }
 
     /**
      * Copy chars from a <code>Reader</code> to a <code>Writer</code>.
-     * 
+     *
      * @param input the reader to read from
      * @param output the writer to write to
      * @throws IOException in case of failure     * @deprecated use {@code org.apache.commons.io.IOUtils.copy()}.
      */
     @Deprecated
-    public static void copy( @Nonnull final Reader input, @Nonnull final Writer output )
-        throws IOException
-    {
-        copy( input, output, DEFAULT_BUFFER_SIZE );
+    public static void copy(@Nonnull final Reader input, @Nonnull final Writer output) throws IOException {
+        copy(input, output, DEFAULT_BUFFER_SIZE);
     }
 
     /**
@@ -191,14 +181,12 @@ public final class IOUtil
      * @deprecated use {@code org.apache.commons.io.IOUtils.copy()}.
      */
     @Deprecated
-    public static void copy( @Nonnull final Reader input, @Nonnull final Writer output, final int bufferSize )
-        throws IOException
-    {
+    public static void copy(@Nonnull final Reader input, @Nonnull final Writer output, final int bufferSize)
+            throws IOException {
         final char[] buffer = new char[bufferSize];
         int n;
-        while ( -1 != ( n = input.read( buffer ) ) )
-        {
-            output.write( buffer, 0, n );
+        while (-1 != (n = input.read(buffer))) {
+            output.write(buffer, 0, n);
         }
         output.flush();
     }
@@ -214,19 +202,17 @@ public final class IOUtil
     /**
      * Copy and convert bytes from an <code>InputStream</code> to chars on a
      * <code>Writer</code>.
-     * 
+     *
      * The platform's default encoding is used for the byte-to-char conversion.
-     * 
+     *
      * @param input the reader to read from
      * @param output the writer to write to
      * @throws IOException in case of failure
      * @deprecated use {@code org.apache.commons.io.IOUtils.copy()}.
      */
     @Deprecated
-    public static void copy( @Nonnull final InputStream input, @Nonnull final Writer output )
-        throws IOException
-    {
-        copy( input, output, DEFAULT_BUFFER_SIZE );
+    public static void copy(@Nonnull final InputStream input, @Nonnull final Writer output) throws IOException {
+        copy(input, output, DEFAULT_BUFFER_SIZE);
     }
 
     /**
@@ -241,11 +227,10 @@ public final class IOUtil
      * @deprecated use {@code org.apache.commons.io.IOUtils.copy()}.
      */
     @Deprecated
-    public static void copy( @Nonnull final InputStream input, @Nonnull final Writer output, final int bufferSize )
-        throws IOException
-    {
-        final InputStreamReader in = new InputStreamReader( input );
-        copy( in, output, bufferSize );
+    public static void copy(@Nonnull final InputStream input, @Nonnull final Writer output, final int bufferSize)
+            throws IOException {
+        final InputStreamReader in = new InputStreamReader(input);
+        copy(in, output, bufferSize);
     }
 
     /**
@@ -261,12 +246,11 @@ public final class IOUtil
      * @deprecated use {@code org.apache.commons.io.IOUtils.copy()}.
      */
     @Deprecated
-    public static void copy( @Nonnull final InputStream input, @Nonnull final Writer output,
-                             @Nonnull final String encoding )
-        throws IOException
-    {
-        final InputStreamReader in = new InputStreamReader( input, encoding );
-        copy( in, output );
+    public static void copy(
+            @Nonnull final InputStream input, @Nonnull final Writer output, @Nonnull final String encoding)
+            throws IOException {
+        final InputStreamReader in = new InputStreamReader(input, encoding);
+        copy(in, output);
     }
 
     /**
@@ -283,12 +267,14 @@ public final class IOUtil
      * @deprecated use {@code org.apache.commons.io.IOUtils.copy()}.
      */
     @Deprecated
-    public static void copy( @Nonnull final InputStream input, @Nonnull final Writer output,
-                             @Nonnull final String encoding, final int bufferSize )
-        throws IOException
-    {
-        final InputStreamReader in = new InputStreamReader( input, encoding );
-        copy( in, output, bufferSize );
+    public static void copy(
+            @Nonnull final InputStream input,
+            @Nonnull final Writer output,
+            @Nonnull final String encoding,
+            final int bufferSize)
+            throws IOException {
+        final InputStreamReader in = new InputStreamReader(input, encoding);
+        copy(in, output, bufferSize);
     }
 
     ///////////////////////////////////////////////////////////////
@@ -297,17 +283,16 @@ public final class IOUtil
     /**
      * Get the contents of an <code>InputStream</code> as a String.
      * The platform's default encoding is used for the byte-to-char conversion.
-     * 
+     *
      * @param input the InputStream to read from
      * @return the resulting string
      * @throws IOException in case of failure
      * @deprecated always specify a character encoding
      */
     @Deprecated
-    @Nonnull public static String toString( @Nonnull final InputStream input )
-        throws IOException
-    {
-        return toString( input, DEFAULT_BUFFER_SIZE );
+    @Nonnull
+    public static String toString(@Nonnull final InputStream input) throws IOException {
+        return toString(input, DEFAULT_BUFFER_SIZE);
     }
 
     /**
@@ -321,11 +306,10 @@ public final class IOUtil
      * @deprecated always specify a character encoding
      */
     @Deprecated
-    @Nonnull public static String toString( @Nonnull final InputStream input, final int bufferSize )
-        throws IOException
-    {
+    @Nonnull
+    public static String toString(@Nonnull final InputStream input, final int bufferSize) throws IOException {
         final StringWriter sw = new StringWriter();
-        copy( input, sw, bufferSize );
+        copy(input, sw, bufferSize);
         return sw.toString();
     }
 
@@ -341,10 +325,9 @@ public final class IOUtil
      * @deprecated use {@code org.apache.commons.io.IOUtils.toString()}.
      */
     @Deprecated
-    @Nonnull public static String toString( @Nonnull final InputStream input, @Nonnull final String encoding )
-        throws IOException
-    {
-        return toString( input, encoding, DEFAULT_BUFFER_SIZE );
+    @Nonnull
+    public static String toString(@Nonnull final InputStream input, @Nonnull final String encoding) throws IOException {
+        return toString(input, encoding, DEFAULT_BUFFER_SIZE);
     }
 
     /**
@@ -360,12 +343,11 @@ public final class IOUtil
      * @deprecated use {@code org.apache.commons.io.IOUtils.toString()}.
      */
     @Deprecated
-    @Nonnull public static String toString( @Nonnull final InputStream input, @Nonnull final String encoding,
-                                            final int bufferSize )
-        throws IOException
-    {
+    @Nonnull
+    public static String toString(
+            @Nonnull final InputStream input, @Nonnull final String encoding, final int bufferSize) throws IOException {
         final StringWriter sw = new StringWriter();
-        copy( input, sw, encoding, bufferSize );
+        copy(input, sw, encoding, bufferSize);
         return sw.toString();
     }
 
@@ -374,17 +356,16 @@ public final class IOUtil
 
     /**
      * Get the contents of an <code>InputStream</code> as a <code>byte[]</code>.
-     * 
+     *
      * @param input the InputStream to read from
      * @return the resulting byte array.
      * @throws IOException in case of failure
      * @deprecated use {@code org.apache.commons.io.IOUtils.readFully()}.
      */
     @Deprecated
-    @Nonnull public static byte[] toByteArray( @Nonnull final InputStream input )
-        throws IOException
-    {
-        return toByteArray( input, DEFAULT_BUFFER_SIZE );
+    @Nonnull
+    public static byte[] toByteArray(@Nonnull final InputStream input) throws IOException {
+        return toByteArray(input, DEFAULT_BUFFER_SIZE);
     }
 
     /**
@@ -397,11 +378,10 @@ public final class IOUtil
      * @deprecated use {@code org.apache.commons.io.IOUtils.readFully()}.
      */
     @Deprecated
-    @Nonnull public static byte[] toByteArray( @Nonnull final InputStream input, final int bufferSize )
-        throws IOException
-    {
+    @Nonnull
+    public static byte[] toByteArray(@Nonnull final InputStream input, final int bufferSize) throws IOException {
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        copy( input, output, bufferSize );
+        copy(input, output, bufferSize);
         return output.toByteArray();
     }
 
@@ -416,17 +396,15 @@ public final class IOUtil
     /**
      * Serialize chars from a <code>Reader</code> to bytes on an <code>OutputStream</code>, and
      * flush the <code>OutputStream</code>.
-     * 
+     *
      * @param input the InputStream to read from
      * @param output the output stream to write to
      * @throws IOException in case of failure
      * @deprecated always specify a character encoding
      */
     @Deprecated
-    public static void copy( @Nonnull final Reader input, @Nonnull final OutputStream output )
-        throws IOException
-    {
-        copy( input, output, DEFAULT_BUFFER_SIZE );
+    public static void copy(@Nonnull final Reader input, @Nonnull final OutputStream output) throws IOException {
+        copy(input, output, DEFAULT_BUFFER_SIZE);
     }
 
     /**
@@ -440,11 +418,10 @@ public final class IOUtil
      * @deprecated always specify a character encoding
      */
     @Deprecated
-    public static void copy( @Nonnull final Reader input, @Nonnull final OutputStream output, final int bufferSize )
-        throws IOException
-    {
-        final OutputStreamWriter out = new OutputStreamWriter( output );
-        copy( input, out, bufferSize );
+    public static void copy(@Nonnull final Reader input, @Nonnull final OutputStream output, final int bufferSize)
+            throws IOException {
+        final OutputStreamWriter out = new OutputStreamWriter(output);
+        copy(input, out, bufferSize);
         // NOTE: Unless anyone is planning on rewriting OutputStreamWriter, we have to flush
         // here.
         out.flush();
@@ -461,10 +438,9 @@ public final class IOUtil
      * @deprecated use {@code org.apache.commons.io.IOUtils.toString()}.
      */
     @Deprecated
-    @Nonnull public static String toString( @Nonnull final Reader input )
-        throws IOException
-    {
-        return toString( input, DEFAULT_BUFFER_SIZE );
+    @Nonnull
+    public static String toString(@Nonnull final Reader input) throws IOException {
+        return toString(input, DEFAULT_BUFFER_SIZE);
     }
 
     /**
@@ -477,11 +453,10 @@ public final class IOUtil
      * @deprecated use {@code org.apache.commons.io.IOUtils.toString()}.
      */
     @Deprecated
-    @Nonnull public static String toString( @Nonnull final Reader input, final int bufferSize )
-        throws IOException
-    {
+    @Nonnull
+    public static String toString(@Nonnull final Reader input, final int bufferSize) throws IOException {
         final StringWriter sw = new StringWriter();
-        copy( input, sw, bufferSize );
+        copy(input, sw, bufferSize);
         return sw.toString();
     }
 
@@ -490,17 +465,16 @@ public final class IOUtil
 
     /**
      * Get the contents of a <code>Reader</code> as a <code>byte[]</code>.
-     * 
+     *
      * @param input the InputStream to read from
      * @return the resulting byte array.
      * @throws IOException in case of failure
      * @deprecated always specify a character encoding
      */
     @Deprecated
-    @Nonnull public static byte[] toByteArray( @Nonnull final Reader input )
-        throws IOException
-    {
-        return toByteArray( input, DEFAULT_BUFFER_SIZE );
+    @Nonnull
+    public static byte[] toByteArray(@Nonnull final Reader input) throws IOException {
+        return toByteArray(input, DEFAULT_BUFFER_SIZE);
     }
 
     /**
@@ -513,11 +487,10 @@ public final class IOUtil
      * @deprecated always specify a character encoding
      */
     @Deprecated
-    @Nonnull public static byte[] toByteArray( @Nonnull final Reader input, final int bufferSize )
-        throws IOException
-    {
+    @Nonnull
+    public static byte[] toByteArray(@Nonnull final Reader input, final int bufferSize) throws IOException {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
-        copy( input, output, bufferSize );
+        copy(input, output, bufferSize);
         return output.toByteArray();
     }
 
@@ -538,10 +511,8 @@ public final class IOUtil
      * @deprecated always specify a character encoding
      */
     @Deprecated
-    public static void copy( @Nonnull final String input, @Nonnull final OutputStream output )
-        throws IOException
-    {
-        copy( input, output, DEFAULT_BUFFER_SIZE );
+    public static void copy(@Nonnull final String input, @Nonnull final OutputStream output) throws IOException {
+        copy(input, output, DEFAULT_BUFFER_SIZE);
     }
 
     /**
@@ -555,12 +526,11 @@ public final class IOUtil
      * @deprecated always specify a character encoding
      */
     @Deprecated
-    public static void copy( @Nonnull final String input, @Nonnull final OutputStream output, final int bufferSize )
-        throws IOException
-    {
-        final StringReader in = new StringReader( input );
-        final OutputStreamWriter out = new OutputStreamWriter( output );
-        copy( in, out, bufferSize );
+    public static void copy(@Nonnull final String input, @Nonnull final OutputStream output, final int bufferSize)
+            throws IOException {
+        final StringReader in = new StringReader(input);
+        final OutputStreamWriter out = new OutputStreamWriter(output);
+        copy(in, out, bufferSize);
         // NOTE: Unless anyone is planning on rewriting OutputStreamWriter, we have to flush
         // here.
         out.flush();
@@ -571,17 +541,15 @@ public final class IOUtil
 
     /**
      * Copy chars from a <code>String</code> to a <code>Writer</code>.
-     * 
+     *
      * @param input the string to write
      * @param output resulting output {@link Writer}
      * @throws IOException in case of failure
      * @deprecated use {@code org.apache.commons.io.IOUtils.write()}.
      */
     @Deprecated
-    public static void copy( @Nonnull final String input, @Nonnull final Writer output )
-        throws IOException
-    {
-        output.write( input );
+    public static void copy(@Nonnull final String input, @Nonnull final Writer output) throws IOException {
+        output.write(input);
     }
 
     ///////////////////////////////////////////////////////////////
@@ -589,17 +557,16 @@ public final class IOUtil
 
     /**
      * Get the contents of a <code>String</code> as a <code>byte[]</code>.
-     * 
+     *
      * @param input the String to read from
      * @return the resulting byte array
      * @throws IOException in case of failure
      * @deprecated always specify a character encoding
      */
     @Deprecated
-    @Nonnull public static byte[] toByteArray( @Nonnull final String input )
-        throws IOException
-    {
-        return toByteArray( input, DEFAULT_BUFFER_SIZE );
+    @Nonnull
+    public static byte[] toByteArray(@Nonnull final String input) throws IOException {
+        return toByteArray(input, DEFAULT_BUFFER_SIZE);
     }
 
     /**
@@ -612,11 +579,10 @@ public final class IOUtil
      * @deprecated always specify a character encoding
      */
     @Deprecated
-    @Nonnull public static byte[] toByteArray( @Nonnull final String input, final int bufferSize )
-        throws IOException
-    {
+    @Nonnull
+    public static byte[] toByteArray(@Nonnull final String input, final int bufferSize) throws IOException {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
-        copy( input, output, bufferSize );
+        copy(input, output, bufferSize);
         return output.toByteArray();
     }
 
@@ -632,17 +598,15 @@ public final class IOUtil
      * Copy and convert bytes from a <code>byte[]</code> to chars on a
      * <code>Writer</code>.
      * The platform's default encoding is used for the byte-to-char conversion.
-     * 
+     *
      * @param input the InputStream to read from
      * @param output the output to write to
      * @throws IOException in case of failure
      * @deprecated always specify a character encoding
      */
     @Deprecated
-    public static void copy( @Nonnull final byte[] input, @Nonnull final Writer output )
-        throws IOException
-    {
-        copy( input, output, DEFAULT_BUFFER_SIZE );
+    public static void copy(@Nonnull final byte[] input, @Nonnull final Writer output) throws IOException {
+        copy(input, output, DEFAULT_BUFFER_SIZE);
     }
 
     /**
@@ -657,11 +621,10 @@ public final class IOUtil
      * @deprecated always specify a character encoding
      */
     @Deprecated
-    public static void copy( @Nonnull final byte[] input, @Nonnull final Writer output, final int bufferSize )
-        throws IOException
-    {
-        final ByteArrayInputStream in = new ByteArrayInputStream( input );
-        copy( in, output, bufferSize );
+    public static void copy(@Nonnull final byte[] input, @Nonnull final Writer output, final int bufferSize)
+            throws IOException {
+        final ByteArrayInputStream in = new ByteArrayInputStream(input);
+        copy(in, output, bufferSize);
     }
 
     /**
@@ -677,11 +640,10 @@ public final class IOUtil
      * @deprecated use {@code org.apache.commons.io.IOUtils.write()}.
      */
     @Deprecated
-    public static void copy( @Nonnull final byte[] input, @Nonnull final Writer output, final String encoding )
-        throws IOException
-    {
-        final ByteArrayInputStream in = new ByteArrayInputStream( input );
-        copy( in, output, encoding );
+    public static void copy(@Nonnull final byte[] input, @Nonnull final Writer output, final String encoding)
+            throws IOException {
+        final ByteArrayInputStream in = new ByteArrayInputStream(input);
+        copy(in, output, encoding);
     }
 
     /**
@@ -698,12 +660,14 @@ public final class IOUtil
      * @deprecated use {@code org.apache.commons.io.IOUtils.write()}.
      */
     @Deprecated
-    public static void copy( @Nonnull final byte[] input, @Nonnull final Writer output, @Nonnull final String encoding,
-                             final int bufferSize )
-        throws IOException
-    {
-        final ByteArrayInputStream in = new ByteArrayInputStream( input );
-        copy( in, output, encoding, bufferSize );
+    public static void copy(
+            @Nonnull final byte[] input,
+            @Nonnull final Writer output,
+            @Nonnull final String encoding,
+            final int bufferSize)
+            throws IOException {
+        final ByteArrayInputStream in = new ByteArrayInputStream(input);
+        copy(in, output, encoding, bufferSize);
     }
 
     ///////////////////////////////////////////////////////////////
@@ -718,10 +682,9 @@ public final class IOUtil
      * @deprecated always specify a character encoding
      */
     @Deprecated
-    @Nonnull public static String toString( @Nonnull final byte[] input )
-        throws IOException
-    {
-        return toString( input, DEFAULT_BUFFER_SIZE );
+    @Nonnull
+    public static String toString(@Nonnull final byte[] input) throws IOException {
+        return toString(input, DEFAULT_BUFFER_SIZE);
     }
 
     /**
@@ -735,11 +698,10 @@ public final class IOUtil
      * @deprecated always specify a character encoding
      */
     @Deprecated
-    @Nonnull public static String toString( @Nonnull final byte[] input, final int bufferSize )
-        throws IOException
-    {
+    @Nonnull
+    public static String toString(@Nonnull final byte[] input, final int bufferSize) throws IOException {
         final StringWriter sw = new StringWriter();
-        copy( input, sw, bufferSize );
+        copy(input, sw, bufferSize);
         return sw.toString();
     }
 
@@ -755,10 +717,9 @@ public final class IOUtil
      * @deprecated use {@code new String(input, encoding)}
      */
     @Deprecated
-    @Nonnull public static String toString( @Nonnull final byte[] input, @Nonnull final String encoding )
-        throws IOException
-    {
-        return toString( input, encoding, DEFAULT_BUFFER_SIZE );
+    @Nonnull
+    public static String toString(@Nonnull final byte[] input, @Nonnull final String encoding) throws IOException {
+        return toString(input, encoding, DEFAULT_BUFFER_SIZE);
     }
 
     /**
@@ -774,12 +735,11 @@ public final class IOUtil
      * @deprecated use {@code new String(input, encoding)}
      */
     @Deprecated
-    @Nonnull public static String toString( @Nonnull final byte[] input, @Nonnull final String encoding,
-                                            final int bufferSize )
-        throws IOException
-    {
+    @Nonnull
+    public static String toString(@Nonnull final byte[] input, @Nonnull final String encoding, final int bufferSize)
+            throws IOException {
         final StringWriter sw = new StringWriter();
-        copy( input, sw, encoding, bufferSize );
+        copy(input, sw, encoding, bufferSize);
         return sw.toString();
     }
 
@@ -788,17 +748,15 @@ public final class IOUtil
 
     /**
      * Copy bytes from a <code>byte[]</code> to an <code>OutputStream</code>.
-     * 
+     *
      * @param input Input byte array.
      * @param output output stream {@link OutputStream}
      * @throws IOException in case of failure
      * @deprecated inline this method
      */
     @Deprecated
-    public static void copy( @Nonnull final byte[] input, @Nonnull final OutputStream output )
-        throws IOException
-    {
-        output.write( input );
+    public static void copy(@Nonnull final byte[] input, @Nonnull final OutputStream output) throws IOException {
+        output.write(input);
     }
 
     /**
@@ -811,18 +769,15 @@ public final class IOUtil
      * @deprecated use {@code org.apache.commons.io.IOUtils.contentEquals()}
      */
     @Deprecated
-    public static boolean contentEquals( @Nonnull final InputStream input1, @Nonnull final InputStream input2 )
-        throws IOException
-    {
-        final InputStream bufferedInput1 = new BufferedInputStream( input1 );
-        final InputStream bufferedInput2 = new BufferedInputStream( input2 );
+    public static boolean contentEquals(@Nonnull final InputStream input1, @Nonnull final InputStream input2)
+            throws IOException {
+        final InputStream bufferedInput1 = new BufferedInputStream(input1);
+        final InputStream bufferedInput2 = new BufferedInputStream(input2);
 
         int ch = bufferedInput1.read();
-        while ( -1 != ch )
-        {
+        while (-1 != ch) {
             final int ch2 = bufferedInput2.read();
-            if ( ch != ch2 )
-            {
+            if (ch != ch2) {
                 return false;
             }
             ch = bufferedInput1.read();
@@ -927,17 +882,12 @@ public final class IOUtil
      * @deprecated use try-with-resources
      */
     @Deprecated
-    public static void close( @Nullable Channel channel )
-    {
-        try
-        {
-            if ( channel != null )
-            {
+    public static void close(@Nullable Channel channel) {
+        try {
+            if (channel != null) {
                 channel.close();
             }
-        }
-        catch ( IOException ex )
-        {
+        } catch (IOException ex) {
             // Suppressed
         }
     }
@@ -1033,17 +983,12 @@ public final class IOUtil
      * @deprecated use try-with-resources
      */
     @Deprecated
-    public static void close( @Nullable InputStream inputStream )
-    {
-        try
-        {
-            if ( inputStream != null )
-            {
+    public static void close(@Nullable InputStream inputStream) {
+        try {
+            if (inputStream != null) {
                 inputStream.close();
             }
-        }
-        catch ( IOException ex )
-        {
+        } catch (IOException ex) {
             // Suppressed
         }
     }
@@ -1139,17 +1084,12 @@ public final class IOUtil
      * @deprecated use try-with-resources
      */
     @Deprecated
-    public static void close( @Nullable OutputStream outputStream )
-    {
-        try
-        {
-            if ( outputStream != null )
-            {
+    public static void close(@Nullable OutputStream outputStream) {
+        try {
+            if (outputStream != null) {
                 outputStream.close();
             }
-        }
-        catch ( IOException ex )
-        {
+        } catch (IOException ex) {
             // Suppressed
         }
     }
@@ -1245,17 +1185,12 @@ public final class IOUtil
      * @deprecated use try-with-resources
      */
     @Deprecated
-    public static void close( @Nullable Reader reader )
-    {
-        try
-        {
-            if ( reader != null )
-            {
+    public static void close(@Nullable Reader reader) {
+        try {
+            if (reader != null) {
                 reader.close();
             }
-        }
-        catch ( IOException ex )
-        {
+        } catch (IOException ex) {
             // Suppressed
         }
     }
@@ -1351,17 +1286,12 @@ public final class IOUtil
      * @deprecated use try-with-resources
      */
     @Deprecated
-    public static void close( @Nullable Writer writer )
-    {
-        try
-        {
-            if ( writer != null )
-            {
+    public static void close(@Nullable Writer writer) {
+        try {
+            if (writer != null) {
                 writer.close();
             }
-        }
-        catch ( IOException ex )
-        {
+        } catch (IOException ex) {
             // Suppressed
         }
     }

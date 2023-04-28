@@ -1,5 +1,3 @@
-package org.apache.maven.shared.utils.cli;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,98 +16,67 @@ package org.apache.maven.shared.utils.cli;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.utils.cli;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.Objects;
 
 /**
  * Read from an InputStream and write the output to an OutputStream.
  *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-class StreamFeeder
-    extends AbstractStreamHandler
-{
+class StreamFeeder extends Thread {
 
-    private final AtomicReference<InputStream> input;
+    private final InputStream input;
 
-    private final AtomicReference<OutputStream> output;
+    private final OutputStream output;
 
-    private volatile Throwable exception;
+    private Throwable exception;
+    private boolean done;
+
+    private final Object lock = new Object();
 
     /**
      * Create a new StreamFeeder
      *
-     * @param input Stream to read from
+     * @param input  Stream to read from
      * @param output Stream to write to
      */
-    StreamFeeder( InputStream input, OutputStream output )
-    {
-        super();
-        this.input = new AtomicReference<InputStream>( input );
-        this.output = new AtomicReference<OutputStream>( output );
+    StreamFeeder(InputStream input, OutputStream output) {
+        this.input = Objects.requireNonNull(input);
+        this.output = Objects.requireNonNull(output);
+        this.done = false;
     }
 
     @Override
-    public void run()
-    {
-        try
-        {
-            feed();
-        }
-        catch ( Throwable e )
-        {
-            // Catch everything so the streams will be closed and flagged as done.
-            if ( this.exception != null )
-            {
-                this.exception = e;
+    @SuppressWarnings("checkstyle:innerassignment")
+    public void run() {
+        try {
+            for (int data; !isInterrupted() && (data = input.read()) != -1; ) {
+                output.write(data);
             }
-        }
-        finally
-        {
+            output.flush();
+        } catch (IOException e) {
+            exception = e;
+        } finally {
             close();
+        }
 
-            synchronized ( this )
-            {
-                notifyAll();
-            }
+        synchronized (lock) {
+            done = true;
+            lock.notifyAll();
         }
     }
 
-    public void close()
-    {
-        setDone();
-        final InputStream is = input.getAndSet( null );
-        if ( is != null )
-        {
-            try
-            {
-                is.close();
-            }
-            catch ( IOException ex )
-            {
-                if ( this.exception != null )
-                {
-                    this.exception = ex;
-                }
-            }
-        }
-
-        final OutputStream os = output.getAndSet( null );
-        if ( os != null )
-        {
-            try
-            {
-                os.close();
-            }
-            catch ( IOException ex )
-            {
-                if ( this.exception != null )
-                {
-                    this.exception = ex;
-                }
+    private void close() {
+        try {
+            output.close();
+        } catch (IOException e) {
+            if (exception == null) {
+                exception = e;
             }
         }
     }
@@ -117,35 +84,20 @@ class StreamFeeder
     /**
      * @since 3.2.0
      */
-    public Throwable getException()
-    {
+    public Throwable getException() {
         return this.exception;
     }
 
-    @SuppressWarnings( "checkstyle:innerassignment" )
-    private void feed()
-        throws IOException
-    {
-        InputStream is = input.get();
-        OutputStream os = output.get();
-        boolean flush = false;
-
-        if ( is != null && os != null )
-        {
-            for ( int data; !isDone() && ( data = is.read() ) != -1; )
-            {
-                if ( !isDisabled() )
-                {
-                    os.write( data );
-                    flush = true;
+    public void waitUntilDone() {
+        this.interrupt();
+        synchronized (lock) {
+            while (!done) {
+                try {
+                    lock.wait();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                 }
-            }
-
-            if ( flush )
-            {
-                os.flush();
             }
         }
     }
-
 }

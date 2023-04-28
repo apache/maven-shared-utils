@@ -1,5 +1,3 @@
-package org.apache.maven.shared.utils.cli;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.shared.utils.cli;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.shared.utils.cli;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -27,30 +26,25 @@ import java.io.Writer;
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  *
  */
-public class WriterStreamConsumer
-    implements StreamConsumer
-{
+public class WriterStreamConsumer implements StreamConsumer {
 
     private final BufferedWriter writer;
 
     /**
      * @param writer {@link Writer}
      */
-    public WriterStreamConsumer( Writer writer )
-    {
+    public WriterStreamConsumer(Writer writer) {
         super();
-        this.writer = new BufferedWriter( writer );
+        this.writer = new BufferedWriter(writer);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void consumeLine( String line ) throws IOException
-    {
-        this.writer.append( line );
+    public void consumeLine(String line) throws IOException {
+        this.writer.append(line);
         this.writer.newLine();
         this.writer.flush();
     }
-
 }
