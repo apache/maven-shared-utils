@@ -24,50 +24,63 @@ import java.io.OutputStream;
 import java.util.Objects;
 
 /**
- * Read from an InputStream and write the output to an OutputStream.
+ * Poll InputStream for available data and write the output to an OutputStream.
  *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
-class StreamFeeder extends Thread {
+class StreamPollFeeder extends Thread {
+
+    public static final int BUF_LEN = 80;
 
     private final InputStream input;
-
     private final OutputStream output;
 
     private Throwable exception;
-    private boolean done;
 
+    private boolean done;
     private final Object lock = new Object();
 
     /**
-     * Create a new StreamFeeder
+     * Create a new StreamPollFeeder
      *
      * @param input  Stream to read from
      * @param output Stream to write to
      */
-    StreamFeeder(InputStream input, OutputStream output) {
+    StreamPollFeeder(InputStream input, OutputStream output) {
         this.input = Objects.requireNonNull(input);
         this.output = Objects.requireNonNull(output);
         this.done = false;
     }
 
     @Override
-    @SuppressWarnings("checkstyle:innerassignment")
     public void run() {
+
+        byte[] buf = new byte[BUF_LEN];
+
         try {
-            for (int data; !isInterrupted() && (data = input.read()) != -1; ) {
-                output.write(data);
+            while (!done) {
+                if (input.available() > 0) {
+                    int i = input.read(buf);
+                    if (i > 0) {
+                        output.write(buf, 0, i);
+                        output.flush();
+                    } else {
+                        done = true;
+                    }
+                } else {
+                    synchronized (lock) {
+                        if (!done) {
+                            lock.wait(100);
+                        }
+                    }
+                }
             }
-            output.flush();
         } catch (IOException e) {
             exception = e;
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         } finally {
             close();
-        }
-
-        synchronized (lock) {
-            done = true;
-            lock.notifyAll();
         }
     }
 
@@ -89,15 +102,16 @@ class StreamFeeder extends Thread {
     }
 
     public void waitUntilDone() {
-        this.interrupt();
+
         synchronized (lock) {
-            while (!done) {
-                try {
-                    lock.wait();
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-            }
+            done = true;
+            lock.notifyAll();
+        }
+
+        try {
+            join();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
 }

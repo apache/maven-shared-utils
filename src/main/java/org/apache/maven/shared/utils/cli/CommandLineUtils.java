@@ -250,13 +250,13 @@ public abstract class CommandLineUtils {
 
             @Override
             public Integer call() throws CommandLineException {
-                StreamFeeder inputFeeder = null;
+                StreamPollFeeder inputFeeder = null;
                 StreamPumper outputPumper = null;
                 StreamPumper errorPumper = null;
                 try {
                     if (systemIn != null) {
-                        inputFeeder = new StreamFeeder(systemIn, p.getOutputStream());
-                        inputFeeder.setName("StreamFeeder-systemIn");
+                        inputFeeder = new StreamPollFeeder(systemIn, p.getOutputStream());
+                        inputFeeder.setName("StreamPollFeeder-systemIn");
                         inputFeeder.start();
                     }
 
