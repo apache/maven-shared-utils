@@ -132,8 +132,6 @@
     <pluginManagement>
       <plugins>
         <plugin>
-          <!-- downgrade due to https://issues.apache.org/jira/browse/MSHARED-1112 -->
-          <!-- review with next pom or next m-resources-p -->
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-resources-plugin</artifactId>
           <version>3.3.1</version>
@@ -141,14 +139,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-assembly-plugin</artifactId>
-          <dependencies>
-            <!-- due to https://issues.apache.org/jira/browse/MASSEMBLY-965 -->
-            <dependency>
-              <groupId>org.codehaus.plexus</groupId>
-              <artifactId>plexus-io</artifactId>
-              <version>3.4.1</version>
-            </dependency>
-          </dependencies>
+          <version>3.6.0</version>
         </plugin>
       </plugins>
     </pluginManagement>
