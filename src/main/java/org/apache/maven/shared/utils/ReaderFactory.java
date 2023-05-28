@@ -39,7 +39,8 @@ import org.apache.commons.io.input.XmlStreamReader;
  *
  * @author <a href="mailto:hboutemy@apache.org">Hervé Boutemy</a>
  * @see java.nio.charset.Charset
- * @see <a href="https://docs.oracle.com/javase/7/docs/technotes/guides/intl/encoding.doc.html">Supported encodings</a>
+ * @see <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/intl/encoding.doc.html">Supported encodings</a>
+ * @deprecated use JDK methods instead
  */
 public class ReaderFactory {
     /**
@@ -99,6 +100,7 @@ public class ReaderFactory {
 
     /**
      * The <code>file.encoding</code> System Property.
+     * @deprecated use {@code java.nio.charset.Charset.getDefaultCharset()}
      */
     public static final String FILE_ENCODING = System.getProperty("file.encoding");
 
@@ -108,7 +110,7 @@ public class ReaderFactory {
      * @param in not null input stream
      * @return an XML reader instance for the input stream
      * @throws IOException if any
-     * @deprecated use org.apache.commons.io.input.XmlStreamReader instead
+     * @deprecated use {@code org.apache.commons.io.input.XmlStreamReader} instead
      */
     @Deprecated
     public static Reader newXmlReader(@Nonnull InputStream in) throws IOException {
@@ -121,7 +123,7 @@ public class ReaderFactory {
      * @param file not null file
      * @return an XML reader instance for the input file
      * @throws IOException if any
-     * @deprecated use org.apache.commons.io.input.XmlStreamReader instead
+     * @deprecated use {}@code org.apache.commons.io.input.XmlStreamReader} instead
      */
     @Deprecated
     public static Reader newXmlReader(@Nonnull File file) throws IOException {
@@ -161,10 +163,13 @@ public class ReaderFactory {
      * @param in       not null input stream
      * @param encoding not null supported encoding
      * @return a reader instance for the input stream using the given encoding
-     * @throws UnsupportedEncodingException if any
-     * @see <a href="https://docs.oracle.com/javase/7/docs/technotes/guides/intl/encoding.doc.html">Supported
+     * @throws UnsupportedEncodingException if the JDK in use does not recognize or support the
+     *    named encoding
+     * @see <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/intl/encoding.doc.html">Supported
      *         encodings</a>
+     * @deprecated use {@code new InputStreamReader(in, encoding)} instead
      */
+    @Deprecated
     public static Reader newReader(@Nonnull InputStream in, @Nonnull String encoding)
             throws UnsupportedEncodingException {
         return new InputStreamReader(in, encoding);
@@ -177,10 +182,14 @@ public class ReaderFactory {
      * @param encoding not null supported encoding
      * @return a reader instance for the input file using the given encoding
      * @throws FileNotFoundException        if any
-     * @throws UnsupportedEncodingException if any
-     * @see <a href="https://docs.oracle.com/javase/7/docs/technotes/guides/intl/encoding.doc.html">Supported
+     * @throws UnsupportedEncodingException if the JDK in use does not recognize or support the
+     *    named encoding
+     * @see <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/intl/encoding.doc.html">Supported
      *         encodings</a>
+     * @deprecated use {@code new InputStreamReader(new FileInputStream(file), encoding)}
+     *    or {@code new Files.newBufferedReader} instead
      */
+    @Deprecated
     public static Reader newReader(@Nonnull File file, @Nonnull String encoding)
             throws FileNotFoundException, UnsupportedEncodingException {
         return new InputStreamReader(new FileInputStream(file), encoding);
@@ -193,9 +202,13 @@ public class ReaderFactory {
      * @param encoding not null supported encoding
      * @return a reader instance for the input URL using the given encoding
      * @throws IOException if any
-     * @see <a href="https://docs.oracle.com/javase/7/docs/technotes/guides/intl/encoding.doc.html">Supported
+     * @throws UnsupportedEncodingException if the JDK in use does not recognize or support the
+     *    named encoding
+     * @see <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/intl/encoding.doc.html">Supported
      *         encodings</a>
+     * @deprecated This method does not use HTTP headers to detect the resource's encoding.
      */
+    @Deprecated
     public static Reader newReader(@Nonnull URL url, @Nonnull String encoding) throws IOException {
         return new InputStreamReader(url.openStream(), encoding);
     }
