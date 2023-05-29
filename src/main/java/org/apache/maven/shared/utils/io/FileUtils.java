@@ -1816,7 +1816,7 @@ public class FileUtils {
      * @param file the file
      * @return a List containing every every line not starting with # and not empty
      * @throws IOException if any
-     * @deprecated assumes the platform default character set.
+     * @deprecated assumes the platform default character set
      */
     @Deprecated
     @Nonnull
