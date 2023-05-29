@@ -1663,7 +1663,9 @@ public class FileUtils {
      * @param encoding the file output encoding (only if wrappers is not empty)
      * @param wrappers array of {@link FilterWrapper}
      * @throws IOException if an IO error occurs during copying or filtering
+     * @deprecated use {@code org.apache.maven.shared.filtering.FilteringUtils.copyFile()} instead
      */
+    @Deprecated
     public static void copyFile(
             @Nonnull File from, @Nonnull File to, @Nullable String encoding, @Nullable FilterWrapper... wrappers)
             throws IOException {
@@ -1672,7 +1674,10 @@ public class FileUtils {
 
     /**
      * Wrapper class for Filter.
+     *
+     * @deprecated use {@code org.apache.maven.shared.filtering.FilterWrapper}
      */
+    @Deprecated
     public abstract static class FilterWrapper {
         /**
          * @param fileReader {@link Reader}
@@ -1682,7 +1687,7 @@ public class FileUtils {
     }
 
     /**
-     * <b>If wrappers is null or empty, the file will be copy only if to.lastModified() &lt; from.lastModified() or if
+     * <b>If wrappers is null or empty, the file will be copied only if to.lastModified() &lt; from.lastModified() or if
      * overwrite is true</b>
      *
      * @param from the file to copy
@@ -1692,7 +1697,9 @@ public class FileUtils {
      * @param overwrite if true and wrappers is null or empty, the file will be copied even if
      *         to.lastModified() &lt; from.lastModified()
      * @throws IOException if an IO error occurs during copying or filtering
+     * @deprecated use {@code org.apache.maven.shared.filtering.FilteringUtils.copyFile()} instead
      */
+    @Deprecated
     public static void copyFile(
             @Nonnull File from,
             @Nonnull File to,
