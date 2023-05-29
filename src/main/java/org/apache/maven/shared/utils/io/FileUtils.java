@@ -1674,6 +1674,8 @@ public class FileUtils {
 
     /**
      * Wrapper class for Filter.
+     *
+     * @deprecated use {@code org.apache.maven.shared.filtering.FilterWrapper}
      */
     @Deprecated
     public abstract static class FilterWrapper {
