@@ -1662,8 +1662,6 @@ public class FileUtils {
      * @param to       the destination file
      * @param encoding the file output encoding (only if wrappers is not empty)
      * @param wrappers array of {@link FilterWrapper}
-     * @throws UnsupportedEncodingException if the JDK in use does not recognize or support the
-     *    named encoding
      * @throws IOException if an IO error occurs during copying or filtering
      * @deprecated use {@code org.apache.maven.shared.filtering.FilteringUtils.copyFile()} instead
      */
@@ -1696,8 +1694,6 @@ public class FileUtils {
      * @param wrappers array of {@link FilterWrapper}
      * @param overwrite if true and wrappers is null or empty, the file will be copied even if
      *         to.lastModified() &lt; from.lastModified()
-     * @throws UnsupportedEncodingException if the JDK in use does not recognize or support the
-     *    named encoding
      * @throws IOException if an IO error occurs during copying or filtering
      * @deprecated use {@code org.apache.maven.shared.filtering.FilteringUtils.copyFile()} instead
      */
