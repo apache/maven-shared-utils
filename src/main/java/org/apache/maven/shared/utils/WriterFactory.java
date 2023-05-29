@@ -38,8 +38,9 @@ import org.apache.maven.shared.utils.xml.XmlStreamWriter;
  *
  * @author Hervé Boutemy
  * @see java.nio.charset.Charset
- * @see <a href="https://docs.oracle.com/javase/7/docs/technotes/guides/intl/encoding.doc.html">Supported encodings</a>
+ * @see <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/intl/encoding.doc.html">Supported encodings</a>
  */
+@Deprecated
 public class WriterFactory {
     /**
      * ISO Latin Alphabet #1, also known as ISO-LATIN-1.
@@ -98,7 +99,9 @@ public class WriterFactory {
 
     /**
      * The <code>file.encoding</code> System Property.
+     * @deprecated use {@code java.nio.charset.Charset.getDefaultCharset()}
      */
+    @Deprecated
     public static final String FILE_ENCODING = System.getProperty("file.encoding");
 
     /**
@@ -108,7 +111,7 @@ public class WriterFactory {
      * @return an XML writer instance for the output stream
      * @throws IOException if any
      * @see XmlStreamWriter
-     * @deprecated use org.apache.commons.io.input.XmlStreamWriter instead
+     * @deprecated use {@code org.apache.commons.io.input.XmlStreamWriter} instead
      */
     @Deprecated
     public static XmlStreamWriter newXmlWriter(@Nonnull OutputStream out) throws IOException {
@@ -122,7 +125,7 @@ public class WriterFactory {
      * @return an XML writer instance for the output file
      * @throws IOException if any
      * @see XmlStreamWriter
-     * @deprecated use org.apache.commons.io.input.XmlStreamWriter instead
+     * @deprecated use {@code org.apache.commons.io.input.XmlStreamWriter} instead
      */
     @Deprecated
     public static XmlStreamWriter newXmlWriter(@Nonnull File file) throws IOException {
@@ -160,10 +163,13 @@ public class WriterFactory {
      * @param out not null output stream
      * @param encoding not null supported encoding
      * @return a writer instance for the output stream using the given encoding
-     * @throws UnsupportedEncodingException if any
-     * @see <a href="https://docs.oracle.com/javase/7/docs/technotes/guides/intl/encoding.doc.html">Supported
+     * @throws UnsupportedEncodingException if the JDK in use does not recognize or support the
+     *    named encoding
+     * @see <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/intl/encoding.doc.html">Supported
      *         encodings</a>
+     * @deprecated use {@code new OutputStreamWriter(out, encoding)} instead
      */
+    @Deprecated
     public static Writer newWriter(@Nonnull OutputStream out, @Nonnull String encoding)
             throws UnsupportedEncodingException {
         return new OutputStreamWriter(out, encoding);
@@ -175,11 +181,14 @@ public class WriterFactory {
      * @param file not null file
      * @param encoding not null supported encoding
      * @return a writer instance for the output file using the given encoding
-     * @throws UnsupportedEncodingException if any
+     * @throws UnsupportedEncodingException if the JDK in use does not recognize or support the
+     *    named encoding
      * @throws FileNotFoundException if any
-     * @see <a href="https://docs.oracle.com/javase/7/docs/technotes/guides/intl/encoding.doc.html">Supported
+     * @see <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/intl/encoding.doc.html">Supported
      *         encodings</a>
+     * @deprecated use {@code java.nio.file.Files.newBufferedWriter()} instead
      */
+    @Deprecated
     public static Writer newWriter(@Nonnull File file, @Nonnull String encoding)
             throws UnsupportedEncodingException, FileNotFoundException {
         return newWriter(new FileOutputStream(file), encoding);
