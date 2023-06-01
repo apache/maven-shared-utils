@@ -302,7 +302,7 @@ public class Commandline implements Cloneable {
 
     /**
      * Do not call. Always throws an UnsupportedOperationException.
-     * 
+     *
      * @throws UnsupportedOperationException
      */
     public Object clone() {
