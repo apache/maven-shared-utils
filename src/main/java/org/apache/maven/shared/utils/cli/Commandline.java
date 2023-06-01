@@ -182,7 +182,7 @@ public class Commandline implements Cloneable {
     }
 
     /**
-     * Noop.
+     * No-op.
      *
      * @deprecated use {@link #setShellEnvironmentInherited(boolean)}
      */
@@ -300,13 +300,13 @@ public class Commandline implements Cloneable {
         return StringUtils.join(getShellCommandline(true), " ");
     }
 
-    /** {@inheritDoc}
+    /**
+     * Do not call. Always throws an UnsupportedOperationException.
+     * 
+     * @throws UnsupportedOperationException
      */
     public Object clone() {
-        throw new RuntimeException("Do we ever clone a commandline?");
-        /*        Commandline c = new Commandline( (Shell) shell.clone() );
-        c.addArguments( getArguments() );
-         return c;*/
+        throw new UnsupportedOperationException("Do we ever clone a commandline?");
     }
 
     /**
