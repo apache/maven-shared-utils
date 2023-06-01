@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.io.StringReader;
 import java.io.Writer;
 import java.net.URL;
 import java.nio.file.Files;
@@ -44,7 +45,6 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.shared.utils.Os;
 import org.apache.maven.shared.utils.testhelpers.FileTestHelper;
-import org.codehaus.plexus.util.InterpolationFilterReader;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -444,7 +444,7 @@ public class FileUtilsTest {
         File from = write("from.txt", MODIFIED_YESTERDAY, "Hello ${name}!");
         File to = new File(tempFolder.getRoot(), "to.txt");
 
-        FileUtils.copyFile(from, to, null, wrappers("name", "Bob"));
+        FileUtils.copyFile(from, to, null, wrappers());
 
         assertTrue("to.txt did not exist so should have been written", to.lastModified() >= MODIFIED_TODAY);
         assertFileContent(to, "Hello Bob!");
@@ -455,7 +455,7 @@ public class FileUtilsTest {
         File from = write("from.txt", MODIFIED_YESTERDAY, "Hello ${name}!");
         File to = write("to.txt", MODIFIED_LAST_WEEK, "Older content");
 
-        FileUtils.copyFile(from, to, null, wrappers("name", "Bob"));
+        FileUtils.copyFile(from, to, null, wrappers());
 
         assertTrue("to.txt was outdated so should have been overwritten", to.lastModified() >= MODIFIED_TODAY);
         assertFileContent(to, "Hello Bob!");
@@ -466,7 +466,7 @@ public class FileUtilsTest {
         File from = write("from.txt", MODIFIED_LAST_WEEK, "Hello ${name}!");
         File to = write("to.txt", MODIFIED_YESTERDAY, "Older content");
 
-        FileUtils.copyFile(from, to, null, wrappers("name", "Bob"), true);
+        FileUtils.copyFile(from, to, null, wrappers(), true);
 
         assertTrue("to.txt was newer but the overwrite should have been forced", to.lastModified() >= MODIFIED_TODAY);
         assertFileContent(to, "Hello Bob!");
@@ -477,7 +477,7 @@ public class FileUtilsTest {
         File from = write("from.txt", MODIFIED_LAST_WEEK, "Hello ${name}!");
         File to = write("to.txt", MODIFIED_YESTERDAY, "Hello Charlie!");
 
-        FileUtils.copyFile(from, to, null, wrappers("name", "Bob"));
+        FileUtils.copyFile(from, to, null, wrappers());
 
         assertTrue("to.txt was outdated so should have been overwritten", to.lastModified() >= MODIFIED_TODAY);
         assertFileContent(to, "Hello Bob!");
@@ -488,20 +488,18 @@ public class FileUtilsTest {
         File from = write("from.txt", MODIFIED_LAST_WEEK, "Hello ${name}!");
         File to = write("to.txt", MODIFIED_YESTERDAY, "Hello Bob!");
 
-        FileUtils.copyFile(from, to, null, wrappers("name", "Bob"));
+        FileUtils.copyFile(from, to, null, wrappers());
 
         assertFileContent(to, "Hello Bob!");
         assertTrue("to.txt content should be unchanged and have been left alone", to.lastModified() < MODIFIED_TODAY);
     }
 
-    private static FileUtils.FilterWrapper[] wrappers(String key, String value) {
-        final Map<String, Object> map = new HashMap<>();
-        map.put(key, value);
+    private static FileUtils.FilterWrapper[] wrappers() {
         return new FileUtils.FilterWrapper[] {
             new FileUtils.FilterWrapper() {
                 @Override
                 public Reader getReader(Reader reader) {
-                    return new InterpolationFilterReader(reader, map);
+                    return new StringReader("Hello Bob!");
                 }
             }
         };
