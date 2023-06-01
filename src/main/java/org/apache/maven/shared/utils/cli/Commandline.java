@@ -182,9 +182,9 @@ public class Commandline implements Cloneable {
     }
 
     /**
-     * Add system environment variables.
+     * Noop.
      *
-     * @deprecated please use {@link #setShellEnvironmentInherited(boolean)}
+     * @deprecated use {@link #setShellEnvironmentInherited(boolean)}
      */
     @Deprecated
     public void addSystemEnvironment() {}
@@ -246,7 +246,7 @@ public class Commandline implements Cloneable {
     }
 
     /**
-     * @param mask flag to mask any arguments (having his {@code mask} field to {@code true})
+     * @param mask replace any arguments whose {@code mask} field is {@code true} with asterisks
      * @return the shell, executable and all defined arguments with masking some arguments if
      * {@code mask} parameter is on
      */
@@ -268,7 +268,7 @@ public class Commandline implements Cloneable {
      * Returns all arguments defined by <code>addLine</code>,
      * <code>addValue</code>, or the argument object.
      *
-     * @param mask flag to mask any arguments (having his {@code mask} field to {@code true})
+     * @param mask replace any arguments whose {@code mask} field is {@code true} with asterisks
      * @return an array of arguments
      */
     public String[] getArguments(boolean mask) {
