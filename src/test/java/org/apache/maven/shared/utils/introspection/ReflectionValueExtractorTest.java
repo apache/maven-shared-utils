@@ -207,18 +207,18 @@ public class ReflectionValueExtractorTest extends TestCase {
         assertNull(ReflectionValueExtractor.evaluate("h.value(a]", value));
     }
 
-    public void testIllegalIndexedType() throws IntrospectionException {
+    public void testIllegalIndexedType() {
         try {
             ReflectionValueExtractor.evaluate("h.value[1]", new ValueHolder("string"));
-        } catch (Exception e) {
+        } catch (IntrospectionException e) {
             assertNotNull(e.getMessage());
         }
     }
 
-    public void testIllegalMappedType() throws IntrospectionException {
+    public void testIllegalMappedType() {
         try {
             ReflectionValueExtractor.evaluate("h.value(key)", new ValueHolder("string"));
-        } catch (Exception e) {
+        } catch (IntrospectionException e) {
             assertNotNull(e.getMessage());
         }
     }
