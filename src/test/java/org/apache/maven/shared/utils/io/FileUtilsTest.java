@@ -1005,7 +1005,7 @@ public class FileUtilsTest {
     //// dirname(String)
 
     @Test(expected = NullPointerException.class)
-    public void nlowUpOnDirnameNull() throws Exception {
+    public void blowUpOnDirnameNull() throws Exception {
         FileUtils.dirname(null);
     }
 
