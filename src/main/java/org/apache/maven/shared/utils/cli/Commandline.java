@@ -182,9 +182,9 @@ public class Commandline implements Cloneable {
     }
 
     /**
-     * Add system environment variables.
+     * No-op.
      *
-     * @deprecated please use {@link #setShellEnvironmentInherited(boolean)}
+     * @deprecated use {@link #setShellEnvironmentInherited(boolean)}
      */
     @Deprecated
     public void addSystemEnvironment() {}
@@ -246,7 +246,7 @@ public class Commandline implements Cloneable {
     }
 
     /**
-     * @param mask flag to mask any arguments (having his {@code mask} field to {@code true})
+     * @param mask replace any arguments whose {@code mask} field is {@code true} with asterisks
      * @return the shell, executable and all defined arguments with masking some arguments if
      * {@code mask} parameter is on
      */
@@ -268,7 +268,7 @@ public class Commandline implements Cloneable {
      * Returns all arguments defined by <code>addLine</code>,
      * <code>addValue</code>, or the argument object.
      *
-     * @param mask flag to mask any arguments (having his {@code mask} field to {@code true})
+     * @param mask replace any arguments whose {@code mask} field is {@code true} with asterisks
      * @return an array of arguments
      */
     public String[] getArguments(boolean mask) {
@@ -300,13 +300,13 @@ public class Commandline implements Cloneable {
         return StringUtils.join(getShellCommandline(true), " ");
     }
 
-    /** {@inheritDoc}
+    /**
+     * Do not call. Always throws an UnsupportedOperationException.
+     *
+     * @throws UnsupportedOperationException
      */
     public Object clone() {
-        throw new RuntimeException("Do we ever clone a commandline?");
-        /*        Commandline c = new Commandline( (Shell) shell.clone() );
-        c.addArguments( getArguments() );
-         return c;*/
+        throw new UnsupportedOperationException("Do we ever clone a commandline?");
     }
 
     /**
