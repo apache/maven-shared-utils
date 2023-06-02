@@ -1000,9 +1000,8 @@ public class FileUtilsTest {
 
     //// dirname(String)
 
-    @SuppressWarnings("ConstantConditions")
     @Test(expected = NullPointerException.class)
-    public void nlowUpOnDirnameNull() throws Exception {
+    public void blowUpOnDirnameNull() throws Exception {
         FileUtils.dirname(null);
     }
 
@@ -1070,7 +1069,6 @@ public class FileUtilsTest {
 
     //// filename(String)
 
-    @SuppressWarnings("ConstantConditions")
     @Test(expected = NullPointerException.class)
     public void blowUpOnFilenameNull() throws Exception {
         FileUtils.filename(null);
@@ -1140,7 +1138,6 @@ public class FileUtilsTest {
 
     //// extension(String)
 
-    @SuppressWarnings("ConstantConditions")
     @Test(expected = NullPointerException.class)
     public void blowUpOnNullExtension() throws Exception {
         FileUtils.extension(null);
