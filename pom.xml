@@ -120,12 +120,6 @@
       <version>3.0.2</version>
       <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-utils</artifactId>
-      <version>3.5.1</version>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
   <build>
