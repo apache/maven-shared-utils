@@ -23,6 +23,7 @@ import java.io.File;
 /**
  *
  */
+@Deprecated
 public interface Arg {
     /**
      * @param value the value to be set

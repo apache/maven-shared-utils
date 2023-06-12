@@ -27,6 +27,7 @@ import org.fusesource.jansi.Ansi.Color;
  * Configurable message styles.
  * @since 3.1.0
  */
+@Deprecated
 enum Style {
     DEBUG("bold,cyan"),
     INFO("bold,blue"),

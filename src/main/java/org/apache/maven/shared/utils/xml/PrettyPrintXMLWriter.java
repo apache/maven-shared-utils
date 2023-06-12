@@ -28,6 +28,7 @@ import java.util.ArrayList;
  *
  * @author kama
  */
+@Deprecated
 public class PrettyPrintXMLWriter implements XMLWriter {
     private static final char[] CLOSE_1 = "/>".toCharArray();
 

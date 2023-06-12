@@ -33,6 +33,7 @@ import java.nio.charset.Charset;
  * @author <a href="mailto:fvancea@maxiq.com">Florin Vancea </a>
  * @author <a href="mailto:pj@thoughtworks.com">Paul Julius </a>
  */
+@Deprecated
 public class StreamPumper extends AbstractStreamHandler {
     private final BufferedReader in;
 

@@ -40,6 +40,7 @@ import org.slf4j.LoggerFactory;
  * @since 0.5
  * @param <Request> Tool-specific request type
  */
+@Deprecated
 public abstract class AbstractJavaTool<Request extends JavaToolRequest> implements JavaTool<Request> {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 

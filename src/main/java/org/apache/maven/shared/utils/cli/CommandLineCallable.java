@@ -25,6 +25,7 @@ import java.util.concurrent.Callable;
  *
  * @author Kristian Rosenvold
  */
+@Deprecated
 public interface CommandLineCallable extends Callable<Integer> {
     /**
      * {@inheritDoc}

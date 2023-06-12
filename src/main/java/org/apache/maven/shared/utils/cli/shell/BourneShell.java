@@ -26,6 +26,7 @@ import org.apache.maven.shared.utils.Os;
 /**
  * @author Jason van Zyl
  */
+@Deprecated
 public class BourneShell extends Shell {
 
     /**

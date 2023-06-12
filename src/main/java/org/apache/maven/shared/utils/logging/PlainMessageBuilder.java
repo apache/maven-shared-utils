@@ -21,6 +21,7 @@ package org.apache.maven.shared.utils.logging;
 /**
  * Message builder implementation that just ignores styling, for Maven version earlier than 3.5.0.
  */
+@Deprecated
 class PlainMessageBuilder implements MessageBuilder, LoggerLevelRenderer {
     private StringBuilder buffer;
 

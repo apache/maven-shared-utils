@@ -21,6 +21,7 @@ package org.apache.maven.shared.utils.cli;
 /**
  * @author <a href="mailto:kristian.rosenvold@gmail.com">Kristian Rosenvold</a>
  */
+@Deprecated
 class AbstractStreamHandler extends Thread {
     private volatile boolean done;
 

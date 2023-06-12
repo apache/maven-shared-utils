@@ -90,6 +90,7 @@ import org.apache.maven.shared.utils.StringUtils;
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  */
+@Deprecated
 public class FileUtils {
     /**
      * protected constructor.

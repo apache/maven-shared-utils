@@ -37,6 +37,7 @@ import org.apache.maven.shared.utils.StringUtils;
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l </a>
  */
+@Deprecated
 public abstract class CommandLineUtils {
 
     /**

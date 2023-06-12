@@ -26,6 +26,7 @@ import java.util.Map;
 /**
  *
  */
+@Deprecated
 public class Xpp3DomUtils {
     /**
      * @param dominant {@link Xpp3Dom}

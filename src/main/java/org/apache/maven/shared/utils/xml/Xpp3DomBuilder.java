@@ -39,6 +39,7 @@ import org.xml.sax.helpers.DefaultHandler;
 /**
  * @author Kristian Rosenvold
  */
+@Deprecated
 public class Xpp3DomBuilder {
 
     /**

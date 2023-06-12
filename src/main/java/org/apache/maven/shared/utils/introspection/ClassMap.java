@@ -34,6 +34,7 @@ import java.util.Map;
  * @author <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
  *
  */
+@Deprecated
 public class ClassMap {
     private static final class CacheMiss {}
 

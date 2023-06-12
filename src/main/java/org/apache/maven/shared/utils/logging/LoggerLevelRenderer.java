@@ -24,6 +24,7 @@ package org.apache.maven.shared.utils.logging;
  *
  * @since 3.2.0
  */
+@Deprecated
 public interface LoggerLevelRenderer {
     /**
      * Render a message at DEBUG level.

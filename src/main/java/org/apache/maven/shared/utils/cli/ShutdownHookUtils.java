@@ -28,6 +28,7 @@ import java.security.AccessControlException;
  *
  * @author Kristian Rosenvold
  */
+@Deprecated
 public class ShutdownHookUtils {
 
     /**

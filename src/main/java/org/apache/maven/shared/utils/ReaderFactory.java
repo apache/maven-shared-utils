@@ -42,6 +42,7 @@ import org.apache.commons.io.input.XmlStreamReader;
  * @see <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/intl/encoding.doc.html">Supported encodings</a>
  * @deprecated use JDK methods instead
  */
+@Deprecated
 public class ReaderFactory {
     /**
      * ISO Latin Alphabet #1, also known as ISO-LATIN-1.

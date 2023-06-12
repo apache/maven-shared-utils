@@ -80,6 +80,7 @@ import java.nio.channels.Channel;
  * @version CVS $Revision$ $Date$
  *
  */
+@Deprecated
 public final class IOUtil
 /*
  * Behold, intrepid explorers; a map of this class:

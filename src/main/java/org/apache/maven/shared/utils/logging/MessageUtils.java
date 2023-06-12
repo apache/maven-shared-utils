@@ -30,6 +30,7 @@ import org.fusesource.jansi.AnsiMode;
  * <a href="https://en.wikipedia.org/wiki/ANSI_escape_code#Colors">ANSI colors</a> on any platform.
  * @since 3.1.0
  */
+@Deprecated
 public class MessageUtils {
     private static final boolean JANSI;
 

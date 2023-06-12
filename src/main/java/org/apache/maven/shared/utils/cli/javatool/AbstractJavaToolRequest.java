@@ -26,6 +26,7 @@ import org.apache.maven.shared.utils.cli.StreamConsumer;
  * @author <a href="mailto:chemit@codelutin.com">Tony Chemit</a>
  * @since 0.5
  */
+@Deprecated
 public class AbstractJavaToolRequest implements JavaToolRequest {
 
     /**

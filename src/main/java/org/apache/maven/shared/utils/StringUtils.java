@@ -49,6 +49,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:alex@purpletech.com">Alexander Day Chaffee</a>
  *
  */
+@Deprecated
 public class StringUtils {
     /**
      * <p><code>StringUtils</code> instances should NOT be constructed in

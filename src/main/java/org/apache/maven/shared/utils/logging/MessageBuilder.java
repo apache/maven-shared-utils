@@ -29,6 +29,7 @@ import java.util.Formatter;
  * @see MessageUtils
  * @since 3.1.0
  */
+@Deprecated
 public interface MessageBuilder {
     /**
      * Append message content in success style.

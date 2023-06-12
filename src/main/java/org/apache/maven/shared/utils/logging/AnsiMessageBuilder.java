@@ -24,6 +24,7 @@ import org.fusesource.jansi.Ansi;
  * Message builder implementation that supports ANSI colors through
  * <a href="http://fusesource.github.io/jansi/">Jansi</a> with configurable styles through {@link Style}.
  */
+@Deprecated
 class AnsiMessageBuilder implements MessageBuilder, LoggerLevelRenderer {
     private Ansi ansi;
 

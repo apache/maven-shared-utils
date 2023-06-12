@@ -28,6 +28,7 @@ import java.util.Objects;
  *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  */
+@Deprecated
 class StreamPollFeeder extends Thread {
 
     public static final int BUF_LEN = 80;

@@ -31,6 +31,7 @@ import java.util.Properties;
 /**
  * Static utility methods for loading properties.
  */
+@Deprecated
 public class PropertyUtils {
 
     /**

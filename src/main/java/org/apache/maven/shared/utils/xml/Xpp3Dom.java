@@ -34,6 +34,7 @@ import java.util.Map;
  *
  * @author Kristian Rosenvold
  */
+@Deprecated
 public class Xpp3Dom implements Iterable<Xpp3Dom> {
     private static final long serialVersionUID = 2567894443061173996L;
 

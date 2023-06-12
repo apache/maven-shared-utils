@@ -26,6 +26,7 @@ import java.io.Writer;
  * This is all about the special characters &amp; and &lt;, and for attributes
  * &quot; and &apos;. These must be encoded/decoded from/to XML.
  */
+@Deprecated
 final class XMLEncode {
 
     private static final int CDATA_BLOCK_THRESHOLD_LENGTH = 12;

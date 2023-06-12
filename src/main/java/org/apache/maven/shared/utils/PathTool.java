@@ -33,6 +33,7 @@ import java.util.StringTokenizer;
  * Some external fixes by Apache Committers have been applied later.
  * </p>
  */
+@Deprecated
 public class PathTool {
 
     /**

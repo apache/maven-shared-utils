@@ -25,6 +25,7 @@ import java.io.Writer;
 /**
  * @author Brett Porter
  */
+@Deprecated
 public class Xpp3DomWriter {
     /**
      * @param writer {@link Writer}

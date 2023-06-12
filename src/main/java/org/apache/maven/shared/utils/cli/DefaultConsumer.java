@@ -23,6 +23,7 @@ import java.io.IOException;
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
  */
+@Deprecated
 public class DefaultConsumer implements StreamConsumer {
 
     /**

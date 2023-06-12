@@ -38,6 +38,7 @@ import java.util.Set;
  * @author Mark Struberg
  *
  */
+@Deprecated
 public class Os {
     /**
      * The OS Name.

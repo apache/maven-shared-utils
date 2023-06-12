@@ -29,6 +29,7 @@ package org.apache.maven.shared.utils.cli.javatool;
  * @since 0.5
  * @param <Request> Tool-specific request type
  */
+@Deprecated
 public interface JavaTool<Request extends JavaToolRequest> {
 
     /**

@@ -14,6 +14,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
+Deprecation
+======================
+The [Apache Maven Shared Utils](https://maven.apache.org/shared/maven-shared-utils/) library has been deprecated in favor 
+of [Plexus Utils](https://github.com/codehaus.plexus/plexus-utils) and [Plexus XML](https://github.com/codehaus.plexus/plexus-xml).
+Please switch to using those libraries.
+
 Contributing to [Apache Maven Shared Utils](https://maven.apache.org/shared/maven-shared-utils/)
 ======================
 

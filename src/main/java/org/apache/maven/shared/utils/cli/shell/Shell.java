@@ -37,6 +37,7 @@ import org.apache.maven.shared.utils.StringUtils;
  * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
  *
  */
+@Deprecated
 public class Shell implements Cloneable {
     private static final char[] DEFAULT_QUOTING_TRIGGER_CHARS = {' '};
 

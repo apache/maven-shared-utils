@@ -27,6 +27,7 @@ import org.apache.maven.shared.utils.cli.Commandline;
  * @author <a href="mailto:chemit@codelutin.com">Tony Chemit</a>
  * @since 0.5
  */
+@Deprecated
 public class JavaToolResult {
     /**
      * The exception that prevented to execute the command line, will be <code>null</code> if jarSigner could be

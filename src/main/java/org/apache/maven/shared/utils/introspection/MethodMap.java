@@ -34,6 +34,7 @@ import java.util.Map;
  * @author <a href="mailto:szegedia@freemail.hu">Attila Szegedi</a>
  *
  */
+@Deprecated
 class MethodMap {
     private static final int MORE_SPECIFIC = 0;
 

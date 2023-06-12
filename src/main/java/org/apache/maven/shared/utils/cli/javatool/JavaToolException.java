@@ -29,6 +29,7 @@ package org.apache.maven.shared.utils.cli.javatool;
  * @see JavaToolResult#getExitCode()
  * @since 0.5
  */
+@Deprecated
 public class JavaToolException extends Exception {
     private static final long serialVersionUID = 1L;
 

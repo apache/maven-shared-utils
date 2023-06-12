@@ -22,6 +22,7 @@ import java.io.IOException;
 
 import org.xml.sax.SAXException;
 
+@Deprecated
 public class XmlPullParserException extends RuntimeException {
 
     private static final long serialVersionUID = 117075811816936575L;
