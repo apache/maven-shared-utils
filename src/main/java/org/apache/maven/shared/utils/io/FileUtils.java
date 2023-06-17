@@ -1098,7 +1098,9 @@ public class FileUtils {
      * @throws IOException if a file already exists with the specified name or the directory is unable to be created
      * @throws IllegalArgumentException if the file contains illegal Windows characters under Windows OS.
      * @see #INVALID_CHARACTERS_FOR_WINDOWS_FILE_NAME
+     * @deprecated use {@code org.apache.commons.io.FileUtils.forceMkdir()}
      */
+    @Deprecated
     public static void forceMkdir(@Nonnull final File file) throws IOException {
         if (Os.isFamily(Os.FAMILY_WINDOWS) && !isValidWindowsFileName(file)) {
             throw new IllegalArgumentException(
