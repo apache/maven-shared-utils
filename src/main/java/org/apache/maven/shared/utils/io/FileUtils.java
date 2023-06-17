@@ -561,7 +561,7 @@ public class FileUtils {
      * @param file2 the second file
      * @return true if the content of the files are equal or they both don't exist, false otherwise
      * @throws IOException if any
-     * @deprecated use {@code org.apache.commons.io.IOUtils.contentEquals()}
+     * @deprecated use {@code org.apache.commons.io.FileUtils.contentEquals()}
      */
     @Deprecated
     public static boolean contentEquals(@Nonnull final File file1, @Nonnull final File file2) throws IOException {
