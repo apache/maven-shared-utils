@@ -23,21 +23,25 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-/**
- * <p>Condition that tests the OS type.</p>
- * <p>This class got copied over from Apache ANT.
+/*
+ * This class was copied over from Apache ANT.
  * Even the version from plexus-utils was
  * only an ANT fork!
  * The last time it got copied was on 2011-08-12</p>
- * <p>When merging changes please take care of the special
- * OS_FAMILY handling in this version of Os.java!</p>
+ * When merging changes please take care of the special
+ * OS_FAMILY handling in this version of Os.java!
+ */
+
+/**
+ * <p>Condition that tests the OS type.</p>
  *
  * @author Stefan Bodewig
  * @author Magesh Umasankar
  * @author Brian Fox
  * @author Mark Struberg
- *
+ * @deprecated use {@code org.apache.commons.lang3.SystemUtils} instead
  */
+@Deprecated
 public class Os {
     /**
      * The OS Name.
