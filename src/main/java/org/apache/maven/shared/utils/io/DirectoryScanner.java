@@ -662,7 +662,7 @@ public class DirectoryScanner {
         }
     }
 
-    private String[] doNotFollowSymbolicLinks(final File dir, final String vpath, String[] newfiles) {
+    private String[] doNotFollowSymbolicLinks(final File dir, final String vpath, final String[] newfiles) {
         final List<String> noLinks = new ArrayList<String>();
         for (final String newfile : newfiles) {
             if (Files.isSymbolicLink(dir.toPath())) {
@@ -677,8 +677,7 @@ public class DirectoryScanner {
                 noLinks.add(newfile);
             }
         }
-        newfiles = noLinks.toArray(new String[noLinks.size()]);
-        return newfiles;
+        return noLinks.toArray(new String[noLinks.size()]);
     }
 
     /**
