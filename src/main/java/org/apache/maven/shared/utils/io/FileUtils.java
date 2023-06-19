@@ -1252,37 +1252,39 @@ public class FileUtils {
     }
 
     /**
-     * Return the files contained in the directory, using inclusion and exclusion Ant patterns,
-     * including the directory name in each of the files
+     * Return a list of the files inside a base directory as relative paths from the base,
+     * using inclusion and exclusion Ant patterns, including the directory name in each of the files.
+     * This is recursive and descends into subdirectories. However it does not include the
+     * subdirectories themselves in the returned list. This method uses case sensitive file names.
      *
      * @param directory the directory to scan
      * @param includes  the Ant includes pattern, comma separated
      * @param excludes  the Ant excludes pattern, comma separated
      * @return a list of File objects
-     * @throws IOException in case of failure.
      * @see #getFileNames(File, String, String, boolean)
      */
     @Nonnull
-    public static List<File> getFiles(@Nonnull File directory, @Nullable String includes, @Nullable String excludes)
-            throws IOException {
+    public static List<File> getFiles(@Nonnull File directory, @Nullable String includes, @Nullable String excludes) {
         return getFiles(directory, includes, excludes, true);
     }
 
     /**
-     * Return the files contained in the directory, using inclusion and exclusion Ant patterns
+     * Return a list of the files inside a base directory as relative paths from the base,
+     * using inclusion and exclusion Ant patterns.
+     * This is recursive and descends into subdirectories. However it does not include the
+     * subdirectories themselves in the returned list.
+     * This method uses case sensitive file names.
      *
      * @param directory      the directory to scan
      * @param includes       the includes pattern, comma separated
      * @param excludes       the excludes pattern, comma separated
      * @param includeBasedir true to include the base dir in each file
      * @return a list of File objects
-     * @throws IOException in case of failure.
      * @see #getFileNames(File, String, String, boolean)
      */
     @Nonnull
     public static List<File> getFiles(
-            @Nonnull File directory, @Nullable String includes, @Nullable String excludes, boolean includeBasedir)
-            throws IOException {
+            @Nonnull File directory, @Nullable String includes, @Nullable String excludes, boolean includeBasedir) {
         List<String> fileNames = getFileNames(directory, includes, excludes, includeBasedir);
 
         List<File> files = new ArrayList<File>();
@@ -1295,33 +1297,35 @@ public class FileUtils {
     }
 
     /**
-     * Return a list of files as String depending options.
-     * This method use case sensitive file name.
+     * Return a list of the files inside a base directory as relative paths from the base.
+     * This is recursive and descends into subdirectories. However it does not include the
+     * subdirectories themselves in the returned list.
+     * This method uses case sensitive file names.
      *
      * @param directory      the directory to scan
      * @param includes       the Ant includes pattern, comma separated
      * @param excludes       the Ant excludes pattern, comma separated
      * @param includeBasedir true to include the base directory in each String of file
      * @return a list of file names
-     * @throws IOException in case of failure
      */
     @Nonnull
     public static List<String> getFileNames(
-            @Nonnull File directory, @Nullable String includes, @Nullable String excludes, boolean includeBasedir)
-            throws IOException {
+            @Nonnull File directory, @Nullable String includes, @Nullable String excludes, boolean includeBasedir) {
         return getFileNames(directory, includes, excludes, includeBasedir, true);
     }
 
     /**
-     * Return a list of files as String depending options.
+     * Return a list of the files inside a base directory as relative paths from the base.
+     * This is recursive and descends into subdirectories. However it does not include the
+     * subdirectories themselves in the returned list.
      *
      * @param directory       the directory to scan
      * @param includes        the Ant includes pattern, comma separated
      * @param excludes        the Ant excludes pattern, comma separated
      * @param includeBasedir  true to include the base dir in each String of file
-     * @param isCaseSensitive true if case sensitive
-     * @return a list of files as String
-     * @throws IOException
+     * @param isCaseSensitive true if the includes and excludes are case sensitive
+     * @param includeBasedir  true to include the base directory at the start of each path
+     * @return a list of relative paths of files
      */
     @Nonnull
     private static List<String> getFileNames(
@@ -1329,39 +1333,37 @@ public class FileUtils {
             @Nullable String includes,
             @Nullable String excludes,
             boolean includeBasedir,
-            boolean isCaseSensitive)
-            throws IOException {
+            boolean isCaseSensitive) {
         return getFileAndDirectoryNames(directory, includes, excludes, includeBasedir, isCaseSensitive, true, false);
     }
 
     /**
-     * Return a list of directories as String depending options.
+     * Return the paths to the subdirectories in a directory, relative to the base directory.
+     * This is recursive and descends into subdirectories.
      * This method use case sensitive file name.
      *
-     * @param directory      the directory to scan
-     * @param includes       the Ant includes pattern, comma separated
-     * @param excludes       the Ant excludes pattern, comma separated
-     * @param includeBasedir true to include the base dir in each String of file
-     * @return a list of directories as String
-     * @throws IOException in case of failure.
+     * @param directory       the base directory to search
+     * @param includes        the Ant includes pattern, comma separated
+     * @param excludes        the Ant excludes pattern, comma separated
+     * @param includeBasedir  true to include the base directory at the start of each path
+     * @return a list of relative paths of directories
      */
     @Nonnull
     public static List<String> getDirectoryNames(
-            @Nonnull File directory, @Nullable String includes, @Nullable String excludes, boolean includeBasedir)
-            throws IOException {
+            @Nonnull File directory, @Nullable String includes, @Nullable String excludes, boolean includeBasedir) {
         return getDirectoryNames(directory, includes, excludes, includeBasedir, true);
     }
 
     /**
-     * Return a list of directories as Strings.
+     * Return the paths to the subdirectories in a directory, relative to the base directory.
+     * This is recursive and descends into subdirectories.
      *
-     * @param directory       the directory to scan
+     * @param directory       the base directory to search
      * @param includes        the Ant includes pattern, comma separated
      * @param excludes        the Ant excludes pattern, comma separated
-     * @param includeBasedir  true to include the base directory in each String of file
-     * @param isCaseSensitive true if case sensitive
-     * @return a list of directories as String
-     * @throws IOException in case of failure
+     * @param includeBasedir  true to include the base directory at the start of each path
+     * @param isCaseSensitive true if the includes and excludes are case sensitive
+     * @return a list of relative paths of directories
      */
     @Nonnull
     public static List<String> getDirectoryNames(
@@ -1369,22 +1371,22 @@ public class FileUtils {
             @Nullable String includes,
             @Nullable String excludes,
             boolean includeBasedir,
-            boolean isCaseSensitive)
-            throws IOException {
+            boolean isCaseSensitive) {
         return getFileAndDirectoryNames(directory, includes, excludes, includeBasedir, isCaseSensitive, false, true);
     }
 
     /**
-     * Return a list of file names as Strings.
+     * Return the paths to the files in a directory, relative to the base directory.
+     * This is recursive and descends into subdirectories.
      *
      * @param directory       the directory to scan
      * @param includes        the Ant includes pattern, comma separated
      * @param excludes        the Ant excludes pattern, comma separated
-     * @param includeBasedir  true to include the base directory in each String of file
-     * @param isCaseSensitive true if case sensitive
-     * @param getFiles        true to include regular files
-     * @param getDirectories  true to include directories
-     * @return a list of file names
+     * @param includeBasedir  true to include the base directory at the start of each path
+     * @param isCaseSensitive true if the includes and excludes are case sensitive
+     * @param getFiles        true to include regular files in the list
+     * @param getDirectories  true to include directories in the list
+     * @return a list of relative paths
      */
     @Nonnull
     public static List<String> getFileAndDirectoryNames(
