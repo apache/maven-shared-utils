@@ -1262,9 +1262,11 @@ public class FileUtils {
      * @param excludes  the Ant excludes pattern, comma separated
      * @return a list of File objects
      * @see #getFileNames(File, String, String, boolean)
+     * @throws IOException never
      */
     @Nonnull
-    public static List<File> getFiles(@Nonnull File directory, @Nullable String includes, @Nullable String excludes) {
+    public static List<File> getFiles(@Nonnull File directory, @Nullable String includes, @Nullable String excludes)
+            throws IOException {
         return getFiles(directory, includes, excludes, true);
     }
 
@@ -1280,11 +1282,13 @@ public class FileUtils {
      * @param excludes       the excludes pattern, comma separated
      * @param includeBasedir true to include the base dir in each file
      * @return a list of File objects
+     * @throws IOException never
      * @see #getFileNames(File, String, String, boolean)
      */
     @Nonnull
     public static List<File> getFiles(
-            @Nonnull File directory, @Nullable String includes, @Nullable String excludes, boolean includeBasedir) {
+            @Nonnull File directory, @Nullable String includes, @Nullable String excludes, boolean includeBasedir)
+            throws IOException {
         List<String> fileNames = getFileNames(directory, includes, excludes, includeBasedir);
 
         List<File> files = new ArrayList<File>();
@@ -1307,10 +1311,12 @@ public class FileUtils {
      * @param excludes       the Ant excludes pattern, comma separated
      * @param includeBasedir true to include the base directory in each String of file
      * @return a list of file names
+     * @throws IOException never
      */
     @Nonnull
     public static List<String> getFileNames(
-            @Nonnull File directory, @Nullable String includes, @Nullable String excludes, boolean includeBasedir) {
+            @Nonnull File directory, @Nullable String includes, @Nullable String excludes, boolean includeBasedir)
+            throws IOException {
         return getFileNames(directory, includes, excludes, includeBasedir, true);
     }
 
@@ -1347,10 +1353,12 @@ public class FileUtils {
      * @param excludes        the Ant excludes pattern, comma separated
      * @param includeBasedir  true to include the base directory at the start of each path
      * @return a list of relative paths of directories
+     * @throws IOException never
      */
     @Nonnull
     public static List<String> getDirectoryNames(
-            @Nonnull File directory, @Nullable String includes, @Nullable String excludes, boolean includeBasedir) {
+            @Nonnull File directory, @Nullable String includes, @Nullable String excludes, boolean includeBasedir)
+            throws IOException {
         return getDirectoryNames(directory, includes, excludes, includeBasedir, true);
     }
 
@@ -1364,6 +1372,7 @@ public class FileUtils {
      * @param includeBasedir  true to include the base directory at the start of each path
      * @param isCaseSensitive true if the includes and excludes are case sensitive
      * @return a list of relative paths of directories
+     * @throws IOException never
      */
     @Nonnull
     public static List<String> getDirectoryNames(
@@ -1371,7 +1380,8 @@ public class FileUtils {
             @Nullable String includes,
             @Nullable String excludes,
             boolean includeBasedir,
-            boolean isCaseSensitive) {
+            boolean isCaseSensitive)
+            throws IOException {
         return getFileAndDirectoryNames(directory, includes, excludes, includeBasedir, isCaseSensitive, false, true);
     }
 
