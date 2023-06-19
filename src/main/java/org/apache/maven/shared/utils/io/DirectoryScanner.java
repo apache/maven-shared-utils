@@ -665,7 +665,7 @@ public class DirectoryScanner {
     private String[] doNotFollowSymbolicLinks(final File dir, final String vpath, String[] newfiles) {
         final List<String> noLinks = new ArrayList<String>();
         for (final String newfile : newfiles) {
-            if (Files.isSymbolicLink(dir)) {
+            if (Files.isSymbolicLink(dir.toPath())) {
                 final String name = vpath + newfile;
                 final File file = new File(dir, newfile);
                 if (file.isDirectory()) {
@@ -682,10 +682,10 @@ public class DirectoryScanner {
     }
 
     /**
-     * Tests whether or not a name matches against at least one include pattern.
+     * Tests whether or not a name matches at least one include pattern.
      *
      * @param name The name to match. Must not be <code>null</code>.
-     * @return <code>true</code> when the name matches against at least one include pattern, or <code>false</code>
+     * @return <code>true</code> when the name matches at least one include pattern, or <code>false</code>
      *         otherwise.
      */
     boolean isIncluded(final String name) {
