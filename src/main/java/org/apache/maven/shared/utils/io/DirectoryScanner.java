@@ -22,7 +22,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -569,8 +568,6 @@ public class DirectoryScanner {
              * the problematic code, as it appears to come from a native method in UnixFileSystem...
              */
             newfiles = new String[0];
-
-            // throw new IOException( "IO error scanning directory " + dir.getAbsolutePath() );
         }
 
         if (!followSymlinks) {
@@ -665,37 +662,29 @@ public class DirectoryScanner {
         }
     }
 
-    private String[] doNotFollowSymbolicLinks(final File dir, final String vpath, String[] newfiles) {
+    private String[] doNotFollowSymbolicLinks(final File dir, final String vpath, final String[] newfiles) {
         final List<String> noLinks = new ArrayList<String>();
         for (final String newfile : newfiles) {
-            try {
-                if (isSymbolicLink(dir, newfile)) {
-                    final String name = vpath + newfile;
-                    final File file = new File(dir, newfile);
-                    if (file.isDirectory()) {
-                        dirsExcluded.add(name);
-                    } else {
-                        filesExcluded.add(name);
-                    }
+            if (Files.isSymbolicLink(dir.toPath())) {
+                final String name = vpath + newfile;
+                final File file = new File(dir, newfile);
+                if (file.isDirectory()) {
+                    dirsExcluded.add(name);
                 } else {
-                    noLinks.add(newfile);
+                    filesExcluded.add(name);
                 }
-            } catch (final IOException ioe) {
-                final String msg = "IOException caught while checking " + "for links, couldn't get canonical path!";
-                // will be caught and redirected to Ant's logging system
-                System.err.println(msg);
+            } else {
                 noLinks.add(newfile);
             }
         }
-        newfiles = noLinks.toArray(new String[noLinks.size()]);
-        return newfiles;
+        return noLinks.toArray(new String[noLinks.size()]);
     }
 
     /**
-     * Tests whether or not a name matches against at least one include pattern.
+     * Tests whether or not a name matches at least one include pattern.
      *
      * @param name The name to match. Must not be <code>null</code>.
-     * @return <code>true</code> when the name matches against at least one include pattern, or <code>false</code>
+     * @return <code>true</code> when the name matches at least one include pattern, or <code>false</code>
      *         otherwise.
      */
     boolean isIncluded(final String name) {
@@ -820,21 +809,6 @@ public class DirectoryScanner {
                     DEFAULTEXCLUDES[i].replace('/', File.separatorChar).replace('\\', File.separatorChar);
         }
         excludes = newExcludes;
-    }
-
-    /**
-     * Checks whether a given file is a symbolic link.
-     * <p>
-     * It doesn't really test for symbolic links but whether the canonical and absolute paths of the file are identical
-     * - this may lead to false positives on some platforms.
-     * </p>
-     *
-     * @param parent the parent directory of the file to test
-     * @param name   the name of the file to test.
-     *
-     */
-    boolean isSymbolicLink(final File parent, final String name) throws IOException {
-        return Files.isSymbolicLink(parent.toPath());
     }
 
     private void setupDefaultFilters() {
