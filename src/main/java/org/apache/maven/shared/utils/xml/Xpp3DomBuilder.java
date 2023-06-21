@@ -38,7 +38,9 @@ import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * @author Kristian Rosenvold
+ * @deprecated use org.w3c.dom, JDOM, XOM, or SAX 
  */
+@Deprecated
 public class Xpp3DomBuilder {
 
     /**
