@@ -37,17 +37,17 @@ import java.util.Map;
 public class Xpp3Dom implements Iterable<Xpp3Dom> {
     private static final long serialVersionUID = 2567894443061173996L;
 
-    private String name; // plexus: protected
+    private String name;
 
-    private String value; // plexus: protected
+    private String value;
 
-    private Map<String, String> attributes; // plexus: protected
+    private Map<String, String> attributes;
 
-    final List<Xpp3Dom> childList; // plexus: protected
+    final List<Xpp3Dom> childList;
 
-    final Map<String, Xpp3Dom> childMap; // plexus: protected
+    final Map<String, Xpp3Dom> childMap;
 
-    private Xpp3Dom parent; // plexus: protected
+    private Xpp3Dom parent;
 
     /**
      * The attribute which identifies merge/append.
