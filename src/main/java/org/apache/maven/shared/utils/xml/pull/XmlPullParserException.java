@@ -23,8 +23,8 @@ import java.io.IOException;
 import org.xml.sax.SAXException;
 
 /**
-* @deprecated use org.w3c.dom, JDOM, XOM, or SAX 
-*/
+ * @deprecated use org.w3c.dom, JDOM, XOM, or SAX
+ */
 @Deprecated
 public class XmlPullParserException extends RuntimeException {
 

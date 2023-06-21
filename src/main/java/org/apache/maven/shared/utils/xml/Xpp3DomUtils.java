@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @deprecated use org.w3c.dom, JDOM, XOM, or SAX 
+ * @deprecated use org.w3c.dom, JDOM, XOM, or SAX
  */
 @Deprecated
 public class Xpp3DomUtils {
