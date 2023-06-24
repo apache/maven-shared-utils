@@ -102,6 +102,7 @@ public class ReaderFactory {
      * The <code>file.encoding</code> System Property.
      * @deprecated use {@code java.nio.charset.Charset.getDefaultCharset()}
      */
+    @Deprecated
     public static final String FILE_ENCODING = System.getProperty("file.encoding");
 
     /**
