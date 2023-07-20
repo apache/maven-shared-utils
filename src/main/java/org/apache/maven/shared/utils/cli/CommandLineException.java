@@ -20,7 +20,9 @@ package org.apache.maven.shared.utils.cli;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
+ * @deprecated Use {@code org.codehaus.plexus.util.cli.CommandLineException} instead.
  */
+@Deprecated
 public class CommandLineException extends Exception {
     /**
      *

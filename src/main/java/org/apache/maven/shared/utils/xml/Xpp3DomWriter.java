@@ -24,7 +24,7 @@ import java.io.Writer;
 
 /**
  * @author Brett Porter
- * @deprecated use org.w3c.dom, JDOM, XOM, or SAX
+ * @deprecated Use {@code org.codehaus.plexus.util.xml.Xpp3DomWriter} instead.
  */
 @Deprecated
 public class Xpp3DomWriter {

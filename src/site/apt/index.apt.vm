@@ -29,6 +29,11 @@
 
 ${project.name}
 
+   <<This project is deprecated now and consumers should look into viable alternatives like {{{http://codehaus-plexus.github.io/plexus-utils/}plexus-utils}}
+   {{{http://codehaus-plexus.github.io/plexus-xml/}plexus-xml}} or native JDK API (where possible).
+   The original intent is stated below, but in fact it was never adopted widely and plexus-utils received more maintenance.>>
+   
+   
    This project aims to be a functional replacement for
    {{{http://codehaus-plexus.github.io/plexus-utils/}plexus-utils}} in Maven.
    

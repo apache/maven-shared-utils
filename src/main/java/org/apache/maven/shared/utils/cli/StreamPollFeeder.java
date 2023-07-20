@@ -27,7 +27,9 @@ import java.util.Objects;
  * Poll InputStream for available data and write the output to an OutputStream.
  *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
+ * @deprecated Use {@code org.codehaus.plexus.util.cli.StreamPollFeeder} instead.
  */
+@Deprecated
 class StreamPollFeeder extends Thread {
 
     public static final int BUF_LEN = 80;

@@ -26,7 +26,9 @@ import java.util.List;
  *
  * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
  *
+ * @deprecated Use {@code org.codehaus.plexus.util.cli.shell.CmdShell} instead.
  */
+@Deprecated
 public class CmdShell extends Shell {
     /**
      * Create an instance of CmdShell.

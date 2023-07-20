@@ -22,7 +22,9 @@ import java.io.IOException;
 
 /**
  * @author <a href="mailto:evenisse@apache.org">Emmanuel Venisse</a>
+ * @deprecated Use {@code org.codehaus.plexus.util.cli.DefaultConsumer} instead.
  */
+@Deprecated
 public class DefaultConsumer implements StreamConsumer {
 
     /**

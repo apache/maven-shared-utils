@@ -36,7 +36,9 @@ import org.apache.maven.shared.utils.StringUtils;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l </a>
+ * @deprecated Use {@code org.codehaus.plexus.util.cli.CommandLineUtils} instead.
  */
+@Deprecated
 public abstract class CommandLineUtils {
 
     /**

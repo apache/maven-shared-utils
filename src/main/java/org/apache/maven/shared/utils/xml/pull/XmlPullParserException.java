@@ -23,7 +23,7 @@ import java.io.IOException;
 import org.xml.sax.SAXException;
 
 /**
- * @deprecated use org.w3c.dom, JDOM, XOM, or SAX
+ * @deprecated Use {@code org.codehaus.plexus.util.xml.pull.XmlPullParserException} instead.
  */
 @Deprecated
 public class XmlPullParserException extends RuntimeException {

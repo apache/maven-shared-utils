@@ -25,7 +25,9 @@ import org.apache.maven.shared.utils.Os;
 
 /**
  * @author Jason van Zyl
+ * @deprecated Use {@code org.codehaus.plexus.util.cli.shell.BourneShell} instead.
  */
+@Deprecated
 public class BourneShell extends Shell {
 
     /**

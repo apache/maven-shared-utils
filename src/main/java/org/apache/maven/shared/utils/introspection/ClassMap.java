@@ -33,7 +33,9 @@ import java.util.Map;
  * @author <a href="mailto:szegedia@freemail.hu">Attila Szegedi</a>
  * @author <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
  *
+ * @deprecated Use {@code org.codehaus.plexus.util.introspection.ClassMap} instead.
  */
+@Deprecated
 public class ClassMap {
     private static final class CacheMiss {}
 

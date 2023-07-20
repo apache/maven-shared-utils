@@ -23,7 +23,9 @@ package org.apache.maven.shared.utils.cli;
  *
  * @author Olivier Lamy
  *
+ * @deprecated Use {@code org.codehaus.plexus.util.cli.CommandLineTimeOutException} instead.
  */
+@Deprecated
 public class CommandLineTimeOutException extends CommandLineException {
 
     private static final long serialVersionUID = 7322428741683224481L;

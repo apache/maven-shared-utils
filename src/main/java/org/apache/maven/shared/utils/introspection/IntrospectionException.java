@@ -18,6 +18,7 @@
  */
 package org.apache.maven.shared.utils.introspection;
 
+@Deprecated
 class IntrospectionException extends Exception {
 
     /**

@@ -33,7 +33,7 @@ import java.util.Map;
  * A reimplementation of Plexus Xpp3Dom based on the public interface of Plexus Xpp3Dom.
  *
  * @author Kristian Rosenvold
- * @deprecated use org.w3c.dom, JDOM, XOM, or SAX
+ * @deprecated Use {@code org.codehaus.plexus.util.xml.Xpp3Dom} instead.
  */
 @Deprecated
 public class Xpp3Dom implements Iterable<Xpp3Dom> {

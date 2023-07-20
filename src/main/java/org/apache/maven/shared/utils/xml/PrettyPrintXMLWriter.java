@@ -29,6 +29,7 @@ import java.util.ArrayList;
  * @deprecated this class swallows and ignores IOExceptions. It is dangerous to use when writing
  *    to anything other than a StringWriter.
  * @author kama
+ * @deprecated Use {@code org.codehaus.plexus.util.xml.PrettyPrintXMLWriter} instead.
  */
 @Deprecated
 public class PrettyPrintXMLWriter implements XMLWriter {

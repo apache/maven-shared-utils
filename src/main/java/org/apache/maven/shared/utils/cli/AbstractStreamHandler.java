@@ -20,7 +20,9 @@ package org.apache.maven.shared.utils.cli;
 
 /**
  * @author <a href="mailto:kristian.rosenvold@gmail.com">Kristian Rosenvold</a>
+ * @deprecated Use {@code org.codehaus.plexus.util.cli.AbstractStreamHandler} instead.
  */
+@Deprecated
 class AbstractStreamHandler extends Thread {
     private volatile boolean done;
 
