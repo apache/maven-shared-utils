@@ -25,7 +25,9 @@ import java.io.Writer;
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  *
+ * @deprecated Use {@code org.codehaus.plexus.util.cli.WriterStreamConsumer} instead.
  */
+@Deprecated
 public class WriterStreamConsumer implements StreamConsumer {
 
     private final BufferedWriter writer;

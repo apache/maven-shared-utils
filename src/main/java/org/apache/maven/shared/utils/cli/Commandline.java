@@ -60,7 +60,9 @@ import org.apache.maven.shared.utils.cli.shell.Shell;
  *
  * @author thomas.haas@softwired-inc.com
  * @author <a href="mailto:stefan.bodewig@epost.de">Stefan Bodewig</a>
+ * @deprecated Use {@code org.codehaus.plexus.util.cli.Commandline} instead.
  */
+@Deprecated
 public class Commandline implements Cloneable {
     private final List<Arg> arguments = new Vector<>();
 

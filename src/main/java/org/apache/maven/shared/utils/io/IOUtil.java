@@ -78,8 +78,9 @@ import java.nio.channels.Channel;
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @version CVS $Revision$ $Date$
- *
+ * @deprecated Use {@code org.codehaus.plexus.util.io.IOUtil} instead.
  */
+@Deprecated
 public final class IOUtil
 /*
  * Behold, intrepid explorers; a map of this class:

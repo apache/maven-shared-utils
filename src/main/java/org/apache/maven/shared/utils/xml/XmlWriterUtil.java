@@ -26,8 +26,9 @@ import org.apache.maven.shared.utils.StringUtils;
  * Utility class for the <code>XmlWriter</code> class.
  *
  * @author <a href="mailto:vincent.siveton@gmail.com">Vincent Siveton</a>
- *
+ * @deprecated Use {@code org.codehaus.plexus.util.xml.XmlWriterUtil} instead.
  */
+@Deprecated
 public class XmlWriterUtil {
     /** The vm line separator */
     public static final String LS = System.getProperty("line.separator");

@@ -25,7 +25,9 @@ import java.io.Writer;
  * Collection of XML encoding/decoding helpers. <br>
  * This is all about the special characters &amp; and &lt;, and for attributes
  * &quot; and &apos;. These must be encoded/decoded from/to XML.
+ * @deprecated Use {@code org.codehaus.plexus.util.xml.XMLEncode} instead.
  */
+@Deprecated
 final class XMLEncode {
 
     private static final int CDATA_BLOCK_THRESHOLD_LENGTH = 12;

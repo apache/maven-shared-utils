@@ -22,6 +22,10 @@ import java.io.IOException;
 
 import org.xml.sax.SAXException;
 
+/**
+ * @deprecated Use {@code org.codehaus.plexus.util.xml.pull.XmlPullParserException} instead.
+ */
+@Deprecated
 public class XmlPullParserException extends RuntimeException {
 
     private static final long serialVersionUID = 117075811816936575L;

@@ -89,7 +89,9 @@ import org.apache.maven.shared.utils.StringUtils;
  * @author <a href="mailto:Christoph.Reck@dlr.de">Christoph.Reck</a>
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
+ * @deprecated Use {@code org.codehaus.plexus.util.io.FileUtils} instead.
  */
+@Deprecated
 public class FileUtils {
     /**
      * protected constructor.

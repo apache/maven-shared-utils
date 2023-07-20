@@ -32,7 +32,9 @@ import java.nio.charset.Charset;
  *
  * @author <a href="mailto:fvancea@maxiq.com">Florin Vancea </a>
  * @author <a href="mailto:pj@thoughtworks.com">Paul Julius </a>
+ * @deprecated Use {@code org.codehaus.plexus.util.cli.StreamPumper} instead.
  */
+@Deprecated
 public class StreamPumper extends AbstractStreamHandler {
     private final BufferedReader in;
 

@@ -41,7 +41,9 @@ import org.apache.maven.shared.utils.introspection.MethodMap.AmbiguousException;
  *
  * @see <a href="http://struts.apache.org/1.x/struts-taglib/indexedprops.html">
  * http://struts.apache.org/1.x/struts-taglib/indexedprops.html</a>
+ * @deprecated Use {@code org.codehaus.plexus.util.introspection.ReflectionValueExtractor} instead.
  */
+@Deprecated
 public class ReflectionValueExtractor {
     private static final Class<?>[] CLASS_ARGS = new Class[0];
 

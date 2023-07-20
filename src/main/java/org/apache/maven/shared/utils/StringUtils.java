@@ -47,8 +47,10 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:fredrik@westermarck.com">Fredrik Westermarck</a>
  * @author Holger Krauth
  * @author <a href="mailto:alex@purpletech.com">Alexander Day Chaffee</a>
+ * @deprecated Use {@code org.codehaus.plexus.util.StringUtils} instead.
  *
  */
+@Deprecated
 public class StringUtils {
     /**
      * <p><code>StringUtils</code> instances should NOT be constructed in

@@ -27,7 +27,9 @@ import java.security.AccessControlException;
  * Incorrect usage of the hook itself may still throw an exception.
  *
  * @author Kristian Rosenvold
+ * @deprecated Use {@code org.codehaus.plexus.util.cli.ShutdownHookUtils} instead.
  */
+@Deprecated
 public class ShutdownHookUtils {
 
     /**

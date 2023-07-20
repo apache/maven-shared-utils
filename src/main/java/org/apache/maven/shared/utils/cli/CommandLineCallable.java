@@ -24,7 +24,9 @@ import java.util.concurrent.Callable;
  * Callable wrapper that exposes the proper exception type to the client.
  *
  * @author Kristian Rosenvold
+ * @deprecated Use {@code org.codehaus.plexus.util.cli.CommandLineCallable} instead.
  */
+@Deprecated
 public interface CommandLineCallable extends Callable<Integer> {
     /**
      * {@inheritDoc}

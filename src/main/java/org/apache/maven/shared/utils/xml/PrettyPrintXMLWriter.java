@@ -27,7 +27,9 @@ import java.util.ArrayList;
  * XMLWriter with nice indentation.
  *
  * @author kama
+ * @deprecated Use {@code org.codehaus.plexus.util.xml.PrettyPrintXMLWriter} instead.
  */
+@Deprecated
 public class PrettyPrintXMLWriter implements XMLWriter {
     private static final char[] CLOSE_1 = "/>".toCharArray();
 

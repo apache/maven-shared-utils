@@ -33,7 +33,9 @@ import java.util.Map;
  * A reimplementation of Plexus Xpp3Dom based on the public interface of Plexus Xpp3Dom.
  *
  * @author Kristian Rosenvold
+ * @deprecated Use {@code org.codehaus.plexus.util.xml.Xpp3Dom} instead.
  */
+@Deprecated
 public class Xpp3Dom implements Iterable<Xpp3Dom> {
     private static final long serialVersionUID = 2567894443061173996L;
 

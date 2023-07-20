@@ -21,8 +21,9 @@ package org.apache.maven.shared.utils.cli;
 import java.io.File;
 
 /**
- *
+ * @deprecated Use {@code org.codehaus.plexus.util.cli.Arg} instead.
  */
+@Deprecated
 public interface Arg {
     /**
      * @param value the value to be set

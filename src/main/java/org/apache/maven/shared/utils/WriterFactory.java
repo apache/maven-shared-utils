@@ -39,6 +39,7 @@ import org.apache.maven.shared.utils.xml.XmlStreamWriter;
  * @author Hervé Boutemy
  * @see java.nio.charset.Charset
  * @see <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/intl/encoding.doc.html">Supported encodings</a>
+ * @deprecated Use default constructors from JDK
  */
 @Deprecated
 public class WriterFactory {

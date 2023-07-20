@@ -38,7 +38,9 @@ import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * @author Kristian Rosenvold
+ * @deprecated Use {@code org.codehaus.plexus.util.xml.Xpp3DomBuilder} instead.
  */
+@Deprecated
 public class Xpp3DomBuilder {
 
     /**

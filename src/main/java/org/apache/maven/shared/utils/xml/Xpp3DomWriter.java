@@ -24,7 +24,9 @@ import java.io.Writer;
 
 /**
  * @author Brett Porter
+ * @deprecated Use {@code org.codehaus.plexus.util.xml.Xpp3DomWriter} instead.
  */
+@Deprecated
 public class Xpp3DomWriter {
     /**
      * @param writer {@link Writer}

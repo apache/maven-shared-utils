@@ -23,7 +23,9 @@ import java.io.IOException;
 /**
  * Interface for tools writing XML files.
  * XMLWriters are not thread safe and must not be accessed concurrently.
+ * @deprecated Use {@code org.codehaus.plexus.util.xml.XMLWriter} instead.
  */
+@Deprecated
 public interface XMLWriter {
 
     /**

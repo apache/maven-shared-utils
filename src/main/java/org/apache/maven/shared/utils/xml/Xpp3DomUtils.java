@@ -24,8 +24,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * @deprecated Use {@code org.codehaus.plexus.util.xml.Xpp3DomUtils} instead.
  */
+@Deprecated
 public class Xpp3DomUtils {
     /**
      * @param dominant {@link Xpp3Dom}

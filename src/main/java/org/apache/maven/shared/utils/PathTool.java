@@ -32,7 +32,9 @@ import java.util.StringTokenizer;
  * in maven-utils of Apache Maven-1.
  * Some external fixes by Apache Committers have been applied later.
  * </p>
+ * @deprecated Use {@code org.codehaus.plexus.util.PathTool} instead.
  */
+@Deprecated
 public class PathTool {
 
     /**
