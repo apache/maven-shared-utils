@@ -22,26 +22,30 @@ import java.io.IOException;
 
 import org.xml.sax.SAXException;
 
+/**
+ * @deprecated use org.w3c.dom, JDOM, XOM, or SAX
+ */
+@Deprecated
 public class XmlPullParserException extends RuntimeException {
 
     private static final long serialVersionUID = 117075811816936575L;
 
     /**
-     * @param e IOException.
+     * @param e the root cause
      */
     public XmlPullParserException(IOException e) {
         super(e);
     }
 
     /**
-     * @param e The exception.
+     * @param e the root cause
      */
     public XmlPullParserException(SAXException e) {
         super(e);
     }
 
     /**
-     * @param message The message.
+     * @param message the message
      */
     public XmlPullParserException(String message) {
         super(message);
