@@ -146,9 +146,9 @@ public class Xpp3DomBuilder {
     }
 
     private static class DocHandler extends DefaultHandler {
-        private final List<Xpp3Dom> elemStack = new ArrayList<Xpp3Dom>();
+        private final List<Xpp3Dom> elemStack = new ArrayList<>();
 
-        private final List<StringBuilder> values = new ArrayList<StringBuilder>();
+        private final List<StringBuilder> values = new ArrayList<>();
 
         Xpp3Dom result = null;
 

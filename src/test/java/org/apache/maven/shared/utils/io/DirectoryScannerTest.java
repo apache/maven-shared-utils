@@ -349,7 +349,7 @@ public class DirectoryScannerTest {
     }
 
     private static class TestScanConductor implements ScanConductor {
-        final List<String> visitedFiles = new ArrayList<String>();
+        final List<String> visitedFiles = new ArrayList<>();
 
         public ScanConductor.ScanAction visitDirectory(String name, File directory) {
             assertTrue(directory.isDirectory());

@@ -159,7 +159,7 @@ public class Os {
             return VALID_FAMILIES;
         }
 
-        Set<String> valid = new HashSet<String>();
+        Set<String> valid = new HashSet<>();
         valid.add(FAMILY_DOS);
         valid.add(FAMILY_MAC);
         valid.add(FAMILY_NETWARE);

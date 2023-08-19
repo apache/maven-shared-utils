@@ -43,7 +43,7 @@ public class WalkCollector implements DirectoryWalkListener {
      * Create an instance.
      */
     public WalkCollector() {
-        steps = new ArrayList<File>();
+        steps = new ArrayList<>();
         startCount = 0;
         finishCount = 0;
         percentageLow = 0;

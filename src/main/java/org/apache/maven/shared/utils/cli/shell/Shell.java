@@ -42,7 +42,7 @@ public class Shell implements Cloneable {
 
     private String shellCommand;
 
-    private final List<String> shellArgs = new ArrayList<String>();
+    private final List<String> shellArgs = new ArrayList<>();
 
     private boolean quotedArgumentsEnabled = true;
 

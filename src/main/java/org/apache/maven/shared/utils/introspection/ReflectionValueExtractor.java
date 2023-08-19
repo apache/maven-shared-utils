@@ -52,7 +52,7 @@ public class ReflectionValueExtractor {
      * This approach prevents permgen space overflows due to retention of discarded
      * classloaders.
      */
-    private static final Map<Class<?>, ClassMap> CLASS_MAPS = new WeakHashMap<Class<?>, ClassMap>();
+    private static final Map<Class<?>, ClassMap> CLASS_MAPS = new WeakHashMap<>();
 
     static final int EOF = -1;
 

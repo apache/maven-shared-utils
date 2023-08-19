@@ -92,8 +92,8 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
      */
     public Xpp3Dom(String name) {
         this.name = name;
-        childList = new ArrayList<Xpp3Dom>();
-        childMap = new HashMap<String, Xpp3Dom>();
+        childList = new ArrayList<>();
+        childMap = new HashMap<>();
     }
 
     /**
@@ -113,8 +113,8 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
         this.name = name;
 
         int size = src.getChildCount();
-        childList = new ArrayList<Xpp3Dom>(size);
-        childMap = new HashMap<String, Xpp3Dom>();
+        childList = new ArrayList<>(size);
+        childMap = new HashMap<>();
 
         setValue(src.getValue());
 
@@ -177,7 +177,7 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
             throw new NullPointerException("name can not be null");
         }
         if (attributes == null) {
-            attributes = new HashMap<String, String>();
+            attributes = new HashMap<>();
         }
 
         attributes.put(nameParameter, valueParameter);
@@ -234,7 +234,7 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
         if (childList == null) {
             return Collections.emptyList();
         } else {
-            ArrayList<Xpp3Dom> children = new ArrayList<Xpp3Dom>();
+            ArrayList<Xpp3Dom> children = new ArrayList<>();
             for (Xpp3Dom aChildList : childList) {
                 if (nameParameter.equals(aChildList.getName())) {
                     children.add(aChildList);

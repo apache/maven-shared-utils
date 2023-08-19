@@ -64,7 +64,7 @@ import org.apache.maven.shared.utils.cli.shell.Shell;
 public class Commandline implements Cloneable {
     private final List<Arg> arguments = new Vector<>();
 
-    private final Map<String, String> envVars = Collections.synchronizedMap(new LinkedHashMap<String, String>());
+    private final Map<String, String> envVars = Collections.synchronizedMap(new LinkedHashMap<>());
 
     private Shell shell;
 
