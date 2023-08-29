@@ -144,37 +144,37 @@ public class ReflectionValueExtractorTest extends TestCase {
     }
 
     public void testMappedDottedKey() throws IntrospectionException {
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
         map.put("a.b", "a.b-value");
 
         assertEquals("a.b-value", ReflectionValueExtractor.evaluate("h.value(a.b)", new ValueHolder(map)));
     }
 
     public void testIndexedMapped() throws IntrospectionException {
-        Map<Object, Object> map = new HashMap<Object, Object>();
+        Map<Object, Object> map = new HashMap<>();
         map.put("a", "a-value");
-        List<Object> list = new ArrayList<Object>();
+        List<Object> list = new ArrayList<>();
         list.add(map);
 
         assertEquals("a-value", ReflectionValueExtractor.evaluate("h.value[0](a)", new ValueHolder(list)));
     }
 
     public void testMappedIndexed() throws IntrospectionException {
-        List<Object> list = new ArrayList<Object>();
+        List<Object> list = new ArrayList<>();
         list.add("a-value");
-        Map<Object, Object> map = new HashMap<Object, Object>();
+        Map<Object, Object> map = new HashMap<>();
         map.put("a", list);
         assertEquals("a-value", ReflectionValueExtractor.evaluate("h.value(a)[0]", new ValueHolder(map)));
     }
 
     public void testMappedMissingDot() throws IntrospectionException {
-        Map<Object, Object> map = new HashMap<Object, Object>();
+        Map<Object, Object> map = new HashMap<>();
         map.put("a", new ValueHolder("a-value"));
         assertNull(ReflectionValueExtractor.evaluate("h.value(a)value", new ValueHolder(map)));
     }
 
     public void testIndexedMissingDot() throws IntrospectionException {
-        List<Object> list = new ArrayList<Object>();
+        List<Object> list = new ArrayList<>();
         list.add(new ValueHolder("a-value"));
         assertNull(ReflectionValueExtractor.evaluate("h.value[0]value", new ValueHolder(list)));
     }
@@ -184,7 +184,7 @@ public class ReflectionValueExtractorTest extends TestCase {
     }
 
     public void testBadIndexedSyntax() throws IntrospectionException {
-        List<Object> list = new ArrayList<Object>();
+        List<Object> list = new ArrayList<>();
         list.add("a-value");
         Object value = new ValueHolder(list);
 
@@ -197,7 +197,7 @@ public class ReflectionValueExtractorTest extends TestCase {
     }
 
     public void testBadMappedSyntax() throws IntrospectionException {
-        Map<Object, Object> map = new HashMap<Object, Object>();
+        Map<Object, Object> map = new HashMap<>();
         map.put("a", "a-value");
         Object value = new ValueHolder(map);
 
@@ -304,7 +304,7 @@ public class ReflectionValueExtractorTest extends TestCase {
 
         private Scm scm;
 
-        private final List<Dependency> dependencies = new ArrayList<Dependency>();
+        private final List<Dependency> dependencies = new ArrayList<>();
 
         private Build build;
 
@@ -314,7 +314,7 @@ public class ReflectionValueExtractorTest extends TestCase {
 
         private String version;
 
-        private Map<String, Artifact> artifactMap = new HashMap<String, Artifact>();
+        private Map<String, Artifact> artifactMap = new HashMap<>();
 
         private String description;
 
@@ -388,7 +388,7 @@ public class ReflectionValueExtractorTest extends TestCase {
         }
 
         public Map<String, Dependency> getDependenciesAsMap() {
-            Map<String, Dependency> ret = new HashMap<String, Dependency>();
+            Map<String, Dependency> ret = new HashMap<>();
             for (Object o : getDependencies()) {
                 Dependency dep = (Dependency) o;
                 ret.put(dep.getArtifactId(), dep);

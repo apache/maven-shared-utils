@@ -458,7 +458,7 @@ public class FileUtils {
      * @return an array of files for the wanted extensions
      */
     public static String[] getFilesFromExtension(@Nonnull String directory, @Nonnull String... extensions) {
-        List<String> files = new ArrayList<String>();
+        List<String> files = new ArrayList<>();
 
         File currentDir = new File(directory);
 
@@ -1291,7 +1291,7 @@ public class FileUtils {
             throws IOException {
         List<String> fileNames = getFileNames(directory, includes, excludes, includeBasedir);
 
-        List<File> files = new ArrayList<File>();
+        List<File> files = new ArrayList<>();
 
         for (String filename : fileNames) {
             files.add(new File(filename));
@@ -1423,7 +1423,7 @@ public class FileUtils {
 
         scanner.scan();
 
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
 
         if (getFiles) {
             String[] files = scanner.getIncludedFiles();
@@ -1835,7 +1835,7 @@ public class FileUtils {
     @Deprecated
     @Nonnull
     public static List<String> loadFile(@Nonnull File file) throws IOException {
-        List<String> lines = new ArrayList<String>();
+        List<String> lines = new ArrayList<>();
 
         if (file.exists()) {
             try (BufferedReader reader = Files.newBufferedReader(file.toPath(), Charset.defaultCharset())) {

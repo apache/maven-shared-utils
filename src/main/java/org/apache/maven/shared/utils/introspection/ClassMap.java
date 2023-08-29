@@ -51,7 +51,7 @@ public class ClassMap {
      * Cache of Methods, or CACHE_MISS, keyed by method
      * name and actual arguments used to find it.
      */
-    private final Map<String, Object> methodCache = new Hashtable<String, Object>();
+    private final Map<String, Object> methodCache = new Hashtable<>();
 
     private MethodMap methodMap = new MethodMap();
 

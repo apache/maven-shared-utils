@@ -504,7 +504,7 @@ public final class SelectorUtils {
      * @return a List of path elements from the tokenized path
      */
     private static List<String> tokenizePath(String path, String separator) {
-        List<String> ret = new ArrayList<String>();
+        List<String> ret = new ArrayList<>();
         StringTokenizer st = new StringTokenizer(path, separator);
         while (st.hasMoreTokens()) {
             ret.add(st.nextToken());
@@ -519,7 +519,7 @@ public final class SelectorUtils {
     }
 
     private static String[] tokenizePathToString(@Nonnull String path, @Nonnull String separator) {
-        List<String> ret = new ArrayList<String>();
+        List<String> ret = new ArrayList<>();
         StringTokenizer st = new StringTokenizer(path, separator);
         while (st.hasMoreTokens()) {
             ret.add(st.nextToken());

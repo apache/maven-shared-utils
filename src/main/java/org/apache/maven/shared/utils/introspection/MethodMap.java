@@ -44,7 +44,7 @@ class MethodMap {
     /**
      * Keep track of all methods with the same name.
      */
-    private final Map<String, List<Method>> methodByNameMap = new Hashtable<String, List<Method>>();
+    private final Map<String, List<Method>> methodByNameMap = new Hashtable<>();
 
     /**
      * Add a method to a list of methods by name.
@@ -59,7 +59,7 @@ class MethodMap {
         List<Method> l = get(methodName);
 
         if (l == null) {
-            l = new ArrayList<Method>();
+            l = new ArrayList<>();
             methodByNameMap.put(methodName, l);
         }
 
@@ -153,7 +153,7 @@ class MethodMap {
          * (the most specific method) otherwise we have ambiguity.
          */
 
-        LinkedList<Method> maximals = new LinkedList<Method>();
+        LinkedList<Method> maximals = new LinkedList<>();
 
         for (Method app : applicables) {
             Class<?>[] appArgs = app.getParameterTypes();
@@ -255,7 +255,7 @@ class MethodMap {
      *         to formal types through a method invocation conversion).
      */
     private static LinkedList<Method> getApplicables(List<Method> methods, Class<?>... classes) {
-        LinkedList<Method> list = new LinkedList<Method>();
+        LinkedList<Method> list = new LinkedList<>();
 
         for (Method method : methods) {
             if (isApplicable(method, classes)) {

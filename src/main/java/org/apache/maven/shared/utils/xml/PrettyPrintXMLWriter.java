@@ -37,7 +37,7 @@ public class PrettyPrintXMLWriter implements XMLWriter {
 
     private PrintWriter writer;
 
-    private ArrayList<String> elementStack = new ArrayList<String>();
+    private ArrayList<String> elementStack = new ArrayList<>();
 
     private boolean processingElement = false;
 

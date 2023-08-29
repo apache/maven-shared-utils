@@ -117,7 +117,7 @@ public class MatchPattern {
     }
 
     static String[] tokenizePathToString(@Nonnull String path, @Nonnull String separator) {
-        List<String> ret = new ArrayList<String>();
+        List<String> ret = new ArrayList<>();
         StringTokenizer st = new StringTokenizer(path, separator);
         while (st.hasMoreTokens()) {
             ret.add(st.nextToken());

@@ -993,7 +993,7 @@ public class FileUtilsTest {
     @Test
     public void getDefaultExcludesAsString() throws Exception {
         assertThat(
-                new HashSet<String>(
+                new HashSet<>(
                         Arrays.asList(FileUtils.getDefaultExcludesAsString().split(","))),
                 hasItems(MINIMUM_DEFAULT_EXCLUDES));
     }
