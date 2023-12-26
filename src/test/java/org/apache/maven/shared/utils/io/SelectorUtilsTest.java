@@ -20,38 +20,35 @@ package org.apache.maven.shared.utils.io;
 
 import java.io.File;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test the {@link SelectorUtils} class.
  */
 @SuppressWarnings("deprecation")
-public class SelectorUtilsTest {
+class SelectorUtilsTest {
 
-    @Test(expected = NullPointerException.class)
-    public void testMatchPatternStart() {
-        SelectorUtils.matchPatternStart(null, null);
+    @Test
+    void matchPatternStart() {
+        assertThrows(NullPointerException.class, () -> SelectorUtils.matchPatternStart(null, null));
     }
 
     @Test
-    public void testEmptyStrings() {
+    void emptyStrings() {
         assertTrue(SelectorUtils.matchPatternStart("", ""));
     }
 
     @Test
-    public void testRegexPrefix() throws Exception {
-        assertEquals(
-                true,
-                SelectorUtils.matchPatternStart(
-                        SelectorUtils.REGEX_HANDLER_PREFIX + File.separator + "aaa"
-                                + SelectorUtils.PATTERN_HANDLER_SUFFIX,
-                        ""));
+    void regexPrefix() throws Exception {
+        assertTrue(SelectorUtils.matchPatternStart(
+                SelectorUtils.REGEX_HANDLER_PREFIX + File.separator + "aaa" + SelectorUtils.PATTERN_HANDLER_SUFFIX,
+                ""));
     }
 
     @Test
-    public void testAntPatternStrings() {
+    void antPatternStrings() {
         assertAntDoesNotMatch("/aaa", "");
         assertAntDoesNotMatch("\\aaa", "");
         assertAntMatch("aaa", "");
@@ -64,11 +61,11 @@ public class SelectorUtilsTest {
     }
 
     private void assertAntDoesNotMatch(String pattern, String target) {
-        assertEquals(false, SelectorUtils.matchPatternStart(wrapWithAntHandler(pattern), target));
+        assertFalse(SelectorUtils.matchPatternStart(wrapWithAntHandler(pattern), target));
     }
 
     private void assertAntMatch(String pattern, String target) {
-        assertEquals(true, SelectorUtils.matchPatternStart(wrapWithAntHandler(pattern), target));
+        assertTrue(SelectorUtils.matchPatternStart(wrapWithAntHandler(pattern), target));
     }
 
     private String wrapWithAntHandler(String val) {

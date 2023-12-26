@@ -18,81 +18,80 @@
  */
 package org.apache.maven.shared.utils.logging;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
-public class AnsiMessageBuilderTest {
+class AnsiMessageBuilderTest {
 
     private AnsiMessageBuilder ansiMessageBuilder;
 
-    @Before
-    public void initializeAnsiMessageBuffer() {
+    @BeforeEach
+    void initializeAnsiMessageBuffer() {
         this.ansiMessageBuilder = new AnsiMessageBuilder();
     }
 
     @Test
-    public void should_color_debug() {
+    void should_color_debug() {
         ansiMessageBuilder.debug("DEBUG");
 
-        assertThat(ansiMessageBuilder.toString(), equalTo("\u001B[1;36mDEBUG\u001B[m"));
+        assertThat(ansiMessageBuilder.toString()).isEqualTo("\u001B[1;36mDEBUG\u001B[m");
     }
 
     @Test
-    public void should_color_info() {
+    void should_color_info() {
         ansiMessageBuilder.info("INFO");
 
-        assertThat(ansiMessageBuilder.toString(), equalTo("\u001B[1;34mINFO\u001B[m"));
+        assertThat(ansiMessageBuilder.toString()).isEqualTo("\u001B[1;34mINFO\u001B[m");
     }
 
     @Test
-    public void should_color_warning_and_reset() {
+    void should_color_warning_and_reset() {
         ansiMessageBuilder.warning("WARNING");
 
-        assertThat(ansiMessageBuilder.toString(), equalTo("\u001B[1;33mWARNING\u001B[m"));
+        assertThat(ansiMessageBuilder.toString()).isEqualTo("\u001B[1;33mWARNING\u001B[m");
     }
 
     @Test
-    public void should_color_error() {
+    void should_color_error() {
         ansiMessageBuilder.error("ERROR");
 
-        assertThat(ansiMessageBuilder.toString(), equalTo("\u001B[1;31mERROR\u001B[m"));
+        assertThat(ansiMessageBuilder.toString()).isEqualTo("\u001B[1;31mERROR\u001B[m");
     }
 
     @Test
-    public void should_color_success_with_message() {
+    void should_color_success_with_message() {
         ansiMessageBuilder.success("a success message");
 
-        assertThat(ansiMessageBuilder.toString(), equalTo("\u001B[1;32ma success message\u001B[m"));
+        assertThat(ansiMessageBuilder.toString()).isEqualTo("\u001B[1;32ma success message\u001B[m");
     }
 
     @Test
-    public void should_color_failure_and_reset() {
+    void should_color_failure_and_reset() {
         ansiMessageBuilder.failure("a failure message");
 
-        assertThat(ansiMessageBuilder.toString(), equalTo("\u001B[1;31ma failure message\u001B[m"));
+        assertThat(ansiMessageBuilder.toString()).isEqualTo("\u001B[1;31ma failure message\u001B[m");
     }
 
     @Test
-    public void should_color_strong_and_reset() {
+    void should_color_strong_and_reset() {
         ansiMessageBuilder.strong("a strong message");
 
-        assertThat(ansiMessageBuilder.toString(), equalTo("\u001B[1ma strong message\u001B[m"));
+        assertThat(ansiMessageBuilder.toString()).isEqualTo("\u001B[1ma strong message\u001B[m");
     }
 
     @Test
-    public void should_color_mojo_and_reset() {
+    void should_color_mojo_and_reset() {
         ansiMessageBuilder.mojo("a mojo");
 
-        assertThat(ansiMessageBuilder.toString(), equalTo("\u001B[32ma mojo\u001B[m"));
+        assertThat(ansiMessageBuilder.toString()).isEqualTo("\u001B[32ma mojo\u001B[m");
     }
 
     @Test
-    public void should_color_project_and_reset() {
+    void should_color_project_and_reset() {
         ansiMessageBuilder.project("a project");
 
-        assertThat(ansiMessageBuilder.toString(), equalTo("\u001B[36ma project\u001B[m"));
+        assertThat(ansiMessageBuilder.toString()).isEqualTo("\u001B[36ma project\u001B[m");
     }
 }

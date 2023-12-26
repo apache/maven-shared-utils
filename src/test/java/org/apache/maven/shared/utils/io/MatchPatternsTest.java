@@ -18,17 +18,17 @@
  */
 package org.apache.maven.shared.utils.io;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Kristian Rosenvold
  */
 @SuppressWarnings("deprecation")
-public class MatchPatternsTest {
+class MatchPatternsTest {
     @Test
-    public void matches() {
+    void matches() {
         MatchPatterns from = MatchPatterns.from("ABC**", "CDE**");
         assertTrue(from.matches("ABCDE", true));
         assertTrue(from.matches("CDEF", true));

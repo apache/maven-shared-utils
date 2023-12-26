@@ -22,15 +22,15 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class StreamPollFeederTest {
+class StreamPollFeederTest {
 
     @Test
-    public void waitUntilFeederDoneOnInputStream() throws Exception {
+    void waitUntilFeederDoneOnInputStream() throws Exception {
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         StreamPollFeeder streamPollFeeder = new StreamPollFeeder(System.in, outputStream);
@@ -47,7 +47,7 @@ public class StreamPollFeederTest {
     }
 
     @Test
-    public void dataShouldBeCopied() throws InterruptedException, IOException {
+    void dataShouldBeCopied() throws InterruptedException, IOException {
 
         StringBuilder TEST_DATA = new StringBuilder();
         for (int i = 0; i < 100; i++) {

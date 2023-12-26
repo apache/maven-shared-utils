@@ -23,17 +23,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  *
  */
-public class ReflectionValueExtractorTest extends TestCase {
+class ReflectionValueExtractorTest {
     private Project project;
 
-    protected void setUp() throws Exception {
-        super.setUp();
+    @BeforeEach
+    void setUp() throws Exception {
 
         Dependency dependency1 = new Dependency();
         dependency1.setArtifactId("dep1");
@@ -58,7 +61,8 @@ public class ReflectionValueExtractorTest extends TestCase {
         project.addArtifact(new Artifact("g2", "a2", "v2", "e2", "c2"));
     }
 
-    public void testValueExtraction() throws IntrospectionException {
+    @Test
+    void valueExtraction() throws IntrospectionException {
         // ----------------------------------------------------------------------
         // Top level values
         // ----------------------------------------------------------------------
@@ -98,11 +102,11 @@ public class ReflectionValueExtractorTest extends TestCase {
 
         assertNotNull(dependency);
 
-        assertTrue("dep1".equals(dependency.getArtifactId()));
+        assertEquals("dep1", dependency.getArtifactId());
 
         String artifactId = (String) ReflectionValueExtractor.evaluate("project.dependencies[1].artifactId", project);
 
-        assertTrue("dep2".equals(artifactId));
+        assertEquals("dep2", artifactId);
 
         // Array
 
@@ -110,11 +114,11 @@ public class ReflectionValueExtractorTest extends TestCase {
 
         assertNotNull(dependency);
 
-        assertTrue("dep1".equals(dependency.getArtifactId()));
+        assertEquals("dep1", dependency.getArtifactId());
 
         artifactId = (String) ReflectionValueExtractor.evaluate("project.dependenciesAsArray[1].artifactId", project);
 
-        assertTrue("dep2".equals(artifactId));
+        assertEquals("dep2", artifactId);
 
         // Map
 
@@ -122,11 +126,11 @@ public class ReflectionValueExtractorTest extends TestCase {
 
         assertNotNull(dependency);
 
-        assertTrue("dep1".equals(dependency.getArtifactId()));
+        assertEquals("dep1", dependency.getArtifactId());
 
         artifactId = (String) ReflectionValueExtractor.evaluate("project.dependenciesAsMap(dep2).artifactId", project);
 
-        assertTrue("dep2".equals(artifactId));
+        assertEquals("dep2", artifactId);
 
         // ----------------------------------------------------------------------
         // Build
@@ -137,20 +141,23 @@ public class ReflectionValueExtractorTest extends TestCase {
         assertNotNull(build);
     }
 
-    public void testValueExtractorWithAInvalidExpression() throws IntrospectionException {
+    @Test
+    void valueExtractorWithAInvalidExpression() throws IntrospectionException {
         assertNull(ReflectionValueExtractor.evaluate("project.foo", project));
         assertNull(ReflectionValueExtractor.evaluate("project.dependencies[10]", project));
         assertNull(ReflectionValueExtractor.evaluate("project.dependencies[0].foo", project));
     }
 
-    public void testMappedDottedKey() throws IntrospectionException {
+    @Test
+    void mappedDottedKey() throws IntrospectionException {
         Map<String, String> map = new HashMap<>();
         map.put("a.b", "a.b-value");
 
         assertEquals("a.b-value", ReflectionValueExtractor.evaluate("h.value(a.b)", new ValueHolder(map)));
     }
 
-    public void testIndexedMapped() throws IntrospectionException {
+    @Test
+    void indexedMapped() throws IntrospectionException {
         Map<Object, Object> map = new HashMap<>();
         map.put("a", "a-value");
         List<Object> list = new ArrayList<>();
@@ -159,7 +166,8 @@ public class ReflectionValueExtractorTest extends TestCase {
         assertEquals("a-value", ReflectionValueExtractor.evaluate("h.value[0](a)", new ValueHolder(list)));
     }
 
-    public void testMappedIndexed() throws IntrospectionException {
+    @Test
+    void mappedIndexed() throws IntrospectionException {
         List<Object> list = new ArrayList<>();
         list.add("a-value");
         Map<Object, Object> map = new HashMap<>();
@@ -167,23 +175,27 @@ public class ReflectionValueExtractorTest extends TestCase {
         assertEquals("a-value", ReflectionValueExtractor.evaluate("h.value(a)[0]", new ValueHolder(map)));
     }
 
-    public void testMappedMissingDot() throws IntrospectionException {
+    @Test
+    void mappedMissingDot() throws IntrospectionException {
         Map<Object, Object> map = new HashMap<>();
         map.put("a", new ValueHolder("a-value"));
         assertNull(ReflectionValueExtractor.evaluate("h.value(a)value", new ValueHolder(map)));
     }
 
-    public void testIndexedMissingDot() throws IntrospectionException {
+    @Test
+    void indexedMissingDot() throws IntrospectionException {
         List<Object> list = new ArrayList<>();
         list.add(new ValueHolder("a-value"));
         assertNull(ReflectionValueExtractor.evaluate("h.value[0]value", new ValueHolder(list)));
     }
 
-    public void testDotDot() throws IntrospectionException {
+    @Test
+    void dotDot() throws IntrospectionException {
         assertNull(ReflectionValueExtractor.evaluate("h..value", new ValueHolder("value")));
     }
 
-    public void testBadIndexedSyntax() throws IntrospectionException {
+    @Test
+    void badIndexedSyntax() throws IntrospectionException {
         List<Object> list = new ArrayList<>();
         list.add("a-value");
         Object value = new ValueHolder(list);
@@ -196,7 +208,8 @@ public class ReflectionValueExtractorTest extends TestCase {
         assertNull(ReflectionValueExtractor.evaluate("h.value[-1]", value));
     }
 
-    public void testBadMappedSyntax() throws IntrospectionException {
+    @Test
+    void badMappedSyntax() throws IntrospectionException {
         Map<Object, Object> map = new HashMap<>();
         map.put("a", "a-value");
         Object value = new ValueHolder(map);
@@ -207,7 +220,8 @@ public class ReflectionValueExtractorTest extends TestCase {
         assertNull(ReflectionValueExtractor.evaluate("h.value(a]", value));
     }
 
-    public void testIllegalIndexedType() {
+    @Test
+    void illegalIndexedType() {
         try {
             ReflectionValueExtractor.evaluate("h.value[1]", new ValueHolder("string"));
         } catch (IntrospectionException e) {
@@ -215,7 +229,8 @@ public class ReflectionValueExtractorTest extends TestCase {
         }
     }
 
-    public void testIllegalMappedType() {
+    @Test
+    void illegalMappedType() {
         try {
             ReflectionValueExtractor.evaluate("h.value(key)", new ValueHolder("string"));
         } catch (IntrospectionException e) {
@@ -223,11 +238,13 @@ public class ReflectionValueExtractorTest extends TestCase {
         }
     }
 
-    public void testTrimRootToken() throws IntrospectionException {
+    @Test
+    void trimRootToken() throws IntrospectionException {
         assertNull(ReflectionValueExtractor.evaluate("project", project, true));
     }
 
-    public void testArtifactMap() throws IntrospectionException {
+    @Test
+    void artifactMap() throws IntrospectionException {
         assertEquals(
                 "g0",
                 ((Artifact) ReflectionValueExtractor.evaluate("project.artifactMap(g0:a0:c0)", project)).getGroupId());
@@ -384,13 +401,12 @@ public class ReflectionValueExtractorTest extends TestCase {
 
         public Dependency[] getDependenciesAsArray() {
             List<Dependency> list = getDependencies();
-            return list.toArray(new Dependency[list.size()]);
+            return list.toArray(new Dependency[0]);
         }
 
         public Map<String, Dependency> getDependenciesAsMap() {
             Map<String, Dependency> ret = new HashMap<>();
-            for (Object o : getDependencies()) {
-                Dependency dep = (Dependency) o;
+            for (Dependency dep : getDependencies()) {
                 ret.put(dep.getArtifactId(), dep);
             }
             return ret;
@@ -452,7 +468,8 @@ public class ReflectionValueExtractorTest extends TestCase {
         }
     }
 
-    public void testRootPropertyRegression() throws IntrospectionException {
+    @Test
+    void rootPropertyRegression() throws IntrospectionException {
         Project project = new Project();
         project.setDescription("c:\\\\org\\apache\\test");
         Object evalued = ReflectionValueExtractor.evaluate("description", project);

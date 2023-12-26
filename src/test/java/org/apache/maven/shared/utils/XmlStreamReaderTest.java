@@ -23,16 +23,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.SequenceInputStream;
 
-import junit.framework.ComparisonFailure;
-import junit.framework.TestCase;
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.shared.utils.xml.XmlStreamReader;
+import org.junit.jupiter.api.Test;
+import org.opentest4j.AssertionFailedError;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
  * @author <a href="mailto:hboutemy@apache.org">Hervé Boutemy</a>
  */
-public class XmlStreamReaderTest extends TestCase {
+class XmlStreamReaderTest {
     /** french */
     private static final String TEXT_LATIN1 = "eacute: \u00E9";
     /** greek */
@@ -95,66 +97,77 @@ public class XmlStreamReaderTest extends TestCase {
         checkXmlContent(xml, effectiveEncoding, bom);
     }
 
-    public void testNoXmlHeader() throws IOException {
+    @Test
+    void noXmlHeader() throws IOException {
         String xml = "<text>text with no XML header</text>";
         checkXmlContent(xml, "UTF-8");
         checkXmlContent(xml, "UTF-8", BOM_UTF8);
     }
 
-    public void testDefaultEncoding() throws IOException {
+    @Test
+    void defaultEncoding() throws IOException {
         checkXmlStreamReader(TEXT_UNICODE, null, "UTF-8");
         checkXmlStreamReader(TEXT_UNICODE, null, "UTF-8", BOM_UTF8);
     }
 
-    public void testUTF8Encoding() throws IOException {
+    @Test
+    void uTF8Encoding() throws IOException {
         checkXmlStreamReader(TEXT_UNICODE, "UTF-8");
         checkXmlStreamReader(TEXT_UNICODE, "UTF-8", BOM_UTF8);
     }
 
-    public void testUTF16Encoding() throws IOException {
+    @Test
+    void uTF16Encoding() throws IOException {
         checkXmlStreamReader(TEXT_UNICODE, "UTF-16", "UTF-16BE", null);
         checkXmlStreamReader(TEXT_UNICODE, "UTF-16", "UTF-16LE", BOM_UTF16LE);
         checkXmlStreamReader(TEXT_UNICODE, "UTF-16", "UTF-16BE", BOM_UTF16BE);
     }
 
-    public void testUTF16BEEncoding() throws IOException {
+    @Test
+    void uTF16BEEncoding() throws IOException {
         checkXmlStreamReader(TEXT_UNICODE, "UTF-16BE");
     }
 
-    public void testUTF16LEEncoding() throws IOException {
+    @Test
+    void uTF16LEEncoding() throws IOException {
         checkXmlStreamReader(TEXT_UNICODE, "UTF-16LE");
     }
 
-    public void testLatin1Encoding() throws IOException {
+    @Test
+    void latin1Encoding() throws IOException {
         checkXmlStreamReader(TEXT_LATIN1, "ISO-8859-1");
     }
 
-    public void testLatin7Encoding() throws IOException {
+    @Test
+    void latin7Encoding() throws IOException {
         checkXmlStreamReader(TEXT_LATIN7, "ISO-8859-7");
     }
 
-    public void testLatin15Encoding() throws IOException {
+    @Test
+    void latin15Encoding() throws IOException {
         checkXmlStreamReader(TEXT_LATIN15, "ISO-8859-15");
     }
 
-    public void testEUC_JPEncoding() throws IOException {
+    @Test
+    void eUC_JPEncoding() throws IOException {
         checkXmlStreamReader(TEXT_EUC_JP, "EUC-JP");
     }
 
-    public void testEBCDICEncoding() throws IOException {
+    @Test
+    void eBCDICEncoding() throws IOException {
         checkXmlStreamReader("simple text in EBCDIC", "CP1047");
     }
 
-    public void testInappropriateEncoding() throws IOException {
-        try {
-            checkXmlStreamReader(TEXT_UNICODE, "ISO-8859-2");
-            fail("Check should have failed, since some characters are not available in the specified encoding");
-        } catch (ComparisonFailure cf) {
-            // expected failure, since the encoding does not contain some characters
-        }
+    @Test
+    void inappropriateEncoding() {
+        assertThrows(
+                AssertionFailedError.class,
+                () -> checkXmlStreamReader(TEXT_UNICODE, "ISO-8859-2"),
+                "Check should have failed, since some characters are not available in the specified encoding");
     }
 
-    public void testEncodingAttribute() throws IOException {
+    @Test
+    void encodingAttribute() throws IOException {
         String xml = "<?xml version='1.0' encoding='US-ASCII'?><element encoding='attribute value'/>";
         checkXmlContent(xml, "US-ASCII");
 

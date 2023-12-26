@@ -20,26 +20,25 @@ package org.apache.maven.shared.utils;
 
 import java.util.Set;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests the 'Os' class which evaluates operation system specific settings.
  *
  * @author <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
-public class OsTest {
+class OsTest {
     private String origOsName;
     private String origOsArch;
     private String origOsVersion;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         origOsName = System.getProperty("os.name");
         origOsArch = System.getProperty("os.arch");
         origOsVersion = System.getProperty("os.version");
@@ -50,8 +49,8 @@ public class OsTest {
         System.setProperty("os.version", "2.1.32");
     }
 
-    @After
-    public void tearDown() {
+    @AfterEach
+    void tearDown() {
         // set the original OS settings again
         System.setProperty("os.name", origOsName);
         System.setProperty("os.arch", origOsArch);
@@ -59,92 +58,92 @@ public class OsTest {
     }
 
     @Test
-    public void testConstructor() {
+    void constructor() {
         Os os = new Os();
         os.eval();
 
-        Assert.assertTrue(Os.isName(Os.FAMILY_OS2));
+        assertTrue(Os.isName(Os.FAMILY_OS2));
 
-        Assert.assertFalse(Os.isName(Os.FAMILY_DOS));
-        Assert.assertFalse(Os.isName(Os.FAMILY_MAC));
-        Assert.assertFalse(Os.isName(Os.FAMILY_NETWARE));
-        Assert.assertFalse(Os.isName(Os.FAMILY_OPENVMS));
-        Assert.assertFalse(Os.isName(Os.FAMILY_OS400));
-        Assert.assertFalse(Os.isName(Os.FAMILY_TANDEM));
-        Assert.assertFalse(Os.isName(Os.FAMILY_UNIX));
-        Assert.assertFalse(Os.isName(Os.FAMILY_WIN9X));
-        Assert.assertFalse(Os.isName(Os.FAMILY_WINDOWS));
-        Assert.assertFalse(Os.isName(Os.FAMILY_ZOS));
+        assertFalse(Os.isName(Os.FAMILY_DOS));
+        assertFalse(Os.isName(Os.FAMILY_MAC));
+        assertFalse(Os.isName(Os.FAMILY_NETWARE));
+        assertFalse(Os.isName(Os.FAMILY_OPENVMS));
+        assertFalse(Os.isName(Os.FAMILY_OS400));
+        assertFalse(Os.isName(Os.FAMILY_TANDEM));
+        assertFalse(Os.isName(Os.FAMILY_UNIX));
+        assertFalse(Os.isName(Os.FAMILY_WIN9X));
+        assertFalse(Os.isName(Os.FAMILY_WINDOWS));
+        assertFalse(Os.isName(Os.FAMILY_ZOS));
     }
 
     @Test
-    public void testFamilyNames() {
-        Assert.assertEquals(Os.FAMILY_DOS, "dos");
-        Assert.assertEquals(Os.FAMILY_MAC, "mac");
-        Assert.assertEquals(Os.FAMILY_NETWARE, "netware");
-        Assert.assertEquals(Os.FAMILY_OPENVMS, "openvms");
-        Assert.assertEquals(Os.FAMILY_OS2, "os/2");
-        Assert.assertEquals(Os.FAMILY_OS400, "os/400");
-        Assert.assertEquals(Os.FAMILY_TANDEM, "tandem");
-        Assert.assertEquals(Os.FAMILY_UNIX, "unix");
-        Assert.assertEquals(Os.FAMILY_WIN9X, "win9x");
-        Assert.assertEquals(Os.FAMILY_WINDOWS, "windows");
-        Assert.assertEquals(Os.FAMILY_ZOS, "z/os");
+    void familyNames() {
+        assertEquals(Os.FAMILY_DOS, "dos");
+        assertEquals(Os.FAMILY_MAC, "mac");
+        assertEquals(Os.FAMILY_NETWARE, "netware");
+        assertEquals(Os.FAMILY_OPENVMS, "openvms");
+        assertEquals(Os.FAMILY_OS2, "os/2");
+        assertEquals(Os.FAMILY_OS400, "os/400");
+        assertEquals(Os.FAMILY_TANDEM, "tandem");
+        assertEquals(Os.FAMILY_UNIX, "unix");
+        assertEquals(Os.FAMILY_WIN9X, "win9x");
+        assertEquals(Os.FAMILY_WINDOWS, "windows");
+        assertEquals(Os.FAMILY_ZOS, "z/os");
     }
 
     @Test
-    public void testGetValidFamilies() {
+    void getValidFamilies() {
         Set<String> osFamilies = Os.getValidFamilies();
 
-        Assert.assertTrue("OsFamilies Set size", osFamilies.size() >= 11);
+        assertTrue(osFamilies.size() >= 11, "OsFamilies Set size");
 
-        Assert.assertTrue(osFamilies.contains(Os.FAMILY_DOS));
-        Assert.assertTrue(osFamilies.contains(Os.FAMILY_MAC));
-        Assert.assertTrue(osFamilies.contains(Os.FAMILY_NETWARE));
-        Assert.assertTrue(osFamilies.contains(Os.FAMILY_OPENVMS));
-        Assert.assertTrue(osFamilies.contains(Os.FAMILY_OS2));
-        Assert.assertTrue(osFamilies.contains(Os.FAMILY_OS400));
-        Assert.assertTrue(osFamilies.contains(Os.FAMILY_TANDEM));
-        Assert.assertTrue(osFamilies.contains(Os.FAMILY_UNIX));
-        Assert.assertTrue(osFamilies.contains(Os.FAMILY_WIN9X));
-        Assert.assertTrue(osFamilies.contains(Os.FAMILY_WINDOWS));
-        Assert.assertTrue(osFamilies.contains(Os.FAMILY_ZOS));
+        assertTrue(osFamilies.contains(Os.FAMILY_DOS));
+        assertTrue(osFamilies.contains(Os.FAMILY_MAC));
+        assertTrue(osFamilies.contains(Os.FAMILY_NETWARE));
+        assertTrue(osFamilies.contains(Os.FAMILY_OPENVMS));
+        assertTrue(osFamilies.contains(Os.FAMILY_OS2));
+        assertTrue(osFamilies.contains(Os.FAMILY_OS400));
+        assertTrue(osFamilies.contains(Os.FAMILY_TANDEM));
+        assertTrue(osFamilies.contains(Os.FAMILY_UNIX));
+        assertTrue(osFamilies.contains(Os.FAMILY_WIN9X));
+        assertTrue(osFamilies.contains(Os.FAMILY_WINDOWS));
+        assertTrue(osFamilies.contains(Os.FAMILY_ZOS));
     }
 
     @Test
-    public void testIsArch() {
-        assertThat("Arch is i386", Os.isArch("i386"), is(true));
+    void isArch() {
+        assertThat(Os.isArch("i386")).as("Arch is i386").isEqualTo(true);
 
-        assertThat("Os is not Mac", Os.isArch("x86_64"), is(false));
+        assertThat(Os.isArch("x86_64")).as("Os is not Mac").isEqualTo(false);
     }
 
     @Test
-    public void testIsFamily() {
-        assertThat("Family is os/2", Os.isFamily(Os.FAMILY_OS2), is(true));
+    void isFamily() {
+        assertThat(Os.isFamily(Os.FAMILY_OS2)).as("Family is os/2").isEqualTo(true);
 
-        assertThat("Family is not mac", Os.isFamily(Os.FAMILY_MAC), is(false));
+        assertThat(Os.isFamily(Os.FAMILY_MAC)).as("Family is not mac").isEqualTo(false);
     }
 
     @Test
-    public void testIsName() {
-        assertThat("Name is os/2", Os.isName("os/2"), is(true));
+    void isName() {
+        assertThat(Os.isName("os/2")).as("Name is os/2").isEqualTo(true);
 
-        assertThat("Name is not Mac OS X", Os.isName("Mac OS X"), is(false));
+        assertThat(Os.isName("Mac OS X")).as("Name is not Mac OS X").isEqualTo(false);
     }
 
     @Test
-    public void testIsValidFamily() {
-        assertThat("os/2 isValidFamily", Os.isValidFamily(Os.FAMILY_OS2), is(true));
+    void isValidFamily() {
+        assertThat(Os.isValidFamily(Os.FAMILY_OS2)).as("os/2 isValidFamily").isEqualTo(true);
 
-        assertThat("iPone != isValidFamily", Os.isValidFamily("iPhone"), is(false));
+        assertThat(Os.isValidFamily("iPhone")).as("iPone != isValidFamily").isEqualTo(false);
     }
 
     @Test
-    public void testIsVersion() {
-        assertThat("isVersion", Os.isVersion("2.1.32"), is(true));
+    void isVersion() {
+        assertThat(Os.isVersion("2.1.32")).as("isVersion").isEqualTo(true);
 
-        assertThat("isVersion", Os.isVersion("2.1"), is(false));
+        assertThat(Os.isVersion("2.1")).as("isVersion").isEqualTo(false);
 
-        assertThat("isVersion", Os.isVersion("4.5"), is(false));
+        assertThat(Os.isVersion("4.5")).as("isVersion").isEqualTo(false);
     }
 }

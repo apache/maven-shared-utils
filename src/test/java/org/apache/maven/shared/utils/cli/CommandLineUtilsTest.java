@@ -25,23 +25,21 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.maven.shared.utils.Os;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItemInArray;
 import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class CommandLineUtilsTest {
+class CommandLineUtilsTest {
 
     /**
      * Tests that case-insensitive environment variables are normalized to upper case.
      */
     @Test
-    public void testGetSystemEnvVarsCaseInsensitive() {
+    void getSystemEnvVarsCaseInsensitive() {
         Properties vars = CommandLineUtils.getSystemEnvVars(false);
         for (Object o : vars.keySet()) {
             String variable = (String) o;
@@ -50,7 +48,7 @@ public class CommandLineUtilsTest {
     }
 
     @Test
-    public void testEnsureCaseSensitivity() {
+    void ensureCaseSensitivity() {
         Map<String, String> data = new HashMap<>();
         data.put("abz", "cool");
         assertTrue(CommandLineUtils.ensureCaseSensitivity(data, false).containsKey("ABZ"));
@@ -61,7 +59,7 @@ public class CommandLineUtilsTest {
      * Tests that environment variables on Windows are normalized to upper case. Does nothing on Unix platforms.
      */
     @Test
-    public void testGetSystemEnvVarsWindows() {
+    void getSystemEnvVarsWindows() {
         if (!Os.isFamily(Os.FAMILY_WINDOWS)) {
             return;
         }
@@ -76,7 +74,7 @@ public class CommandLineUtilsTest {
      * Tests the splitting of a command line into distinct arguments.
      */
     @Test
-    public void testTranslateCommandline() throws Exception {
+    void translateCommandline() throws Exception {
         assertCmdLineArgs(new String[] {}, null);
         assertCmdLineArgs(new String[] {}, "");
 
@@ -91,7 +89,7 @@ public class CommandLineUtilsTest {
     }
 
     @Test
-    public void givenADoubleQuoteMarkInArgument_whenExecutingCode_thenCommandLineExceptionIsThrown() {
+    void givenADoubleQuoteMarkInArgument_whenExecutingCode_thenCommandLineExceptionIsThrown() {
         try {
             new Commandline("echo \"let\"s go\"").execute();
         } catch (CommandLineException e) {
@@ -102,14 +100,14 @@ public class CommandLineUtilsTest {
     }
 
     @Test
-    public void givenASingleQuoteMarkInArgument_whenExecutingCode_thenExitCode0Returned() throws Exception {
+    void givenASingleQuoteMarkInArgument_whenExecutingCode_thenExitCode0Returned() throws Exception {
         final Process p = new Commandline("echo \"let's go\"").execute();
         p.waitFor();
         assertEquals(0, p.exitValue());
     }
 
     @Test
-    public void givenASingleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenTheQuotationMarkIsNotEscaped()
+    void givenASingleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenTheQuotationMarkIsNotEscaped()
             throws Exception {
         final String command = "echo \"let's go\"";
         final String[] expected = new String[] {"echo", "let's go"};
@@ -117,25 +115,23 @@ public class CommandLineUtilsTest {
     }
 
     @Test
-    public void
-            givenAnEscapedDoubleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenTheQuotationMarkRemainsEscaped()
-                    throws Exception {
+    void givenAnEscapedDoubleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenTheQuotationMarkRemainsEscaped()
+            throws Exception {
         final String command = "echo \"let\\\"s go\"";
         final String[] expected = new String[] {"echo", "let\\\"s go"};
         assertCmdLineArgs(expected, command);
     }
 
     @Test
-    public void
-            givenAnEscapedSingleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenTheQuotationMarkRemainsEscaped()
-                    throws Exception {
+    void givenAnEscapedSingleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenTheQuotationMarkRemainsEscaped()
+            throws Exception {
         final String command = "echo \"let\\'s go\"";
         final String[] expected = new String[] {"echo", "let\\'s go"};
         assertCmdLineArgs(expected, command);
     }
 
     @Test
-    public void givenAnEscapedDoubleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenNoExceptionIsThrown()
+    void givenAnEscapedDoubleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenNoExceptionIsThrown()
             throws Exception {
         Process p = new Commandline("echo \"let\\\"s go\"").execute();
         p.waitFor();
@@ -150,7 +146,7 @@ public class CommandLineUtilsTest {
     }
 
     @Test
-    public void environmentVariableWithNullShouldNotBeSet() {
+    void environmentVariableWithNullShouldNotBeSet() {
 
         Commandline commandline = new Commandline();
         commandline.addEnvironment("TEST_NULL_ENV", null);
@@ -162,18 +158,18 @@ public class CommandLineUtilsTest {
     }
 
     @Test
-    public void environmentVariableFromSystemIsCopiedByDefault() {
+    void environmentVariableFromSystemIsCopiedByDefault() {
 
         Commandline commandline = new Commandline();
 
         String[] environmentVariables = commandline.getEnvironmentVariables();
 
         assertNotNull(environmentVariables);
-        assertThat(environmentVariables, hasItemInArray("TEST_SHARED_ENV=TestValue"));
+        assertThat(environmentVariables).contains("TEST_SHARED_ENV=TestValue");
     }
 
     @Test
-    public void environmentVariableFromSystemIsNotCopiedIfInheritedIsFalse() {
+    void environmentVariableFromSystemIsNotCopiedIfInheritedIsFalse() {
 
         Commandline commandline = new Commandline();
         commandline.setShellEnvironmentInherited(false);
@@ -185,7 +181,7 @@ public class CommandLineUtilsTest {
     }
 
     @Test
-    public void environmentVariableFromSystemIsRemoved() {
+    void environmentVariableFromSystemIsRemoved() {
 
         Commandline commandline = new Commandline();
         commandline.addEnvironment("TEST_SHARED_ENV", null);

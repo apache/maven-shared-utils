@@ -23,1487 +23,1507 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test the {@link StringUtils} class.
  *
  * @author <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
-public class StringUtilsTest {
+class StringUtilsTest {
 
-    @Test(expected = NullPointerException.class)
-    public void testAbbreviate_NPE() {
-        assertThat(StringUtils.abbreviate(null, 10), nullValue());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testAbbreviate_MinLength() {
-        assertThat(StringUtils.abbreviate("This is a longtext", 3), is("T"));
+    @Test
+    void abbreviate_NPE() {
+        assertThrows(NullPointerException.class, () -> assertThat(StringUtils.abbreviate(null, 10))
+                .isNull());
     }
 
     @Test
-    public void testAbbreviate() {
-        assertThat(StringUtils.abbreviate("This is a longtext", 10), is("This is..."));
-
-        assertThat(StringUtils.abbreviate("This is a longtext", 50), is("This is a longtext"));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testAbbreviate_Offset_NPE() {
-        assertThat(StringUtils.abbreviate(null, 10, 20), nullValue());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testAbbreviate_Offset_MinLength() {
-        assertThat(StringUtils.abbreviate("This is a longtext", 10, 3), is("T"));
+    void abbreviate_MinLength() {
+        assertThrows(IllegalArgumentException.class, () -> assertThat(StringUtils.abbreviate("This is a longtext", 3))
+                .isEqualTo("T"));
     }
 
     @Test
-    public void testAbbreviate_Offset() {
-        assertThat(StringUtils.abbreviate("This is a longtext", 5, 10), is("...is a..."));
+    void abbreviate() {
+        assertThat(StringUtils.abbreviate("This is a longtext", 10)).isEqualTo("This is...");
 
-        assertThat(StringUtils.abbreviate("This is a longtext", 10, 20), is("This is a longtext"));
-
-        assertThat(StringUtils.abbreviate("This is a longtext", 50, 20), is("This is a longtext"));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testAddAndDeHump_NPE() {
-        StringUtils.addAndDeHump(null);
+        assertThat(StringUtils.abbreviate("This is a longtext", 50)).isEqualTo("This is a longtext");
     }
 
     @Test
-    public void testAddAndDeHump() {
-        assertThat(StringUtils.addAndDeHump("lalala"), is("lalala"));
-
-        assertThat(StringUtils.addAndDeHump("LaLaLa"), is("la-la-la"));
-
-        assertThat(StringUtils.addAndDeHump("ALLUPPER"), is("a-l-l-u-p-p-e-r"));
+    void abbreviate_Offset_NPE() {
+        assertThrows(NullPointerException.class, () -> assertThat(StringUtils.abbreviate(null, 10, 20))
+                .isNull());
     }
 
     @Test
-    public void testCapitalise() {
-        assertThat(StringUtils.capitalise(null), nullValue());
-
-        assertThat(StringUtils.capitalise("startBig"), is("StartBig"));
+    void abbreviate_Offset_MinLength() {
+        assertThrows(
+                IllegalArgumentException.class, () -> assertThat(StringUtils.abbreviate("This is a longtext", 10, 3))
+                        .isEqualTo("T"));
     }
 
     @Test
-    public void testCapitaliseAllWords() {
-        assertThat(StringUtils.capitaliseAllWords(null), nullValue());
+    void abbreviate_Offset() {
+        assertThat(StringUtils.abbreviate("This is a longtext", 5, 10)).isEqualTo("...is a...");
 
-        assertThat(StringUtils.capitaliseAllWords("start all big"), is("Start All Big"));
-    }
+        assertThat(StringUtils.abbreviate("This is a longtext", 10, 20)).isEqualTo("This is a longtext");
 
-    @Test(expected = NullPointerException.class)
-    public void testCapitalizeFirstLetter_NPE() {
-        assertThat(StringUtils.capitalizeFirstLetter(null), nullValue());
+        assertThat(StringUtils.abbreviate("This is a longtext", 50, 20)).isEqualTo("This is a longtext");
     }
 
     @Test
-    public void testCapitalizeFirstLetter() {
-        assertThat(StringUtils.capitalizeFirstLetter("Dings"), is("Dings"));
-
-        assertThat(StringUtils.capitalizeFirstLetter("  dings"), is("  dings"));
-
-        assertThat(StringUtils.capitalizeFirstLetter("start all big"), is("Start all big"));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testCenter_NPE() {
-        StringUtils.center(null, 20);
+    void addAndDeHump_NPE() {
+        assertThrows(NullPointerException.class, () -> StringUtils.addAndDeHump(null));
     }
 
     @Test
-    public void testCenter() {
-        assertThat(StringUtils.center("centerMe", 20), is("      centerMe      "));
+    void addAndDeHump() {
+        assertThat(StringUtils.addAndDeHump("lalala")).isEqualTo("lalala");
 
-        assertThat(StringUtils.center("centerMe", 4), is("centerMe"));
+        assertThat(StringUtils.addAndDeHump("LaLaLa")).isEqualTo("la-la-la");
 
-        assertThat(StringUtils.center("        centerMe", 20), is("          centerMe  "));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testCenter_Delim_NPE() {
-        StringUtils.center(null, 20, "*");
+        assertThat(StringUtils.addAndDeHump("ALLUPPER")).isEqualTo("a-l-l-u-p-p-e-r");
     }
 
     @Test
-    public void testCenter_Delim() {
-        assertThat(StringUtils.center("centerMe", 20, "*"), is("******centerMe******"));
+    void capitalise() {
+        assertThat(StringUtils.capitalise(null)).isNull();
 
-        assertThat(StringUtils.center("centerMe", 4, "*"), is("centerMe"));
-
-        assertThat(StringUtils.center("        centerMe", 20, "*"), is("**        centerMe**"));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testChomp_NPE() {
-        StringUtils.chomp(null);
+        assertThat(StringUtils.capitalise("startBig")).isEqualTo("StartBig");
     }
 
     @Test
-    public void testChomp() {
-        assertThat(StringUtils.chomp("dings"), is("dings"));
+    void capitaliseAllWords() {
+        assertThat(StringUtils.capitaliseAllWords(null)).isNull();
 
-        assertThat(StringUtils.chomp("dings\n"), is("dings"));
-
-        assertThat(StringUtils.chomp("dings\nbums"), is("dings"));
-
-        assertThat(StringUtils.chomp("dings\nbums\ndongs"), is("dings\nbums"));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testChomp_Delim_NPE() {
-        StringUtils.chomp(null, "+");
+        assertThat(StringUtils.capitaliseAllWords("start all big")).isEqualTo("Start All Big");
     }
 
     @Test
-    public void testChomp_Delim() {
-        assertThat(StringUtils.chomp("dings", "+"), is("dings"));
-
-        assertThat(StringUtils.chomp("dings+", "+"), is("dings"));
-
-        assertThat(StringUtils.chomp("dings+bums", "+"), is("dings"));
-
-        assertThat(StringUtils.chomp("dings+bums+dongs", "+"), is("dings+bums"));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testChompLast_NPE() {
-        StringUtils.chompLast(null);
+    void capitalizeFirstLetter_NPE() {
+        assertThrows(NullPointerException.class, () -> assertThat(StringUtils.capitalizeFirstLetter(null))
+                .isNull());
     }
 
     @Test
-    public void testChompLast() {
-        assertThat(StringUtils.chompLast("dings"), is("dings"));
+    void capitalizeFirstLetter() {
+        assertThat(StringUtils.capitalizeFirstLetter("Dings")).isEqualTo("Dings");
 
-        assertThat(StringUtils.chompLast("\n"), is(""));
+        assertThat(StringUtils.capitalizeFirstLetter("  dings")).isEqualTo("  dings");
 
-        assertThat(StringUtils.chompLast("dings\n"), is("dings"));
-
-        assertThat(StringUtils.chompLast("dings\nbums"), is("dings\nbums"));
-
-        assertThat(StringUtils.chompLast("dings\nbums\ndongs\n"), is("dings\nbums\ndongs"));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testChompLast_Delim_NPE() {
-        StringUtils.chompLast(null, "+");
+        assertThat(StringUtils.capitalizeFirstLetter("start all big")).isEqualTo("Start all big");
     }
 
     @Test
-    public void testChompLast_Delim() {
-        assertThat(StringUtils.chompLast("dings", "+"), is("dings"));
-
-        assertThat(StringUtils.chompLast("+", "+"), is(""));
-
-        assertThat(StringUtils.chompLast("dings+", "+"), is("dings"));
-
-        assertThat(StringUtils.chompLast("dings+bums", "+"), is("dings+bums"));
-
-        assertThat(StringUtils.chompLast("dings+bums+dongs+", "+"), is("dings+bums+dongs"));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testChop_NPE() {
-        StringUtils.chop(null);
+    void center_NPE() {
+        assertThrows(NullPointerException.class, () -> StringUtils.center(null, 20));
     }
 
     @Test
-    public void testChop() {
-        assertThat(StringUtils.chop("dings"), is("ding"));
+    void center() {
+        assertThat(StringUtils.center("centerMe", 20)).isEqualTo("      centerMe      ");
 
-        assertThat(StringUtils.chop("x"), is(""));
+        assertThat(StringUtils.center("centerMe", 4)).isEqualTo("centerMe");
 
-        assertThat(StringUtils.chop("dings\n"), is("dings"));
-
-        assertThat(StringUtils.chop("dings\r\n"), is("dings"));
-
-        assertThat(StringUtils.chop("dings\n\r"), is("dings\n"));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testChopNewline_NPE() {
-        StringUtils.chopNewline(null);
+        assertThat(StringUtils.center("        centerMe", 20)).isEqualTo("          centerMe  ");
     }
 
     @Test
-    public void testChopNewline() {
-        assertThat(StringUtils.chopNewline("dings"), is("dings"));
-
-        assertThat(StringUtils.chopNewline("x"), is("x"));
-
-        assertThat(StringUtils.chopNewline("dings\n"), is("dings"));
-
-        assertThat(StringUtils.chopNewline("dings\r\n"), is("dings"));
-
-        assertThat(StringUtils.chopNewline("dings\n\r"), is("dings\n\r"));
+    void center_Delim_NPE() {
+        assertThrows(NullPointerException.class, () -> StringUtils.center(null, 20, "*"));
     }
 
     @Test
-    public void testClean() {
-        assertThat(StringUtils.clean(null), is(""));
+    void center_Delim() {
+        assertThat(StringUtils.center("centerMe", 20, "*")).isEqualTo("******centerMe******");
 
-        assertThat(StringUtils.clean("   "), is(""));
+        assertThat(StringUtils.center("centerMe", 4, "*")).isEqualTo("centerMe");
 
-        assertThat(StringUtils.clean("  c "), is("c"));
-
-        assertThat(StringUtils.clean("  dings \n  "), is("dings"));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testConcatenate_NPE() {
-        StringUtils.concatenate(null);
+        assertThat(StringUtils.center("        centerMe", 20, "*")).isEqualTo("**        centerMe**");
     }
 
     @Test
-    public void testConcatenate() {
-        assertThat(StringUtils.concatenate(new String[0]), is(""));
-
-        assertThat(StringUtils.concatenate(new String[] {"x"}), is("x"));
-
-        assertThat(StringUtils.concatenate(new String[] {"x", "y", "z"}), is("xyz"));
+    void chomp_NPE() {
+        assertThrows(NullPointerException.class, () -> StringUtils.chomp(null));
     }
 
     @Test
-    public void testContains_String() {
-        assertThat(StringUtils.contains(null, null), is(false));
+    void chomp() {
+        assertThat(StringUtils.chomp("dings")).isEqualTo("dings");
 
-        assertThat(StringUtils.contains(null, "string"), is(false));
+        assertThat(StringUtils.chomp("dings\n")).isEqualTo("dings");
 
-        assertThat(StringUtils.contains("string", null), is(false));
+        assertThat(StringUtils.chomp("dings\nbums")).isEqualTo("dings");
 
-        assertThat(StringUtils.contains("string", ""), is(true));
-
-        assertThat(StringUtils.contains("string", "in"), is(true));
-
-        assertThat(StringUtils.contains("string", "IN"), is(false));
+        assertThat(StringUtils.chomp("dings\nbums\ndongs")).isEqualTo("dings\nbums");
     }
 
     @Test
-    public void testContains_Char() {
-        assertThat(StringUtils.contains(null, 'c'), is(false));
-
-        assertThat(StringUtils.contains("string", "c"), is(false));
-
-        assertThat(StringUtils.contains("string", ""), is(true));
-
-        assertThat(StringUtils.contains("string", "r"), is(true));
-
-        assertThat(StringUtils.contains("string", "R"), is(false));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testCountMatches_NPE() {
-        StringUtils.countMatches(null, null);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testCountMatches_NPE2() {
-        StringUtils.countMatches("this is it", null);
+    void chomp_Delim_NPE() {
+        assertThrows(NullPointerException.class, () -> StringUtils.chomp(null, "+"));
     }
 
     @Test
-    public void testCountMatches() {
-        assertThat(StringUtils.countMatches(null, "is"), is(0));
+    void chomp_Delim() {
+        assertThat(StringUtils.chomp("dings", "+")).isEqualTo("dings");
 
-        assertThat(StringUtils.countMatches("this is it", "is"), is(2));
+        assertThat(StringUtils.chomp("dings+", "+")).isEqualTo("dings");
 
-        assertThat(StringUtils.countMatches("this is it", "notincluded"), is(0));
+        assertThat(StringUtils.chomp("dings+bums", "+")).isEqualTo("dings");
+
+        assertThat(StringUtils.chomp("dings+bums+dongs", "+")).isEqualTo("dings+bums");
     }
 
     @Test
-    public void testDefaultString() {
-        assertThat(StringUtils.defaultString(null), is(""));
-
-        assertThat(StringUtils.defaultString("dings"), is("dings"));
+    void chompLast_NPE() {
+        assertThrows(NullPointerException.class, () -> StringUtils.chompLast(null));
     }
 
     @Test
-    public void testDefaultString_defaultValue() {
-        assertThat(StringUtils.defaultString(null, "defaultValue"), is("defaultValue"));
+    void chompLast() {
+        assertThat(StringUtils.chompLast("dings")).isEqualTo("dings");
 
-        assertThat(StringUtils.defaultString("dings", "defaultValue"), is("dings"));
-    }
+        assertThat(StringUtils.chompLast("\n")).isEqualTo("");
 
-    @Test(expected = NullPointerException.class)
-    public void testDeleteWhitespace_NPE() {
-        StringUtils.deleteWhitespace(null);
-    }
+        assertThat(StringUtils.chompLast("dings\n")).isEqualTo("dings");
 
-    @Test
-    public void testDeleteWhitespace() {
-        assertThat(StringUtils.deleteWhitespace(" \t  \n"), is(""));
+        assertThat(StringUtils.chompLast("dings\nbums")).isEqualTo("dings\nbums");
 
-        assertThat(StringUtils.deleteWhitespace(" \t  \b \n"), is("\b"));
-
-        assertThat(StringUtils.deleteWhitespace("dings"), is("dings"));
-
-        assertThat(StringUtils.deleteWhitespace("\n  dings \t "), is("dings"));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testDifference_NPE() {
-        StringUtils.difference(null, null);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testDifference_NPE2() {
-        StringUtils.difference(null, "another");
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testDifference_NPE3() {
-        StringUtils.difference("this", null);
+        assertThat(StringUtils.chompLast("dings\nbums\ndongs\n")).isEqualTo("dings\nbums\ndongs");
     }
 
     @Test
-    public void testDifference() {
-        assertThat(StringUtils.difference("this", "another"), is("another"));
-
-        assertThat(StringUtils.difference("I am human", "I am a robot"), is("a robot"));
-
-        assertThat(StringUtils.difference("I am human", "I AM a robot"), is("AM a robot"));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testDifferenceAt_NPE() {
-        StringUtils.differenceAt(null, null);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testDifferenceAt_NPE2() {
-        StringUtils.differenceAt("test", null);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testDifferenceAt_NPE3() {
-        StringUtils.differenceAt(null, "test");
+    void chompLast_Delim_NPE() {
+        assertThrows(NullPointerException.class, () -> StringUtils.chompLast(null, "+"));
     }
 
     @Test
-    public void testDifferenceAt() {
-        assertThat(StringUtils.differenceAt("this", "another"), is(0));
+    void chompLast_Delim() {
+        assertThat(StringUtils.chompLast("dings", "+")).isEqualTo("dings");
 
-        assertThat(StringUtils.differenceAt("I am human", "I am a robot"), is(5));
+        assertThat(StringUtils.chompLast("+", "+")).isEqualTo("");
 
-        assertThat(StringUtils.differenceAt("I am human", "I AM a robot"), is(2));
+        assertThat(StringUtils.chompLast("dings+", "+")).isEqualTo("dings");
+
+        assertThat(StringUtils.chompLast("dings+bums", "+")).isEqualTo("dings+bums");
+
+        assertThat(StringUtils.chompLast("dings+bums+dongs+", "+")).isEqualTo("dings+bums+dongs");
     }
 
     @Test
-    public void testEndsWithIgnoreCase() {
-        assertThat(StringUtils.endsWithIgnoreCase(null, null), is(false));
-
-        assertThat(StringUtils.endsWithIgnoreCase(null, "string"), is(false));
-
-        assertThat(StringUtils.endsWithIgnoreCase("string", null), is(false));
-
-        assertThat(StringUtils.endsWithIgnoreCase("string", "ing"), is(true));
-
-        assertThat(StringUtils.endsWithIgnoreCase("string", "a string"), is(false));
-
-        assertThat(StringUtils.endsWithIgnoreCase("string", "str"), is(false));
+    void chop_NPE() {
+        assertThrows(NullPointerException.class, () -> StringUtils.chop(null));
     }
 
     @Test
-    public void testEquals() {
-        assertThat(StringUtils.equals(null, null), is(true));
+    void chop() {
+        assertThat(StringUtils.chop("dings")).isEqualTo("ding");
 
-        assertThat(StringUtils.equals("x", null), is(false));
+        assertThat(StringUtils.chop("x")).isEqualTo("");
 
-        assertThat(StringUtils.equals(null, "x"), is(false));
+        assertThat(StringUtils.chop("dings\n")).isEqualTo("dings");
 
-        assertThat(StringUtils.equals("X", "x"), is(false));
+        assertThat(StringUtils.chop("dings\r\n")).isEqualTo("dings");
 
-        assertThat(StringUtils.equals("dings", "dings"), is(true));
+        assertThat(StringUtils.chop("dings\n\r")).isEqualTo("dings\n");
     }
 
     @Test
-    public void testEqualsIgnoreCase() {
-        assertThat(StringUtils.equalsIgnoreCase(null, null), is(true));
-
-        assertThat(StringUtils.equalsIgnoreCase("x", null), is(false));
-
-        assertThat(StringUtils.equalsIgnoreCase(null, "x"), is(false));
-
-        assertThat(StringUtils.equalsIgnoreCase("X", "x"), is(true));
-
-        assertThat(StringUtils.equalsIgnoreCase("dings", "dings"), is(true));
-
-        assertThat(StringUtils.equalsIgnoreCase("dings", "diNGs"), is(true));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testEscape_NPE() {
-        StringUtils.escape(null);
+    void chopNewline_NPE() {
+        assertThrows(NullPointerException.class, () -> StringUtils.chopNewline(null));
     }
 
     @Test
-    public void testEscape() {
-        assertThat(StringUtils.escape("dings"), is("dings"));
+    void chopNewline() {
+        assertThat(StringUtils.chopNewline("dings")).isEqualTo("dings");
 
-        assertThat(StringUtils.escape("dings\tbums"), is("dings\\tbums"));
+        assertThat(StringUtils.chopNewline("x")).isEqualTo("x");
 
-        assertThat(StringUtils.escape("dings\nbums"), is("dings\\nbums"));
+        assertThat(StringUtils.chopNewline("dings\n")).isEqualTo("dings");
+
+        assertThat(StringUtils.chopNewline("dings\r\n")).isEqualTo("dings");
+
+        assertThat(StringUtils.chopNewline("dings\n\r")).isEqualTo("dings\n\r");
     }
 
     @Test
-    public void testEscape2() {
-        assertThat(StringUtils.escape(null, null, '#'), nullValue());
+    void clean() {
+        assertThat(StringUtils.clean(null)).isEqualTo("");
 
-        assertThat(StringUtils.escape("dings", new char[] {'\t', '\b'}, '+'), is("dings"));
+        assertThat(StringUtils.clean("   ")).isEqualTo("");
 
-        assertThat(StringUtils.escape("dings\tbums", new char[] {'\t', '\b'}, '+'), is("dings+\tbums"));
+        assertThat(StringUtils.clean("  c ")).isEqualTo("c");
 
-        assertThat(StringUtils.escape("dings\nbums", new char[] {'\t', '\b'}, '+'), is("dings\nbums"));
-        assertThat(StringUtils.escape("dings\bbums", new char[] {'\t', '\b'}, '+'), is("dings+\bbums"));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testGetChomp_NPE1() {
-        StringUtils.getChomp(null, null);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testGetChomp_NPE2() {
-        StringUtils.getChomp("dings", null);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testGetChomp_NPE3() {
-        StringUtils.getChomp(null, "dings");
+        assertThat(StringUtils.clean("  dings \n  ")).isEqualTo("dings");
     }
 
     @Test
-    public void testGetChomp() {
-        assertThat(StringUtils.getChomp("dings-bums", "-"), is("-bums"));
-
-        assertThat(StringUtils.getChomp("dings-", "-"), is("-"));
-
-        assertThat(StringUtils.getChomp("dingsbums", "-"), is(""));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testGetNestedString_NPE() {
-        assertThat(StringUtils.getNestedString("  +dings+ ", null), nullValue());
+    void concatenate_NPE() {
+        assertThrows(NullPointerException.class, () -> StringUtils.concatenate(null));
     }
 
     @Test
-    public void testGetNestedString() {
-        assertThat(StringUtils.getNestedString(null, null), nullValue());
+    void concatenate() {
+        assertThat(StringUtils.concatenate(new String[0])).isEqualTo("");
 
-        assertThat(StringUtils.getNestedString("  +dings+ ", "+"), is("dings"));
+        assertThat(StringUtils.concatenate(new String[] {"x"})).isEqualTo("x");
 
-        assertThat(StringUtils.getNestedString("  +dings+ ", "not"), nullValue());
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testGetNestedString2_NPE1() {
-        assertThat(StringUtils.getNestedString("  +dings+ ", null, null), nullValue());
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testGetNestedString2_NPE2() {
-        assertThat(StringUtils.getNestedString("  +dings+ ", null, "neither"), nullValue());
+        assertThat(StringUtils.concatenate(new String[] {"x", "y", "z"})).isEqualTo("xyz");
     }
 
     @Test
-    public void testGetNestedString2() {
-        assertThat(StringUtils.getNestedString(null, null, null), nullValue());
+    void contains_String() {
+        assertThat(StringUtils.contains(null, null)).isEqualTo(false);
 
-        assertThat(StringUtils.getNestedString("  +dings+ ", "not", null), nullValue());
+        assertThat(StringUtils.contains(null, "string")).isEqualTo(false);
 
-        assertThat(StringUtils.getNestedString("  +dings- ", "+", "-"), is("dings"));
+        assertThat(StringUtils.contains("string", null)).isEqualTo(false);
 
-        assertThat(StringUtils.getNestedString("  +dings+ ", "not", "neither"), nullValue());
-    }
+        assertThat(StringUtils.contains("string", "")).isEqualTo(true);
 
-    @Test(expected = NullPointerException.class)
-    public void testGetPrechomp_NPE1() {
-        StringUtils.getPrechomp(null, null);
-    }
+        assertThat(StringUtils.contains("string", "in")).isEqualTo(true);
 
-    @Test(expected = NullPointerException.class)
-    public void testGetPrechomp_NPE2() {
-        StringUtils.getPrechomp(null, "bums");
+        assertThat(StringUtils.contains("string", "IN")).isEqualTo(false);
     }
 
     @Test
-    public void testGetPrechomp() {
-        assertThat(StringUtils.getPrechomp("dings bums dongs", "bums"), is("dings bums"));
+    void contains_Char() {
+        assertThat(StringUtils.contains(null, 'c')).isEqualTo(false);
 
-        assertThat(StringUtils.getPrechomp("dings bums dongs", "non"), is(""));
+        assertThat(StringUtils.contains("string", "c")).isEqualTo(false);
+
+        assertThat(StringUtils.contains("string", "")).isEqualTo(true);
+
+        assertThat(StringUtils.contains("string", "r")).isEqualTo(true);
+
+        assertThat(StringUtils.contains("string", "R")).isEqualTo(false);
     }
 
     @Test
-    public void testIndexOfAny() {
-        assertThat(StringUtils.indexOfAny(null, null), is(-1));
-
-        assertThat(StringUtils.indexOfAny("dings", null), is(-1));
-
-        assertThat(StringUtils.indexOfAny(null, new String[] {}), is(-1));
-
-        assertThat(StringUtils.indexOfAny("dings bums dongs", new String[] {"knuff", "bums"}), is(6));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testInterpolate_NPE() {
-        StringUtils.interpolate(null, null);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testInterpolate_NPE2() {
-        StringUtils.interpolate("This ${text} will get replaced", null);
+    void countMatches_NPE() {
+        assertThrows(NullPointerException.class, () -> StringUtils.countMatches(null, null));
     }
 
     @Test
-    public void testInterpolate() {
+    void countMatches_NPE2() {
+        assertThrows(NullPointerException.class, () -> StringUtils.countMatches("this is it", null));
+    }
+
+    @Test
+    void countMatches() {
+        assertThat(StringUtils.countMatches(null, "is")).isEqualTo(0);
+
+        assertThat(StringUtils.countMatches("this is it", "is")).isEqualTo(2);
+
+        assertThat(StringUtils.countMatches("this is it", "notincluded")).isEqualTo(0);
+    }
+
+    @Test
+    void defaultString() {
+        assertThat(StringUtils.defaultString(null)).isEqualTo("");
+
+        assertThat(StringUtils.defaultString("dings")).isEqualTo("dings");
+    }
+
+    @Test
+    void defaultString_defaultValue() {
+        assertThat(StringUtils.defaultString(null, "defaultValue")).isEqualTo("defaultValue");
+
+        assertThat(StringUtils.defaultString("dings", "defaultValue")).isEqualTo("dings");
+    }
+
+    @Test
+    void deleteWhitespace_NPE() {
+        assertThrows(NullPointerException.class, () -> StringUtils.deleteWhitespace(null));
+    }
+
+    @Test
+    void deleteWhitespace() {
+        assertThat(StringUtils.deleteWhitespace(" \t  \n")).isEqualTo("");
+
+        assertThat(StringUtils.deleteWhitespace(" \t  \b \n")).isEqualTo("\b");
+
+        assertThat(StringUtils.deleteWhitespace("dings")).isEqualTo("dings");
+
+        assertThat(StringUtils.deleteWhitespace("\n  dings \t ")).isEqualTo("dings");
+    }
+
+    @Test
+    void difference_NPE() {
+        assertThrows(NullPointerException.class, () -> StringUtils.difference(null, null));
+    }
+
+    @Test
+    void difference_NPE2() {
+        assertThrows(NullPointerException.class, () -> StringUtils.difference(null, "another"));
+    }
+
+    @Test
+    void difference_NPE3() {
+        assertThrows(NullPointerException.class, () -> StringUtils.difference("this", null));
+    }
+
+    @Test
+    void difference() {
+        assertThat(StringUtils.difference("this", "another")).isEqualTo("another");
+
+        assertThat(StringUtils.difference("I am human", "I am a robot")).isEqualTo("a robot");
+
+        assertThat(StringUtils.difference("I am human", "I AM a robot")).isEqualTo("AM a robot");
+    }
+
+    @Test
+    void differenceAt_NPE() {
+        assertThrows(NullPointerException.class, () -> StringUtils.differenceAt(null, null));
+    }
+
+    @Test
+    void differenceAt_NPE2() {
+        assertThrows(NullPointerException.class, () -> StringUtils.differenceAt("test", null));
+    }
+
+    @Test
+    void differenceAt_NPE3() {
+        assertThrows(NullPointerException.class, () -> StringUtils.differenceAt(null, "test"));
+    }
+
+    @Test
+    void differenceAt() {
+        assertThat(StringUtils.differenceAt("this", "another")).isEqualTo(0);
+
+        assertThat(StringUtils.differenceAt("I am human", "I am a robot")).isEqualTo(5);
+
+        assertThat(StringUtils.differenceAt("I am human", "I AM a robot")).isEqualTo(2);
+    }
+
+    @Test
+    void endsWithIgnoreCase() {
+        assertThat(StringUtils.endsWithIgnoreCase(null, null)).isEqualTo(false);
+
+        assertThat(StringUtils.endsWithIgnoreCase(null, "string")).isEqualTo(false);
+
+        assertThat(StringUtils.endsWithIgnoreCase("string", null)).isEqualTo(false);
+
+        assertThat(StringUtils.endsWithIgnoreCase("string", "ing")).isEqualTo(true);
+
+        assertThat(StringUtils.endsWithIgnoreCase("string", "a string")).isEqualTo(false);
+
+        assertThat(StringUtils.endsWithIgnoreCase("string", "str")).isEqualTo(false);
+    }
+
+    @Test
+    void equals() {
+        assertThat(StringUtils.equals(null, null)).isEqualTo(true);
+
+        assertThat(StringUtils.equals("x", null)).isEqualTo(false);
+
+        assertThat(StringUtils.equals(null, "x")).isEqualTo(false);
+
+        assertThat(StringUtils.equals("X", "x")).isEqualTo(false);
+
+        assertThat(StringUtils.equals("dings", "dings")).isEqualTo(true);
+    }
+
+    @Test
+    void equalsIgnoreCase() {
+        assertThat(StringUtils.equalsIgnoreCase(null, null)).isEqualTo(true);
+
+        assertThat(StringUtils.equalsIgnoreCase("x", null)).isEqualTo(false);
+
+        assertThat(StringUtils.equalsIgnoreCase(null, "x")).isEqualTo(false);
+
+        assertThat(StringUtils.equalsIgnoreCase("X", "x")).isEqualTo(true);
+
+        assertThat(StringUtils.equalsIgnoreCase("dings", "dings")).isEqualTo(true);
+
+        assertThat(StringUtils.equalsIgnoreCase("dings", "diNGs")).isEqualTo(true);
+    }
+
+    @Test
+    void escape_NPE() {
+        assertThrows(NullPointerException.class, () -> StringUtils.escape(null));
+    }
+
+    @Test
+    void escape() {
+        assertThat(StringUtils.escape("dings")).isEqualTo("dings");
+
+        assertThat(StringUtils.escape("dings\tbums")).isEqualTo("dings\\tbums");
+
+        assertThat(StringUtils.escape("dings\nbums")).isEqualTo("dings\\nbums");
+    }
+
+    @Test
+    void escape2() {
+        assertThat(StringUtils.escape(null, null, '#')).isNull();
+
+        assertThat(StringUtils.escape("dings", new char[] {'\t', '\b'}, '+')).isEqualTo("dings");
+
+        assertThat(StringUtils.escape("dings\tbums", new char[] {'\t', '\b'}, '+'))
+                .isEqualTo("dings+\tbums");
+
+        assertThat(StringUtils.escape("dings\nbums", new char[] {'\t', '\b'}, '+'))
+                .isEqualTo("dings\nbums");
+        assertThat(StringUtils.escape("dings\bbums", new char[] {'\t', '\b'}, '+'))
+                .isEqualTo("dings+\bbums");
+    }
+
+    @Test
+    void getChomp_NPE1() {
+        assertThrows(NullPointerException.class, () -> StringUtils.getChomp(null, null));
+    }
+
+    @Test
+    void getChomp_NPE2() {
+        assertThrows(NullPointerException.class, () -> StringUtils.getChomp("dings", null));
+    }
+
+    @Test
+    void getChomp_NPE3() {
+        assertThrows(NullPointerException.class, () -> StringUtils.getChomp(null, "dings"));
+    }
+
+    @Test
+    void getChomp() {
+        assertThat(StringUtils.getChomp("dings-bums", "-")).isEqualTo("-bums");
+
+        assertThat(StringUtils.getChomp("dings-", "-")).isEqualTo("-");
+
+        assertThat(StringUtils.getChomp("dingsbums", "-")).isEqualTo("");
+    }
+
+    @Test
+    void getNestedString_NPE() {
+        assertThrows(NullPointerException.class, () -> assertThat(StringUtils.getNestedString("  +dings+ ", null))
+                .isNull());
+    }
+
+    @Test
+    void getNestedString() {
+        assertThat(StringUtils.getNestedString(null, null)).isNull();
+
+        assertThat(StringUtils.getNestedString("  +dings+ ", "+")).isEqualTo("dings");
+
+        assertThat(StringUtils.getNestedString("  +dings+ ", "not")).isNull();
+    }
+
+    @Test
+    void getNestedString2_NPE1() {
+        assertThrows(NullPointerException.class, () -> assertThat(StringUtils.getNestedString("  +dings+ ", null, null))
+                .isNull());
+    }
+
+    @Test
+    void getNestedString2_NPE2() {
+        assertThrows(
+                NullPointerException.class, () -> assertThat(StringUtils.getNestedString("  +dings+ ", null, "neither"))
+                        .isNull());
+    }
+
+    @Test
+    void getNestedString2() {
+        assertThat(StringUtils.getNestedString(null, null, null)).isNull();
+
+        assertThat(StringUtils.getNestedString("  +dings+ ", "not", null)).isNull();
+
+        assertThat(StringUtils.getNestedString("  +dings- ", "+", "-")).isEqualTo("dings");
+
+        assertThat(StringUtils.getNestedString("  +dings+ ", "not", "neither")).isNull();
+    }
+
+    @Test
+    void getPrechomp_NPE1() {
+        assertThrows(NullPointerException.class, () -> StringUtils.getPrechomp(null, null));
+    }
+
+    @Test
+    void getPrechomp_NPE2() {
+        assertThrows(NullPointerException.class, () -> StringUtils.getPrechomp(null, "bums"));
+    }
+
+    @Test
+    void getPrechomp() {
+        assertThat(StringUtils.getPrechomp("dings bums dongs", "bums")).isEqualTo("dings bums");
+
+        assertThat(StringUtils.getPrechomp("dings bums dongs", "non")).isEqualTo("");
+    }
+
+    @Test
+    void indexOfAny() {
+        assertThat(StringUtils.indexOfAny(null, null)).isEqualTo(-1);
+
+        assertThat(StringUtils.indexOfAny("dings", null)).isEqualTo(-1);
+
+        assertThat(StringUtils.indexOfAny(null, new String[] {})).isEqualTo(-1);
+
+        assertThat(StringUtils.indexOfAny("dings bums dongs", "knuff", "bums")).isEqualTo(6);
+    }
+
+    @Test
+    void interpolate_NPE() {
+        assertThrows(NullPointerException.class, () -> StringUtils.interpolate(null, null));
+    }
+
+    @Test
+    void interpolate_NPE2() {
+        assertThrows(NullPointerException.class, () -> StringUtils.interpolate("This ${text} will get replaced", null));
+    }
+
+    @Test
+    void interpolate() {
         Map<String, String> variables = new HashMap<>();
-        assertThat(
-                StringUtils.interpolate("This ${text} will get replaced", variables),
-                is("This ${text} will get replaced"));
+        assertThat(StringUtils.interpolate("This ${text} will get replaced", variables))
+                .isEqualTo("This ${text} will get replaced");
 
         variables.put("text", "with a special content");
 
-        assertThat(
-                StringUtils.interpolate("This ${text} will get replaced", variables),
-                is("This with a special content will get replaced"));
+        assertThat(StringUtils.interpolate("This ${text} will get replaced", variables))
+                .isEqualTo("This with a special content will get replaced");
     }
 
     @Test
-    public void testIsAlpha() {
-        assertThat(StringUtils.isAlpha(null), is(false));
+    void isAlpha() {
+        assertThat(StringUtils.isAlpha(null)).isEqualTo(false);
 
-        assertThat(StringUtils.isAlpha("2"), is(false));
+        assertThat(StringUtils.isAlpha("2")).isEqualTo(false);
 
-        assertThat(StringUtils.isAlpha("asvsdfSDF"), is(true));
+        assertThat(StringUtils.isAlpha("asvsdfSDF")).isEqualTo(true);
 
-        assertThat(StringUtils.isAlpha("asvsdfSDF \t "), is(false));
+        assertThat(StringUtils.isAlpha("asvsdfSDF \t ")).isEqualTo(false);
 
-        assertThat(StringUtils.isAlpha("435afsafd3!"), is(false));
+        assertThat(StringUtils.isAlpha("435afsafd3!")).isEqualTo(false);
     }
 
     @Test
-    public void testIsAlphaSpace() {
-        assertThat(StringUtils.isAlphaSpace(null), is(false));
+    void isAlphaSpace() {
+        assertThat(StringUtils.isAlphaSpace(null)).isEqualTo(false);
 
-        assertThat(StringUtils.isAlphaSpace("2"), is(false));
+        assertThat(StringUtils.isAlphaSpace("2")).isEqualTo(false);
 
-        assertThat(StringUtils.isAlphaSpace("asvsdfSDF"), is(true));
+        assertThat(StringUtils.isAlphaSpace("asvsdfSDF")).isEqualTo(true);
 
-        assertThat(StringUtils.isAlphaSpace("asvsdfSDF  "), is(true));
+        assertThat(StringUtils.isAlphaSpace("asvsdfSDF  ")).isEqualTo(true);
 
-        assertThat(StringUtils.isAlphaSpace("asvsdfSDF \t "), is(false));
+        assertThat(StringUtils.isAlphaSpace("asvsdfSDF \t ")).isEqualTo(false);
 
-        assertThat(StringUtils.isAlphaSpace("435afsafd3!"), is(false));
+        assertThat(StringUtils.isAlphaSpace("435afsafd3!")).isEqualTo(false);
     }
 
     @Test
-    public void testIsAlphanumeric() {
-        assertThat(StringUtils.isAlphanumeric(null), is(false));
+    void isAlphanumeric() {
+        assertThat(StringUtils.isAlphanumeric(null)).isEqualTo(false);
 
-        assertThat(StringUtils.isAlphanumeric("2"), is(true));
+        assertThat(StringUtils.isAlphanumeric("2")).isEqualTo(true);
 
-        assertThat(StringUtils.isAlphanumeric("asvsdfSDF"), is(true));
+        assertThat(StringUtils.isAlphanumeric("asvsdfSDF")).isEqualTo(true);
 
-        assertThat(StringUtils.isAlphanumeric("asvsdfSDF  "), is(false));
+        assertThat(StringUtils.isAlphanumeric("asvsdfSDF  ")).isEqualTo(false);
 
-        assertThat(StringUtils.isAlphanumeric("asvsdfSDF \t "), is(false));
+        assertThat(StringUtils.isAlphanumeric("asvsdfSDF \t ")).isEqualTo(false);
 
-        assertThat(StringUtils.isAlphanumeric("435afsafd3!"), is(false));
+        assertThat(StringUtils.isAlphanumeric("435afsafd3!")).isEqualTo(false);
 
-        assertThat(StringUtils.isAlphanumeric("435afsafd3"), is(true));
+        assertThat(StringUtils.isAlphanumeric("435afsafd3")).isEqualTo(true);
 
-        assertThat(StringUtils.isAlphanumeric("435 "), is(false));
+        assertThat(StringUtils.isAlphanumeric("435 ")).isEqualTo(false);
 
-        assertThat(StringUtils.isAlphanumeric("435"), is(true));
+        assertThat(StringUtils.isAlphanumeric("435")).isEqualTo(true);
     }
 
     @Test
-    public void testIsAlphanumericSpace() {
-        assertThat(StringUtils.isAlphanumericSpace(null), is(false));
+    void isAlphanumericSpace() {
+        assertThat(StringUtils.isAlphanumericSpace(null)).isEqualTo(false);
 
-        assertThat(StringUtils.isAlphanumericSpace("2"), is(true));
+        assertThat(StringUtils.isAlphanumericSpace("2")).isEqualTo(true);
 
-        assertThat(StringUtils.isAlphanumericSpace("asvsdfSDF"), is(true));
+        assertThat(StringUtils.isAlphanumericSpace("asvsdfSDF")).isEqualTo(true);
 
-        assertThat(StringUtils.isAlphanumericSpace("asvsdfSDF  "), is(true));
+        assertThat(StringUtils.isAlphanumericSpace("asvsdfSDF  ")).isEqualTo(true);
 
-        assertThat(StringUtils.isAlphanumericSpace("asvsdfSDF \t "), is(false));
+        assertThat(StringUtils.isAlphanumericSpace("asvsdfSDF \t ")).isEqualTo(false);
 
-        assertThat(StringUtils.isAlphanumericSpace("435afsafd3!"), is(false));
+        assertThat(StringUtils.isAlphanumericSpace("435afsafd3!")).isEqualTo(false);
 
-        assertThat(StringUtils.isAlphanumericSpace("435afsafd3"), is(true));
+        assertThat(StringUtils.isAlphanumericSpace("435afsafd3")).isEqualTo(true);
 
-        assertThat(StringUtils.isAlphanumericSpace("435 "), is(true));
+        assertThat(StringUtils.isAlphanumericSpace("435 ")).isEqualTo(true);
 
-        assertThat(StringUtils.isAlphanumericSpace("435"), is(true));
+        assertThat(StringUtils.isAlphanumericSpace("435")).isEqualTo(true);
     }
 
     @Test
-    public void testIsBlank() {
-        assertThat(StringUtils.isBlank(null), is(true));
+    void isBlank() {
+        assertThat(StringUtils.isBlank(null)).isEqualTo(true);
 
-        assertThat(StringUtils.isBlank("xx"), is(false));
+        assertThat(StringUtils.isBlank("xx")).isEqualTo(false);
 
-        assertThat(StringUtils.isBlank("xx "), is(false));
+        assertThat(StringUtils.isBlank("xx ")).isEqualTo(false);
 
-        assertThat(StringUtils.isBlank("  "), is(true));
+        assertThat(StringUtils.isBlank("  ")).isEqualTo(true);
 
-        assertThat(StringUtils.isBlank("  \t "), is(true));
+        assertThat(StringUtils.isBlank("  \t ")).isEqualTo(true);
 
-        assertThat(StringUtils.isBlank("  \n "), is(true));
+        assertThat(StringUtils.isBlank("  \n ")).isEqualTo(true);
     }
 
     @Test
-    public void testEmpty() {
-        assertThat(StringUtils.isEmpty(null), is(true));
+    void empty() {
+        assertThat(StringUtils.isEmpty(null)).isEqualTo(true);
 
-        assertThat(StringUtils.isEmpty("xx"), is(false));
+        assertThat(StringUtils.isEmpty("xx")).isEqualTo(false);
 
-        assertThat(StringUtils.isEmpty("xx "), is(false));
+        assertThat(StringUtils.isEmpty("xx ")).isEqualTo(false);
 
-        assertThat(StringUtils.isEmpty("  "), is(true));
+        assertThat(StringUtils.isEmpty("  ")).isEqualTo(true);
 
-        assertThat(StringUtils.isEmpty("  \t "), is(true));
+        assertThat(StringUtils.isEmpty("  \t ")).isEqualTo(true);
 
-        assertThat(StringUtils.isEmpty("  \n "), is(true));
+        assertThat(StringUtils.isEmpty("  \n ")).isEqualTo(true);
     }
 
     @Test
-    public void testNotBlank() {
-        assertThat(StringUtils.isNotBlank(null), is(false));
+    void notBlank() {
+        assertThat(StringUtils.isNotBlank(null)).isEqualTo(false);
 
-        assertThat(StringUtils.isNotBlank("xx"), is(true));
+        assertThat(StringUtils.isNotBlank("xx")).isEqualTo(true);
 
-        assertThat(StringUtils.isNotBlank("xx "), is(true));
+        assertThat(StringUtils.isNotBlank("xx ")).isEqualTo(true);
 
-        assertThat(StringUtils.isNotBlank("  "), is(false));
+        assertThat(StringUtils.isNotBlank("  ")).isEqualTo(false);
 
-        assertThat(StringUtils.isNotBlank("  \t "), is(false));
+        assertThat(StringUtils.isNotBlank("  \t ")).isEqualTo(false);
 
-        assertThat(StringUtils.isNotBlank("  \n "), is(false));
+        assertThat(StringUtils.isNotBlank("  \n ")).isEqualTo(false);
     }
 
     @Test
-    public void testNotEmpty() {
-        assertThat(StringUtils.isNotEmpty(null), is(false));
+    void notEmpty() {
+        assertThat(StringUtils.isNotEmpty(null)).isEqualTo(false);
 
-        assertThat(StringUtils.isNotEmpty("xx"), is(true));
+        assertThat(StringUtils.isNotEmpty("xx")).isEqualTo(true);
 
-        assertThat(StringUtils.isNotEmpty("xx "), is(true));
+        assertThat(StringUtils.isNotEmpty("xx ")).isEqualTo(true);
 
-        assertThat(StringUtils.isNotEmpty("  "), is(true));
+        assertThat(StringUtils.isNotEmpty("  ")).isEqualTo(true);
 
-        assertThat(StringUtils.isNotEmpty(""), is(false));
+        assertThat(StringUtils.isNotEmpty("")).isEqualTo(false);
 
-        assertThat(StringUtils.isNotEmpty("  \t "), is(true));
+        assertThat(StringUtils.isNotEmpty("  \t ")).isEqualTo(true);
 
-        assertThat(StringUtils.isNotEmpty("  \n "), is(true));
+        assertThat(StringUtils.isNotEmpty("  \n ")).isEqualTo(true);
     }
 
     @Test
-    public void testIsNumeric() {
-        assertThat(StringUtils.isNumeric(null), is(false));
+    void isNumeric() {
+        assertThat(StringUtils.isNumeric(null)).isEqualTo(false);
 
-        assertThat(StringUtils.isNumeric("2"), is(true));
+        assertThat(StringUtils.isNumeric("2")).isEqualTo(true);
 
-        assertThat(StringUtils.isNumeric("asvsdfSDF"), is(false));
+        assertThat(StringUtils.isNumeric("asvsdfSDF")).isEqualTo(false);
 
-        assertThat(StringUtils.isNumeric("asvsdfSDF  "), is(false));
+        assertThat(StringUtils.isNumeric("asvsdfSDF  ")).isEqualTo(false);
 
-        assertThat(StringUtils.isNumeric("asvsdfSDF \t "), is(false));
+        assertThat(StringUtils.isNumeric("asvsdfSDF \t ")).isEqualTo(false);
 
-        assertThat(StringUtils.isNumeric("435afsafd3!"), is(false));
+        assertThat(StringUtils.isNumeric("435afsafd3!")).isEqualTo(false);
 
-        assertThat(StringUtils.isNumeric("435afsafd3"), is(false));
+        assertThat(StringUtils.isNumeric("435afsafd3")).isEqualTo(false);
 
-        assertThat(StringUtils.isNumeric("435 "), is(false));
+        assertThat(StringUtils.isNumeric("435 ")).isEqualTo(false);
 
-        assertThat(StringUtils.isNumeric("435"), is(true));
+        assertThat(StringUtils.isNumeric("435")).isEqualTo(true);
     }
 
     @Test
-    public void testIsWhitespace() {
-        assertThat(StringUtils.isWhitespace(null), is(false));
+    void isWhitespace() {
+        assertThat(StringUtils.isWhitespace(null)).isEqualTo(false);
 
-        assertThat(StringUtils.isWhitespace("xx"), is(false));
+        assertThat(StringUtils.isWhitespace("xx")).isEqualTo(false);
 
-        assertThat(StringUtils.isWhitespace("xx "), is(false));
+        assertThat(StringUtils.isWhitespace("xx ")).isEqualTo(false);
 
-        assertThat(StringUtils.isWhitespace("  "), is(true));
+        assertThat(StringUtils.isWhitespace("  ")).isEqualTo(true);
 
-        assertThat(StringUtils.isWhitespace(""), is(true));
+        assertThat(StringUtils.isWhitespace("")).isEqualTo(true);
 
-        assertThat(StringUtils.isWhitespace("  \t "), is(true));
+        assertThat(StringUtils.isWhitespace("  \t ")).isEqualTo(true);
 
-        assertThat(StringUtils.isWhitespace("  \n "), is(true));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testJoin_Array_NPE() {
-        StringUtils.join((Object[]) null, null);
+        assertThat(StringUtils.isWhitespace("  \n ")).isEqualTo(true);
     }
 
     @Test
-    public void testJoin_Array() {
-        assertThat(StringUtils.join(new Object[0], null), is(""));
-
-        assertThat(StringUtils.join(new Object[] {"a", "b", "c"}, null), is("abc"));
-
-        assertThat(StringUtils.join(new Object[] {"a", "b", "c"}, "__"), is("a__b__c"));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testJoin_Iterator_NPE() {
-        StringUtils.join((Iterator<?>) null, null);
+    void join_Array_NPE() {
+        assertThrows(NullPointerException.class, () -> StringUtils.join((Object[]) null, null));
     }
 
     @Test
-    public void testJoin_Iterator() {
+    void join_Array() {
+        assertThat(StringUtils.join(new Object[0], null)).isEqualTo("");
+
+        assertThat(StringUtils.join(new Object[] {"a", "b", "c"}, null)).isEqualTo("abc");
+
+        assertThat(StringUtils.join(new Object[] {"a", "b", "c"}, "__")).isEqualTo("a__b__c");
+    }
+
+    @Test
+    void join_Iterator_NPE() {
+        assertThrows(NullPointerException.class, () -> StringUtils.join((Iterator<?>) null, null));
+    }
+
+    @Test
+    void join_Iterator() {
         ArrayList<String> list = new ArrayList<>();
 
-        assertThat(StringUtils.join(list.iterator(), null), is(""));
+        assertThat(StringUtils.join(list.iterator(), null)).isEqualTo("");
 
         list.add("a");
         list.add("b");
         list.add("c");
 
-        assertThat(StringUtils.join(list.iterator(), null), is("abc"));
+        assertThat(StringUtils.join(list.iterator(), null)).isEqualTo("abc");
 
-        assertThat(StringUtils.join(list.iterator(), "__"), is("a__b__c"));
+        assertThat(StringUtils.join(list.iterator(), "__")).isEqualTo("a__b__c");
     }
 
     @Test
-    public void testLastIndexOfAny() {
-        assertThat(StringUtils.lastIndexOfAny(null, null), is(-1));
+    void lastIndexOfAny() {
+        assertThat(StringUtils.lastIndexOfAny(null, null)).isEqualTo(-1);
 
-        assertThat(StringUtils.lastIndexOfAny("dings", null), is(-1));
+        assertThat(StringUtils.lastIndexOfAny("dings", null)).isEqualTo(-1);
 
-        assertThat(StringUtils.lastIndexOfAny("dings bums boms", new String[] {"ms", " b"}), is(13));
+        assertThat(StringUtils.lastIndexOfAny("dings bums boms", "ms", " b")).isEqualTo(13);
 
-        assertThat(StringUtils.lastIndexOfAny("dings bums boms", new String[] {"nix", "da"}), is(-1));
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testLeft_IAE() {
-        StringUtils.left(null, -1);
+        assertThat(StringUtils.lastIndexOfAny("dings bums boms", "nix", "da")).isEqualTo(-1);
     }
 
     @Test
-    public void testLeft() {
-        assertThat(StringUtils.left(null, 4), nullValue());
-
-        assertThat(StringUtils.left("dingsbums", 4), is("ding"));
-
-        assertThat(StringUtils.left("dingsbums", 40), is("dingsbums"));
-
-        assertThat(StringUtils.left("dingsbums", 0), is(""));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testLeftPad1_NPE() {
-        StringUtils.leftPad(null, 0);
+    void left_IAE() {
+        assertThrows(IllegalArgumentException.class, () -> StringUtils.left(null, -1));
     }
 
     @Test
-    public void testLeftPad1() {
-        assertThat(StringUtils.leftPad("dings", 0), is("dings"));
+    void left() {
+        assertThat(StringUtils.left(null, 4)).isNull();
 
-        assertThat(StringUtils.leftPad("dings", 2), is("dings"));
+        assertThat(StringUtils.left("dingsbums", 4)).isEqualTo("ding");
 
-        assertThat(StringUtils.leftPad("dings", 10), is("     dings"));
-    }
+        assertThat(StringUtils.left("dingsbums", 40)).isEqualTo("dingsbums");
 
-    @Test(expected = NullPointerException.class)
-    public void testLeftPad2_NPE1() {
-        StringUtils.leftPad(null, 0, null);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testLeftPad2_NPE2() {
-        StringUtils.leftPad("dings", 0, null);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testLeftPad2_NPE3() {
-        StringUtils.leftPad(null, 0, "*");
+        assertThat(StringUtils.left("dingsbums", 0)).isEqualTo("");
     }
 
     @Test
-    public void testLeftPad2() {
-        assertThat(StringUtils.leftPad("dings", 0, "*"), is("dings"));
-
-        assertThat(StringUtils.leftPad("dings", 2, "*"), is("dings"));
-
-        assertThat(StringUtils.leftPad("dings", 10, "*"), is("*****dings"));
+    void leftPad1_NPE() {
+        assertThrows(NullPointerException.class, () -> StringUtils.leftPad(null, 0));
     }
 
     @Test
-    public void testLowerCase() {
-        assertThat(StringUtils.lowerCase(null), nullValue());
+    void leftPad1() {
+        assertThat(StringUtils.leftPad("dings", 0)).isEqualTo("dings");
 
-        assertThat(StringUtils.lowerCase("dinGSbuMS"), is("dingsbums"));
+        assertThat(StringUtils.leftPad("dings", 2)).isEqualTo("dings");
 
-        assertThat(StringUtils.lowerCase(""), is(""));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testLowerCaseFirstLetter_NPE() {
-        StringUtils.lowercaseFirstLetter(null);
+        assertThat(StringUtils.leftPad("dings", 10)).isEqualTo("     dings");
     }
 
     @Test
-    public void testLowerCaseFirstLetter() {
-        assertThat(StringUtils.lowercaseFirstLetter("Dings Bums"), is("dings Bums"));
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testMid_NegativeLen() {
-        StringUtils.mid(null, 0, -2);
-    }
-
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void testMid_WrongPos() {
-        StringUtils.mid(null, -2, 3);
+    void leftPad2_NPE1() {
+        assertThrows(NullPointerException.class, () -> StringUtils.leftPad(null, 0, null));
     }
 
     @Test
-    public void testMid() {
-        assertThat(StringUtils.mid(null, 0, 0), nullValue());
-
-        assertThat(StringUtils.mid("dings bums", 0, 0), is(""));
-
-        assertThat(StringUtils.mid("dings bums", 3, 4), is("gs b"));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testOverlayString_NPE1() {
-        StringUtils.overlayString(null, null, 0, 0);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testOverlayString_NPE2() {
-        StringUtils.overlayString("dings", null, 0, 0);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testOverlayString_NPE3() {
-        StringUtils.overlayString(null, "bums", 0, 0);
+    void leftPad2_NPE2() {
+        assertThrows(NullPointerException.class, () -> StringUtils.leftPad("dings", 0, null));
     }
 
     @Test
-    public void testOverlayString() {
-        assertThat(StringUtils.overlayString("dings", "bums", 0, 0), is("bumsdings"));
-
-        assertThat(StringUtils.overlayString("dings", "bums", 2, 4), is("dibumss"));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testPrechomp_NPE1() {
-        StringUtils.prechomp(null, null);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testPrechomp_NPE2() {
-        StringUtils.prechomp("dings", null);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testPrechomp_NPE3() {
-        StringUtils.prechomp(null, "bums");
+    void leftPad2_NPE3() {
+        assertThrows(NullPointerException.class, () -> StringUtils.leftPad(null, 0, "*"));
     }
 
     @Test
-    public void testPrechomp() {
-        assertThat(StringUtils.prechomp("dings bums", " "), is("bums"));
+    void leftPad2() {
+        assertThat(StringUtils.leftPad("dings", 0, "*")).isEqualTo("dings");
 
-        assertThat(StringUtils.prechomp("dings bums", "nix"), is("dings bums"));
+        assertThat(StringUtils.leftPad("dings", 2, "*")).isEqualTo("dings");
+
+        assertThat(StringUtils.leftPad("dings", 10, "*")).isEqualTo("*****dings");
     }
 
     @Test
-    public void testQuoteAndEscape1() {
-        assertThat(StringUtils.quoteAndEscape(null, '+'), nullValue());
+    void lowerCase() {
+        assertThat(StringUtils.lowerCase(null)).isNull();
 
-        assertThat(StringUtils.quoteAndEscape("", '+'), is(""));
+        assertThat(StringUtils.lowerCase("dinGSbuMS")).isEqualTo("dingsbums");
 
-        assertThat(StringUtils.quoteAndEscape("abc", '"'), is("abc"));
-
-        assertThat(StringUtils.quoteAndEscape("a\"bc", '"'), is("\"a\\\"bc\""));
-
-        assertThat(StringUtils.quoteAndEscape("a\'bc", '\''), is("\'a\\'bc\'"));
-
-        assertThat(StringUtils.quoteAndEscape("a\"bc", '\''), is("a\"bc"));
+        assertThat(StringUtils.lowerCase("")).isEqualTo("");
     }
 
     @Test
-    public void testQuoteAndEscape2() {
-        assertThat(StringUtils.quoteAndEscape(null, '+', new char[] {'"'}), nullValue());
-
-        assertThat(StringUtils.quoteAndEscape("", '+', new char[] {'"'}), is(""));
-
-        assertThat(StringUtils.quoteAndEscape("abc", '"', new char[] {'"'}), is("abc"));
-
-        assertThat(StringUtils.quoteAndEscape("a\"bc", '"', new char[] {'"'}), is("\"a\\\"bc\""));
-
-        assertThat(StringUtils.quoteAndEscape("a\'bc", '\'', new char[] {'"'}), is("\'a\\'bc\'"));
-
-        assertThat(StringUtils.quoteAndEscape("a\"bc", '\'', new char[] {'\''}), is("a\"bc"));
-
-        assertThat(StringUtils.quoteAndEscape("a\"bc", '\'', new char[] {'\'', '"'}), is("\'a\"bc\'"));
+    void lowerCaseFirstLetter_NPE() {
+        assertThrows(NullPointerException.class, () -> StringUtils.lowercaseFirstLetter(null));
     }
 
     @Test
-    public void testQuoteAndEscape3() {
-        assertThat(StringUtils.quoteAndEscape(null, '+', new char[] {'"'}, '\\', false), nullValue());
+    void lowerCaseFirstLetter() {
+        assertThat(StringUtils.lowercaseFirstLetter("Dings Bums")).isEqualTo("dings Bums");
+    }
 
-        assertThat(StringUtils.quoteAndEscape("", '+', new char[] {'"'}, '\\', false), is(""));
+    @Test
+    void mid_NegativeLen() {
+        assertThrows(IllegalArgumentException.class, () -> StringUtils.mid(null, 0, -2));
+    }
 
-        assertThat(StringUtils.quoteAndEscape("abc", '"', new char[] {'"'}, '\\', false), is("abc"));
+    @Test
+    void mid_WrongPos() {
+        assertThrows(IndexOutOfBoundsException.class, () -> StringUtils.mid(null, -2, 3));
+    }
 
-        assertThat(StringUtils.quoteAndEscape("a\"bc", '"', new char[] {'"'}, '\\', false), is("\"a\\\"bc\""));
+    @Test
+    void mid() {
+        assertThat(StringUtils.mid(null, 0, 0)).isNull();
 
-        assertThat(StringUtils.quoteAndEscape("a\'bc", '\'', new char[] {'"'}, '\\', false), is("a\'bc"));
+        assertThat(StringUtils.mid("dings bums", 0, 0)).isEqualTo("");
 
-        assertThat(StringUtils.quoteAndEscape("a\"bc", '\'', new char[] {'\''}, '\\', false), is("a\"bc"));
+        assertThat(StringUtils.mid("dings bums", 3, 4)).isEqualTo("gs b");
+    }
 
-        assertThat(StringUtils.quoteAndEscape("a\"bc", '\'', new char[] {'\'', '"'}, '\\', false), is("\'a\\\"bc\'"));
+    @Test
+    void overlayString_NPE1() {
+        assertThrows(NullPointerException.class, () -> StringUtils.overlayString(null, null, 0, 0));
+    }
+
+    @Test
+    void overlayString_NPE2() {
+        assertThrows(NullPointerException.class, () -> StringUtils.overlayString("dings", null, 0, 0));
+    }
+
+    @Test
+    void overlayString_NPE3() {
+        assertThrows(NullPointerException.class, () -> StringUtils.overlayString(null, "bums", 0, 0));
+    }
+
+    @Test
+    void overlayString() {
+        assertThat(StringUtils.overlayString("dings", "bums", 0, 0)).isEqualTo("bumsdings");
+
+        assertThat(StringUtils.overlayString("dings", "bums", 2, 4)).isEqualTo("dibumss");
+    }
+
+    @Test
+    void prechomp_NPE1() {
+        assertThrows(NullPointerException.class, () -> StringUtils.prechomp(null, null));
+    }
+
+    @Test
+    void prechomp_NPE2() {
+        assertThrows(NullPointerException.class, () -> StringUtils.prechomp("dings", null));
+    }
+
+    @Test
+    void prechomp_NPE3() {
+        assertThrows(NullPointerException.class, () -> StringUtils.prechomp(null, "bums"));
+    }
+
+    @Test
+    void prechomp() {
+        assertThat(StringUtils.prechomp("dings bums", " ")).isEqualTo("bums");
+
+        assertThat(StringUtils.prechomp("dings bums", "nix")).isEqualTo("dings bums");
+    }
+
+    @Test
+    void quoteAndEscape1() {
+        assertThat(StringUtils.quoteAndEscape(null, '+')).isNull();
+
+        assertThat(StringUtils.quoteAndEscape("", '+')).isEqualTo("");
+
+        assertThat(StringUtils.quoteAndEscape("abc", '"')).isEqualTo("abc");
+
+        assertThat(StringUtils.quoteAndEscape("a\"bc", '"')).isEqualTo("\"a\\\"bc\"");
+
+        assertThat(StringUtils.quoteAndEscape("a'bc", '\'')).isEqualTo("'a\\'bc'");
+
+        assertThat(StringUtils.quoteAndEscape("a\"bc", '\'')).isEqualTo("a\"bc");
+    }
+
+    @Test
+    void quoteAndEscape2() {
+        assertThat(StringUtils.quoteAndEscape(null, '+', new char[] {'"'})).isNull();
+
+        assertThat(StringUtils.quoteAndEscape("", '+', new char[] {'"'})).isEqualTo("");
+
+        assertThat(StringUtils.quoteAndEscape("abc", '"', new char[] {'"'})).isEqualTo("abc");
+
+        assertThat(StringUtils.quoteAndEscape("a\"bc", '"', new char[] {'"'})).isEqualTo("\"a\\\"bc\"");
+
+        assertThat(StringUtils.quoteAndEscape("a'bc", '\'', new char[] {'"'})).isEqualTo("'a\\'bc'");
+
+        assertThat(StringUtils.quoteAndEscape("a\"bc", '\'', new char[] {'\''})).isEqualTo("a\"bc");
+
+        assertThat(StringUtils.quoteAndEscape("a\"bc", '\'', new char[] {'\'', '"'}))
+                .isEqualTo("'a\"bc'");
+    }
+
+    @Test
+    void quoteAndEscape3() {
+        assertThat(StringUtils.quoteAndEscape(null, '+', new char[] {'"'}, '\\', false))
+                .isNull();
+
+        assertThat(StringUtils.quoteAndEscape("", '+', new char[] {'"'}, '\\', false))
+                .isEqualTo("");
+
+        assertThat(StringUtils.quoteAndEscape("abc", '"', new char[] {'"'}, '\\', false))
+                .isEqualTo("abc");
+
+        assertThat(StringUtils.quoteAndEscape("a\"bc", '"', new char[] {'"'}, '\\', false))
+                .isEqualTo("\"a\\\"bc\"");
+
+        assertThat(StringUtils.quoteAndEscape("a'bc", '\'', new char[] {'"'}, '\\', false))
+                .isEqualTo("a'bc");
+
+        assertThat(StringUtils.quoteAndEscape("a\"bc", '\'', new char[] {'\''}, '\\', false))
+                .isEqualTo("a\"bc");
+
+        assertThat(StringUtils.quoteAndEscape("a\"bc", '\'', new char[] {'\'', '"'}, '\\', false))
+                .isEqualTo("'a\\\"bc'");
 
         // with force flag
-        assertThat(StringUtils.quoteAndEscape(null, '+', new char[] {'"'}, '\\', true), nullValue());
+        assertThat(StringUtils.quoteAndEscape(null, '+', new char[] {'"'}, '\\', true))
+                .isNull();
 
-        assertThat(StringUtils.quoteAndEscape("", '+', new char[] {'"'}, '\\', true), is("++"));
+        assertThat(StringUtils.quoteAndEscape("", '+', new char[] {'"'}, '\\', true))
+                .isEqualTo("++");
 
-        assertThat(StringUtils.quoteAndEscape("abc", '"', new char[] {'"'}, '\\', true), is("\"abc\""));
+        assertThat(StringUtils.quoteAndEscape("abc", '"', new char[] {'"'}, '\\', true))
+                .isEqualTo("\"abc\"");
 
-        assertThat(StringUtils.quoteAndEscape("a\"bc", '"', new char[] {'"'}, '\\', true), is("\"a\\\"bc\""));
+        assertThat(StringUtils.quoteAndEscape("a\"bc", '"', new char[] {'"'}, '\\', true))
+                .isEqualTo("\"a\\\"bc\"");
 
-        assertThat(StringUtils.quoteAndEscape("a\'bc", '\'', new char[] {'"'}, '\\', true), is("\'a\'bc\'"));
+        assertThat(StringUtils.quoteAndEscape("a'bc", '\'', new char[] {'"'}, '\\', true))
+                .isEqualTo("'a'bc'");
 
-        assertThat(StringUtils.quoteAndEscape("a\"bc", '\'', new char[] {'\''}, '\\', true), is("\'a\"bc\'"));
+        assertThat(StringUtils.quoteAndEscape("a\"bc", '\'', new char[] {'\''}, '\\', true))
+                .isEqualTo("'a\"bc'");
 
-        assertThat(StringUtils.quoteAndEscape("a\"bc", '\'', new char[] {'\'', '"'}, '\\', true), is("\'a\\\"bc\'"));
+        assertThat(StringUtils.quoteAndEscape("a\"bc", '\'', new char[] {'\'', '"'}, '\\', true))
+                .isEqualTo("'a\\\"bc'");
     }
 
     @Test
-    public void testQuoteAndEscape4() {
-        assertThat(StringUtils.quoteAndEscape(null, '+', new char[] {'"'}, new char[] {'"'}, '\\', false), nullValue());
+    void quoteAndEscape4() {
+        assertThat(StringUtils.quoteAndEscape(null, '+', new char[] {'"'}, new char[] {'"'}, '\\', false))
+                .isNull();
 
-        assertThat(StringUtils.quoteAndEscape("", '+', new char[] {'"'}, new char[] {'"'}, '\\', false), is(""));
+        assertThat(StringUtils.quoteAndEscape("", '+', new char[] {'"'}, new char[] {'"'}, '\\', false))
+                .isEqualTo("");
 
-        assertThat(StringUtils.quoteAndEscape("abc", '"', new char[] {'"'}, new char[] {'"'}, '\\', false), is("abc"));
+        assertThat(StringUtils.quoteAndEscape("abc", '"', new char[] {'"'}, new char[] {'"'}, '\\', false))
+                .isEqualTo("abc");
 
-        assertThat(
-                StringUtils.quoteAndEscape("a\"bc", '"', new char[] {'"'}, new char[] {'"'}, '\\', false),
-                is("\"a\\\"bc\""));
+        assertThat(StringUtils.quoteAndEscape("a\"bc", '"', new char[] {'"'}, new char[] {'"'}, '\\', false))
+                .isEqualTo("\"a\\\"bc\"");
 
-        assertThat(
-                StringUtils.quoteAndEscape("a\'bc", '\'', new char[] {'"'}, new char[] {'"'}, '\\', false),
-                is("a\'bc"));
+        assertThat(StringUtils.quoteAndEscape("a'bc", '\'', new char[] {'"'}, new char[] {'"'}, '\\', false))
+                .isEqualTo("a'bc");
 
-        assertThat(
-                StringUtils.quoteAndEscape("a\"bc", '\'', new char[] {'\''}, new char[] {'"'}, '\\', false),
-                is("\'a\"bc\'"));
+        assertThat(StringUtils.quoteAndEscape("a\"bc", '\'', new char[] {'\''}, new char[] {'"'}, '\\', false))
+                .isEqualTo("'a\"bc'");
 
-        assertThat(
-                StringUtils.quoteAndEscape("\'a\"bc\'", '\'', new char[] {'\'', '"'}, new char[] {'"'}, '\\', false),
-                is("\'a\"bc\'"));
+        assertThat(StringUtils.quoteAndEscape("'a\"bc'", '\'', new char[] {'\'', '"'}, new char[] {'"'}, '\\', false))
+                .isEqualTo("'a\"bc'");
 
         // with force flag
-        assertThat(StringUtils.quoteAndEscape(null, '+', new char[] {'"'}, new char[] {'"'}, '\\', true), nullValue());
+        assertThat(StringUtils.quoteAndEscape(null, '+', new char[] {'"'}, new char[] {'"'}, '\\', true))
+                .isNull();
 
-        assertThat(StringUtils.quoteAndEscape("", '+', new char[] {'"'}, new char[] {'"'}, '\\', true), is("++"));
+        assertThat(StringUtils.quoteAndEscape("", '+', new char[] {'"'}, new char[] {'"'}, '\\', true))
+                .isEqualTo("++");
 
-        assertThat(
-                StringUtils.quoteAndEscape("abc", '"', new char[] {'"'}, new char[] {'"'}, '\\', true), is("\"abc\""));
+        assertThat(StringUtils.quoteAndEscape("abc", '"', new char[] {'"'}, new char[] {'"'}, '\\', true))
+                .isEqualTo("\"abc\"");
 
-        assertThat(
-                StringUtils.quoteAndEscape("a\"bc", '"', new char[] {'"'}, new char[] {'"'}, '\\', true),
-                is("\"a\\\"bc\""));
+        assertThat(StringUtils.quoteAndEscape("a\"bc", '"', new char[] {'"'}, new char[] {'"'}, '\\', true))
+                .isEqualTo("\"a\\\"bc\"");
 
-        assertThat(
-                StringUtils.quoteAndEscape("a\'bc", '\'', new char[] {'"'}, new char[] {'"'}, '\\', true),
-                is("\'a\'bc\'"));
+        assertThat(StringUtils.quoteAndEscape("a'bc", '\'', new char[] {'"'}, new char[] {'"'}, '\\', true))
+                .isEqualTo("'a'bc'");
 
-        assertThat(
-                StringUtils.quoteAndEscape("a\"bc", '\'', new char[] {'\''}, new char[] {'"'}, '\\', true),
-                is("\'a\"bc\'"));
+        assertThat(StringUtils.quoteAndEscape("a\"bc", '\'', new char[] {'\''}, new char[] {'"'}, '\\', true))
+                .isEqualTo("'a\"bc'");
 
-        assertThat(
-                StringUtils.quoteAndEscape("a\"bc", '\'', new char[] {'\'', '"'}, new char[] {'"'}, '\\', true),
-                is("\'a\\\"bc\'"));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testRemoveAndHump_NPE1() {
-        StringUtils.removeAndHump(null, null);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testRemoveAndHump_NPE2() {
-        StringUtils.removeAndHump("dings", null);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testRemoveAndHump_NPE3() {
-        StringUtils.removeAndHump(null, "bums");
+        assertThat(StringUtils.quoteAndEscape("a\"bc", '\'', new char[] {'\'', '"'}, new char[] {'"'}, '\\', true))
+                .isEqualTo("'a\\\"bc'");
     }
 
     @Test
-    public void testRemoveAndHump() {
-        assertThat(StringUtils.removeAndHump("dings", "bums"), is("Ding"));
-
-        assertThat(StringUtils.removeAndHump("this-is-it", "-"), is("ThisIsIt"));
-
-        assertThat(StringUtils.removeAndHump("THIS-IS-IT", "-"), is("THISISIT"));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testRemoveDuplicateWhitespace_NPE() {
-        StringUtils.removeDuplicateWhitespace(null);
+    void removeAndHump_NPE1() {
+        assertThrows(NullPointerException.class, () -> StringUtils.removeAndHump(null, null));
     }
 
     @Test
-    public void testRemoveDuplicateWhitespace() {
-        assertThat(StringUtils.removeDuplicateWhitespace("dings"), is("dings"));
-
-        assertThat(StringUtils.removeDuplicateWhitespace("dings bums"), is("dings bums"));
-
-        assertThat(StringUtils.removeDuplicateWhitespace("dings  bums"), is("dings bums"));
-
-        assertThat(StringUtils.removeDuplicateWhitespace("dings \t bums"), is("dings bums"));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testRepeat_NPE() {
-        StringUtils.repeat(null, 0);
-    }
-
-    @Test(expected = NegativeArraySizeException.class)
-    public void testRepeat_NegativeAmount() {
-        StringUtils.repeat("dings", -1);
+    void removeAndHump_NPE2() {
+        assertThrows(NullPointerException.class, () -> StringUtils.removeAndHump("dings", null));
     }
 
     @Test
-    public void testRepeat() {
-        assertThat(StringUtils.repeat("dings", 0), is(""));
-
-        assertThat(StringUtils.repeat("dings", 1), is("dings"));
-
-        assertThat(StringUtils.repeat("dings", 3), is("dingsdingsdings"));
+    void removeAndHump_NPE3() {
+        assertThrows(NullPointerException.class, () -> StringUtils.removeAndHump(null, "bums"));
     }
 
     @Test
-    public void testReplace_char() {
-        assertThat(StringUtils.replace(null, 'i', 'o'), nullValue());
+    void removeAndHump() {
+        assertThat(StringUtils.removeAndHump("dings", "bums")).isEqualTo("Ding");
 
-        assertThat(StringUtils.replace("dings", 'i', 'o'), is("dongs"));
+        assertThat(StringUtils.removeAndHump("this-is-it", "-")).isEqualTo("ThisIsIt");
 
-        assertThat(StringUtils.replace("dingsbims", 'i', 'o'), is("dongsboms"));
-
-        assertThat(StringUtils.replace("dings", 'x', 'o'), is("dings"));
+        assertThat(StringUtils.removeAndHump("THIS-IS-IT", "-")).isEqualTo("THISISIT");
     }
 
     @Test
-    public void testReplace2_char_max() {
-        assertThat(StringUtils.replace(null, 'i', 'o', 0), nullValue());
-
-        assertThat(StringUtils.replace("dingsibumsi", 'i', 'o', 3), is("dongsobumso"));
-
-        assertThat(StringUtils.replace("dingsibumsi", 'i', 'o', 2), is("dongsobumsi"));
-
-        assertThat(StringUtils.replace("dingsibumsi", 'i', 'o', 0), is("dongsobumso"));
-
-        assertThat(StringUtils.replace("dingsibumsi", 'i', 'o', -2), is("dongsobumso"));
-
-        assertThat(StringUtils.replace("dings", 'x', 'o', 2), is("dings"));
+    void removeDuplicateWhitespace_NPE() {
+        assertThrows(NullPointerException.class, () -> StringUtils.removeDuplicateWhitespace(null));
     }
 
     @Test
-    public void testReplace_string() {
-        assertThat(StringUtils.replace(null, "in", "ox"), nullValue());
+    void removeDuplicateWhitespace() {
+        assertThat(StringUtils.removeDuplicateWhitespace("dings")).isEqualTo("dings");
 
-        assertThat(StringUtils.replace("dings", "in", "ox"), is("doxgs"));
+        assertThat(StringUtils.removeDuplicateWhitespace("dings bums")).isEqualTo("dings bums");
 
-        assertThat(StringUtils.replace("dingsbins", "in", "ox"), is("doxgsboxs"));
+        assertThat(StringUtils.removeDuplicateWhitespace("dings  bums")).isEqualTo("dings bums");
 
-        assertThat(StringUtils.replace("dings", "nin", "ox"), is("dings"));
+        assertThat(StringUtils.removeDuplicateWhitespace("dings \t bums")).isEqualTo("dings bums");
     }
 
     @Test
-    public void testReplace2_string_max() {
-        assertThat(StringUtils.replace(null, "in", "ox", 0), nullValue());
-
-        assertThat(StringUtils.replace("dingsibumsi", "si", "xo", 3), is("dingxobumxo"));
-
-        assertThat(StringUtils.replace("dingsibumsi", "si", "xo", 2), is("dingxobumxo"));
-
-        assertThat(StringUtils.replace("dingsibumsi", "si", "xo", 1), is("dingxobumsi"));
-
-        assertThat(StringUtils.replace("dingsibumsi", "si", "xo", 0), is("dingxobumxo"));
-
-        assertThat(StringUtils.replace("dingsibumsi", "si", "xo", -2), is("dingxobumxo"));
-
-        assertThat(StringUtils.replace("dings", "si", "xo", 2), is("dings"));
+    void repeat_NPE() {
+        assertThrows(NullPointerException.class, () -> StringUtils.repeat(null, 0));
     }
 
     @Test
-    public void testReplaceOnce_char() {
-        assertThat(StringUtils.replaceOnce(null, 'i', 'o'), nullValue());
-
-        assertThat(StringUtils.replaceOnce("dingsibumsi", 'i', 'o'), is("dongsibumsi"));
-
-        assertThat(StringUtils.replaceOnce("dings", 'x', 'o'), is("dings"));
+    void repeat_NegativeAmount() {
+        assertThrows(NegativeArraySizeException.class, () -> StringUtils.repeat("dings", -1));
     }
 
     @Test
-    public void testReplaceOnce_string() {
-        assertThat(StringUtils.replaceOnce(null, "in", "ox"), nullValue());
+    void repeat() {
+        assertThat(StringUtils.repeat("dings", 0)).isEqualTo("");
 
-        assertThat(StringUtils.replaceOnce("dingsibumsi", "si", "xo"), is("dingxobumsi"));
+        assertThat(StringUtils.repeat("dings", 1)).isEqualTo("dings");
 
-        assertThat(StringUtils.replaceOnce("dings", "si", "xo"), is("dings"));
+        assertThat(StringUtils.repeat("dings", 3)).isEqualTo("dingsdingsdings");
     }
 
     @Test
-    public void testReverse() {
-        assertThat(StringUtils.reverse(null), nullValue());
+    void replace_char() {
+        assertThat(StringUtils.replace(null, 'i', 'o')).isNull();
 
-        assertThat(StringUtils.reverse(""), is(""));
+        assertThat(StringUtils.replace("dings", 'i', 'o')).isEqualTo("dongs");
 
-        assertThat(StringUtils.reverse("dings"), is("sgnid"));
+        assertThat(StringUtils.replace("dingsbims", 'i', 'o')).isEqualTo("dongsboms");
 
-        assertThat(StringUtils.reverse("  dings "), is(" sgnid  "));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testReverseDelimitedString_NPE1() {
-        StringUtils.reverseDelimitedString(null, null);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testReverseDelimitedString_NPE2() {
-        StringUtils.reverseDelimitedString(null, " ");
+        assertThat(StringUtils.replace("dings", 'x', 'o')).isEqualTo("dings");
     }
 
     @Test
-    public void testReverseDelimitedString() {
-        assertThat(StringUtils.reverseDelimitedString("dings", null), is("dings"));
+    void replace2_char_max() {
+        assertThat(StringUtils.replace(null, 'i', 'o', 0)).isNull();
 
-        assertThat(StringUtils.reverseDelimitedString("", " "), is(""));
+        assertThat(StringUtils.replace("dingsibumsi", 'i', 'o', 3)).isEqualTo("dongsobumso");
 
-        assertThat(StringUtils.reverseDelimitedString("dings", " "), is("dings"));
+        assertThat(StringUtils.replace("dingsibumsi", 'i', 'o', 2)).isEqualTo("dongsobumsi");
 
-        assertThat(StringUtils.reverseDelimitedString("  dings ", " "), is("dings"));
+        assertThat(StringUtils.replace("dingsibumsi", 'i', 'o', 0)).isEqualTo("dongsobumso");
 
-        assertThat(StringUtils.reverseDelimitedString("dings bums", " "), is("bums dings"));
-    }
+        assertThat(StringUtils.replace("dingsibumsi", 'i', 'o', -2)).isEqualTo("dongsobumso");
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testRight_IAE1() {
-        StringUtils.right(null, -1);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testRight_IAE2() {
-        StringUtils.right("dings", -1);
+        assertThat(StringUtils.replace("dings", 'x', 'o', 2)).isEqualTo("dings");
     }
 
     @Test
-    public void testRight() {
-        assertThat(StringUtils.right(null, 0), nullValue());
+    void replace_string() {
+        assertThat(StringUtils.replace(null, "in", "ox")).isNull();
 
-        assertThat(StringUtils.right("dings", 0), is(""));
+        assertThat(StringUtils.replace("dings", "in", "ox")).isEqualTo("doxgs");
 
-        assertThat(StringUtils.right("dings", 3), is("ngs"));
+        assertThat(StringUtils.replace("dingsbins", "in", "ox")).isEqualTo("doxgsboxs");
 
-        assertThat(StringUtils.right("dings ", 3), is("gs "));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testRightPad1_NPE() {
-        StringUtils.rightPad(null, 0);
+        assertThat(StringUtils.replace("dings", "nin", "ox")).isEqualTo("dings");
     }
 
     @Test
-    public void testRightPad1() {
-        assertThat(StringUtils.rightPad("dings", 0), is("dings"));
+    void replace2_string_max() {
+        assertThat(StringUtils.replace(null, "in", "ox", 0)).isNull();
 
-        assertThat(StringUtils.rightPad("dings", 3), is("dings"));
+        assertThat(StringUtils.replace("dingsibumsi", "si", "xo", 3)).isEqualTo("dingxobumxo");
 
-        assertThat(StringUtils.rightPad("dings", 10), is("dings     "));
-    }
+        assertThat(StringUtils.replace("dingsibumsi", "si", "xo", 2)).isEqualTo("dingxobumxo");
 
-    @Test(expected = NullPointerException.class)
-    public void testRightPad2_NPE1() {
-        StringUtils.rightPad(null, 0, null);
-    }
+        assertThat(StringUtils.replace("dingsibumsi", "si", "xo", 1)).isEqualTo("dingxobumsi");
 
-    @Test(expected = NullPointerException.class)
-    public void testRightPad2_NPE2() {
-        StringUtils.rightPad("dings", 0, null);
-    }
+        assertThat(StringUtils.replace("dingsibumsi", "si", "xo", 0)).isEqualTo("dingxobumxo");
 
-    @Test(expected = NullPointerException.class)
-    public void testRightPad2_NPE23() {
-        StringUtils.rightPad(null, 0, "+");
+        assertThat(StringUtils.replace("dingsibumsi", "si", "xo", -2)).isEqualTo("dingxobumxo");
+
+        assertThat(StringUtils.replace("dings", "si", "xo", 2)).isEqualTo("dings");
     }
 
     @Test
-    public void testRightPad2() {
-        assertThat(StringUtils.rightPad("dings", 0, "+"), is("dings"));
+    void replaceOnce_char() {
+        assertThat(StringUtils.replaceOnce(null, 'i', 'o')).isNull();
 
-        assertThat(StringUtils.rightPad("dings", 3, "+"), is("dings"));
+        assertThat(StringUtils.replaceOnce("dingsibumsi", 'i', 'o')).isEqualTo("dongsibumsi");
 
-        assertThat(StringUtils.rightPad("dings", 10, "+"), is("dings+++++"));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testSplit1_NPE() {
-        StringUtils.split(null);
+        assertThat(StringUtils.replaceOnce("dings", 'x', 'o')).isEqualTo("dings");
     }
 
     @Test
-    public void testSplit1() {
-        assertThat(StringUtils.split("dings"), is(new String[] {"dings"}));
+    void replaceOnce_string() {
+        assertThat(StringUtils.replaceOnce(null, "in", "ox")).isNull();
 
-        assertThat(StringUtils.split("dings bums"), is(new String[] {"dings", "bums"}));
-    }
+        assertThat(StringUtils.replaceOnce("dingsibumsi", "si", "xo")).isEqualTo("dingxobumsi");
 
-    @Test(expected = NullPointerException.class)
-    public void testSplit2_NPE1() {
-        StringUtils.split(null, null);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testSplit2_NPE2() {
-        StringUtils.split(null, " ");
+        assertThat(StringUtils.replaceOnce("dings", "si", "xo")).isEqualTo("dings");
     }
 
     @Test
-    public void testSplit2() {
-        assertThat(StringUtils.split("dings", null), is(new String[] {"dings"}));
+    void reverse() {
+        assertThat(StringUtils.reverse(null)).isNull();
 
-        assertThat(StringUtils.split("dings bums", null), is(new String[] {"dings", "bums"}));
+        assertThat(StringUtils.reverse("")).isEqualTo("");
 
-        assertThat(StringUtils.split("dings", "+"), is(new String[] {"dings"}));
+        assertThat(StringUtils.reverse("dings")).isEqualTo("sgnid");
 
-        assertThat(StringUtils.split("dings+bums", "+"), is(new String[] {"dings", "bums"}));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testSplit3_NPE1() {
-        StringUtils.split(null, null, 1);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testSplit3_NPE2() {
-        StringUtils.split(null, " ", 1);
+        assertThat(StringUtils.reverse("  dings ")).isEqualTo(" sgnid  ");
     }
 
     @Test
-    public void testSplit3() {
-        assertThat(StringUtils.split("dings", null, 3), is(new String[] {"dings"}));
-
-        assertThat(StringUtils.split("dings bums", null, 3), is(new String[] {"dings", "bums"}));
-
-        assertThat(StringUtils.split("dings", "+", 3), is(new String[] {"dings"}));
-
-        assertThat(StringUtils.split("dings+bums", "+", 3), is(new String[] {"dings", "bums"}));
-
-        assertThat(StringUtils.split("dings+bums", "+", 1), is(new String[] {"dings+bums"}));
-
-        assertThat(StringUtils.split("dings+bums", "+", 0), is(new String[] {"dings", "bums"}));
-
-        assertThat(StringUtils.split("dings+bums", "+", -5), is(new String[] {"dings", "bums"}));
+    void reverseDelimitedString_NPE1() {
+        assertThrows(NullPointerException.class, () -> StringUtils.reverseDelimitedString(null, null));
     }
 
     @Test
-    public void testStrip1() {
-        assertThat(StringUtils.strip(null), nullValue());
-
-        assertThat(StringUtils.strip("dings"), is("dings"));
-
-        assertThat(StringUtils.strip("  dings \t "), is("dings"));
+    void reverseDelimitedString_NPE2() {
+        assertThrows(NullPointerException.class, () -> StringUtils.reverseDelimitedString(null, " "));
     }
 
     @Test
-    public void testStrip2() {
-        assertThat(StringUtils.strip(null, " "), nullValue());
+    void reverseDelimitedString() {
+        assertThat(StringUtils.reverseDelimitedString("dings", null)).isEqualTo("dings");
 
-        assertThat(StringUtils.strip(null, null), nullValue());
+        assertThat(StringUtils.reverseDelimitedString("", " ")).isEqualTo("");
 
-        assertThat(StringUtils.strip("dings", " "), is("dings"));
+        assertThat(StringUtils.reverseDelimitedString("dings", " ")).isEqualTo("dings");
 
-        assertThat(StringUtils.strip("  dings \t ", " "), is("dings \t"));
+        assertThat(StringUtils.reverseDelimitedString("  dings ", " ")).isEqualTo("dings");
+
+        assertThat(StringUtils.reverseDelimitedString("dings bums", " ")).isEqualTo("bums dings");
     }
 
     @Test
-    public void testStripAll1() {
-        assertThat(StringUtils.stripAll(null), nullValue());
-
-        assertThat(StringUtils.stripAll(new String[] {}), is(new String[] {}));
-
-        assertThat(StringUtils.stripAll(new String[] {"dings"}), is(new String[] {"dings"}));
-
-        assertThat(StringUtils.stripAll(new String[] {" dings ", "  bums \t  "}), is(new String[] {"dings", "bums"}));
+    void right_IAE1() {
+        assertThrows(IllegalArgumentException.class, () -> StringUtils.right(null, -1));
     }
 
     @Test
-    public void testStripAll2() {
-        assertThat(StringUtils.stripAll(null, " "), nullValue());
-
-        assertThat(StringUtils.stripAll(new String[] {}, " "), is(new String[] {}));
-
-        assertThat(StringUtils.stripAll(new String[] {"dings"}, " "), is(new String[] {"dings"}));
-
-        assertThat(
-                StringUtils.stripAll(new String[] {" dings ", "  bums \t  "}, " "),
-                is(new String[] {"dings", "bums \t"}));
+    void right_IAE2() {
+        assertThrows(IllegalArgumentException.class, () -> StringUtils.right("dings", -1));
     }
 
     @Test
-    public void testStripEnd() {
-        assertThat(StringUtils.stripEnd(null, null), nullValue());
+    void right() {
+        assertThat(StringUtils.right(null, 0)).isNull();
 
-        assertThat(StringUtils.stripEnd("dings", null), is("dings"));
+        assertThat(StringUtils.right("dings", 0)).isEqualTo("");
 
-        assertThat(StringUtils.stripEnd("  dings \t ", null), is("  dings"));
+        assertThat(StringUtils.right("dings", 3)).isEqualTo("ngs");
 
-        assertThat(StringUtils.stripEnd(null, " "), nullValue());
-
-        assertThat(StringUtils.stripEnd("dings", " "), is("dings"));
-
-        assertThat(StringUtils.stripEnd("  dings \t ", " "), is("  dings \t"));
+        assertThat(StringUtils.right("dings ", 3)).isEqualTo("gs ");
     }
 
     @Test
-    public void testStripStart() {
-        assertThat(StringUtils.stripStart(null, null), nullValue());
-
-        assertThat(StringUtils.stripStart("dings", null), is("dings"));
-
-        assertThat(StringUtils.stripStart("  dings \t ", null), is("dings \t "));
-
-        assertThat(StringUtils.stripStart(null, " "), nullValue());
-
-        assertThat(StringUtils.stripStart("dings", " "), is("dings"));
-
-        assertThat(StringUtils.stripStart("  \t dings \t ", " "), is("\t dings \t "));
+    void rightPad1_NPE() {
+        assertThrows(NullPointerException.class, () -> StringUtils.rightPad(null, 0));
     }
 
     @Test
-    public void testSubstring1() {
-        assertThat(StringUtils.substring(null, 0), nullValue());
-        assertThat(StringUtils.substring(null, -3), nullValue());
+    void rightPad1() {
+        assertThat(StringUtils.rightPad("dings", 0)).isEqualTo("dings");
 
-        assertThat(StringUtils.substring("dings", 2), is("ngs"));
+        assertThat(StringUtils.rightPad("dings", 3)).isEqualTo("dings");
 
-        assertThat(StringUtils.substring("dings", -2), is("gs"));
-
-        assertThat(StringUtils.substring("dings", 20), is(""));
+        assertThat(StringUtils.rightPad("dings", 10)).isEqualTo("dings     ");
     }
 
     @Test
-    public void testSubstring2() {
-        assertThat(StringUtils.substring(null, 0, 2), nullValue());
-
-        assertThat(StringUtils.substring(null, -3, 0), nullValue());
-
-        assertThat(StringUtils.substring("dings", 2, 4), is("ng"));
-
-        assertThat(StringUtils.substring("dings", -2, 4), is("g"));
-
-        assertThat(StringUtils.substring("dings", 20, 23), is(""));
-
-        assertThat(StringUtils.substring("dings", 4, 2), is(""));
+    void rightPad2_NPE1() {
+        assertThrows(NullPointerException.class, () -> StringUtils.rightPad(null, 0, null));
     }
 
     @Test
-    public void testSwapCase() {
-        assertThat(StringUtils.swapCase(null), nullValue());
-
-        assertThat(StringUtils.swapCase("dings"), is("DINGS"));
-
-        assertThat(StringUtils.swapCase("DinGs"), is("dINgS"));
+    void rightPad2_NPE2() {
+        assertThrows(NullPointerException.class, () -> StringUtils.rightPad("dings", 0, null));
     }
 
     @Test
-    public void testTrim() {
-        assertThat(StringUtils.trim(null), nullValue());
-
-        assertThat(StringUtils.trim("   "), is(""));
-
-        assertThat(StringUtils.trim("  c "), is("c"));
-
-        assertThat(StringUtils.trim("  dings \n  "), is("dings"));
+    void rightPad2_NPE23() {
+        assertThrows(NullPointerException.class, () -> StringUtils.rightPad(null, 0, "+"));
     }
 
     @Test
-    public void testUncapitalise() {
-        assertThat(StringUtils.uncapitalise(null), nullValue());
+    void rightPad2() {
+        assertThat(StringUtils.rightPad("dings", 0, "+")).isEqualTo("dings");
 
-        assertThat(StringUtils.uncapitalise("   "), is("   "));
+        assertThat(StringUtils.rightPad("dings", 3, "+")).isEqualTo("dings");
 
-        assertThat(StringUtils.uncapitalise("dings"), is("dings"));
-
-        assertThat(StringUtils.uncapitalise("Dings"), is("dings"));
-
-        assertThat(StringUtils.uncapitalise("DINGS"), is("dINGS"));
+        assertThat(StringUtils.rightPad("dings", 10, "+")).isEqualTo("dings+++++");
     }
 
     @Test
-    public void testUncapitaliseAllWords() {
-        assertThat(StringUtils.uncapitaliseAllWords(null), nullValue());
-
-        assertThat(StringUtils.uncapitaliseAllWords("   "), is("   "));
-
-        assertThat(StringUtils.uncapitaliseAllWords("dings bums"), is("dings bums"));
-
-        assertThat(StringUtils.uncapitaliseAllWords("Dings Bums"), is("dings bums"));
-
-        assertThat(StringUtils.uncapitaliseAllWords("DINGS Bums"), is("dINGS bums"));
+    void split1_NPE() {
+        assertThrows(NullPointerException.class, () -> StringUtils.split(null));
     }
 
     @Test
-    public void testUnifyLineSeparators1() {
-        String sls = System.getProperty("line.separator");
+    void split1() {
+        assertThat(StringUtils.split("dings")).isEqualTo(new String[] {"dings"});
 
-        assertThat(StringUtils.unifyLineSeparators(null), nullValue());
-
-        assertThat(StringUtils.unifyLineSeparators("   "), is("   "));
-
-        assertThat(StringUtils.unifyLineSeparators("dings\nbums\r\ndongs"), is("dings" + sls + "bums" + sls + "dongs"));
+        assertThat(StringUtils.split("dings bums")).isEqualTo(new String[] {"dings", "bums"});
     }
 
     @Test
-    public void testUnifyLineSeparators2() {
-        assertThat(StringUtils.unifyLineSeparators(null, "\n"), nullValue());
-
-        assertThat(StringUtils.unifyLineSeparators("   ", "\n"), is("   "));
-
-        assertThat(
-                StringUtils.unifyLineSeparators("   ", null) // takes the sytem line separator
-                ,
-                is("   "));
-
-        assertThat(StringUtils.unifyLineSeparators("dings\nbums\r\ndongs", "\n"), is("dings\nbums\ndongs"));
+    void split2_NPE1() {
+        assertThrows(NullPointerException.class, () -> StringUtils.split(null, null));
     }
 
     @Test
-    public void testUppercase() {
-        assertThat(StringUtils.upperCase(null), nullValue());
+    void split2_NPE2() {
+        assertThrows(NullPointerException.class, () -> StringUtils.split(null, " "));
+    }
 
-        assertThat(StringUtils.upperCase("   "), is("   "));
+    @Test
+    void split2() {
+        assertThat(StringUtils.split("dings", null)).isEqualTo(new String[] {"dings"});
 
-        assertThat(StringUtils.upperCase(""), is(""));
+        assertThat(StringUtils.split("dings bums", null)).isEqualTo(new String[] {"dings", "bums"});
 
-        assertThat(StringUtils.upperCase("dings"), is("DINGS"));
+        assertThat(StringUtils.split("dings", "+")).isEqualTo(new String[] {"dings"});
+
+        assertThat(StringUtils.split("dings+bums", "+")).isEqualTo(new String[] {"dings", "bums"});
+    }
+
+    @Test
+    void split3_NPE1() {
+        assertThrows(NullPointerException.class, () -> StringUtils.split(null, null, 1));
+    }
+
+    @Test
+    void split3_NPE2() {
+        assertThrows(NullPointerException.class, () -> StringUtils.split(null, " ", 1));
+    }
+
+    @Test
+    void split3() {
+        assertThat(StringUtils.split("dings", null, 3)).isEqualTo(new String[] {"dings"});
+
+        assertThat(StringUtils.split("dings bums", null, 3)).isEqualTo(new String[] {"dings", "bums"});
+
+        assertThat(StringUtils.split("dings", "+", 3)).isEqualTo(new String[] {"dings"});
+
+        assertThat(StringUtils.split("dings+bums", "+", 3)).isEqualTo(new String[] {"dings", "bums"});
+
+        assertThat(StringUtils.split("dings+bums", "+", 1)).isEqualTo(new String[] {"dings+bums"});
+
+        assertThat(StringUtils.split("dings+bums", "+", 0)).isEqualTo(new String[] {"dings", "bums"});
+
+        assertThat(StringUtils.split("dings+bums", "+", -5)).isEqualTo(new String[] {"dings", "bums"});
+    }
+
+    @Test
+    void strip1() {
+        assertThat(StringUtils.strip(null)).isNull();
+
+        assertThat(StringUtils.strip("dings")).isEqualTo("dings");
+
+        assertThat(StringUtils.strip("  dings \t ")).isEqualTo("dings");
+    }
+
+    @Test
+    void strip2() {
+        assertThat(StringUtils.strip(null, " ")).isNull();
+
+        assertThat(StringUtils.strip(null, null)).isNull();
+
+        assertThat(StringUtils.strip("dings", " ")).isEqualTo("dings");
+
+        assertThat(StringUtils.strip("  dings \t ", " ")).isEqualTo("dings \t");
+    }
+
+    @Test
+    void stripAll1() {
+        assertThat(StringUtils.stripAll(null)).isNull();
+
+        assertThat(StringUtils.stripAll()).isEqualTo(new String[] {});
+
+        assertThat(StringUtils.stripAll("dings")).isEqualTo(new String[] {"dings"});
+
+        assertThat(StringUtils.stripAll(" dings ", "  bums \t  ")).isEqualTo(new String[] {"dings", "bums"});
+    }
+
+    @Test
+    void stripAll2() {
+        assertThat(StringUtils.stripAll(null, " ")).isNull();
+
+        assertThat(StringUtils.stripAll(new String[] {}, " ")).isEqualTo(new String[] {});
+
+        assertThat(StringUtils.stripAll(new String[] {"dings"}, " ")).isEqualTo(new String[] {"dings"});
+
+        assertThat(StringUtils.stripAll(new String[] {" dings ", "  bums \t  "}, " "))
+                .isEqualTo(new String[] {"dings", "bums \t"});
+    }
+
+    @Test
+    void stripEnd() {
+        assertThat(StringUtils.stripEnd(null, null)).isNull();
+
+        assertThat(StringUtils.stripEnd("dings", null)).isEqualTo("dings");
+
+        assertThat(StringUtils.stripEnd("  dings \t ", null)).isEqualTo("  dings");
+
+        assertThat(StringUtils.stripEnd(null, " ")).isNull();
+
+        assertThat(StringUtils.stripEnd("dings", " ")).isEqualTo("dings");
+
+        assertThat(StringUtils.stripEnd("  dings \t ", " ")).isEqualTo("  dings \t");
+    }
+
+    @Test
+    void stripStart() {
+        assertThat(StringUtils.stripStart(null, null)).isNull();
+
+        assertThat(StringUtils.stripStart("dings", null)).isEqualTo("dings");
+
+        assertThat(StringUtils.stripStart("  dings \t ", null)).isEqualTo("dings \t ");
+
+        assertThat(StringUtils.stripStart(null, " ")).isNull();
+
+        assertThat(StringUtils.stripStart("dings", " ")).isEqualTo("dings");
+
+        assertThat(StringUtils.stripStart("  \t dings \t ", " ")).isEqualTo("\t dings \t ");
+    }
+
+    @Test
+    void substring1() {
+        assertThat(StringUtils.substring(null, 0)).isNull();
+        assertThat(StringUtils.substring(null, -3)).isNull();
+
+        assertThat(StringUtils.substring("dings", 2)).isEqualTo("ngs");
+
+        assertThat(StringUtils.substring("dings", -2)).isEqualTo("gs");
+
+        assertThat(StringUtils.substring("dings", 20)).isEqualTo("");
+    }
+
+    @Test
+    void substring2() {
+        assertThat(StringUtils.substring(null, 0, 2)).isNull();
+
+        assertThat(StringUtils.substring(null, -3, 0)).isNull();
+
+        assertThat(StringUtils.substring("dings", 2, 4)).isEqualTo("ng");
+
+        assertThat(StringUtils.substring("dings", -2, 4)).isEqualTo("g");
+
+        assertThat(StringUtils.substring("dings", 20, 23)).isEqualTo("");
+
+        assertThat(StringUtils.substring("dings", 4, 2)).isEqualTo("");
+    }
+
+    @Test
+    void swapCase() {
+        assertThat(StringUtils.swapCase(null)).isNull();
+
+        assertThat(StringUtils.swapCase("dings")).isEqualTo("DINGS");
+
+        assertThat(StringUtils.swapCase("DinGs")).isEqualTo("dINgS");
+    }
+
+    @Test
+    void trim() {
+        assertThat(StringUtils.trim(null)).isNull();
+
+        assertThat(StringUtils.trim("   ")).isEqualTo("");
+
+        assertThat(StringUtils.trim("  c ")).isEqualTo("c");
+
+        assertThat(StringUtils.trim("  dings \n  ")).isEqualTo("dings");
+    }
+
+    @Test
+    void uncapitalise() {
+        assertThat(StringUtils.uncapitalise(null)).isNull();
+
+        assertThat(StringUtils.uncapitalise("   ")).isEqualTo("   ");
+
+        assertThat(StringUtils.uncapitalise("dings")).isEqualTo("dings");
+
+        assertThat(StringUtils.uncapitalise("Dings")).isEqualTo("dings");
+
+        assertThat(StringUtils.uncapitalise("DINGS")).isEqualTo("dINGS");
+    }
+
+    @Test
+    void uncapitaliseAllWords() {
+        assertThat(StringUtils.uncapitaliseAllWords(null)).isNull();
+
+        assertThat(StringUtils.uncapitaliseAllWords("   ")).isEqualTo("   ");
+
+        assertThat(StringUtils.uncapitaliseAllWords("dings bums")).isEqualTo("dings bums");
+
+        assertThat(StringUtils.uncapitaliseAllWords("Dings Bums")).isEqualTo("dings bums");
+
+        assertThat(StringUtils.uncapitaliseAllWords("DINGS Bums")).isEqualTo("dINGS bums");
+    }
+
+    @Test
+    void unifyLineSeparators1() {
+        String sls = System.lineSeparator();
+
+        assertThat(StringUtils.unifyLineSeparators(null)).isNull();
+
+        assertThat(StringUtils.unifyLineSeparators("   ")).isEqualTo("   ");
+
+        assertThat(StringUtils.unifyLineSeparators("dings\nbums\r\ndongs"))
+                .isEqualTo("dings" + sls + "bums" + sls + "dongs");
+    }
+
+    @Test
+    void unifyLineSeparators2() {
+        assertThat(StringUtils.unifyLineSeparators(null, "\n")).isNull();
+
+        assertThat(StringUtils.unifyLineSeparators("   ", "\n")).isEqualTo("   ");
+
+        assertThat(StringUtils.unifyLineSeparators("   ", null)).isEqualTo("   ");
+
+        assertThat(StringUtils.unifyLineSeparators("dings\nbums\r\ndongs", "\n"))
+                .isEqualTo("dings\nbums\ndongs");
+    }
+
+    @Test
+    void uppercase() {
+        assertThat(StringUtils.upperCase(null)).isNull();
+
+        assertThat(StringUtils.upperCase("   ")).isEqualTo("   ");
+
+        assertThat(StringUtils.upperCase("")).isEqualTo("");
+
+        assertThat(StringUtils.upperCase("dings")).isEqualTo("DINGS");
     }
 }

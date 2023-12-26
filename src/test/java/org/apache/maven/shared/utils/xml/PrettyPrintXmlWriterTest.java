@@ -24,31 +24,33 @@ import java.io.IOException;
 import java.io.StringWriter;
 
 import org.apache.maven.shared.utils.StringUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test of {@link PrettyPrintXMLWriter}
  *
  * @author <a href="mailto:vincent.siveton@gmail.com">Vincent Siveton</a>
  */
-public class PrettyPrintXmlWriterTest {
+class PrettyPrintXmlWriterTest {
     private StringWriter w = new StringWriter();
     private PrettyPrintXMLWriter writer = new PrettyPrintXMLWriter(w);
 
     @Test
-    public void testNoStartTag() throws IOException {
+    void noStartTag() throws IOException {
 
         try {
             writer.startElement("");
-            Assert.fail("allowed empty name");
+            fail("allowed empty name");
         } catch (IllegalArgumentException ex) {
-            Assert.assertEquals("Element name cannot be empty", ex.getMessage());
+            assertEquals("Element name cannot be empty", ex.getMessage());
         }
     }
 
     @Test
-    public void testDefaultPrettyPrintXMLWriter() throws IOException {
+    void defaultPrettyPrintXMLWriter() throws IOException {
         writer.startElement(HTML.Tag.HTML.toString());
 
         writeXhtmlHead(writer);
@@ -57,11 +59,11 @@ public class PrettyPrintXmlWriterTest {
 
         writer.endElement(); // Tag.HTML
 
-        Assert.assertEquals(expectedResult(), w.toString());
+        assertEquals(expectedResult(), w.toString());
     }
 
     @Test
-    public void testPrettyPrintXMLWriterWithGivenLineSeparator() throws IOException {
+    void prettyPrintXMLWriterWithGivenLineSeparator() throws IOException {
         writer.setLineSeparator("\n");
 
         writer.startElement(HTML.Tag.HTML.toString());
@@ -72,11 +74,11 @@ public class PrettyPrintXmlWriterTest {
 
         writer.endElement(); // Tag.HTML
 
-        Assert.assertEquals(expectedResult(), w.toString());
+        assertEquals(expectedResult(), w.toString());
     }
 
     @Test
-    public void testPrettyPrintXMLWriterWithGivenLineIndenter() throws IOException {
+    void prettyPrintXMLWriterWithGivenLineIndenter() throws IOException {
         writer.setLineIndenter("    ");
 
         writer.startElement(HTML.Tag.HTML.toString());
@@ -87,43 +89,43 @@ public class PrettyPrintXmlWriterTest {
 
         writer.endElement(); // Tag.HTML
 
-        Assert.assertEquals(expectedResult("    "), w.toString());
+        assertEquals(expectedResult("    "), w.toString());
     }
 
     @Test
-    public void testEscapeXmlAttributeWindows() throws IOException {
+    void escapeXmlAttributeWindows() throws IOException {
         // Windows
         writer.startElement(HTML.Tag.DIV.toString());
         writer.addAttribute("class", "sect\r\nion");
         writer.endElement(); // Tag.DIV
-        Assert.assertEquals("<div class=\"sect&#10;ion\"/>", w.toString());
+        assertEquals("<div class=\"sect&#10;ion\"/>", w.toString());
     }
 
     @Test
-    public void testEscapeXmlAttributeMac() throws IOException {
+    void escapeXmlAttributeMac() throws IOException {
         // Mac
         writer.startElement(HTML.Tag.DIV.toString());
         writer.addAttribute("class", "sect\rion");
         writer.endElement(); // Tag.DIV
-        Assert.assertEquals("<div class=\"sect&#13;ion\"/>", w.toString());
+        assertEquals("<div class=\"sect&#13;ion\"/>", w.toString());
     }
 
     @Test
-    public void testEscapeXmlAttributeTrailingCR() throws IOException {
+    void escapeXmlAttributeTrailingCR() throws IOException {
         // Mac
         writer.startElement(HTML.Tag.DIV.toString());
         writer.addAttribute("class", "section\r");
         writer.endElement(); // Tag.DIV
-        Assert.assertEquals("<div class=\"section&#13;\"/>", w.toString());
+        assertEquals("<div class=\"section&#13;\"/>", w.toString());
     }
 
     @Test
-    public void testEscapeXmlAttributeUnix() throws IOException {
+    void escapeXmlAttributeUnix() throws IOException {
         // Unix
         writer.startElement(HTML.Tag.DIV.toString());
         writer.addAttribute("class", "sect\nion");
         writer.endElement(); // Tag.DIV
-        Assert.assertEquals("<div class=\"sect&#10;ion\"/>", w.toString());
+        assertEquals("<div class=\"sect&#10;ion\"/>", w.toString());
     }
 
     private void writeXhtmlHead(XMLWriter writer) throws IOException {
@@ -161,36 +163,30 @@ public class PrettyPrintXmlWriterTest {
     }
 
     private static String expectedResult(String lineIndenter) {
-
         String lineSeparator = "\n";
-        StringBuilder expected = new StringBuilder();
-
-        expected.append("<html>").append(lineSeparator);
-        expected.append(StringUtils.repeat(lineIndenter, 1)).append("<head>").append(lineSeparator);
-        expected.append(StringUtils.repeat(lineIndenter, 2))
-                .append("<title>title</title>")
-                .append(lineSeparator);
-        expected.append(StringUtils.repeat(lineIndenter, 2))
-                .append("<meta name=\"author\" content=\"Author\"/>")
-                .append(lineSeparator);
-        expected.append(StringUtils.repeat(lineIndenter, 2))
-                .append("<meta name=\"date\" content=\"Date\"/>")
-                .append(lineSeparator);
-        expected.append(StringUtils.repeat(lineIndenter, 1)).append("</head>").append(lineSeparator);
-        expected.append(StringUtils.repeat(lineIndenter, 1)).append("<body>").append(lineSeparator);
-        expected.append(StringUtils.repeat(lineIndenter, 2))
-                .append("<p>Paragraph 1, line 1. Paragraph 1, line 2.</p>")
-                .append(lineSeparator);
-        expected.append(StringUtils.repeat(lineIndenter, 2))
-                .append("<div class=\"section\">")
-                .append(lineSeparator);
-        expected.append(StringUtils.repeat(lineIndenter, 3))
-                .append("<h2>Section title</h2>")
-                .append(lineSeparator);
-        expected.append(StringUtils.repeat(lineIndenter, 2)).append("</div>").append(lineSeparator);
-        expected.append(StringUtils.repeat(lineIndenter, 1)).append("</body>").append(lineSeparator);
-        expected.append("</html>");
-
-        return expected.toString();
+        return "<html>" + lineSeparator + StringUtils.repeat(lineIndenter, 1)
+                + "<head>" + lineSeparator + StringUtils.repeat(lineIndenter, 2)
+                + "<title>title</title>"
+                + lineSeparator
+                + StringUtils.repeat(lineIndenter, 2)
+                + "<meta name=\"author\" content=\"Author\"/>"
+                + lineSeparator
+                + StringUtils.repeat(lineIndenter, 2)
+                + "<meta name=\"date\" content=\"Date\"/>"
+                + lineSeparator
+                + StringUtils.repeat(lineIndenter, 1)
+                + "</head>" + lineSeparator + StringUtils.repeat(lineIndenter, 1)
+                + "<body>" + lineSeparator + StringUtils.repeat(lineIndenter, 2)
+                + "<p>Paragraph 1, line 1. Paragraph 1, line 2.</p>"
+                + lineSeparator
+                + StringUtils.repeat(lineIndenter, 2)
+                + "<div class=\"section\">"
+                + lineSeparator
+                + StringUtils.repeat(lineIndenter, 3)
+                + "<h2>Section title</h2>"
+                + lineSeparator
+                + StringUtils.repeat(lineIndenter, 2)
+                + "</div>" + lineSeparator + StringUtils.repeat(lineIndenter, 1)
+                + "</body>" + lineSeparator + "</html>";
     }
 }

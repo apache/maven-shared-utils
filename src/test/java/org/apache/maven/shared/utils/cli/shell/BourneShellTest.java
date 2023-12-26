@@ -20,17 +20,21 @@ package org.apache.maven.shared.utils.cli.shell;
 
 import java.util.List;
 
-import junit.framework.TestCase;
 import org.apache.maven.shared.utils.StringUtils;
 import org.apache.maven.shared.utils.cli.Commandline;
+import org.junit.jupiter.api.Test;
 
-public class BourneShellTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class BourneShellTest {
 
     Shell newShell() {
         return new BourneShell();
     }
 
-    public void testQuoteWorkingDirectoryAndExecutable() {
+    @Test
+    void quoteWorkingDirectoryAndExecutable() {
         Shell sh = newShell();
 
         sh.setWorkingDirectory("/usr/local/bin");
@@ -41,7 +45,8 @@ public class BourneShellTest extends TestCase {
         assertEquals("/bin/sh -c cd '/usr/local/bin' && 'chmod'", executable);
     }
 
-    public void testQuoteWorkingDirectoryAndExecutable_WDPathWithSingleQuotes() {
+    @Test
+    void quoteWorkingDirectoryAndExecutable_WDPathWithSingleQuotes() {
         Shell sh = newShell();
 
         sh.setWorkingDirectory("/usr/local/'something else'");
@@ -52,7 +57,8 @@ public class BourneShellTest extends TestCase {
         assertEquals("/bin/sh -c cd '/usr/local/'\"'\"'something else'\"'\"'' && 'chmod'", executable);
     }
 
-    public void testQuoteWorkingDirectoryAndExecutable_WDPathWithSingleQuotes_BackslashFileSep() {
+    @Test
+    void quoteWorkingDirectoryAndExecutable_WDPathWithSingleQuotes_BackslashFileSep() {
         Shell sh = newShell();
 
         sh.setWorkingDirectory("\\usr\\local\\'something else'");
@@ -63,7 +69,8 @@ public class BourneShellTest extends TestCase {
         assertEquals("/bin/sh -c cd '\\usr\\local\\'\"'\"'something else'\"'\"'' && 'chmod'", executable);
     }
 
-    public void testPreserveSingleQuotesOnArgument() {
+    @Test
+    void preserveSingleQuotesOnArgument() {
         Shell sh = newShell();
 
         sh.setWorkingDirectory("/usr/bin");
@@ -75,7 +82,8 @@ public class BourneShellTest extends TestCase {
         assertTrue(cli.endsWith("'\"some arg with spaces\"'"));
     }
 
-    public void testAddSingleQuotesOnArgumentWithSpaces() {
+    @Test
+    void addSingleQuotesOnArgumentWithSpaces() {
         Shell sh = newShell();
 
         sh.setWorkingDirectory("/usr/bin");
@@ -87,7 +95,8 @@ public class BourneShellTest extends TestCase {
         assertTrue(cli.endsWith("'some arg with spaces'"));
     }
 
-    public void testAddArgumentWithSingleQuote() {
+    @Test
+    void addArgumentWithSingleQuote() {
         Shell sh = newShell();
 
         sh.setWorkingDirectory("/usr/bin");
@@ -99,7 +108,8 @@ public class BourneShellTest extends TestCase {
                 "cd '/usr/bin' && 'chmod' 'arg'\"'\"'withquote'", shellCommandLine.get(shellCommandLine.size() - 1));
     }
 
-    public void testArgumentsWithSemicolon() {
+    @Test
+    void argumentsWithSemicolon() {
         Shell sh = newShell();
 
         sh.setWorkingDirectory("/usr/bin");
@@ -145,7 +155,8 @@ public class BourneShellTest extends TestCase {
         assertEquals("\"--password ;password\"", lines.get(3));
     }
 
-    public void testBourneShellQuotingCharacters() throws Exception {
+    @Test
+    void bourneShellQuotingCharacters() throws Exception {
         // { ' ', '$', ';', '&', '|', '<', '>', '*', '?', '(', ')' };
         // test with values https://steve-parker.org/sh/bourne.shtml Appendix B - Meta-characters and Reserved Words
         Commandline commandline = new Commandline(newShell());

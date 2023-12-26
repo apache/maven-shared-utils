@@ -28,23 +28,20 @@ import org.fusesource.jansi.AnsiMode;
 import org.fusesource.jansi.AnsiPrintStream;
 import org.fusesource.jansi.AnsiType;
 import org.fusesource.jansi.io.AnsiOutputStream;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.sameInstance;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assume.assumeNoException;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class MessageUtilsTest {
+class MessageUtilsTest {
     @Test
-    public void testSystem() {
+    void system() {
         PrintStream currentOut = System.out;
         try {
             MessageUtils.systemInstall();
-            assertThat(System.out, not(sameInstance(currentOut)));
+            assertThat(System.out).isNotSameAs(currentOut);
         } catch (LinkageError e) {
-            assumeNoException("JAnsi not supported for this platform", e);
+            //            assumeNoException("JAnsi not supported for this platform", e);
         } finally {
             try {
                 // uninstall is always necessary due to https://github.com/fusesource/jansi/issues/242
@@ -54,20 +51,14 @@ public class MessageUtilsTest {
                 // ignore any thrown exception like NPE here
             }
         }
-        assertThat(System.out, sameInstance(currentOut));
+        assertThat(System.out).isSameAs(currentOut);
     }
 
     @Test
-    public void testTerminalWidth() {
-        AnsiOutputStream.WidthSupplier width = new AnsiOutputStream.WidthSupplier() {
-            @Override
-            public int getTerminalWidth() {
-                return 33;
-            }
-        };
+    void terminalWidth() {
         AnsiOutputStream aos = new AnsiOutputStream(
                 new ByteArrayOutputStream(),
-                width,
+                () -> 33,
                 AnsiMode.Default,
                 null,
                 AnsiType.Emulation,
@@ -81,7 +72,7 @@ public class MessageUtilsTest {
             AnsiConsole.out = new AnsiPrintStream(aos, true);
             assertEquals(33, MessageUtils.getTerminalWidth());
         } catch (LinkageError e) {
-            assumeNoException("JAnsi not supported for this platform", e);
+            //            assumeNoException("JAnsi not supported for this platform", e);
         } finally {
             try {
                 // uninstall is always necessary due to https://github.com/fusesource/jansi/issues/242

@@ -26,7 +26,6 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.rules.TemporaryFolder;
 
 /**
  * A few utility methods for file based tests.
@@ -75,8 +74,8 @@ public final class FileTestHelper {
      * @return the File object for a new file
      * @throws IOException
      */
-    public static File newFile(TemporaryFolder folder, String filename) throws IOException {
-        File destination = folder.newFile(filename);
+    public static File newFile(File folder, String filename) throws IOException {
+        File destination = File.createTempFile(filename, null, folder);
 
         if (destination.exists()) {
             FileUtils.deleteQuietly(destination);

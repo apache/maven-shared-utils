@@ -32,13 +32,10 @@ import java.lang.annotation.Target;
 import java.net.URL;
 import java.util.Properties;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class PropertyUtilsTest {
 
@@ -46,116 +43,122 @@ public class PropertyUtilsTest {
     @Target(ElementType.METHOD)
     @interface NeedsTemporaryFolder {}
 
-    @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
+    @TempDir
+    public File tempFolder;
 
-    @Test
-    @SuppressWarnings("deprecation")
     // @ReproducesPlexusBug( "Should return null on error like url and file do" )
-    public void loadNullInputStream() throws Exception {
-        assertThat(PropertyUtils.loadProperties((InputStream) null), is(new Properties()));
+    @Test
+    @SuppressWarnings("deprecation")
+    void loadNullInputStream() throws Exception {
+        assertThat(PropertyUtils.loadProperties((InputStream) null)).isEqualTo(new Properties());
     }
 
     @Test
-    public void loadOptionalNullInputStream() throws Exception {
-        assertThat(PropertyUtils.loadOptionalProperties((InputStream) null), is(new Properties()));
+    void loadOptionalNullInputStream() throws Exception {
+        assertThat(PropertyUtils.loadOptionalProperties((InputStream) null)).isEqualTo(new Properties());
     }
 
     @Test
-    public void loadOptionalProperties_ioException() throws Exception {
+    void loadOptionalProperties_ioException() throws Exception {
         URL url = new URL("https://nonesuch12344.foo.bar.com");
-        assertThat(PropertyUtils.loadOptionalProperties(url), is(new Properties()));
+        assertThat(PropertyUtils.loadOptionalProperties(url)).isEqualTo(new Properties());
     }
 
     @Test
     @SuppressWarnings("deprecation")
-    public void loadNullURL() throws Exception {
-        assertThat(PropertyUtils.loadProperties((URL) null), nullValue(Properties.class));
+    void loadNullURL() throws Exception {
+        assertThat(PropertyUtils.loadProperties((URL) null)).isNull();
     }
 
     @Test
-    public void loadOptionalNullURL() throws Exception {
-        assertThat(PropertyUtils.loadOptionalProperties((URL) null), is(new Properties()));
-    }
-
-    @Test
-    @SuppressWarnings("deprecation")
-    public void loadNullFile() throws Exception {
-        assertThat(PropertyUtils.loadProperties((File) null), nullValue(Properties.class));
-    }
-
-    @Test
-    public void loadOptionalNullFile() throws Exception {
-        assertThat(PropertyUtils.loadOptionalProperties((File) null), is(new Properties()));
+    void loadOptionalNullURL() throws Exception {
+        assertThat(PropertyUtils.loadOptionalProperties((URL) null)).isEqualTo(new Properties());
     }
 
     @Test
     @SuppressWarnings("deprecation")
-    public void loadEmptyInputStream() throws Exception {
-        assertThat(PropertyUtils.loadProperties(new ByteArrayInputStream(new byte[0])), is(new Properties()));
+    void loadNullFile() throws Exception {
+        assertThat(PropertyUtils.loadProperties((File) null)).isNull();
+    }
 
-        assertThat(PropertyUtils.loadOptionalProperties(new ByteArrayInputStream(new byte[0])), is(new Properties()));
+    @Test
+    void loadOptionalNullFile() throws Exception {
+        assertThat(PropertyUtils.loadOptionalProperties((File) null)).isEqualTo(new Properties());
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    void loadEmptyInputStream() throws Exception {
+        assertThat(PropertyUtils.loadProperties(new ByteArrayInputStream(new byte[0])))
+                .isEqualTo(new Properties());
+
+        assertThat(PropertyUtils.loadOptionalProperties(new ByteArrayInputStream(new byte[0])))
+                .isEqualTo(new Properties());
     }
 
     @Test
     @NeedsTemporaryFolder
     @SuppressWarnings("deprecation")
-    public void loadEmptyFile() throws Exception {
-        assertThat(PropertyUtils.loadProperties(tempFolder.newFile("empty")), is(new Properties()));
-        assertThat(PropertyUtils.loadOptionalProperties(tempFolder.newFile("optional")), is(new Properties()));
+    void loadEmptyFile() throws Exception {
+        assertThat(PropertyUtils.loadProperties(File.createTempFile("empty", null, tempFolder)))
+                .isEqualTo(new Properties());
+        assertThat(PropertyUtils.loadOptionalProperties(File.createTempFile("optional", null, tempFolder)))
+                .isEqualTo(new Properties());
     }
 
     @Test
     @NeedsTemporaryFolder
     @SuppressWarnings("deprecation")
-    public void loadEmptyURL() throws Exception {
-        assertThat(
-                PropertyUtils.loadProperties(tempFolder.newFile("empty").toURI().toURL()), is(new Properties()));
+    void loadEmptyURL() throws Exception {
+        assertThat(PropertyUtils.loadProperties(
+                        File.createTempFile("empty", null, tempFolder).toURI().toURL()))
+                .isEqualTo(new Properties());
 
-        assertThat(
-                PropertyUtils.loadOptionalProperties(
-                        tempFolder.newFile("optional").toURI().toURL()),
-                is(new Properties()));
+        assertThat(PropertyUtils.loadOptionalProperties(File.createTempFile("optional", null, tempFolder)
+                        .toURI()
+                        .toURL()))
+                .isEqualTo(new Properties());
     }
 
     @Test
     @SuppressWarnings("deprecation")
-    public void loadValidInputStream() throws UnsupportedEncodingException {
+    void loadValidInputStream() throws UnsupportedEncodingException {
         Properties value = new Properties();
         value.setProperty("a", "b");
 
-        assertThat(PropertyUtils.loadProperties(new ByteArrayInputStream("a=b".getBytes("ISO-8859-1"))), is(value));
+        assertThat(PropertyUtils.loadProperties(new ByteArrayInputStream("a=b".getBytes("ISO-8859-1"))))
+                .isEqualTo(value);
 
-        assertThat(
-                PropertyUtils.loadOptionalProperties(new ByteArrayInputStream("a=b".getBytes("ISO-8859-1"))),
-                is(value));
+        assertThat(PropertyUtils.loadOptionalProperties(new ByteArrayInputStream("a=b".getBytes("ISO-8859-1"))))
+                .isEqualTo(value);
     }
 
     @Test
     @NeedsTemporaryFolder
     @SuppressWarnings("deprecation")
-    public void loadValidFile() throws IOException {
-        File valid = tempFolder.newFile("valid");
+    void loadValidFile() throws IOException {
+        File valid = File.createTempFile("valid", null, tempFolder);
         Properties value = new Properties();
         value.setProperty("a", "b");
         try (OutputStream out = new FileOutputStream(valid)) {
             value.store(out, "a test");
-            assertThat(PropertyUtils.loadProperties(valid), is(value));
-            assertThat(PropertyUtils.loadOptionalProperties(valid), is(value));
+            assertThat(PropertyUtils.loadProperties(valid)).isEqualTo(value);
+            assertThat(PropertyUtils.loadOptionalProperties(valid)).isEqualTo(value);
         }
     }
 
     @Test
     @NeedsTemporaryFolder
     @SuppressWarnings("deprecation")
-    public void loadValidURL() throws IOException {
-        File valid = tempFolder.newFile("valid");
+    void loadValidURL() throws IOException {
+        File valid = File.createTempFile("valid", null, tempFolder);
         Properties value = new Properties();
         value.setProperty("a", "b");
         try (OutputStream out = new FileOutputStream(valid)) {
             value.store(out, "a test");
-            assertThat(PropertyUtils.loadProperties(valid.toURI().toURL()), is(value));
-            assertThat(PropertyUtils.loadOptionalProperties(valid.toURI().toURL()), is(value));
+            assertThat(PropertyUtils.loadProperties(valid.toURI().toURL())).isEqualTo(value);
+            assertThat(PropertyUtils.loadOptionalProperties(valid.toURI().toURL()))
+                    .isEqualTo(value);
         }
     }
 }

@@ -27,22 +27,20 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.maven.shared.utils.xml.pull.XmlPullParserException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Kristian Rosenvold
  */
-public class Xpp3DomBuilderTest {
+class Xpp3DomBuilderTest {
 
     private static final String XML_DECLARATION = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 
     @Test
-    public void selfClosingTag() throws Exception {
+    void selfClosingTag() throws Exception {
 
         String domString = selfClosingTagSource();
 
@@ -50,24 +48,20 @@ public class Xpp3DomBuilderTest {
 
         String expected = expectedSelfClosingTag();
         String dom1Str = dom.toString();
-        assertEquals("check DOMs match", expected, dom1Str);
+        assertEquals(expected, dom1Str, "check DOMs match");
     }
 
     @Test
-    public void testUnrecognizedEncoding() {
+    void unrecognizedEncoding() {
+        InputStream in = new ByteArrayInputStream("<foo/>".getBytes(StandardCharsets.UTF_8));
 
-        byte[] data = "<foo/>".getBytes(StandardCharsets.UTF_8);
-        InputStream in = new ByteArrayInputStream(data);
-        try {
-            Xpp3DomBuilder.build(in, "nosuch encoding");
-            fail();
-        } catch (XmlPullParserException expected) {
-            assertTrue(expected.getCause() instanceof UnsupportedEncodingException);
-        }
+        XmlPullParserException e =
+                assertThrows(XmlPullParserException.class, () -> Xpp3DomBuilder.build(in, "nosuch encoding"));
+        assertInstanceOf(UnsupportedEncodingException.class, e.getCause());
     }
 
     @Test
-    public void trimming() throws Exception {
+    void trimming() throws Exception {
         String domString = createDomString();
 
         Xpp3Dom dom = Xpp3DomBuilder.build(new StringReader(domString), true);
@@ -79,17 +73,17 @@ public class Xpp3DomBuilderTest {
     }
 
     @Test
-    public void testMalformedXml() {
+    void malformedXml() {
         try {
             Xpp3DomBuilder.build(new StringReader("<newRoot>" + createDomString()));
             fail("We're supposed to fail");
         } catch (XmlPullParserException ex) {
-            Assert.assertNotNull(ex.getMessage());
+            Assertions.assertNotNull(ex.getMessage());
         }
     }
 
     @Test
-    public void attributeEscaping() throws IOException, XmlPullParserException {
+    void attributeEscaping() throws IOException, XmlPullParserException {
         String s = getAttributeEncodedString();
         Xpp3Dom dom = Xpp3DomBuilder.build(new StringReader(s));
 
@@ -101,7 +95,7 @@ public class Xpp3DomBuilderTest {
     }
 
     @Test
-    public void contentEscaping() throws IOException, XmlPullParserException {
+    void contentEscaping() throws IOException, XmlPullParserException {
         Xpp3Dom dom = Xpp3DomBuilder.build(new StringReader(getEncodedString()));
 
         assertEquals("\"msg\"", dom.getChild("a1").getValue());

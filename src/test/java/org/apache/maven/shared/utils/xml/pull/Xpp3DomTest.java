@@ -23,15 +23,15 @@ import java.io.StringReader;
 
 import org.apache.maven.shared.utils.xml.Xpp3Dom;
 import org.apache.maven.shared.utils.xml.Xpp3DomBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.apache.maven.shared.utils.xml.Xpp3Dom.mergeXpp3Dom;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Kristian Rosenvold
  */
-public class Xpp3DomTest {
+class Xpp3DomTest {
 
     private Xpp3Dom createElement(String element, String value) {
         Xpp3Dom t1s1 = new Xpp3Dom(element);
@@ -40,7 +40,7 @@ public class Xpp3DomTest {
     }
 
     @Test
-    public void mergePrecedenceSelfClosed() throws XmlPullParserException, IOException {
+    void mergePrecedenceSelfClosed() throws XmlPullParserException, IOException {
         Xpp3Dom parentConfig = build("<configuration><items><item/></items></configuration>");
         Xpp3Dom childConfig = build("<configuration><items><item>ooopise</item></items></configuration>");
 
@@ -53,7 +53,7 @@ public class Xpp3DomTest {
     }
 
     @Test
-    public void mergePrecedenceOpenClose() throws XmlPullParserException, IOException {
+    void mergePrecedenceOpenClose() throws XmlPullParserException, IOException {
         Xpp3Dom parentConfig = build("<configuration><items><item></item></items></configuration>");
         Xpp3Dom childConfig = build("<configuration><items><item>ooopise</item></items></configuration>");
 
@@ -66,7 +66,7 @@ public class Xpp3DomTest {
     }
 
     @Test
-    public void selfOverrideOnRootNode() {
+    void selfOverrideOnRootNode() {
         // Todo: This does not work when loaded. Probably a bug related to null vs "" handling
         //      Xpp3Dom t1 = build( "<top combine.self='override' attr='value'></top>" );
 
@@ -83,7 +83,7 @@ public class Xpp3DomTest {
     }
 
     @Test
-    public void mergeValuesOnRootNode() {
+    void mergeValuesOnRootNode() {
         Xpp3Dom t1 = build("<root attr='value'/>");
         Xpp3Dom t2 = build("<root attr2='value2'>t2Val</root>");
         Xpp3Dom result = mergeXpp3Dom(t1, t2);
@@ -92,7 +92,7 @@ public class Xpp3DomTest {
     }
 
     @Test
-    public void mergeAttributesOnRootNode() {
+    void mergeAttributesOnRootNode() {
         Xpp3Dom t1 = build("<root combine.self='merge' attr='value'/>");
         Xpp3Dom t2 = build("<root attr2='value2'/>");
 
@@ -101,7 +101,7 @@ public class Xpp3DomTest {
     }
 
     @Test
-    public void combineAppend() {
+    void combineAppend() {
         Xpp3Dom t1 = new Xpp3Dom("root");
         t1.setAttribute(Xpp3Dom.CHILDREN_COMBINATION_MODE_ATTRIBUTE, Xpp3Dom.CHILDREN_COMBINATION_APPEND);
         t1.addChild(createElement("sub", "s1Value"));
@@ -115,7 +115,7 @@ public class Xpp3DomTest {
     }
 
     @Test
-    public void mergeOverride() {
+    void mergeOverride() {
         Xpp3Dom t1 = new Xpp3Dom("root");
         t1.setAttribute(Xpp3Dom.CHILDREN_COMBINATION_MODE_ATTRIBUTE, Xpp3Dom.CHILDREN_COMBINATION_APPEND);
         t1.addChild(createElement("sub", "s1Value"));
@@ -128,20 +128,24 @@ public class Xpp3DomTest {
         assertEquals(1, result.getChildren("sub").length);
     }
 
-    @Test(expected = NullPointerException.class)
-    public void nullValue() {
-        //noinspection ConstantConditions
-        new Xpp3Dom("top").setAttribute(null, "value");
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void nullAttribute() {
-        //noinspection ConstantConditions
-        new Xpp3Dom("root").setAttribute("attr", null);
+    @Test
+    void nullValue() {
+        assertThrows(NullPointerException.class, () -> {
+            //noinspection ConstantConditions
+            new Xpp3Dom("top").setAttribute(null, "value");
+        });
     }
 
     @Test
-    public void testEquals() {
+    void nullAttribute() {
+        assertThrows(NullPointerException.class, () -> {
+            //noinspection ConstantConditions
+            new Xpp3Dom("root").setAttribute("attr", null);
+        });
+    }
+
+    @Test
+    void equals() {
         Xpp3Dom dom = new Xpp3Dom("single");
         dom.addChild(new Xpp3Dom("kid"));
 
@@ -150,13 +154,13 @@ public class Xpp3DomTest {
 
         assertEquals(dom, dom);
         //noinspection ObjectEqualsNull
-        assertFalse(dom.equals(null));
-        assertFalse(dom.equals(new Xpp3Dom((String) null)));
-        assertFalse(dom.equals(other));
+        assertNotEquals(null, dom);
+        assertNotEquals(dom, new Xpp3Dom((String) null));
+        assertNotEquals(dom, other);
     }
 
     @Test
-    public void dominantWinsCollections() throws XmlPullParserException {
+    void dominantWinsCollections() throws XmlPullParserException {
         Xpp3Dom parent = build("<root><entries><entry>uno</entry><entry>dos</entry></entries></root>");
         Xpp3Dom dominant = build("<root><entries><entry>tres</entry></entries></root>");
 
@@ -169,7 +173,7 @@ public class Xpp3DomTest {
     }
 
     @Test
-    public void combineChildrenAppendTest() throws XmlPullParserException {
+    void combineChildrenAppendTest() throws XmlPullParserException {
         Xpp3Dom parent =
                 build("<root><entries><entry>uno</entry><entry>dos</entry><entry>tres</entry></entries></root>");
         Xpp3Dom child = build("<root><entries combine.children=\"append\"><entry>quatro</entry></entries></root>");
@@ -188,7 +192,7 @@ public class Xpp3DomTest {
     }
 
     @Test
-    public void unchangedWithFirstOrLastEmpty() throws Exception {
+    void unchangedWithFirstOrLastEmpty() throws Exception {
         String configStr = "<root><entries><entry/><entry>test</entry><entry/></entries></root>";
         Xpp3Dom dominant = build(configStr);
         Xpp3Dom duplicatedDominant = build(configStr);
@@ -215,7 +219,7 @@ public class Xpp3DomTest {
     }
 
     @Test
-    public void recessiveChildrenIncludedWhenDominantEmpty() throws Exception {
+    void recessiveChildrenIncludedWhenDominantEmpty() throws Exception {
         String dominant = "<root><baz>bazzy</baz></root>";
         String recessive = "<root><bar>barry</bar></root>";
 
@@ -231,7 +235,7 @@ public class Xpp3DomTest {
     }
 
     @Test
-    public void duplicatedChildren() throws IOException, XmlPullParserException {
+    void duplicatedChildren() throws IOException, XmlPullParserException {
         String dupes = "<root><baz>x</baz><baz>y</baz></root>";
         assertEquals("y", build(dupes).getChild("baz").getValue());
     }
