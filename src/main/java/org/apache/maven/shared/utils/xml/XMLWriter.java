@@ -24,6 +24,7 @@ import java.io.IOException;
  * Interface for tools writing XML files.
  * XMLWriters are not thread safe and must not be accessed concurrently.
  */
+@Deprecated
 public interface XMLWriter {
 
     /**

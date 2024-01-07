@@ -26,8 +26,11 @@ import java.util.ArrayList;
 /**
  * XMLWriter with nice indentation.
  *
+ * @deprecated this class swallows and ignores IOExceptions. It is dangerous to use when writing
+ *    to anything other than a StringWriter.
  * @author kama
  */
+@Deprecated
 public class PrettyPrintXMLWriter implements XMLWriter {
     private static final char[] CLOSE_1 = "/>".toCharArray();
 
@@ -158,6 +161,7 @@ public class PrettyPrintXMLWriter implements XMLWriter {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void addAttribute(String key, String value) throws IOException {
         if (!processingElement) {
             throw new IllegalStateException("currently processing no element");
@@ -173,6 +177,7 @@ public class PrettyPrintXMLWriter implements XMLWriter {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setEncoding(String encoding) {
         if (documentStarted) {
             throw new IllegalStateException("Document headers already written!");
@@ -182,6 +187,7 @@ public class PrettyPrintXMLWriter implements XMLWriter {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void setDocType(String docType) {
         if (documentStarted) {
             throw new IllegalStateException("Document headers already written!");
@@ -213,6 +219,7 @@ public class PrettyPrintXMLWriter implements XMLWriter {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void startElement(String elementName) throws IOException {
 
         if (elementName.isEmpty()) {
@@ -239,6 +246,7 @@ public class PrettyPrintXMLWriter implements XMLWriter {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void writeText(String text) throws IOException {
         ensureDocumentStarted();
 
@@ -254,6 +262,7 @@ public class PrettyPrintXMLWriter implements XMLWriter {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void writeMarkup(String markup) throws IOException {
         ensureDocumentStarted();
 
@@ -267,6 +276,7 @@ public class PrettyPrintXMLWriter implements XMLWriter {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void endElement() throws IOException {
         String chars = elementStack.get(--depth);
         if (processingElement) {

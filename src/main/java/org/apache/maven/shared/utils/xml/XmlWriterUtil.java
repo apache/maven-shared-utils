@@ -28,6 +28,7 @@ import org.apache.maven.shared.utils.StringUtils;
  * @author <a href="mailto:vincent.siveton@gmail.com">Vincent Siveton</a>
  *
  */
+@Deprecated
 public class XmlWriterUtil {
     /** The vm line separator */
     public static final String LS = System.getProperty("line.separator");
