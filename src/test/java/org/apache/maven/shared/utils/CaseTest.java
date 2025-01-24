@@ -71,18 +71,25 @@ public class CaseTest extends Assert {
         final String iIıİ = "iIıİ";
 
         // check source encoding doesn't wreak havoc */
-        assertEquals( "misc i directly in (UTF-8) source", iIıİ, "" + DOTTED_i + DOTLESS_I + DOTLESS_i + DOTTED_I );
+        assertEquals("misc i directly in (UTF-8) source", iIıİ, "" + DOTTED_i + DOTLESS_I + DOTLESS_i + DOTTED_I);
 
         // check toUpperCase and toLowerCase difference with turkish and english locales
-        assertEquals( "'iIıİ'.toUpperCase('tr')=='İIIİ'", "" + DOTTED_I + DOTLESS_I + DOTLESS_I + DOTTED_I,
-                iIıİ.toUpperCase(LOCALE_TURKISH) );
-        assertEquals( "'iIıİ'.toLowerCase('tr')=='iııi'", "" + DOTTED_i + DOTLESS_i + DOTLESS_i + DOTTED_i,
-                iIıİ.toLowerCase(LOCALE_TURKISH) );
-        assertEquals( "'iIıİ'.toUpperCase('en')=='IIIİ'", "" + DOTLESS_I + DOTLESS_I + DOTLESS_I + DOTTED_I,
-                iIıİ.toUpperCase(Locale.ENGLISH) );
+        assertEquals(
+                "'iIıİ'.toUpperCase('tr')=='İIIİ'",
+                "" + DOTTED_I + DOTLESS_I + DOTLESS_I + DOTTED_I,
+                iIıİ.toUpperCase(LOCALE_TURKISH));
+        assertEquals(
+                "'iIıİ'.toLowerCase('tr')=='iııi'",
+                "" + DOTTED_i + DOTLESS_i + DOTLESS_i + DOTTED_i,
+                iIıİ.toLowerCase(LOCALE_TURKISH));
+        assertEquals(
+                "'iIıİ'.toUpperCase('en')=='IIIİ'",
+                "" + DOTLESS_I + DOTLESS_I + DOTLESS_I + DOTTED_I,
+                iIıİ.toUpperCase(Locale.ENGLISH));
         String lower = iIıİ.toLowerCase(Locale.ENGLISH); // on some platforms, ends with extra COMBINED DOT ABOVE
-        String expected = "" + DOTTED_i + DOTTED_i + DOTLESS_i + DOTTED_i + (lower.length() > 4 ? COMBINING_DOT_ABOVE : "");
-        assertEquals( "'iIıİ'.toLowerCase('en')=='iiıi'", expected, lower );
+        String expected =
+                "" + DOTTED_i + DOTTED_i + DOTLESS_i + DOTTED_i + (lower.length() > 4 ? COMBINING_DOT_ABOVE : "");
+        assertEquals("'iIıİ'.toLowerCase('en')=='iiıi'", expected, lower);
 
         // check equalsIgnoreCase() , which has no locale
         for (int i = 0; i < iIıİ.length(); i++) {
