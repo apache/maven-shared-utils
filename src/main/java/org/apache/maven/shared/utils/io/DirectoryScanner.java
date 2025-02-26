@@ -544,7 +544,7 @@ public class DirectoryScanner {
      * @param dir   The directory to scan. Must not be <code>null</code>.
      * @param vpath The path relative to the base directory (needed to prevent problems with an absolute path when using
      *              dir). Must not be <code>null</code>.
-     * @param fast  Whether or not this call is part of a fast scan.
+     * @param fast  Whether this call is part of a fast scan
      * @see #filesIncluded
      * @see #filesNotIncluded
      * @see #filesExcluded
@@ -553,7 +553,7 @@ public class DirectoryScanner {
      * @see #dirsExcluded
      * @see #slowScan
      */
-    void scandir(@Nonnull final File dir, @Nonnull final String vpath, final boolean fast) {
+    private void scandir(@Nonnull final File dir, @Nonnull final String vpath, final boolean fast) {
         String[] newfiles = dir.list();
 
         if (newfiles == null) {
