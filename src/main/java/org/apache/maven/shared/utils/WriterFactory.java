@@ -29,6 +29,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.nio.charset.Charset;
 
 import org.apache.maven.shared.utils.xml.XmlStreamWriter;
 
@@ -102,7 +103,7 @@ public class WriterFactory {
      * @deprecated use {@code java.nio.charset.Charset.getDefaultCharset()}
      */
     @Deprecated
-    public static final String FILE_ENCODING = System.getProperty("file.encoding");
+    public static final String FILE_ENCODING = Charset.defaultCharset().displayName();
 
     /**
      * Create a new Writer with XML encoding detection rules.

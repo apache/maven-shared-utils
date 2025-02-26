@@ -18,6 +18,7 @@
  */
 package org.apache.maven.shared.utils;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Locale;
@@ -61,12 +62,12 @@ public class Os {
     /**
      * The path separator.
      */
-    public static final String PATH_SEP = System.getProperty("path.separator");
+    public static final String PATH_SEP = File.pathSeparator;
 
     /**
      * system line separator , e.g. &quot;\n&quot; on unixoid systems and &quot;\r\n&quot; on Windows
      */
-    public static final String LINE_SEP = System.getProperty("line.separator");
+    public static final String LINE_SEP = System.lineSeparator();
 
     /**
      * OS Family

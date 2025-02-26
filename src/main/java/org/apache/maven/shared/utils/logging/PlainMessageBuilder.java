@@ -102,7 +102,7 @@ class PlainMessageBuilder implements MessageBuilder, LoggerLevelRenderer {
     }
 
     public PlainMessageBuilder newline() {
-        buffer.append(System.getProperty("line.separator"));
+        buffer.append( System.lineSeparator() );
         return this;
     }
 

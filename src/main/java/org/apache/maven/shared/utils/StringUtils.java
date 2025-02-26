@@ -2152,7 +2152,7 @@ public class StringUtils {
      */
     @Deprecated
     public static String unifyLineSeparators(@Nullable String s) {
-        return unifyLineSeparators(s, System.getProperty("line.separator"));
+        return unifyLineSeparators(s, System.lineSeparator() );
     }
 
     /**
@@ -2171,7 +2171,7 @@ public class StringUtils {
         }
 
         if (ls == null) {
-            ls = System.getProperty("line.separator");
+            ls = System.lineSeparator();
         }
 
         if (!(ls.equals("\n") || ls.equals("\r") || ls.equals("\r\n"))) {
