@@ -2152,7 +2152,7 @@ public class StringUtils {
      */
     @Deprecated
     public static String unifyLineSeparators(@Nullable String s) {
-        return unifyLineSeparators(s, System.lineSeparator() );
+        return unifyLineSeparators(s, System.lineSeparator());
     }
 
     /**
