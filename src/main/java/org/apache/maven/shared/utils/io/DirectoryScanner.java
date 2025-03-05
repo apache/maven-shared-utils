@@ -541,10 +541,10 @@ public class DirectoryScanner {
      * collections, based on the matching of includes, excludes, and the selectors. When a directory is found, it is
      * scanned recursively.
      *
-     * @param dir   The directory to scan. Must not be <code>null</code>.
-     * @param vpath The path relative to the base directory (needed to prevent problems with an absolute path when using
+     * @param dir   the directory to scan. Must not be <code>null</code>.
+     * @param vpath the path relative to the base directory (needed to prevent problems with an absolute path when using
      *              dir). Must not be <code>null</code>.
-     * @param fast  Whether this call is part of a fast scan
+     * @param fast  whether this call is part of a fast scan
      * @see #filesIncluded
      * @see #filesNotIncluded
      * @see #filesExcluded
