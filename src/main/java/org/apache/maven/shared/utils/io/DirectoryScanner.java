@@ -512,7 +512,7 @@ public class DirectoryScanner {
      * <p/>
      * Returns immediately if a slow scan has already been completed.
      */
-    void slowScan() {
+    private void slowScan() {
         if (haveSlowResults) {
             return;
         }
@@ -687,7 +687,7 @@ public class DirectoryScanner {
      * @return <code>true</code> when the name matches at least one include pattern, or <code>false</code>
      *         otherwise.
      */
-    boolean isIncluded(final String name) {
+    private boolean isIncluded(final String name) {
         return includesPatterns.matches(name, isCaseSensitive);
     }
 
@@ -698,7 +698,7 @@ public class DirectoryScanner {
      * @return <code>true</code> when the name matches against the start of at least one include pattern, or
      *         <code>false</code> otherwise.
      */
-    boolean couldHoldIncluded(@Nonnull final String name) {
+    private boolean couldHoldIncluded(@Nonnull final String name) {
         return includesPatterns.matchesPatternStart(name, isCaseSensitive);
     }
 
@@ -709,7 +709,7 @@ public class DirectoryScanner {
      * @return <code>true</code> when the name matches against at least one exclude pattern, or <code>false</code>
      *         otherwise.
      */
-    boolean isExcluded(@Nonnull final String name) {
+    private boolean isExcluded(@Nonnull final String name) {
         return excludesPatterns.matches(name, isCaseSensitive);
     }
 
@@ -799,8 +799,7 @@ public class DirectoryScanner {
      */
     public void addDefaultExcludes() {
         final int excludesLength = excludes == null ? 0 : excludes.length;
-        String[] newExcludes;
-        newExcludes = new String[excludesLength + DEFAULTEXCLUDES.length];
+        String[] newExcludes = new String[excludesLength + DEFAULTEXCLUDES.length];
         if (excludesLength > 0) {
             System.arraycopy(excludes, 0, newExcludes, 0, excludesLength);
         }
