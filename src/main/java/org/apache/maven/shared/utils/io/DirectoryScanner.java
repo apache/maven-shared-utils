@@ -400,12 +400,12 @@ public class DirectoryScanner {
         setupDefaultFilters();
         setupMatchPatterns();
 
-        filesIncluded = new ArrayList<String>();
-        filesNotIncluded = new ArrayList<String>();
-        filesExcluded = new ArrayList<String>();
-        dirsIncluded = new ArrayList<String>();
-        dirsNotIncluded = new ArrayList<String>();
-        dirsExcluded = new ArrayList<String>();
+        filesIncluded = new ArrayList<>();
+        filesNotIncluded = new ArrayList<>();
+        filesExcluded = new ArrayList<>();
+        dirsIncluded = new ArrayList<>();
+        dirsNotIncluded = new ArrayList<>();
+        dirsExcluded = new ArrayList<>();
         scanAction = ScanConductor.ScanAction.CONTINUE;
 
         if (isIncluded("")) {
@@ -450,11 +450,11 @@ public class DirectoryScanner {
      */
     public DirectoryScanResult diffIncludedFiles(String... oldFiles) {
         if (filesIncluded == null) {
-            // perform a scan if the directory didn't got scanned yet
+            // perform a scan if the directory didn't get scanned yet
             scan();
         }
 
-        return diffFiles(oldFiles, filesIncluded.toArray(new String[filesIncluded.size()]));
+        return diffFiles(oldFiles, filesIncluded.toArray(new String[0]));
     }
 
     /**
@@ -466,8 +466,8 @@ public class DirectoryScanner {
         Set<String> oldFileSet = arrayAsHashSet(oldFiles);
         Set<String> newFileSet = arrayAsHashSet(newFiles);
 
-        List<String> added = new ArrayList<String>();
-        List<String> removed = new ArrayList<String>();
+        List<String> added = new ArrayList<>();
+        List<String> removed = new ArrayList<>();
 
         for (String oldFile : oldFileSet) {
             if (!newFileSet.contains(oldFile)) {
@@ -481,8 +481,8 @@ public class DirectoryScanner {
             }
         }
 
-        String[] filesAdded = added.toArray(new String[added.size()]);
-        String[] filesRemoved = removed.toArray(new String[removed.size()]);
+        String[] filesAdded = added.toArray( new String[0] );
+        String[] filesRemoved = removed.toArray(new String[0]);
 
         return new DirectoryScanResult(filesAdded, filesRemoved);
     }
@@ -499,7 +499,7 @@ public class DirectoryScanner {
             return Collections.emptySet();
         }
 
-        Set<T> set = new HashSet<T>(array.length);
+        Set<T> set = new HashSet<>(array.length);
         Collections.addAll(set, array);
 
         return set;
@@ -517,9 +517,9 @@ public class DirectoryScanner {
             return;
         }
 
-        final String[] excl = dirsExcluded.toArray(new String[dirsExcluded.size()]);
+        final String[] excl = dirsExcluded.toArray(new String[0]);
 
-        final String[] notIncl = dirsNotIncluded.toArray(new String[dirsNotIncluded.size()]);
+        final String[] notIncl = dirsNotIncluded.toArray(new String[0]);
 
         for (String anExcl : excl) {
             if (!couldHoldIncluded(anExcl)) {
@@ -663,7 +663,7 @@ public class DirectoryScanner {
     }
 
     private String[] doNotFollowSymbolicLinks(final File dir, final String vpath, final String[] newfiles) {
-        final List<String> noLinks = new ArrayList<String>();
+        final List<String> noLinks = new ArrayList<>();
         for (final String newfile : newfiles) {
             if (Files.isSymbolicLink(dir.toPath())) {
                 final String name = vpath + newfile;
@@ -677,7 +677,7 @@ public class DirectoryScanner {
                 noLinks.add(newfile);
             }
         }
-        return noLinks.toArray(new String[noLinks.size()]);
+        return noLinks.toArray(new String[0]);
     }
 
     /**
@@ -726,7 +726,7 @@ public class DirectoryScanner {
         if (filesIncluded == null) {
             return new String[0];
         }
-        return filesIncluded.toArray(new String[filesIncluded.size()]);
+        return filesIncluded.toArray(new String[0]);
     }
 
     /**
@@ -738,7 +738,7 @@ public class DirectoryScanner {
      */
     public String[] getNotIncludedFiles() {
         slowScan();
-        return filesNotIncluded.toArray(new String[filesNotIncluded.size()]);
+        return filesNotIncluded.toArray(new String[0]);
     }
 
     /**
@@ -752,7 +752,7 @@ public class DirectoryScanner {
      */
     public String[] getExcludedFiles() {
         slowScan();
-        return filesExcluded.toArray(new String[filesExcluded.size()]);
+        return filesExcluded.toArray(new String[0]);
     }
 
     /**
@@ -765,7 +765,7 @@ public class DirectoryScanner {
      */
     @Deprecated
     public String[] getIncludedDirectories() {
-        return dirsIncluded.toArray(new String[dirsIncluded.size()]);
+        return dirsIncluded.toArray(new String[0]);
     }
 
     /**
@@ -777,7 +777,7 @@ public class DirectoryScanner {
      */
     public String[] getNotIncludedDirectories() {
         slowScan();
-        return dirsNotIncluded.toArray(new String[dirsNotIncluded.size()]);
+        return dirsNotIncluded.toArray(new String[0]);
     }
 
     /**
@@ -791,7 +791,7 @@ public class DirectoryScanner {
      */
     public String[] getExcludedDirectories() {
         slowScan();
-        return dirsExcluded.toArray(new String[dirsExcluded.size()]);
+        return dirsExcluded.toArray(new String[0]);
     }
 
     /**
