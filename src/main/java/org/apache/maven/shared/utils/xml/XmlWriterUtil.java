@@ -31,7 +31,7 @@ import org.apache.maven.shared.utils.StringUtils;
 @Deprecated
 public class XmlWriterUtil {
     /** The vm line separator */
-    public static final String LS = System.getProperty("line.separator");
+    public static final String LS = System.lineSeparator();
 
     /** Platform independent line separator */
     private static final String CRLF = "\r\n";
