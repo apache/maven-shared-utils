@@ -30,6 +30,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.nio.charset.Charset;
 
 import org.apache.commons.io.input.XmlStreamReader;
 
@@ -103,7 +104,7 @@ public class ReaderFactory {
      * @deprecated use {@code java.nio.charset.Charset.getDefaultCharset()}
      */
     @Deprecated
-    public static final String FILE_ENCODING = System.getProperty("file.encoding");
+    public static final String FILE_ENCODING = Charset.defaultCharset().displayName();
 
     /**
      * Create a new Reader with XML encoding detection rules.

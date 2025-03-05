@@ -1473,7 +1473,7 @@ public class StringUtilsTest {
 
     @Test
     public void testUnifyLineSeparators1() {
-        String sls = System.getProperty("line.separator");
+        String sls = System.lineSeparator();
 
         assertThat(StringUtils.unifyLineSeparators(null), nullValue());
 
