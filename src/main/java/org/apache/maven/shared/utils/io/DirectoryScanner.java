@@ -481,7 +481,7 @@ public class DirectoryScanner {
             }
         }
 
-        String[] filesAdded = added.toArray( new String[0] );
+        String[] filesAdded = added.toArray(new String[0]);
         String[] filesRemoved = removed.toArray(new String[0]);
 
         return new DirectoryScanResult(filesAdded, filesRemoved);
