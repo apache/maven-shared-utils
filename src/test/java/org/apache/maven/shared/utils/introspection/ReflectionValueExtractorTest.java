@@ -389,8 +389,7 @@ public class ReflectionValueExtractorTest extends TestCase {
 
         public Map<String, Dependency> getDependenciesAsMap() {
             Map<String, Dependency> ret = new HashMap<>();
-            for (Object o : getDependencies()) {
-                Dependency dep = (Dependency) o;
+            for (Dependency dep : getDependencies()) {
                 ret.put(dep.getArtifactId(), dep);
             }
             return ret;

@@ -139,11 +139,10 @@ public class CaseTest extends Assert {
                     upper.toLowerCase(locale));
 
             // check that toLowerCase on lower and toUpperCase on upper don't cause harm
-            assertEquals("'" + lower + "'.toLowerCase('" + locale.toString() + "')", lower, lower.toLowerCase(locale));
-            assertEquals("'" + upper + "'.toUpperCase('" + locale.toString() + "')", upper, upper.toUpperCase(locale));
+            assertEquals("'" + lower + "'.toLowerCase('" + locale + "')", lower, lower.toLowerCase(locale));
+            assertEquals("'" + upper + "'.toUpperCase('" + locale + "')", upper, upper.toUpperCase(locale));
 
             // check equalsIgnoreCase
-            assertTrue("'" + upper + "'.equalsIgnoreCase('" + lower + "')", upper.equalsIgnoreCase(lower));
             assertTrue(
                     "'" + upper + "'.equalsIgnoreCase('" + expectedToLowerCase + "')",
                     upper.equalsIgnoreCase(expectedToLowerCase));

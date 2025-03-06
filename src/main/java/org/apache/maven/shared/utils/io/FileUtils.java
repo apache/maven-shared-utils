@@ -429,9 +429,7 @@ public class FileUtils {
         try (Writer writer = Files.newBufferedWriter(file.toPath(), charset)) {
             for (int i = 0; data != null && i < data.length; i++) {
                 writer.write(data[i]);
-                if (i < data.length) {
-                    writer.write("\n");
-                }
+                writer.write("\n");
             }
         }
     }
