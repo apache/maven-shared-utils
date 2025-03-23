@@ -229,6 +229,8 @@ public abstract class CommandLineUtils {
             throw new IllegalArgumentException("cl cannot be null.");
         }
 
+        final Charset pumperCharset = streamCharset == null && Os.isFamily(Os.FAMILY_WINDOWS) ? Charset.forName("GBK") : streamCharset;
+
         final Process p = cl.execute();
 
         final Thread processHook = new Thread() {
@@ -260,11 +262,11 @@ public abstract class CommandLineUtils {
                         inputFeeder.start();
                     }
 
-                    outputPumper = new StreamPumper(p.getInputStream(), systemOut);
+                    outputPumper = new StreamPumper(p.getInputStream(), systemOut, pumperCharset);
                     outputPumper.setName("StreamPumper-systemOut");
                     outputPumper.start();
 
-                    errorPumper = new StreamPumper(p.getErrorStream(), systemErr);
+                    errorPumper = new StreamPumper(p.getErrorStream(), systemErr, pumperCharset);
                     errorPumper.setName("StreamPumper-systemErr");
                     errorPumper.start();
 
