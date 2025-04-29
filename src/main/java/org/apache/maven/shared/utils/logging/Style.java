@@ -20,8 +20,8 @@ package org.apache.maven.shared.utils.logging;
 
 import java.util.Locale;
 
-import org.fusesource.jansi.Ansi;
-import org.fusesource.jansi.Ansi.Color;
+import org.jline.jansi.Ansi;
+import org.jline.jansi.Ansi.Color;
 
 /**
  * Configurable message styles.

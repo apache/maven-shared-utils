@@ -19,20 +19,20 @@
 package org.apache.maven.shared.utils.logging;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 
-import org.fusesource.jansi.AnsiColors;
-import org.fusesource.jansi.AnsiConsole;
-import org.fusesource.jansi.AnsiMode;
-import org.fusesource.jansi.AnsiPrintStream;
-import org.fusesource.jansi.AnsiType;
-import org.fusesource.jansi.io.AnsiOutputStream;
+import org.jline.jansi.*;
+import org.jline.jansi.io.AnsiOutputStream;
+import org.jline.terminal.Size;
+import org.jline.terminal.TerminalBuilder;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.jline.jansi.AnsiConsole.JANSI_PROVIDERS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assume.assumeNoException;
 
@@ -78,6 +78,7 @@ public class MessageUtilsTest {
                 false);
         try {
             AnsiConsole.systemInstall();
+            // AnsiConsole.out is not available, need to adjust initialization
             AnsiConsole.out = new AnsiPrintStream(aos, true);
             assertEquals(33, MessageUtils.getTerminalWidth());
         } catch (LinkageError e) {
