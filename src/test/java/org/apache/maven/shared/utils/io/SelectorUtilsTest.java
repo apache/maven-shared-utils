@@ -42,12 +42,9 @@ public class SelectorUtilsTest {
 
     @Test
     public void testRegexPrefix() throws Exception {
-        assertEquals(
-                true,
-                SelectorUtils.matchPatternStart(
-                        SelectorUtils.REGEX_HANDLER_PREFIX + File.separator + "aaa"
-                                + SelectorUtils.PATTERN_HANDLER_SUFFIX,
-                        ""));
+        assertTrue(SelectorUtils.matchPatternStart(
+                SelectorUtils.REGEX_HANDLER_PREFIX + File.separator + "aaa" + SelectorUtils.PATTERN_HANDLER_SUFFIX,
+                ""));
     }
 
     @Test
@@ -64,11 +61,11 @@ public class SelectorUtilsTest {
     }
 
     private void assertAntDoesNotMatch(String pattern, String target) {
-        assertEquals(false, SelectorUtils.matchPatternStart(wrapWithAntHandler(pattern), target));
+        assertFalse(SelectorUtils.matchPatternStart(wrapWithAntHandler(pattern), target));
     }
 
     private void assertAntMatch(String pattern, String target) {
-        assertEquals(true, SelectorUtils.matchPatternStart(wrapWithAntHandler(pattern), target));
+        assertTrue(SelectorUtils.matchPatternStart(wrapWithAntHandler(pattern), target));
     }
 
     private String wrapWithAntHandler(String val) {
