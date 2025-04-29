@@ -150,9 +150,9 @@ public class Xpp3DomTest {
 
         assertEquals(dom, dom);
         //noinspection ObjectEqualsNull
-        assertFalse(dom.equals(null));
-        assertFalse(dom.equals(new Xpp3Dom((String) null)));
-        assertFalse(dom.equals(other));
+        assertNotEquals(null, dom);
+        assertNotEquals(dom, new Xpp3Dom((String) null));
+        assertNotEquals(dom, other);
     }
 
     @Test

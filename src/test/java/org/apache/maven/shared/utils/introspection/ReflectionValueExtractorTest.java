@@ -98,11 +98,11 @@ public class ReflectionValueExtractorTest extends TestCase {
 
         assertNotNull(dependency);
 
-        assertTrue("dep1".equals(dependency.getArtifactId()));
+        assertEquals("dep1", dependency.getArtifactId());
 
         String artifactId = (String) ReflectionValueExtractor.evaluate("project.dependencies[1].artifactId", project);
 
-        assertTrue("dep2".equals(artifactId));
+        assertEquals("dep2", artifactId);
 
         // Array
 
@@ -110,11 +110,11 @@ public class ReflectionValueExtractorTest extends TestCase {
 
         assertNotNull(dependency);
 
-        assertTrue("dep1".equals(dependency.getArtifactId()));
+        assertEquals("dep1", dependency.getArtifactId());
 
         artifactId = (String) ReflectionValueExtractor.evaluate("project.dependenciesAsArray[1].artifactId", project);
 
-        assertTrue("dep2".equals(artifactId));
+        assertEquals("dep2", artifactId);
 
         // Map
 
@@ -122,11 +122,11 @@ public class ReflectionValueExtractorTest extends TestCase {
 
         assertNotNull(dependency);
 
-        assertTrue("dep1".equals(dependency.getArtifactId()));
+        assertEquals("dep1", dependency.getArtifactId());
 
         artifactId = (String) ReflectionValueExtractor.evaluate("project.dependenciesAsMap(dep2).artifactId", project);
 
-        assertTrue("dep2".equals(artifactId));
+        assertEquals("dep2", artifactId);
 
         // ----------------------------------------------------------------------
         // Build
