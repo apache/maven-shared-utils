@@ -20,7 +20,7 @@ package org.apache.maven.shared.utils.io;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Kristian Rosenvold

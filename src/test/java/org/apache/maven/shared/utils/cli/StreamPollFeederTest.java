@@ -49,13 +49,13 @@ public class StreamPollFeederTest {
     @Test
     public void dataShouldBeCopied() throws InterruptedException, IOException {
 
-        StringBuilder TEST_DATA = new StringBuilder();
+        StringBuilder testData = new StringBuilder();
         for (int i = 0; i < 100; i++) {
-            TEST_DATA.append("TestData");
+            testData.append("TestData");
         }
 
         ByteArrayInputStream inputStream =
-                new ByteArrayInputStream(TEST_DATA.toString().getBytes());
+                new ByteArrayInputStream(testData.toString().getBytes());
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         StreamPollFeeder streamPollFeeder = new StreamPollFeeder(inputStream, outputStream);
@@ -63,7 +63,7 @@ public class StreamPollFeederTest {
         streamPollFeeder.start();
 
         //  wait until all data from steam will be read
-        while (outputStream.size() < TEST_DATA.length()) {
+        while (outputStream.size() < testData.length()) {
             Thread.sleep(100);
         }
 
@@ -71,6 +71,6 @@ public class StreamPollFeederTest {
         streamPollFeeder.waitUntilDone();
         assertNull(streamPollFeeder.getException());
 
-        assertEquals(TEST_DATA.toString(), outputStream.toString());
+        assertEquals(testData.toString(), outputStream.toString());
     }
 }

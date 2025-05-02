@@ -1360,9 +1360,9 @@ public class IOUtilTest {
 
     @Test
     public void copyEmptyStringValidOutputStream() throws Exception {
-        ByteArrayOutputStream OutputStream = new DontCloseByteArrayOutputStream();
-        IOUtil.copy(emptyString(), OutputStream);
-        assertThat(OutputStream.toByteArray(), is(emptyString().getBytes()));
+        ByteArrayOutputStream os = new DontCloseByteArrayOutputStream();
+        IOUtil.copy(emptyString(), os);
+        assertThat(os.toByteArray(), is(emptyString().getBytes()));
     }
 
     @Test(expected = NullPointerException.class)
@@ -1374,9 +1374,9 @@ public class IOUtilTest {
     @Test
     public void copyStringValidOutputStream() throws Exception {
         String probe = "A string \u2345\u00ef";
-        ByteArrayOutputStream OutputStream = new DontCloseByteArrayOutputStream();
-        IOUtil.copy(probe, OutputStream);
-        assertThat(OutputStream.toByteArray(), is(probe.getBytes()));
+        ByteArrayOutputStream os = new DontCloseByteArrayOutputStream();
+        IOUtil.copy(probe, os);
+        assertThat(os.toByteArray(), is(probe.getBytes()));
     }
 
     @Test(expected = NullPointerException.class)
@@ -1396,9 +1396,9 @@ public class IOUtilTest {
 
     @Test(expected = NegativeArraySizeException.class)
     public void copyEmptyStringValidOutputStreamNegBufSz() throws Exception {
-        ByteArrayOutputStream OutputStream = new DontCloseByteArrayOutputStream();
-        IOUtil.copy(emptyString(), OutputStream, -1);
-        assertThat(OutputStream.toByteArray(), is(emptyString().getBytes()));
+        ByteArrayOutputStream os = new DontCloseByteArrayOutputStream();
+        IOUtil.copy(emptyString(), os, -1);
+        assertThat(os.toByteArray(), is(emptyString().getBytes()));
     }
 
     @Test(expected = NullPointerException.class)
@@ -1410,9 +1410,9 @@ public class IOUtilTest {
     @Test(expected = NegativeArraySizeException.class)
     public void copyStringValidOutputStreamNegBufSz() throws Exception {
         String probe = "A string \u2345\u00ef";
-        ByteArrayOutputStream OutputStream = new DontCloseByteArrayOutputStream();
-        IOUtil.copy(probe, OutputStream, -1);
-        assertThat(OutputStream.toByteArray(), is(probe.getBytes()));
+        ByteArrayOutputStream os = new DontCloseByteArrayOutputStream();
+        IOUtil.copy(probe, os, -1);
+        assertThat(os.toByteArray(), is(probe.getBytes()));
     }
 
     @Test(expected = NullPointerException.class, timeout = INFINITE_LOOP_TIMEOUT)
@@ -1447,9 +1447,9 @@ public class IOUtilTest {
 
     @Test
     public void copyEmptyStringValidOutputStreamPosBufSz() throws Exception {
-        ByteArrayOutputStream OutputStream = new DontCloseByteArrayOutputStream();
-        IOUtil.copy(emptyString(), OutputStream, 1);
-        assertThat(OutputStream.toByteArray(), is(emptyString().getBytes()));
+        ByteArrayOutputStream os = new DontCloseByteArrayOutputStream();
+        IOUtil.copy(emptyString(), os, 1);
+        assertThat(os.toByteArray(), is(emptyString().getBytes()));
     }
 
     @Test(expected = NullPointerException.class)
@@ -1461,9 +1461,9 @@ public class IOUtilTest {
     @Test
     public void copyStringValidOutputStreamPosBufSz() throws Exception {
         String probe = "A string \u2345\u00ef";
-        ByteArrayOutputStream OutputStream = new DontCloseByteArrayOutputStream();
-        IOUtil.copy(probe, OutputStream, 1);
-        assertThat(OutputStream.toByteArray(), is(probe.getBytes()));
+        ByteArrayOutputStream os = new DontCloseByteArrayOutputStream();
+        IOUtil.copy(probe, os, 1);
+        assertThat(os.toByteArray(), is(probe.getBytes()));
     }
 
     @Test(expected = NullPointerException.class)
@@ -2284,7 +2284,7 @@ public class IOUtilTest {
 
     private static class DontCloseStringReader extends StringReader {
 
-        public DontCloseStringReader(String s) {
+        DontCloseStringReader(String s) {
             super(s);
         }
 
@@ -2295,7 +2295,7 @@ public class IOUtilTest {
     }
 
     private static class DontCloseByteArrayInputStream extends ByteArrayInputStream {
-        public DontCloseByteArrayInputStream(byte[] input) {
+        DontCloseByteArrayInputStream(byte[] input) {
             super(input);
         }
 

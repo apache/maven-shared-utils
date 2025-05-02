@@ -41,7 +41,7 @@ public class BourneShellTest extends TestCase {
         assertEquals("/bin/sh -c cd '/usr/local/bin' && 'chmod'", executable);
     }
 
-    public void testQuoteWorkingDirectoryAndExecutable_WDPathWithSingleQuotes() {
+    public void testQuoteWorkingDirectoryAndExecutableWDPathWithSingleQuotes() {
         Shell sh = newShell();
 
         sh.setWorkingDirectory("/usr/local/'something else'");
@@ -52,7 +52,7 @@ public class BourneShellTest extends TestCase {
         assertEquals("/bin/sh -c cd '/usr/local/'\"'\"'something else'\"'\"'' && 'chmod'", executable);
     }
 
-    public void testQuoteWorkingDirectoryAndExecutable_WDPathWithSingleQuotes_BackslashFileSep() {
+    public void testQuoteWorkingDirectoryAndExecutableWDPathWithSingleQuotesBackslashFileSep() {
         Shell sh = newShell();
 
         sh.setWorkingDirectory("\\usr\\local\\'something else'");

@@ -34,63 +34,63 @@ public class AnsiMessageBuilderTest {
     }
 
     @Test
-    public void should_color_debug() {
+    public void shouldColorDebug() {
         ansiMessageBuilder.debug("DEBUG");
 
         assertThat(ansiMessageBuilder.toString(), equalTo("\u001B[1;36mDEBUG\u001B[m"));
     }
 
     @Test
-    public void should_color_info() {
+    public void shouldColorInfo() {
         ansiMessageBuilder.info("INFO");
 
         assertThat(ansiMessageBuilder.toString(), equalTo("\u001B[1;34mINFO\u001B[m"));
     }
 
     @Test
-    public void should_color_warning_and_reset() {
+    public void shouldColorWarningAndReset() {
         ansiMessageBuilder.warning("WARNING");
 
         assertThat(ansiMessageBuilder.toString(), equalTo("\u001B[1;33mWARNING\u001B[m"));
     }
 
     @Test
-    public void should_color_error() {
+    public void shouldColorError() {
         ansiMessageBuilder.error("ERROR");
 
         assertThat(ansiMessageBuilder.toString(), equalTo("\u001B[1;31mERROR\u001B[m"));
     }
 
     @Test
-    public void should_color_success_with_message() {
+    public void shouldColorSuccessWithMessage() {
         ansiMessageBuilder.success("a success message");
 
         assertThat(ansiMessageBuilder.toString(), equalTo("\u001B[1;32ma success message\u001B[m"));
     }
 
     @Test
-    public void should_color_failure_and_reset() {
+    public void shouldColorFailureAndReset() {
         ansiMessageBuilder.failure("a failure message");
 
         assertThat(ansiMessageBuilder.toString(), equalTo("\u001B[1;31ma failure message\u001B[m"));
     }
 
     @Test
-    public void should_color_strong_and_reset() {
+    public void shouldColorStrongAndReset() {
         ansiMessageBuilder.strong("a strong message");
 
         assertThat(ansiMessageBuilder.toString(), equalTo("\u001B[1ma strong message\u001B[m"));
     }
 
     @Test
-    public void should_color_mojo_and_reset() {
+    public void shouldColorMojoAndReset() {
         ansiMessageBuilder.mojo("a mojo");
 
         assertThat(ansiMessageBuilder.toString(), equalTo("\u001B[32ma mojo\u001B[m"));
     }
 
     @Test
-    public void should_color_project_and_reset() {
+    public void shouldColorProjectAndReset() {
         ansiMessageBuilder.project("a project");
 
         assertThat(ansiMessageBuilder.toString(), equalTo("\u001B[36ma project\u001B[m"));
