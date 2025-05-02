@@ -137,7 +137,7 @@ public class XmlStreamReaderTest extends TestCase {
         checkXmlStreamReader(TEXT_LATIN15, "ISO-8859-15");
     }
 
-    public void testEUC_JPEncoding() throws IOException {
+    public void testEUCJPEncoding() throws IOException {
         checkXmlStreamReader(TEXT_EUC_JP, "EUC-JP");
     }
 

@@ -40,8 +40,8 @@ public class PathToolTest {
     public TemporaryFolder tempFolder = new TemporaryFolder();
 
     @Test
-    // Keep in sync with testGetRelativeFilePath_Windows()
-    public void testGetRelativeFilePath_NonWindows() {
+    // Keep in sync with testGetRelativeFilePathWindows()
+    public void testGetRelativeFilePathNonWindows() {
         Assume.assumeThat(File.separatorChar, is('/'));
 
         assertThat(PathTool.getRelativeFilePath(null, null), is(""));
@@ -66,8 +66,8 @@ public class PathToolTest {
     }
 
     @Test
-    // Keep in sync with testGetRelativeFilePath_NonWindows()
-    public void testGetRelativeFilePath_Windows() {
+    // Keep in sync with testGetRelativeFilePathNonWindows()
+    public void testGetRelativeFilePathWindows() {
         Assume.assumeThat(File.separatorChar, is('\\'));
 
         assertThat(PathTool.getRelativeFilePath(null, null), is(""));
@@ -96,7 +96,7 @@ public class PathToolTest {
     }
 
     @Test
-    public void testGetRelativePath_2parm() {
+    public void testGetRelativePath2Parm() {
         assertThat(PathTool.getRelativePath(null, null), is(""));
 
         assertThat(PathTool.getRelativePath(null, "/usr/local/java/bin"), is(""));

@@ -34,6 +34,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -361,14 +362,14 @@ public class FileUtilsTest {
     }
 
     /** A time today, rounded down to the previous minute */
-    private static long MODIFIED_TODAY =
+    private static final long MODIFIED_TODAY =
             (System.currentTimeMillis() / TimeUnit.MINUTES.toMillis(1)) * TimeUnit.MINUTES.toMillis(1);
 
     /** A time yesterday, rounded down to the previous minute */
-    private static long MODIFIED_YESTERDAY = MODIFIED_TODAY - TimeUnit.DAYS.toMillis(1);
+    private static final long MODIFIED_YESTERDAY = MODIFIED_TODAY - TimeUnit.DAYS.toMillis(1);
 
     /** A time last week, rounded down to the previous minute */
-    private static long MODIFIED_LAST_WEEK = MODIFIED_TODAY - TimeUnit.DAYS.toMillis(7);
+    private static final long MODIFIED_LAST_WEEK = MODIFIED_TODAY - TimeUnit.DAYS.toMillis(7);
 
     @Test
     public void copyFileWithNoFiltersAndNoDestination() throws Exception {
@@ -505,7 +506,7 @@ public class FileUtilsTest {
 
     private File write(@Nonnull String name, long lastModified, @Nonnull String text) throws IOException {
         final File file = new File(tempFolder.getRoot(), name);
-        try (final Writer writer = new FileWriter(file)) {
+        try (Writer writer = new FileWriter(file)) {
             writer.write(text);
         }
         assertTrue(file.setLastModified(lastModified));
@@ -644,7 +645,7 @@ public class FileUtilsTest {
     }
 
     @Test
-    public void copyDirectoryErrors_nullDestination() throws IOException {
+    public void copyDirectoryErrorsNullDestination() throws IOException {
         try {
             FileUtils.copyDirectory(new File("a"), null);
             fail();
@@ -653,7 +654,7 @@ public class FileUtilsTest {
     }
 
     @Test
-    public void copyDirectoryErrors_copyToSelf() {
+    public void copyDirectoryErrorsCopyToSelf() {
         try {
             FileUtils.copyDirectory(tempFolder.getRoot(), tempFolder.getRoot());
             fail();
@@ -872,7 +873,7 @@ public class FileUtilsTest {
     }
 
     @Test
-    public void writeStringToFileWithEncoding_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
+    public void writeStringToFileWithEncodingWithAppendOptionTrueShouldNotDeletePreviousFileLines() throws Exception {
         File file = FileTestHelper.newFile(tempFolder, "lines.txt");
         FileUtils.fileWrite(file, null, "This line was there before you...");
 
@@ -884,7 +885,7 @@ public class FileUtilsTest {
     }
 
     @Test
-    public void writeStringToFile_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
+    public void writeStringToFileWithAppendOptionTrueShouldNotDeletePreviousFileLines() throws Exception {
         File file = FileTestHelper.newFile(tempFolder, "lines.txt");
         FileUtils.fileWrite(file, null, "This line was there before you...");
 
@@ -900,7 +901,7 @@ public class FileUtilsTest {
         File file = new File(tempFolder.getRoot(), "writeArray.txt");
         FileUtils.fileWriteArray(file, new String[] {"line1", "line2", "line3"});
 
-        byte[] text = "line1\nline2\nline3".getBytes("UTF8");
+        byte[] text = "line1\nline2\nline3".getBytes(StandardCharsets.UTF_8);
         assertEqualContent(text, file);
     }
 
@@ -909,12 +910,12 @@ public class FileUtilsTest {
         File file = new File(tempFolder.getRoot(), "writeArray.txt");
         FileUtils.fileWriteArray(file, "UTF8", new String[] {"line1", "line2", "line3"});
 
-        byte[] text = "line1\nline2\nline3".getBytes("UTF8");
+        byte[] text = "line1\nline2\nline3".getBytes(StandardCharsets.UTF_8);
         assertEqualContent(text, file);
     }
 
     @Test
-    public void writeWithEncoding_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
+    public void writeWithEncodingWithAppendOptionTrueShouldNotDeletePreviousFileLines() throws Exception {
         File file = FileTestHelper.newFile(tempFolder, "lines.txt");
         FileUtils.fileWrite(file, "UTF-8", "This line was there before you...");
 
@@ -926,7 +927,7 @@ public class FileUtilsTest {
     }
 
     @Test
-    public void write_WithAppendOptionTrue_ShouldNotDeletePreviousFileLines() throws Exception {
+    public void writeWithAppendOptionTrueShouldNotDeletePreviousFileLines() throws Exception {
         File file = FileTestHelper.newFile(tempFolder, "lines.txt");
         FileUtils.fileWrite(file, null, "This line was there before you...");
 

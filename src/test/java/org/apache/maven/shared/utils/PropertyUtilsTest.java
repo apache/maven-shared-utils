@@ -62,7 +62,7 @@ public class PropertyUtilsTest {
     }
 
     @Test
-    public void loadOptionalProperties_ioException() throws Exception {
+    public void loadOptionalPropertiesIoException() throws Exception {
         URL url = new URL("https://nonesuch12344.foo.bar.com");
         assertThat(PropertyUtils.loadOptionalProperties(url), is(new Properties()));
     }

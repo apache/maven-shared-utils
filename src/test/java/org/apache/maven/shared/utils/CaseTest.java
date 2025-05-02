@@ -37,12 +37,15 @@ public class CaseTest extends Assert {
     private static final Locale LOCALE_TURKISH = new Locale("tr");
 
     /** common ASCII 'i' */
+    @SuppressWarnings("ConstantName")
     private static final char DOTTED_i = '\u0069';
 
     /** common ASCII 'I' */
+    @SuppressWarnings("ConstantName")
     private static final char DOTLESS_I = '\u0049';
 
     /** turkish dotless i = ı */
+    @SuppressWarnings("ConstantName")
     private static final char DOTLESS_i = '\u0131';
 
     /** turkish dotted I = İ */
@@ -68,6 +71,7 @@ public class CaseTest extends Assert {
         assertEquals("common lowercase i should have a dot", 'i', DOTTED_i);
         assertEquals("common uppercase I should not have a dot", 'I', DOTLESS_I);
 
+        @SuppressWarnings("LocalFinalVariableName")
         final String iIıİ = "iIıİ";
 
         // check source encoding doesn't wreak havoc */

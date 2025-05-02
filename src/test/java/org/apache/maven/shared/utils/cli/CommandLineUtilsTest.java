@@ -91,7 +91,7 @@ public class CommandLineUtilsTest {
     }
 
     @Test
-    public void givenADoubleQuoteMarkInArgument_whenExecutingCode_thenCommandLineExceptionIsThrown() {
+    public void givenADoubleQuoteMarkInArgumentWhenExecutingCodeThenCommandLineExceptionIsThrown() {
         try {
             new Commandline("echo \"let\"s go\"").execute();
         } catch (CommandLineException e) {
@@ -102,14 +102,14 @@ public class CommandLineUtilsTest {
     }
 
     @Test
-    public void givenASingleQuoteMarkInArgument_whenExecutingCode_thenExitCode0Returned() throws Exception {
+    public void givenASingleQuoteMarkInArgumentWhenExecutingCodeThenExitCode0Returned() throws Exception {
         final Process p = new Commandline("echo \"let's go\"").execute();
         p.waitFor();
         assertEquals(0, p.exitValue());
     }
 
     @Test
-    public void givenASingleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenTheQuotationMarkIsNotEscaped()
+    public void givenASingleQuoteMarkInArgumentWhenTranslatingToCmdLineArgsThenTheQuotationMarkIsNotEscaped()
             throws Exception {
         final String command = "echo \"let's go\"";
         final String[] expected = new String[] {"echo", "let's go"};
@@ -117,25 +117,23 @@ public class CommandLineUtilsTest {
     }
 
     @Test
-    public void
-            givenAnEscapedDoubleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenTheQuotationMarkRemainsEscaped()
-                    throws Exception {
+    public void givenAnEscapedDoubleQuoteMarkInArgumentWhenTranslatingToCmdLineArgsThenTheQuotationMarkRemainsEscaped()
+            throws Exception {
         final String command = "echo \"let\\\"s go\"";
         final String[] expected = new String[] {"echo", "let\\\"s go"};
         assertCmdLineArgs(expected, command);
     }
 
     @Test
-    public void
-            givenAnEscapedSingleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenTheQuotationMarkRemainsEscaped()
-                    throws Exception {
+    public void givenAnEscapedSingleQuoteMarkInArgumentWhenTranslatingToCmdLineArgsThenTheQuotationMarkRemainsEscaped()
+            throws Exception {
         final String command = "echo \"let\\'s go\"";
         final String[] expected = new String[] {"echo", "let\\'s go"};
         assertCmdLineArgs(expected, command);
     }
 
     @Test
-    public void givenAnEscapedDoubleQuoteMarkInArgument_whenTranslatingToCmdLineArgs_thenNoExceptionIsThrown()
+    public void givenAnEscapedDoubleQuoteMarkInArgumentWhenTranslatingToCmdLineArgsThenNoExceptionIsThrown()
             throws Exception {
         Process p = new Commandline("echo \"let\\\"s go\"").execute();
         p.waitFor();
