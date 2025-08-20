@@ -1756,7 +1756,7 @@ public class StringUtils {
     /**
      * <p>Turn "Now is the time for all good men" into "Now is the time for..."</p>
      * <p>Specifically:</p>
-     * <p>If str is less than max characters long, return it.
+     * <p>If str is no greater than max characters long, return it.
      * Else abbreviate it to (substring(str, 0, max-3) + "...").
      * If maxWidth is less than 3, throw an IllegalArgumentException.
      * In no case will it return a string of length greater than maxWidth.</p>
