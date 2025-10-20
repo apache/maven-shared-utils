@@ -20,14 +20,12 @@ package org.apache.maven.shared.utils;
 
 import java.io.File;
 
-import org.hamcrest.CoreMatchers;
-import org.junit.Assume;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 /**
  * Test the {@link PathTool} class.
@@ -36,88 +34,87 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 public class PathToolTest {
 
-    @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
+    @TempDir
+    private File tempFolder;
 
     @Test
     // Keep in sync with testGetRelativeFilePathWindows()
     public void testGetRelativeFilePathNonWindows() {
-        Assume.assumeThat(File.separatorChar, is('/'));
+        assumeTrue(File.separatorChar == '/');
 
-        assertThat(PathTool.getRelativeFilePath(null, null), is(""));
+        assertEquals("", PathTool.getRelativeFilePath(null, null));
 
-        assertThat(PathTool.getRelativeFilePath(null, "/usr/local/java/bin"), is(""));
+        assertEquals("", PathTool.getRelativeFilePath(null, "/usr/local/java/bin"));
 
-        assertThat(PathTool.getRelativeFilePath("/usr/local", null), is(""));
+        assertEquals("", PathTool.getRelativeFilePath("/usr/local", null));
 
-        assertThat(PathTool.getRelativeFilePath("/usr/local", "/usr/local/java/bin"), is("java/bin"));
+        assertEquals("java/bin", PathTool.getRelativeFilePath("/usr/local", "/usr/local/java/bin"));
 
-        assertThat(PathTool.getRelativeFilePath("/usr/local", "/usr/local/java/bin/"), is("java/bin/"));
+        assertEquals("java/bin/", PathTool.getRelativeFilePath("/usr/local", "/usr/local/java/bin/"));
 
-        assertThat(PathTool.getRelativeFilePath("/usr/local/java/bin", "/usr/local/"), is("../../"));
+        assertEquals("../../", PathTool.getRelativeFilePath("/usr/local/java/bin", "/usr/local/"));
 
-        assertThat(PathTool.getRelativeFilePath("/usr/local/", "/usr/local/java/bin/java.sh"), is("java/bin/java.sh"));
+        assertEquals("java/bin/java.sh", PathTool.getRelativeFilePath("/usr/local/", "/usr/local/java/bin/java.sh"));
 
-        assertThat(PathTool.getRelativeFilePath("/usr/local/java/bin/java.sh", "/usr/local/"), is("../../../"));
+        assertEquals("../../../", PathTool.getRelativeFilePath("/usr/local/java/bin/java.sh", "/usr/local/"));
 
-        assertThat(PathTool.getRelativeFilePath("/usr/local/", "/bin"), is("../../bin"));
+        assertEquals("../../bin", PathTool.getRelativeFilePath("/usr/local/", "/bin"));
 
-        assertThat(PathTool.getRelativeFilePath("/bin", "/usr/local/"), is("../usr/local/"));
+        assertEquals("../usr/local/", PathTool.getRelativeFilePath("/bin", "/usr/local/"));
     }
 
     @Test
     // Keep in sync with testGetRelativeFilePathNonWindows()
     public void testGetRelativeFilePathWindows() {
-        Assume.assumeThat(File.separatorChar, is('\\'));
+        assumeTrue(File.separatorChar == '\\');
 
-        assertThat(PathTool.getRelativeFilePath(null, null), is(""));
+        assertEquals("", PathTool.getRelativeFilePath(null, null));
 
-        assertThat(PathTool.getRelativeFilePath(null, "c:\\usr\\local\\java\\bin"), is(""));
+        assertEquals("", PathTool.getRelativeFilePath(null, "c:\\usr\\local\\java\\bin"));
 
-        assertThat(PathTool.getRelativeFilePath("c:\\usr\\local", null), is(""));
+        assertEquals("", PathTool.getRelativeFilePath("c:\\usr\\local", null));
 
-        assertThat(PathTool.getRelativeFilePath("c:\\usr\\local", "c:\\usr\\local\\java\\bin"), is("java\\bin"));
+        assertEquals("java\\bin", PathTool.getRelativeFilePath("c:\\usr\\local", "c:\\usr\\local\\java\\bin"));
 
-        assertThat(PathTool.getRelativeFilePath("c:\\usr\\local", "c:\\usr\\local\\java\\bin\\"), is("java\\bin\\"));
+        assertEquals("java\\bin\\", PathTool.getRelativeFilePath("c:\\usr\\local", "c:\\usr\\local\\java\\bin\\"));
 
-        assertThat(PathTool.getRelativeFilePath("c:\\usr\\local\\java\\bin", "c:\\usr\\local\\"), is("..\\..\\"));
+        assertEquals("..\\..\\", PathTool.getRelativeFilePath("c:\\usr\\local\\java\\bin", "c:\\usr\\local\\"));
 
-        assertThat(
-                PathTool.getRelativeFilePath("c:\\usr\\local\\", "c:\\usr\\local\\java\\bin\\java.sh"),
-                is("java\\bin\\java.sh"));
+        assertEquals(
+                "java\\bin\\java.sh",
+                PathTool.getRelativeFilePath("c:\\usr\\local\\", "c:\\usr\\local\\java\\bin\\java.sh"));
 
-        assertThat(
-                PathTool.getRelativeFilePath("c:\\usr\\local\\java\\bin\\java.sh", "c:\\usr\\local\\"),
-                is("..\\..\\..\\"));
+        assertEquals(
+                "..\\..\\..\\", PathTool.getRelativeFilePath("c:\\usr\\local\\java\\bin\\java.sh", "c:\\usr\\local\\"));
 
-        assertThat(PathTool.getRelativeFilePath("c:\\usr\\local\\", "c:\\bin"), is("..\\..\\bin"));
+        assertEquals("..\\..\\bin", PathTool.getRelativeFilePath("c:\\usr\\local\\", "c:\\bin"));
 
-        assertThat(PathTool.getRelativeFilePath("c:\\bin", "c:\\usr\\local\\"), is("..\\usr\\local\\"));
+        assertEquals("..\\usr\\local\\", PathTool.getRelativeFilePath("c:\\bin", "c:\\usr\\local\\"));
     }
 
     @Test
     public void testGetRelativePath2Parm() {
-        assertThat(PathTool.getRelativePath(null, null), is(""));
+        assertEquals("", PathTool.getRelativePath(null, null));
 
-        assertThat(PathTool.getRelativePath(null, "/usr/local/java/bin"), is(""));
+        assertEquals("", PathTool.getRelativePath(null, "/usr/local/java/bin"));
 
-        assertThat(PathTool.getRelativePath("/usr/local/", null), is(""));
+        assertEquals("", PathTool.getRelativePath("/usr/local/", null));
 
-        assertThat(PathTool.getRelativePath("/usr/local/", "/usr/local/java/bin"), is(".."));
+        assertEquals("..", PathTool.getRelativePath("/usr/local/", "/usr/local/java/bin"));
 
-        assertThat(PathTool.getRelativePath("/usr/local/", "/usr/local/java/bin/java.sh"), is("../.."));
+        assertEquals("../..", PathTool.getRelativePath("/usr/local/", "/usr/local/java/bin/java.sh"));
 
-        assertThat(PathTool.getRelativePath("/usr/local/java/bin/java.sh", "/usr/local/"), is(""));
+        assertEquals("", PathTool.getRelativePath("/usr/local/java/bin/java.sh", "/usr/local/"));
     }
 
     @Test
     public void testUppercaseDrive() {
-        assertThat(PathTool.uppercaseDrive(null), CoreMatchers.nullValue());
+        assertNull(PathTool.uppercaseDrive(null));
 
-        assertThat(PathTool.uppercaseDrive("d:"), is("D:"));
+        assertEquals("D:", PathTool.uppercaseDrive("d:"));
 
-        assertThat(PathTool.uppercaseDrive("D:"), is("D:"));
+        assertEquals("D:", PathTool.uppercaseDrive("D:"));
 
-        assertThat(PathTool.uppercaseDrive("/notadrive"), is("/notadrive"));
+        assertEquals("/notadrive", PathTool.uppercaseDrive("/notadrive"));
     }
 }

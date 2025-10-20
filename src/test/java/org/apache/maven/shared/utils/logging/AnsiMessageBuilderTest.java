@@ -18,8 +18,8 @@
  */
 package org.apache.maven.shared.utils.logging;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -28,7 +28,7 @@ public class AnsiMessageBuilderTest {
 
     private AnsiMessageBuilder ansiMessageBuilder;
 
-    @Before
+    @BeforeEach
     public void initializeAnsiMessageBuffer() {
         this.ansiMessageBuilder = new AnsiMessageBuilder();
     }

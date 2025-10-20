@@ -24,8 +24,8 @@ import java.io.IOException;
 import java.io.StringWriter;
 
 import org.apache.maven.shared.utils.StringUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test of {@link PrettyPrintXMLWriter}
@@ -41,9 +41,9 @@ public class PrettyPrintXmlWriterTest {
 
         try {
             writer.startElement("");
-            Assert.fail("allowed empty name");
+            Assertions.fail("allowed empty name");
         } catch (IllegalArgumentException ex) {
-            Assert.assertEquals("Element name cannot be empty", ex.getMessage());
+            Assertions.assertEquals("Element name cannot be empty", ex.getMessage());
         }
     }
 
@@ -57,7 +57,7 @@ public class PrettyPrintXmlWriterTest {
 
         writer.endElement(); // Tag.HTML
 
-        Assert.assertEquals(expectedResult(), w.toString());
+        Assertions.assertEquals(expectedResult(), w.toString());
     }
 
     @Test
@@ -72,7 +72,7 @@ public class PrettyPrintXmlWriterTest {
 
         writer.endElement(); // Tag.HTML
 
-        Assert.assertEquals(expectedResult(), w.toString());
+        Assertions.assertEquals(expectedResult(), w.toString());
     }
 
     @Test
@@ -87,7 +87,7 @@ public class PrettyPrintXmlWriterTest {
 
         writer.endElement(); // Tag.HTML
 
-        Assert.assertEquals(expectedResult("    "), w.toString());
+        Assertions.assertEquals(expectedResult("    "), w.toString());
     }
 
     @Test
@@ -96,7 +96,7 @@ public class PrettyPrintXmlWriterTest {
         writer.startElement(HTML.Tag.DIV.toString());
         writer.addAttribute("class", "sect\r\nion");
         writer.endElement(); // Tag.DIV
-        Assert.assertEquals("<div class=\"sect&#10;ion\"/>", w.toString());
+        Assertions.assertEquals("<div class=\"sect&#10;ion\"/>", w.toString());
     }
 
     @Test
@@ -105,7 +105,7 @@ public class PrettyPrintXmlWriterTest {
         writer.startElement(HTML.Tag.DIV.toString());
         writer.addAttribute("class", "sect\rion");
         writer.endElement(); // Tag.DIV
-        Assert.assertEquals("<div class=\"sect&#13;ion\"/>", w.toString());
+        Assertions.assertEquals("<div class=\"sect&#13;ion\"/>", w.toString());
     }
 
     @Test
@@ -114,7 +114,7 @@ public class PrettyPrintXmlWriterTest {
         writer.startElement(HTML.Tag.DIV.toString());
         writer.addAttribute("class", "section\r");
         writer.endElement(); // Tag.DIV
-        Assert.assertEquals("<div class=\"section&#13;\"/>", w.toString());
+        Assertions.assertEquals("<div class=\"section&#13;\"/>", w.toString());
     }
 
     @Test
@@ -123,7 +123,7 @@ public class PrettyPrintXmlWriterTest {
         writer.startElement(HTML.Tag.DIV.toString());
         writer.addAttribute("class", "sect\nion");
         writer.endElement(); // Tag.DIV
-        Assert.assertEquals("<div class=\"sect&#10;ion\"/>", w.toString());
+        Assertions.assertEquals("<div class=\"sect&#10;ion\"/>", w.toString());
     }
 
     private void writeXhtmlHead(XMLWriter writer) throws IOException {
