@@ -20,10 +20,11 @@ package org.apache.maven.shared.utils.io;
 
 import java.io.File;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test the {@link SelectorUtils} class.
@@ -31,9 +32,9 @@ import static org.junit.Assert.assertTrue;
 @SuppressWarnings("deprecation")
 public class SelectorUtilsTest {
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testMatchPatternStart() {
-        SelectorUtils.matchPatternStart(null, null);
+        assertThrows(NullPointerException.class, () -> SelectorUtils.matchPatternStart(null, null));
     }
 
     @Test

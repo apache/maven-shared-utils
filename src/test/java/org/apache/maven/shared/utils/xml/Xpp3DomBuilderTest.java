@@ -27,12 +27,12 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.maven.shared.utils.xml.pull.XmlPullParserException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * @author Kristian Rosenvold
@@ -50,7 +50,7 @@ public class Xpp3DomBuilderTest {
 
         String expected = expectedSelfClosingTag();
         String dom1Str = dom.toString();
-        assertEquals("check DOMs match", expected, dom1Str);
+        assertEquals(expected, dom1Str, "check DOMs match");
     }
 
     @Test
@@ -84,7 +84,7 @@ public class Xpp3DomBuilderTest {
             Xpp3DomBuilder.build(new StringReader("<newRoot>" + createDomString()));
             fail("We're supposed to fail");
         } catch (XmlPullParserException ex) {
-            Assert.assertNotNull(ex.getMessage());
+            Assertions.assertNotNull(ex.getMessage());
         }
     }
 
