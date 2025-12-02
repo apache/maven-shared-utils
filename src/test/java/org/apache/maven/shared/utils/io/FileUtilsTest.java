@@ -33,36 +33,35 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.shared.utils.Os;
 import org.apache.maven.shared.utils.testhelpers.FileTestHelper;
-import org.hamcrest.CoreMatchers;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.rules.TestName;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.io.TempDir;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.junit.Assume.assumeFalse;
-import static org.junit.Assume.assumeThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 /**
  * This is used to test FileUtils for correctness.
@@ -79,11 +78,10 @@ public class FileUtilsTest {
 
     // Test data
 
-    @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
+    @TempDir
+    private File tempFolder;
 
-    @Rule
-    public TestName name = new TestName();
+    private String name;
 
     /**
      * Size of test directory.
@@ -99,21 +97,25 @@ public class FileUtilsTest {
     private long testFile2Size;
 
     /**
-     * @see junit.framework.TestCase#setUp()
+     * @see
      */
-    @Before
-    public void setUp() throws Exception {
-        testFile1 = tempFolder.newFile("file1-test.txt");
-        testFile2 = tempFolder.newFile("file1a-test.txt");
+    @BeforeEach
+    public void setUp(TestInfo testInfo) throws Exception {
+        Optional<Method> testMethod = testInfo.getTestMethod();
+        if (testMethod.isPresent()) {
+            this.name = testMethod.get().getName();
+        }
+        testFile1 = newFile(tempFolder, "file1-test.txt");
+        testFile2 = newFile(tempFolder, "file1a-test.txt");
 
         testFile1Size = (int) testFile1.length();
         testFile2Size = (int) testFile2.length();
 
-        tempFolder.getRoot().mkdirs();
+        tempFolder.mkdirs();
         createFile(testFile1, testFile1Size);
         createFile(testFile2, testFile2Size);
-        FileUtils.deleteDirectory(tempFolder.getRoot());
-        tempFolder.getRoot().mkdirs();
+        FileUtils.deleteDirectory(tempFolder);
+        tempFolder.mkdirs();
         createFile(testFile1, testFile1Size);
         createFile(testFile2, testFile2Size);
     }
@@ -139,16 +141,16 @@ public class FileUtilsTest {
                 numRead = is.read(b1, count, b0.length);
                 count += numRead;
             }
-            assertThat("Different number of bytes: ", count, is(b0.length));
+            assertEquals(b0.length, count, "Different number of bytes: ");
             for (int i = 0; i < count; i++) {
-                assertEquals("byte " + i + " differs", b1[i], b0[i]);
+                assertEquals(b0[i], b1[i], "byte " + i + " differs");
             }
         }
     }
 
     private void deleteFile(File file) {
         if (file.exists()) {
-            assertTrue("Couldn't delete file: " + file, file.delete());
+            assertTrue(file.delete(), "Couldn't delete file: " + file);
         }
     }
 
@@ -157,27 +159,29 @@ public class FileUtilsTest {
     public void toFile1() throws Exception {
         URL url = new URL("file", null, "a/b/c/file.txt");
         File file = FileUtils.toFile(url);
-        assertThat(file.toString(), containsString("file.txt"));
+        assertTrue(file.toString().contains("file.txt"));
     }
 
     @Test
     public void toFile2() throws Exception {
         URL url = new URL("file", null, "a/b/c/file%20n%61me%2520.tx%74");
         File file = FileUtils.toFile(url);
-        assertThat(file.toString(), containsString("file name%20.txt"));
+        assertTrue(file.toString().contains("file name%20.txt"));
     }
 
     @Test
     public void toFile3() throws Exception {
-        assertThat(FileUtils.toFile(null), CoreMatchers.nullValue());
-        assertThat(FileUtils.toFile(new URL("http://jakarta.apache.org")), CoreMatchers.nullValue());
+        assertNull(FileUtils.toFile(null));
+        assertNull(FileUtils.toFile(new URL("http://jakarta.apache.org")));
     }
 
-    @Test(expected = NumberFormatException.class)
+    @Test
     public void toFile4() throws Exception {
-        URL url = new URL("file", null, "a/b/c/file%%20%me.txt%");
-        File file = FileUtils.toFile(url);
-        assertThat(file.toString(), containsString("file% %me.txt%"));
+        assertThrows(NumberFormatException.class, () -> {
+            URL url = new URL("file", null, "a/b/c/file%%20%me.txt%");
+            File file = FileUtils.toFile(url);
+            assertTrue(file.toString().contains("file% %me.txt%"));
+        });
     }
 
     /**
@@ -187,14 +191,14 @@ public class FileUtilsTest {
     public void toFile5() throws Exception {
         URL url = new URL("file", null, "both%20are%20100%20%25%20true");
         File file = FileUtils.toFile(url);
-        assertThat(file.toString(), is("both are 100 % true"));
+        assertEquals("both are 100 % true", file.toString());
     }
 
     @Test
     public void toFileUtf8() throws Exception {
         URL url = new URL("file", null, "/home/%C3%A4%C3%B6%C3%BC%C3%9F");
         File file = FileUtils.toFile(url);
-        assertThat(file.toString(), not(containsString("\u00E4\u00F6\u00FC\u00DF")));
+        assertFalse(file.toString().contains("\u00E4\u00F6\u00FC\u00DF"));
     }
 
     // toURLs
@@ -202,21 +206,19 @@ public class FileUtilsTest {
     @Test
     public void toURLs1() throws Exception {
         File[] files = new File[] {
-            new File(tempFolder.getRoot(), "file1.txt"),
-            new File(tempFolder.getRoot(), "file2.txt"),
-            new File(tempFolder.getRoot(), "test file.txt"),
+            new File(tempFolder, "file1.txt"), new File(tempFolder, "file2.txt"), new File(tempFolder, "test file.txt"),
         };
         URL[] urls = FileUtils.toURLs(files);
 
-        assertThat(urls.length, is(files.length));
-        assertThat(urls[0].toExternalForm().startsWith("file:"), is(true));
-        assertThat(urls[0].toExternalForm().contains("file1.txt"), is(true));
-        assertThat(urls[1].toExternalForm().startsWith("file:"), is(true));
-        assertThat(urls[1].toExternalForm(), containsString("file2.txt"));
+        assertEquals(files.length, urls.length);
+        assertTrue(urls[0].toExternalForm().startsWith("file:"));
+        assertTrue(urls[0].toExternalForm().contains("file1.txt"));
+        assertTrue(urls[1].toExternalForm().startsWith("file:"));
+        assertTrue(urls[1].toExternalForm().contains("file2.txt"));
 
         // Test escaped char
-        assertThat(urls[2].toExternalForm().startsWith("file:"), is(true));
-        assertThat(urls[2].toExternalForm(), containsString("test%20file.txt"));
+        assertTrue(urls[2].toExternalForm().startsWith("file:"));
+        assertTrue(urls[2].toExternalForm().contains("test%20file.txt"));
     }
 
     // contentEquals
@@ -224,43 +226,43 @@ public class FileUtilsTest {
     @Test
     public void contentEquals() throws Exception {
         // Non-existent files
-        File file = new File(tempFolder.getRoot(), name.getMethodName());
-        File file2 = new File(tempFolder.getRoot(), name.getMethodName() + "2");
+        File file = new File(tempFolder, name);
+        File file2 = new File(tempFolder, name + "2");
         // both don't  exist
-        assertThat(FileUtils.contentEquals(file, file), is(true));
-        assertThat(FileUtils.contentEquals(file, file2), is(true));
-        assertThat(FileUtils.contentEquals(file2, file2), is(true));
-        assertThat(FileUtils.contentEquals(file2, file), is(true));
+        assertTrue(FileUtils.contentEquals(file, file));
+        assertTrue(FileUtils.contentEquals(file, file2));
+        assertTrue(FileUtils.contentEquals(file2, file2));
+        assertTrue(FileUtils.contentEquals(file2, file));
 
         // Directories
-        FileUtils.contentEquals(tempFolder.getRoot(), tempFolder.getRoot());
+        FileUtils.contentEquals(tempFolder, tempFolder);
 
         // Different files
-        File objFile1 = new File(tempFolder.getRoot(), name.getMethodName() + ".object");
+        File objFile1 = new File(tempFolder, name + ".object");
         objFile1.deleteOnExit();
         FileUtils.copyURLToFile(getClass().getResource("/java/lang/Object.class"), objFile1);
 
-        File objFile1b = new File(tempFolder.getRoot(), name.getMethodName() + ".object2");
+        File objFile1b = new File(tempFolder, name + ".object2");
         objFile1.deleteOnExit();
         FileUtils.copyURLToFile(getClass().getResource("/java/lang/Object.class"), objFile1b);
 
-        File objFile2 = new File(tempFolder.getRoot(), name.getMethodName() + ".collection");
+        File objFile2 = new File(tempFolder, name + ".collection");
         objFile2.deleteOnExit();
         FileUtils.copyURLToFile(getClass().getResource("/java/util/Collection.class"), objFile2);
 
-        assertThat(FileUtils.contentEquals(objFile1, objFile2), is(false));
-        assertThat(FileUtils.contentEquals(objFile1b, objFile2), is(false));
-        assertThat(FileUtils.contentEquals(objFile1, objFile1b), is(true));
+        assertFalse(FileUtils.contentEquals(objFile1, objFile2));
+        assertFalse(FileUtils.contentEquals(objFile1b, objFile2));
+        assertTrue(FileUtils.contentEquals(objFile1, objFile1b));
 
-        assertThat(FileUtils.contentEquals(objFile1, objFile1), is(true));
-        assertThat(FileUtils.contentEquals(objFile1b, objFile1b), is(true));
-        assertThat(FileUtils.contentEquals(objFile2, objFile2), is(true));
+        assertTrue(FileUtils.contentEquals(objFile1, objFile1));
+        assertTrue(FileUtils.contentEquals(objFile1b, objFile1b));
+        assertTrue(FileUtils.contentEquals(objFile2, objFile2));
 
         // Equal files
         file.createNewFile();
         file2.createNewFile();
-        assertThat(FileUtils.contentEquals(file, file), is(true));
-        assertThat(FileUtils.contentEquals(file, file2), is(true));
+        assertTrue(FileUtils.contentEquals(file, file));
+        assertTrue(FileUtils.contentEquals(file, file2));
     }
 
     // copyURLToFile
@@ -268,7 +270,7 @@ public class FileUtilsTest {
     @Test
     public void copyURLToFile() throws Exception {
         // Creates file
-        File file = new File(tempFolder.getRoot(), name.getMethodName());
+        File file = new File(tempFolder, name);
         file.deleteOnExit();
 
         // Loads resource
@@ -277,10 +279,8 @@ public class FileUtilsTest {
 
         // Tests that resource was copied correctly
         try (FileInputStream fis = new FileInputStream(file)) {
-            assertThat(
-                    "Content is not equal.",
-                    IOUtil.contentEquals(getClass().getResourceAsStream(resourceName), fis),
-                    is(true));
+            assertTrue(
+                    IOUtil.contentEquals(getClass().getResourceAsStream(resourceName), fis), "Content is not equal.");
         }
         // TODO Maybe test copy to itself like for copyFile()
     }
@@ -290,13 +290,13 @@ public class FileUtilsTest {
     @Test
     public void forceMkdir() throws Exception {
         // Tests with existing directory
-        FileUtils.forceMkdir(tempFolder.getRoot());
+        FileUtils.forceMkdir(tempFolder);
 
         // Creates test file
-        File testFile = new File(tempFolder.getRoot(), name.getMethodName());
+        File testFile = new File(tempFolder, name);
         testFile.deleteOnExit();
         testFile.createNewFile();
-        assertThat("Test file does not exist.", testFile.exists(), is(true));
+        assertTrue(testFile.exists(), "Test file does not exist.");
 
         // Tests with existing file
         try {
@@ -309,14 +309,14 @@ public class FileUtilsTest {
 
         // Tests with non-existent directory
         FileUtils.forceMkdir(testFile);
-        assertThat("Directory was not created.", testFile.exists(), is(true));
+        assertTrue(testFile.exists(), "Directory was not created.");
     }
 
     // sizeOfDirectory
 
     @Test
     public void sizeOfDirectory() throws Exception {
-        File file = new File(tempFolder.getRoot(), name.getMethodName());
+        File file = new File(tempFolder, name);
 
         // Non-existent file
         try {
@@ -340,22 +340,22 @@ public class FileUtilsTest {
         file.delete();
         file.mkdir();
 
-        assertThat("Unexpected directory size", FileUtils.sizeOfDirectory(file), is((long) TEST_DIRECTORY_SIZE));
+        assertEquals((long) TEST_DIRECTORY_SIZE, FileUtils.sizeOfDirectory(file), "Unexpected directory size");
     }
 
     // copyFile
 
     @Test
     public void copyFile1() throws Exception {
-        File destination = new File(tempFolder.getRoot(), "copy1.txt");
+        File destination = new File(tempFolder, "copy1.txt");
 
         // Thread.sleep(LAST_MODIFIED_DELAY);
         // This is to slow things down so we can catch if
         // the lastModified date is not ok
 
         FileUtils.copyFile(testFile1, destination);
-        assertThat("Check Exist", destination.exists(), is(true));
-        assertThat("Check Full copy", destination.length(), is(testFile1Size));
+        assertTrue(destination.exists(), "Check Exist");
+        assertEquals(testFile1Size, destination.length(), "Check Full copy");
         /* disabled: Thread.sleep doesn't work reliantly for this case
         assertTrue("Check last modified date preserved",
             testFile1.lastModified() == destination.lastModified());*/
@@ -374,23 +374,23 @@ public class FileUtilsTest {
     @Test
     public void copyFileWithNoFiltersAndNoDestination() throws Exception {
         File from = write("from.txt", MODIFIED_YESTERDAY, "Hello World!");
-        File to = new File(tempFolder.getRoot(), "to.txt");
+        File to = new File(tempFolder, "to.txt");
 
         FileUtils.copyFile(from, to, null, (FileUtils.FilterWrapper[]) null);
 
-        assertTrue("to.txt did not exist so should have been written", to.lastModified() >= MODIFIED_TODAY);
+        assertTrue(to.lastModified() >= MODIFIED_TODAY, "to.txt did not exist so should have been written");
         assertFileContent(to, "Hello World!");
     }
 
     @Test
     public void copyFileWithNoFiltersAndLastModifiedDateOfZeroAndNoDestination() throws Exception {
         File from = write("from.txt", MODIFIED_YESTERDAY, "Hello World!");
-        File to = new File(tempFolder.getRoot(), "to.txt");
+        File to = new File(tempFolder, "to.txt");
 
         from.setLastModified(0);
         FileUtils.copyFile(from, to, null, (FileUtils.FilterWrapper[]) null);
 
-        assertTrue("to.txt did not exist so should have been written", to.lastModified() >= MODIFIED_TODAY);
+        assertTrue(to.lastModified() >= MODIFIED_TODAY, "to.txt did not exist so should have been written");
         assertFileContent(to, "Hello World!");
     }
 
@@ -401,7 +401,7 @@ public class FileUtilsTest {
 
         FileUtils.copyFile(from, to, null, (FileUtils.FilterWrapper[]) null);
 
-        assertTrue("to.txt was outdated so should have been overwritten", to.lastModified() >= MODIFIED_TODAY);
+        assertTrue(to.lastModified() >= MODIFIED_TODAY, "to.txt was outdated so should have been overwritten");
         assertFileContent(to, "Hello World!");
     }
 
@@ -412,7 +412,7 @@ public class FileUtilsTest {
 
         FileUtils.copyFile(from, to, null, (FileUtils.FilterWrapper[]) null);
 
-        assertTrue("to.txt was newer so should have been left alone", to.lastModified() < MODIFIED_TODAY);
+        assertTrue(to.lastModified() < MODIFIED_TODAY, "to.txt was newer so should have been left alone");
         assertFileContent(to, "Older content");
     }
 
@@ -423,7 +423,7 @@ public class FileUtilsTest {
 
         FileUtils.copyFile(from, to, null, null, true);
 
-        assertTrue("to.txt was newer but the overwrite should have been forced", to.lastModified() >= MODIFIED_TODAY);
+        assertTrue(to.lastModified() >= MODIFIED_TODAY, "to.txt was newer but the overwrite should have been forced");
         assertFileContent(to, "Hello World!");
     }
 
@@ -434,18 +434,18 @@ public class FileUtilsTest {
 
         FileUtils.copyFile(from, to, null);
 
-        assertTrue("to.txt was outdated so should have been overwritten", to.lastModified() >= MODIFIED_TODAY);
+        assertTrue(to.lastModified() >= MODIFIED_TODAY, "to.txt was outdated so should have been overwritten");
         assertFileContent(to, "Hello ${name}!");
     }
 
     @Test
     public void copyFileWithFilteringAndNoDestination() throws Exception {
         File from = write("from.txt", MODIFIED_YESTERDAY, "Hello ${name}!");
-        File to = new File(tempFolder.getRoot(), "to.txt");
+        File to = new File(tempFolder, "to.txt");
 
         FileUtils.copyFile(from, to, null, wrappers());
 
-        assertTrue("to.txt did not exist so should have been written", to.lastModified() >= MODIFIED_TODAY);
+        assertTrue(to.lastModified() >= MODIFIED_TODAY, "to.txt did not exist so should have been written");
         assertFileContent(to, "Hello Bob!");
     }
 
@@ -456,7 +456,7 @@ public class FileUtilsTest {
 
         FileUtils.copyFile(from, to, null, wrappers());
 
-        assertTrue("to.txt was outdated so should have been overwritten", to.lastModified() >= MODIFIED_TODAY);
+        assertTrue(to.lastModified() >= MODIFIED_TODAY, "to.txt was outdated so should have been overwritten");
         assertFileContent(to, "Hello Bob!");
     }
 
@@ -467,7 +467,7 @@ public class FileUtilsTest {
 
         FileUtils.copyFile(from, to, null, wrappers(), true);
 
-        assertTrue("to.txt was newer but the overwrite should have been forced", to.lastModified() >= MODIFIED_TODAY);
+        assertTrue(to.lastModified() >= MODIFIED_TODAY, "to.txt was newer but the overwrite should have been forced");
         assertFileContent(to, "Hello Bob!");
     }
 
@@ -478,7 +478,7 @@ public class FileUtilsTest {
 
         FileUtils.copyFile(from, to, null, wrappers());
 
-        assertTrue("to.txt was outdated so should have been overwritten", to.lastModified() >= MODIFIED_TODAY);
+        assertTrue(to.lastModified() >= MODIFIED_TODAY, "to.txt was outdated so should have been overwritten");
         assertFileContent(to, "Hello Bob!");
     }
 
@@ -490,7 +490,7 @@ public class FileUtilsTest {
         FileUtils.copyFile(from, to, null, wrappers());
 
         assertFileContent(to, "Hello Bob!");
-        assertTrue("to.txt content should be unchanged and have been left alone", to.lastModified() < MODIFIED_TODAY);
+        assertTrue(to.lastModified() < MODIFIED_TODAY, "to.txt content should be unchanged and have been left alone");
     }
 
     private static FileUtils.FilterWrapper[] wrappers() {
@@ -505,18 +505,18 @@ public class FileUtilsTest {
     }
 
     private File write(@Nonnull String name, long lastModified, @Nonnull String text) throws IOException {
-        final File file = new File(tempFolder.getRoot(), name);
+        final File file = new File(tempFolder, name);
         try (Writer writer = new FileWriter(file)) {
             writer.write(text);
         }
         assertTrue(file.setLastModified(lastModified));
-        assertEquals("Failed to set lastModified date on " + file.getPath(), lastModified, file.lastModified());
+        assertEquals(lastModified, file.lastModified(), "Failed to set lastModified date on " + file.getPath());
         return file;
     }
 
     private static void assertFileContent(@Nonnull File file, @Nonnull String expected) throws IOException {
         try (Reader in = new FileReader(file)) {
-            assertEquals("Expected " + file.getPath() + " to contain: " + expected, expected, IOUtils.toString(in));
+            assertEquals(expected, IOUtils.toString(in), "Expected " + file.getPath() + " to contain: " + expected);
         }
     }
 
@@ -524,7 +524,7 @@ public class FileUtilsTest {
     public void copyFileThatIsSymlink() throws Exception {
         assumeFalse(Os.isFamily(Os.FAMILY_WINDOWS));
 
-        File destination = new File(tempFolder.getRoot(), "symCopy.txt");
+        File destination = new File(tempFolder, "symCopy.txt");
 
         File testDir = SymlinkTestSetup.createStandardSymlinkTestDir(new File("target/test/symlinkCopy"));
 
@@ -535,21 +535,23 @@ public class FileUtilsTest {
 
     @Test
     public void deleteFile() throws Exception {
-        File destination = new File(tempFolder.getRoot(), "copy1.txt");
+        File destination = new File(tempFolder, "copy1.txt");
         FileUtils.copyFile(testFile1, destination);
         FileUtils.delete(destination);
-        assertThat("Check Exist", destination.exists(), is(false));
+        assertFalse(destination.exists(), "Check Exist");
     }
 
-    @Test(expected = IOException.class)
+    @Test
     public void deleteFileNofile() throws Exception {
-        File destination = new File("abc/cde");
-        FileUtils.delete(destination);
+        assertThrows(IOException.class, () -> {
+            File destination = new File("abc/cde");
+            FileUtils.delete(destination);
+        });
     }
 
     @Test
     public void deleteFileLegacy() throws Exception {
-        File destination = new File(tempFolder.getRoot(), "copy1.txt");
+        File destination = new File(tempFolder, "copy1.txt");
         FileUtils.copyFile(testFile1, destination);
         assertTrue(FileUtils.deleteLegacyStyle(destination));
     }
@@ -564,33 +566,32 @@ public class FileUtilsTest {
     public void copyFileWithPermissions() throws Exception {
         File source = new File("src/test/resources/executable");
         source.setExecutable(true);
-        assumeThat("Need an existing file to copy", source.exists(), is(true));
-        assumeThat("Need an executable file to copy", source.canExecute(), is(true));
+        assumeTrue(source.exists(), "Need an existing file to copy");
+        assumeTrue(source.canExecute(), "Need an executable file to copy");
 
-        File destination = new File(tempFolder.getRoot(), "executable-copy");
+        File destination = new File(tempFolder, "executable-copy");
 
         FileUtils.copyFile(source, destination);
 
-        assertThat(
-                "destination not exists: " + destination.getAbsolutePath() + ", directory content: "
-                        + Arrays.asList(destination.getParentFile().list()),
+        assertTrue(
                 Files.exists(destination.toPath()),
-                is(true));
+                "destination not exists: " + destination.getAbsolutePath() + ", directory content: "
+                        + Arrays.asList(destination.getParentFile().list()));
 
-        assertThat("Check copy executable", destination.canExecute(), is(true));
+        assertTrue(destination.canExecute(), "Check copy executable");
     }
 
     @Test
     public void copyFile2() throws Exception {
-        File destination = new File(tempFolder.getRoot(), "copy2.txt");
+        File destination = new File(tempFolder, "copy2.txt");
 
         // Thread.sleep(LAST_MODIFIED_DELAY);
         // This is to slow things down so we can catch if
         // the lastModified date is not ok
 
         FileUtils.copyFile(testFile1, destination);
-        assertThat("Check Exist", destination.exists(), is(true));
-        assertThat("Check Full copy", destination.length(), is(testFile2Size));
+        assertTrue(destination.exists(), "Check Exist");
+        assertEquals(testFile2Size, destination.length(), "Check Full copy");
         /* disabled: Thread.sleep doesn't work reliably for this case
         assertTrue("Check last modified date preserved",
             testFile1.lastModified() == destination.lastModified());*/
@@ -598,7 +599,7 @@ public class FileUtilsTest {
 
     @Test
     public void copyToSelf() throws IOException {
-        File destination = new File(tempFolder.getRoot(), "copy3.txt");
+        File destination = new File(tempFolder, "copy3.txt");
         // Prepare a test file
         FileUtils.copyFile(testFile1, destination);
 
@@ -609,7 +610,7 @@ public class FileUtilsTest {
     public void copyDirectoryToNonExistingDest() throws Exception {
         createFile(testFile1, 1234);
         createFile(testFile2, 4321);
-        File srcDir = tempFolder.getRoot();
+        File srcDir = tempFolder;
         File subDir = new File(srcDir, "sub");
         subDir.mkdir();
         File subFile = new File(subDir, "A.txt");
@@ -629,7 +630,7 @@ public class FileUtilsTest {
     public void copyDirectoryToExistingDest() throws IOException {
         createFile(testFile1, 1234);
         createFile(testFile2, 4321);
-        File srcDir = tempFolder.getRoot();
+        File srcDir = tempFolder;
         File subDir = new File(srcDir, "sub");
         assertTrue(subDir.mkdir());
         File subFile = new File(subDir, "A.txt");
@@ -656,7 +657,7 @@ public class FileUtilsTest {
     @Test
     public void copyDirectoryErrorsCopyToSelf() {
         try {
-            FileUtils.copyDirectory(tempFolder.getRoot(), tempFolder.getRoot());
+            FileUtils.copyDirectory(tempFolder, tempFolder);
             fail();
         } catch (IOException ex) {
         }
@@ -675,7 +676,7 @@ public class FileUtilsTest {
         } catch (NullPointerException ex) {
         }
         try {
-            FileUtils.copyDirectory(tempFolder.getRoot(), testFile1);
+            FileUtils.copyDirectory(tempFolder, testFile1);
             fail();
         } catch (IOException ex) {
         }
@@ -685,27 +686,27 @@ public class FileUtilsTest {
 
     @Test
     public void forceDeleteAFile1() throws Exception {
-        File destination = new File(tempFolder.getRoot(), "copy1.txt");
+        File destination = new File(tempFolder, "copy1.txt");
         destination.createNewFile();
-        assertTrue("Copy1.txt doesn't exist to delete", destination.exists());
+        assertTrue(destination.exists(), "Copy1.txt doesn't exist to delete");
         FileUtils.forceDelete(destination);
         assertFalse(destination.exists());
     }
 
     @Test
     public void forceDeleteAFile2() throws Exception {
-        File destination = new File(tempFolder.getRoot(), "copy2.txt");
+        File destination = new File(tempFolder, "copy2.txt");
         destination.createNewFile();
-        assertThat("Copy2.txt doesn't exist to delete", destination.exists(), is(true));
+        assertTrue(destination.exists(), "Copy2.txt doesn't exist to delete");
         FileUtils.forceDelete(destination);
-        assertThat("Check No Exist", !destination.exists(), is(true));
+        assertTrue(!destination.exists(), "Check No Exist");
     }
 
     @Test
-    @Ignore("Commons test case that is failing for plexus")
+    @Disabled("Commons test case that is failing for plexus")
     public void forceDeleteAFile3() throws Exception {
-        File destination = new File(tempFolder.getRoot(), "no_such_file");
-        assertThat("Check No Exist", !destination.exists(), is(true));
+        File destination = new File(tempFolder, "no_such_file");
+        assertTrue(!destination.exists(), "Check No Exist");
         try {
             FileUtils.forceDelete(destination);
             fail("Should generate FileNotFoundException");
@@ -716,9 +717,9 @@ public class FileUtilsTest {
     // copyFileToDirectory
 
     @Test
-    @Ignore("Commons test case that is failing for plexus")
+    @Disabled("Commons test case that is failing for plexus")
     public void copyFile1ToDir() throws Exception {
-        File directory = new File(tempFolder.getRoot(), "subdir");
+        File directory = new File(tempFolder, "subdir");
         if (!directory.exists()) {
             directory.mkdirs();
         }
@@ -729,8 +730,8 @@ public class FileUtilsTest {
         // the lastModified date is not ok
 
         FileUtils.copyFileToDirectory(testFile1, directory);
-        assertThat("Check Exist", destination.exists(), is(true));
-        assertThat("Check Full copy", destination.length(), is(testFile1Size));
+        assertTrue(destination.exists(), "Check Exist");
+        assertEquals(testFile1Size, destination.length(), "Check Full copy");
         /* disabled: Thread.sleep doesn't work reliantly for this case
         assertTrue("Check last modified date preserved",
             testFile1.lastModified() == destination.lastModified());*/
@@ -745,7 +746,7 @@ public class FileUtilsTest {
 
     @Test
     public void copyFile2ToDir() throws Exception {
-        File directory = new File(tempFolder.getRoot(), "subdir");
+        File directory = new File(tempFolder, "subdir");
         if (!directory.exists()) {
             directory.mkdirs();
         }
@@ -756,8 +757,8 @@ public class FileUtilsTest {
         // the lastModified date is not ok
 
         FileUtils.copyFileToDirectory(testFile1, directory);
-        assertThat("Check Exist", destination.exists(), is(true));
-        assertThat("Check Full copy", destination.length(), is(testFile2Size));
+        assertTrue(destination.exists(), "Check Exist");
+        assertEquals(testFile2Size, destination.length(), "Check Full copy");
         /* disabled: Thread.sleep doesn't work reliantly for this case
         assertTrue("Check last modified date preserved",
             testFile1.lastModified() == destination.lastModified());*/
@@ -767,9 +768,9 @@ public class FileUtilsTest {
 
     @Test
     public void forceDeleteDir() throws Exception {
-        File testDirectory = tempFolder.newFolder(name.getMethodName());
+        File testDirectory = newFolder(tempFolder, name);
         FileUtils.forceDelete(testDirectory.getParentFile());
-        assertThat("Check No Exist", !testDirectory.getParentFile().exists(), is(true));
+        assertTrue(!testDirectory.getParentFile().exists(), "Check No Exist");
     }
 
     /**
@@ -778,7 +779,7 @@ public class FileUtilsTest {
     @Test
     public void fileUtils() throws Exception {
         // Loads file from classpath
-        File file1 = new File(tempFolder.getRoot(), "test.txt");
+        File file1 = new File(tempFolder, "test.txt");
         String filename = file1.getAbsolutePath();
 
         // Create test file on-the-fly
@@ -786,47 +787,47 @@ public class FileUtilsTest {
             out.write("This is a test".getBytes("UTF-8"));
         }
 
-        File file2 = new File(tempFolder.getRoot(), "test2.txt");
+        File file2 = new File(tempFolder, "test2.txt");
 
         FileUtils.fileWrite(file2, "UTF-8", filename);
-        assertThat(file2.exists(), is(true));
-        assertThat(file2.length() > 0, is(true));
+        assertTrue(file2.exists());
+        assertTrue(file2.length() > 0);
 
         String file2contents = FileUtils.fileRead(file2, "UTF-8");
-        assertThat("Second file's contents correct", filename.equals(file2contents), is(true));
+        assertTrue(filename.equals(file2contents), "Second file's contents correct");
 
-        assertThat(file2.delete(), is(true));
+        assertTrue(file2.delete());
 
         String contents = FileUtils.fileRead(new File(filename), "UTF-8");
-        assertThat("FileUtils.fileRead()", contents.equals("This is a test"), is(true));
+        assertTrue(contents.equals("This is a test"), "FileUtils.fileRead()");
     }
 
     @Test
     public void fileReadWithDefaultEncoding() throws Exception {
-        File file = new File(tempFolder.getRoot(), "read.obj");
+        File file = new File(tempFolder, "read.obj");
         FileOutputStream out = new FileOutputStream(file);
         byte[] text = "Hello /u1234".getBytes();
         out.write(text);
         out.close();
 
         String data = FileUtils.fileRead(file);
-        assertThat(data, is("Hello /u1234"));
+        assertEquals("Hello /u1234", data);
     }
 
     @Test
     public void fileReadWithEncoding() throws Exception {
-        File file = new File(tempFolder.getRoot(), "read.obj");
+        File file = new File(tempFolder, "read.obj");
         FileOutputStream out = new FileOutputStream(file);
         byte[] text = "Hello /u1234".getBytes("UTF8");
         out.write(text);
         out.close();
 
         String data = FileUtils.fileRead(file, "UTF8");
-        assertThat(data, is("Hello /u1234"));
+        assertEquals("Hello /u1234", data);
     }
 
     @Test
-    @Ignore("Commons test case that is failing for plexus")
+    @Disabled("Commons test case that is failing for plexus")
     public void readLines() throws Exception {
         File file = FileTestHelper.newFile(tempFolder, "lines.txt");
         try {
@@ -834,7 +835,7 @@ public class FileUtilsTest {
             FileTestHelper.createLineBasedFile(file, data);
 
             List<String> lines = FileUtils.loadFile(file);
-            assertThat(lines, is(Arrays.asList(data)));
+            assertIterableEquals(Arrays.asList(data), lines);
         } finally {
             deleteFile(file);
         }
@@ -842,7 +843,7 @@ public class FileUtilsTest {
 
     @Test
     public void writeStringToFile1() throws Exception {
-        File file = new File(tempFolder.getRoot(), "write.txt");
+        File file = new File(tempFolder, "write.txt");
         FileUtils.fileWrite(file, "UTF8", "Hello /u1234");
         byte[] text = "Hello /u1234".getBytes("UTF8");
         assertEqualContent(text, file);
@@ -850,7 +851,7 @@ public class FileUtilsTest {
 
     @Test
     public void writeStringToFile2() throws Exception {
-        File file = new File(tempFolder.getRoot(), "write.txt");
+        File file = new File(tempFolder, "write.txt");
         FileUtils.fileWrite(file, null, "Hello /u1234");
         byte[] text = "Hello /u1234".getBytes();
         assertEqualContent(text, file);
@@ -858,7 +859,7 @@ public class FileUtilsTest {
 
     @Test
     public void writeCharSequence1() throws Exception {
-        File file = new File(tempFolder.getRoot(), "write.txt");
+        File file = new File(tempFolder, "write.txt");
         FileUtils.fileWrite(file, "UTF8", "Hello /u1234");
         byte[] text = "Hello /u1234".getBytes("UTF8");
         assertEqualContent(text, file);
@@ -866,7 +867,7 @@ public class FileUtilsTest {
 
     @Test
     public void writeCharSequence2() throws Exception {
-        File file = new File(tempFolder.getRoot(), "write.txt");
+        File file = new File(tempFolder, "write.txt");
         FileUtils.fileWrite(file, null, "Hello /u1234");
         byte[] text = "Hello /u1234".getBytes();
         assertEqualContent(text, file);
@@ -881,7 +882,7 @@ public class FileUtilsTest {
 
         String expected = "This line was there before you..." + "this is brand new data";
         String actual = FileUtils.fileRead(file);
-        assertThat(actual, is(expected));
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -893,12 +894,12 @@ public class FileUtilsTest {
 
         String expected = "This line was there before you..." + "this is brand new data";
         String actual = FileUtils.fileRead(file);
-        assertThat(actual, is(expected));
+        assertEquals(expected, actual);
     }
 
     @Test
     public void writeStringArrayToFile() throws Exception {
-        File file = new File(tempFolder.getRoot(), "writeArray.txt");
+        File file = new File(tempFolder, "writeArray.txt");
         FileUtils.fileWriteArray(file, new String[] {"line1", "line2", "line3"});
 
         byte[] text = "line1\nline2\nline3".getBytes(StandardCharsets.UTF_8);
@@ -907,7 +908,7 @@ public class FileUtilsTest {
 
     @Test
     public void writeStringArrayToFileWithEncoding() throws Exception {
-        File file = new File(tempFolder.getRoot(), "writeArray.txt");
+        File file = new File(tempFolder, "writeArray.txt");
         FileUtils.fileWriteArray(file, "UTF8", new String[] {"line1", "line2", "line3"});
 
         byte[] text = "line1\nline2\nline3".getBytes(StandardCharsets.UTF_8);
@@ -923,7 +924,7 @@ public class FileUtilsTest {
 
         String expected = "This line was there before you..." + "this is brand new data";
         String actual = FileUtils.fileRead(file);
-        assertThat(actual, is(expected));
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -935,42 +936,42 @@ public class FileUtilsTest {
 
         String expected = "This line was there before you..." + "this is brand new data";
         String actual = FileUtils.fileRead(file);
-        assertThat(actual, is(expected));
+        assertEquals(expected, actual);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void blowUpOnNull() throws IOException {
-        FileUtils.deleteDirectory((File) null);
+        assertThrows(NullPointerException.class, () -> FileUtils.deleteDirectory((File) null));
     }
 
     @Test
     public void deleteQuietlyDir() throws IOException {
-        File testDirectory = new File(tempFolder.getRoot(), "testDeleteQuietlyDir");
+        File testDirectory = new File(tempFolder, "testDeleteQuietlyDir");
         File testFile = new File(testDirectory, "testDeleteQuietlyFile");
         testDirectory.mkdirs();
         createFile(testFile, 0);
 
-        assertThat(testDirectory.exists(), is(true));
-        assertThat(testFile.exists(), is(true));
+        assertTrue(testDirectory.exists());
+        assertTrue(testFile.exists());
         FileUtils.deleteDirectory(testDirectory);
-        assertThat("Check No Exist", testDirectory.exists(), is(false));
-        assertThat("Check No Exist", testFile.exists(), is(false));
+        assertFalse(testDirectory.exists(), "Check No Exist");
+        assertFalse(testFile.exists(), "Check No Exist");
     }
 
     @Test
     public void deleteQuietlyFile() throws IOException {
-        File testFile = new File(tempFolder.getRoot(), "testDeleteQuietlyFile");
+        File testFile = new File(tempFolder, "testDeleteQuietlyFile");
         createFile(testFile, 0);
 
-        assertThat(testFile.exists(), is(true));
+        assertTrue(testFile.exists());
         FileUtils.deleteDirectory(testFile);
-        assertThat("Check No Exist", testFile.exists(), is(false));
+        assertFalse(testFile.exists(), "Check No Exist");
     }
 
     @Test
     public void deleteQuietlyNonExistent() throws IOException {
-        File testFile = new File(tempFolder.getRoot(), "testDeleteQuietlyNonExistent");
-        assertThat(testFile.exists(), is(false));
+        File testFile = new File(tempFolder, "testDeleteQuietlyNonExistent");
+        assertFalse(testFile.exists());
 
         FileUtils.deleteDirectory(testFile);
     }
@@ -979,228 +980,238 @@ public class FileUtilsTest {
 
     @Test
     public void getDefaultExcludes() throws Exception {
-        assertThat(Arrays.asList(FileUtils.getDefaultExcludes()), hasItems(MINIMUM_DEFAULT_EXCLUDES));
+        List<String> excludes = Arrays.asList(FileUtils.getDefaultExcludes());
+        assertAll(
+                "All minimum default excludes should be present",
+                Arrays.stream(MINIMUM_DEFAULT_EXCLUDES)
+                        .map(exclude -> () -> assertTrue(excludes.contains(exclude), "Missing exclude: " + exclude)));
     }
 
     //// getDefaultExcludesAsList
 
     @Test
     public void getDefaultExcludesAsList() throws Exception {
-        assertThat(FileUtils.getDefaultExcludesAsList(), hasItems(MINIMUM_DEFAULT_EXCLUDES));
+        List<String> excludes = FileUtils.getDefaultExcludesAsList();
+        assertAll(
+                "All minimum default excludes should be present",
+                Arrays.stream(MINIMUM_DEFAULT_EXCLUDES)
+                        .map(exclude -> () -> assertTrue(excludes.contains(exclude), "Missing exclude: " + exclude)));
     }
 
     //// getDefaultExcludesAsString
 
     @Test
     public void getDefaultExcludesAsString() throws Exception {
-        assertThat(
-                new HashSet<>(
-                        Arrays.asList(FileUtils.getDefaultExcludesAsString().split(","))),
-                hasItems(MINIMUM_DEFAULT_EXCLUDES));
+        HashSet<String> excludes = new HashSet<>(
+                Arrays.asList(FileUtils.getDefaultExcludesAsString().split(",")));
+        assertAll(
+                "All minimum default excludes should be present",
+                Arrays.stream(MINIMUM_DEFAULT_EXCLUDES)
+                        .map(exclude -> () -> assertTrue(excludes.contains(exclude), "Missing exclude: " + exclude)));
     }
 
     //// dirname(String)
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void blowUpOnDirnameNull() throws Exception {
-        FileUtils.dirname(null);
+        assertThrows(NullPointerException.class, () -> FileUtils.dirname(null));
     }
 
     @Test
     public void dirnameEmpty() throws Exception {
-        assertThat(FileUtils.dirname(""), is(""));
+        assertEquals("", FileUtils.dirname(""));
     }
 
     @Test
     public void dirnameFilename() throws Exception {
-        assertThat(FileUtils.dirname("foo.bar.txt"), is(""));
+        assertEquals("", FileUtils.dirname("foo.bar.txt"));
     }
 
     @Test
     // X @ReproducesPlexusBug( "assumes that the path is a local path" )
     public void dirnameWindowsRootPathOnUnix() throws Exception {
-        assumeThat(File.separatorChar, is('/'));
-        assertThat(FileUtils.dirname("C:\\foo.bar.txt"), is(""));
+        assumeTrue(File.separatorChar == '/');
+        assertEquals("", FileUtils.dirname("C:\\foo.bar.txt"));
     }
 
     @Test
     // X @ReproducesPlexusBug( "assumes that the path is a local path" )
     public void dirnameWindowsNonRootPathOnUnix() throws Exception {
-        assumeThat(File.separatorChar, is('/'));
-        assertThat(FileUtils.dirname("C:\\test\\foo.bar.txt"), is(""));
+        assumeTrue(File.separatorChar == '/');
+        assertEquals("", FileUtils.dirname("C:\\test\\foo.bar.txt"));
     }
 
     @Test
     // X @ReproducesPlexusBug( "assumes that the path is a local path" )
     public void dirnameUnixRootPathOnWindows() throws Exception {
-        assumeThat(File.separatorChar, is('\\'));
-        assertThat(FileUtils.dirname("/foo.bar.txt"), is(""));
+        assumeTrue(File.separatorChar == '\\');
+        assertEquals("", FileUtils.dirname("/foo.bar.txt"));
     }
 
     @Test
     // X @ReproducesPlexusBug( "assumes that the path is a local path" )
     public void dirnameUnixNonRootPathOnWindows() throws Exception {
-        assumeThat(File.separatorChar, is('\\'));
-        assertThat(FileUtils.dirname("/test/foo.bar.txt"), is(""));
+        assumeTrue(File.separatorChar == '\\');
+        assertEquals("", FileUtils.dirname("/test/foo.bar.txt"));
     }
 
     @Test
     public void dirnameWindowsRootPathOnWindows() throws Exception {
-        assumeThat(File.separatorChar, is('\\'));
-        assertThat(FileUtils.dirname("C:\\foo.bar.txt"), is("C:"));
+        assumeTrue(File.separatorChar == '\\');
+        assertEquals("C:", FileUtils.dirname("C:\\foo.bar.txt"));
     }
 
     @Test
     public void dirnameWindowsNonRootPathOnWindows() throws Exception {
-        assumeThat(File.separatorChar, is('\\'));
-        assertThat(FileUtils.dirname("C:\\test\\foo.bar.txt"), is("C:\\test"));
+        assumeTrue(File.separatorChar == '\\');
+        assertEquals("C:\\test", FileUtils.dirname("C:\\test\\foo.bar.txt"));
     }
 
     @Test
     public void dirnameUnixRootPathOnUnix() throws Exception {
-        assumeThat(File.separatorChar, is('/'));
-        assertThat(FileUtils.dirname("/foo.bar.txt"), is(""));
+        assumeTrue(File.separatorChar == '/');
+        assertEquals("", FileUtils.dirname("/foo.bar.txt"));
     }
 
     @Test
     public void dirnameUnixNonRootPathOnUnix() throws Exception {
-        assumeThat(File.separatorChar, is('/'));
-        assertThat(FileUtils.dirname("/test/foo.bar.txt"), is("/test"));
+        assumeTrue(File.separatorChar == '/');
+        assertEquals("/test", FileUtils.dirname("/test/foo.bar.txt"));
     }
 
     //// filename(String)
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void blowUpOnFilenameNull() throws Exception {
-        FileUtils.filename(null);
+        assertThrows(NullPointerException.class, () -> FileUtils.filename(null));
     }
 
     @Test
     public void filenameEmpty() throws Exception {
-        assertThat(FileUtils.filename(""), is(""));
+        assertEquals("", FileUtils.filename(""));
     }
 
     @Test
     public void filenameFilename() throws Exception {
-        assertThat(FileUtils.filename("foo.bar.txt"), is("foo.bar.txt"));
+        assertEquals("foo.bar.txt", FileUtils.filename("foo.bar.txt"));
     }
 
     @Test
     // X @ReproducesPlexusBug( "assumes that the path is a local path" )
     public void filenameWindowsRootPathOnUnix() throws Exception {
-        assumeThat(File.separatorChar, is('/'));
-        assertThat(FileUtils.filename("C:\\foo.bar.txt"), is("C:\\foo.bar.txt"));
+        assumeTrue(File.separatorChar == '/');
+        assertEquals("C:\\foo.bar.txt", FileUtils.filename("C:\\foo.bar.txt"));
     }
 
     @Test
     // X @ReproducesPlexusBug( "assumes that the path is a local path" )
     public void filenameWindowsNonRootPathOnUnix() throws Exception {
-        assumeThat(File.separatorChar, is('/'));
-        assertThat(FileUtils.filename("C:\\test\\foo.bar.txt"), is("C:\\test\\foo.bar.txt"));
+        assumeTrue(File.separatorChar == '/');
+        assertEquals("C:\\test\\foo.bar.txt", FileUtils.filename("C:\\test\\foo.bar.txt"));
     }
 
     @Test
     // X @ReproducesPlexusBug( "assumes that the path is a local path" )
     public void filenameUnixRootPathOnWindows() throws Exception {
-        assumeThat(File.separatorChar, is('\\'));
-        assertThat(FileUtils.filename("/foo.bar.txt"), is("/foo.bar.txt"));
+        assumeTrue(File.separatorChar == '\\');
+        assertEquals("/foo.bar.txt", FileUtils.filename("/foo.bar.txt"));
     }
 
     @Test
     // X @ReproducesPlexusBug( "assumes that the path is a local path" )
     public void filenameUnixNonRootPathOnWindows() throws Exception {
-        assumeThat(File.separatorChar, is('\\'));
-        assertThat(FileUtils.filename("/test/foo.bar.txt"), is("/test/foo.bar.txt"));
+        assumeTrue(File.separatorChar == '\\');
+        assertEquals("/test/foo.bar.txt", FileUtils.filename("/test/foo.bar.txt"));
     }
 
     @Test
     public void filenameWindowsRootPathOnWindows() throws Exception {
-        assumeThat(File.separatorChar, is('\\'));
-        assertThat(FileUtils.filename("C:\\foo.bar.txt"), is("foo.bar.txt"));
+        assumeTrue(File.separatorChar == '\\');
+        assertEquals("foo.bar.txt", FileUtils.filename("C:\\foo.bar.txt"));
     }
 
     @Test
     public void filenameWindowsNonRootPathOnWindows() throws Exception {
-        assumeThat(File.separatorChar, is('\\'));
-        assertThat(FileUtils.filename("C:\\test\\foo.bar.txt"), is("foo.bar.txt"));
+        assumeTrue(File.separatorChar == '\\');
+        assertEquals("foo.bar.txt", FileUtils.filename("C:\\test\\foo.bar.txt"));
     }
 
     @Test
     public void filenameUnixRootPathOnUnix() throws Exception {
-        assumeThat(File.separatorChar, is('/'));
-        assertThat(FileUtils.filename("/foo.bar.txt"), is("foo.bar.txt"));
+        assumeTrue(File.separatorChar == '/');
+        assertEquals("foo.bar.txt", FileUtils.filename("/foo.bar.txt"));
     }
 
     @Test
     public void filenameUnixNonRootPathOnUnix() throws Exception {
-        assumeThat(File.separatorChar, is('/'));
-        assertThat(FileUtils.filename("/test/foo.bar.txt"), is("foo.bar.txt"));
+        assumeTrue(File.separatorChar == '/');
+        assertEquals("foo.bar.txt", FileUtils.filename("/test/foo.bar.txt"));
     }
 
     //// extension(String)
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void blowUpOnNullExtension() throws Exception {
-        FileUtils.extension(null);
+        assertThrows(NullPointerException.class, () -> FileUtils.extension(null));
     }
 
     @Test
     public void extensionEmpty() throws Exception {
-        assertThat(FileUtils.extension(""), is(""));
+        assertEquals("", FileUtils.extension(""));
     }
 
     @Test
     public void extensionFileName() throws Exception {
-        assertThat(FileUtils.extension("foo.bar.txt"), is("txt"));
+        assertEquals("txt", FileUtils.extension("foo.bar.txt"));
     }
 
     @Test
     public void extensionFileNameNoExtension() throws Exception {
-        assertThat(FileUtils.extension("foo_bar_txt"), is(""));
+        assertEquals("", FileUtils.extension("foo_bar_txt"));
     }
 
     @Test
     // X @ReproducesPlexusBug( "assumes that the path is a local path" )
     public void extensionWindowsRootPathOnUnix() throws Exception {
-        assumeThat(File.separatorChar, is('/'));
-        assertThat(FileUtils.extension("C:\\foo.bar.txt"), is("txt"));
+        assumeTrue(File.separatorChar == '/');
+        assertEquals("txt", FileUtils.extension("C:\\foo.bar.txt"));
     }
 
     @Test
     // X @ReproducesPlexusBug( "assumes that the path is a local path" )
     public void extensionWindowsNonRootPathOnUnix() throws Exception {
-        assumeThat(File.separatorChar, is('/'));
-        assertThat(FileUtils.extension("C:\\test\\foo.bar.txt"), is("txt"));
+        assumeTrue(File.separatorChar == '/');
+        assertEquals("txt", FileUtils.extension("C:\\test\\foo.bar.txt"));
     }
 
     @Test
     // X @ReproducesPlexusBug( "assumes that the path is a local path" )
     public void extensionUnixRootPathOnWindows() throws Exception {
-        assumeThat(File.separatorChar, is('\\'));
-        assertThat(FileUtils.extension("/foo.bar.txt"), is("txt"));
+        assumeTrue(File.separatorChar == '\\');
+        assertEquals("txt", FileUtils.extension("/foo.bar.txt"));
     }
 
     @Test
     // X @ReproducesPlexusBug( "assumes that the path is a local path" )
     public void extensionUnixNonRootPathOnWindows() throws Exception {
-        assumeThat(File.separatorChar, is('\\'));
-        assertThat(FileUtils.extension("/test/foo.bar.txt"), is("txt"));
+        assumeTrue(File.separatorChar == '\\');
+        assertEquals("txt", FileUtils.extension("/test/foo.bar.txt"));
     }
 
     @Test
     public void extensionWindowsRootPathOnWindows() throws Exception {
-        assumeThat(File.separatorChar, is('\\'));
-        assertThat(FileUtils.extension("C:\\foo.bar.txt"), is("txt"));
+        assumeTrue(File.separatorChar == '\\');
+        assertEquals("txt", FileUtils.extension("C:\\foo.bar.txt"));
     }
 
     @Test
     public void extensionWindowsNonRootPathOnWindows() throws Exception {
-        assumeThat(File.separatorChar, is('\\'));
-        assertThat(FileUtils.extension("C:\\test\\foo.bar.txt"), is("txt"));
+        assumeTrue(File.separatorChar == '\\');
+        assertEquals("txt", FileUtils.extension("C:\\test\\foo.bar.txt"));
     }
 
     @Test
-    @Ignore("Wait until we can run with assembly 2.5 which will support symlinks properly")
+    @Disabled("Wait until we can run with assembly 2.5 which will support symlinks properly")
     public void isASymbolicLink() throws IOException {
         // This testcase will pass when running under java7 or higher
         assumeFalse(Os.isFamily(Os.FAMILY_WINDOWS));
@@ -1210,7 +1221,7 @@ public class FileUtilsTest {
     }
 
     @Test
-    @Ignore("Wait until we can run with assembly 2.5 which will support symlinks properly")
+    @Disabled("Wait until we can run with assembly 2.5 which will support symlinks properly")
     public void notASymbolicLink() throws IOException {
         File file = new File("src/test/resources/symlinks/src/");
         assertFalse(FileUtils.isSymbolicLink(file));
@@ -1218,14 +1229,14 @@ public class FileUtilsTest {
 
     @Test
     public void extensionUnixRootPathOnUnix() throws Exception {
-        assumeThat(File.separatorChar, is('/'));
-        assertThat(FileUtils.extension("/foo.bar.txt"), is("txt"));
+        assumeTrue(File.separatorChar == '/');
+        assertEquals("txt", FileUtils.extension("/foo.bar.txt"));
     }
 
     @Test
     public void extensionUnixNonRootPathOnUnix() throws Exception {
-        assumeThat(File.separatorChar, is('/'));
-        assertThat(FileUtils.extension("/test/foo.bar.txt"), is("txt"));
+        assumeTrue(File.separatorChar == '/');
+        assertEquals("txt", FileUtils.extension("/test/foo.bar.txt"));
     }
 
     @Test
@@ -1246,7 +1257,7 @@ public class FileUtilsTest {
 
         // Arrange
 
-        final File symlink1 = new File(tempFolder.getRoot(), "symlink");
+        final File symlink1 = new File(tempFolder, "symlink");
 
         FileUtils.createSymbolicLink(symlink1, testFile1);
 
@@ -1256,7 +1267,7 @@ public class FileUtilsTest {
 
         // Assert
 
-        assertThat(Files.readSymbolicLink(symlink2.toPath()).toFile(), CoreMatchers.equalTo(testFile2));
+        assertEquals(testFile2, Files.readSymbolicLink(symlink2.toPath()).toFile());
     }
 
     //// constants for testing
@@ -1318,4 +1329,19 @@ public class FileUtilsTest {
         "**/-darcs-backup*",
         "**/.darcs-temp-mail"
     };
+
+    private static File newFile(File parent, String child) throws IOException {
+        File result = new File(parent, child);
+        result.createNewFile();
+        return result;
+    }
+
+    private static File newFolder(File root, String... subDirs) throws IOException {
+        String subFolder = String.join("/", subDirs);
+        File result = new File(root, subFolder);
+        if (!result.mkdirs()) {
+            throw new IOException("Couldn't create folders " + root);
+        }
+        return result;
+    }
 }

@@ -23,11 +23,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test the {@link StringUtils} class.
@@ -36,14 +37,16 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 public class StringUtilsTest {
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testAbbreviateNPE() {
-        assertThat(StringUtils.abbreviate(null, 10), nullValue());
+        assertThrows(NullPointerException.class, () -> assertThat(StringUtils.abbreviate(null, 10), nullValue()));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testAbbreviateMinLength() {
-        assertThat(StringUtils.abbreviate("This is a longtext", 3), is("T"));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> assertThat(StringUtils.abbreviate("This is a longtext", 3), is("T")));
     }
 
     @Test
@@ -53,14 +56,16 @@ public class StringUtilsTest {
         assertThat(StringUtils.abbreviate("This is a longtext", 50), is("This is a longtext"));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testAbbreviateOffsetNPE() {
-        assertThat(StringUtils.abbreviate(null, 10, 20), nullValue());
+        assertThrows(NullPointerException.class, () -> assertThat(StringUtils.abbreviate(null, 10, 20), nullValue()));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testAbbreviateOffsetMinLength() {
-        assertThat(StringUtils.abbreviate("This is a longtext", 10, 3), is("T"));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> assertThat(StringUtils.abbreviate("This is a longtext", 10, 3), is("T")));
     }
 
     @Test
@@ -72,9 +77,9 @@ public class StringUtilsTest {
         assertThat(StringUtils.abbreviate("This is a longtext", 50, 20), is("This is a longtext"));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testAddAndDeHumpNPE() {
-        StringUtils.addAndDeHump(null);
+        assertThrows(NullPointerException.class, () -> StringUtils.addAndDeHump(null));
     }
 
     @Test
@@ -100,9 +105,10 @@ public class StringUtilsTest {
         assertThat(StringUtils.capitaliseAllWords("start all big"), is("Start All Big"));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testCapitalizeFirstLetterNPE() {
-        assertThat(StringUtils.capitalizeFirstLetter(null), nullValue());
+        assertThrows(
+                NullPointerException.class, () -> assertThat(StringUtils.capitalizeFirstLetter(null), nullValue()));
     }
 
     @Test
@@ -114,9 +120,9 @@ public class StringUtilsTest {
         assertThat(StringUtils.capitalizeFirstLetter("start all big"), is("Start all big"));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testCenterNPE() {
-        StringUtils.center(null, 20);
+        assertThrows(NullPointerException.class, () -> StringUtils.center(null, 20));
     }
 
     @Test
@@ -128,9 +134,9 @@ public class StringUtilsTest {
         assertThat(StringUtils.center("        centerMe", 20), is("          centerMe  "));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testCenterDelimNPE() {
-        StringUtils.center(null, 20, "*");
+        assertThrows(NullPointerException.class, () -> StringUtils.center(null, 20, "*"));
     }
 
     @Test
@@ -142,9 +148,9 @@ public class StringUtilsTest {
         assertThat(StringUtils.center("        centerMe", 20, "*"), is("**        centerMe**"));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testChompNPE() {
-        StringUtils.chomp(null);
+        assertThrows(NullPointerException.class, () -> StringUtils.chomp(null));
     }
 
     @Test
@@ -158,9 +164,9 @@ public class StringUtilsTest {
         assertThat(StringUtils.chomp("dings\nbums\ndongs"), is("dings\nbums"));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testChompDelimNPE() {
-        StringUtils.chomp(null, "+");
+        assertThrows(NullPointerException.class, () -> StringUtils.chomp(null, "+"));
     }
 
     @Test
@@ -174,9 +180,9 @@ public class StringUtilsTest {
         assertThat(StringUtils.chomp("dings+bums+dongs", "+"), is("dings+bums"));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testChompLastNPE() {
-        StringUtils.chompLast(null);
+        assertThrows(NullPointerException.class, () -> StringUtils.chompLast(null));
     }
 
     @Test
@@ -192,9 +198,9 @@ public class StringUtilsTest {
         assertThat(StringUtils.chompLast("dings\nbums\ndongs\n"), is("dings\nbums\ndongs"));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testChompLastDelimNPE() {
-        StringUtils.chompLast(null, "+");
+        assertThrows(NullPointerException.class, () -> StringUtils.chompLast(null, "+"));
     }
 
     @Test
@@ -210,9 +216,9 @@ public class StringUtilsTest {
         assertThat(StringUtils.chompLast("dings+bums+dongs+", "+"), is("dings+bums+dongs"));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testChopNPE() {
-        StringUtils.chop(null);
+        assertThrows(NullPointerException.class, () -> StringUtils.chop(null));
     }
 
     @Test
@@ -228,9 +234,9 @@ public class StringUtilsTest {
         assertThat(StringUtils.chop("dings\n\r"), is("dings\n"));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testChopNewlineNPE() {
-        StringUtils.chopNewline(null);
+        assertThrows(NullPointerException.class, () -> StringUtils.chopNewline(null));
     }
 
     @Test
@@ -257,9 +263,9 @@ public class StringUtilsTest {
         assertThat(StringUtils.clean("  dings \n  "), is("dings"));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testConcatenateNPE() {
-        StringUtils.concatenate(null);
+        assertThrows(NullPointerException.class, () -> StringUtils.concatenate(null));
     }
 
     @Test
@@ -299,14 +305,14 @@ public class StringUtilsTest {
         assertThat(StringUtils.contains("string", "R"), is(false));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testCountMatchesNPE() {
-        StringUtils.countMatches(null, null);
+        assertThrows(NullPointerException.class, () -> StringUtils.countMatches(null, null));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testCountMatchesNPE2() {
-        StringUtils.countMatches("this is it", null);
+        assertThrows(NullPointerException.class, () -> StringUtils.countMatches("this is it", null));
     }
 
     @Test
@@ -332,9 +338,9 @@ public class StringUtilsTest {
         assertThat(StringUtils.defaultString("dings", "defaultValue"), is("dings"));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testDeleteWhitespaceNPE() {
-        StringUtils.deleteWhitespace(null);
+        assertThrows(NullPointerException.class, () -> StringUtils.deleteWhitespace(null));
     }
 
     @Test
@@ -348,19 +354,19 @@ public class StringUtilsTest {
         assertThat(StringUtils.deleteWhitespace("\n  dings \t "), is("dings"));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testDifferenceNPE() {
-        StringUtils.difference(null, null);
+        assertThrows(NullPointerException.class, () -> StringUtils.difference(null, null));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testDifferenceNPE2() {
-        StringUtils.difference(null, "another");
+        assertThrows(NullPointerException.class, () -> StringUtils.difference(null, "another"));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testDifferenceNPE3() {
-        StringUtils.difference("this", null);
+        assertThrows(NullPointerException.class, () -> StringUtils.difference("this", null));
     }
 
     @Test
@@ -372,19 +378,19 @@ public class StringUtilsTest {
         assertThat(StringUtils.difference("I am human", "I AM a robot"), is("AM a robot"));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testDifferenceAtNPE() {
-        StringUtils.differenceAt(null, null);
+        assertThrows(NullPointerException.class, () -> StringUtils.differenceAt(null, null));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testDifferenceAtNPE2() {
-        StringUtils.differenceAt("test", null);
+        assertThrows(NullPointerException.class, () -> StringUtils.differenceAt("test", null));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testDifferenceAtNPE3() {
-        StringUtils.differenceAt(null, "test");
+        assertThrows(NullPointerException.class, () -> StringUtils.differenceAt(null, "test"));
     }
 
     @Test
@@ -439,9 +445,9 @@ public class StringUtilsTest {
         assertThat(StringUtils.equalsIgnoreCase("dings", "diNGs"), is(true));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testEscapeNPE() {
-        StringUtils.escape(null);
+        assertThrows(NullPointerException.class, () -> StringUtils.escape(null));
     }
 
     @Test
@@ -465,19 +471,19 @@ public class StringUtilsTest {
         assertThat(StringUtils.escape("dings\bbums", new char[] {'\t', '\b'}, '+'), is("dings+\bbums"));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testGetChompNPE1() {
-        StringUtils.getChomp(null, null);
+        assertThrows(NullPointerException.class, () -> StringUtils.getChomp(null, null));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testGetChompNPE2() {
-        StringUtils.getChomp("dings", null);
+        assertThrows(NullPointerException.class, () -> StringUtils.getChomp("dings", null));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testGetChompNPE3() {
-        StringUtils.getChomp(null, "dings");
+        assertThrows(NullPointerException.class, () -> StringUtils.getChomp(null, "dings"));
     }
 
     @Test
@@ -489,9 +495,11 @@ public class StringUtilsTest {
         assertThat(StringUtils.getChomp("dingsbums", "-"), is(""));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testGetNestedStringNPE() {
-        assertThat(StringUtils.getNestedString("  +dings+ ", null), nullValue());
+        assertThrows(
+                NullPointerException.class,
+                () -> assertThat(StringUtils.getNestedString("  +dings+ ", null), nullValue()));
     }
 
     @Test
@@ -503,14 +511,18 @@ public class StringUtilsTest {
         assertThat(StringUtils.getNestedString("  +dings+ ", "not"), nullValue());
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testGetNestedString2NPE1() {
-        assertThat(StringUtils.getNestedString("  +dings+ ", null, null), nullValue());
+        assertThrows(
+                NullPointerException.class,
+                () -> assertThat(StringUtils.getNestedString("  +dings+ ", null, null), nullValue()));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testGetNestedString2NPE2() {
-        assertThat(StringUtils.getNestedString("  +dings+ ", null, "neither"), nullValue());
+        assertThrows(
+                NullPointerException.class,
+                () -> assertThat(StringUtils.getNestedString("  +dings+ ", null, "neither"), nullValue()));
     }
 
     @Test
@@ -524,14 +536,14 @@ public class StringUtilsTest {
         assertThat(StringUtils.getNestedString("  +dings+ ", "not", "neither"), nullValue());
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testGetPrechompNPE1() {
-        StringUtils.getPrechomp(null, null);
+        assertThrows(NullPointerException.class, () -> StringUtils.getPrechomp(null, null));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testGetPrechompNPE2() {
-        StringUtils.getPrechomp(null, "bums");
+        assertThrows(NullPointerException.class, () -> StringUtils.getPrechomp(null, "bums"));
     }
 
     @Test
@@ -552,14 +564,14 @@ public class StringUtilsTest {
         assertThat(StringUtils.indexOfAny("dings bums dongs", new String[] {"knuff", "bums"}), is(6));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testInterpolateNPE() {
-        StringUtils.interpolate(null, null);
+        assertThrows(NullPointerException.class, () -> StringUtils.interpolate(null, null));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testInterpolateNPE2() {
-        StringUtils.interpolate("This ${text} will get replaced", null);
+        assertThrows(NullPointerException.class, () -> StringUtils.interpolate("This ${text} will get replaced", null));
     }
 
     @Test
@@ -746,9 +758,9 @@ public class StringUtilsTest {
         assertThat(StringUtils.isWhitespace("  \n "), is(true));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testJoinArrayNPE() {
-        StringUtils.join((Object[]) null, null);
+        assertThrows(NullPointerException.class, () -> StringUtils.join((Object[]) null, null));
     }
 
     @Test
@@ -760,9 +772,9 @@ public class StringUtilsTest {
         assertThat(StringUtils.join(new Object[] {"a", "b", "c"}, "__"), is("a__b__c"));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testJoinIteratorNPE() {
-        StringUtils.join((Iterator<?>) null, null);
+        assertThrows(NullPointerException.class, () -> StringUtils.join((Iterator<?>) null, null));
     }
 
     @Test
@@ -791,9 +803,9 @@ public class StringUtilsTest {
         assertThat(StringUtils.lastIndexOfAny("dings bums boms", new String[] {"nix", "da"}), is(-1));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testLeftIAE() {
-        StringUtils.left(null, -1);
+        assertThrows(IllegalArgumentException.class, () -> StringUtils.left(null, -1));
     }
 
     @Test
@@ -807,9 +819,9 @@ public class StringUtilsTest {
         assertThat(StringUtils.left("dingsbums", 0), is(""));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testLeftPad1NPE() {
-        StringUtils.leftPad(null, 0);
+        assertThrows(NullPointerException.class, () -> StringUtils.leftPad(null, 0));
     }
 
     @Test
@@ -821,19 +833,19 @@ public class StringUtilsTest {
         assertThat(StringUtils.leftPad("dings", 10), is("     dings"));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testLeftPad2NPE1() {
-        StringUtils.leftPad(null, 0, null);
+        assertThrows(NullPointerException.class, () -> StringUtils.leftPad(null, 0, null));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testLeftPad2NPE2() {
-        StringUtils.leftPad("dings", 0, null);
+        assertThrows(NullPointerException.class, () -> StringUtils.leftPad("dings", 0, null));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testLeftPad2NPE3() {
-        StringUtils.leftPad(null, 0, "*");
+        assertThrows(NullPointerException.class, () -> StringUtils.leftPad(null, 0, "*"));
     }
 
     @Test
@@ -854,9 +866,9 @@ public class StringUtilsTest {
         assertThat(StringUtils.lowerCase(""), is(""));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testLowerCaseFirstLetterNPE() {
-        StringUtils.lowercaseFirstLetter(null);
+        assertThrows(NullPointerException.class, () -> StringUtils.lowercaseFirstLetter(null));
     }
 
     @Test
@@ -864,14 +876,14 @@ public class StringUtilsTest {
         assertThat(StringUtils.lowercaseFirstLetter("Dings Bums"), is("dings Bums"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testMidNegativeLen() {
-        StringUtils.mid(null, 0, -2);
+        assertThrows(IllegalArgumentException.class, () -> StringUtils.mid(null, 0, -2));
     }
 
-    @Test(expected = IndexOutOfBoundsException.class)
+    @Test
     public void testMidWrongPos() {
-        StringUtils.mid(null, -2, 3);
+        assertThrows(IndexOutOfBoundsException.class, () -> StringUtils.mid(null, -2, 3));
     }
 
     @Test
@@ -883,19 +895,19 @@ public class StringUtilsTest {
         assertThat(StringUtils.mid("dings bums", 3, 4), is("gs b"));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testOverlayStringNPE1() {
-        StringUtils.overlayString(null, null, 0, 0);
+        assertThrows(NullPointerException.class, () -> StringUtils.overlayString(null, null, 0, 0));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testOverlayStringNPE2() {
-        StringUtils.overlayString("dings", null, 0, 0);
+        assertThrows(NullPointerException.class, () -> StringUtils.overlayString("dings", null, 0, 0));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testOverlayStringNPE3() {
-        StringUtils.overlayString(null, "bums", 0, 0);
+        assertThrows(NullPointerException.class, () -> StringUtils.overlayString(null, "bums", 0, 0));
     }
 
     @Test
@@ -905,19 +917,19 @@ public class StringUtilsTest {
         assertThat(StringUtils.overlayString("dings", "bums", 2, 4), is("dibumss"));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testPrechompNPE1() {
-        StringUtils.prechomp(null, null);
+        assertThrows(NullPointerException.class, () -> StringUtils.prechomp(null, null));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testPrechompNPE2() {
-        StringUtils.prechomp("dings", null);
+        assertThrows(NullPointerException.class, () -> StringUtils.prechomp("dings", null));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testPrechompNPE3() {
-        StringUtils.prechomp(null, "bums");
+        assertThrows(NullPointerException.class, () -> StringUtils.prechomp(null, "bums"));
     }
 
     @Test
@@ -1040,19 +1052,19 @@ public class StringUtilsTest {
                 is("\'a\\\"bc\'"));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testRemoveAndHumpNPE1() {
-        StringUtils.removeAndHump(null, null);
+        assertThrows(NullPointerException.class, () -> StringUtils.removeAndHump(null, null));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testRemoveAndHumpNPE2() {
-        StringUtils.removeAndHump("dings", null);
+        assertThrows(NullPointerException.class, () -> StringUtils.removeAndHump("dings", null));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testRemoveAndHumpNPE3() {
-        StringUtils.removeAndHump(null, "bums");
+        assertThrows(NullPointerException.class, () -> StringUtils.removeAndHump(null, "bums"));
     }
 
     @Test
@@ -1064,9 +1076,9 @@ public class StringUtilsTest {
         assertThat(StringUtils.removeAndHump("THIS-IS-IT", "-"), is("THISISIT"));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testRemoveDuplicateWhitespaceNPE() {
-        StringUtils.removeDuplicateWhitespace(null);
+        assertThrows(NullPointerException.class, () -> StringUtils.removeDuplicateWhitespace(null));
     }
 
     @Test
@@ -1080,14 +1092,14 @@ public class StringUtilsTest {
         assertThat(StringUtils.removeDuplicateWhitespace("dings \t bums"), is("dings bums"));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testRepeatNPE() {
-        StringUtils.repeat(null, 0);
+        assertThrows(NullPointerException.class, () -> StringUtils.repeat(null, 0));
     }
 
-    @Test(expected = NegativeArraySizeException.class)
+    @Test
     public void testRepeatNegativeAmount() {
-        StringUtils.repeat("dings", -1);
+        assertThrows(NegativeArraySizeException.class, () -> StringUtils.repeat("dings", -1));
     }
 
     @Test
@@ -1182,14 +1194,14 @@ public class StringUtilsTest {
         assertThat(StringUtils.reverse("  dings "), is(" sgnid  "));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testReverseDelimitedStringNPE1() {
-        StringUtils.reverseDelimitedString(null, null);
+        assertThrows(NullPointerException.class, () -> StringUtils.reverseDelimitedString(null, null));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testReverseDelimitedStringNPE2() {
-        StringUtils.reverseDelimitedString(null, " ");
+        assertThrows(NullPointerException.class, () -> StringUtils.reverseDelimitedString(null, " "));
     }
 
     @Test
@@ -1205,14 +1217,14 @@ public class StringUtilsTest {
         assertThat(StringUtils.reverseDelimitedString("dings bums", " "), is("bums dings"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testRightIAE1() {
-        StringUtils.right(null, -1);
+        assertThrows(IllegalArgumentException.class, () -> StringUtils.right(null, -1));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testRightIAE2() {
-        StringUtils.right("dings", -1);
+        assertThrows(IllegalArgumentException.class, () -> StringUtils.right("dings", -1));
     }
 
     @Test
@@ -1226,9 +1238,9 @@ public class StringUtilsTest {
         assertThat(StringUtils.right("dings ", 3), is("gs "));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testRightPad1NPE() {
-        StringUtils.rightPad(null, 0);
+        assertThrows(NullPointerException.class, () -> StringUtils.rightPad(null, 0));
     }
 
     @Test
@@ -1240,19 +1252,19 @@ public class StringUtilsTest {
         assertThat(StringUtils.rightPad("dings", 10), is("dings     "));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testRightPad2NPE1() {
-        StringUtils.rightPad(null, 0, null);
+        assertThrows(NullPointerException.class, () -> StringUtils.rightPad(null, 0, null));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testRightPad2NPE2() {
-        StringUtils.rightPad("dings", 0, null);
+        assertThrows(NullPointerException.class, () -> StringUtils.rightPad("dings", 0, null));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testRightPad2NPE23() {
-        StringUtils.rightPad(null, 0, "+");
+        assertThrows(NullPointerException.class, () -> StringUtils.rightPad(null, 0, "+"));
     }
 
     @Test
@@ -1264,9 +1276,9 @@ public class StringUtilsTest {
         assertThat(StringUtils.rightPad("dings", 10, "+"), is("dings+++++"));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testSplit1NPE() {
-        StringUtils.split(null);
+        assertThrows(NullPointerException.class, () -> StringUtils.split(null));
     }
 
     @Test
@@ -1276,14 +1288,14 @@ public class StringUtilsTest {
         assertThat(StringUtils.split("dings bums"), is(new String[] {"dings", "bums"}));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testSplit2NPE1() {
-        StringUtils.split(null, null);
+        assertThrows(NullPointerException.class, () -> StringUtils.split(null, null));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testSplit2NPE2() {
-        StringUtils.split(null, " ");
+        assertThrows(NullPointerException.class, () -> StringUtils.split(null, " "));
     }
 
     @Test
@@ -1297,14 +1309,14 @@ public class StringUtilsTest {
         assertThat(StringUtils.split("dings+bums", "+"), is(new String[] {"dings", "bums"}));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testSplit3NPE1() {
-        StringUtils.split(null, null, 1);
+        assertThrows(NullPointerException.class, () -> StringUtils.split(null, null, 1));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testSplit3NPE2() {
-        StringUtils.split(null, " ", 1);
+        assertThrows(NullPointerException.class, () -> StringUtils.split(null, " ", 1));
     }
 
     @Test

@@ -32,9 +32,8 @@ import java.lang.annotation.Target;
 import java.net.URL;
 import java.util.Properties;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -46,8 +45,8 @@ public class PropertyUtilsTest {
     @Target(ElementType.METHOD)
     @interface NeedsTemporaryFolder {}
 
-    @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
+    @TempDir
+    private File tempFolder;
 
     @Test
     @SuppressWarnings("deprecation")
@@ -101,8 +100,8 @@ public class PropertyUtilsTest {
     @NeedsTemporaryFolder
     @SuppressWarnings("deprecation")
     public void loadEmptyFile() throws Exception {
-        assertThat(PropertyUtils.loadProperties(tempFolder.newFile("empty")), is(new Properties()));
-        assertThat(PropertyUtils.loadOptionalProperties(tempFolder.newFile("optional")), is(new Properties()));
+        assertThat(PropertyUtils.loadProperties(newFile(tempFolder, "empty")), is(new Properties()));
+        assertThat(PropertyUtils.loadOptionalProperties(newFile(tempFolder, "optional")), is(new Properties()));
     }
 
     @Test
@@ -110,11 +109,13 @@ public class PropertyUtilsTest {
     @SuppressWarnings("deprecation")
     public void loadEmptyURL() throws Exception {
         assertThat(
-                PropertyUtils.loadProperties(tempFolder.newFile("empty").toURI().toURL()), is(new Properties()));
+                PropertyUtils.loadProperties(
+                        newFile(tempFolder, "empty").toURI().toURL()),
+                is(new Properties()));
 
         assertThat(
                 PropertyUtils.loadOptionalProperties(
-                        tempFolder.newFile("optional").toURI().toURL()),
+                        newFile(tempFolder, "optional").toURI().toURL()),
                 is(new Properties()));
     }
 
@@ -135,7 +136,7 @@ public class PropertyUtilsTest {
     @NeedsTemporaryFolder
     @SuppressWarnings("deprecation")
     public void loadValidFile() throws IOException {
-        File valid = tempFolder.newFile("valid");
+        File valid = newFile(tempFolder, "valid");
         Properties value = new Properties();
         value.setProperty("a", "b");
         try (OutputStream out = new FileOutputStream(valid)) {
@@ -149,7 +150,7 @@ public class PropertyUtilsTest {
     @NeedsTemporaryFolder
     @SuppressWarnings("deprecation")
     public void loadValidURL() throws IOException {
-        File valid = tempFolder.newFile("valid");
+        File valid = newFile(tempFolder, "valid");
         Properties value = new Properties();
         value.setProperty("a", "b");
         try (OutputStream out = new FileOutputStream(valid)) {
@@ -157,5 +158,11 @@ public class PropertyUtilsTest {
             assertThat(PropertyUtils.loadProperties(valid.toURI().toURL()), is(value));
             assertThat(PropertyUtils.loadOptionalProperties(valid.toURI().toURL()), is(value));
         }
+    }
+
+    private static File newFile(File parent, String child) throws IOException {
+        File result = new File(parent, child);
+        result.createNewFile();
+        return result;
     }
 }

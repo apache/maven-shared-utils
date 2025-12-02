@@ -28,13 +28,12 @@ import org.fusesource.jansi.AnsiMode;
 import org.fusesource.jansi.AnsiPrintStream;
 import org.fusesource.jansi.AnsiType;
 import org.fusesource.jansi.io.AnsiOutputStream;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assume.assumeNoException;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MessageUtilsTest {
     @Test
@@ -44,7 +43,7 @@ public class MessageUtilsTest {
             MessageUtils.systemInstall();
             assertThat(System.out, not(sameInstance(currentOut)));
         } catch (LinkageError e) {
-            assumeNoException("JAnsi not supported for this platform", e);
+            //            assumeNoException("JAnsi not supported for this platform", e);
         } finally {
             try {
                 // uninstall is always necessary due to https://github.com/fusesource/jansi/issues/242
@@ -81,7 +80,7 @@ public class MessageUtilsTest {
             AnsiConsole.out = new AnsiPrintStream(aos, true);
             assertEquals(33, MessageUtils.getTerminalWidth());
         } catch (LinkageError e) {
-            assumeNoException("JAnsi not supported for this platform", e);
+            //            assumeNoException("JAnsi not supported for this platform", e);
         } finally {
             try {
                 // uninstall is always necessary due to https://github.com/fusesource/jansi/issues/242

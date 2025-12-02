@@ -23,13 +23,14 @@ import java.io.StringReader;
 
 import org.apache.maven.shared.utils.xml.Xpp3Dom;
 import org.apache.maven.shared.utils.xml.Xpp3DomBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.apache.maven.shared.utils.xml.Xpp3Dom.mergeXpp3Dom;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author Kristian Rosenvold
@@ -131,16 +132,22 @@ public class Xpp3DomTest {
         assertEquals(1, result.getChildren("sub").length);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void nullValue() {
-        //noinspection ConstantConditions
-        new Xpp3Dom("top").setAttribute(null, "value");
+        assertThrows(
+                NullPointerException.class,
+                () ->
+                        //noinspection ConstantConditions
+                        new Xpp3Dom("top").setAttribute(null, "value"));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void nullAttribute() {
-        //noinspection ConstantConditions
-        new Xpp3Dom("root").setAttribute("attr", null);
+        assertThrows(
+                NullPointerException.class,
+                () ->
+                        //noinspection ConstantConditions
+                        new Xpp3Dom("root").setAttribute("attr", null));
     }
 
     @Test
