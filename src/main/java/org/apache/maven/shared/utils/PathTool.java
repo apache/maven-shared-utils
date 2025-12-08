@@ -33,6 +33,7 @@ import java.util.StringTokenizer;
  * Some external fixes by Apache Committers have been applied later.
  * </p>
  */
+@Deprecated
 public class PathTool {
 
     /**
@@ -46,7 +47,7 @@ public class PathTool {
     /**
      * Determines the relative path of a filename from a base directory.
      * This method is useful in building relative links within pages of
-     * a web site.  It provides similar functionality to Anakia's
+     * a website.  It provides similar functionality to Anakia's
      * <code>$relativePath</code> context variable.  The arguments to
      * this method may contain either forward or backward slashes as
      * file separators.  The relative path returned is formed using
@@ -67,12 +68,14 @@ public class PathTool {
      * @param basedir  The base directory.
      * @param filename The filename that is relative to the base
      *                 directory.
-     * @return The relative path of the filename from the base
+     * @return the relative path of the filename from the base
      *         directory.  This value is not terminated with a forward slash.
      *         A zero-length string is returned if: the filename is not relative to
      *         the base directory, <code>basedir</code> is null or zero-length,
      *         or <code>filename</code> is null or zero-length.
+     * @deprecated use java.nio.file.Path.relativize() instead
      */
+    @Deprecated
     public static String getRelativePath(@Nullable String basedir, @Nullable String filename) {
         basedir = uppercaseDrive(basedir);
         filename = uppercaseDrive(filename);
@@ -127,7 +130,9 @@ public class PathTool {
      * @param oldPath old path
      * @param newPath new path
      * @return a relative file path from <code>oldPath</code>.
+     * @deprecated use java.nio.file.Path.relativize() instead
      */
+    @Deprecated
     public static String getRelativeFilePath(final String oldPath, final String newPath) {
         if (StringUtils.isEmpty(oldPath) || StringUtils.isEmpty(newPath)) {
             return "";
