@@ -69,7 +69,7 @@ public class StringUtils {
      * an empty String.</p>
      *
      * @param str the String to check
-     * @return the trimmed text (never <code>null</code>)
+     * @return the cleaned text (never <code>null</code>)
      * @see java.lang.String#trim()
      */
     @Nonnull
@@ -448,32 +448,40 @@ public class StringUtils {
     // --------------------------------------------------------------------------
 
     /**
-     * <p>Splits the provided text into a array, using whitespace as the
+     * <p>Splits the provided text into an array, using whitespace as the
      * separator.</p>
      *
      * <p>The separator is not included in the returned String array.</p>
      *
      * @param str the String to parse
      * @return an array of parsed Strings
+     * @deprecated use <code>java.lang.String.split()</code> instead. Be careful when migrating.
+     *      <code>String.split()</code>) splits on a regular expression so while it can
+     *      do anything this method does, it is not a drop-in replacement.
      */
     @Nonnull
+    @Deprecated
     public static String[] split(@Nonnull String str) {
         return split(str, null, -1);
     }
 
     /**
-     * @param text the text to be split
+     * @param text the text to split
      * @param separator the separator at which the text will be split
      * @return the resulting array
      * @see #split(String, String, int)
+     * @deprecated use <code>java.lang.String.split()</code> instead. Be careful when migrating.
+     *      <code>String.split()</code>) splits on a regular expression so while it can
+     *      do anything this method does, it is not a drop-in replacement.
      */
     @Nonnull
+    @Deprecated
     public static String[] split(@Nonnull String text, @Nullable String separator) {
         return split(text, separator, -1);
     }
 
     /**
-     * <p>Splits the provided text into a array, based on a given separator.</p>
+     * <p>Splits the provided text into an array, based on a given separator.</p>
      *
      * <p>The separator is not included in the returned String array. The
      * maximum number of splits to perform can be controlled. A <code>null</code>
@@ -489,8 +497,12 @@ public class StringUtils {
      * @param max       the maximum number of elements to include in the
      *                  array.  A zero or negative value implies no limit.
      * @return an array of parsed Strings
+     * @deprecated use <code>java.lang.String.split()</code> instead. Be careful when migrating.
+     *      <code>String.split()</code>) splits on a regular expression so while it can
+     *      do anything this method does, it is not a drop-in replacement.
      */
     @Nonnull
+    @Deprecated
     public static String[] split(@Nonnull String str, @Nullable String separator, int max) {
         StringTokenizer tok;
         if (separator == null) {
