@@ -26,26 +26,40 @@ import java.io.SequenceInputStream;
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.shared.utils.xml.XmlStreamReader;
 import org.junit.jupiter.api.Test;
+import org.opentest4j.AssertionFailedError;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  *
  * @author <a href="mailto:hboutemy@apache.org">Hervé Boutemy</a>
  */
 public class XmlStreamReaderTest {
-    /** french */
+    /**
+     * french
+     */
     private static final String TEXT_LATIN1 = "eacute: \u00E9";
-    /** greek */
+    /**
+     * greek
+     */
     private static final String TEXT_LATIN7 = "alpha: \u03B1";
-    /** euro support */
+    /**
+     * euro support
+     */
     private static final String TEXT_LATIN15 = "euro: \u20AC";
-    /** japanese */
+    /**
+     * japanese
+     */
     private static final String TEXT_EUC_JP = "hiragana A: \u3042";
-    /** Unicode: support everything */
+    /**
+     * Unicode: support everything
+     */
     private static final String TEXT_UNICODE =
             TEXT_LATIN1 + ", " + TEXT_LATIN7 + ", " + TEXT_LATIN15 + ", " + TEXT_EUC_JP;
-    /** see http://unicode.org/faq/utf_bom.html#BOM */
+    /**
+     * see http://unicode.org/faq/utf_bom.html#BOM
+     */
     private static final byte[] BOM_UTF8 = {(byte) 0xEF, (byte) 0xBB, (byte) 0xBF};
 
     private static final byte[] BOM_UTF16BE = {(byte) 0xFE, (byte) 0xFF};
@@ -159,13 +173,12 @@ public class XmlStreamReaderTest {
 
     @Test
     public void testInappropriateEncoding() throws IOException {
-        //        try {
-        //            checkXmlStreamReader(TEXT_UNICODE, "ISO-8859-2");
-        //            fail("Check should have failed, since some characters are not available in the specified
-        // encoding");
-        //        } catch (ComparisonFailure cf) {
-        //            // expected failure, since the encoding does not contain some characters
-        //        }
+        try {
+            checkXmlStreamReader(TEXT_UNICODE, "ISO-8859-2");
+            fail("Check should have failed, since some characters are not available in the specified encoding");
+        } catch (AssertionFailedError cf) {
+            // expected failure, since the encoding does not contain some characters
+        }
     }
 
     @Test
