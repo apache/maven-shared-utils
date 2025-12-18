@@ -26,29 +26,30 @@ import java.util.List;
 
 import org.apache.maven.shared.utils.Os;
 import org.apache.maven.shared.utils.testhelpers.FileTestHelper;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assume.assumeFalse;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 @SuppressWarnings("deprecation")
 public class DirectoryScannerTest {
     private static final String[] NONE = new String[0];
 
-    @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
+    @TempDir
+    private File tempFolder;
 
     private void createTestData() throws IOException {
-        File rootDir = tempFolder.getRoot();
+        File rootDir = tempFolder;
         File folder1 = new File(rootDir, "folder1");
         if (!folder1.mkdirs()) {
-            Assert.fail();
+            Assertions.fail();
         }
 
         FileTestHelper.generateTestFile(new File(rootDir, "file1.txt"), 11);
@@ -60,7 +61,7 @@ public class DirectoryScannerTest {
 
         File folder2 = new File(folder1, "ignorefolder");
         if (!folder2.mkdirs()) {
-            Assert.fail();
+            Assertions.fail();
         }
         FileTestHelper.generateTestFile(new File(folder2, "file7.txt"), 17);
     }
@@ -131,9 +132,6 @@ public class DirectoryScannerTest {
                 /* expExclDirs     */ NONE);
     }
 
-    @Rule
-    public ExpectedException xcludesNPExRule = ExpectedException.none();
-
     @Test
     public void testIncludesWithNull() throws Exception {
         testXcludesWithNull(new String[] {null}, null, "includes");
@@ -144,23 +142,25 @@ public class DirectoryScannerTest {
         testXcludesWithNull(null, new String[] {null}, "excludes");
     }
 
-    private void testXcludesWithNull(String[] includes, String[] excludes, String listName) throws Exception {
+    private void testXcludesWithNull(String[] includes, String[] excludes, String listName) throws IOException {
         createTestData();
-        xcludesNPExRule.expect(NullPointerException.class);
-        xcludesNPExRule.expectMessage("If a non-null " + listName + " list is given, all elements must be non-null");
-
-        fitScanTest(
-                true,
-                true,
-                true,
-                /* includes        */ includes,
-                /* excludes        */ excludes,
-                /* expInclFiles    */ new String[] {"file3.dat", "folder1/file5.dat"},
-                /* expInclDirs     */ NONE,
-                /* expNotInclFiles */ new String[] {"file1.txt", "file2.txt", "folder1/file4.txt"},
-                /* expNotInclDirs  */ new String[] {"", "folder1"},
-                /* expExclFiles    */ NONE,
-                /* expExclDirs     */ NONE);
+        Throwable exception = assertThrows(
+                NullPointerException.class,
+                () -> fitScanTest(
+                        true,
+                        true,
+                        true,
+                        /* includes        */ includes,
+                        /* excludes        */ excludes,
+                        /* expInclFiles    */ new String[] {"file3.dat", "folder1/file5.dat"},
+                        /* expInclDirs     */ NONE,
+                        /* expNotInclFiles */ new String[] {"file1.txt", "file2.txt", "folder1/file4.txt"},
+                        /* expNotInclDirs  */ new String[] {"", "folder1"},
+                        /* expExclFiles    */ NONE,
+                        /* expExclDirs     */ NONE));
+        assertThat(
+                exception.getMessage(),
+                containsString("If a non-null " + listName + " list is given, all elements must be non-null"));
     }
 
     @Test
@@ -179,7 +179,7 @@ public class DirectoryScannerTest {
         assertAlwaysIncluded(Arrays.asList(files));
 
         // FIXME getIncludedFiles is broken on Windows; correct answer is 9
-        assertTrue("files.length is " + files.length, files.length == 9 || files.length == 11);
+        assertTrue(files.length == 9 || files.length == 11, "files.length is " + files.length);
     }
 
     @Test
@@ -292,7 +292,7 @@ public class DirectoryScannerTest {
             String[] expectedExcludedFiles,
             String[] expectedExcludedDirectories) {
         DirectoryScanner ds = new DirectoryScanner();
-        ds.setBasedir(tempFolder.getRoot());
+        ds.setBasedir(tempFolder);
 
         ds.setCaseSensitive(caseSensitive);
         ds.setFollowSymlinks(followSymLinks);
@@ -336,14 +336,14 @@ public class DirectoryScannerTest {
         if (expectedFiles != null) {
             String msg = category + " expected: " + Arrays.toString(expectedFiles) + " but got: "
                     + Arrays.toString(resolvedFiles);
-            Assert.assertNotNull(msg, resolvedFiles);
-            assertEquals(msg, expectedFiles.length, resolvedFiles.length);
+            Assertions.assertNotNull(resolvedFiles, msg);
+            assertEquals(expectedFiles.length, resolvedFiles.length, msg);
 
             Arrays.sort(expectedFiles);
             Arrays.sort(resolvedFiles);
 
             for (int i = 0; i < resolvedFiles.length; i++) {
-                assertEquals(msg, expectedFiles[i], resolvedFiles[i].replace("\\", "/"));
+                assertEquals(expectedFiles[i], resolvedFiles[i].replace("\\", "/"), msg);
             }
         }
     }
@@ -369,7 +369,7 @@ public class DirectoryScannerTest {
     }
 
     private void removeAndAddSomeFiles() throws IOException {
-        File rootDir = tempFolder.getRoot();
+        File rootDir = tempFolder;
         File file2 = new File(rootDir, "file2.txt");
         file2.delete();
 
@@ -384,8 +384,8 @@ public class DirectoryScannerTest {
         createTestData();
 
         DirectoryScanner dss = new DirectoryScanner();
-        dss.setBasedir(tempFolder.getRoot());
-        Assert.assertNotNull(dss);
+        dss.setBasedir(tempFolder);
+        Assertions.assertNotNull(dss);
 
         // we take the initial snapshot
         dss.scan();
@@ -400,17 +400,17 @@ public class DirectoryScannerTest {
 
         String[] addedFiles = dsr.getFilesAdded();
         String[] removedFiles = dsr.getFilesRemoved();
-        Assert.assertNotNull(addedFiles);
-        Assert.assertNotNull(removedFiles);
+        Assertions.assertNotNull(addedFiles);
+        Assertions.assertNotNull(removedFiles);
         assertEquals(1, addedFiles.length);
         assertEquals(2, removedFiles.length);
     }
 
-    @Ignore("Enable this test to run performance checks")
+    @Disabled("Enable this test to run performance checks")
     @Test
     public void performanceTest() throws Exception {
 
-        File rootFolder = tempFolder.getRoot();
+        File rootFolder = tempFolder;
 
         // do some warmup
         for (int i = 1; i < 200; i++) {
@@ -447,7 +447,7 @@ public class DirectoryScannerTest {
             directoryScanner.scan();
 
             DirectoryScanResult directoryScanResult = directoryScanner.diffIncludedFiles(oldFiles);
-            Assert.assertNotNull(directoryScanResult);
+            Assertions.assertNotNull(directoryScanResult);
 
             FileUtils.deleteDirectory(rootFolder);
             rootFolder.mkdir();

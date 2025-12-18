@@ -20,9 +20,11 @@ package org.apache.maven.shared.utils;
 
 import java.util.Locale;
 
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test case for character case changes, to precisely point the situations when character case comparison doesn't
@@ -33,7 +35,7 @@ import org.junit.Test;
  * @author Hervé Boutemy
  * @see <a href="http://sim.ivi.co/2011/07/trap-of-case-insensitive-string.html">Simple Smiles - Xuelei Fan's Blog</a>
  */
-public class CaseTest extends Assert {
+public class CaseTest {
     private static final Locale LOCALE_TURKISH = new Locale("tr");
 
     /** common ASCII 'i' */
@@ -56,7 +58,7 @@ public class CaseTest extends Assert {
 
     private static final Locale SAVED_DEFAULT_LOCALE = Locale.getDefault();
 
-    @AfterClass
+    @AfterAll
     public static void restoreDefaultLocale() {
         Locale.setDefault(SAVED_DEFAULT_LOCALE);
     }
@@ -68,32 +70,32 @@ public class CaseTest extends Assert {
     @Test
     public void testTurkishI() {
         // check common i and I
-        assertEquals("common lowercase i should have a dot", 'i', DOTTED_i);
-        assertEquals("common uppercase I should not have a dot", 'I', DOTLESS_I);
+        assertEquals('i', DOTTED_i, "common lowercase i should have a dot");
+        assertEquals('I', DOTLESS_I, "common uppercase I should not have a dot");
 
         @SuppressWarnings("LocalFinalVariableName")
         final String iIıİ = "iIıİ";
 
         // check source encoding doesn't wreak havoc */
-        assertEquals("misc i directly in (UTF-8) source", iIıİ, "" + DOTTED_i + DOTLESS_I + DOTLESS_i + DOTTED_I);
+        assertEquals(iIıİ, "" + DOTTED_i + DOTLESS_I + DOTLESS_i + DOTTED_I, "misc i directly in (UTF-8) source");
 
         // check toUpperCase and toLowerCase difference with turkish and english locales
         assertEquals(
-                "'iIıİ'.toUpperCase('tr')=='İIIİ'",
                 "" + DOTTED_I + DOTLESS_I + DOTLESS_I + DOTTED_I,
-                iIıİ.toUpperCase(LOCALE_TURKISH));
+                iIıİ.toUpperCase(LOCALE_TURKISH),
+                "'iIıİ'.toUpperCase('tr')=='İIIİ'");
         assertEquals(
-                "'iIıİ'.toLowerCase('tr')=='iııi'",
                 "" + DOTTED_i + DOTLESS_i + DOTLESS_i + DOTTED_i,
-                iIıİ.toLowerCase(LOCALE_TURKISH));
+                iIıİ.toLowerCase(LOCALE_TURKISH),
+                "'iIıİ'.toLowerCase('tr')=='iııi'");
         assertEquals(
-                "'iIıİ'.toUpperCase('en')=='IIIİ'",
                 "" + DOTLESS_I + DOTLESS_I + DOTLESS_I + DOTTED_I,
-                iIıİ.toUpperCase(Locale.ENGLISH));
+                iIıİ.toUpperCase(Locale.ENGLISH),
+                "'iIıİ'.toUpperCase('en')=='IIIİ'");
         String lower = iIıİ.toLowerCase(Locale.ENGLISH); // on some platforms, ends with extra COMBINED DOT ABOVE
         String expected =
                 "" + DOTTED_i + DOTTED_i + DOTLESS_i + DOTTED_i + (lower.length() > 4 ? COMBINING_DOT_ABOVE : "");
-        assertEquals("'iIıİ'.toLowerCase('en')=='iiıi'", expected, lower);
+        assertEquals(expected, lower, "'iIıİ'.toLowerCase('en')=='iiıi'");
 
         // check equalsIgnoreCase() , which has no locale
         for (int i = 0; i < iIıİ.length(); i++) {
@@ -105,7 +107,7 @@ public class CaseTest extends Assert {
             }
             String current = sb.toString();
 
-            assertTrue("'" + current + "'.equalsIgnoreCase('" + iIıİ + "')", current.equalsIgnoreCase(iIıİ));
+            assertTrue(current.equalsIgnoreCase(iIıİ), "'" + current + "'.equalsIgnoreCase('" + iIıİ + "')");
         }
     }
 
@@ -134,25 +136,25 @@ public class CaseTest extends Assert {
             }
 
             assertEquals(
-                    "'" + lower + "'.toUpperCase('" + locale.toString() + "')",
                     expectedToUpperCase,
-                    lower.toUpperCase(locale));
+                    lower.toUpperCase(locale),
+                    "'" + lower + "'.toUpperCase('" + locale.toString() + "')");
             assertEquals(
-                    "'" + upper + "'.toLowerCase('" + locale.toString() + "')",
                     expectedToLowerCase,
-                    upper.toLowerCase(locale));
+                    upper.toLowerCase(locale),
+                    "'" + upper + "'.toLowerCase('" + locale.toString() + "')");
 
             // check that toLowerCase on lower and toUpperCase on upper don't cause harm
-            assertEquals("'" + lower + "'.toLowerCase('" + locale + "')", lower, lower.toLowerCase(locale));
-            assertEquals("'" + upper + "'.toUpperCase('" + locale + "')", upper, upper.toUpperCase(locale));
+            assertEquals(lower, lower.toLowerCase(locale), "'" + lower + "'.toLowerCase('" + locale + "')");
+            assertEquals(upper, upper.toUpperCase(locale), "'" + upper + "'.toUpperCase('" + locale + "')");
 
             // check equalsIgnoreCase
             assertTrue(
-                    "'" + upper + "'.equalsIgnoreCase('" + expectedToLowerCase + "')",
-                    upper.equalsIgnoreCase(expectedToLowerCase));
+                    upper.equalsIgnoreCase(expectedToLowerCase),
+                    "'" + upper + "'.equalsIgnoreCase('" + expectedToLowerCase + "')");
             assertTrue(
-                    "'" + expectedToUpperCase + "'.equalsIgnoreCase('" + lower + "')",
-                    expectedToUpperCase.equalsIgnoreCase(lower));
+                    expectedToUpperCase.equalsIgnoreCase(lower),
+                    "'" + expectedToUpperCase + "'.equalsIgnoreCase('" + lower + "')");
         }
     }
 }

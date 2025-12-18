@@ -23,15 +23,19 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
 
-import junit.framework.TestCase;
 import org.apache.maven.shared.utils.StringUtils;
 import org.apache.maven.shared.utils.WriterFactory;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author <a href="mailto:vincent.siveton@gmail.com">Vincent Siveton</a>
  *
  */
-public class XmlWriterUtilTest extends TestCase {
+public class XmlWriterUtilTest {
     private OutputStream output;
 
     private Writer writer;
@@ -39,8 +43,8 @@ public class XmlWriterUtilTest extends TestCase {
     private XMLWriter xmlWriter;
 
     /** {@inheritDoc} */
-    protected void setUp() throws Exception {
-        super.setUp();
+    @BeforeEach
+    public void setUp() throws Exception {
 
         output = new ByteArrayOutputStream();
         writer = WriterFactory.newXmlWriter(output);
@@ -52,6 +56,7 @@ public class XmlWriterUtilTest extends TestCase {
      *
      * @throws Exception if any
      */
+    @Test
     public void testWriteLineBreakXMLWriter() throws Exception {
         XmlWriterUtil.writeLineBreak(xmlWriter);
         writer.close();
@@ -63,6 +68,7 @@ public class XmlWriterUtilTest extends TestCase {
      *
      * @throws Exception if any
      */
+    @Test
     public void testWriteLineBreakXMLWriterInt() throws Exception {
         XmlWriterUtil.writeLineBreak(xmlWriter, 10);
         writer.close();
@@ -74,6 +80,7 @@ public class XmlWriterUtilTest extends TestCase {
      *
      * @throws Exception if any
      */
+    @Test
     public void testWriteLineBreakXMLWriterIntInt() throws Exception {
         XmlWriterUtil.writeLineBreak(xmlWriter, 10, 2);
         writer.close();
@@ -89,6 +96,7 @@ public class XmlWriterUtilTest extends TestCase {
      *
      * @throws Exception if any
      */
+    @Test
     public void testWriteLineBreakXMLWriterIntIntInt() throws Exception {
         XmlWriterUtil.writeLineBreak(xmlWriter, 10, 2, 4);
         writer.close();
@@ -101,6 +109,7 @@ public class XmlWriterUtilTest extends TestCase {
      *
      * @throws Exception if any
      */
+    @Test
     public void testWriteCommentLineBreakXMLWriter() throws Exception {
         XmlWriterUtil.writeCommentLineBreak(xmlWriter);
         writer.close();
@@ -116,12 +125,14 @@ public class XmlWriterUtilTest extends TestCase {
      *
      * @throws Exception if any
      */
+    @Test
     public void testWriteCommentLineBreakXMLWriterInt() throws Exception {
         XmlWriterUtil.writeCommentLineBreak(xmlWriter, 20);
         writer.close();
         assertEquals("<!-- ========== -->" + "\r\n", output.toString());
     }
 
+    @Test
     public void testWriteCommentLineBreak() throws IOException {
         XmlWriterUtil.writeCommentLineBreak(xmlWriter, 10);
         writer.close();
@@ -133,6 +144,7 @@ public class XmlWriterUtilTest extends TestCase {
      *
      * @throws Exception if any
      */
+    @Test
     public void testWriteCommentXMLWriterString() throws Exception {
         XmlWriterUtil.writeComment(xmlWriter, "hello");
         writer.close();
@@ -143,6 +155,7 @@ public class XmlWriterUtilTest extends TestCase {
         assertEquals(output.toString().length(), XmlWriterUtil.DEFAULT_COLUMN_LINE - 1 + "\r\n".length());
     }
 
+    @Test
     public void testWriteComment() throws IOException {
         XmlWriterUtil.writeComment(
                 xmlWriter, "hellooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
@@ -154,6 +167,7 @@ public class XmlWriterUtilTest extends TestCase {
         assertTrue(output.toString().length() >= XmlWriterUtil.DEFAULT_COLUMN_LINE);
     }
 
+    @Test
     public void testWriteComment2() throws IOException {
         XmlWriterUtil.writeComment(xmlWriter, "hello\nworld");
         writer.close();
@@ -171,6 +185,7 @@ public class XmlWriterUtilTest extends TestCase {
      *
      * @throws Exception if any
      */
+    @Test
     public void testWriteCommentXMLWriterStringInt() throws Exception {
         String indent = StringUtils.repeat(" ", 2 * XmlWriterUtil.DEFAULT_INDENTATION_SIZE);
 
@@ -186,6 +201,7 @@ public class XmlWriterUtilTest extends TestCase {
                 XmlWriterUtil.DEFAULT_COLUMN_LINE - 1 + "\r\n".length() + 2 * XmlWriterUtil.DEFAULT_INDENTATION_SIZE);
     }
 
+    @Test
     public void testWriteComment3() throws IOException {
         String indent = StringUtils.repeat(" ", 2 * XmlWriterUtil.DEFAULT_INDENTATION_SIZE);
         XmlWriterUtil.writeComment(xmlWriter, "hello\nworld", 2);
@@ -208,6 +224,7 @@ public class XmlWriterUtilTest extends TestCase {
      *
      * @throws Exception if any
      */
+    @Test
     public void testWriteCommentXMLWriterStringIntInt() throws Exception {
         String repeat = StringUtils.repeat(" ", 2 * 4);
 
@@ -221,6 +238,7 @@ public class XmlWriterUtilTest extends TestCase {
         assertEquals(output.toString().length(), XmlWriterUtil.DEFAULT_COLUMN_LINE - 1 + "\r\n".length() + 2 * 4);
     }
 
+    @Test
     public void testWriteCommentXMLWriterStringIntInt2() throws IOException {
         String repeat = StringUtils.repeat(" ", 2 * 4);
         XmlWriterUtil.writeComment(xmlWriter, "hello\nworld", 2, 4);
@@ -243,6 +261,7 @@ public class XmlWriterUtilTest extends TestCase {
      *
      * @throws Exception if any
      */
+    @Test
     public void testWriteCommentXMLWriterStringIntIntInt() throws Exception {
         String indent = StringUtils.repeat(" ", 2 * 4);
 
@@ -255,6 +274,7 @@ public class XmlWriterUtilTest extends TestCase {
         assertEquals(output.toString().length(), 50 - 1 + "\r\n".length() + 2 * 4);
     }
 
+    @Test
     public void testWriteCommentXMLWriterStringIntIntInt2() throws IOException {
         String indent = StringUtils.repeat(" ", 2 * 4);
         XmlWriterUtil.writeComment(xmlWriter, "hello", 2, 4, 10);
@@ -271,6 +291,7 @@ public class XmlWriterUtilTest extends TestCase {
      *
      * @throws Exception if any
      */
+    @Test
     public void testWriteCommentTextXMLWriterStringInt() throws Exception {
         XmlWriterUtil.writeCommentText(xmlWriter, "hello", 0);
         writer.close();
@@ -287,6 +308,7 @@ public class XmlWriterUtilTest extends TestCase {
         assertEquals(output.toString().length(), 3 * (80 - 1 + "\r\n".length()) + 2 * "\r\n".length());
     }
 
+    @Test
     public void testWriteCommentTextXMLWriterStringInt2() throws IOException {
         String indent = StringUtils.repeat(" ", 2 * 2);
 
@@ -326,6 +348,7 @@ public class XmlWriterUtilTest extends TestCase {
      *
      * @throws Exception if any
      */
+    @Test
     public void testWriteCommentTextXMLWriterStringIntInt() throws Exception {
         String indent = StringUtils.repeat(" ", 2 * 4);
 
@@ -353,6 +376,7 @@ public class XmlWriterUtilTest extends TestCase {
      *
      * @throws Exception if any
      */
+    @Test
     public void testWriteCommentTextXMLWriterStringIntIntInt() throws Exception {
         String indent = StringUtils.repeat(" ", 2 * 4);
 
@@ -380,6 +404,7 @@ public class XmlWriterUtilTest extends TestCase {
      *
      * @throws Exception if any
      */
+    @Test
     public void testWriteCommentNull() throws Exception {
         XmlWriterUtil.writeComment(xmlWriter, null);
         writer.close();
@@ -394,6 +419,7 @@ public class XmlWriterUtilTest extends TestCase {
      *
      * @throws Exception if any
      */
+    @Test
     public void testWriteCommentShort() throws Exception {
         XmlWriterUtil.writeComment(xmlWriter, "This is a short text");
         writer.close();
@@ -408,6 +434,7 @@ public class XmlWriterUtilTest extends TestCase {
      *
      * @throws Exception if any
      */
+    @Test
     public void testWriteCommentLong() throws Exception {
         XmlWriterUtil.writeComment(
                 xmlWriter,
