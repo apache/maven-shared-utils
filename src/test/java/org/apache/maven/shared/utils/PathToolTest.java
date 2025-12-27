@@ -18,30 +18,26 @@
  */
 package org.apache.maven.shared.utils;
 
-import java.io.File;
-
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 /**
  * Test the {@link PathTool} class.
  *
  * @author <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
+@SuppressWarnings("deprecation")
 public class PathToolTest {
-
-    @TempDir
-    private File tempFolder;
 
     @Test
     // Keep in sync with testGetRelativeFilePathWindows()
+    @DisabledOnOs(OS.WINDOWS)
     public void testGetRelativeFilePathNonWindows() {
-        assumeTrue(File.separatorChar == '/');
-
         assertEquals("", PathTool.getRelativeFilePath(null, null));
 
         assertEquals("", PathTool.getRelativeFilePath(null, "/usr/local/java/bin"));
@@ -65,9 +61,8 @@ public class PathToolTest {
 
     @Test
     // Keep in sync with testGetRelativeFilePathNonWindows()
+    @EnabledOnOs(OS.WINDOWS)
     public void testGetRelativeFilePathWindows() {
-        assumeTrue(File.separatorChar == '\\');
-
         assertEquals("", PathTool.getRelativeFilePath(null, null));
 
         assertEquals("", PathTool.getRelativeFilePath(null, "c:\\usr\\local\\java\\bin"));

@@ -20,7 +20,6 @@ package org.apache.maven.shared.utils.cli;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
@@ -47,7 +46,7 @@ public class StreamPollFeederTest {
     }
 
     @Test
-    public void dataShouldBeCopied() throws InterruptedException, IOException {
+    public void dataShouldBeCopied() throws InterruptedException {
 
         StringBuilder testData = new StringBuilder();
         for (int i = 0; i < 100; i++) {

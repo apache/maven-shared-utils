@@ -40,18 +40,18 @@ public class CaseTest {
 
     /** common ASCII 'i' */
     @SuppressWarnings("ConstantName")
-    private static final char DOTTED_i = '\u0069';
+    private static final char DOTTED_i = 'i';
 
     /** common ASCII 'I' */
     @SuppressWarnings("ConstantName")
-    private static final char DOTLESS_I = '\u0049';
+    private static final char DOTLESS_I = 'I';
 
     /** turkish dotless i = ı */
     @SuppressWarnings("ConstantName")
-    private static final char DOTLESS_i = '\u0131';
+    private static final char DOTLESS_i = 'ı';
 
     /** turkish dotted I = İ */
-    private static final char DOTTED_I = '\u0130';
+    private static final char DOTTED_I = 'İ';
 
     /** http://en.wikipedia.org/wiki/Dot_(diacritic) */
     private static final char COMBINING_DOT_ABOVE = '\u0307';

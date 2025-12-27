@@ -18,7 +18,6 @@
  */
 package org.apache.maven.shared.utils.xml.pull;
 
-import java.io.IOException;
 import java.io.StringReader;
 
 import org.apache.maven.shared.utils.xml.Xpp3Dom;
@@ -27,7 +26,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.apache.maven.shared.utils.xml.Xpp3Dom.mergeXpp3Dom;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -35,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * @author Kristian Rosenvold
  */
+@SuppressWarnings("deprecation")
 public class Xpp3DomTest {
 
     private Xpp3Dom createElement(String element, String value) {
@@ -44,7 +43,7 @@ public class Xpp3DomTest {
     }
 
     @Test
-    public void mergePrecedenceSelfClosed() throws XmlPullParserException, IOException {
+    public void mergePrecedenceSelfClosed() throws XmlPullParserException {
         Xpp3Dom parentConfig = build("<configuration><items><item/></items></configuration>");
         Xpp3Dom childConfig = build("<configuration><items><item>ooopise</item></items></configuration>");
 
@@ -57,7 +56,7 @@ public class Xpp3DomTest {
     }
 
     @Test
-    public void mergePrecedenceOpenClose() throws XmlPullParserException, IOException {
+    public void mergePrecedenceOpenClose() throws XmlPullParserException {
         Xpp3Dom parentConfig = build("<configuration><items><item></item></items></configuration>");
         Xpp3Dom childConfig = build("<configuration><items><item>ooopise</item></items></configuration>");
 
@@ -134,20 +133,12 @@ public class Xpp3DomTest {
 
     @Test
     public void nullValue() {
-        assertThrows(
-                NullPointerException.class,
-                () ->
-                        //noinspection ConstantConditions
-                        new Xpp3Dom("top").setAttribute(null, "value"));
+        assertThrows(NullPointerException.class, () -> new Xpp3Dom("top").setAttribute(null, "value"));
     }
 
     @Test
     public void nullAttribute() {
-        assertThrows(
-                NullPointerException.class,
-                () ->
-                        //noinspection ConstantConditions
-                        new Xpp3Dom("root").setAttribute("attr", null));
+        assertThrows(NullPointerException.class, () -> new Xpp3Dom("root").setAttribute("attr", null));
     }
 
     @Test
@@ -158,10 +149,11 @@ public class Xpp3DomTest {
         Xpp3Dom other = new Xpp3Dom("single");
         other.addChild(new Xpp3Dom("kid2"));
 
+        //noinspection EqualsWithItself
         assertEquals(dom, dom);
         //noinspection ObjectEqualsNull
-        assertFalse(dom.equals(null));
-        assertNotEquals(dom, new Xpp3Dom((String) null));
+        assertNotEquals(null, dom);
+        assertNotEquals(new Xpp3Dom((String) null), dom);
         assertNotEquals(dom, other);
     }
 
@@ -198,7 +190,7 @@ public class Xpp3DomTest {
     }
 
     @Test
-    public void unchangedWithFirstOrLastEmpty() throws Exception {
+    public void unchangedWithFirstOrLastEmpty() {
         String configStr = "<root><entries><entry/><entry>test</entry><entry/></entries></root>";
         Xpp3Dom dominant = build(configStr);
         Xpp3Dom duplicatedDominant = build(configStr);
@@ -225,7 +217,7 @@ public class Xpp3DomTest {
     }
 
     @Test
-    public void recessiveChildrenIncludedWhenDominantEmpty() throws Exception {
+    public void recessiveChildrenIncludedWhenDominantEmpty() {
         String dominant = "<root><baz>bazzy</baz></root>";
         String recessive = "<root><bar>barry</bar></root>";
 
@@ -241,7 +233,7 @@ public class Xpp3DomTest {
     }
 
     @Test
-    public void duplicatedChildren() throws IOException, XmlPullParserException {
+    public void duplicatedChildren() throws XmlPullParserException {
         String dupes = "<root><baz>x</baz><baz>y</baz></root>";
         assertEquals("y", build(dupes).getChild("baz").getValue());
     }

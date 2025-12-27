@@ -31,8 +31,6 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -158,9 +156,9 @@ public class DirectoryScannerTest {
                         /* expNotInclDirs  */ new String[] {"", "folder1"},
                         /* expExclFiles    */ NONE,
                         /* expExclDirs     */ NONE));
-        assertThat(
-                exception.getMessage(),
-                containsString("If a non-null " + listName + " list is given, all elements must be non-null"));
+        assertTrue(exception
+                .getMessage()
+                .contains("If a non-null " + listName + " list is given, all elements must be non-null"));
     }
 
     @Test
@@ -320,10 +318,7 @@ public class DirectoryScannerTest {
         checkFiles("expectedExcludedFiles", expectedExcludedFiles, ds.getExcludedFiles());
         checkFiles("expectedExcludedDirectories", expectedExcludedDirectories, ds.getExcludedDirectories());
 
-        checkFiles(
-                "visitedFiles",
-                expectedIncludedFiles,
-                scanConductor.visitedFiles.toArray(new String[scanConductor.visitedFiles.size()]));
+        checkFiles("visitedFiles", expectedIncludedFiles, scanConductor.visitedFiles.toArray(new String[0]));
     }
 
     /**

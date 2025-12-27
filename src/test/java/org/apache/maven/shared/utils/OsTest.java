@@ -33,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
+@SuppressWarnings("deprecation")
 public class OsTest {
     private String origOsName;
     private String origOsArch;

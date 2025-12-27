@@ -20,7 +20,6 @@ package org.apache.maven.shared.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -30,14 +29,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.Properties;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class PropertyUtilsTest {
 
@@ -51,72 +50,72 @@ public class PropertyUtilsTest {
     @Test
     @SuppressWarnings("deprecation")
     // @ReproducesPlexusBug( "Should return null on error like url and file do" )
-    public void loadNullInputStream() throws Exception {
-        assertThat(PropertyUtils.loadProperties((InputStream) null), is(new Properties()));
+    public void loadNullInputStream() {
+        assertEquals(new Properties(), PropertyUtils.loadProperties((InputStream) null));
     }
 
     @Test
-    public void loadOptionalNullInputStream() throws Exception {
-        assertThat(PropertyUtils.loadOptionalProperties((InputStream) null), is(new Properties()));
+    public void loadOptionalNullInputStream() {
+        assertEquals(new Properties(), PropertyUtils.loadOptionalProperties((InputStream) null));
     }
 
     @Test
     public void loadOptionalPropertiesIoException() throws Exception {
         URL url = new URL("https://nonesuch12344.foo.bar.com");
-        assertThat(PropertyUtils.loadOptionalProperties(url), is(new Properties()));
+        assertEquals(new Properties(), PropertyUtils.loadOptionalProperties(url));
     }
 
     @Test
     @SuppressWarnings("deprecation")
-    public void loadNullURL() throws Exception {
-        assertThat(PropertyUtils.loadProperties((URL) null), nullValue(Properties.class));
+    public void loadNullURL() {
+        assertNull(PropertyUtils.loadProperties((URL) null));
     }
 
     @Test
-    public void loadOptionalNullURL() throws Exception {
-        assertThat(PropertyUtils.loadOptionalProperties((URL) null), is(new Properties()));
-    }
-
-    @Test
-    @SuppressWarnings("deprecation")
-    public void loadNullFile() throws Exception {
-        assertThat(PropertyUtils.loadProperties((File) null), nullValue(Properties.class));
-    }
-
-    @Test
-    public void loadOptionalNullFile() throws Exception {
-        assertThat(PropertyUtils.loadOptionalProperties((File) null), is(new Properties()));
+    public void loadOptionalNullURL() {
+        assertEquals(new Properties(), PropertyUtils.loadOptionalProperties((URL) null));
     }
 
     @Test
     @SuppressWarnings("deprecation")
-    public void loadEmptyInputStream() throws Exception {
-        assertThat(PropertyUtils.loadProperties(new ByteArrayInputStream(new byte[0])), is(new Properties()));
+    public void loadNullFile() {
+        assertNull(PropertyUtils.loadProperties((File) null));
+    }
 
-        assertThat(PropertyUtils.loadOptionalProperties(new ByteArrayInputStream(new byte[0])), is(new Properties()));
+    @Test
+    public void loadOptionalNullFile() {
+        assertEquals(new Properties(), PropertyUtils.loadOptionalProperties((File) null));
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    public void loadEmptyInputStream() {
+        assertEquals(new Properties(), PropertyUtils.loadProperties(new ByteArrayInputStream(new byte[0])));
+
+        assertEquals(new Properties(), PropertyUtils.loadOptionalProperties(new ByteArrayInputStream(new byte[0])));
     }
 
     @Test
     @NeedsTemporaryFolder
     @SuppressWarnings("deprecation")
     public void loadEmptyFile() throws Exception {
-        assertThat(PropertyUtils.loadProperties(newFile(tempFolder, "empty")), is(new Properties()));
-        assertThat(PropertyUtils.loadOptionalProperties(newFile(tempFolder, "optional")), is(new Properties()));
+        assertEquals(new Properties(), PropertyUtils.loadProperties(newFile(tempFolder, "empty")));
+        assertEquals(new Properties(), PropertyUtils.loadOptionalProperties(newFile(tempFolder, "optional")));
     }
 
     @Test
     @NeedsTemporaryFolder
     @SuppressWarnings("deprecation")
     public void loadEmptyURL() throws Exception {
-        assertThat(
+        assertEquals(
+                new Properties(),
                 PropertyUtils.loadProperties(
-                        newFile(tempFolder, "empty").toURI().toURL()),
-                is(new Properties()));
+                        newFile(tempFolder, "empty").toURI().toURL()));
 
-        assertThat(
+        assertEquals(
+                new Properties(),
                 PropertyUtils.loadOptionalProperties(
-                        newFile(tempFolder, "optional").toURI().toURL()),
-                is(new Properties()));
+                        newFile(tempFolder, "optional").toURI().toURL()));
     }
 
     @Test
@@ -125,11 +124,10 @@ public class PropertyUtilsTest {
         Properties value = new Properties();
         value.setProperty("a", "b");
 
-        assertThat(PropertyUtils.loadProperties(new ByteArrayInputStream("a=b".getBytes("ISO-8859-1"))), is(value));
+        assertEquals(value, PropertyUtils.loadProperties(new ByteArrayInputStream("a=b".getBytes("ISO-8859-1"))));
 
-        assertThat(
-                PropertyUtils.loadOptionalProperties(new ByteArrayInputStream("a=b".getBytes("ISO-8859-1"))),
-                is(value));
+        assertEquals(
+                value, PropertyUtils.loadOptionalProperties(new ByteArrayInputStream("a=b".getBytes("ISO-8859-1"))));
     }
 
     @Test
@@ -139,10 +137,10 @@ public class PropertyUtilsTest {
         File valid = newFile(tempFolder, "valid");
         Properties value = new Properties();
         value.setProperty("a", "b");
-        try (OutputStream out = new FileOutputStream(valid)) {
+        try (OutputStream out = Files.newOutputStream(valid.toPath())) {
             value.store(out, "a test");
-            assertThat(PropertyUtils.loadProperties(valid), is(value));
-            assertThat(PropertyUtils.loadOptionalProperties(valid), is(value));
+            assertEquals(value, PropertyUtils.loadProperties(valid));
+            assertEquals(value, PropertyUtils.loadOptionalProperties(valid));
         }
     }
 
@@ -153,10 +151,11 @@ public class PropertyUtilsTest {
         File valid = newFile(tempFolder, "valid");
         Properties value = new Properties();
         value.setProperty("a", "b");
-        try (OutputStream out = new FileOutputStream(valid)) {
+        try (OutputStream out = Files.newOutputStream(valid.toPath())) {
             value.store(out, "a test");
-            assertThat(PropertyUtils.loadProperties(valid.toURI().toURL()), is(value));
-            assertThat(PropertyUtils.loadOptionalProperties(valid.toURI().toURL()), is(value));
+            assertEquals(value, PropertyUtils.loadProperties(valid.toURI().toURL()));
+            assertEquals(
+                    value, PropertyUtils.loadOptionalProperties(valid.toURI().toURL()));
         }
     }
 

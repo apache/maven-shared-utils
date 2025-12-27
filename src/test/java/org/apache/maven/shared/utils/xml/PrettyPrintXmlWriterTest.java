@@ -32,9 +32,10 @@ import org.junit.jupiter.api.Test;
  *
  * @author <a href="mailto:vincent.siveton@gmail.com">Vincent Siveton</a>
  */
+@SuppressWarnings("deprecation")
 public class PrettyPrintXmlWriterTest {
-    private StringWriter w = new StringWriter();
-    private PrettyPrintXMLWriter writer = new PrettyPrintXMLWriter(w);
+    private final StringWriter w = new StringWriter();
+    private final PrettyPrintXMLWriter writer = new PrettyPrintXMLWriter(w);
 
     @Test
     public void testNoStartTag() throws IOException {
@@ -163,34 +164,30 @@ public class PrettyPrintXmlWriterTest {
     private static String expectedResult(String lineIndenter) {
 
         String lineSeparator = "\n";
-        StringBuilder expected = new StringBuilder();
 
-        expected.append("<html>").append(lineSeparator);
-        expected.append(StringUtils.repeat(lineIndenter, 1)).append("<head>").append(lineSeparator);
-        expected.append(StringUtils.repeat(lineIndenter, 2))
-                .append("<title>title</title>")
-                .append(lineSeparator);
-        expected.append(StringUtils.repeat(lineIndenter, 2))
-                .append("<meta name=\"author\" content=\"Author\"/>")
-                .append(lineSeparator);
-        expected.append(StringUtils.repeat(lineIndenter, 2))
-                .append("<meta name=\"date\" content=\"Date\"/>")
-                .append(lineSeparator);
-        expected.append(StringUtils.repeat(lineIndenter, 1)).append("</head>").append(lineSeparator);
-        expected.append(StringUtils.repeat(lineIndenter, 1)).append("<body>").append(lineSeparator);
-        expected.append(StringUtils.repeat(lineIndenter, 2))
-                .append("<p>Paragraph 1, line 1. Paragraph 1, line 2.</p>")
-                .append(lineSeparator);
-        expected.append(StringUtils.repeat(lineIndenter, 2))
-                .append("<div class=\"section\">")
-                .append(lineSeparator);
-        expected.append(StringUtils.repeat(lineIndenter, 3))
-                .append("<h2>Section title</h2>")
-                .append(lineSeparator);
-        expected.append(StringUtils.repeat(lineIndenter, 2)).append("</div>").append(lineSeparator);
-        expected.append(StringUtils.repeat(lineIndenter, 1)).append("</body>").append(lineSeparator);
-        expected.append("</html>");
-
-        return expected.toString();
+        return "<html>" + lineSeparator + StringUtils.repeat(lineIndenter, 1)
+                + "<head>" + lineSeparator + StringUtils.repeat(lineIndenter, 2)
+                + "<title>title</title>"
+                + lineSeparator
+                + StringUtils.repeat(lineIndenter, 2)
+                + "<meta name=\"author\" content=\"Author\"/>"
+                + lineSeparator
+                + StringUtils.repeat(lineIndenter, 2)
+                + "<meta name=\"date\" content=\"Date\"/>"
+                + lineSeparator
+                + StringUtils.repeat(lineIndenter, 1)
+                + "</head>" + lineSeparator + StringUtils.repeat(lineIndenter, 1)
+                + "<body>" + lineSeparator + StringUtils.repeat(lineIndenter, 2)
+                + "<p>Paragraph 1, line 1. Paragraph 1, line 2.</p>"
+                + lineSeparator
+                + StringUtils.repeat(lineIndenter, 2)
+                + "<div class=\"section\">"
+                + lineSeparator
+                + StringUtils.repeat(lineIndenter, 3)
+                + "<h2>Section title</h2>"
+                + lineSeparator
+                + StringUtils.repeat(lineIndenter, 2)
+                + "</div>" + lineSeparator + StringUtils.repeat(lineIndenter, 1)
+                + "</body>" + lineSeparator + "</html>";
     }
 }

@@ -31,18 +31,19 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * @author Kristian Rosenvold
  */
+@SuppressWarnings("deprecation")
 public class Xpp3DomBuilderTest {
 
     private static final String XML_DECLARATION = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 
     @Test
-    public void selfClosingTag() throws Exception {
+    public void selfClosingTag() {
 
         String domString = selfClosingTagSource();
 
@@ -62,12 +63,12 @@ public class Xpp3DomBuilderTest {
             Xpp3DomBuilder.build(in, "nosuch encoding");
             fail();
         } catch (XmlPullParserException expected) {
-            assertTrue(expected.getCause() instanceof UnsupportedEncodingException);
+            assertInstanceOf(UnsupportedEncodingException.class, expected.getCause());
         }
     }
 
     @Test
-    public void trimming() throws Exception {
+    public void trimming() {
         String domString = createDomString();
 
         Xpp3Dom dom = Xpp3DomBuilder.build(new StringReader(domString), true);
@@ -114,63 +115,36 @@ public class Xpp3DomBuilderTest {
     }
 
     private static String getAttributeEncodedString() {
-        StringBuilder domString = new StringBuilder();
-        domString.append("<root>");
-        domString.append("\n");
-        domString.append("  <el att=\"&lt;foo&gt;\">bar</el>");
-        domString.append("\n");
-        domString.append("</root>");
-
-        return domString.toString();
+        return "<root>\n" + "  <el att=\"&lt;foo&gt;\">bar</el>\n" + "</root>";
     }
 
     private static String getEncodedString() {
-        StringBuilder domString = new StringBuilder();
-        domString.append("<root>\n");
-        domString.append("  <a1>\"msg\"</a1>\n");
-        domString.append("  <a2><![CDATA[<b>\"msg\"</b>]]></a2>\n");
-        domString.append("  <a3>&lt;b&gt;&quot;msg&quot;&lt;/b&gt;</a3>\n");
-        domString.append("</root>");
-
-        return domString.toString();
+        return "<root>\n" + "  <a1>\"msg\"</a1>\n"
+                + "  <a2><![CDATA[<b>\"msg\"</b>]]></a2>\n"
+                + "  <a3>&lt;b&gt;&quot;msg&quot;&lt;/b&gt;</a3>\n"
+                + "</root>";
     }
 
     private static String getExpectedString() {
-        StringBuilder domString = new StringBuilder();
-        domString.append("<root>");
-        domString.append("\n");
-        domString.append("  <a1>\"msg\"</a1>");
-        domString.append("\n");
-        domString.append("  <a2>&lt;b&gt;\"msg\"&lt;/b&gt;</a2>");
-        domString.append("\n");
-        domString.append("  <a3>&lt;b&gt;\"msg\"&lt;/b&gt;</a3>");
-        domString.append("\n");
-        domString.append("</root>");
-        return domString.toString();
+        return "<root>\n" + "  <a1>\"msg\"</a1>\n"
+                + "  <a2>&lt;b&gt;\"msg\"&lt;/b&gt;</a2>\n"
+                + "  <a3>&lt;b&gt;\"msg\"&lt;/b&gt;</a3>\n"
+                + "</root>";
     }
 
     private static String createDomString() {
-        StringBuilder buf = new StringBuilder();
-        buf.append("<root>\n");
-        buf.append(" <element1> element1value\n </element1>\n");
-        buf.append(" <element2 att2='attribute2&#10;nextline'>\n");
-        buf.append("  <element3 att3='attribute3'>element3value</element3>\n");
-        buf.append(" </element2>\n");
-        buf.append(" <element4></element4>\n");
-        buf.append(" <element5/>\n");
-        buf.append(" <element6 xml:space=\"preserve\">  preserve space  </element6>\n");
-        buf.append("</root>\n");
-
-        return buf.toString();
+        return "<root>\n" + " <element1> element1value\n </element1>\n"
+                + " <element2 att2='attribute2&#10;nextline'>\n"
+                + "  <element3 att3='attribute3'>element3value</element3>\n"
+                + " </element2>\n"
+                + " <element4></element4>\n"
+                + " <element5/>\n"
+                + " <element6 xml:space=\"preserve\">  preserve space  </element6>\n"
+                + "</root>\n";
     }
 
     private static String selfClosingTagSource() {
-        StringBuilder buf = new StringBuilder();
-        buf.append("<root>\n");
-        buf.append("  <el4></el4>\n");
-        buf.append("  <el5></el5>\n");
-        buf.append("</root>");
-        return buf.toString();
+        return "<root>\n" + "  <el4></el4>\n" + "  <el5></el5>\n" + "</root>";
     }
 
     private static String expectedSelfClosingTag() {

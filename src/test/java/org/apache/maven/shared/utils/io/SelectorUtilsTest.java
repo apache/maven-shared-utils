@@ -43,7 +43,7 @@ public class SelectorUtilsTest {
     }
 
     @Test
-    public void testRegexPrefix() throws Exception {
+    public void testRegexPrefix() {
         assertTrue(SelectorUtils.matchPatternStart(
                 SelectorUtils.REGEX_HANDLER_PREFIX + File.separator + "aaa" + SelectorUtils.PATTERN_HANDLER_SUFFIX,
                 ""));

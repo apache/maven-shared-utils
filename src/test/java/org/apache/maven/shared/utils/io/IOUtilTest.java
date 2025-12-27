@@ -38,9 +38,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static java.nio.charset.StandardCharsets.UTF_16;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SuppressWarnings("deprecation")
 public class IOUtilTest {
@@ -48,27 +48,27 @@ public class IOUtilTest {
     private static final long INFINITE_LOOP_TIMEOUT = 500;
 
     @Test
-    public void closeReaderWithNull() throws Exception {
+    public void closeReaderWithNull() {
         IOUtil.close((Reader) null);
     }
 
     @Test
-    public void closeWriterWithNull() throws Exception {
+    public void closeWriterWithNull() {
         IOUtil.close((Writer) null);
     }
 
     @Test
-    public void closeInputStreamWithNull() throws Exception {
+    public void closeInputStreamWithNull() {
         IOUtil.close(nullInputStream());
     }
 
     @Test
-    public void closeOutputStreamWithNull() throws Exception {
+    public void closeOutputStreamWithNull() {
         IOUtil.close(nullOutputStream());
     }
 
     @Test
-    public void closeReaderWithIOE() throws Exception {
+    public void closeReaderWithIOE() {
         IOUtil.close(new BufferedReader(new StringReader(emptyString())) {
             @Override
             public void close() throws IOException {
@@ -79,7 +79,7 @@ public class IOUtilTest {
     }
 
     @Test
-    public void closeWriterWithIOE() throws Exception {
+    public void closeWriterWithIOE() {
         IOUtil.close(new BufferedWriter(new StringWriter()) {
             @Override
             public void close() throws IOException {
@@ -90,7 +90,7 @@ public class IOUtilTest {
     }
 
     @Test
-    public void closeInputStreamWithIOE() throws Exception {
+    public void closeInputStreamWithIOE() {
         IOUtil.close(new BufferedInputStream(emptyInputStream()) {
             @Override
             public void close() throws IOException {
@@ -101,7 +101,7 @@ public class IOUtilTest {
     }
 
     @Test
-    public void closeOutputStreamWithIOE() throws Exception {
+    public void closeOutputStreamWithIOE() {
         IOUtil.close(new BufferedOutputStream(new ByteArrayOutputStream()) {
             @Override
             public void close() throws IOException {
@@ -112,7 +112,7 @@ public class IOUtilTest {
     }
 
     @Test
-    public void closeReaderCloses() throws Exception {
+    public void closeReaderCloses() {
         final AtomicBoolean closed = new AtomicBoolean(false);
         IOUtil.close(new BufferedReader(new StringReader(emptyString())) {
             @Override
@@ -121,11 +121,11 @@ public class IOUtilTest {
                 super.close();
             }
         });
-        assertThat(closed.get(), is(true));
+        assertTrue(closed.get());
     }
 
     @Test
-    public void closeWriterCloses() throws Exception {
+    public void closeWriterCloses() {
         final AtomicBoolean closed = new AtomicBoolean(false);
         IOUtil.close(new BufferedWriter(new StringWriter()) {
             @Override
@@ -134,11 +134,11 @@ public class IOUtilTest {
                 super.close();
             }
         });
-        assertThat(closed.get(), is(true));
+        assertTrue(closed.get());
     }
 
     @Test
-    public void closeInputStreamCloses() throws Exception {
+    public void closeInputStreamCloses() {
         final AtomicBoolean closed = new AtomicBoolean(false);
         IOUtil.close(new BufferedInputStream(emptyInputStream()) {
             @Override
@@ -147,11 +147,11 @@ public class IOUtilTest {
                 super.close();
             }
         });
-        assertThat(closed.get(), is(true));
+        assertTrue(closed.get());
     }
 
     @Test
-    public void closeOutputStreamCloses() throws Exception {
+    public void closeOutputStreamCloses() {
         final AtomicBoolean closed = new AtomicBoolean(false);
         IOUtil.close(new BufferedOutputStream(new ByteArrayOutputStream()) {
             @Override
@@ -160,57 +160,65 @@ public class IOUtilTest {
                 super.close();
             }
         });
-        assertThat(closed.get(), is(true));
+        assertTrue(closed.get());
     }
 
     @Test
     public void toByteArrayFromString() throws Exception {
-        String probe = "A string \u2345\u00ef";
-        assertThat(IOUtil.toByteArray(probe), is(probe.getBytes()));
+        String probe = "A string ⍅ï";
+        assertArrayEquals(probe.getBytes(), IOUtil.toByteArray(probe));
     }
 
     @Test
     public void toByteArrayFromReader() throws Exception {
-        String probe = "A string \u2345\u00ef";
-        assertThat(IOUtil.toByteArray(new StringReader(probe)), is(probe.getBytes()));
+        String probe = "A string ⍅ï";
+        assertArrayEquals(probe.getBytes(), IOUtil.toByteArray(new StringReader(probe)));
     }
 
     @Test
     public void toByteArrayFromInputStream() throws Exception {
-        String probe = "A string \u2345\u00ef";
-        assertThat(
-                IOUtil.toByteArray(new DontCloseByteArrayInputStream(IOUtil.toByteArray(probe))), is(probe.getBytes()));
+        String probe = "A string ⍅ï";
+        assertArrayEquals(
+                probe.getBytes(), IOUtil.toByteArray(new DontCloseByteArrayInputStream(IOUtil.toByteArray(probe))));
     }
 
     @Test
-    public void toByteArrayNullString() throws Exception {
+    public void toByteArrayNullString() {
+        //noinspection DataFlowIssue
         assertThrows(NullPointerException.class, () -> IOUtil.toByteArray((String) null));
     }
 
     @Test
-    public void toByteArrayNullReader() throws Exception {
+    public void toByteArrayNullReader() {
+        //noinspection DataFlowIssue
         assertThrows(NullPointerException.class, () -> IOUtil.toByteArray((Reader) null));
     }
 
     @Test
-    public void toByteArrayNullInputStream() throws Exception {
-        assertThrows(NullPointerException.class, () -> IOUtil.toByteArray(nullInputStream()));
+    public void toByteArrayNullInputStream() {
+        assertThrows(NullPointerException.class, () -> {
+            assertNotNull(nullInputStream());
+            IOUtil.toByteArray(nullInputStream());
+        });
     }
 
     @Test
-    public void contentEqualNullNull() throws Exception {
+    public void contentEqualNullNull() {
+        //noinspection DataFlowIssue
         assertThrows(IOException.class, () -> IOUtil.contentEquals(null, null));
     }
 
     @Test
-    public void contentEqualNonNullNull() throws Exception {
+    public void contentEqualNonNullNull() {
+        //noinspection DataFlowIssue
         assertThrows(
                 IOException.class,
                 () -> IOUtil.contentEquals(new DontCloseByteArrayInputStream(emptyByteArray()), null));
     }
 
     @Test
-    public void contentEqualNullNonNull() throws Exception {
+    public void contentEqualNullNonNull() {
+        //noinspection DataFlowIssue
         assertThrows(
                 IOException.class,
                 () -> IOUtil.contentEquals(new DontCloseByteArrayInputStream(emptyByteArray()), null));
@@ -218,292 +226,273 @@ public class IOUtilTest {
 
     @Test
     public void contentEqualEmptyEmpty() throws Exception {
-        assertThat(
-                IOUtil.contentEquals(
-                        new DontCloseByteArrayInputStream(emptyByteArray()),
-                        new DontCloseByteArrayInputStream(emptyByteArray())),
-                is(true));
+        assertTrue(IOUtil.contentEquals(
+                new DontCloseByteArrayInputStream(emptyByteArray()),
+                new DontCloseByteArrayInputStream(emptyByteArray())));
     }
 
     @Test
     public void contentEqualNonEmptyEmpty() throws Exception {
-        assertThat(
-                IOUtil.contentEquals(
-                        new DontCloseByteArrayInputStream(new byte[1]),
-                        new DontCloseByteArrayInputStream(emptyByteArray())),
-                is(false));
+        assertFalse(IOUtil.contentEquals(
+                new DontCloseByteArrayInputStream(new byte[1]), new DontCloseByteArrayInputStream(emptyByteArray())));
     }
 
     @Test
     public void contentEqualEmptyNonEmpty() throws Exception {
-        assertThat(
-                IOUtil.contentEquals(
-                        new DontCloseByteArrayInputStream(emptyByteArray()),
-                        new DontCloseByteArrayInputStream(new byte[1])),
-                is(false));
+        assertFalse(IOUtil.contentEquals(
+                new DontCloseByteArrayInputStream(emptyByteArray()), new DontCloseByteArrayInputStream(new byte[1])));
     }
 
     @Test
     public void contentEqualNonEmptyNonEmpty() throws Exception {
-        assertThat(
-                IOUtil.contentEquals(
-                        new DontCloseByteArrayInputStream(new byte[1]), new DontCloseByteArrayInputStream(new byte[1])),
-                is(true));
+        assertTrue(IOUtil.contentEquals(
+                new DontCloseByteArrayInputStream(new byte[1]), new DontCloseByteArrayInputStream(new byte[1])));
     }
 
     @Test
     public void contentEqualMostlySame() throws Exception {
-        assertThat(
-                IOUtil.contentEquals(
-                        new DontCloseByteArrayInputStream(new byte[] {1, 2, 3, 4, 5, 6}),
-                        new DontCloseByteArrayInputStream(new byte[] {1, 2, 3, 4, 5, 7})),
-                is(false));
+        assertFalse(IOUtil.contentEquals(
+                new DontCloseByteArrayInputStream(new byte[] {1, 2, 3, 4, 5, 6}),
+                new DontCloseByteArrayInputStream(new byte[] {1, 2, 3, 4, 5, 7})));
     }
 
     @Test
     public void contentEqualLargeSame() throws Exception {
-        assertThat(
-                IOUtil.contentEquals(
-                        new DontCloseByteArrayInputStream(new byte[8192]),
-                        new DontCloseByteArrayInputStream(new byte[8192])),
-                is(true));
+        assertTrue(IOUtil.contentEquals(
+                new DontCloseByteArrayInputStream(new byte[8192]), new DontCloseByteArrayInputStream(new byte[8192])));
     }
 
     @Test
     public void contentEqualLargeDifferent() throws Exception {
         byte[] buf = new byte[8192];
         buf[8191] = 1;
-        assertThat(
-                IOUtil.contentEquals(
-                        new DontCloseByteArrayInputStream(new byte[8192]), new DontCloseByteArrayInputStream(buf)),
-                is(false));
+        assertFalse(IOUtil.contentEquals(
+                new DontCloseByteArrayInputStream(new byte[8192]), new DontCloseByteArrayInputStream(buf)));
     }
 
     @Test
-    public void toStringNullByteArray() throws Exception {
+    public void toStringNullByteArray() {
         assertThrows(NullPointerException.class, () -> IOUtil.toString(nullByteArray()));
     }
 
     @Test
     public void toStringEmptyByteArray() throws Exception {
-        assertThat(IOUtil.toString(emptyByteArray()), is(emptyString()));
+        assertEquals(emptyString(), IOUtil.toString(emptyByteArray()));
     }
 
     @Test
     public void toStringByteArray() throws Exception {
-        String probe = "A string \u2345\u00ef";
-        assertThat(IOUtil.toString(probe.getBytes()).getBytes(), is(probe.getBytes()));
+        String probe = "A string ⍅ï";
+        assertArrayEquals(probe.getBytes(), IOUtil.toString(probe.getBytes()).getBytes());
     }
 
     @Test
-    public void toStringNullByteArrayNegBufSz() throws Exception {
+    public void toStringNullByteArrayNegBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.toString(nullByteArray(), -1));
     }
 
     @Test
-    public void toStringEmptyByteArrayNegBufSz() throws Exception {
+    public void toStringEmptyByteArrayNegBufSz() {
         assertThrows(
                 NegativeArraySizeException.class,
-                () -> assertThat(IOUtil.toString(emptyByteArray(), -1), is(emptyString())));
+                () -> assertEquals(IOUtil.toString(emptyByteArray(), -1), emptyString()));
     }
 
     @Test
-    public void toStringByteArrayNegBufSz() throws Exception {
+    public void toStringByteArrayNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> {
-            String probe = "A string \u2345\u00ef";
-            assertThat(IOUtil.toString(probe.getBytes(), -1), is(probe));
+            String probe = "A string ⍅ï";
+            assertEquals(probe, IOUtil.toString(probe.getBytes(), -1));
         });
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void toStringNullByteArrayZeroBufSz() throws Exception {
+    public void toStringNullByteArrayZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.toString(nullByteArray(), 0));
     }
 
     @Test
-    public void toStringNullByteArrayPosBufSz() throws Exception {
+    public void toStringNullByteArrayPosBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.toString(nullByteArray(), 1));
     }
 
     @Test
     public void toStringEmptyByteArrayPosBufSz() throws Exception {
-        assertThat(IOUtil.toString(emptyByteArray(), 1), is(emptyString()));
+        assertEquals(emptyString(), IOUtil.toString(emptyByteArray(), 1));
     }
 
     @Test
     public void toStringByteArrayPosBufSz() throws Exception {
-        String probe = "A string \u2345\u00ef";
-        assertThat(IOUtil.toString(probe.getBytes(), 1).getBytes(), is(probe.getBytes()));
+        String probe = "A string ⍅ï";
+        assertArrayEquals(probe.getBytes(), IOUtil.toString(probe.getBytes(), 1).getBytes());
     }
 
     @Test
-    public void toStringNullByteArrayNullEncoding() throws Exception {
+    public void toStringNullByteArrayNullEncoding() {
         assertThrows(NullPointerException.class, () -> IOUtil.toString(nullByteArray(), null));
     }
 
     @Test
-    public void toStringEmptyByteArrayNullEncoding() throws Exception {
-        assertThrows(
-                NullPointerException.class,
-                () -> assertThat(IOUtil.toString(emptyByteArray(), null), is(emptyString())));
+    public void toStringEmptyByteArrayNullEncoding() {
+        assertThrows(NullPointerException.class, () -> IOUtil.toString(emptyByteArray(), null));
     }
 
     @Test
-    public void toStringByteArrayNullEncoding() throws Exception {
+    public void toStringByteArrayNullEncoding() {
         assertThrows(NullPointerException.class, () -> {
-            String probe = "A string \u2345\u00ef";
-            assertThat(IOUtil.toString(probe.getBytes(), null).getBytes(), is(probe.getBytes()));
+            String probe = "A string ⍅ï";
+            IOUtil.toString(probe.getBytes(), null).getBytes();
         });
     }
 
     @Test
-    public void toStringNullByteArrayJunkEncoding() throws Exception {
+    public void toStringNullByteArrayJunkEncoding() {
         assertThrows(NullPointerException.class, () -> IOUtil.toString(nullByteArray(), "junk"));
     }
 
     @Test
-    public void toStringEmptyByteArrayJunkEncoding() throws Exception {
+    public void toStringEmptyByteArrayJunkEncoding() {
         assertThrows(
                 UnsupportedEncodingException.class,
-                () -> assertThat(IOUtil.toString(emptyByteArray(), "junk"), is(emptyString())));
+                () -> assertEquals(IOUtil.toString(emptyByteArray(), "junk"), emptyString()));
     }
 
     @Test
-    public void toStringByteArrayJunkEncoding() throws Exception {
+    public void toStringByteArrayJunkEncoding() {
         assertThrows(UnsupportedEncodingException.class, () -> {
-            String probe = "A string \u2345\u00ef";
-            assertThat(IOUtil.toString(probe.getBytes(), "junk").getBytes(), is(probe.getBytes()));
+            String probe = "A string ⍅ï";
+            assertArrayEquals(IOUtil.toString(probe.getBytes(), "junk").getBytes(), probe.getBytes());
         });
     }
 
     @Test
-    public void toStringNullByteArrayValidEncoding() throws Exception {
+    public void toStringNullByteArrayValidEncoding() {
         assertThrows(NullPointerException.class, () -> IOUtil.toString(nullByteArray(), "utf-16"));
     }
 
     @Test
     public void toStringEmptyByteArrayValidEncoding() throws Exception {
-        assertThat(IOUtil.toString(emptyByteArray(), "utf-16"), is(emptyString()));
+        assertEquals(IOUtil.toString(emptyByteArray(), "utf-16"), emptyString());
     }
 
     @Test
     public void toStringByteArrayValidEncoding() throws Exception {
-        String probe = "A string \u2345\u00ef";
-        assertThat(IOUtil.toString(probe.getBytes("utf-16"), "utf-16").getBytes("utf-8"), is(probe.getBytes("utf-8")));
+        String probe = "A string ⍅ï";
+        assertArrayEquals(
+                IOUtil.toString(probe.getBytes("utf-16"), "utf-16").getBytes("utf-8"), probe.getBytes("utf-8"));
     }
 
     @Test
-    public void toStringNullByteArrayNullEncodingNegBufSz() throws Exception {
+    public void toStringNullByteArrayNullEncodingNegBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.toString(nullByteArray(), null, -1));
     }
 
     @Test
-    public void toStringEmptyByteArrayNullEncodingNegBufSz() throws Exception {
+    public void toStringEmptyByteArrayNullEncodingNegBufSz() {
         assertThrows(
                 NullPointerException.class,
-                () -> assertThat(IOUtil.toString(emptyByteArray(), null, -1), is(emptyString())));
+                () -> assertEquals(IOUtil.toString(emptyByteArray(), null, -1), emptyString()));
     }
 
     @Test
-    public void toStringByteArrayNullEncodingNegBufSz() throws Exception {
+    public void toStringByteArrayNullEncodingNegBufSz() {
         assertThrows(NullPointerException.class, () -> {
-            String probe = "A string \u2345\u00ef";
-            assertThat(IOUtil.toString(probe.getBytes(), null, -1).getBytes(), is(probe.getBytes()));
+            String probe = "A string ⍅ï";
+            assertArrayEquals(IOUtil.toString(probe.getBytes(), null, -1).getBytes(), probe.getBytes());
         });
     }
 
     @Test
-    public void toStringNullByteArrayJunkEncodingNegBufSz() throws Exception {
+    public void toStringNullByteArrayJunkEncodingNegBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.toString(nullByteArray(), "junk", -1));
     }
 
     @Test
-    public void toStringEmptyByteArrayJunkEncodingNegBufSz() throws Exception {
+    public void toStringEmptyByteArrayJunkEncodingNegBufSz() {
         assertThrows(
                 UnsupportedEncodingException.class,
-                () -> assertThat(IOUtil.toString(emptyByteArray(), "junk", -1), is(emptyString())));
+                () -> assertEquals(IOUtil.toString(emptyByteArray(), "junk", -1), emptyString()));
     }
 
     @Test
-    public void toStringByteArrayJunkEncodingNegBufSz() throws Exception {
+    public void toStringByteArrayJunkEncodingNegBufSz() {
         assertThrows(UnsupportedEncodingException.class, () -> {
-            String probe = "A string \u2345\u00ef";
-            assertThat(IOUtil.toString(probe.getBytes(), "junk", -1).getBytes(), is(probe.getBytes()));
+            String probe = "A string ⍅ï";
+            assertEquals(IOUtil.toString(probe.getBytes(), "junk", -1).getBytes(), probe.getBytes());
         });
     }
 
     @Test
-    public void toStringNullByteArrayValidEncodingNegBufSz() throws Exception {
+    public void toStringNullByteArrayValidEncodingNegBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.toString(nullByteArray(), "utf-16", -1));
     }
 
     @Test
-    public void toStringEmptyByteArrayValidEncodingNegBufSz() throws Exception {
+    public void toStringEmptyByteArrayValidEncodingNegBufSz() {
         assertThrows(
                 NegativeArraySizeException.class,
-                () -> assertThat(IOUtil.toString(emptyByteArray(), "utf-16", -1), is(emptyString())));
+                () -> assertEquals(IOUtil.toString(emptyByteArray(), "utf-16", -1), emptyString()));
     }
 
     @Test
-    public void toStringByteArrayValidEncodingNegBufSz() throws Exception {
+    public void toStringByteArrayValidEncodingNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> {
-            String probe = "A string \u2345\u00ef";
-            assertThat(
-                    IOUtil.toString(probe.getBytes("utf-16"), "utf-16", -1).getBytes("utf-8"),
-                    is(probe.getBytes("utf-8")));
+            String probe = "A string ⍅ï";
+            assertArrayEquals(
+                    IOUtil.toString(probe.getBytes("utf-16"), "utf-16", -1).getBytes(UTF_8), probe.getBytes(UTF_8));
         });
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void toStringNullByteArrayNullEncodingZeroBufSz() throws Exception {
+    public void toStringNullByteArrayNullEncodingZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.toString(nullByteArray(), null, 0));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void toStringEmptyByteArrayNullEncodingZeroBufSz() throws Exception {
+    public void toStringEmptyByteArrayNullEncodingZeroBufSz() {
         assertThrows(
                 NullPointerException.class,
-                () -> assertThat(IOUtil.toString(emptyByteArray(), null, 0), is(emptyString())));
+                () -> assertEquals(IOUtil.toString(emptyByteArray(), null, 0), emptyString()));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void toStringByteArrayNullEncodingZeroBufSz() throws Exception {
+    public void toStringByteArrayNullEncodingZeroBufSz() {
         assertThrows(NullPointerException.class, () -> {
-            String probe = "A string \u2345\u00ef";
-            assertThat(IOUtil.toString(probe.getBytes(), null, 0).getBytes(), is(probe.getBytes()));
+            String probe = "A string ⍅ï";
+            assertArrayEquals(IOUtil.toString(probe.getBytes(), null, 0).getBytes(), probe.getBytes());
         });
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void toStringNullByteArrayJunkEncodingZeroBufSz() throws Exception {
+    public void toStringNullByteArrayJunkEncodingZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.toString(nullByteArray(), "junk", 0));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void toStringEmptyByteArrayJunkEncodingZeroBufSz() throws Exception {
+    public void toStringEmptyByteArrayJunkEncodingZeroBufSz() {
         assertThrows(
                 UnsupportedEncodingException.class,
-                () -> assertThat(IOUtil.toString(emptyByteArray(), "junk", 0), is(emptyString())));
+                () -> assertEquals(IOUtil.toString(emptyByteArray(), "junk", 0), emptyString()));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void toStringByteArrayJunkEncodingZeroBufSz() throws Exception {
+    public void toStringByteArrayJunkEncodingZeroBufSz() {
         assertThrows(UnsupportedEncodingException.class, () -> {
-            String probe = "A string \u2345\u00ef";
-            assertThat(IOUtil.toString(probe.getBytes(), "junk", 0).getBytes(), is(probe.getBytes()));
+            String probe = "A string ⍅ï";
+            assertArrayEquals(IOUtil.toString(probe.getBytes(), "junk", 0).getBytes(), probe.getBytes());
         });
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void toStringNullByteArrayValidEncodingZeroBufSz() throws Exception {
+    public void toStringNullByteArrayValidEncodingZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.toString(nullByteArray(), "utf-16", 0));
     }
 
@@ -512,18 +501,18 @@ public class IOUtilTest {
      */
 
     @Test
-    public void copyNullByteArrayNullOutputStream() throws Exception {
+    public void copyNullByteArrayNullOutputStream() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullByteArray(), nullOutputStream()));
     }
 
     @Test
-    public void copyNullByteArrayValidOutputStream() throws Exception {
+    public void copyNullByteArrayValidOutputStream() {
         assertThrows(
                 NullPointerException.class, () -> IOUtil.copy(nullByteArray(), new DontCloseByteArrayOutputStream()));
     }
 
     @Test
-    public void copyEmptyByteArrayNullOutputStream() throws Exception {
+    public void copyEmptyByteArrayNullOutputStream() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(emptyByteArray(), nullOutputStream()));
     }
 
@@ -537,7 +526,7 @@ public class IOUtilTest {
         ByteArrayOutputStream outputStream = new DontCloseByteArrayOutputStream();
         byte[] input = {1, 2, 3, 4, 5, 6};
         IOUtil.copy(input, outputStream);
-        assertThat(outputStream.toByteArray(), is(input));
+        assertArrayEquals(input, outputStream.toByteArray());
     }
 
     /*
@@ -545,18 +534,18 @@ public class IOUtilTest {
      */
 
     @Test
-    public void copyNullByteArrayNullOutputStreamNegBufSz() throws Exception {
+    public void copyNullByteArrayNullOutputStreamNegBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullByteArray(), nullOutputStream()));
     }
 
     @Test
-    public void copyNullByteArrayValidOutputStreamNegBufSz() throws Exception {
+    public void copyNullByteArrayValidOutputStreamNegBufSz() {
         assertThrows(
                 NullPointerException.class, () -> IOUtil.copy(nullByteArray(), new DontCloseByteArrayOutputStream()));
     }
 
     @Test
-    public void copyEmptyByteArrayNullOutputStreamNegBufSz() throws Exception {
+    public void copyEmptyByteArrayNullOutputStreamNegBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(emptyByteArray(), nullOutputStream()));
     }
 
@@ -570,25 +559,25 @@ public class IOUtilTest {
         ByteArrayOutputStream outputStream = new DontCloseByteArrayOutputStream();
         byte[] input = {1, 2, 3, 4, 5, 6};
         IOUtil.copy(input, outputStream);
-        assertThat(outputStream.toByteArray(), is(input));
+        assertArrayEquals(input, outputStream.toByteArray());
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyNullByteArrayNullOutputStreamZeroBufSz() throws Exception {
+    public void copyNullByteArrayNullOutputStreamZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullByteArray(), nullOutputStream()));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyNullByteArrayValidOutputStreamZeroBufSz() throws Exception {
+    public void copyNullByteArrayValidOutputStreamZeroBufSz() {
         assertThrows(
                 NullPointerException.class, () -> IOUtil.copy(nullByteArray(), new DontCloseByteArrayOutputStream()));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyEmptyByteArrayNullOutputStreamZeroBufSz() throws Exception {
+    public void copyEmptyByteArrayNullOutputStreamZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(emptyByteArray(), nullOutputStream()));
     }
 
@@ -604,25 +593,25 @@ public class IOUtilTest {
         ByteArrayOutputStream outputStream = new DontCloseByteArrayOutputStream();
         byte[] input = {1, 2, 3, 4, 5, 6};
         IOUtil.copy(input, outputStream);
-        assertThat(outputStream.toByteArray(), is(input));
+        assertArrayEquals(input, outputStream.toByteArray());
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyNullByteArrayNullOutputStreamPosBufSz() throws Exception {
+    public void copyNullByteArrayNullOutputStreamPosBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullByteArray(), nullOutputStream()));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyNullByteArrayValidOutputStreamPosBufSz() throws Exception {
+    public void copyNullByteArrayValidOutputStreamPosBufSz() {
         assertThrows(
                 NullPointerException.class, () -> IOUtil.copy(nullByteArray(), new DontCloseByteArrayOutputStream()));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyEmptyByteArrayNullOutputStreamPosBufSz() throws Exception {
+    public void copyEmptyByteArrayNullOutputStreamPosBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(emptyByteArray(), nullOutputStream()));
     }
 
@@ -638,16 +627,16 @@ public class IOUtilTest {
         ByteArrayOutputStream outputStream = new DontCloseByteArrayOutputStream();
         byte[] input = {1, 2, 3, 4, 5, 6};
         IOUtil.copy(input, outputStream);
-        assertThat(outputStream.toByteArray(), is(input));
+        assertArrayEquals(input, outputStream.toByteArray());
     }
 
     @Test
-    public void copyNullInputStreamNullOutputStream() throws Exception {
+    public void copyNullInputStreamNullOutputStream() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullInputStream(), nullOutputStream()));
     }
 
     @Test
-    public void copyNullInputStreamValidOutputStream() throws Exception {
+    public void copyNullInputStreamValidOutputStream() {
         assertThrows(
                 NullPointerException.class, () -> IOUtil.copy(nullInputStream(), new DontCloseByteArrayOutputStream()));
     }
@@ -667,30 +656,30 @@ public class IOUtilTest {
         ByteArrayOutputStream outputStream = new DontCloseByteArrayOutputStream();
         byte[] input = {1, 2, 3, 4, 5, 6};
         IOUtil.copy(new DontCloseByteArrayInputStream(input), outputStream);
-        assertThat(outputStream.toByteArray(), is(input));
+        assertArrayEquals(input, outputStream.toByteArray());
     }
 
     @Test
-    public void copyNullInputStreamNullOutputStreamNegBufSz() throws Exception {
+    public void copyNullInputStreamNullOutputStreamNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> IOUtil.copy(nullInputStream(), nullOutputStream(), -1));
     }
 
     @Test
-    public void copyNullInputStreamValidOutputStreamNegBufSz() throws Exception {
+    public void copyNullInputStreamValidOutputStreamNegBufSz() {
         assertThrows(
                 NegativeArraySizeException.class,
                 () -> IOUtil.copy(nullInputStream(), new DontCloseByteArrayOutputStream(), -1));
     }
 
     @Test
-    public void copyEmptyInputStreamNullOutputStreamNegBufSz() throws Exception {
+    public void copyEmptyInputStreamNullOutputStreamNegBufSz() {
         assertThrows(
                 NegativeArraySizeException.class,
                 () -> IOUtil.copy(new DontCloseByteArrayInputStream(emptyByteArray()), nullOutputStream(), -1));
     }
 
     @Test
-    public void copyEmptyInputStreamValidOutputStreamNegBufSz() throws Exception {
+    public void copyEmptyInputStreamValidOutputStreamNegBufSz() {
         assertThrows(
                 NegativeArraySizeException.class,
                 () -> IOUtil.copy(
@@ -698,24 +687,24 @@ public class IOUtilTest {
     }
 
     @Test
-    public void copyInputStreamValidOutputStreamNegBufSz() throws Exception {
+    public void copyInputStreamValidOutputStreamNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> {
             ByteArrayOutputStream outputStream = new DontCloseByteArrayOutputStream();
             byte[] input = {1, 2, 3, 4, 5, 6};
             IOUtil.copy(new DontCloseByteArrayInputStream(input), outputStream, -1);
-            assertThat(outputStream.toByteArray(), is(input));
+            assertEquals(input, outputStream.toByteArray());
         });
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyNullInputStreamNullOutputStreamZeroBufSz() throws Exception {
+    public void copyNullInputStreamNullOutputStreamZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullInputStream(), nullOutputStream(), 0));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyNullInputStreamValidOutputStreamZeroBufSz() throws Exception {
+    public void copyNullInputStreamValidOutputStreamZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullInputStream(), new ByteArrayOutputStream(), 0));
     }
 
@@ -733,13 +722,13 @@ public class IOUtilTest {
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyNullInputStreamNullOutputStreamPosBufSz() throws Exception {
+    public void copyNullInputStreamNullOutputStreamPosBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullInputStream(), nullOutputStream(), 1));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyNullInputStreamValidOutputStreamPosBufSz() throws Exception {
+    public void copyNullInputStreamValidOutputStreamPosBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullInputStream(), new ByteArrayOutputStream(), 1));
     }
 
@@ -761,257 +750,259 @@ public class IOUtilTest {
         ByteArrayOutputStream outputStream = new DontCloseByteArrayOutputStream();
         byte[] input = {1, 2, 3, 4, 5, 6};
         IOUtil.copy(new DontCloseByteArrayInputStream(input), outputStream, 1);
-        assertThat(outputStream.toByteArray(), is(input));
+        assertArrayEquals(input, outputStream.toByteArray());
     }
 
     @Test
-    public void toStringNullInputStream() throws Exception {
+    public void toStringNullInputStream() {
         assertThrows(NullPointerException.class, () -> IOUtil.toString(nullInputStream()));
     }
 
     @Test
     public void toStringEmptyInputStream() throws Exception {
-        assertThat(IOUtil.toString(emptyInputStream()), is(emptyString()));
+        assertEquals(emptyString(), IOUtil.toString(emptyInputStream()));
     }
 
     @Test
     public void toStringInputStream() throws Exception {
-        String probe = "A string \u2345\u00ef";
-        assertThat(IOUtil.toString(new ByteArrayInputStream(probe.getBytes())).getBytes(), is(probe.getBytes()));
+        String probe = "A string ⍅ï";
+        assertArrayEquals(
+                probe.getBytes(),
+                IOUtil.toString(new ByteArrayInputStream(probe.getBytes())).getBytes());
     }
 
     @Test
-    public void toStringNullInputStreamNegBufSz() throws Exception {
+    public void toStringNullInputStreamNegBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.toString(nullInputStream(), -1));
     }
 
     @Test
-    public void toStringEmptyInputStreamNegBufSz() throws Exception {
+    public void toStringEmptyInputStreamNegBufSz() {
         assertThrows(
                 NegativeArraySizeException.class,
-                () -> assertThat(IOUtil.toString(emptyInputStream(), -1), is(emptyString())));
+                () -> assertEquals(IOUtil.toString(emptyInputStream(), -1), emptyString()));
     }
 
     @Test
-    public void toStringInputStreamNegBufSz() throws Exception {
+    public void toStringInputStreamNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> {
-            String probe = "A string \u2345\u00ef";
-            assertThat(IOUtil.toString(new ByteArrayInputStream(probe.getBytes()), -1), is(probe));
+            String probe = "A string ⍅ï";
+            assertEquals(probe, IOUtil.toString(new ByteArrayInputStream(probe.getBytes()), -1));
         });
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void toStringNullInputStreamZeroBufSz() throws Exception {
+    public void toStringNullInputStreamZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.toString(nullInputStream(), 0));
     }
 
     @Test
-    public void toStringNullInputStreamPosBufSz() throws Exception {
+    public void toStringNullInputStreamPosBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.toString(nullInputStream(), 1));
     }
 
     @Test
     public void toStringEmptyInputStreamPosBufSz() throws Exception {
-        assertThat(IOUtil.toString(emptyInputStream(), 1), is(emptyString()));
+        assertEquals(IOUtil.toString(emptyInputStream(), 1), emptyString());
     }
 
     @Test
     public void toStringInputStreamPosBufSz() throws Exception {
-        String probe = "A string \u2345\u00ef";
-        assertThat(
-                IOUtil.toString(new ByteArrayInputStream(probe.getBytes()), 1).getBytes(), is(probe.getBytes()));
+        String probe = "A string ⍅ï";
+        assertArrayEquals(
+                IOUtil.toString(new ByteArrayInputStream(probe.getBytes()), 1).getBytes(), probe.getBytes());
     }
 
     @Test
-    public void toStringNullInputStreamNullEncoding() throws Exception {
+    public void toStringNullInputStreamNullEncoding() {
         assertThrows(NullPointerException.class, () -> IOUtil.toString(nullInputStream(), null));
     }
 
     @Test
-    public void toStringEmptyInputStreamNullEncoding() throws Exception {
+    public void toStringEmptyInputStreamNullEncoding() {
         assertThrows(
                 NullPointerException.class,
-                () -> assertThat(IOUtil.toString(emptyInputStream(), null), is(emptyString())));
+                () -> assertEquals(IOUtil.toString(emptyInputStream(), null), emptyString()));
     }
 
     @Test
-    public void toStringInputStreamNullEncoding() throws Exception {
+    public void toStringInputStreamNullEncoding() {
         assertThrows(NullPointerException.class, () -> {
-            String probe = "A string \u2345\u00ef";
-            assertThat(
+            String probe = "A string ⍅ï";
+            assertEquals(
                     IOUtil.toString(new ByteArrayInputStream(probe.getBytes()), null)
                             .getBytes(),
-                    is(probe.getBytes()));
+                    probe.getBytes());
         });
     }
 
     @Test
-    public void toStringNullInputStreamJunkEncoding() throws Exception {
+    public void toStringNullInputStreamJunkEncoding() {
         assertThrows(NullPointerException.class, () -> IOUtil.toString(nullInputStream(), "junk"));
     }
 
     @Test
-    public void toStringEmptyInputStreamJunkEncoding() throws Exception {
+    public void toStringEmptyInputStreamJunkEncoding() {
         assertThrows(
                 UnsupportedEncodingException.class,
-                () -> assertThat(IOUtil.toString(emptyInputStream(), "junk"), is(emptyString())));
+                () -> assertEquals(IOUtil.toString(emptyInputStream(), "junk"), emptyString()));
     }
 
     @Test
-    public void toStringInputStreamJunkEncoding() throws Exception {
+    public void toStringInputStreamJunkEncoding() {
         assertThrows(UnsupportedEncodingException.class, () -> {
-            String probe = "A string \u2345\u00ef";
-            assertThat(
+            String probe = "A string ⍅ï";
+            assertEquals(
                     IOUtil.toString(new ByteArrayInputStream(probe.getBytes()), "junk")
                             .getBytes(),
-                    is(probe.getBytes()));
+                    probe.getBytes());
         });
     }
 
     @Test
-    public void toStringNullInputStreamValidEncoding() throws Exception {
+    public void toStringNullInputStreamValidEncoding() {
         assertThrows(NullPointerException.class, () -> IOUtil.toString(nullInputStream(), "utf-16"));
     }
 
     @Test
     public void toStringEmptyInputStreamValidEncoding() throws Exception {
-        assertThat(IOUtil.toString(emptyInputStream(), "utf-16"), is(emptyString()));
+        assertEquals(IOUtil.toString(emptyInputStream(), "utf-16"), emptyString());
     }
 
     @Test
     public void toStringInputStreamValidEncoding() throws Exception {
-        String probe = "A string \u2345\u00ef";
-        assertThat(
+        String probe = "A string ⍅ï";
+        assertArrayEquals(
                 IOUtil.toString(new ByteArrayInputStream(probe.getBytes("utf-16")), "utf-16")
                         .getBytes("utf-8"),
-                is(probe.getBytes("utf-8")));
+                probe.getBytes("utf-8"));
     }
 
     @Test
-    public void toStringNullInputStreamNullEncodingNegBufSz() throws Exception {
+    public void toStringNullInputStreamNullEncodingNegBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.toString(nullInputStream(), null, -1));
     }
 
     @Test
-    public void toStringEmptyInputStreamNullEncodingNegBufSz() throws Exception {
+    public void toStringEmptyInputStreamNullEncodingNegBufSz() {
         assertThrows(
                 NullPointerException.class,
-                () -> assertThat(IOUtil.toString(emptyInputStream(), null, -1), is(emptyString())));
+                () -> assertEquals(IOUtil.toString(emptyInputStream(), null, -1), emptyString()));
     }
 
     @Test
-    public void toStringInputStreamNullEncodingNegBufSz() throws Exception {
+    public void toStringInputStreamNullEncodingNegBufSz() {
         assertThrows(NullPointerException.class, () -> {
-            String probe = "A string \u2345\u00ef";
-            assertThat(
+            String probe = "A string ⍅ï";
+            assertEquals(
                     IOUtil.toString(new ByteArrayInputStream(probe.getBytes()), null, -1)
                             .getBytes(),
-                    is(probe.getBytes()));
+                    probe.getBytes());
         });
     }
 
     @Test
-    public void toStringNullInputStreamJunkEncodingNegBufSz() throws Exception {
+    public void toStringNullInputStreamJunkEncodingNegBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.toString(nullInputStream(), "junk", -1));
     }
 
     @Test
-    public void toStringEmptyInputStreamJunkEncodingNegBufSz() throws Exception {
+    public void toStringEmptyInputStreamJunkEncodingNegBufSz() {
         assertThrows(
                 UnsupportedEncodingException.class,
-                () -> assertThat(IOUtil.toString(emptyInputStream(), "junk", -1), is(emptyString())));
+                () -> assertEquals(IOUtil.toString(emptyInputStream(), "junk", -1), emptyString()));
     }
 
     @Test
-    public void toStringInputStreamJunkEncodingNegBufSz() throws Exception {
+    public void toStringInputStreamJunkEncodingNegBufSz() {
         assertThrows(UnsupportedEncodingException.class, () -> {
-            String probe = "A string \u2345\u00ef";
-            assertThat(
+            String probe = "A string ⍅ï";
+            assertEquals(
                     IOUtil.toString(new ByteArrayInputStream(probe.getBytes()), "junk", -1)
                             .getBytes(),
-                    is(probe.getBytes()));
+                    probe.getBytes());
         });
     }
 
     @Test
-    public void toStringNullInputStreamValidEncodingNegBufSz() throws Exception {
+    public void toStringNullInputStreamValidEncodingNegBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.toString(nullInputStream(), "utf-16", -1));
     }
 
     @Test
-    public void toStringEmptyInputStreamValidEncodingNegBufSz() throws Exception {
+    public void toStringEmptyInputStreamValidEncodingNegBufSz() {
         assertThrows(
                 NegativeArraySizeException.class,
-                () -> assertThat(IOUtil.toString(emptyInputStream(), "utf-16", -1), is(emptyString())));
+                () -> assertEquals(IOUtil.toString(emptyInputStream(), "utf-16", -1), emptyString()));
     }
 
     @Test
-    public void toStringInputStreamValidEncodingNegBufSz() throws Exception {
+    public void toStringInputStreamValidEncodingNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> {
-            String probe = "A string \u2345\u00ef";
-            assertThat(
-                    IOUtil.toString(new ByteArrayInputStream(probe.getBytes("utf-16")), "utf-16", -1)
-                            .getBytes("utf-8"),
-                    is(probe.getBytes("utf-8")));
+            String probe = "A string ⍅ï";
+            assertArrayEquals(
+                    IOUtil.toString(new ByteArrayInputStream(probe.getBytes(UTF_16)), "utf-16", -1)
+                            .getBytes(UTF_8),
+                    probe.getBytes(UTF_8));
         });
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void toStringNullInputStreamNullEncodingZeroBufSz() throws Exception {
+    public void toStringNullInputStreamNullEncodingZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.toString(nullInputStream(), null, 0));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void toStringEmptyInputStreamNullEncodingZeroBufSz() throws Exception {
+    public void toStringEmptyInputStreamNullEncodingZeroBufSz() {
         assertThrows(
                 NullPointerException.class,
-                () -> assertThat(IOUtil.toString(emptyInputStream(), null, 0), is(emptyString())));
+                () -> assertEquals(IOUtil.toString(emptyInputStream(), null, 0), emptyString()));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void toStringInputStreamNullEncodingZeroBufSz() throws Exception {
+    public void toStringInputStreamNullEncodingZeroBufSz() {
         assertThrows(NullPointerException.class, () -> {
-            String probe = "A string \u2345\u00ef";
-            assertThat(
+            String probe = "A string ⍅ï";
+            assertEquals(
                     IOUtil.toString(new ByteArrayInputStream(probe.getBytes()), null, 0)
                             .getBytes(),
-                    is(probe.getBytes()));
+                    probe.getBytes());
         });
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void toStringNullInputStreamJunkEncodingZeroBufSz() throws Exception {
+    public void toStringNullInputStreamJunkEncodingZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.toString(nullInputStream(), "junk", 0));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void toStringEmptyInputStreamJunkEncodingZeroBufSz() throws Exception {
+    public void toStringEmptyInputStreamJunkEncodingZeroBufSz() {
         assertThrows(
                 UnsupportedEncodingException.class,
-                () -> assertThat(IOUtil.toString(emptyInputStream(), "junk", 0), is(emptyString())));
+                () -> assertEquals(IOUtil.toString(emptyInputStream(), "junk", 0), emptyString()));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void toStringInputStreamJunkEncodingZeroBufSz() throws Exception {
+    public void toStringInputStreamJunkEncodingZeroBufSz() {
         assertThrows(UnsupportedEncodingException.class, () -> {
-            String probe = "A string \u2345\u00ef";
-            assertThat(
+            String probe = "A string ⍅ï";
+            assertEquals(
                     IOUtil.toString(new ByteArrayInputStream(probe.getBytes()), "junk", 0)
                             .getBytes(),
-                    is(probe.getBytes()));
+                    probe.getBytes());
         });
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void toStringNullInputStreamValidEncodingZeroBufSz() throws Exception {
+    public void toStringNullInputStreamValidEncodingZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.toString(nullInputStream(), "utf-16", 0));
     }
 
@@ -1020,12 +1011,12 @@ public class IOUtilTest {
      */
 
     @Test
-    public void copyNullInputStreamNullWriter() throws Exception {
+    public void copyNullInputStreamNullWriter() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullInputStream(), nullWriter()));
     }
 
     @Test
-    public void copyEmptyInputStreamNullWriter() throws Exception {
+    public void copyEmptyInputStreamNullWriter() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(emptyInputStream(), nullWriter()));
     }
 
@@ -1033,23 +1024,23 @@ public class IOUtilTest {
     public void copyEmptyInputStreamValidWriter() throws Exception {
         StringWriter writer = new DontCloseStringWriter();
         IOUtil.copy(emptyInputStream(), writer);
-        assertThat(writer.toString(), is(emptyString()));
+        assertEquals(emptyString(), writer.toString());
     }
 
     @Test
-    public void copyInputStreamNullWriter() throws Exception {
+    public void copyInputStreamNullWriter() {
         assertThrows(NullPointerException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             IOUtil.copy(new ByteArrayInputStream(probe.getBytes()), nullWriter());
         });
     }
 
     @Test
     public void copyInputStreamValidWriter() throws Exception {
-        String probe = "A string \u2345\u00ef";
+        String probe = "A string ⍅ï";
         StringWriter writer = new DontCloseStringWriter();
         IOUtil.copy(new ByteArrayInputStream(probe.getBytes()), writer);
-        assertThat(writer.toString().getBytes(), is(probe.getBytes()));
+        assertArrayEquals(probe.getBytes(), writer.toString().getBytes());
     }
 
     /*
@@ -1057,70 +1048,70 @@ public class IOUtilTest {
      */
 
     @Test
-    public void copyNullInputStreamNullWriterNegBufSz() throws Exception {
+    public void copyNullInputStreamNullWriterNegBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullInputStream(), nullWriter(), -1));
     }
 
     @Test
-    public void copyEmptyInputStreamNullWriterNegBufSz() throws Exception {
+    public void copyEmptyInputStreamNullWriterNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> IOUtil.copy(emptyInputStream(), nullWriter(), -1));
     }
 
     @Test
-    public void copyEmptyInputStreamValidWriterNegBufSz() throws Exception {
+    public void copyEmptyInputStreamValidWriterNegBufSz() {
         assertThrows(
                 NegativeArraySizeException.class,
                 () -> IOUtil.copy(emptyInputStream(), new DontCloseStringWriter(), -1));
     }
 
     @Test
-    public void copyInputStreamNullWriterNegBufSz() throws Exception {
+    public void copyInputStreamNullWriterNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             IOUtil.copy(new ByteArrayInputStream(probe.getBytes()), nullWriter(), -1);
         });
     }
 
     @Test
-    public void copyInputStreamValidWriterNegBufSz() throws Exception {
+    public void copyInputStreamValidWriterNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             StringWriter writer = new DontCloseStringWriter();
             IOUtil.copy(new ByteArrayInputStream(probe.getBytes()), writer, -1);
-            assertThat(writer.toString().getBytes(), is(probe.getBytes()));
+            assertArrayEquals(probe.getBytes(), writer.toString().getBytes());
         });
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyNullInputStreamNullWriterZeroBufSz() throws Exception {
+    public void copyNullInputStreamNullWriterZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullInputStream(), nullWriter(), 0));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyNullInputStreamValidWriterZeroBufSz() throws Exception {
+    public void copyNullInputStreamValidWriterZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullInputStream(), new DontCloseStringWriter(), 0));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyEmptyInputStreamNullWriterZeroBufSz() throws Exception {
+    public void copyEmptyInputStreamNullWriterZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(emptyInputStream(), nullWriter(), 0));
     }
 
     @Test
-    public void copyNullInputStreamNullWriterPosBufSz() throws Exception {
+    public void copyNullInputStreamNullWriterPosBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullInputStream(), nullWriter(), 1));
     }
 
     @Test
-    public void copyNullInputStreamValidWriterPosBufSz() throws Exception {
+    public void copyNullInputStreamValidWriterPosBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullInputStream(), new DontCloseStringWriter(), 1));
     }
 
     @Test
-    public void copyEmptyInputStreamNullWriterPosBufSz() throws Exception {
+    public void copyEmptyInputStreamNullWriterPosBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(emptyInputStream(), nullWriter(), 1));
     }
 
@@ -1128,15 +1119,15 @@ public class IOUtilTest {
     public void copyEmptyInputStreamValidWriterPosBufSz() throws Exception {
         StringWriter writer = new DontCloseStringWriter();
         IOUtil.copy(emptyInputStream(), writer, 1);
-        assertThat(writer.toString(), is(emptyString()));
+        assertEquals(emptyString(), writer.toString());
     }
 
     @Test
     public void copyInputStreamValidWriterPosBufSz() throws Exception {
-        String probe = "A string \u2345\u00ef";
+        String probe = "A string ⍅ï";
         StringWriter writer = new DontCloseStringWriter();
         IOUtil.copy(new ByteArrayInputStream(probe.getBytes()), writer, 1);
-        assertThat(writer.toString().getBytes(), is(probe.getBytes()));
+        assertArrayEquals(probe.getBytes(), writer.toString().getBytes());
     }
 
     /*
@@ -1144,90 +1135,90 @@ public class IOUtilTest {
      */
 
     @Test
-    public void copyNullInputStreamNullWriterNullEncoding() throws Exception {
+    public void copyNullInputStreamNullWriterNullEncoding() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullInputStream(), nullWriter(), null));
     }
 
     @Test
-    public void copyNullInputStreamValidWriterNullEncoding() throws Exception {
+    public void copyNullInputStreamValidWriterNullEncoding() {
         assertThrows(
                 NullPointerException.class, () -> IOUtil.copy(nullInputStream(), new DontCloseStringWriter(), null));
     }
 
     @Test
-    public void copyEmptyInputStreamNullWriterNullEncoding() throws Exception {
+    public void copyEmptyInputStreamNullWriterNullEncoding() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(emptyInputStream(), nullWriter(), null));
     }
 
     @Test
-    public void copyEmptyInputStreamValidWriterNullEncoding() throws Exception {
+    public void copyEmptyInputStreamValidWriterNullEncoding() {
         assertThrows(
                 NullPointerException.class, () -> IOUtil.copy(emptyInputStream(), new DontCloseStringWriter(), null));
     }
 
     @Test
-    public void copyInputStreamNullEncoding() throws Exception {
+    public void copyInputStreamNullEncoding() {
         assertThrows(NullPointerException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             StringWriter writer = new DontCloseStringWriter();
             IOUtil.copy(new ByteArrayInputStream(probe.getBytes()), writer, null);
-            assertThat(writer.toString().getBytes(), is(probe.getBytes()));
+            assertArrayEquals(probe.getBytes(), writer.toString().getBytes());
         });
     }
 
     @Test
-    public void copyNullInputStreamNullWriterJunkEncoding() throws Exception {
+    public void copyNullInputStreamNullWriterJunkEncoding() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullInputStream(), nullWriter(), "junk"));
     }
 
     @Test
-    public void copyNullInputStreamValidWriterJunkEncoding() throws Exception {
+    public void copyNullInputStreamValidWriterJunkEncoding() {
         assertThrows(
                 NullPointerException.class, () -> IOUtil.copy(nullInputStream(), new DontCloseStringWriter(), "junk"));
     }
 
     @Test
-    public void copyEmptyInputStreamNullWriterJunkEncoding() throws Exception {
+    public void copyEmptyInputStreamNullWriterJunkEncoding() {
         assertThrows(UnsupportedEncodingException.class, () -> IOUtil.copy(emptyInputStream(), nullWriter(), "junk"));
     }
 
     @Test
-    public void copyEmptyInputStreamValidWriterJunkEncoding() throws Exception {
+    public void copyEmptyInputStreamValidWriterJunkEncoding() {
         assertThrows(
                 UnsupportedEncodingException.class,
                 () -> IOUtil.copy(emptyInputStream(), new DontCloseStringWriter(), "junk"));
     }
 
     @Test
-    public void copyInputStreamNullWriterJunkEncoding() throws Exception {
+    public void copyInputStreamNullWriterJunkEncoding() {
         assertThrows(UnsupportedEncodingException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             IOUtil.copy(new ByteArrayInputStream(probe.getBytes()), nullWriter(), "junk");
         });
     }
 
     @Test
-    public void copyInputStreamValidWriterJunkEncoding() throws Exception {
+    public void copyInputStreamValidWriterJunkEncoding() {
         assertThrows(UnsupportedEncodingException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             StringWriter writer = new DontCloseStringWriter();
             IOUtil.copy(new ByteArrayInputStream(probe.getBytes()), writer, "junk");
-            assertThat(writer.toString().getBytes(), is(probe.getBytes()));
+            assertArrayEquals(probe.getBytes(), writer.toString().getBytes());
         });
     }
 
     @Test
-    public void copyNullInputStreamNullWriterValidEncoding() throws Exception {
+    public void copyNullInputStreamNullWriterValidEncoding() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullInputStream(), nullWriter(), "utf-16"));
     }
 
     @Test
-    public void copyEmptyInputStreamNullWriterValidEncoding() throws Exception {
+    public void copyEmptyInputStreamNullWriterValidEncoding() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(emptyInputStream(), nullWriter(), "utf-16"));
     }
 
     @Test
-    public void copyNullInputStreamValidWriterValidEncoding() throws Exception {
+    public void copyNullInputStreamValidWriterValidEncoding() {
         assertThrows(
                 NullPointerException.class,
                 () -> IOUtil.copy(nullInputStream(), new DontCloseStringWriter(), "utf-16"));
@@ -1237,23 +1228,23 @@ public class IOUtilTest {
     public void copyEmptyInputStreamValidWriterValidEncoding() throws Exception {
         StringWriter writer = new DontCloseStringWriter();
         IOUtil.copy(emptyInputStream(), writer, "utf-16");
-        assertThat(writer.toString(), is(emptyString()));
+        assertEquals(emptyString(), writer.toString());
     }
 
     @Test
-    public void copyInputStreamNullWriterValidEncoding() throws Exception {
+    public void copyInputStreamNullWriterValidEncoding() {
         assertThrows(NullPointerException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             IOUtil.copy(new ByteArrayInputStream(probe.getBytes("utf-16")), nullWriter(), "utf-16");
         });
     }
 
     @Test
     public void copyInputStreamValidWriterValidEncoding() throws Exception {
-        String probe = "A string \u2345\u00ef";
+        String probe = "A string ⍅ï";
         StringWriter writer = new DontCloseStringWriter();
-        IOUtil.copy(new ByteArrayInputStream(probe.getBytes("utf-16")), writer, "utf-16");
-        assertThat(writer.toString().getBytes("utf-8"), is(probe.getBytes("utf-8")));
+        IOUtil.copy(new ByteArrayInputStream(probe.getBytes(UTF_16)), writer, "utf-16");
+        assertArrayEquals(probe.getBytes(UTF_8), writer.toString().getBytes(UTF_8));
     }
 
     /*
@@ -1261,197 +1252,197 @@ public class IOUtilTest {
      */
 
     @Test
-    public void copyNullInputStreamNullWriterNullEncodingNegBufSz() throws Exception {
+    public void copyNullInputStreamNullWriterNullEncodingNegBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullInputStream(), nullWriter(), null, -1));
     }
 
     @Test
-    public void copyNullInputStreamValidWriterNullEncodingNegBufSz() throws Exception {
+    public void copyNullInputStreamValidWriterNullEncodingNegBufSz() {
         assertThrows(
                 NullPointerException.class,
                 () -> IOUtil.copy(nullInputStream(), new DontCloseStringWriter(), null, -1));
     }
 
     @Test
-    public void copyEmptyInputStreamNullWriterNullEncodingNegBufSz() throws Exception {
+    public void copyEmptyInputStreamNullWriterNullEncodingNegBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(emptyInputStream(), nullWriter(), null, -1));
     }
 
     @Test
-    public void copyEmptyInputStreamValidWriterNullEncodingNegBufSz() throws Exception {
+    public void copyEmptyInputStreamValidWriterNullEncodingNegBufSz() {
         assertThrows(NullPointerException.class, () -> {
             StringWriter writer = new DontCloseStringWriter();
             IOUtil.copy(emptyInputStream(), writer, null, -1);
-            assertThat(writer.toString(), is(emptyString()));
+            assertEquals(emptyString(), writer.toString());
         });
     }
 
     @Test
-    public void copyInputStreamNullWriterNullEncodingNegBufSz() throws Exception {
+    public void copyInputStreamNullWriterNullEncodingNegBufSz() {
         assertThrows(NullPointerException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             IOUtil.copy(new ByteArrayInputStream(probe.getBytes()), nullWriter(), null, -1);
         });
     }
 
     @Test
-    public void copyInputStreamValidWriterNullEncodingNegBufSz() throws Exception {
+    public void copyInputStreamValidWriterNullEncodingNegBufSz() {
         assertThrows(NullPointerException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             StringWriter writer = new DontCloseStringWriter();
             IOUtil.copy(new ByteArrayInputStream(probe.getBytes()), writer, null, -1);
-            assertThat(writer.toString().getBytes(), is(probe.getBytes()));
+            assertArrayEquals(probe.getBytes(), writer.toString().getBytes());
         });
     }
 
     @Test
-    public void copyNullInputStreamNullWriterJunkEncodingNegBufSz() throws Exception {
+    public void copyNullInputStreamNullWriterJunkEncodingNegBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullInputStream(), nullWriter(), "junk", -1));
     }
 
     @Test
-    public void copyNullInputStreamValidWriterJunkEncodingNegBufSz() throws Exception {
+    public void copyNullInputStreamValidWriterJunkEncodingNegBufSz() {
         assertThrows(
                 NullPointerException.class,
                 () -> IOUtil.copy(nullInputStream(), new DontCloseStringWriter(), "junk", -1));
     }
 
     @Test
-    public void copyEmptyInputStreamNullWriterJunkEncodingNegBufSz() throws Exception {
+    public void copyEmptyInputStreamNullWriterJunkEncodingNegBufSz() {
         assertThrows(
                 UnsupportedEncodingException.class, () -> IOUtil.copy(emptyInputStream(), nullWriter(), "junk", -1));
     }
 
     @Test
-    public void copyEmptyInputStreamJunkEncodingNegBufSz() throws Exception {
+    public void copyEmptyInputStreamJunkEncodingNegBufSz() {
         assertThrows(UnsupportedEncodingException.class, () -> {
             StringWriter writer = new DontCloseStringWriter();
             IOUtil.copy(emptyInputStream(), writer, "junk", -1);
-            assertThat(writer.toString(), is(emptyString()));
+            assertEquals(emptyString(), writer.toString());
         });
     }
 
     @Test
-    public void copyInputStreamNullWriterJunkEncodingNegBufSz() throws Exception {
+    public void copyInputStreamNullWriterJunkEncodingNegBufSz() {
         assertThrows(UnsupportedEncodingException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             IOUtil.copy(new ByteArrayInputStream(probe.getBytes()), nullWriter(), "junk", -1);
         });
     }
 
     @Test
-    public void copyInputStreamValidWriterJunkEncodingNegBufSz() throws Exception {
+    public void copyInputStreamValidWriterJunkEncodingNegBufSz() {
         assertThrows(UnsupportedEncodingException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             StringWriter writer = new DontCloseStringWriter();
             IOUtil.copy(new ByteArrayInputStream(probe.getBytes()), writer, "junk", -1);
-            assertThat(writer.toString().getBytes(), is(probe.getBytes()));
+            assertArrayEquals(probe.getBytes(), writer.toString().getBytes());
         });
     }
 
     @Test
-    public void copyNullInputStreamNullWriterValidEncodingNegBufSz() throws Exception {
+    public void copyNullInputStreamNullWriterValidEncodingNegBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullInputStream(), nullWriter(), "utf-16", -1));
     }
 
     @Test
-    public void copyNullInputStreamValidWriterValidEncodingNegBufSz() throws Exception {
+    public void copyNullInputStreamValidWriterValidEncodingNegBufSz() {
         assertThrows(
                 NullPointerException.class,
                 () -> IOUtil.copy(nullInputStream(), new DontCloseStringWriter(), "utf-16", -1));
     }
 
     @Test
-    public void copyEmptyInputStreamNullWriterValidEncodingNegBufSz() throws Exception {
+    public void copyEmptyInputStreamNullWriterValidEncodingNegBufSz() {
         assertThrows(
                 NegativeArraySizeException.class, () -> IOUtil.copy(emptyInputStream(), nullWriter(), "utf-16", -1));
     }
 
     @Test
-    public void copyEmptyInputStreamValidWriterValidEncodingNegBufSz() throws Exception {
+    public void copyEmptyInputStreamValidWriterValidEncodingNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> {
             StringWriter writer = new DontCloseStringWriter();
             IOUtil.copy(emptyInputStream(), writer, "utf-16", -1);
-            assertThat(writer.toString(), is(emptyString()));
+            assertEquals(emptyString(), writer.toString());
         });
     }
 
     @Test
-    public void copyInputStreamNullWriterValidEncodingNegBufSz() throws Exception {
+    public void copyInputStreamNullWriterValidEncodingNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             IOUtil.copy(new ByteArrayInputStream(probe.getBytes("utf-16")), nullWriter(), -1);
         });
     }
 
     @Test
-    public void copyInputStreamValidEncodingNegBufSz() throws Exception {
+    public void copyInputStreamValidEncodingNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             StringWriter writer = new DontCloseStringWriter();
-            IOUtil.copy(new ByteArrayInputStream(probe.getBytes("utf-16")), writer, "utf-16", -1);
-            assertThat(writer.toString().getBytes("utf-8"), is(probe.getBytes("utf-8")));
+            IOUtil.copy(new ByteArrayInputStream(probe.getBytes(UTF_16)), writer, "utf-16", -1);
+            assertEquals(probe.getBytes(UTF_8), writer.toString().getBytes(UTF_8));
         });
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyNullInputStreamNullWriterNullEncodingZeroBufSz() throws Exception {
+    public void copyNullInputStreamNullWriterNullEncodingZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullInputStream(), nullWriter(), null, 0));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyNullInputStreamValidWriterNullEncodingZeroBufSz() throws Exception {
+    public void copyNullInputStreamValidWriterNullEncodingZeroBufSz() {
         assertThrows(
                 NullPointerException.class, () -> IOUtil.copy(nullInputStream(), new DontCloseStringWriter(), null, 0));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyEmptyInputStreamNullWriterNullEncodingZeroBufSz() throws Exception {
+    public void copyEmptyInputStreamNullWriterNullEncodingZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(emptyInputStream(), nullWriter(), null, 0));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyEmptyInputStreamValidWriterNullEncodingZeroBufSz() throws Exception {
+    public void copyEmptyInputStreamValidWriterNullEncodingZeroBufSz() {
         assertThrows(NullPointerException.class, () -> {
             StringWriter writer = new DontCloseStringWriter();
             IOUtil.copy(emptyInputStream(), writer, null, 0);
-            assertThat(writer.toString(), is(emptyString()));
+            assertEquals(emptyString(), writer.toString());
         });
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyInputStreamNullWriterNullEncodingZeroBufSz() throws Exception {
+    public void copyInputStreamNullWriterNullEncodingZeroBufSz() {
         assertThrows(NullPointerException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             IOUtil.copy(new ByteArrayInputStream(probe.getBytes()), nullWriter(), null, 0);
         });
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyInputStreamValidWriterNullEncodingZeroBufSz() throws Exception {
+    public void copyInputStreamValidWriterNullEncodingZeroBufSz() {
         assertThrows(NullPointerException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             StringWriter writer = new DontCloseStringWriter();
             IOUtil.copy(new ByteArrayInputStream(probe.getBytes()), writer, null, 0);
-            assertThat(writer.toString().getBytes(), is(probe.getBytes()));
+            assertArrayEquals(probe.getBytes(), writer.toString().getBytes());
         });
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyNullInputStreamNullWriterJunkEncodingZeroBufSz() throws Exception {
+    public void copyNullInputStreamNullWriterJunkEncodingZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullInputStream(), nullWriter(), "junk", 0));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyNullInputStreamValidWriterJunkEncodingZeroBufSz() throws Exception {
+    public void copyNullInputStreamValidWriterJunkEncodingZeroBufSz() {
         assertThrows(
                 NullPointerException.class,
                 () -> IOUtil.copy(nullInputStream(), new DontCloseStringWriter(), "junk", 0));
@@ -1459,50 +1450,50 @@ public class IOUtilTest {
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyEmptyInputStreamNullWriterJunkEncodingZeroBufSz() throws Exception {
+    public void copyEmptyInputStreamNullWriterJunkEncodingZeroBufSz() {
         assertThrows(
                 UnsupportedEncodingException.class, () -> IOUtil.copy(emptyInputStream(), nullWriter(), "junk", 0));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyEmptyInputStreamValidWriterJunkEncodingZeroBufSz() throws Exception {
+    public void copyEmptyInputStreamValidWriterJunkEncodingZeroBufSz() {
         assertThrows(UnsupportedEncodingException.class, () -> {
             StringWriter writer = new DontCloseStringWriter();
             IOUtil.copy(emptyInputStream(), writer, "junk", 0);
-            assertThat(writer.toString(), is(emptyString()));
+            assertEquals(emptyString(), writer.toString());
         });
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyInputStreamNullWriterJunkEncodingZeroBufSz() throws Exception {
+    public void copyInputStreamNullWriterJunkEncodingZeroBufSz() {
         assertThrows(UnsupportedEncodingException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             IOUtil.copy(new ByteArrayInputStream(probe.getBytes()), nullWriter(), "junk", 0);
         });
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyInputStreamValidWriterJunkEncodingZeroBufSz() throws Exception {
+    public void copyInputStreamValidWriterJunkEncodingZeroBufSz() {
         assertThrows(UnsupportedEncodingException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             StringWriter writer = new DontCloseStringWriter();
             IOUtil.copy(new ByteArrayInputStream(probe.getBytes()), writer, "junk", 0);
-            assertThat(writer.toString().getBytes(), is(probe.getBytes()));
+            assertArrayEquals(probe.getBytes(), writer.toString().getBytes());
         });
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyNullInputStreamNullWriterValidEncodingZeroBufSz() throws Exception {
+    public void copyNullInputStreamNullWriterValidEncodingZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullInputStream(), nullWriter(), "utf-16", 0));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyNullInputStreamValidWriterValidEncodingZeroBufSz() throws Exception {
+    public void copyNullInputStreamValidWriterValidEncodingZeroBufSz() {
         assertThrows(
                 NullPointerException.class,
                 () -> IOUtil.copy(nullInputStream(), new DontCloseStringWriter(), "utf-16", 0));
@@ -1513,12 +1504,12 @@ public class IOUtilTest {
      */
 
     @Test
-    public void copyNullStringNullWriter() throws Exception {
+    public void copyNullStringNullWriter() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullString(), nullWriter()));
     }
 
     @Test
-    public void copyEmptyStringNullWriter() throws Exception {
+    public void copyEmptyStringNullWriter() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(emptyString(), nullWriter()));
     }
 
@@ -1531,37 +1522,37 @@ public class IOUtilTest {
     public void copyEmptyStringValidWriter() throws Exception {
         StringWriter writer = new DontCloseStringWriter();
         IOUtil.copy(emptyString(), writer);
-        assertThat(writer.toString(), is(emptyString()));
+        assertEquals(emptyString(), writer.toString());
     }
 
     @Test
-    public void copyStringNullWriter() throws Exception {
+    public void copyStringNullWriter() {
         assertThrows(NullPointerException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             IOUtil.copy(probe, nullWriter());
         });
     }
 
     @Test
     public void copyStringValidWriter() throws Exception {
-        String probe = "A string \u2345\u00ef";
+        String probe = "A string ⍅ï";
         StringWriter writer = new DontCloseStringWriter();
         IOUtil.copy(probe, writer);
-        assertThat(writer.toString(), is(probe));
+        assertEquals(probe, writer.toString());
     }
 
     @Test
-    public void copyNullStringNullOutputStream() throws Exception {
+    public void copyNullStringNullOutputStream() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullString(), nullOutputStream()));
     }
 
     @Test
-    public void copyEmptyStringNullOutputStream() throws Exception {
+    public void copyEmptyStringNullOutputStream() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(emptyString(), nullOutputStream()));
     }
 
     @Test
-    public void copyNullStringValidOutputStream() throws Exception {
+    public void copyNullStringValidOutputStream() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullString(), new DontCloseByteArrayOutputStream()));
     }
 
@@ -1569,99 +1560,99 @@ public class IOUtilTest {
     public void copyEmptyStringValidOutputStream() throws Exception {
         ByteArrayOutputStream os = new DontCloseByteArrayOutputStream();
         IOUtil.copy(emptyString(), os);
-        assertThat(os.toByteArray(), is(emptyString().getBytes()));
+        assertArrayEquals(os.toByteArray(), emptyString().getBytes());
     }
 
     @Test
-    public void copyStringNullOutputStream() throws Exception {
+    public void copyStringNullOutputStream() {
         assertThrows(NullPointerException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             IOUtil.copy(probe, nullOutputStream());
         });
     }
 
     @Test
     public void copyStringValidOutputStream() throws Exception {
-        String probe = "A string \u2345\u00ef";
+        String probe = "A string ⍅ï";
         ByteArrayOutputStream os = new DontCloseByteArrayOutputStream();
         IOUtil.copy(probe, os);
-        assertThat(os.toByteArray(), is(probe.getBytes()));
+        assertArrayEquals(probe.getBytes(), os.toByteArray());
     }
 
     @Test
-    public void copyNullStringNullOutputStreamNegBufSz() throws Exception {
+    public void copyNullStringNullOutputStreamNegBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullString(), nullOutputStream(), -1));
     }
 
     @Test
-    public void copyEmptyStringNullOutputStreamNegBufSz() throws Exception {
+    public void copyEmptyStringNullOutputStreamNegBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(emptyString(), nullOutputStream(), -1));
     }
 
     @Test
-    public void copyNullStringValidOutputStreamNegBufSz() throws Exception {
+    public void copyNullStringValidOutputStreamNegBufSz() {
         assertThrows(
                 NullPointerException.class, () -> IOUtil.copy(nullString(), new DontCloseByteArrayOutputStream(), -1));
     }
 
     @Test
-    public void copyEmptyStringValidOutputStreamNegBufSz() throws Exception {
+    public void copyEmptyStringValidOutputStreamNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> {
             ByteArrayOutputStream os = new DontCloseByteArrayOutputStream();
             IOUtil.copy(emptyString(), os, -1);
-            assertThat(os.toByteArray(), is(emptyString().getBytes()));
+            assertArrayEquals(os.toByteArray(), emptyString().getBytes());
         });
     }
 
     @Test
-    public void copyStringNullOutputStreamNegBufSz() throws Exception {
+    public void copyStringNullOutputStreamNegBufSz() {
         assertThrows(NullPointerException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             IOUtil.copy(probe, nullOutputStream(), -1);
         });
     }
 
     @Test
-    public void copyStringValidOutputStreamNegBufSz() throws Exception {
+    public void copyStringValidOutputStreamNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             ByteArrayOutputStream os = new DontCloseByteArrayOutputStream();
             IOUtil.copy(probe, os, -1);
-            assertThat(os.toByteArray(), is(probe.getBytes()));
+            assertEquals(probe.getBytes(), os.toByteArray());
         });
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyNullStringNullOutputStreamZeroBufSz() throws Exception {
+    public void copyNullStringNullOutputStreamZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullString(), nullOutputStream(), 0));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyEmptyStringNullOutputStreamZeroBufSz() throws Exception {
+    public void copyEmptyStringNullOutputStreamZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(emptyString(), nullOutputStream(), 0));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyNullStringValidOutputStreamZeroBufSz() throws Exception {
+    public void copyNullStringValidOutputStreamZeroBufSz() {
         assertThrows(
                 NullPointerException.class, () -> IOUtil.copy(nullString(), new DontCloseByteArrayOutputStream(), 0));
     }
 
     @Test
-    public void copyNullStringNullOutputStreamPosBufSz() throws Exception {
+    public void copyNullStringNullOutputStreamPosBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullString(), nullOutputStream(), 1));
     }
 
     @Test
-    public void copyEmptyStringNullOutputStreamPosBufSz() throws Exception {
+    public void copyEmptyStringNullOutputStreamPosBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(emptyString(), nullOutputStream(), 1));
     }
 
     @Test
-    public void copyNullStringValidOutputStreamPosBufSz() throws Exception {
+    public void copyNullStringValidOutputStreamPosBufSz() {
         assertThrows(
                 NullPointerException.class, () -> IOUtil.copy(nullString(), new DontCloseByteArrayOutputStream(), 1));
     }
@@ -1670,37 +1661,37 @@ public class IOUtilTest {
     public void copyEmptyStringValidOutputStreamPosBufSz() throws Exception {
         ByteArrayOutputStream os = new DontCloseByteArrayOutputStream();
         IOUtil.copy(emptyString(), os, 1);
-        assertThat(os.toByteArray(), is(emptyString().getBytes()));
+        assertArrayEquals(os.toByteArray(), emptyString().getBytes());
     }
 
     @Test
-    public void copyStringNullOutputStreamPosBufSz() throws Exception {
+    public void copyStringNullOutputStreamPosBufSz() {
         assertThrows(NullPointerException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             IOUtil.copy(probe, nullOutputStream(), 1);
         });
     }
 
     @Test
     public void copyStringValidOutputStreamPosBufSz() throws Exception {
-        String probe = "A string \u2345\u00ef";
+        String probe = "A string ⍅ï";
         ByteArrayOutputStream os = new DontCloseByteArrayOutputStream();
         IOUtil.copy(probe, os, 1);
-        assertThat(os.toByteArray(), is(probe.getBytes()));
+        assertArrayEquals(probe.getBytes(), os.toByteArray());
     }
 
     @Test
-    public void copyNullReaderNullWriter() throws Exception {
+    public void copyNullReaderNullWriter() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullReader(), nullWriter()));
     }
 
     @Test
-    public void copyEmptyReaderNullWriter() throws Exception {
+    public void copyEmptyReaderNullWriter() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(emptyReader(), nullWriter()));
     }
 
     @Test
-    public void copyNullReaderValidWriter() throws Exception {
+    public void copyNullReaderValidWriter() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullReader(), new DontCloseStringWriter()));
     }
 
@@ -1708,23 +1699,23 @@ public class IOUtilTest {
     public void copyEmptyReaderValidWriter() throws Exception {
         StringWriter writer = new DontCloseStringWriter();
         IOUtil.copy(emptyReader(), writer);
-        assertThat(writer.toString(), is(emptyString()));
+        assertEquals(emptyString(), writer.toString());
     }
 
     @Test
-    public void copyReaderNullWriter() throws Exception {
+    public void copyReaderNullWriter() {
         assertThrows(NullPointerException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             IOUtil.copy(new StringReader(probe), nullWriter());
         });
     }
 
     @Test
     public void copyReaderValidWriter() throws Exception {
-        String probe = "A string \u2345\u00ef";
+        String probe = "A string ⍅ï";
         StringWriter writer = new DontCloseStringWriter();
         IOUtil.copy(new StringReader(probe), writer);
-        assertThat(writer.toString(), is(probe));
+        assertEquals(probe, writer.toString());
     }
 
     /*
@@ -1732,78 +1723,78 @@ public class IOUtilTest {
      */
 
     @Test
-    public void copyNullReaderNullWriterNegBufSz() throws Exception {
+    public void copyNullReaderNullWriterNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> IOUtil.copy(nullReader(), nullWriter(), -1));
     }
 
     @Test
-    public void copyEmptyReaderNullWriterNegBufSz() throws Exception {
+    public void copyEmptyReaderNullWriterNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> IOUtil.copy(emptyReader(), nullWriter(), -1));
     }
 
     @Test
-    public void copyNullReaderValidWriterNegBufSz() throws Exception {
+    public void copyNullReaderValidWriterNegBufSz() {
         assertThrows(
                 NegativeArraySizeException.class, () -> IOUtil.copy(nullReader(), new DontCloseStringWriter(), -1));
     }
 
     @Test
-    public void copyEmptyReaderValidWriterNegBufSz() throws Exception {
+    public void copyEmptyReaderValidWriterNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> {
             StringWriter writer = new DontCloseStringWriter();
             IOUtil.copy(emptyReader(), writer, -1);
-            assertThat(writer.toString(), is(emptyString()));
+            assertEquals(emptyString(), writer.toString());
         });
     }
 
     @Test
-    public void copyReaderNullWriterNegBufSz() throws Exception {
+    public void copyReaderNullWriterNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             IOUtil.copy(new StringReader(probe), nullWriter(), -1);
         });
     }
 
     @Test
-    public void copyReaderValidWriterNegBufSz() throws Exception {
+    public void copyReaderValidWriterNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             StringWriter writer = new DontCloseStringWriter();
             IOUtil.copy(new StringReader(probe), writer, -1);
-            assertThat(writer.toString(), is(probe));
+            assertEquals(probe, writer.toString());
         });
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyNullReaderNullWriterZeroBufSz() throws Exception {
+    public void copyNullReaderNullWriterZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullReader(), nullWriter(), 0));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyEmptyReaderNullWriterZeroBufSz() throws Exception {
+    public void copyEmptyReaderNullWriterZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(emptyReader(), nullWriter(), 0));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyNullReaderValidWriterZeroBufSz() throws Exception {
+    public void copyNullReaderValidWriterZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullReader(), new DontCloseStringWriter(), 0));
     }
 
     @Test
-    public void copyNullReaderNullWriterPosBufSz() throws Exception {
+    public void copyNullReaderNullWriterPosBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullReader(), nullWriter(), 1));
     }
 
     @Test
-    public void copyEmptyReaderNullWriterPosBufSz() throws Exception {
+    public void copyEmptyReaderNullWriterPosBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(emptyReader(), nullWriter(), 1));
     }
 
     @Test
-    public void copyNullReaderValidWriterPosBufSz() throws Exception {
+    public void copyNullReaderValidWriterPosBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullReader(), new DontCloseStringWriter(), 1));
     }
 
@@ -1811,23 +1802,23 @@ public class IOUtilTest {
     public void copyEmptyReaderValidWriterPosBufSz() throws Exception {
         StringWriter writer = new DontCloseStringWriter();
         IOUtil.copy(emptyReader(), writer, 1);
-        assertThat(writer.toString(), is(emptyString()));
+        assertEquals(emptyString(), writer.toString());
     }
 
     @Test
-    public void copyReaderNullWriterPosBufSz() throws Exception {
+    public void copyReaderNullWriterPosBufSz() {
         assertThrows(NullPointerException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             IOUtil.copy(new StringReader(probe), nullWriter(), 1);
         });
     }
 
     @Test
     public void copyReaderValidWriterPosBufSz() throws Exception {
-        String probe = "A string \u2345\u00ef";
+        String probe = "A string ⍅ï";
         StringWriter writer = new DontCloseStringWriter();
         IOUtil.copy(new StringReader(probe), writer, 1);
-        assertThat(writer.toString(), is(probe));
+        assertEquals(probe, writer.toString());
     }
 
     /*
@@ -1835,30 +1826,29 @@ public class IOUtilTest {
      */
 
     @Test
-    public void toByteArrayFromInputStreamNegBufSz() throws Exception {
+    public void toByteArrayFromInputStreamNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> {
-            String probe = "A string \u2345\u00ef";
-            assertThat(
+            String probe = "A string ⍅ï";
+            assertEquals(
                     IOUtil.toByteArray(new DontCloseByteArrayInputStream(IOUtil.toByteArray(probe)), -1),
-                    is(probe.getBytes()));
+                    probe.getBytes());
         });
     }
 
     @Test
-    public void toByteArrayNullInputStreamNegBufSz() throws Exception {
+    public void toByteArrayNullInputStreamNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> IOUtil.toByteArray(nullInputStream(), -1));
     }
 
     @Test
     public void toByteArrayFromInputStreamPosBufSz() throws Exception {
-        String probe = "A string \u2345\u00ef";
-        assertThat(
-                IOUtil.toByteArray(new DontCloseByteArrayInputStream(IOUtil.toByteArray(probe)), +1),
-                is(probe.getBytes()));
+        String probe = "A string ⍅ï";
+        assertArrayEquals(
+                IOUtil.toByteArray(new DontCloseByteArrayInputStream(IOUtil.toByteArray(probe)), +1), probe.getBytes());
     }
 
     @Test
-    public void toByteArrayNullInputStreamPosBufSz() throws Exception {
+    public void toByteArrayNullInputStreamPosBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.toByteArray(nullInputStream(), +1));
     }
 
@@ -1867,26 +1857,26 @@ public class IOUtilTest {
      */
 
     @Test
-    public void toByteArrayFromReaderNegBufSz() throws Exception {
+    public void toByteArrayFromReaderNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> {
-            String probe = "A string \u2345\u00ef";
-            assertThat(IOUtil.toByteArray(new DontCloseStringReader(probe), -1), is(probe.getBytes()));
+            String probe = "A string ⍅ï";
+            assertEquals(IOUtil.toByteArray(new DontCloseStringReader(probe), -1), probe.getBytes());
         });
     }
 
     @Test
-    public void toByteArrayNullReaderNegBufSz() throws Exception {
+    public void toByteArrayNullReaderNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> IOUtil.toByteArray(nullReader(), -1));
     }
 
     @Test
     public void toByteArrayFromReaderPosBufSz() throws Exception {
-        String probe = "A string \u2345\u00ef";
-        assertThat(IOUtil.toByteArray(new DontCloseStringReader(probe), +1), is(probe.getBytes()));
+        String probe = "A string ⍅ï";
+        assertArrayEquals(IOUtil.toByteArray(new DontCloseStringReader(probe), +1), probe.getBytes());
     }
 
     @Test
-    public void toByteArrayNullReaderPosBufSz() throws Exception {
+    public void toByteArrayNullReaderPosBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.toByteArray(nullReader(), +1));
     }
 
@@ -1895,26 +1885,26 @@ public class IOUtilTest {
      */
 
     @Test
-    public void toByteArrayFromStringNegBufSz() throws Exception {
+    public void toByteArrayFromStringNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> {
-            String probe = "A string \u2345\u00ef";
-            assertThat(IOUtil.toByteArray(probe, -1), is(probe.getBytes()));
+            String probe = "A string ⍅ï";
+            assertEquals(IOUtil.toByteArray(probe, -1), probe.getBytes());
         });
     }
 
     @Test
-    public void toByteArrayNullStringNegBufSz() throws Exception {
+    public void toByteArrayNullStringNegBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.toByteArray(nullString(), -1));
     }
 
     @Test
     public void toByteArrayFromStringPosBufSz() throws Exception {
-        String probe = "A string \u2345\u00ef";
-        assertThat(IOUtil.toByteArray(probe, +1), is(probe.getBytes()));
+        String probe = "A string ⍅ï";
+        assertArrayEquals(IOUtil.toByteArray(probe, +1), probe.getBytes());
     }
 
     @Test
-    public void toByteArrayNullStringPosBufSz() throws Exception {
+    public void toByteArrayNullStringPosBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.toByteArray(nullString(), +1));
     }
 
@@ -1923,26 +1913,26 @@ public class IOUtilTest {
      */
 
     @Test
-    public void toStringFromReaderNegBufSz() throws Exception {
+    public void toStringFromReaderNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> {
-            String probe = "A string \u2345\u00ef";
-            assertThat(IOUtil.toString(new DontCloseStringReader(probe), -1), is(probe));
+            String probe = "A string ⍅ï";
+            assertEquals(probe, IOUtil.toString(new DontCloseStringReader(probe), -1));
         });
     }
 
     @Test
-    public void toStringNullReaderNegBufSz() throws Exception {
+    public void toStringNullReaderNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> IOUtil.toString(nullReader(), -1));
     }
 
     @Test
     public void toStringFromReaderPosBufSz() throws Exception {
-        String probe = "A string \u2345\u00ef";
-        assertThat(IOUtil.toString(new DontCloseStringReader(probe), +1), is(probe));
+        String probe = "A string ⍅ï";
+        assertEquals(probe, IOUtil.toString(new DontCloseStringReader(probe), +1));
     }
 
     @Test
-    public void toStringNullReaderPosBufSz() throws Exception {
+    public void toStringNullReaderPosBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.toString(nullReader(), +1));
     }
 
@@ -1951,17 +1941,17 @@ public class IOUtilTest {
      */
 
     @Test
-    public void copyNullReaderNullOutputStream() throws Exception {
+    public void copyNullReaderNullOutputStream() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullReader(), nullOutputStream()));
     }
 
     @Test
-    public void copyNullReaderValidOutputStream() throws Exception {
+    public void copyNullReaderValidOutputStream() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullReader(), new DontCloseByteArrayOutputStream()));
     }
 
     @Test
-    public void copyEmptyReaderNullOutputStream() throws Exception {
+    public void copyEmptyReaderNullOutputStream() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(emptyReader(), nullOutputStream()));
     }
 
@@ -1973,9 +1963,9 @@ public class IOUtilTest {
     @Test
     public void copyReaderValidOutputStream() throws Exception {
         ByteArrayOutputStream outputStream = new DontCloseByteArrayOutputStream();
-        String probe = "A string \u2345\u00ef";
+        String probe = "A string ⍅ï";
         IOUtil.copy(new DontCloseStringReader(probe), outputStream);
-        assertThat(outputStream.toByteArray(), is(probe.getBytes()));
+        assertArrayEquals(probe.getBytes(), outputStream.toByteArray());
     }
 
     /*
@@ -1983,71 +1973,71 @@ public class IOUtilTest {
      */
 
     @Test
-    public void copyNullReaderNullOutputStreamNegBufSz() throws Exception {
+    public void copyNullReaderNullOutputStreamNegBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullReader(), nullOutputStream(), -1));
     }
 
     @Test
-    public void copyNullReaderValidOutputStreamNegBufSz() throws Exception {
+    public void copyNullReaderValidOutputStreamNegBufSz() {
         assertThrows(
                 NegativeArraySizeException.class,
                 () -> IOUtil.copy(nullReader(), new DontCloseByteArrayOutputStream(), -1));
     }
 
     @Test
-    public void copyEmptyReaderNullOutputStreamNegBufSz() throws Exception {
+    public void copyEmptyReaderNullOutputStreamNegBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(emptyReader(), nullOutputStream(), -1));
     }
 
     @Test
-    public void copyEmptyReaderValidOutputStreamNegBufSz() throws Exception {
+    public void copyEmptyReaderValidOutputStreamNegBufSz() {
         assertThrows(
                 NegativeArraySizeException.class,
                 () -> IOUtil.copy(emptyReader(), new DontCloseByteArrayOutputStream(), -1));
     }
 
     @Test
-    public void copyReaderValidOutputStreamNegBufSz() throws Exception {
+    public void copyReaderValidOutputStreamNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> {
             ByteArrayOutputStream outputStream = new DontCloseByteArrayOutputStream();
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             IOUtil.copy(new DontCloseStringReader(probe), outputStream, -1);
-            assertThat(outputStream.toByteArray(), is(probe.getBytes()));
+            assertEquals(probe.getBytes(), outputStream.toByteArray());
         });
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyNullReaderNullOutputStreamZeroBufSz() throws Exception {
+    public void copyNullReaderNullOutputStreamZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullReader(), nullOutputStream(), 0));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyNullReaderValidOutputStreamZeroBufSz() throws Exception {
+    public void copyNullReaderValidOutputStreamZeroBufSz() {
         assertThrows(
                 NullPointerException.class, () -> IOUtil.copy(nullReader(), new DontCloseByteArrayOutputStream(), 0));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyEmptyReaderNullOutputStreamZeroBufSz() throws Exception {
+    public void copyEmptyReaderNullOutputStreamZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(emptyReader(), nullOutputStream(), 0));
     }
 
     @Test
-    public void copyNullReaderNullOutputStreamPosBufSz() throws Exception {
+    public void copyNullReaderNullOutputStreamPosBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullReader(), nullOutputStream(), 1));
     }
 
     @Test
-    public void copyNullReaderValidOutputStreamPosBufSz() throws Exception {
+    public void copyNullReaderValidOutputStreamPosBufSz() {
         assertThrows(
                 NullPointerException.class, () -> IOUtil.copy(nullReader(), new DontCloseByteArrayOutputStream(), 1));
     }
 
     @Test
-    public void copyEmptyReaderNullOutputStreamPosBufSz() throws Exception {
+    public void copyEmptyReaderNullOutputStreamPosBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(emptyReader(), nullOutputStream(), 1));
     }
 
@@ -2059,9 +2049,9 @@ public class IOUtilTest {
     @Test
     public void copyReaderValidOutputStreamPosBufSz() throws Exception {
         ByteArrayOutputStream outputStream = new DontCloseByteArrayOutputStream();
-        String probe = "A string \u2345\u00ef";
+        String probe = "A string ⍅ï";
         IOUtil.copy(new DontCloseStringReader(probe), outputStream, 1);
-        assertThat(outputStream.toByteArray(), is(probe.getBytes()));
+        assertArrayEquals(probe.getBytes(), outputStream.toByteArray());
     }
 
     /*
@@ -2084,12 +2074,12 @@ public class IOUtilTest {
      */
 
     @Test
-    public void copyNullByteArrayNullWriter() throws Exception {
+    public void copyNullByteArrayNullWriter() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullByteArray(), nullWriter()));
     }
 
     @Test
-    public void copyEmptyByteArrayNullWriter() throws Exception {
+    public void copyEmptyByteArrayNullWriter() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(emptyByteArray(), nullWriter()));
     }
 
@@ -2097,23 +2087,23 @@ public class IOUtilTest {
     public void copyEmptyByteArrayValidWriter() throws Exception {
         StringWriter writer = new DontCloseStringWriter();
         IOUtil.copy(emptyByteArray(), writer);
-        assertThat(writer.toString(), is(emptyString()));
+        assertEquals(emptyString(), writer.toString());
     }
 
     @Test
-    public void copyByteArrayNullWriter() throws Exception {
+    public void copyByteArrayNullWriter() {
         assertThrows(NullPointerException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             IOUtil.copy(probe.getBytes(), nullWriter());
         });
     }
 
     @Test
     public void copyByteArrayValidWriter() throws Exception {
-        String probe = "A string \u2345\u00ef";
+        String probe = "A string ⍅ï";
         StringWriter writer = new DontCloseStringWriter();
         IOUtil.copy(probe.getBytes(), writer);
-        assertThat(writer.toString().getBytes(), is(probe.getBytes()));
+        assertArrayEquals(probe.getBytes(), writer.toString().getBytes());
     }
 
     /*
@@ -2121,69 +2111,69 @@ public class IOUtilTest {
      */
 
     @Test
-    public void copyNullByteArrayNullWriterNegBufSz() throws Exception {
+    public void copyNullByteArrayNullWriterNegBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullByteArray(), nullWriter(), -1));
     }
 
     @Test
-    public void copyEmptyByteArrayNullWriterNegBufSz() throws Exception {
+    public void copyEmptyByteArrayNullWriterNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> IOUtil.copy(emptyByteArray(), nullWriter(), -1));
     }
 
     @Test
-    public void copyEmptyByteArrayValidWriterNegBufSz() throws Exception {
+    public void copyEmptyByteArrayValidWriterNegBufSz() {
         assertThrows(
                 NegativeArraySizeException.class, () -> IOUtil.copy(emptyByteArray(), new DontCloseStringWriter(), -1));
     }
 
     @Test
-    public void copyByteArrayNullWriterNegBufSz() throws Exception {
+    public void copyByteArrayNullWriterNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             IOUtil.copy(probe.getBytes(), nullWriter(), -1);
         });
     }
 
     @Test
-    public void copyByteArrayValidWriterNegBufSz() throws Exception {
+    public void copyByteArrayValidWriterNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             StringWriter writer = new DontCloseStringWriter();
             IOUtil.copy(probe.getBytes(), writer, -1);
-            assertThat(writer.toString().getBytes(), is(probe.getBytes()));
+            assertArrayEquals(probe.getBytes(), writer.toString().getBytes());
         });
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyNullByteArrayNullWriterZeroBufSz() throws Exception {
+    public void copyNullByteArrayNullWriterZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullByteArray(), nullWriter(), 0));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyNullByteArrayValidWriterZeroBufSz() throws Exception {
+    public void copyNullByteArrayValidWriterZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullByteArray(), new DontCloseStringWriter(), 0));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyEmptyByteArrayNullWriterZeroBufSz() throws Exception {
+    public void copyEmptyByteArrayNullWriterZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(emptyByteArray(), nullWriter(), 0));
     }
 
     @Test
-    public void copyNullByteArrayNullWriterPosBufSz() throws Exception {
+    public void copyNullByteArrayNullWriterPosBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullByteArray(), nullWriter(), 1));
     }
 
     @Test
-    public void copyNullByteArrayValidWriterPosBufSz() throws Exception {
+    public void copyNullByteArrayValidWriterPosBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullByteArray(), new DontCloseStringWriter(), 1));
     }
 
     @Test
-    public void copyEmptyByteArrayNullWriterPosBufSz() throws Exception {
+    public void copyEmptyByteArrayNullWriterPosBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(emptyByteArray(), nullWriter(), 1));
     }
 
@@ -2191,15 +2181,15 @@ public class IOUtilTest {
     public void copyEmptyByteArrayValidWriterPosBufSz() throws Exception {
         StringWriter writer = new DontCloseStringWriter();
         IOUtil.copy(emptyByteArray(), writer, 1);
-        assertThat(writer.toString(), is(emptyString()));
+        assertEquals(emptyString(), writer.toString());
     }
 
     @Test
     public void copyByteArrayValidWriterPosBufSz() throws Exception {
-        String probe = "A string \u2345\u00ef";
+        String probe = "A string ⍅ï";
         StringWriter writer = new DontCloseStringWriter();
         IOUtil.copy(probe.getBytes(), writer, 1);
-        assertThat(writer.toString().getBytes(), is(probe.getBytes()));
+        assertArrayEquals(probe.getBytes(), writer.toString().getBytes());
     }
 
     /*
@@ -2207,89 +2197,89 @@ public class IOUtilTest {
      */
 
     @Test
-    public void copyNullByteArrayNullWriterNullEncoding() throws Exception {
+    public void copyNullByteArrayNullWriterNullEncoding() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullByteArray(), nullWriter(), null));
     }
 
     @Test
-    public void copyNullByteArrayValidWriterNullEncoding() throws Exception {
+    public void copyNullByteArrayValidWriterNullEncoding() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullByteArray(), new DontCloseStringWriter(), null));
     }
 
     @Test
-    public void copyEmptyByteArrayNullWriterNullEncoding() throws Exception {
+    public void copyEmptyByteArrayNullWriterNullEncoding() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(emptyByteArray(), nullWriter(), null));
     }
 
     @Test
-    public void copyEmptyByteArrayValidWriterNullEncoding() throws Exception {
+    public void copyEmptyByteArrayValidWriterNullEncoding() {
         assertThrows(
                 NullPointerException.class, () -> IOUtil.copy(emptyByteArray(), new DontCloseStringWriter(), null));
     }
 
     @Test
-    public void copyByteArrayNullEncoding() throws Exception {
+    public void copyByteArrayNullEncoding() {
         assertThrows(NullPointerException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             StringWriter writer = new DontCloseStringWriter();
             IOUtil.copy(probe.getBytes(), writer, null);
-            assertThat(writer.toString().getBytes(), is(probe.getBytes()));
+            assertArrayEquals(probe.getBytes(), writer.toString().getBytes());
         });
     }
 
     @Test
-    public void copyNullByteArrayNullWriterJunkEncoding() throws Exception {
+    public void copyNullByteArrayNullWriterJunkEncoding() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullByteArray(), nullWriter(), "junk"));
     }
 
     @Test
-    public void copyNullByteArrayValidWriterJunkEncoding() throws Exception {
+    public void copyNullByteArrayValidWriterJunkEncoding() {
         assertThrows(
                 NullPointerException.class, () -> IOUtil.copy(nullByteArray(), new DontCloseStringWriter(), "junk"));
     }
 
     @Test
-    public void copyEmptyByteArrayNullWriterJunkEncoding() throws Exception {
+    public void copyEmptyByteArrayNullWriterJunkEncoding() {
         assertThrows(UnsupportedEncodingException.class, () -> IOUtil.copy(emptyByteArray(), nullWriter(), "junk"));
     }
 
     @Test
-    public void copyEmptyByteArrayValidWriterJunkEncoding() throws Exception {
+    public void copyEmptyByteArrayValidWriterJunkEncoding() {
         assertThrows(
                 UnsupportedEncodingException.class,
                 () -> IOUtil.copy(emptyByteArray(), new DontCloseStringWriter(), "junk"));
     }
 
     @Test
-    public void copyByteArrayNullWriterJunkEncoding() throws Exception {
+    public void copyByteArrayNullWriterJunkEncoding() {
         assertThrows(UnsupportedEncodingException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             IOUtil.copy(probe.getBytes(), nullWriter(), "junk");
         });
     }
 
     @Test
-    public void copyByteArrayValidWriterJunkEncoding() throws Exception {
+    public void copyByteArrayValidWriterJunkEncoding() {
         assertThrows(UnsupportedEncodingException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             StringWriter writer = new DontCloseStringWriter();
             IOUtil.copy(probe.getBytes(), writer, "junk");
-            assertThat(writer.toString().getBytes(), is(probe.getBytes()));
+            assertArrayEquals(probe.getBytes(), writer.toString().getBytes());
         });
     }
 
     @Test
-    public void copyNullByteArrayNullWriterValidEncoding() throws Exception {
+    public void copyNullByteArrayNullWriterValidEncoding() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullByteArray(), nullWriter(), "utf-16"));
     }
 
     @Test
-    public void copyEmptyByteArrayNullWriterValidEncoding() throws Exception {
+    public void copyEmptyByteArrayNullWriterValidEncoding() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(emptyByteArray(), nullWriter(), "utf-16"));
     }
 
     @Test
-    public void copyNullByteArrayValidWriterValidEncoding() throws Exception {
+    public void copyNullByteArrayValidWriterValidEncoding() {
         assertThrows(
                 NullPointerException.class, () -> IOUtil.copy(nullByteArray(), new DontCloseStringWriter(), "utf-16"));
     }
@@ -2298,23 +2288,23 @@ public class IOUtilTest {
     public void copyEmptyByteArrayValidWriterValidEncoding() throws Exception {
         StringWriter writer = new DontCloseStringWriter();
         IOUtil.copy(emptyByteArray(), writer, "utf-16");
-        assertThat(writer.toString(), is(emptyString()));
+        assertEquals(emptyString(), writer.toString());
     }
 
     @Test
-    public void copyByteArrayNullWriterValidEncoding() throws Exception {
+    public void copyByteArrayNullWriterValidEncoding() {
         assertThrows(NullPointerException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             IOUtil.copy(probe.getBytes("utf-16"), nullWriter(), "utf-16");
         });
     }
 
     @Test
     public void copyByteArrayValidWriterValidEncoding() throws Exception {
-        String probe = "A string \u2345\u00ef";
+        String probe = "A string ⍅ï";
         StringWriter writer = new DontCloseStringWriter();
-        IOUtil.copy(probe.getBytes("utf-16"), writer, "utf-16");
-        assertThat(writer.toString().getBytes("utf-8"), is(probe.getBytes("utf-8")));
+        IOUtil.copy(probe.getBytes(UTF_16), writer, "utf-16");
+        assertArrayEquals(probe.getBytes(UTF_8), writer.toString().getBytes(UTF_8));
     }
 
     /*
@@ -2322,243 +2312,243 @@ public class IOUtilTest {
      */
 
     @Test
-    public void copyNullByteArrayNullWriterNullEncodingNegBufSz() throws Exception {
+    public void copyNullByteArrayNullWriterNullEncodingNegBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullByteArray(), nullWriter(), null, -1));
     }
 
     @Test
-    public void copyNullByteArrayValidWriterNullEncodingNegBufSz() throws Exception {
+    public void copyNullByteArrayValidWriterNullEncodingNegBufSz() {
         assertThrows(
                 NullPointerException.class, () -> IOUtil.copy(nullByteArray(), new DontCloseStringWriter(), null, -1));
     }
 
     @Test
-    public void copyEmptyByteArrayNullWriterNullEncodingNegBufSz() throws Exception {
+    public void copyEmptyByteArrayNullWriterNullEncodingNegBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(emptyByteArray(), nullWriter(), null, -1));
     }
 
     @Test
-    public void copyEmptyByteArrayValidWriterNullEncodingNegBufSz() throws Exception {
+    public void copyEmptyByteArrayValidWriterNullEncodingNegBufSz() {
         assertThrows(NullPointerException.class, () -> {
             StringWriter writer = new DontCloseStringWriter();
             IOUtil.copy(emptyByteArray(), writer, null, -1);
-            assertThat(writer.toString(), is(emptyString()));
+            assertEquals(emptyString(), writer.toString());
         });
     }
 
     @Test
-    public void copyByteArrayNullWriterNullEncodingNegBufSz() throws Exception {
+    public void copyByteArrayNullWriterNullEncodingNegBufSz() {
         assertThrows(NullPointerException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             IOUtil.copy(probe.getBytes(), nullWriter(), null, -1);
         });
     }
 
     @Test
-    public void copyByteArrayValidWriterNullEncodingNegBufSz() throws Exception {
+    public void copyByteArrayValidWriterNullEncodingNegBufSz() {
         assertThrows(NullPointerException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             StringWriter writer = new DontCloseStringWriter();
             IOUtil.copy(probe.getBytes(), writer, null, -1);
-            assertThat(writer.toString().getBytes(), is(probe.getBytes()));
+            assertArrayEquals(probe.getBytes(), writer.toString().getBytes());
         });
     }
 
     @Test
-    public void copyNullByteArrayNullWriterJunkEncodingNegBufSz() throws Exception {
+    public void copyNullByteArrayNullWriterJunkEncodingNegBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullByteArray(), nullWriter(), "junk", -1));
     }
 
     @Test
-    public void copyNullByteArrayValidWriterJunkEncodingNegBufSz() throws Exception {
+    public void copyNullByteArrayValidWriterJunkEncodingNegBufSz() {
         assertThrows(
                 NullPointerException.class,
                 () -> IOUtil.copy(nullByteArray(), new DontCloseStringWriter(), "junk", -1));
     }
 
     @Test
-    public void copyEmptyByteArrayNullWriterJunkEncodingNegBufSz() throws Exception {
+    public void copyEmptyByteArrayNullWriterJunkEncodingNegBufSz() {
         assertThrows(UnsupportedEncodingException.class, () -> IOUtil.copy(emptyByteArray(), nullWriter(), "junk", -1));
     }
 
     @Test
-    public void copyEmptyByteArrayJunkEncodingNegBufSz() throws Exception {
+    public void copyEmptyByteArrayJunkEncodingNegBufSz() {
         assertThrows(UnsupportedEncodingException.class, () -> {
             StringWriter writer = new DontCloseStringWriter();
             IOUtil.copy(emptyByteArray(), writer, "junk", -1);
-            assertThat(writer.toString(), is(emptyString()));
+            assertEquals(emptyString(), writer.toString());
         });
     }
 
     @Test
-    public void copyByteArrayNullWriterJunkEncodingNegBufSz() throws Exception {
+    public void copyByteArrayNullWriterJunkEncodingNegBufSz() {
         assertThrows(UnsupportedEncodingException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             IOUtil.copy(probe.getBytes(), nullWriter(), "junk", -1);
         });
     }
 
     @Test
-    public void copyByteArrayValidWriterJunkEncodingNegBufSz() throws Exception {
+    public void copyByteArrayValidWriterJunkEncodingNegBufSz() {
         assertThrows(UnsupportedEncodingException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             StringWriter writer = new DontCloseStringWriter();
             IOUtil.copy(probe.getBytes(), writer, "junk", -1);
-            assertThat(writer.toString().getBytes(), is(probe.getBytes()));
+            assertArrayEquals(probe.getBytes(), writer.toString().getBytes());
         });
     }
 
     @Test
-    public void copyNullByteArrayNullWriterValidEncodingNegBufSz() throws Exception {
+    public void copyNullByteArrayNullWriterValidEncodingNegBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullByteArray(), nullWriter(), "utf-16", -1));
     }
 
     @Test
-    public void copyNullByteArrayValidWriterValidEncodingNegBufSz() throws Exception {
+    public void copyNullByteArrayValidWriterValidEncodingNegBufSz() {
         assertThrows(
                 NullPointerException.class,
                 () -> IOUtil.copy(nullByteArray(), new DontCloseStringWriter(), "utf-16", -1));
     }
 
     @Test
-    public void copyEmptyByteArrayNullWriterValidEncodingNegBufSz() throws Exception {
+    public void copyEmptyByteArrayNullWriterValidEncodingNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> IOUtil.copy(emptyByteArray(), nullWriter(), "utf-16", -1));
     }
 
     @Test
-    public void copyEmptyByteArrayValidWriterValidEncodingNegBufSz() throws Exception {
+    public void copyEmptyByteArrayValidWriterValidEncodingNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> {
             StringWriter writer = new DontCloseStringWriter();
             IOUtil.copy(emptyByteArray(), writer, "utf-16", -1);
-            assertThat(writer.toString(), is(emptyString()));
+            assertEquals(emptyString(), writer.toString());
         });
     }
 
     @Test
-    public void copyByteArrayNullWriterValidEncodingNegBufSz() throws Exception {
+    public void copyByteArrayNullWriterValidEncodingNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             IOUtil.copy(probe.getBytes("utf-16"), nullWriter(), -1);
         });
     }
 
     @Test
-    public void copyByteArrayValidEncodingNegBufSz() throws Exception {
+    public void copyByteArrayValidEncodingNegBufSz() {
         assertThrows(NegativeArraySizeException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             StringWriter writer = new DontCloseStringWriter();
             IOUtil.copy(probe.getBytes("utf-16"), writer, "utf-16", -1);
-            assertThat(writer.toString().getBytes("utf-8"), is(probe.getBytes("utf-8")));
+            assertEquals(probe.getBytes("utf-8"), writer.toString().getBytes("utf-8"));
         });
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyNullByteArrayNullWriterNullEncodingZeroBufSz() throws Exception {
+    public void copyNullByteArrayNullWriterNullEncodingZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullByteArray(), nullWriter(), null, 0));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyNullByteArrayValidWriterNullEncodingZeroBufSz() throws Exception {
+    public void copyNullByteArrayValidWriterNullEncodingZeroBufSz() {
         assertThrows(
                 NullPointerException.class, () -> IOUtil.copy(nullByteArray(), new DontCloseStringWriter(), null, 0));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyEmptyByteArrayNullWriterNullEncodingZeroBufSz() throws Exception {
+    public void copyEmptyByteArrayNullWriterNullEncodingZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(emptyByteArray(), nullWriter(), null, 0));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyEmptyByteArrayValidWriterNullEncodingZeroBufSz() throws Exception {
+    public void copyEmptyByteArrayValidWriterNullEncodingZeroBufSz() {
         assertThrows(NullPointerException.class, () -> {
             StringWriter writer = new DontCloseStringWriter();
             IOUtil.copy(emptyByteArray(), writer, null, 0);
-            assertThat(writer.toString(), is(emptyString()));
+            assertEquals(emptyString(), writer.toString());
         });
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyByteArrayNullWriterNullEncodingZeroBufSz() throws Exception {
+    public void copyByteArrayNullWriterNullEncodingZeroBufSz() {
         assertThrows(NullPointerException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             IOUtil.copy(probe.getBytes(), nullWriter(), null, 0);
         });
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyByteArrayValidWriterNullEncodingZeroBufSz() throws Exception {
+    public void copyByteArrayValidWriterNullEncodingZeroBufSz() {
         assertThrows(NullPointerException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             StringWriter writer = new DontCloseStringWriter();
             IOUtil.copy(probe.getBytes(), writer, null, 0);
-            assertThat(writer.toString().getBytes(), is(probe.getBytes()));
+            assertArrayEquals(probe.getBytes(), writer.toString().getBytes());
         });
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyNullByteArrayNullWriterJunkEncodingZeroBufSz() throws Exception {
+    public void copyNullByteArrayNullWriterJunkEncodingZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullByteArray(), nullWriter(), "junk", 0));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyNullByteArrayValidWriterJunkEncodingZeroBufSz() throws Exception {
+    public void copyNullByteArrayValidWriterJunkEncodingZeroBufSz() {
         assertThrows(
                 NullPointerException.class, () -> IOUtil.copy(nullByteArray(), new DontCloseStringWriter(), "junk", 0));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyEmptyByteArrayNullWriterJunkEncodingZeroBufSz() throws Exception {
+    public void copyEmptyByteArrayNullWriterJunkEncodingZeroBufSz() {
         assertThrows(UnsupportedEncodingException.class, () -> IOUtil.copy(emptyByteArray(), nullWriter(), "junk", 0));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyEmptyByteArrayValidWriterJunkEncodingZeroBufSz() throws Exception {
+    public void copyEmptyByteArrayValidWriterJunkEncodingZeroBufSz() {
         assertThrows(UnsupportedEncodingException.class, () -> {
             StringWriter writer = new DontCloseStringWriter();
             IOUtil.copy(emptyByteArray(), writer, "junk", 0);
-            assertThat(writer.toString(), is(emptyString()));
+            assertEquals(emptyString(), writer.toString());
         });
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyByteArrayNullWriterJunkEncodingZeroBufSz() throws Exception {
+    public void copyByteArrayNullWriterJunkEncodingZeroBufSz() {
         assertThrows(UnsupportedEncodingException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             IOUtil.copy(probe.getBytes(), nullWriter(), "junk", 0);
         });
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyByteArrayValidWriterJunkEncodingZeroBufSz() throws Exception {
+    public void copyByteArrayValidWriterJunkEncodingZeroBufSz() {
         assertThrows(UnsupportedEncodingException.class, () -> {
-            String probe = "A string \u2345\u00ef";
+            String probe = "A string ⍅ï";
             StringWriter writer = new DontCloseStringWriter();
             IOUtil.copy(probe.getBytes(), writer, "junk", 0);
-            assertThat(writer.toString().getBytes(), is(probe.getBytes()));
+            assertArrayEquals(probe.getBytes(), writer.toString().getBytes());
         });
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyNullByteArrayNullWriterValidEncodingZeroBufSz() throws Exception {
+    public void copyNullByteArrayNullWriterValidEncodingZeroBufSz() {
         assertThrows(NullPointerException.class, () -> IOUtil.copy(nullByteArray(), nullWriter(), "utf-16", 0));
     }
 
     @Test
     @Timeout(value = INFINITE_LOOP_TIMEOUT, unit = TimeUnit.MILLISECONDS)
-    public void copyNullByteArrayValidWriterValidEncodingZeroBufSz() throws Exception {
+    public void copyNullByteArrayValidWriterValidEncodingZeroBufSz() {
         assertThrows(
                 NullPointerException.class,
                 () -> IOUtil.copy(nullByteArray(), new DontCloseStringWriter(), "utf-16", 0));
@@ -2609,7 +2599,7 @@ public class IOUtilTest {
 
     private static class DontCloseStringWriter extends StringWriter {
         @Override
-        public void close() throws IOException {
+        public void close() {
             throw new UnsupportedOperationException("should not be called");
         }
     }
@@ -2632,14 +2622,14 @@ public class IOUtilTest {
         }
 
         @Override
-        public void close() throws IOException {
+        public void close() {
             throw new UnsupportedOperationException("should not be called");
         }
     }
 
     private static class DontCloseByteArrayOutputStream extends ByteArrayOutputStream {
         @Override
-        public void close() throws IOException {
+        public void close() {
             throw new UnsupportedOperationException("should not be called");
         }
     }
