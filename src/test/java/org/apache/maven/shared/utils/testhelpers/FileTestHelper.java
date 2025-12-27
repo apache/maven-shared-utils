@@ -19,11 +19,12 @@
 package org.apache.maven.shared.utils.testhelpers;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 import org.apache.commons.io.FileUtils;
 
@@ -49,7 +50,7 @@ public final class FileTestHelper {
             testfile.delete();
         }
 
-        try (OutputStream os = new FileOutputStream(testfile)) {
+        try (OutputStream os = Files.newOutputStream(testfile.toPath())) {
             generateTestData(os, size);
             os.flush();
         }
@@ -60,7 +61,7 @@ public final class FileTestHelper {
             throw new IOException("Cannot create file " + file + " as the parent directory does not exist");
         }
 
-        try (Writer out = new OutputStreamWriter(new FileOutputStream(file), "UTF-8")) {
+        try (Writer out = new OutputStreamWriter(Files.newOutputStream(file.toPath()), StandardCharsets.UTF_8)) {
             for (String aData : data) {
                 out.write(aData);
                 out.write(System.lineSeparator());
@@ -72,9 +73,8 @@ public final class FileTestHelper {
      * Check if the given file exists in the given folder and remove it.
      *
      * @return the File object for a new file
-     * @throws IOException
      */
-    public static File newFile(File folder, String filename) throws IOException {
+    public static File newFile(File folder, String filename) {
         File destination = new File(folder, filename);
 
         if (destination.exists()) {

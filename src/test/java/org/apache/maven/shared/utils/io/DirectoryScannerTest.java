@@ -26,16 +26,15 @@ import java.util.List;
 
 import org.apache.maven.shared.utils.Os;
 import org.apache.maven.shared.utils.testhelpers.FileTestHelper;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 @SuppressWarnings("deprecation")
@@ -49,7 +48,7 @@ public class DirectoryScannerTest {
         File rootDir = tempFolder;
         File folder1 = new File(rootDir, "folder1");
         if (!folder1.mkdirs()) {
-            Assertions.fail();
+            fail();
         }
 
         FileTestHelper.generateTestFile(new File(rootDir, "file1.txt"), 11);
@@ -61,7 +60,7 @@ public class DirectoryScannerTest {
 
         File folder2 = new File(folder1, "ignorefolder");
         if (!folder2.mkdirs()) {
-            Assertions.fail();
+            fail();
         }
         FileTestHelper.generateTestFile(new File(folder2, "file7.txt"), 17);
     }
@@ -158,9 +157,9 @@ public class DirectoryScannerTest {
                         /* expNotInclDirs  */ new String[] {"", "folder1"},
                         /* expExclFiles    */ NONE,
                         /* expExclDirs     */ NONE));
-        assertThat(
-                exception.getMessage(),
-                containsString("If a non-null " + listName + " list is given, all elements must be non-null"));
+        assertTrue(exception
+                .getMessage()
+                .contains("If a non-null " + listName + " list is given, all elements must be non-null"));
     }
 
     @Test
@@ -279,6 +278,7 @@ public class DirectoryScannerTest {
     /**
      * Performs a scan and test for the given parameters if not null.
      */
+    @SuppressWarnings("SameParameterValue")
     private void fitScanTest(
             boolean caseSensitive,
             boolean followSymLinks,
@@ -320,10 +320,7 @@ public class DirectoryScannerTest {
         checkFiles("expectedExcludedFiles", expectedExcludedFiles, ds.getExcludedFiles());
         checkFiles("expectedExcludedDirectories", expectedExcludedDirectories, ds.getExcludedDirectories());
 
-        checkFiles(
-                "visitedFiles",
-                expectedIncludedFiles,
-                scanConductor.visitedFiles.toArray(new String[scanConductor.visitedFiles.size()]));
+        checkFiles("visitedFiles", expectedIncludedFiles, scanConductor.visitedFiles.toArray(new String[0]));
     }
 
     /**
@@ -336,7 +333,7 @@ public class DirectoryScannerTest {
         if (expectedFiles != null) {
             String msg = category + " expected: " + Arrays.toString(expectedFiles) + " but got: "
                     + Arrays.toString(resolvedFiles);
-            Assertions.assertNotNull(resolvedFiles, msg);
+            assertNotNull(resolvedFiles, msg);
             assertEquals(expectedFiles.length, resolvedFiles.length, msg);
 
             Arrays.sort(expectedFiles);
@@ -385,7 +382,7 @@ public class DirectoryScannerTest {
 
         DirectoryScanner dss = new DirectoryScanner();
         dss.setBasedir(tempFolder);
-        Assertions.assertNotNull(dss);
+        assertNotNull(dss);
 
         // we take the initial snapshot
         dss.scan();
@@ -400,8 +397,8 @@ public class DirectoryScannerTest {
 
         String[] addedFiles = dsr.getFilesAdded();
         String[] removedFiles = dsr.getFilesRemoved();
-        Assertions.assertNotNull(addedFiles);
-        Assertions.assertNotNull(removedFiles);
+        assertNotNull(addedFiles);
+        assertNotNull(removedFiles);
         assertEquals(1, addedFiles.length);
         assertEquals(2, removedFiles.length);
     }
@@ -447,7 +444,7 @@ public class DirectoryScannerTest {
             directoryScanner.scan();
 
             DirectoryScanResult directoryScanResult = directoryScanner.diffIncludedFiles(oldFiles);
-            Assertions.assertNotNull(directoryScanResult);
+            assertNotNull(directoryScanResult);
 
             FileUtils.deleteDirectory(rootFolder);
             rootFolder.mkdir();

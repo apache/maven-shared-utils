@@ -171,16 +171,13 @@ public class MessageUtils {
     public static void registerShutdownHook() {
         if (JANSI && shutdownHook == null) {
             // No shutdown hook registered yet.
-            shutdownHook = new Thread() {
-                @Override
-                public void run() {
-                    synchronized (STARTUP_SHUTDOWN_MONITOR) {
-                        while (AnsiConsole.isInstalled()) {
-                            doSystemUninstall();
-                        }
+            shutdownHook = new Thread(() -> {
+                synchronized (STARTUP_SHUTDOWN_MONITOR) {
+                    while (AnsiConsole.isInstalled()) {
+                        doSystemUninstall();
                     }
                 }
-            };
+            });
             Runtime.getRuntime().addShutdownHook(shutdownHook);
         }
     }

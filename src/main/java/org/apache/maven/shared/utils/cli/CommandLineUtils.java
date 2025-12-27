@@ -386,7 +386,7 @@ public abstract class CommandLineUtils {
         final int inDoubleQuote = 2;
         boolean inEscape = false;
         int state = normal;
-        final StringTokenizer tok = new StringTokenizer(toProcess, "\"\' \\", true);
+        final StringTokenizer tok = new StringTokenizer(toProcess, "\"' \\", true);
         List<String> tokens = new ArrayList<>();
         StringBuilder current = new StringBuilder();
 
@@ -394,7 +394,7 @@ public abstract class CommandLineUtils {
             String nextTok = tok.nextToken();
             switch (state) {
                 case inQuote:
-                    if ("\'".equals(nextTok)) {
+                    if ("'".equals(nextTok)) {
                         if (inEscape) {
                             current.append(nextTok);
                             inEscape = false;
@@ -420,7 +420,7 @@ public abstract class CommandLineUtils {
                     }
                     break;
                 default:
-                    if ("\'".equals(nextTok)) {
+                    if ("'".equals(nextTok)) {
                         if (inEscape) {
                             inEscape = false;
                             current.append(nextTok);

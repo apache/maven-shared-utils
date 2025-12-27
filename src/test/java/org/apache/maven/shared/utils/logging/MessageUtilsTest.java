@@ -30,10 +30,9 @@ import org.fusesource.jansi.AnsiType;
 import org.fusesource.jansi.io.AnsiOutputStream;
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.sameInstance;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 public class MessageUtilsTest {
     @Test
@@ -41,7 +40,7 @@ public class MessageUtilsTest {
         PrintStream currentOut = System.out;
         try {
             MessageUtils.systemInstall();
-            assertThat(System.out, not(sameInstance(currentOut)));
+            assertNotSame(System.out, currentOut);
         } catch (LinkageError e) {
             //            assumeNoException("JAnsi not supported for this platform", e);
         } finally {
@@ -53,17 +52,13 @@ public class MessageUtilsTest {
                 // ignore any thrown exception like NPE here
             }
         }
-        assertThat(System.out, sameInstance(currentOut));
+        assertSame(System.out, currentOut);
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     public void testTerminalWidth() {
-        AnsiOutputStream.WidthSupplier width = new AnsiOutputStream.WidthSupplier() {
-            @Override
-            public int getTerminalWidth() {
-                return 33;
-            }
-        };
+        AnsiOutputStream.WidthSupplier width = () -> 33;
         AnsiOutputStream aos = new AnsiOutputStream(
                 new ByteArrayOutputStream(),
                 width,

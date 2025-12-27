@@ -443,7 +443,6 @@ public class FileUtils {
     @Deprecated
     public static void fileDelete(@Nonnull String fileName) {
         File file = new File(fileName);
-        //noinspection ResultOfMethodCallIgnored
         deleteLegacyStyle(file);
     }
 

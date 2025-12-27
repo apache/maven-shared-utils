@@ -219,7 +219,6 @@ public class Xpp3DomBuilder {
         }
 
         private void appendToTopValue(String toAppend) {
-            // noinspection MismatchedQueryAndUpdateOfStringBuilder
             StringBuilder stringBuilder = values.get(values.size() - 1);
             stringBuilder.append(toAppend);
         }

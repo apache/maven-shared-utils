@@ -27,14 +27,13 @@ import java.util.Properties;
 import org.apache.maven.shared.utils.Os;
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItemInArray;
-import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+@SuppressWarnings("deprecation")
 public class CommandLineUtilsTest {
 
     /**
@@ -156,7 +155,7 @@ public class CommandLineUtilsTest {
         String[] environmentVariables = commandline.getEnvironmentVariables();
 
         assertNotNull(environmentVariables);
-        assertThat(environmentVariables, not(hasItemInArray("TEST_NULL_ENV=null")));
+        assertFalse(Arrays.asList(environmentVariables).contains("TEST_NULL_ENV=null"));
     }
 
     @Test
@@ -167,7 +166,7 @@ public class CommandLineUtilsTest {
         String[] environmentVariables = commandline.getEnvironmentVariables();
 
         assertNotNull(environmentVariables);
-        assertThat(environmentVariables, hasItemInArray("TEST_SHARED_ENV=TestValue"));
+        assertTrue(Arrays.asList(environmentVariables).contains("TEST_SHARED_ENV=TestValue"));
     }
 
     @Test
@@ -191,6 +190,6 @@ public class CommandLineUtilsTest {
         String[] environmentVariables = commandline.getEnvironmentVariables();
 
         assertNotNull(environmentVariables);
-        assertThat(environmentVariables, not(hasItemInArray("TEST_SHARED_ENV=TestValue")));
+        assertFalse(Arrays.asList(environmentVariables).contains("TEST_SHARED_ENV=TestValue"));
     }
 }
