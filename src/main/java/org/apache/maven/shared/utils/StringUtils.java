@@ -71,7 +71,9 @@ public class StringUtils {
      * @param str the String to check
      * @return the cleaned text (never <code>null</code>)
      * @see java.lang.String#trim()
+     * @deprecated use {@link #trim(String)} instead.
      */
+    @Deprecated
     @Nonnull
     public static String clean(String str) {
         return (str == null ? "" : str.trim());
