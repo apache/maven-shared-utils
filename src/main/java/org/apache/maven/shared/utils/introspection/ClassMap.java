@@ -32,7 +32,6 @@ import java.util.Map;
  * @author <a href="mailto:bob@werken.com">Bob McWhirter</a>
  * @author <a href="mailto:szegedia@freemail.hu">Attila Szegedi</a>
  * @author <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
- *
  */
 public class ClassMap {
     private static final class CacheMiss {}
@@ -56,8 +55,9 @@ public class ClassMap {
     private MethodMap methodMap = new MethodMap();
 
     /**
-     * Standard constructor
-     * @param clazz The class.
+     * Standard constructor.
+     *
+     * @param clazz the class
      */
     public ClassMap(Class<?> clazz) {
         this.clazz = clazz;
@@ -65,7 +65,7 @@ public class ClassMap {
     }
 
     /**
-     * @return the class object whose methods are cached by this map.
+     * @return the class object whose methods are cached by this map
      */
     Class<?> getCachedClass() {
         return clazz;
@@ -79,10 +79,11 @@ public class ClassMap {
      * case, we return it.</p>
      * <p>If nothing is found, then we must actually go
      * and introspect the method from the MethodMap.</p>
-     * @param name Method name.
-     * @param params Method parameters.
-     * @return The found method.
-     * @throws MethodMap.AmbiguousException in case of duplicate methods.
+     *
+     * @param name method name
+     * @param params method parameters
+     * @return the found method
+     * @throws MethodMap.AmbiguousException in case of duplicate methods
      */
     public Method findMethod(String name, Object... params) throws MethodMap.AmbiguousException {
         String methodKey = makeMethodKey(name, params);
@@ -267,7 +268,7 @@ public class ClassMap {
      * Recursively finds a match for each method, starting with the class, and then
      * searching the superclass and interfaces.
      *
-     * @param clazz       Class to check
+     * @param clazz       class to check
      * @param methodInfos array of methods we are searching to match
      * @param upcastCount current number of methods we have matched
      * @return count of matched methods
@@ -353,7 +354,7 @@ public class ClassMap {
      * and signature declared in a public superclass or implemented interface of this
      * method's declaring class. This counterpart method is publicly callable.
      *
-     * @param method a method whose publicly callable counterpart is requested.
+     * @param method a method whose publicly callable counterpart is requested
      * @return the publicly callable counterpart method. Note that if the parameter
      *         method is itself declared by a public class, this method is an identity
      *         function.

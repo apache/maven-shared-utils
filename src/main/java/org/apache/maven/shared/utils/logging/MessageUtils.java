@@ -28,15 +28,16 @@ import org.fusesource.jansi.AnsiMode;
  * <p>
  * Internally, <a href="http://fusesource.github.io/jansi/">Jansi</a> is used to render
  * <a href="https://en.wikipedia.org/wiki/ANSI_escape_code#Colors">ANSI colors</a> on any platform.
+ *
  * @since 3.1.0
  */
 public class MessageUtils {
     private static final boolean JANSI;
 
-    /** Reference to the JVM shutdown hook, if registered */
+    /** Reference to the JVM shutdown hook, if registered. */
     private static Thread shutdownHook;
 
-    /** Synchronization monitor for the "uninstall" */
+    /** Synchronization monitor for the "uninstall". */
     private static final Object STARTUP_SHUTDOWN_MONITOR = new Object();
 
     static {
@@ -88,6 +89,7 @@ public class MessageUtils {
 
     /**
      * Enables message color (if Jansi is available).
+     *
      * @param flag to enable Jansi
      */
     public static void setColorEnabled(boolean flag) {
@@ -108,6 +110,7 @@ public class MessageUtils {
 
     /**
      * Is message color enabled: requires Jansi available (through Maven) and the color has not been disabled.
+     *
      * @return whether colored messages are enabled
      */
     public static boolean isColorEnabled() {
@@ -116,6 +119,7 @@ public class MessageUtils {
 
     /**
      * Create a default message buffer.
+     *
      * @return a new buffer
      */
     public static MessageBuilder buffer() {
@@ -124,6 +128,7 @@ public class MessageUtils {
 
     /**
      * Create a message buffer with defined String builder.
+     *
      * @param builder initial content of the message buffer
      * @return a new buffer
      */
@@ -133,6 +138,7 @@ public class MessageUtils {
 
     /**
      * Create a message buffer with an internal buffer of defined size.
+     *
      * @param size size of the buffer
      * @return a new buffer
      */
@@ -142,6 +148,7 @@ public class MessageUtils {
 
     /**
      * Create a logger level renderer.
+     *
      * @return a logger level renderer
      * @since 3.2.0
      */
@@ -152,6 +159,7 @@ public class MessageUtils {
 
     /**
      * Remove any ANSI code from a message (colors or other escape sequences).
+     *
      * @param msg message eventually containing ANSI codes
      * @return the message with ANSI codes removed
      */
@@ -162,7 +170,7 @@ public class MessageUtils {
     /**
      * Register a shutdown hook with the JVM runtime, uninstalling Ansi support on
      * JVM shutdown unless is has already been uninstalled at that time.
-     * <p>Delegates to {@link #doSystemUninstall()} for the actual uninstall procedure
+     * <p>Delegates to {@link #doSystemUninstall()} for the actual uninstall procedure.
      *
      * @see Runtime#addShutdownHook(Thread)
      * @see MessageUtils#systemUninstall()
@@ -171,16 +179,13 @@ public class MessageUtils {
     public static void registerShutdownHook() {
         if (JANSI && shutdownHook == null) {
             // No shutdown hook registered yet.
-            shutdownHook = new Thread() {
-                @Override
-                public void run() {
-                    synchronized (STARTUP_SHUTDOWN_MONITOR) {
-                        while (AnsiConsole.isInstalled()) {
-                            doSystemUninstall();
-                        }
+            shutdownHook = new Thread(() -> {
+                synchronized (STARTUP_SHUTDOWN_MONITOR) {
+                    while (AnsiConsole.isInstalled()) {
+                        doSystemUninstall();
                     }
                 }
-            };
+            });
             Runtime.getRuntime().addShutdownHook(shutdownHook);
         }
     }

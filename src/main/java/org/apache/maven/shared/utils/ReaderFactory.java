@@ -18,8 +18,6 @@
  */
 package org.apache.maven.shared.utils;
 
-import javax.annotation.Nonnull;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -33,6 +31,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 
 import org.apache.commons.io.input.XmlStreamReader;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Utility to create Readers from streams, with explicit encoding choice: platform default,
@@ -101,6 +100,7 @@ public class ReaderFactory {
 
     /**
      * The <code>file.encoding</code> System Property.
+     *
      * @deprecated use {@code java.nio.charset.Charset.getDefaultCharset()}
      */
     @Deprecated
@@ -115,7 +115,7 @@ public class ReaderFactory {
      * @deprecated use {@code org.apache.commons.io.input.XmlStreamReader} instead
      */
     @Deprecated
-    public static Reader newXmlReader(@Nonnull InputStream in) throws IOException {
+    public static Reader newXmlReader(@NonNull InputStream in) throws IOException {
         return new XmlStreamReader(in);
     }
 
@@ -128,7 +128,7 @@ public class ReaderFactory {
      * @deprecated use {}@code org.apache.commons.io.input.XmlStreamReader} instead
      */
     @Deprecated
-    public static Reader newXmlReader(@Nonnull File file) throws IOException {
+    public static Reader newXmlReader(@NonNull File file) throws IOException {
         return new XmlStreamReader(file);
     }
 
@@ -141,21 +141,21 @@ public class ReaderFactory {
      * @deprecated use {@code org.apache.commons.io.input.XmlStreamReader} instead
      */
     @Deprecated
-    public static Reader newXmlReader(@Nonnull URL url) throws IOException {
+    public static Reader newXmlReader(@NonNull URL url) throws IOException {
         return new XmlStreamReader(url);
     }
 
     /**
      * Create a new Reader with default platform encoding.
      *
-     * @param file not null file.
+     * @param file not null file
      * @return a reader instance for the input file using the default platform character set
      * @throws FileNotFoundException if any
      * @see java.nio.charset.Charset#defaultCharset()
      * @deprecated always specify an encoding. Do not depend on the default platform character set.
      */
     @Deprecated
-    public static Reader newPlatformReader(@Nonnull File file) throws FileNotFoundException {
+    public static Reader newPlatformReader(@NonNull File file) throws FileNotFoundException {
         return new FileReader(file);
     }
 
@@ -172,7 +172,7 @@ public class ReaderFactory {
      * @deprecated use {@code new InputStreamReader(in, encoding)} instead
      */
     @Deprecated
-    public static Reader newReader(@Nonnull InputStream in, @Nonnull String encoding)
+    public static Reader newReader(@NonNull InputStream in, @NonNull String encoding)
             throws UnsupportedEncodingException {
         return new InputStreamReader(in, encoding);
     }
@@ -192,7 +192,7 @@ public class ReaderFactory {
      *    or {@code new Files.newBufferedReader} instead
      */
     @Deprecated
-    public static Reader newReader(@Nonnull File file, @Nonnull String encoding)
+    public static Reader newReader(@NonNull File file, @NonNull String encoding)
             throws FileNotFoundException, UnsupportedEncodingException {
         return new InputStreamReader(new FileInputStream(file), encoding);
     }
@@ -211,7 +211,7 @@ public class ReaderFactory {
      * @deprecated This method does not use HTTP headers to detect the resource's encoding.
      */
     @Deprecated
-    public static Reader newReader(@Nonnull URL url, @Nonnull String encoding) throws IOException {
+    public static Reader newReader(@NonNull URL url, @NonNull String encoding) throws IOException {
         return new InputStreamReader(url.openStream(), encoding);
     }
 }

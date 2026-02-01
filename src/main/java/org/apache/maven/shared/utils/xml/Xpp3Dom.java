@@ -18,8 +18,6 @@
  */
 package org.apache.maven.shared.utils.xml;
 
-import javax.annotation.Nonnull;
-
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -28,6 +26,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.jspecify.annotations.NonNull;
 
 /**
  * A reimplementation of Plexus Xpp3Dom based on the public interface of Plexus Xpp3Dom.
@@ -88,7 +88,7 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
     private static final Xpp3Dom[] EMPTY_DOM_ARRAY = new Xpp3Dom[0];
 
     /**
-     * @param name The name of the instance.
+     * @param name the name of the instance
      */
     public Xpp3Dom(String name) {
         this.name = name;
@@ -98,7 +98,8 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
 
     /**
      * Create instance.
-     * @param source The source.
+     *
+     * @param source the source
      */
     public Xpp3Dom(Xpp3Dom source) {
         this(source, source.getName());
@@ -106,10 +107,11 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
 
     /**
      * Create instance.
-     * @param src The source Dom.
-     * @param name The name of the Dom.
+     *
+     * @param src the source Dom
+     * @param name the name of the Dom
      */
-    public Xpp3Dom(@Nonnull Xpp3Dom src, String name) {
+    public Xpp3Dom(@NonNull Xpp3Dom src, String name) {
         this.name = name;
 
         int size = src.getChildCount();
@@ -128,29 +130,29 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
     }
 
     /**
-     * @return The current name.
+     * @return the current name
      */
     public String getName() {
         return name;
     }
 
     /**
-     * @return The current value.
+     * @return the current value
      */
-    @Nonnull
+    @NonNull
     public String getValue() {
         return value;
     }
 
     /**
-     * @param value The value to be set.
+     * @param value the value to be set
      */
-    public void setValue(@Nonnull String value) {
+    public void setValue(@NonNull String value) {
         this.value = value;
     }
 
     /**
-     * @return The array of attribute names.
+     * @return the array of attribute names
      */
     public String[] getAttributeNames() {
         boolean isNothing = attributes == null || attributes.isEmpty();
@@ -158,18 +160,18 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
     }
 
     /**
-     * @param nameParameter The name of the attribute.
-     * @return The attribute value.
+     * @param nameParameter the name of the attribute
+     * @return the attribute value
      */
     public String getAttribute(String nameParameter) {
         return this.attributes != null ? this.attributes.get(nameParameter) : null;
     }
 
     /**
-     * @param nameParameter The name of the attribute.
-     * @param valueParameter The value of the attribute.
+     * @param nameParameter the name of the attribute
+     * @param valueParameter the value of the attribute
      */
-    public void setAttribute(@Nonnull String nameParameter, @Nonnull String valueParameter) {
+    public void setAttribute(@NonNull String nameParameter, @NonNull String valueParameter) {
         if (valueParameter == null) {
             throw new NullPointerException("value can not be null");
         }
@@ -184,23 +186,23 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
     }
 
     /**
-     * @param i The index to be selected.
-     * @return The child selected by index.
+     * @param i the index to be selected
+     * @return the child selected by index
      */
     public Xpp3Dom getChild(int i) {
         return childList.get(i);
     }
 
     /**
-     * @param nameParameter The name of the child.
-     * @return The child selected by name.
+     * @param nameParameter the name of the child
+     * @return the child selected by name
      */
     public Xpp3Dom getChild(String nameParameter) {
         return childMap.get(nameParameter);
     }
 
     /**
-     * @param child The child to be added.
+     * @param child the child to be added
      */
     public void addChild(Xpp3Dom child) {
         child.setParent(this);
@@ -209,7 +211,7 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
     }
 
     /**
-     * @return The array of childs.
+     * @return the array of childs
      */
     public Xpp3Dom[] getChildren() {
         boolean isNothing = childList == null || childList.isEmpty();
@@ -222,8 +224,8 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
     }
 
     /**
-     * @param nameParameter The name of the child.
-     * @return The array of the Dom.
+     * @param nameParameter the name of the child
+     * @return the array of the Dom
      */
     public Xpp3Dom[] getChildren(String nameParameter) {
         List<Xpp3Dom> children = getChildrenList(nameParameter);
@@ -245,7 +247,7 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
     }
 
     /**
-     * @return The number of childs.
+     * @return the number of childs
      */
     public int getChildCount() {
         if (childList == null) {
@@ -256,7 +258,7 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
     }
 
     /**
-     * @param i The child to be removed.
+     * @param i the child to be removed
      */
     public void removeChild(int i) {
         Xpp3Dom child = childList.remove(i);
@@ -265,39 +267,41 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
     }
 
     /**
-     * @return The current parent.
+     * @return the current parent
      */
     public Xpp3Dom getParent() {
         return parent;
     }
 
     /**
-     * @param parent Set the parent.
+     * @param parent set the parent
      */
     public void setParent(Xpp3Dom parent) {
         this.parent = parent;
     }
 
     /**
-     * @param dominant The dominant part.
-     * @param recessive The recessive part.
-     * @param childMergeOverride true if child merge will take precedence false otherwise.
-     * @return The merged Xpp3Dom.
+     * @param dominant the dominant part
+     * @param recessive the recessive part
+     * @param childMergeOverride true if child merge will take precedence false otherwise
+     * @return the merged Xpp3Dom
      */
     public static Xpp3Dom mergeXpp3Dom(Xpp3Dom dominant, Xpp3Dom recessive, Boolean childMergeOverride) {
         return Xpp3DomUtils.mergeXpp3Dom(dominant, recessive, childMergeOverride);
     }
 
     /**
-     * @param dominant The dominant part.
-     * @param recessive The recessive part.
-     * @return The merged Xpp3Dom.
+     * @param dominant the dominant part
+     * @param recessive the recessive part
+     * @return the merged Xpp3Dom
      */
     public static Xpp3Dom mergeXpp3Dom(Xpp3Dom dominant, Xpp3Dom recessive) {
         return Xpp3DomUtils.mergeXpp3Dom(dominant, recessive);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean equals(Object obj) {
         if (obj == this) {
             return true;
@@ -315,7 +319,9 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
                 && !(childList == null ? dom.childList != null : !childList.equals(dom.childList));
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public int hashCode() {
         int result = 17;
         result = 37 * result + (name != null ? name.hashCode() : 0);
@@ -325,7 +331,9 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
         return result;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public String toString() {
         try {
             StringWriter writer = new StringWriter();
@@ -338,7 +346,7 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
     }
 
     /**
-     * @return Unescaped string.
+     * @return unescaped string
      */
     public String toUnescapedString() {
         try {
@@ -381,7 +389,9 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
         return str == null || str.trim().length() == 0;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Iterator<Xpp3Dom> iterator() {
         return getChildrenList().iterator();
     }

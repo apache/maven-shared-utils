@@ -33,8 +33,9 @@ import java.io.IOException;
 public interface StreamConsumer {
     /**
      * Called when the StreamPumper pumps a line from the Stream.
-     * @param line The line to be consumed.
-     * @throws IOException if consuming {@code line} fails.
+     *
+     * @param line the line to be consumed
+     * @throws IOException if consuming {@code line} fails
      */
     void consumeLine(String line) throws IOException;
 }

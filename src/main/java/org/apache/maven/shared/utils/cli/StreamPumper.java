@@ -18,14 +18,14 @@
  */
 package org.apache.maven.shared.utils.cli;
 
-import javax.annotation.Nullable;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.Charset;
+
+import org.jspecify.annotations.Nullable;
 
 /**
  * Class to pump the error stream during Process's runtime. Copied from the Ant built-in task.
@@ -69,7 +69,7 @@ public class StreamPumper extends AbstractStreamHandler {
         this.consumer = consumer;
     }
 
-    /** run it. */
+    /** Run it. */
     public void run() {
         try {
             for (String line = in.readLine(); line != null; line = in.readLine()) {
@@ -101,7 +101,7 @@ public class StreamPumper extends AbstractStreamHandler {
     }
 
     /**
-     * flush.
+     * Flush.
      *
      * @deprecated As of 3.2.0, removed without replacement.
      */

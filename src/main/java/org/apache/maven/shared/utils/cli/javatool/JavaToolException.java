@@ -25,7 +25,6 @@ package org.apache.maven.shared.utils.cli.javatool;
  * of a non-zero exit code.</p>
  *
  * @author <a href="mailto:chemit@codelutin.com">Tony Chemit</a>
- *
  * @see JavaToolResult#getExitCode()
  * @since 0.5
  */
@@ -33,15 +32,15 @@ public class JavaToolException extends Exception {
     private static final long serialVersionUID = 1L;
 
     /**
-     * @param message The message of the exception.
+     * @param message the message of the exception
      */
     public JavaToolException(String message) {
         super(message);
     }
 
     /**
-     * @param message The message of the exception.
-     * @param cause The cause of the exception.
+     * @param message the message of the exception
+     * @param cause the cause of the exception
      */
     public JavaToolException(String message, Throwable cause) {
         super(message, cause);

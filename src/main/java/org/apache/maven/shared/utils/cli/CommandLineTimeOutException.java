@@ -22,22 +22,21 @@ package org.apache.maven.shared.utils.cli;
  * Report a timeout for executing process.
  *
  * @author Olivier Lamy
- *
  */
 public class CommandLineTimeOutException extends CommandLineException {
 
     private static final long serialVersionUID = 7322428741683224481L;
 
     /**
-     * @param message The message of the exception.
-     * @param cause The cause of the exception.
+     * @param message the message of the exception
+     * @param cause the cause of the exception
      */
     public CommandLineTimeOutException(String message, Throwable cause) {
         super(message, cause);
     }
 
     /**
-     * @param message The message of the exception.
+     * @param message the message of the exception
      */
     public CommandLineTimeOutException(String message) {
         super(message);

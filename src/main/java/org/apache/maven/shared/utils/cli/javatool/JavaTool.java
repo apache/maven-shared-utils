@@ -26,8 +26,8 @@ package org.apache.maven.shared.utils.cli.javatool;
  * execute any user requests of this tool.</p>
  *
  * @author <a href="mailto:chemit@codelutin.com">Tony Chemit</a>
+ * @param <Request> tool-specific request type
  * @since 0.5
- * @param <Request> Tool-specific request type
  */
 public interface JavaTool<Request extends JavaToolRequest> {
 
@@ -36,7 +36,7 @@ public interface JavaTool<Request extends JavaToolRequest> {
      * find in the {@code jdk/bin} directory.</p>
      * <p>For example: {@code jarsigner, keytool, javadoc, ...}</p>
      *
-     * @return the name of the java tool.
+     * @return the name of the java tool
      */
     String getJavaToolName();
 

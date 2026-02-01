@@ -18,13 +18,13 @@
  */
 package org.apache.maven.shared.utils.io;
 
-import javax.annotation.Nonnull;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
+
+import org.jspecify.annotations.NonNull;
 
 /**
  * <p>Describes a match target for SelectorUtils.</p>
@@ -46,7 +46,7 @@ public class MatchPattern {
 
     private final String[] tokenized;
 
-    private MatchPattern(@Nonnull String source, @Nonnull String separator) {
+    private MatchPattern(@NonNull String source, @NonNull String separator) {
         regexPattern = SelectorUtils.isRegexPrefixedPattern(source)
                 ? source.substring(
                         SelectorUtils.REGEX_HANDLER_PREFIX.length(),
@@ -63,9 +63,9 @@ public class MatchPattern {
     }
 
     /**
-     * @param str The string to match for.
-     * @param isCaseSensitive case sensitive true false otherwise.
-     * @return true if matches false otherwise.
+     * @param str the string to match for
+     * @param isCaseSensitive case sensitive true false otherwise
+     * @return true if matches false otherwise
      */
     public boolean matchPath(String str, boolean isCaseSensitive) {
         if (regexPattern != null) {
@@ -84,11 +84,11 @@ public class MatchPattern {
     }
 
     /**
-     * @param str The string to check.
-     * @param isCaseSensitive Check case sensitive or not.
-     * @return true in case of matching pattern.
+     * @param str the string to check
+     * @param isCaseSensitive check case sensitive or not
+     * @return true in case of matching pattern
      */
-    public boolean matchPatternStart(@Nonnull String str, boolean isCaseSensitive) {
+    public boolean matchPatternStart(@NonNull String str, boolean isCaseSensitive) {
         if (regexPattern != null) {
             // FIXME: ICK! But we can't do partial matches for regex, so we have to reserve judgment until we have
             // a file to deal with, or we can definitely say this is an exclusion...
@@ -102,21 +102,21 @@ public class MatchPattern {
     }
 
     /**
-     * @return Tokenized string.
+     * @return tokenized string
      */
     public String[] getTokenizedPathString() {
         return tokenized;
     }
 
     /**
-     * @param string The part which will be checked to start with.
-     * @return true in case of starting with the string false otherwise.
+     * @param string the part which will be checked to start with
+     * @return true in case of starting with the string false otherwise
      */
     public boolean startsWith(String string) {
         return source.startsWith(string);
     }
 
-    static String[] tokenizePathToString(@Nonnull String path, @Nonnull String separator) {
+    static String[] tokenizePathToString(@NonNull String path, @NonNull String separator) {
         List<String> ret = new ArrayList<>();
         StringTokenizer st = new StringTokenizer(path, separator);
         while (st.hasMoreTokens()) {
@@ -126,8 +126,8 @@ public class MatchPattern {
     }
 
     /**
-     * @param source The source.
-     * @return The match pattern.
+     * @param source the source
+     * @return the match pattern
      */
     public static MatchPattern fromString(String source) {
         return new MatchPattern(source, File.separator);

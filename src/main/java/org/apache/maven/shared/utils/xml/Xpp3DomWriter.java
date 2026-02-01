@@ -31,7 +31,7 @@ public class Xpp3DomWriter {
     /**
      * @param writer {@link Writer}
      * @param dom {@link Xpp3Dom}
-     * @throws IOException if writing fails.
+     * @throws IOException if writing fails
      */
     public static void write(Writer writer, Xpp3Dom dom) throws IOException {
         write(new PrettyPrintXMLWriter(writer), dom);
@@ -40,7 +40,7 @@ public class Xpp3DomWriter {
     /**
      * @param writer {@link PrintWriter}
      * @param dom {@link Xpp3Dom}
-     * @throws IOException if writing fails.
+     * @throws IOException if writing fails
      */
     public static void write(PrintWriter writer, Xpp3Dom dom) throws IOException {
         write(new PrettyPrintXMLWriter(writer), dom);
@@ -49,7 +49,7 @@ public class Xpp3DomWriter {
     /**
      * @param xmlWriter {@link XMLWriter}
      * @param dom {@link Xpp3Dom}
-     * @throws IOException if writing fails.
+     * @throws IOException if writing fails
      */
     public static void write(XMLWriter xmlWriter, Xpp3Dom dom) throws IOException {
         write(xmlWriter, dom, true);
@@ -58,8 +58,8 @@ public class Xpp3DomWriter {
     /**
      * @param xmlWriter {@link XMLWriter}
      * @param dom {@link Xpp3Dom}
-     * @param escape true/false.
-     * @throws IOException if writing fails.
+     * @param escape true/false
+     * @throws IOException if writing fails
      */
     public static void write(XMLWriter xmlWriter, Xpp3Dom dom, boolean escape) throws IOException {
         xmlWriter.startElement(dom.getName());

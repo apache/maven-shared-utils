@@ -56,10 +56,10 @@ public interface XMLWriter {
      * Add a XML attribute to the current XML Element.
      * This method must get called immediately after {@link #startElement(String)}.
      *
-     * @param key The key of the attribute.
-     * @param value The value of the attribute.
+     * @param key the key of the attribute
+     * @param value the value of the attribute
      * @throws IllegalStateException if no element tag is currently in process
-     * @throws IOException if adding the attribute fails.
+     * @throws IOException if adding the attribute fails
      */
     void addAttribute(String key, String value) throws IOException;
 
@@ -67,9 +67,9 @@ public interface XMLWriter {
      * Add text to the current element tag.
      * This performs XML escaping to guarantee well-formed content.
      *
-     * @param text The text which should be written.
+     * @param text the text which should be written
      * @throws IllegalStateException if no element tag got started yet
-     * @throws IOException if writing the text fails.
+     * @throws IOException if writing the text fails
      */
     void writeText(String text) throws IOException;
 
@@ -84,8 +84,9 @@ public interface XMLWriter {
 
     /**
      * End the previously opened element.
+     *
+     * @throws IOException if ending the element fails
      * @see #startElement(String)
-     * @throws IOException if ending the element fails.
      */
     void endElement() throws IOException;
 }

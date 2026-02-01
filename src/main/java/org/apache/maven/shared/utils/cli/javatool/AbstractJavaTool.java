@@ -37,8 +37,8 @@ import org.slf4j.LoggerFactory;
  * Abstract implementation of a {@link JavaTool}.
  *
  * @author <a href="mailto:chemit@codelutin.com">Tony Chemit</a>
+ * @param <Request> tool-specific request type
  * @since 0.5
- * @param <Request> Tool-specific request type
  */
 public abstract class AbstractJavaTool<Request extends JavaToolRequest> implements JavaTool<Request> {
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -59,7 +59,7 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest> implemen
     private Object toolchain;
 
     /**
-     * @param javaToolName The name of the java tool.
+     * @param javaToolName the name of the java tool
      */
     protected AbstractJavaTool(String javaToolName) {
         this.javaToolName = javaToolName;
@@ -68,8 +68,8 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest> implemen
     /**
      * Create the command line object given the request.
      *
-     * @param request      User request on the java tool
-     * @param javaToolFileLocation Location of the java tool file to use
+     * @param request      user request on the java tool
+     * @param javaToolFileLocation location of the java tool file to use
      * @return the command line
      * @throws JavaToolException if could not create the command line from the request
      */
@@ -138,7 +138,7 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest> implemen
 
     /**
      * @param cli {@link Commandline}
-     * @param request The request.
+     * @param request the request
      * @return {@link JavaToolRequest}
      */
     protected JavaToolResult executeCommandLine(Commandline cli, Request request) {
@@ -168,7 +168,7 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest> implemen
     }
 
     /**
-     * @param request The request.
+     * @param request the request
      * @return {@link StreamConsumer}
      */
     protected StreamConsumer createSystemErrorStreamConsumer(Request request) {
@@ -190,7 +190,7 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest> implemen
     }
 
     /**
-     * @param request The request.
+     * @param request the request
      * @return {@link StreamConsumer}
      */
     protected StreamConsumer createSystemOutStreamConsumer(Request request) {
@@ -213,14 +213,14 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest> implemen
     }
 
     /**
-     * @return The JavaToolResult.
+     * @return the JavaToolResult
      */
     protected JavaToolResult createResult() {
         return new JavaToolResult();
     }
 
     /**
-     * @return The location of the java tool executable.
+     * @return the location of the java tool executable
      */
     protected String findJavaToolExecutable() {
         String executable = null;
@@ -286,10 +286,10 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest> implemen
     /**
      * Finds the specified command in any of the given sub directories of the specified JDK/JRE home directory.
      *
-     * @param command The command to find, must not be <code>null</code>.
-     * @param homeDir The home directory to search in, may be <code>null</code>.
-     * @param subDirs The sub directories of the home directory to search in, must not be <code>null</code>.
-     * @return The (absolute) path to the command if found, <code>null</code> otherwise.
+     * @param command the command to find, must not be <code>null</code>
+     * @param homeDir the home directory to search in, may be <code>null</code>
+     * @param subDirs the sub directories of the home directory to search in, must not be <code>null</code>
+     * @return the (absolute) path to the command if found, <code>null</code> otherwise
      */
     private String findExecutable(String command, String homeDir, String... subDirs) {
         String result = null;

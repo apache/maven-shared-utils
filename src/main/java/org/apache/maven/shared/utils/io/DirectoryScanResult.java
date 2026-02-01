@@ -31,8 +31,8 @@ public class DirectoryScanResult {
     private final String[] filesRemoved;
 
     /**
-     * @param filesAdded Added files.
-     * @param filesRemoved Removed files.
+     * @param filesAdded added files
+     * @param filesRemoved removed files
      */
     public DirectoryScanResult(String[] filesAdded, String[] filesRemoved) {
         this.filesAdded = filesAdded;

@@ -85,7 +85,7 @@ public class Commandline implements Cloneable {
      * Shell is autodetected from operating system.
      *
      * @param toProcess the command to process
-     * @throws CommandLineException in case of unbalanced quotes.
+     * @throws CommandLineException in case of unbalanced quotes
      */
     public Commandline(String toProcess) throws CommandLineException {
         setDefaultShell();
@@ -258,7 +258,8 @@ public class Commandline implements Cloneable {
     /**
      * Returns all arguments defined by <code>addLine</code>,
      * <code>addValue</code> or the argument object.
-     * @return an array of arguments.
+     *
+     * @return an array of arguments
      */
     public String[] getArguments() {
         return getArguments(false);
@@ -294,7 +295,8 @@ public class Commandline implements Cloneable {
         return result.toArray(new String[result.size()]);
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
      */
     public String toString() {
         return StringUtils.join(getShellCommandline(true), " ");
@@ -346,7 +348,7 @@ public class Commandline implements Cloneable {
      * should are propagated to the executing Command.
      * By default, the current environment variables are inherited by the new Command line execution.
      *
-     * @return <code>true</code> if the environment variables should be propagated, <code>false</code> otherwise.
+     * @return <code>true</code> if the environment variables should be propagated, <code>false</code> otherwise
      */
     public boolean isShellEnvironmentInherited() {
         return shellEnvironmentInherited;
@@ -356,7 +358,7 @@ public class Commandline implements Cloneable {
      * Specifies whether the environment variables of the current process should be propagated to the executing Command.
      *
      * @param shellEnvironmentInherited <code>true</code> if the environment variables should be propagated,
-     *            <code>false</code> otherwise.
+     *            <code>false</code> otherwise
      */
     public void setShellEnvironmentInherited(boolean shellEnvironmentInherited) {
         this.shellEnvironmentInherited = shellEnvironmentInherited;
@@ -415,7 +417,7 @@ public class Commandline implements Cloneable {
     }
 
     /**
-     * A single command line argument
+     * A single command line argument.
      */
     public static class Argument implements Arg {
         private String[] parts;

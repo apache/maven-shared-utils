@@ -26,9 +26,9 @@ import java.util.ArrayList;
 /**
  * XMLWriter with nice indentation.
  *
+ * @author kama
  * @deprecated this class swallows and ignores IOExceptions. It is dangerous to use when writing
  *    to anything other than a StringWriter.
- * @author kama
  */
 @Deprecated
 public class PrettyPrintXMLWriter implements XMLWriter {
@@ -68,7 +68,7 @@ public class PrettyPrintXMLWriter implements XMLWriter {
 
     /**
      * @param writer not null
-     * @param lineIndent can be null, but the normal way is some spaces.
+     * @param lineIndent can be null, but the normal way is some spaces
      */
     public PrettyPrintXMLWriter(Writer writer, String lineIndent) {
         this(new PrintWriter(writer), lineIndent);
@@ -128,9 +128,9 @@ public class PrettyPrintXMLWriter implements XMLWriter {
 
     /**
      * @param writer not null
-     * @param lineIndent can be null, but the normal way is some spaces.
+     * @param lineIndent can be null, but the normal way is some spaces
      * @param lineSeparator can be null, but the normal way is valid line separator
-     * @param encoding can be null or the encoding to use.
+     * @param encoding can be null or the encoding to use
      * @param doctype can be null
      */
     public PrettyPrintXMLWriter(
@@ -160,7 +160,9 @@ public class PrettyPrintXMLWriter implements XMLWriter {
         assert !writer.checkError() : "Unexpected error state PrintWriter passed to PrettyPrintXMLWriter.";
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addAttribute(String key, String value) throws IOException {
         if (!processingElement) {
@@ -176,7 +178,9 @@ public class PrettyPrintXMLWriter implements XMLWriter {
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setEncoding(String encoding) {
         if (documentStarted) {
@@ -186,7 +190,9 @@ public class PrettyPrintXMLWriter implements XMLWriter {
         this.encoding = encoding;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setDocType(String docType) {
         if (documentStarted) {
@@ -218,7 +224,9 @@ public class PrettyPrintXMLWriter implements XMLWriter {
         this.lineIndent = lineIndentParameter.toCharArray();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startElement(String elementName) throws IOException {
 
@@ -245,7 +253,9 @@ public class PrettyPrintXMLWriter implements XMLWriter {
         elementStack.add(depth++, elementName);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void writeText(String text) throws IOException {
         ensureDocumentStarted();
@@ -261,7 +271,9 @@ public class PrettyPrintXMLWriter implements XMLWriter {
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void writeMarkup(String markup) throws IOException {
         ensureDocumentStarted();
@@ -275,7 +287,9 @@ public class PrettyPrintXMLWriter implements XMLWriter {
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void endElement() throws IOException {
         String chars = elementStack.get(--depth);
@@ -305,7 +319,7 @@ public class PrettyPrintXMLWriter implements XMLWriter {
     /**
      * Write the document if not already done.
      *
-     * @return <code>true</code> if the document headers have freshly been written.
+     * @return <code>true</code> if the document headers have freshly been written
      */
     private boolean ensureDocumentStarted() {
         if (!documentStarted) {

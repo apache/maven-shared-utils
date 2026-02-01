@@ -41,10 +41,10 @@ class StreamPollFeeder extends Thread {
     private final Object lock = new Object();
 
     /**
-     * Create a new StreamPollFeeder
+     * Create a new StreamPollFeeder.
      *
-     * @param input  Stream to read from
-     * @param output Stream to write to
+     * @param input  stream to read from
+     * @param output stream to write to
      */
     StreamPollFeeder(InputStream input, OutputStream output) {
         this.input = Objects.requireNonNull(input);

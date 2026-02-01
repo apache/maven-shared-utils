@@ -18,9 +18,6 @@
  */
 package org.apache.maven.shared.utils.io;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -28,6 +25,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * <p>Class for scanning a directory for files/directories which match certain criteria.</p>
@@ -243,8 +243,6 @@ public class DirectoryScanner {
 
     /**
      * Whether or not symbolic links should be followed.
-     *
-     *
      */
     private boolean followSymlinks = true;
 
@@ -254,7 +252,7 @@ public class DirectoryScanner {
     private ScanConductor scanConductor = null;
 
     /**
-     * The last ScanAction. We need to store this in the instance as the scan() method doesn't return
+     * The last ScanAction. We need to store this in the instance as the scan() method doesn't return.
      */
     private ScanConductor.ScanAction scanAction = null;
 
@@ -268,7 +266,7 @@ public class DirectoryScanner {
      * characters are replaced by <code>File.separatorChar</code>, so the separator used need not match
      * <code>File.separatorChar</code>.
      *
-     * @param basedir The base directory to scan. Must not be <code>null</code>.
+     * @param basedir the base directory to scan. Must not be <code>null</code>.
      */
     public void setBasedir(final String basedir) {
         setBasedir(new File(basedir.replace('/', File.separatorChar).replace('\\', File.separatorChar)));
@@ -277,9 +275,9 @@ public class DirectoryScanner {
     /**
      * Sets the base directory to be scanned. This is the directory which is scanned recursively.
      *
-     * @param basedir The base directory for scanning. Should not be <code>null</code>.
+     * @param basedir the base directory for scanning. Should not be <code>null</code>.
      */
-    public void setBasedir(@Nonnull final File basedir) {
+    public void setBasedir(@NonNull final File basedir) {
         this.basedir = basedir;
     }
 
@@ -317,7 +315,7 @@ public class DirectoryScanner {
      * When a pattern ends with a '/' or '\', "**" is appended.
      * </p>
      *
-     * @param includes A list of include patterns. May be <code>null</code>, indicating that all files should be
+     * @param includes a list of include patterns. May be <code>null</code>, indicating that all files should be
      *                 included. If a non-<code>null</code> list is given, all elements must be non-<code>null</code>.
      */
     public void setIncludes(final String... includes) {
@@ -346,7 +344,7 @@ public class DirectoryScanner {
      * When a pattern ends with a '/' or '\', "**" is appended.
      * </p>
      *
-     * @param excludes A list of exclude patterns. May be <code>null</code>, indicating that no files should be
+     * @param excludes a list of exclude patterns. May be <code>null</code>, indicating that no files should be
      *                 excluded. If a non-<code>null</code> list is given, all elements must be non-<code>null</code>.
      */
     public void setExcludes(final String... excludes) {
@@ -445,8 +443,8 @@ public class DirectoryScanner {
      * {@link DirectoryScanResult#getFilesAdded()} and {@link DirectoryScanResult#getFilesRemoved()}
      * </p>
      *
-     * @param oldFiles the list of previously captured files names.
-     * @return the result of the directory scan.
+     * @param oldFiles the list of previously captured files names
+     * @return the result of the directory scan
      */
     public DirectoryScanResult diffIncludedFiles(String... oldFiles) {
         if (filesIncluded == null) {
@@ -491,7 +489,7 @@ public class DirectoryScanner {
      * Take an array of type T and convert it into a HashSet of type T.
      * If <code>null</code> or an empty array gets passed, an empty Set will be returned.
      *
-     * @param array  The array
+     * @param array  the array
      * @return the filled HashSet of type T
      */
     private static <T> Set<T> arrayAsHashSet(@Nullable T[] array) {
@@ -553,7 +551,7 @@ public class DirectoryScanner {
      * @see #dirsExcluded
      * @see #slowScan
      */
-    private void scandir(@Nonnull final File dir, @Nonnull final String vpath, final boolean fast) {
+    private void scandir(@NonNull final File dir, @NonNull final String vpath, final boolean fast) {
         String[] newfiles = dir.list();
 
         if (newfiles == null) {
@@ -683,9 +681,9 @@ public class DirectoryScanner {
     /**
      * Tests whether or not a name matches at least one include pattern.
      *
-     * @param name The name to match. Must not be <code>null</code>.
+     * @param name the name to match. Must not be <code>null</code>.
      * @return <code>true</code> when the name matches at least one include pattern, or <code>false</code>
-     *         otherwise.
+     *         otherwise
      */
     private boolean isIncluded(final String name) {
         return includesPatterns.matches(name, isCaseSensitive);
@@ -694,22 +692,22 @@ public class DirectoryScanner {
     /**
      * Tests whether or not a name matches the start of at least one include pattern.
      *
-     * @param name The name to match. Must not be <code>null</code>.
+     * @param name the name to match. Must not be <code>null</code>.
      * @return <code>true</code> when the name matches against the start of at least one include pattern, or
-     *         <code>false</code> otherwise.
+     *         <code>false</code> otherwise
      */
-    private boolean couldHoldIncluded(@Nonnull final String name) {
+    private boolean couldHoldIncluded(@NonNull final String name) {
         return includesPatterns.matchesPatternStart(name, isCaseSensitive);
     }
 
     /**
      * Tests whether or not a name matches against at least one exclude pattern.
      *
-     * @param name The name to match. Must not be <code>null</code>.
+     * @param name the name to match. Must not be <code>null</code>.
      * @return <code>true</code> when the name matches against at least one exclude pattern, or <code>false</code>
-     *         otherwise.
+     *         otherwise
      */
-    private boolean isExcluded(@Nonnull final String name) {
+    private boolean isExcluded(@NonNull final String name) {
         return excludesPatterns.matches(name, isCaseSensitive);
     }
 
@@ -717,9 +715,9 @@ public class DirectoryScanner {
      * Returns the names of the files which matched at least one of the include patterns and none of the exclude
      * patterns. The names are relative to the base directory.
      *
-     * @deprecated this method does not work correctly on Windows.
      * @return the names of the files which matched at least one of the include patterns and none of the exclude
      *         patterns. May also contain symbolic links to files.
+     * @deprecated this method does not work correctly on Windows.
      */
     @Deprecated
     public String[] getIncludedFiles() {
@@ -733,7 +731,7 @@ public class DirectoryScanner {
      * Returns the names of the files which matched none of the include patterns. The names are relative to the base
      * directory. This involves performing a slow scan if one has not already been completed.
      *
-     * @return the names of the files which matched none of the include patterns.
+     * @return the names of the files which matched none of the include patterns
      * @see #slowScan
      */
     public String[] getNotIncludedFiles() {
@@ -747,7 +745,7 @@ public class DirectoryScanner {
      * already been completed.
      *
      * @return the names of the files which matched at least one of the include patterns and at at least one of the
-     *         exclude patterns.
+     *         exclude patterns
      * @see #slowScan
      */
     public String[] getExcludedFiles() {
@@ -759,9 +757,9 @@ public class DirectoryScanner {
      * Returns the names of the directories which matched at least one of the include patterns and none of the exclude
      * patterns. The names are relative to the base directory.
      *
-     * @deprecated this method is buggy. Do not depend on it.
      * @return the names of the directories which matched at least one of the include patterns and none of the exclude
      *         patterns. May also contain symbolic links to directories.
+     * @deprecated this method is buggy. Do not depend on it.
      */
     @Deprecated
     public String[] getIncludedDirectories() {
@@ -772,7 +770,7 @@ public class DirectoryScanner {
      * Returns the names of the directories which matched none of the include patterns. The names are relative to the
      * base directory. This involves performing a slow scan if one has not already been completed.
      *
-     * @return the names of the directories which matched none of the include patterns.
+     * @return the names of the directories which matched none of the include patterns
      * @see #slowScan
      */
     public String[] getNotIncludedDirectories() {
@@ -786,7 +784,7 @@ public class DirectoryScanner {
      * not already been completed.
      *
      * @return the names of the directories which matched at least one of the include patterns and at least one of the
-     *         exclude patterns.
+     *         exclude patterns
      * @see #slowScan
      */
     public String[] getExcludedDirectories() {

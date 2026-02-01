@@ -27,6 +27,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@SuppressWarnings("deprecation")
 public class BourneShellTest {
 
     Shell newShell() {
@@ -156,7 +157,7 @@ public class BourneShellTest {
     }
 
     @Test
-    public void testBourneShellQuotingCharacters() throws Exception {
+    public void testBourneShellQuotingCharacters() {
         // { ' ', '$', ';', '&', '|', '<', '>', '*', '?', '(', ')' };
         // test with values https://steve-parker.org/sh/bourne.shtml Appendix B - Meta-characters and Reserved Words
         Commandline commandline = new Commandline(newShell());

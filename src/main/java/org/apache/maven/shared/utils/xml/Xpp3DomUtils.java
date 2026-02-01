@@ -31,8 +31,8 @@ public class Xpp3DomUtils {
     /**
      * @param dominant {@link Xpp3Dom}
      * @param recessive {@link Xpp3Dom}
-     * @param childMergeOverride true/false.
-     * @return Merged dom.
+     * @param childMergeOverride true/false
+     * @return merged dom
      */
     public static Xpp3Dom mergeXpp3Dom(Xpp3Dom dominant, Xpp3Dom recessive, Boolean childMergeOverride) {
         return dominant != null ? merge(dominant, recessive, childMergeOverride) : recessive;
@@ -41,7 +41,7 @@ public class Xpp3DomUtils {
     /**
      * @param dominant {@link Xpp3Dom}
      * @param recessive {@link Xpp3Dom}
-     * @return Merged dom.
+     * @return merged dom
      */
     public static Xpp3Dom mergeXpp3Dom(Xpp3Dom dominant, Xpp3Dom recessive) {
         return dominant != null ? merge(dominant, recessive, null) : recessive;
@@ -50,8 +50,8 @@ public class Xpp3DomUtils {
     /**
      * @param dominant {@link Xpp3Dom}
      * @param recessive {@link Xpp3Dom}
-     * @param childMergeOverride true/false.
-     * @return Merged dom.
+     * @param childMergeOverride true/false
+     * @return merged dom
      */
     public static Xpp3Dom merge(Xpp3Dom dominant, Xpp3Dom recessive, Boolean childMergeOverride) {
         if (recessive == null || isCombineSelfOverride(dominant)) {
@@ -124,10 +124,10 @@ public class Xpp3DomUtils {
     }
 
     /**
-     * @deprecated use <code>str == null || String.isBlank(str)</code> (Java 11+)
-     *             or <code>org.apache.commons.lang3.StringUtils.isBlank(str)</code>
      * @param str the string to be checked
      * @return <code>true</code> if the string is null, empty, or whitespace only; <code>false</code> otherwise
+     * @deprecated use <code>str == null || String.isBlank(str)</code> (Java 11+)
+     *             or <code>org.apache.commons.lang3.StringUtils.isBlank(str)</code>
      */
     @Deprecated
     public static boolean isEmpty(String str) {

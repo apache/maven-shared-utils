@@ -35,23 +35,24 @@ import static org.junit.jupiter.api.Assertions.fail;
  *
  * @author <a href="mailto:hboutemy@apache.org">Hervé Boutemy</a>
  */
+@SuppressWarnings("deprecation")
 public class XmlStreamReaderTest {
     /**
      * french
      */
-    private static final String TEXT_LATIN1 = "eacute: \u00E9";
+    private static final String TEXT_LATIN1 = "eacute: é";
     /**
      * greek
      */
-    private static final String TEXT_LATIN7 = "alpha: \u03B1";
+    private static final String TEXT_LATIN7 = "alpha: α";
     /**
      * euro support
      */
-    private static final String TEXT_LATIN15 = "euro: \u20AC";
+    private static final String TEXT_LATIN15 = "euro: €";
     /**
      * japanese
      */
-    private static final String TEXT_EUC_JP = "hiragana A: \u3042";
+    private static final String TEXT_EUC_JP = "hiragana A: あ";
     /**
      * Unicode: support everything
      */
@@ -91,17 +92,8 @@ public class XmlStreamReaderTest {
         assertEquals(xml, result);
     }
 
-    private static void checkXmlStreamReader(String text, String encoding, String effectiveEncoding)
-            throws IOException {
-        checkXmlStreamReader(text, encoding, effectiveEncoding, null);
-    }
-
     private static void checkXmlStreamReader(String text, String encoding) throws IOException {
         checkXmlStreamReader(text, encoding, encoding, null);
-    }
-
-    private static void checkXmlStreamReader(String text, String encoding, byte[] bom) throws IOException {
-        checkXmlStreamReader(text, encoding, encoding, bom);
     }
 
     private static void checkXmlStreamReader(String text, String encoding, String effectiveEncoding, byte[] bom)
@@ -119,14 +111,14 @@ public class XmlStreamReaderTest {
 
     @Test
     public void testDefaultEncoding() throws IOException {
-        checkXmlStreamReader(TEXT_UNICODE, null, "UTF-8");
+        checkXmlStreamReader(TEXT_UNICODE, (String) null, "UTF-8", null);
         checkXmlStreamReader(TEXT_UNICODE, null, "UTF-8", BOM_UTF8);
     }
 
     @Test
     public void testUTF8Encoding() throws IOException {
         checkXmlStreamReader(TEXT_UNICODE, "UTF-8");
-        checkXmlStreamReader(TEXT_UNICODE, "UTF-8", BOM_UTF8);
+        checkXmlStreamReader(TEXT_UNICODE, "UTF-8", "UTF-8", BOM_UTF8);
     }
 
     @Test
@@ -183,22 +175,13 @@ public class XmlStreamReaderTest {
 
     @Test
     public void testEncodingAttribute() throws IOException {
-        String xml = "<?xml version='1.0' encoding='US-ASCII'?><element encoding='attribute value'/>";
-        checkXmlContent(xml, "US-ASCII");
-
-        xml = "<?xml version='1.0' encoding  =  'US-ASCII'  ?><element encoding='attribute value'/>";
-        checkXmlContent(xml, "US-ASCII");
-
-        xml = "<?xml version='1.0'?><element encoding='attribute value'/>";
-        checkXmlContent(xml, "UTF-8");
-
-        xml = "<?xml\nversion='1.0'\nencoding\n=\n'US-ASCII'\n?>\n<element encoding='attribute value'/>";
-        checkXmlContent(xml, "US-ASCII");
-
-        xml = "<?xml\nversion='1.0'\n?>\n<element encoding='attribute value'/>";
-        checkXmlContent(xml, "UTF-8");
-
-        xml = "<element encoding='attribute value'/>";
-        checkXmlContent(xml, "UTF-8");
+        checkXmlContent("<?xml version='1.0' encoding='US-ASCII'?><element encoding='attribute value'/>", "US-ASCII");
+        checkXmlContent(
+                "<?xml version='1.0' encoding  =  'US-ASCII'  ?><element encoding='attribute value'/>", "US-ASCII");
+        checkXmlContent("<?xml version='1.0'?><element encoding='attribute value'/>", "UTF-8");
+        checkXmlContent(
+                "<?xml\nversion='1.0'\nencoding\n=\n'US-ASCII'\n?>\n<element encoding='attribute value'/>", "US-ASCII");
+        checkXmlContent("<?xml\nversion='1.0'\n?>\n<element encoding='attribute value'/>", "UTF-8");
+        checkXmlContent("<element encoding='attribute value'/>", "UTF-8");
     }
 }

@@ -18,15 +18,15 @@
  */
 package org.apache.maven.shared.utils;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Static utility methods for loading properties.
@@ -49,7 +49,7 @@ public class PropertyUtils {
      *             instead of an empty {@code Properties} instance when the given {@code URL} is {@code null}.
      */
     @Deprecated
-    public static java.util.Properties loadProperties(@Nonnull URL url) {
+    public static java.util.Properties loadProperties(@NonNull URL url) {
         try (InputStream in = url.openStream()) {
             return loadProperties(in);
         } catch (Exception e) {
@@ -66,7 +66,7 @@ public class PropertyUtils {
      *             instead of an empty {@code Properties} instance when the given {@code File} is {@code null}.
      */
     @Deprecated
-    public static Properties loadProperties(@Nonnull File file) {
+    public static Properties loadProperties(@NonNull File file) {
         try (InputStream in = new FileInputStream(file)) {
             return loadProperties(in);
         } catch (Exception e) {
@@ -113,7 +113,7 @@ public class PropertyUtils {
      * @return the loaded properties or an empty {@code Properties} instance if properties fail to load
      * @since 3.1.0
      */
-    @Nonnull
+    @NonNull
     public static Properties loadOptionalProperties(final @Nullable URL url) {
 
         Properties properties = new Properties();
@@ -138,7 +138,7 @@ public class PropertyUtils {
      * @return the loaded properties or an empty {@code Properties} instance if properties fail to load
      * @since 3.1.0
      */
-    @Nonnull
+    @NonNull
     public static Properties loadOptionalProperties(final @Nullable File file) {
         Properties properties = new Properties();
         if (file != null) {
@@ -162,7 +162,7 @@ public class PropertyUtils {
      * @return the loaded properties or an empty {@code Properties} instance if properties fail to load
      * @since 3.1.0
      */
-    @Nonnull
+    @NonNull
     public static Properties loadOptionalProperties(final @Nullable InputStream inputStream) {
 
         Properties properties = new Properties();

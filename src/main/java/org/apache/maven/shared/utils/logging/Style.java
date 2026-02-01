@@ -25,6 +25,7 @@ import org.fusesource.jansi.Ansi.Color;
 
 /**
  * Configurable message styles.
+ *
  * @since 3.1.0
  */
 enum Style {

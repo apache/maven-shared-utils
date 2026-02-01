@@ -18,9 +18,6 @@
  */
 package org.apache.maven.shared.utils.cli;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -33,6 +30,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.maven.shared.utils.Os;
 import org.apache.maven.shared.utils.StringUtils;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l </a>
@@ -59,7 +58,7 @@ public abstract class CommandLineUtils {
         }
 
         /**
-         * @return The output.
+         * @return the output
          */
         public String getOutput() {
             return string.toString();
@@ -67,56 +66,56 @@ public abstract class CommandLineUtils {
     }
 
     /**
-     * @param cl The command line {@link Commandline}
+     * @param cl the command line {@link Commandline}
      * @param systemOut {@link StreamConsumer}
      * @param systemErr {@link StreamConsumer}
-     * @return return code.
-     * @throws CommandLineException in case of a problem.
+     * @return code
+     * @throws CommandLineException in case of a problem
      */
-    public static int executeCommandLine(@Nonnull Commandline cl, StreamConsumer systemOut, StreamConsumer systemErr)
+    public static int executeCommandLine(@NonNull Commandline cl, StreamConsumer systemOut, StreamConsumer systemErr)
             throws CommandLineException {
         return executeCommandLine(cl, null, systemOut, systemErr, 0);
     }
 
     /**
-     * @param cl The command line {@link Commandline}
+     * @param cl the command line {@link Commandline}
      * @param systemOut {@link StreamConsumer}
      * @param systemErr {@link StreamConsumer}
-     * @param timeoutInSeconds The timeout.
-     * @return return code.
-     * @throws CommandLineException in case of a problem.
+     * @param timeoutInSeconds the timeout
+     * @return code
+     * @throws CommandLineException in case of a problem
      */
     public static int executeCommandLine(
-            @Nonnull Commandline cl, StreamConsumer systemOut, StreamConsumer systemErr, int timeoutInSeconds)
+            @NonNull Commandline cl, StreamConsumer systemOut, StreamConsumer systemErr, int timeoutInSeconds)
             throws CommandLineException {
         return executeCommandLine(cl, null, systemOut, systemErr, timeoutInSeconds);
     }
 
     /**
-     * @param cl The command line {@link Commandline}
+     * @param cl the command line {@link Commandline}
      * @param systemIn {@link StreamConsumer}
      * @param systemOut {@link StreamConsumer}
      * @param systemErr {@link StreamConsumer}
-     * @return return code.
-     * @throws CommandLineException in case of a problem.
+     * @return code
+     * @throws CommandLineException in case of a problem
      */
     public static int executeCommandLine(
-            @Nonnull Commandline cl, InputStream systemIn, StreamConsumer systemOut, StreamConsumer systemErr)
+            @NonNull Commandline cl, InputStream systemIn, StreamConsumer systemOut, StreamConsumer systemErr)
             throws CommandLineException {
         return executeCommandLine(cl, systemIn, systemOut, systemErr, 0);
     }
 
     /**
-     * @param cl               The command line to execute
-     * @param systemIn         The input to read from, must be thread safe
-     * @param systemOut        A consumer that receives output, must be thread safe
-     * @param systemErr        A consumer that receives system error stream output, must be thread safe
-     * @param timeoutInSeconds Positive integer to specify timeout, zero and negative integers for no timeout.
-     * @return A return value, see {@link Process#exitValue()}
+     * @param cl               the command line to execute
+     * @param systemIn         the input to read from, must be thread safe
+     * @param systemOut        a consumer that receives output, must be thread safe
+     * @param systemErr        a consumer that receives system error stream output, must be thread safe
+     * @param timeoutInSeconds positive integer to specify timeout, zero and negative integers for no timeout
+     * @return a return value, see {@link Process#exitValue()}
      * @throws CommandLineException or CommandLineTimeOutException if time out occurs
      */
     public static int executeCommandLine(
-            @Nonnull Commandline cl,
+            @NonNull Commandline cl,
             InputStream systemIn,
             StreamConsumer systemOut,
             StreamConsumer systemErr,
@@ -126,18 +125,18 @@ public abstract class CommandLineUtils {
     }
 
     /**
-     * @param cl               The command line to execute
-     * @param systemIn         The input to read from, must be thread safe
-     * @param systemOut        A consumer that receives output, must be thread safe
-     * @param systemErr        A consumer that receives system error stream output, must be thread safe
-     * @param timeoutInSeconds Positive integer to specify timeout, zero and negative integers for no timeout.
-     * @param runAfterProcessTermination Optional callback to run after the process terminated or the the timeout was
-     *  exceeded, but before waiting on the stream feeder and pumpers to finish.
-     * @return A return value, see {@link Process#exitValue()}
+     * @param cl               the command line to execute
+     * @param systemIn         the input to read from, must be thread safe
+     * @param systemOut        a consumer that receives output, must be thread safe
+     * @param systemErr        a consumer that receives system error stream output, must be thread safe
+     * @param timeoutInSeconds positive integer to specify timeout, zero and negative integers for no timeout
+     * @param runAfterProcessTermination optional callback to run after the process terminated or the the timeout was
+     *  exceeded, but before waiting on the stream feeder and pumpers to finish
+     * @return a return value, see {@link Process#exitValue()}
      * @throws CommandLineException or CommandLineTimeOutException if time out occurs
      */
     public static int executeCommandLine(
-            @Nonnull Commandline cl,
+            @NonNull Commandline cl,
             InputStream systemIn,
             StreamConsumer systemOut,
             StreamConsumer systemErr,
@@ -149,19 +148,19 @@ public abstract class CommandLineUtils {
     }
 
     /**
-     * @param cl               The command line to execute
-     * @param systemIn         The input to read from, must be thread safe
-     * @param systemOut        A consumer that receives output, must be thread safe
-     * @param systemErr        A consumer that receives system error stream output, must be thread safe
-     * @param timeoutInSeconds Positive integer to specify timeout, zero and negative integers for no timeout.
-     * @param runAfterProcessTermination Optional callback to run after the process terminated or the the timeout was
-     *  exceeded, but before waiting on the stream feeder and pumpers to finish.
-     * @param streamCharset    Charset to use for reading streams
-     * @return A return value, see {@link Process#exitValue()}
+     * @param cl               the command line to execute
+     * @param systemIn         the input to read from, must be thread safe
+     * @param systemOut        a consumer that receives output, must be thread safe
+     * @param systemErr        a consumer that receives system error stream output, must be thread safe
+     * @param timeoutInSeconds positive integer to specify timeout, zero and negative integers for no timeout
+     * @param runAfterProcessTermination optional callback to run after the process terminated or the the timeout was
+     *  exceeded, but before waiting on the stream feeder and pumpers to finish
+     * @param streamCharset    charset to use for reading streams
+     * @return a return value, see {@link Process#exitValue()}
      * @throws CommandLineException or CommandLineTimeOutException if time out occurs
      */
     public static int executeCommandLine(
-            @Nonnull Commandline cl,
+            @NonNull Commandline cl,
             InputStream systemIn,
             StreamConsumer systemOut,
             StreamConsumer systemErr,
@@ -177,19 +176,19 @@ public abstract class CommandLineUtils {
     /**
      * Immediately forks a process, returns a callable that will block until process is complete.
      *
-     * @param cl               The command line to execute
-     * @param systemIn         The input to read from, must be thread safe
-     * @param systemOut        A consumer that receives output, must be thread safe
-     * @param systemErr        A consumer that receives system error stream output, must be thread safe
-     * @param timeoutInSeconds Positive integer to specify timeout, zero and negative integers for no timeout.
-     * @param runAfterProcessTermination Optional callback to run after the process terminated or the the timeout was
-     * @return A CommandLineCallable that provides the process return value, see {@link Process#exitValue()}. "call"
+     * @param cl               the command line to execute
+     * @param systemIn         the input to read from, must be thread safe
+     * @param systemOut        a consumer that receives output, must be thread safe
+     * @param systemErr        a consumer that receives system error stream output, must be thread safe
+     * @param timeoutInSeconds positive integer to specify timeout, zero and negative integers for no timeout
+     * @param runAfterProcessTermination optional callback to run after the process terminated or the the timeout was
+     * @return a CommandLineCallable that provides the process return value, see {@link Process#exitValue()}. "call"
      *         must be called on this to be sure the forked process has terminated, no guarantees is made about
      *         any internal state before after the completion of the call statements
      * @throws CommandLineException or CommandLineTimeOutException if time out occurs
      */
     public static CommandLineCallable executeCommandLineAsCallable(
-            @Nonnull final Commandline cl,
+            @NonNull final Commandline cl,
             @Nullable final InputStream systemIn,
             final StreamConsumer systemOut,
             final StreamConsumer systemErr,
@@ -203,20 +202,20 @@ public abstract class CommandLineUtils {
     /**
      * Immediately forks a process, returns a callable that will block until process is complete.
      *
-     * @param cl               The command line to execute
-     * @param systemIn         The input to read from, must be thread safe
-     * @param systemOut        A consumer that receives output, must be thread safe
-     * @param systemErr        A consumer that receives system error stream output, must be thread safe
-     * @param timeoutInSeconds Positive integer to specify timeout, zero and negative integers for no timeout.
-     * @param runAfterProcessTermination Optional callback to run after the process terminated or the the timeout was
-     * @param streamCharset    Charset to use for reading streams
-     * @return A CommandLineCallable that provides the process return value, see {@link Process#exitValue()}. "call"
+     * @param cl               the command line to execute
+     * @param systemIn         the input to read from, must be thread safe
+     * @param systemOut        a consumer that receives output, must be thread safe
+     * @param systemErr        a consumer that receives system error stream output, must be thread safe
+     * @param timeoutInSeconds positive integer to specify timeout, zero and negative integers for no timeout
+     * @param runAfterProcessTermination optional callback to run after the process terminated or the the timeout was
+     * @param streamCharset    charset to use for reading streams
+     * @return a CommandLineCallable that provides the process return value, see {@link Process#exitValue()}. "call"
      *         must be called on this to be sure the forked process has terminated, no guarantees is made about
      *         any internal state before after the completion of the call statements
      * @throws CommandLineException or CommandLineTimeOutException if time out occurs
      */
     public static CommandLineCallable executeCommandLineAsCallable(
-            @Nonnull final Commandline cl,
+            @NonNull final Commandline cl,
             @Nullable final InputStream systemIn,
             final StreamConsumer systemOut,
             final StreamConsumer systemErr,
@@ -347,7 +346,7 @@ public abstract class CommandLineUtils {
      * and <code>getSystemEnvVars().get("PATH")</code> will in general return different values. However, on platforms
      * with case-insensitive environment variables like Windows, all variable names will be normalized to upper case.
      *
-     * @return The shell environment variables, can be empty but never <code>null</code>.
+     * @return the shell environment variables, can be empty but never <code>null</code>
      * @deprecated use System#getenv()
      */
     @Deprecated
@@ -359,8 +358,8 @@ public abstract class CommandLineUtils {
      * Return the shell environment variables. If <code>caseSensitive == true</code>, then envar
      * keys will all be upper-case.
      *
-     * @param caseSensitive Whether environment variable keys should be treated case-sensitively.
-     * @return Properties object of (possibly modified) envar keys mapped to their values.
+     * @param caseSensitive whether environment variable keys should be treated case-sensitively
+     * @return properties object of (possibly modified) envar keys mapped to their values
      * @deprecated use System#getenv()
      */
     @Deprecated
@@ -370,9 +369,9 @@ public abstract class CommandLineUtils {
     }
 
     /**
-     * @param toProcess The command line to translate.
-     * @return The array of translated parts.
-     * @throws CommandLineException in case of unbalanced quotes.
+     * @param toProcess the command line to translate
+     * @return the array of translated parts
+     * @throws CommandLineException in case of unbalanced quotes
      */
     public static String[] translateCommandline(String toProcess) throws CommandLineException {
         if ((toProcess == null) || (toProcess.length() == 0)) {
@@ -386,7 +385,7 @@ public abstract class CommandLineUtils {
         final int inDoubleQuote = 2;
         boolean inEscape = false;
         int state = normal;
-        final StringTokenizer tok = new StringTokenizer(toProcess, "\"\' \\", true);
+        final StringTokenizer tok = new StringTokenizer(toProcess, "\"' \\", true);
         List<String> tokens = new ArrayList<>();
         StringBuilder current = new StringBuilder();
 
@@ -394,7 +393,7 @@ public abstract class CommandLineUtils {
             String nextTok = tok.nextToken();
             switch (state) {
                 case inQuote:
-                    if ("\'".equals(nextTok)) {
+                    if ("'".equals(nextTok)) {
                         if (inEscape) {
                             current.append(nextTok);
                             inEscape = false;
@@ -420,7 +419,7 @@ public abstract class CommandLineUtils {
                     }
                     break;
                 default:
-                    if ("\'".equals(nextTok)) {
+                    if ("'".equals(nextTok)) {
                         if (inEscape) {
                             inEscape = false;
                             current.append(nextTok);

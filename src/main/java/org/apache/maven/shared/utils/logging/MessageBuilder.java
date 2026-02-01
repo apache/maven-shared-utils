@@ -32,7 +32,8 @@ import java.util.Formatter;
 public interface MessageBuilder {
     /**
      * Append message content in success style.
-     * By default, bold green
+     * By default, bold green.
+     *
      * @param message the message to append
      * @return the current builder
      */
@@ -40,7 +41,8 @@ public interface MessageBuilder {
 
     /**
      * Append message content in warning style.
-     * By default, bold yellow
+     * By default, bold yellow.
+     *
      * @param message the message to append
      * @return the current builder
      */
@@ -48,7 +50,8 @@ public interface MessageBuilder {
 
     /**
      * Append message content in failure style.
-     * By default, bold red
+     * By default, bold red.
+     *
      * @param message the message to append
      * @return the current builder
      */
@@ -56,7 +59,8 @@ public interface MessageBuilder {
 
     /**
      * Append message content in strong style.
-     * By default, bold
+     * By default, bold.
+     *
      * @param message the message to append
      * @return the current builder
      */
@@ -64,7 +68,8 @@ public interface MessageBuilder {
 
     /**
      * Append message content in mojo style.
-     * By default, green
+     * By default, green.
+     *
      * @param message the message to append
      * @return the current builder
      */
@@ -72,7 +77,8 @@ public interface MessageBuilder {
 
     /**
      * Append message content in project style.
-     * By default, cyan
+     * By default, cyan.
+     *
      * @param message the message to append
      * @return the current builder
      */
@@ -83,6 +89,7 @@ public interface MessageBuilder {
     //
     /**
      * Append content to the message buffer.
+     *
      * @param value the content to append
      * @param offset the index of the first {@code char} to append
      * @param len the number of {@code char}s to append
@@ -92,6 +99,7 @@ public interface MessageBuilder {
 
     /**
      * Append content to the message buffer.
+     *
      * @param value the content to append
      * @return the current builder
      */
@@ -99,6 +107,7 @@ public interface MessageBuilder {
 
     /**
      * Append content to the message buffer.
+     *
      * @param value the content to append
      * @param start the starting index of the subsequence to be appended
      * @param end the end index of the subsequence to be appended
@@ -108,6 +117,7 @@ public interface MessageBuilder {
 
     /**
      * Append content to the message buffer.
+     *
      * @param value the content to append
      * @return the current builder
      */
@@ -115,6 +125,7 @@ public interface MessageBuilder {
 
     /**
      * Append content to the message buffer.
+     *
      * @param value the content to append
      * @return the current builder
      */
@@ -122,16 +133,18 @@ public interface MessageBuilder {
 
     /**
      * Append newline to the message buffer.
+     *
      * @return the current builder
      */
     MessageBuilder newline();
 
     /**
      * Append formatted content to the buffer.
-     * @see String#format(String, Object...)
+     *
      * @param pattern a format string according to the {@link Formatter} syntax
-     * @param args arguments referenced by the format specifiers in the format string.
+     * @param args arguments referenced by the format specifiers in the format string
      * @return the current builder
+     * @see String#format(String, Object...)
      */
     MessageBuilder format(String pattern, Object... args);
 
@@ -139,6 +152,7 @@ public interface MessageBuilder {
      * Get the message constructed by this builder.
      * The underlying buffer is not reset with this method, i.e. if you continue using this builder you just
      * append content to the existing one.
+     *
      * @return the message
      * @since 4.0.0
      */
@@ -146,6 +160,7 @@ public interface MessageBuilder {
 
     /**
      * Same as {@link MessageBuilder#build()}.
+     *
      * @deprecated Rather use {@link MessageBuilder#build()}
      */
     @Deprecated

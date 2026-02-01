@@ -25,7 +25,6 @@ import java.util.List;
  * Implementation to call the CMD Shell present on Windows NT, 2000, XP, 7, 8, and 10.
  *
  * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
- *
  */
 public class CmdShell extends Shell {
     /**
@@ -74,9 +73,9 @@ public class CmdShell extends Shell {
      * appears to make Windows processes invoke successfully.
      * </p>
      *
-     * @param executable The executable.
-     * @param arguments The arguments for the executable.
-     * @return The resulting command line.
+     * @param executable the executable
+     * @param arguments the arguments for the executable
+     * @return the resulting command line
      */
     public List<String> getCommandLine(String executable, String... arguments) {
         StringBuilder sb = new StringBuilder();

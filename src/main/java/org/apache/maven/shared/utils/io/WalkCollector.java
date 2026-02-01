@@ -50,25 +50,33 @@ public class WalkCollector implements DirectoryWalkListener {
         percentageHigh = 0;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void debug(String message) {
         // can be used to set some message
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void directoryWalkStarting(File basedir) {
         startingDir = basedir;
         startCount++;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void directoryWalkStep(int percentage, File file) {
         steps.add(file);
         percentageLow = Math.min(percentageLow, percentage);
         percentageHigh = Math.max(percentageHigh, percentage);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void directoryWalkFinished() {
         finishCount++;
     }

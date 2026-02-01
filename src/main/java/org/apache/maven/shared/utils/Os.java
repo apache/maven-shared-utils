@@ -65,12 +65,12 @@ public class Os {
     public static final String PATH_SEP = File.pathSeparator;
 
     /**
-     * system line separator , e.g. &quot;\n&quot; on unixoid systems and &quot;\r\n&quot; on Windows
+     * System line separator , e.g. &quot;\n&quot; on unixoid systems and &quot;\r\n&quot; on Windows.
      */
     public static final String LINE_SEP = System.lineSeparator();
 
     /**
-     * OS Family
+     * OS Family.
      */
     public static final String OS_FAMILY = getOsFamily();
 
@@ -78,7 +78,7 @@ public class Os {
     private static final Set<String> VALID_FAMILIES = getValidFamilies();
 
     /**
-     * OS family to look for
+     * OS family to look for.
      */
     private String family;
 
@@ -153,7 +153,8 @@ public class Os {
     /**
      * The set of valid families. This methods initializes the set until
      * VALID_FAMILIES constant is set.
-     * @return The set of families.
+     *
+     * @return the set of families
      */
     public static Set<String> getValidFamilies() {
         if (VALID_FAMILIES != null) {
@@ -178,14 +179,14 @@ public class Os {
     }
 
     /**
-     * Default constructor
+     * Default constructor.
      */
     public Os() {
         // default
     }
 
     /**
-     * Constructor that sets the family attribute
+     * Constructor that sets the family attribute.
      *
      * @param family a String value
      */
@@ -194,9 +195,9 @@ public class Os {
     }
 
     /**
-     * Sets the desired OS family type
+     * Sets the desired OS family type.
      *
-     * @param f The OS family type desired<br />
+     * @param f the OS family type desired<br />
      *          Possible values:<br />
      *          <ul>
      *          <li>dos</li>
@@ -219,7 +220,7 @@ public class Os {
      * Determines if the OS on which Ant is executing matches the type of
      * that set in setFamily.
      *
-     * @return true if the os matches.
+     * @return true if the os matches
      * @see Os#setFamily(String)
      */
     boolean eval() {
@@ -232,7 +233,6 @@ public class Os {
      *
      * @param family the family to check for
      * @return true if the OS matches
-     *
      */
     public static boolean isFamily(String family) {
         return isOs(family, null, null, null);
@@ -244,7 +244,6 @@ public class Os {
      *
      * @param name the OS name to check for
      * @return true if the OS matches
-     *
      */
     public static boolean isName(String name) {
         return isOs(null, name, null, null);
@@ -256,7 +255,6 @@ public class Os {
      *
      * @param arch the OS architecture to check for
      * @return true if the OS matches
-     *
      */
     public static boolean isArch(String arch) {
         return isOs(null, null, arch, null);
@@ -268,7 +266,6 @@ public class Os {
      *
      * @param version the OS version to check for
      * @return true if the OS matches
-     *
      */
     public static boolean isVersion(String version) {
         return isOs(null, null, null, version);
@@ -276,14 +273,13 @@ public class Os {
 
     /**
      * Determines if the OS on which Ant is executing matches the
-     * given OS family, name, architecture and version
+     * given OS family, name, architecture and version.
      *
-     * @param family  The OS family
-     * @param name    The OS name
-     * @param arch    The OS architecture
-     * @param version The OS version
+     * @param family  the OS family
+     * @param name    the OS name
+     * @param arch    the OS architecture
+     * @param version the OS version
      * @return true if the OS matches
-     *
      */
     private static boolean isOs(String family, String name, String arch, String version) {
         boolean retValue = false;
@@ -359,7 +355,7 @@ public class Os {
     /**
      * Helper method to determine the current OS family.
      *
-     * @return name of current OS family.
+     * @return name of current OS family
      */
     private static String getOsFamily() {
         Set<String> families = getValidFamilies();
@@ -373,10 +369,10 @@ public class Os {
     }
 
     /**
-     * Test if the given family String represents a valid Family
+     * Test if the given family String represents a valid Family.
      *
      * @param family the os family
-     * @return <code>true</code> if 'family' represents a valid OS-Family, <code>false</code> otherwise.
+     * @return <code>true</code> if 'family' represents a valid OS-Family, <code>false</code> otherwise
      */
     public static boolean isValidFamily(String family) {
         return VALID_FAMILIES.contains(family);
