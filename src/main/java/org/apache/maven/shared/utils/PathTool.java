@@ -65,9 +65,9 @@ public class PathTool {
      * PathTool.getRelativePath( "/usr/local/java/bin/java.sh", "/usr/local/" ) = ""
      * </pre>
      *
-     * @param basedir  The base directory.
-     * @param filename The filename that is relative to the base
-     *                 directory.
+     * @param basedir  the base directory
+     * @param filename the filename that is relative to the base
+     *                 directory
      * @return the relative path of the filename from the base
      *         directory.  This value is not terminated with a forward slash.
      *         A zero-length string is returned if: the filename is not relative to
@@ -129,7 +129,7 @@ public class PathTool {
      *
      * @param oldPath old path
      * @param newPath new path
-     * @return a relative file path from <code>oldPath</code>.
+     * @return a relative file path from <code>oldPath</code>
      * @deprecated use java.nio.file.Path.relativize() instead
      */
     @Deprecated
@@ -192,9 +192,9 @@ public class PathTool {
      * within the filename (except the leading if present), append the
      * "../" string to the return value.
      *
-     * @param filename  The filename to parse.
-     * @param separator The separator used within the filename.
-     * @return The relative path of the filename.  This value is not
+     * @param filename  the filename to parse
+     * @param separator the separator used within the filename
+     * @return the relative path of the filename.  This value is not
      *         terminated with a forward slash.  A zero-length string is
      *         returned if: the filename is zero-length.
      */
@@ -236,9 +236,9 @@ public class PathTool {
      * backward slash) used in a filename.  The slash that occurs more
      * often is returned as the separator.
      *
-     * @param filename The filename parsed to determine the file
-     *                 separator.
-     * @return The file separator used within <code>filename</code>.
+     * @param filename the filename parsed to determine the file
+     *                 separator
+     * @return the file separator used within <code>filename</code>.
      *         This value is either a forward or backward slash.
      */
     private static String determineSeparator(String filename) {
@@ -249,10 +249,10 @@ public class PathTool {
     }
 
     /**
-     * Cygwin prefers lowercase drive letters, but other parts of maven use uppercase
+     * Cygwin prefers lowercase drive letters, but other parts of maven use uppercase.
      *
      * @param path old path
-     * @return String
+     * @return string
      */
     static String uppercaseDrive(@Nullable String path) {
         if (path == null) {

@@ -37,21 +37,21 @@ public class XmlStreamReader extends Reader {
     private static String staticDefaultEncoding = null;
 
     /**
-     * @param encoding define the default encoding.
+     * @param encoding define the default encoding
      */
     public static void setDefaultEncoding(String encoding) {
         staticDefaultEncoding = encoding;
     }
 
     /**
-     * @return the default encoding.
+     * @return the default encoding
      */
     public static String getDefaultEncoding() {
         return staticDefaultEncoding;
     }
 
     /**
-     * @param file The file to create it from.
+     * @param file the file to create it from
      * @throws IOException in case of an error
      */
     public XmlStreamReader(File file) throws IOException {
@@ -84,7 +84,7 @@ public class XmlStreamReader extends Reader {
     }
 
     /**
-     * @param conn The URL connection {@link URLConnection}
+     * @param conn the URL connection {@link URLConnection}
      * @throws IOException in case of error
      */
     public XmlStreamReader(URLConnection conn) throws IOException {
@@ -130,12 +130,16 @@ public class XmlStreamReader extends Reader {
         return reader.getEncoding();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public int read(char[] buf, int offset, int len) throws IOException {
         return reader.read(buf, offset, len);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void close() throws IOException {
         reader.close();
     }

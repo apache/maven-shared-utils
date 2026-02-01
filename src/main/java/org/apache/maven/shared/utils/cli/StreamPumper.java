@@ -69,7 +69,7 @@ public class StreamPumper extends AbstractStreamHandler {
         this.consumer = consumer;
     }
 
-    /** run it. */
+    /** Run it. */
     public void run() {
         try {
             for (String line = in.readLine(); line != null; line = in.readLine()) {
@@ -101,7 +101,7 @@ public class StreamPumper extends AbstractStreamHandler {
     }
 
     /**
-     * flush.
+     * Flush.
      *
      * @deprecated As of 3.2.0, removed without replacement.
      */

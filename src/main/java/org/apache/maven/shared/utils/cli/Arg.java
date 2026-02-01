@@ -20,9 +20,6 @@ package org.apache.maven.shared.utils.cli;
 
 import java.io.File;
 
-/**
- *
- */
 public interface Arg {
     /**
      * @param value the value to be set
@@ -31,7 +28,7 @@ public interface Arg {
 
     /**
      * @param line the line of arguments
-     * @throws CommandLineException in case of unbalanced quotes.
+     * @throws CommandLineException in case of unbalanced quotes
      */
     void setLine(String line) throws CommandLineException;
 

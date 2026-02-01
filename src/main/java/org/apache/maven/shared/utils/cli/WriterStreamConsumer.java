@@ -24,7 +24,6 @@ import java.io.Writer;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
- *
  */
 public class WriterStreamConsumer implements StreamConsumer {
 

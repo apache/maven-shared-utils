@@ -47,7 +47,6 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:fredrik@westermarck.com">Fredrik Westermarck</a>
  * @author Holger Krauth
  * @author <a href="mailto:alex@purpletech.com">Alexander Day Chaffee</a>
- *
  */
 public class StringUtils {
     /**
@@ -98,7 +97,7 @@ public class StringUtils {
      * <p>Whitespace is defined by
      * {@link Character#isWhitespace(char)}.</p>
      *
-     * @param str String target to delete whitespace from
+     * @param str string target to delete whitespace from
      * @return the String without whitespace
      */
     @Nonnull
@@ -154,7 +153,6 @@ public class StringUtils {
      *
      * @param str the String to check, may be null
      * @return <code>true</code> if the String is null, empty or whitespace
-     *
      */
     public static boolean isBlank(@Nullable String str) {
         int strLen;
@@ -187,7 +185,6 @@ public class StringUtils {
      *
      * @param str the String to check, may be null
      * @return <code>true</code> if the String is not empty and not null and not whitespace
-     *
      */
     public static boolean isNotBlank(@Nullable String str) {
         return !isBlank(str);
@@ -426,8 +423,8 @@ public class StringUtils {
      * @param pos the position to start from
      * @param len the length of the required String
      * @return the leftmost characters
-     * @throws IndexOutOfBoundsException if pos is out of bounds
      * @throws IllegalArgumentException  if len is less than zero
+     * @throws IndexOutOfBoundsException if pos is out of bounds
      */
     public static String mid(String str, int pos, int len) {
         if ((pos < 0) || ((str != null) && (pos > str.length()))) {
@@ -494,7 +491,7 @@ public class StringUtils {
      * <code>StringTokenizer</code> does).</p>
      *
      * @param str       the string to parse
-     * @param separator Characters used as the delimiters. If
+     * @param separator characters used as the delimiters. If
      *                  <code>null</code>, splits on whitespace.
      * @param max       the maximum number of elements to include in the
      *                  array.  A zero or negative value implies no limit.
@@ -551,8 +548,8 @@ public class StringUtils {
      *
      * <p>The difference from join is that concatenate has no delimiter.</p>
      *
-     * @param array the array of values to concatenate.
-     * @return the concatenated string.
+     * @param array the array of values to concatenate
+     * @return the concatenated string
      */
     @Nonnull
     public static String concatenate(@Nonnull Object... array) {
@@ -673,8 +670,8 @@ public class StringUtils {
      * <p>A <code>null</code> reference passed to this method is a no-op.</p>
      *
      * @param text text to search and replace in
-     * @param repl String to search for
-     * @param with String to replace with
+     * @param repl string to search for
+     * @param with string to replace with
      * @return the text with any replacements processed
      * @see #replace(String text, String repl, String with, int max)
      */
@@ -688,8 +685,8 @@ public class StringUtils {
      * <p>A <code>null</code> reference passed to this method is a no-op.</p>
      *
      * @param text text to search and replace in
-     * @param repl String to search for
-     * @param with String to replace with
+     * @param repl string to search for
+     * @param with string to replace with
      * @return the text with any replacements processed
      * @see #replace(String text, String repl, String with, int max)
      */
@@ -704,8 +701,8 @@ public class StringUtils {
      * <p>A <code>null</code> reference passed to this method is a no-op.</p>
      *
      * @param text text to search and replace in
-     * @param repl String to search for
-     * @param with String to replace with
+     * @param repl string to search for
+     * @param with string to replace with
      * @param max  maximum number of values to replace, or <code>-1</code> if no maximum
      * @return the text with any replacements processed
      */
@@ -731,11 +728,11 @@ public class StringUtils {
     /**
      * <p>Overlay a part of a String with another String.</p>
      *
-     * @param text    String to do overlaying in
-     * @param overlay String to overlay
+     * @param text    string to do overlaying in
+     * @param overlay string to overlay
      * @param start   position to start overlaying at
      * @param end     position to stop overlaying before
-     * @return String with overlaid text
+     * @return string with overlaid text
      * @throws NullPointerException if text or overlay is <code>null</code>
      */
     @Nonnull
@@ -759,9 +756,9 @@ public class StringUtils {
      * <p>Uses spaces as the value to buffer the String with.
      * Equivalent to <code>center(str, size, " ")</code>.</p>
      *
-     * @param str  String to center
+     * @param str  string to center
      * @param size int size of new String
-     * @return String containing centered String
+     * @return string containing centered String
      * @throws NullPointerException if str is <code>null</code>
      */
     @Nonnull
@@ -774,12 +771,12 @@ public class StringUtils {
      *
      * <p>Uses a supplied String as the value to buffer the String with.</p>
      *
-     * @param str   String to center
+     * @param str   string to center
      * @param size  int size of new String
-     * @param delim String to buffer the new String with
-     * @return String containing centered String
-     * @throws NullPointerException if str or delim is <code>null</code>
+     * @param delim string to buffer the new String with
+     * @return string containing centered String
      * @throws ArithmeticException  if delim is the empty String
+     * @throws NullPointerException if str or delim is <code>null</code>
      */
     @Nonnull
     public static String center(@Nonnull String str, int size, @Nonnull String delim) {
@@ -799,8 +796,8 @@ public class StringUtils {
     /**
      * <p>Remove the last newline, and everything after it from a String.</p>
      *
-     * @param str String to chomp the newline from
-     * @return String without chomped newline
+     * @param str string to chomp the newline from
+     * @return string without chomped newline
      * @throws NullPointerException if str is <code>null</code>
      */
     @Nonnull
@@ -812,9 +809,9 @@ public class StringUtils {
      * <p>Remove the last value of a supplied String, and everything after
      * it from a String.</p>
      *
-     * @param str String to chomp from
-     * @param sep String to chomp
-     * @return String without chomped ending
+     * @param str string to chomp from
+     * @param sep string to chomp
+     * @return string without chomped ending
      * @throws NullPointerException if str or sep is <code>null</code>
      */
     @Nonnull
@@ -831,8 +828,8 @@ public class StringUtils {
      * <p>Remove a newline if and only if it is at the end
      * of the supplied String.</p>
      *
-     * @param str String to chomp from
-     * @return String without chomped ending
+     * @param str string to chomp from
+     * @return string without chomped ending
      * @throws NullPointerException if str is <code>null</code>
      */
     @Nonnull
@@ -843,9 +840,9 @@ public class StringUtils {
     /**
      * <p>Remove a value if and only if the String ends with that value.</p>
      *
-     * @param str String to chomp from
-     * @param sep String to chomp
-     * @return String without chomped ending
+     * @param str string to chomp from
+     * @param sep string to chomp
+     * @return string without chomped ending
      * @throws NullPointerException if str or sep is <code>null</code>
      */
     @Nonnull
@@ -865,9 +862,9 @@ public class StringUtils {
      * <p>Remove everything and return the last value of a supplied String, and
      * everything after it from a String.</p>
      *
-     * @param str String to chomp from
-     * @param sep String to chomp
-     * @return String chomped
+     * @param str string to chomp from
+     * @param sep string to chomp
+     * @return string chomped
      * @throws NullPointerException if str or sep is <code>null</code>
      */
     @Nonnull
@@ -886,9 +883,9 @@ public class StringUtils {
      * <p>Remove the first value of a supplied String, and everything before it
      * from a String.</p>
      *
-     * @param str String to chomp from
-     * @param sep String to chomp
-     * @return String without chomped beginning
+     * @param str string to chomp from
+     * @param sep string to chomp
+     * @return string without chomped beginning
      * @throws NullPointerException if str or sep is <code>null</code>
      */
     @Nonnull
@@ -905,9 +902,9 @@ public class StringUtils {
      * <p>Remove and return everything before the first value of a
      * supplied String from another String.</p>
      *
-     * @param str String to chomp from
-     * @param sep String to chomp
-     * @return String prechomped
+     * @param str string to chomp from
+     * @param sep string to chomp
+     * @return string prechomped
      * @throws NullPointerException if str or sep is <code>null</code>
      */
     @Nonnull
@@ -929,8 +926,8 @@ public class StringUtils {
      * <p>If the String ends in <code>\r\n</code>, then remove both
      * of them.</p>
      *
-     * @param str String to chop last character from
-     * @return String without last character
+     * @param str string to chop last character from
+     * @return string without last character
      * @throws NullPointerException if str is <code>null</code>
      */
     @Nonnull
@@ -956,8 +953,8 @@ public class StringUtils {
      * <p>Remove <code>\n</code> from end of a String if it's there.
      * If a <code>\r</code> precedes it, then remove that too.</p>
      *
-     * @param str String to chop a newline from
-     * @return String without newline
+     * @param str string to chop a newline from
+     * @return string without newline
      * @throws NullPointerException if str is <code>null</code>
      */
     @Nonnull
@@ -985,8 +982,8 @@ public class StringUtils {
      * <p>So a tab becomes the characters <code>'\\'</code> and
      * <code>'t'</code>.</p>
      *
-     * @param str String to escape values in
-     * @return String with escaped values
+     * @param str string to escape values in
+     * @return string with escaped values
      * @throws NullPointerException if str is <code>null</code>
      */
     @Nonnull
@@ -1068,9 +1065,9 @@ public class StringUtils {
      * <p>Repeat a String <code>n</code> times to form a
      * new string.</p>
      *
-     * @param str    String to repeat
+     * @param str    string to repeat
      * @param repeat number of times to repeat str
-     * @return String with repeated String
+     * @return string with repeated String
      * @throws NegativeArraySizeException if <code>repeat &lt; 0</code>
      * @throws NullPointerException       if str is <code>null</code>
      */
@@ -1088,7 +1085,7 @@ public class StringUtils {
      *
      * <p>The String is padded to the size of <code>n</code>.</p>
      *
-     * @param str  String to repeat
+     * @param str  string to repeat
      * @param size number of times to repeat str
      * @return right padded String
      * @throws NullPointerException if str is <code>null</code>
@@ -1103,12 +1100,12 @@ public class StringUtils {
      *
      * <p>The String is padded to the size of <code>n</code>.</p>
      *
-     * @param str   String to pad out
+     * @param str   string to pad out
      * @param size  size to pad to
-     * @param delim String to pad with
+     * @param delim string to pad with
      * @return right padded String
-     * @throws NullPointerException if str or delim is <code>null</code>
      * @throws ArithmeticException  if delim is the empty String
+     * @throws NullPointerException if str or delim is <code>null</code>
      */
     @Nonnull
     public static String rightPad(@Nonnull String str, int size, @Nonnull String delim) {
@@ -1124,7 +1121,7 @@ public class StringUtils {
      *
      * <p>The String is padded to the size of <code>n</code>.</p>
      *
-     * @param str  String to pad out
+     * @param str  string to pad out
      * @param size size to pad to
      * @return left padded String
      * @throws NullPointerException if str or delim is <code>null</code>
@@ -1137,12 +1134,12 @@ public class StringUtils {
     /**
      * Left pad a String with a specified string. Pad to a size of n.
      *
-     * @param str   String to pad out
+     * @param str   string to pad out
      * @param size  size to pad to
-     * @param delim String to pad with
+     * @param delim string to pad with
      * @return left padded String
-     * @throws NullPointerException if str or delim is null
      * @throws ArithmeticException  if delim is the empty string
+     * @throws NullPointerException if str or delim is null
      */
     @Nonnull
     public static String leftPad(@Nonnull String str, int size, @Nonnull String delim) {
@@ -1775,9 +1772,9 @@ public class StringUtils {
      * If maxWidth is less than 3, throw an IllegalArgumentException.
      * In no case will it return a string of length greater than maxWidth.</p>
      *
-     * @param s The string to be abbreviated.
+     * @param s the string to be abbreviated
      * @param maxWidth maximum length of result string
-     * @return The abbreviated string.
+     * @return the abbreviated string
      */
     @Nonnull
     public static String abbreviate(@Nonnull String s, int maxWidth) {
@@ -1794,10 +1791,10 @@ public class StringUtils {
      * In no case will it return a string of length greater than maxWidth.
      * </p>
      *
-     * @param s        String to abbreviate.
+     * @param s        string to abbreviate
      * @param offset   left edge of source string
      * @param maxWidth maximum length of result string
-     * @return The abbreviated string.
+     * @return the abbreviated string
      */
     @Nonnull
     public static String abbreviate(@Nonnull String s, int offset, int maxWidth) {
@@ -1836,8 +1833,8 @@ public class StringUtils {
      * E.g. strdiff("i am a machine", "i am a robot") &rarr; "robot"
      * </p>
      *
-     * @param s1 The first string.
-     * @param s2 The second string.
+     * @param s1 the first string
+     * @param s2 the second string
      * @return the portion of s2 where it differs from s1; returns the empty string ("") if they are equal
      */
     public static String difference(@Nonnull String s1, @Nonnull String s2) {
@@ -1854,8 +1851,8 @@ public class StringUtils {
      * E.g. strdiff("i am a machine", "i am a robot") &rarr; 7
      * </p>
      *
-     * @param s1 The first string.
-     * @param s2 The second string.
+     * @param s1 the first string
+     * @param s2 the second string
      * @return the index where s2 and s1 begin to differ; -1 if they are equal
      */
     public static int differenceAt(@Nonnull String s1, @Nonnull String s2) {
@@ -1876,9 +1873,9 @@ public class StringUtils {
      * Any text looking like '${key}' will get replaced by the value stored
      * in the namespace map under the 'key'.
      *
-     * @param text The text where replacements will be searched for.
-     * @param namespace The namespace which contains the replacements.
-     * @return the interpolated text.
+     * @param text the text where replacements will be searched for
+     * @param namespace the namespace which contains the replacements
+     * @return the interpolated text
      */
     public static String interpolate(String text, @Nonnull Map<?, ?> namespace) {
         for (Map.Entry<?, ?> entry : namespace.entrySet()) {
@@ -1910,8 +1907,8 @@ public class StringUtils {
      * </pre>
      * will become 'ThisIsIt'.
      *
-     * @param data The data.
-     * @param replaceThis The things which should be replaced.
+     * @param data the data
+     * @param replaceThis the things which should be replaced
      * @return humped String
      */
     @Nonnull
@@ -1939,8 +1936,8 @@ public class StringUtils {
      *
      * @param data the String to get capitalized
      * @return data string with the first character transformed to uppercase
-     * @throws NullPointerException if data is <code>null</code>
      * @throws IndexOutOfBoundsException if data is empty
+     * @throws NullPointerException if data is <code>null</code>
      */
     @Nonnull
     public static String capitalizeFirstLetter(@Nonnull String data) {
@@ -1959,10 +1956,10 @@ public class StringUtils {
      * Converts the first character of the given String to lowercase.
      * This method does <i>not</i> trim spaces!
      *
-     * @param data the String to get its first character lower-cased.
+     * @param data the String to get its first character lower-cased
      * @return data string with the first character transformed to lowercase
-     * @throws NullPointerException if data is <code>null</code>
      * @throws IndexOutOfBoundsException if data is empty
+     * @throws NullPointerException if data is <code>null</code>
      */
     @Nonnull
     public static String lowercaseFirstLetter(@Nonnull String data) {
@@ -2006,12 +2003,11 @@ public class StringUtils {
      * StringUtils.quoteAndEscape("a\"bc", '\'') = 'a\"bc'
      * </pre>
      *
-     * @param source The source.
-     * @param quoteChar The quote character.
+     * @param source the source
+     * @param quoteChar the quote character
      * @return the String quoted and escaped
      * @see #quoteAndEscape(String, char, char[], char[], char, boolean)
      * @see #quoteAndEscape(String, char, char[], char[], char, boolean)
-     *
      */
     public static String quoteAndEscape(@Nullable String source, char quoteChar) {
         return quoteAndEscape(source, quoteChar, new char[] {quoteChar}, new char[] {' '}, '\\', false);
@@ -2025,7 +2021,6 @@ public class StringUtils {
      * @param quotingTriggers the quoting trigger
      * @return the String quoted and escaped
      * @see #quoteAndEscape(String, char, char[], char[], char, boolean)
-     *
      */
     public static String quoteAndEscape(@Nullable String source, char quoteChar, @Nonnull char[] quotingTriggers) {
         return quoteAndEscape(source, quoteChar, new char[] {quoteChar}, quotingTriggers, '\\', false);
@@ -2039,7 +2034,6 @@ public class StringUtils {
      * @param force true/false
      * @return the String quoted and escaped
      * @see #quoteAndEscape(String, char, char[], char[], char, boolean)
-     *
      */
     public static String quoteAndEscape(
             @Nullable String source,
@@ -2134,7 +2128,6 @@ public class StringUtils {
      *
      * @param s a not null String
      * @return a string with unique whitespace
-     *
      */
     @Nonnull
     public static String removeDuplicateWhitespace(@Nonnull String s) {
@@ -2228,7 +2221,6 @@ public class StringUtils {
      * @param searchChar the character to find
      * @return true if the String contains the search character,
      *         false if not or <code>null</code> string input
-     *
      */
     public static boolean contains(@Nullable String str, char searchChar) {
         return !isEmpty(str) && str.indexOf(searchChar) >= 0;
@@ -2275,7 +2267,6 @@ public class StringUtils {
      * @param searchStr the String to find at end, may be null
      * @return true if the String ends with the search String,
      *         false if not or <code>null</code> string input
-     *
      */
     public static boolean endsWithIgnoreCase(@Nullable String str, @Nullable String searchStr) {
         if (str == null || searchStr == null) {

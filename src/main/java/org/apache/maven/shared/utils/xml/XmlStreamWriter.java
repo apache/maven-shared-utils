@@ -35,8 +35,8 @@ public class XmlStreamWriter extends org.apache.commons.io.output.XmlStreamWrite
     }
 
     /**
-     * @param file The file to use.
-     * @throws FileNotFoundException in case of not found file.
+     * @param file the file to use
+     * @throws FileNotFoundException in case of not found file
      */
     public XmlStreamWriter(File file) throws FileNotFoundException {
         super(file);

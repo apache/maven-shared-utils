@@ -35,7 +35,6 @@ import org.apache.maven.shared.utils.StringUtils;
  * </ul>
  *
  * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
- *
  */
 public class Shell implements Cloneable {
     private static final char[] DEFAULT_QUOTING_TRIGGER_CHARS = {' '};
@@ -92,7 +91,7 @@ public class Shell implements Cloneable {
     }
 
     /**
-     * Get the shell arguments
+     * Get the shell arguments.
      *
      * @return the arguments
      */
@@ -116,7 +115,7 @@ public class Shell implements Cloneable {
     }
 
     /**
-     * Get the command line for the provided executable and arguments in this shell
+     * Get the command line for the provided executable and arguments in this shell.
      *
      * @param executableParameter executable that the shell has to call
      * @param argumentsParameter  arguments for the executable, not the shell
@@ -127,7 +126,7 @@ public class Shell implements Cloneable {
     }
 
     /**
-     * @param executableParameter Executable
+     * @param executableParameter executable
      * @param argumentsParameter the arguments for the executable
      * @return the list on command line
      */
@@ -234,10 +233,10 @@ public class Shell implements Cloneable {
 
     /**
      * Get the full command line to execute, including shell command, shell arguments,
-     * executable and executable arguments
+     * executable and executable arguments.
      *
      * @param arguments arguments for the executable, not the shell
-     * @return List of String objects, whose array version is suitable to be used as argument
+     * @return list of String objects, whose array version is suitable to be used as argument
      *         of Runtime.getRuntime().exec()
      */
     public List<String> getShellCommandLine(String... arguments) {
@@ -282,7 +281,8 @@ public class Shell implements Cloneable {
 
     /**
      * Sets the executable to run.
-     * @param executable The executable.
+     *
+     * @param executable the executable
      */
     public void setExecutable(String executable) {
         if ((executable == null) || (executable.length() == 0)) {
@@ -292,7 +292,7 @@ public class Shell implements Cloneable {
     }
 
     /**
-     * @return The executable.
+     * @return the executable
      */
     public String getExecutable() {
         return executable;
@@ -300,7 +300,8 @@ public class Shell implements Cloneable {
 
     /**
      * Sets execution directory.
-     * @param path The path which should be used as working directory.
+     *
+     * @param path the path which should be used as working directory
      */
     public void setWorkingDirectory(String path) {
         if (path != null) {
@@ -330,7 +331,9 @@ public class Shell implements Cloneable {
         return workingDir;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Object clone() {
         throw new RuntimeException("Do we ever clone this?");
         /*        Shell shell = new Shell();

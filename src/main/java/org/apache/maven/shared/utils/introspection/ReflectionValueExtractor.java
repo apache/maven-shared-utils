@@ -38,7 +38,6 @@ import org.apache.maven.shared.utils.introspection.MethodMap.AmbiguousException;
  *
  * @author <a href="mailto:jason@maven.org">Jason van Zyl </a>
  * @author <a href="mailto:vincent.siveton@gmail.com">Vincent Siveton</a>
- *
  * @see <a href="http://struts.apache.org/1.x/struts-taglib/indexedprops.html">
  * http://struts.apache.org/1.x/struts-taglib/indexedprops.html</a>
  */

@@ -100,6 +100,7 @@ public class WriterFactory {
 
     /**
      * The <code>file.encoding</code> System Property.
+     *
      * @deprecated use {@code java.nio.charset.Charset.getDefaultCharset()}
      */
     @Deprecated
@@ -182,9 +183,9 @@ public class WriterFactory {
      * @param file not null file
      * @param encoding not null supported encoding
      * @return a writer instance for the output file using the given encoding
+     * @throws FileNotFoundException if any
      * @throws UnsupportedEncodingException if the JDK in use does not recognize or support the
      *    named encoding
-     * @throws FileNotFoundException if any
      * @see <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/intl/encoding.doc.html">Supported
      *         encodings</a>
      * @deprecated use {@code java.nio.file.Files.newBufferedWriter()} instead

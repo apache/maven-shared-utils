@@ -30,14 +30,10 @@ import java.io.File;
  * cleaned between two scan() invocations.</p>
  *
  * @author <a href="mailto:struberg@apache.org">Mark Struberg</a>
- *
  * @deprecated use {@code java.nio.file.Files.walkFileTree()} and related classes
  */
 @Deprecated
 public interface ScanConductor {
-    /**
-     *
-     */
     enum ScanAction {
         /**
          * Abort the whole scanning process. The current file will not
@@ -69,7 +65,7 @@ public interface ScanConductor {
      * This method will get invoked for every detected directory.
      *
      * @param name      the directory name (contains parent folders up to the pwd)
-     * @param directory The directory.
+     * @param directory the directory
      * @return the ScanAction to control how to proceed with the scanning
      */
     ScanAction visitDirectory(String name, File directory);
@@ -78,7 +74,7 @@ public interface ScanConductor {
      * This method will get invoked for every detected file.
      *
      * @param name the file name (contains parent folders up to the pwd)
-     * @param file The file.
+     * @param file the file
      * @return the ScanAction to control how to proceed with the scanning
      */
     ScanAction visitFile(String name, File file);

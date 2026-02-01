@@ -52,7 +52,9 @@ public class BourneShell extends Shell {
         return quoteOneItem(super.getExecutable(), true);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public List<String> getShellArgsList() {
         List<String> shellArgs = new ArrayList<>();
         List<String> existingShellArgs = super.getShellArgsList();
@@ -66,7 +68,9 @@ public class BourneShell extends Shell {
         return shellArgs;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public String[] getShellArgs() {
         String[] shellArgs = super.getShellArgs();
         if (shellArgs == null) {
@@ -85,7 +89,9 @@ public class BourneShell extends Shell {
         return shellArgs;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     protected String getExecutionPreamble() {
         if (getWorkingDirectoryAsString() == null) {
             return null;
@@ -109,8 +115,8 @@ public class BourneShell extends Shell {
      * BourneShell.quoteOneItem("/test/quoted path\"'abc")  = '/test/quoted path"'"'"'abc'
      * </pre>
      *
-     * @param path not null path.
-     * @return the path unified correctly for the Bourne shell.
+     * @param path not null path
+     * @return the path unified correctly for the Bourne shell
      */
     protected String quoteOneItem(String path, boolean isExecutable) {
         if (path == null) {

@@ -78,7 +78,6 @@ import java.nio.channels.Channel;
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * @author <a href="mailto:jefft@apache.org">Jeff Turner</a>
  * @version CVS $Revision$ $Date$
- *
  */
 public final class IOUtil
 /*
@@ -164,7 +163,7 @@ public final class IOUtil
      *
      * @param input the reader to read from
      * @param output the writer to write to
-     * @throws IOException in case of failure     * @deprecated use {@code org.apache.commons.io.IOUtils.copy()}.
+     * @throws IOException in case of failure     * @deprecated use {@code org.apache.commons.io.IOUtils.copy()}
      */
     @Deprecated
     public static void copy(@Nonnull final Reader input, @Nonnull final Writer output) throws IOException {
@@ -338,7 +337,7 @@ public final class IOUtil
      *                   <a href="https://www.iana.org/assignments/character-sets">IANA
      *                   Charset Registry</a> for a list of valid encoding types.
      * @param bufferSize size of internal buffer
-     * @return The converted string.
+     * @return the converted string
      * @throws IOException in case of failure
      * @deprecated use {@code org.apache.commons.io.IOUtils.toString()}.
      */
@@ -358,7 +357,7 @@ public final class IOUtil
      * Get the contents of an <code>InputStream</code> as a <code>byte[]</code>.
      *
      * @param input the InputStream to read from
-     * @return the resulting byte array.
+     * @return the resulting byte array
      * @throws IOException in case of failure
      * @deprecated use {@code org.apache.commons.io.IOUtils.readFully()}.
      */
@@ -373,7 +372,7 @@ public final class IOUtil
      *
      * @param input the InputStream to read from
      * @param bufferSize size of internal buffer
-     * @return the resulting byte array.
+     * @return the resulting byte array
      * @throws IOException in case of failure
      * @deprecated use {@code org.apache.commons.io.IOUtils.readFully()}.
      */
@@ -432,8 +431,9 @@ public final class IOUtil
 
     /**
      * Get the contents of a <code>Reader</code> as a String.
+     *
      * @param input the InputStream to read from
-     * @return The converted string.
+     * @return the converted string
      * @throws IOException in case of failure
      * @deprecated use {@code org.apache.commons.io.IOUtils.toString()}.
      */
@@ -448,7 +448,7 @@ public final class IOUtil
      *
      * @param input the reader to read from
      * @param bufferSize size of internal buffer
-     * @return the resulting byte array.
+     * @return the resulting byte array
      * @throws IOException in case of failure
      * @deprecated use {@code org.apache.commons.io.IOUtils.toString()}.
      */
@@ -467,7 +467,7 @@ public final class IOUtil
      * Get the contents of a <code>Reader</code> as a <code>byte[]</code>.
      *
      * @param input the InputStream to read from
-     * @return the resulting byte array.
+     * @return the resulting byte array
      * @throws IOException in case of failure
      * @deprecated always specify a character encoding
      */
@@ -482,7 +482,7 @@ public final class IOUtil
      *
      * @param input the InputStream to read from
      * @param bufferSize size of internal buffer
-     * @return the resulting byte array.
+     * @return the resulting byte array
      * @throws IOException in case of failure
      * @deprecated always specify a character encoding
      */
@@ -505,6 +505,7 @@ public final class IOUtil
     /**
      * Serialize chars from a <code>String</code> to bytes on an <code>OutputStream</code>, and
      * flush the <code>OutputStream</code>.
+     *
      * @param input the InputStream to read from
      * @param output the output to write to
      * @throws IOException in case of failure
@@ -654,7 +655,7 @@ public final class IOUtil
      *                   <a href="https://www.iana.org/assignments/character-sets">IANA
      *                   Charset Registry</a> for a list of valid encoding types.
      * @param input the input bytes
-     * @param output The output buffer {@link Writer}
+     * @param output the output buffer {@link Writer}
      * @param bufferSize size of internal buffer
      * @throws IOException in case of failure
      * @deprecated use {@code org.apache.commons.io.IOUtils.write()}.
@@ -676,6 +677,7 @@ public final class IOUtil
     /**
      * Get the contents of a <code>byte[]</code> as a String.
      * The platform's default encoding is used for the byte-to-char conversion.
+     *
      * @param input the input bytes
      * @return the resulting string
      * @throws IOException in case of failure
@@ -749,7 +751,7 @@ public final class IOUtil
     /**
      * Copy bytes from a <code>byte[]</code> to an <code>OutputStream</code>.
      *
-     * @param input Input byte array.
+     * @param input input byte array
      * @param output output stream {@link OutputStream}
      * @throws IOException in case of failure
      * @deprecated inline this method
@@ -878,7 +880,7 @@ public final class IOUtil
      * }
      * </pre>
      *
-     * @param channel The channel to close or {@code null}.
+     * @param channel the channel to close or {@code null}
      * @deprecated use try-with-resources
      */
     @Deprecated
@@ -979,7 +981,7 @@ public final class IOUtil
      * }
      * </pre>
      *
-     * @param inputStream The stream to close or {@code null}.
+     * @param inputStream the stream to close or {@code null}
      * @deprecated use try-with-resources
      */
     @Deprecated
@@ -1080,7 +1082,7 @@ public final class IOUtil
      * }
      * </pre>
      *
-     * @param outputStream The stream to close or {@code null}.
+     * @param outputStream the stream to close or {@code null}
      * @deprecated use try-with-resources
      */
     @Deprecated
@@ -1181,7 +1183,7 @@ public final class IOUtil
      * }
      * </pre>
      *
-     * @param reader The reader to close or {@code null}.
+     * @param reader the reader to close or {@code null}
      * @deprecated use try-with-resources
      */
     @Deprecated
@@ -1282,7 +1284,7 @@ public final class IOUtil
      * }
      * </pre>
      *
-     * @param writer The writer to close or {@code null}.
+     * @param writer the writer to close or {@code null}
      * @deprecated use try-with-resources
      */
     @Deprecated

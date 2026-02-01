@@ -32,7 +32,6 @@ import java.util.Map;
  * @author <a href="mailto:Christoph.Reck@dlr.de">Christoph Reck</a>
  * @author <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
  * @author <a href="mailto:szegedia@freemail.hu">Attila Szegedi</a>
- *
  */
 class MethodMap {
     private static final int MORE_SPECIFIC = 0;
@@ -51,7 +50,7 @@ class MethodMap {
      * For a particular class we are keeping track
      * of all the methods with the same name.
      *
-     * @param method The method
+     * @param method the method
      */
     void add(Method method) {
         String methodName = method.getName();
@@ -69,8 +68,8 @@ class MethodMap {
     /**
      * Return a list of methods with the same name.
      *
-     * @param key The name of the method.
-     * @return List list of methods
+     * @param key the name of the method
+     * @return list list of methods
      */
     List<Method> get(String key) {
         return methodByNameMap.get(key);
@@ -100,7 +99,7 @@ class MethodMap {
      * @param methodName name of method
      * @param args       the actual arguments with which the method is called
      * @return the most specific applicable method, or null if no
-     *         method is applicable.
+     *         method is applicable
      * @throws AmbiguousException if there is more than one maximally
      *                            specific applicable method
      */
@@ -128,8 +127,8 @@ class MethodMap {
     }
 
     /**
-     * simple distinguishable exception, used when
-     * we run across ambiguous overloading
+     * Simple distinguishable exception, used when
+     * we run across ambiguous overloading.
      */
     static class AmbiguousException extends Exception {
 
@@ -207,7 +206,7 @@ class MethodMap {
      * @param c1 first signature to compare
      * @param c2 second signature to compare
      * @return MORE_SPECIFIC if c1 is more specific than c2, LESS_SPECIFIC if
-     *         c1 is less specific than c2, INCOMPARABLE if they are incomparable.
+     *         c1 is less specific than c2, INCOMPARABLE if they are incomparable
      */
     private static int moreSpecific(Class<?>[] c1, Class<?>[] c2) {
         boolean c1MoreSpecific = false;
@@ -252,7 +251,7 @@ class MethodMap {
      * @param classes the actual types of the arguments
      * @return a list that contains only applicable methods (number of
      *         formal and actual arguments matches, and argument types are assignable
-     *         to formal types through a method invocation conversion).
+     *         to formal types through a method invocation conversion)
      */
     private static LinkedList<Method> getApplicables(List<Method> methods, Class<?>... classes) {
         LinkedList<Method> list = new LinkedList<>();
@@ -269,8 +268,8 @@ class MethodMap {
      * Returns true if the supplied method is applicable to actual
      * argument types.
      *
-     * @param method  The method to check for applicability
-     * @param classes The arguments
+     * @param method  the method to check for applicability
+     * @param classes the arguments
      * @return true if the method applies to the parameter types
      */
     private static boolean isApplicable(Method method, Class<?>... classes) {
@@ -301,11 +300,11 @@ class MethodMap {
      *
      * @param formal the formal parameter type to which the actual
      *               parameter type should be convertible
-     * @param actual the actual parameter type.
+     * @param actual the actual parameter type
      * @return true if either formal type is assignable from actual type,
      *         or formal is a primitive type and actual is its corresponding object
      *         type or an object type of a primitive type that can be converted to
-     *         the formal type.
+     *         the formal type
      */
     private static boolean isMethodInvocationConvertible(Class<?> formal, Class<?> actual) {
         /*
@@ -382,10 +381,10 @@ class MethodMap {
      *
      * @param formal the formal parameter type to which the actual
      *               parameter type should be convertible
-     * @param actual the actual parameter type.
+     * @param actual the actual parameter type
      * @return true if either formal type is assignable from actual type,
      *         or formal and actual are both primitive types and actual can be
-     *         subject to widening conversion to formal.
+     *         subject to widening conversion to formal
      */
     private static boolean isStrictMethodInvocationConvertible(Class<?> formal, Class<?> actual) {
         /*

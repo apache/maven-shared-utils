@@ -101,6 +101,7 @@ public class ReaderFactory {
 
     /**
      * The <code>file.encoding</code> System Property.
+     *
      * @deprecated use {@code java.nio.charset.Charset.getDefaultCharset()}
      */
     @Deprecated
@@ -148,7 +149,7 @@ public class ReaderFactory {
     /**
      * Create a new Reader with default platform encoding.
      *
-     * @param file not null file.
+     * @param file not null file
      * @return a reader instance for the input file using the default platform character set
      * @throws FileNotFoundException if any
      * @see java.nio.charset.Charset#defaultCharset()

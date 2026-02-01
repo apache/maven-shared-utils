@@ -33,7 +33,7 @@ public interface JavaToolRequest {
      * <p>This option field if filled is used by the commandline tool to consume system ouput stream of the jarsigner
      * command.</p>
      *
-     * @return the value of the {@code systemOutStreamConsumer} field.
+     * @return the value of the {@code systemOutStreamConsumer} field
      */
     StreamConsumer getSystemOutStreamConsumer();
 
@@ -42,21 +42,21 @@ public interface JavaToolRequest {
      * <p>This option field if filled is used by the commandline tool to consume system error stream of the jarsigner
      * command.</p>
      *
-     * @return the value of the {@code systemErrorStreamConsumer} field.
+     * @return the value of the {@code systemErrorStreamConsumer} field
      */
     StreamConsumer getSystemErrorStreamConsumer();
 
     /**
      * Sets the new given value to the field {@code systemOutStreamConsumer} of the request.
      *
-     * @param systemOutStreamConsumer the new value of the field {@code systemOutStreamConsumer}.
+     * @param systemOutStreamConsumer the new value of the field {@code systemOutStreamConsumer}
      */
     void setSystemOutStreamConsumer(StreamConsumer systemOutStreamConsumer);
 
     /**
      * Sets the new given value to the field {@code systemErrorStreamConsumer} of the request.
      *
-     * @param systemErrorStreamConsumer the new value of the field {@code systemErrorStreamConsumer}.
+     * @param systemErrorStreamConsumer the new value of the field {@code systemErrorStreamConsumer}
      */
     void setSystemErrorStreamConsumer(StreamConsumer systemErrorStreamConsumer);
 }

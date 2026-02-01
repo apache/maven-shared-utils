@@ -48,7 +48,7 @@ public class JavaToolResult {
      * Gets the exit code from the tool invocation. A non-zero value indicates a build failure. <strong>Note:</strong>
      * This value is undefined if {@link #getExecutionException()} reports an exception.
      *
-     * @return The exit code from the tool invocation.
+     * @return the exit code from the tool invocation
      */
     public int getExitCode() {
         return exitCode;
@@ -57,7 +57,7 @@ public class JavaToolResult {
     /**
      * Gets the command line used.
      *
-     * @return The command line used
+     * @return the command line used
      */
     public Commandline getCommandline() {
         return commandline;
@@ -66,8 +66,8 @@ public class JavaToolResult {
     /**
      * Gets the exception that possibly occurred during the execution of the command line.
      *
-     * @return The exception that prevented to invoke tool or <code>null</code> if the command line was successfully
-     * processed by the operating system.
+     * @return the exception that prevented to invoke tool or <code>null</code> if the command line was successfully
+     * processed by the operating system
      */
     public CommandLineException getExecutionException() {
         return executionException;
@@ -76,7 +76,7 @@ public class JavaToolResult {
     /**
      * Sets the exit code reported by the tool invocation.
      *
-     * @param exitCode The exit code reported by the tool invocation.
+     * @param exitCode the exit code reported by the tool invocation
      */
     public void setExitCode(int exitCode) {
         this.exitCode = exitCode;
@@ -85,7 +85,7 @@ public class JavaToolResult {
     /**
      * Sets the exception that prevented to execute the command line.
      *
-     * @param executionException The exception that prevented to execute the command line, may be <code>null</code>.
+     * @param executionException the exception that prevented to execute the command line, may be <code>null</code>
      */
     public void setExecutionException(CommandLineException executionException) {
         this.executionException = executionException;
