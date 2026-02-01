@@ -553,7 +553,8 @@ public class StringUtils {
      *
      * @param array the array of values to concatenate.
      * @return the concatenated string.
-     * @deprecated use <code>java.lang.String.join()</code> instead
+     * @deprecated use <code>java.lang.String.join()</code> or
+     *     <code>Arrays.stream(array).map(Object::toString).collect(Collectors.joining(""))</code> instead
      */
     @Deprecated
     @Nonnull
@@ -571,7 +572,8 @@ public class StringUtils {
      * @param array     the array of values to join together
      * @param separator the separator character to use
      * @return the joined String
-     * @deprecated use <code>java.lang.String.join()</code> instead
+     * @deprecated use <code>java.lang.String.join()</code> or
+     *      <code>Arrays.stream(array).map(Object::toString).collect(Collectors.joining(separator))</code> instead
      */
     @Deprecated
     @Nonnull
