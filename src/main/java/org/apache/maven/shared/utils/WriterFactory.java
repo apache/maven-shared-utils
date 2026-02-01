@@ -18,8 +18,6 @@
  */
 package org.apache.maven.shared.utils;
 
-import javax.annotation.Nonnull;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -32,6 +30,7 @@ import java.io.Writer;
 import java.nio.charset.Charset;
 
 import org.apache.maven.shared.utils.xml.XmlStreamWriter;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Utility to create Writers, with explicit encoding choice: platform default,
@@ -115,7 +114,7 @@ public class WriterFactory {
      * @deprecated use {@code org.apache.commons.io.input.XmlStreamWriter} instead
      */
     @Deprecated
-    public static XmlStreamWriter newXmlWriter(@Nonnull OutputStream out) throws IOException {
+    public static XmlStreamWriter newXmlWriter(@NonNull OutputStream out) throws IOException {
         return new XmlStreamWriter(out);
     }
 
@@ -129,7 +128,7 @@ public class WriterFactory {
      * @deprecated use {@code org.apache.commons.io.input.XmlStreamWriter} instead
      */
     @Deprecated
-    public static XmlStreamWriter newXmlWriter(@Nonnull File file) throws IOException {
+    public static XmlStreamWriter newXmlWriter(@NonNull File file) throws IOException {
         return new XmlStreamWriter(file);
     }
 
@@ -141,7 +140,7 @@ public class WriterFactory {
      * @deprecated always specify an encoding. Do not depend on the default platform character set.
      */
     @Deprecated
-    public static Writer newPlatformWriter(@Nonnull OutputStream out) {
+    public static Writer newPlatformWriter(@NonNull OutputStream out) {
         return new OutputStreamWriter(out);
     }
 
@@ -154,7 +153,7 @@ public class WriterFactory {
      * @deprecated always specify an encoding. Do not depend on the default platform character set.
      */
     @Deprecated
-    public static Writer newPlatformWriter(@Nonnull File file) throws IOException {
+    public static Writer newPlatformWriter(@NonNull File file) throws IOException {
         return new FileWriter(file);
     }
 
@@ -171,7 +170,7 @@ public class WriterFactory {
      * @deprecated use {@code new OutputStreamWriter(out, encoding)} instead
      */
     @Deprecated
-    public static Writer newWriter(@Nonnull OutputStream out, @Nonnull String encoding)
+    public static Writer newWriter(@NonNull OutputStream out, @NonNull String encoding)
             throws UnsupportedEncodingException {
         return new OutputStreamWriter(out, encoding);
     }
@@ -190,7 +189,7 @@ public class WriterFactory {
      * @deprecated use {@code java.nio.file.Files.newBufferedWriter()} instead
      */
     @Deprecated
-    public static Writer newWriter(@Nonnull File file, @Nonnull String encoding)
+    public static Writer newWriter(@NonNull File file, @NonNull String encoding)
             throws UnsupportedEncodingException, FileNotFoundException {
         return newWriter(new FileOutputStream(file), encoding);
     }

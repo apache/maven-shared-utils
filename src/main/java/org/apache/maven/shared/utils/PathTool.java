@@ -18,11 +18,11 @@
  */
 package org.apache.maven.shared.utils;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import java.io.File;
 import java.util.StringTokenizer;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * <p>Path tool contains static methods to assist in determining path-related
@@ -198,8 +198,8 @@ public class PathTool {
      *         terminated with a forward slash.  A zero-length string is
      *         returned if: the filename is zero-length.
      */
-    @Nonnull
-    private static String determineRelativePath(@Nonnull String filename, @Nonnull String separator) {
+    @NonNull
+    private static String determineRelativePath(@NonNull String filename, @NonNull String separator) {
         if (filename.length() == 0) {
             return "";
         }
@@ -264,9 +264,9 @@ public class PathTool {
         return path;
     }
 
-    @Nonnull
+    @NonNull
     private static String buildRelativePath(
-            @Nonnull String toPath, @Nonnull String fromPath, final char separatorChar) {
+            @NonNull String toPath, @NonNull String fromPath, final char separatorChar) {
         // use tokeniser to traverse paths and for lazy checking
         StringTokenizer toTokeniser = new StringTokenizer(toPath, String.valueOf(separatorChar));
         StringTokenizer fromTokeniser = new StringTokenizer(fromPath, String.valueOf(separatorChar));

@@ -18,9 +18,6 @@
  */
 package org.apache.maven.shared.utils.introspection;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -30,6 +27,8 @@ import java.util.WeakHashMap;
 
 import org.apache.maven.shared.utils.StringUtils;
 import org.apache.maven.shared.utils.introspection.MethodMap.AmbiguousException;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * <p>Using simple dotted expressions to extract the values from an Object instance,
@@ -141,7 +140,7 @@ public class ReflectionValueExtractor {
      * @return the object defined by the expression
      * @throws IntrospectionException if any
      */
-    public static Object evaluate(@Nonnull String expression, @Nullable Object root) throws IntrospectionException {
+    public static Object evaluate(@NonNull String expression, @Nullable Object root) throws IntrospectionException {
         return evaluate(expression, root, true);
     }
 
@@ -163,7 +162,7 @@ public class ReflectionValueExtractor {
      * @return the object defined by the expression
      * @throws IntrospectionException if any
      */
-    public static Object evaluate(@Nonnull String expression, @Nullable Object root, boolean trimRootToken)
+    public static Object evaluate(@NonNull String expression, @Nullable Object root, boolean trimRootToken)
             throws IntrospectionException {
         Object value = root;
 

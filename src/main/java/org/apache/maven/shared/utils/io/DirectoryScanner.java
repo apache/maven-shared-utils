@@ -18,9 +18,6 @@
  */
 package org.apache.maven.shared.utils.io;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -28,6 +25,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * <p>Class for scanning a directory for files/directories which match certain criteria.</p>
@@ -279,7 +279,7 @@ public class DirectoryScanner {
      *
      * @param basedir The base directory for scanning. Should not be <code>null</code>.
      */
-    public void setBasedir(@Nonnull final File basedir) {
+    public void setBasedir(@NonNull final File basedir) {
         this.basedir = basedir;
     }
 
@@ -553,7 +553,7 @@ public class DirectoryScanner {
      * @see #dirsExcluded
      * @see #slowScan
      */
-    private void scandir(@Nonnull final File dir, @Nonnull final String vpath, final boolean fast) {
+    private void scandir(@NonNull final File dir, @NonNull final String vpath, final boolean fast) {
         String[] newfiles = dir.list();
 
         if (newfiles == null) {
@@ -698,7 +698,7 @@ public class DirectoryScanner {
      * @return <code>true</code> when the name matches against the start of at least one include pattern, or
      *         <code>false</code> otherwise.
      */
-    private boolean couldHoldIncluded(@Nonnull final String name) {
+    private boolean couldHoldIncluded(@NonNull final String name) {
         return includesPatterns.matchesPatternStart(name, isCaseSensitive);
     }
 
@@ -709,7 +709,7 @@ public class DirectoryScanner {
      * @return <code>true</code> when the name matches against at least one exclude pattern, or <code>false</code>
      *         otherwise.
      */
-    private boolean isExcluded(@Nonnull final String name) {
+    private boolean isExcluded(@NonNull final String name) {
         return excludesPatterns.matches(name, isCaseSensitive);
     }
 
