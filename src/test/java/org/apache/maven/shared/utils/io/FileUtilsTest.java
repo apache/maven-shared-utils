@@ -18,8 +18,6 @@
  */
 package org.apache.maven.shared.utils.io;
 
-import javax.annotation.Nonnull;
-
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -490,7 +488,7 @@ public class FileUtilsTest {
         };
     }
 
-    private File write(@Nonnull String name, long lastModified, @Nonnull String text) throws IOException {
+    private File write(String name, long lastModified, String text) throws IOException {
         final File file = new File(tempFolder, name);
         try (Writer writer = new FileWriter(file)) {
             writer.write(text);
@@ -500,7 +498,7 @@ public class FileUtilsTest {
         return file;
     }
 
-    private static void assertFileContent(@Nonnull File file, @Nonnull String expected) throws IOException {
+    private static void assertFileContent(File file, String expected) throws IOException {
         try (Reader in = new FileReader(file)) {
             assertEquals(expected, IOUtils.toString(in), "Expected " + file.getPath() + " to contain: " + expected);
         }

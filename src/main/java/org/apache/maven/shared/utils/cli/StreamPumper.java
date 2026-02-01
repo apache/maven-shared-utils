@@ -18,8 +18,6 @@
  */
 package org.apache.maven.shared.utils.cli;
 
-import javax.annotation.Nullable;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,7 +53,7 @@ public class StreamPumper extends AbstractStreamHandler {
      * @param consumer {@link StreamConsumer}
      * @param charset {@link Charset}
      */
-    public StreamPumper(InputStream in, StreamConsumer consumer, @Nullable Charset charset) {
+    public StreamPumper(InputStream in, StreamConsumer consumer, Charset charset) {
         this(null == charset ? new InputStreamReader(in) : new InputStreamReader(in, charset), consumer);
     }
 

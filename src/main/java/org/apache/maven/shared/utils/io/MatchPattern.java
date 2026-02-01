@@ -18,8 +18,6 @@
  */
 package org.apache.maven.shared.utils.io;
 
-import javax.annotation.Nonnull;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +44,7 @@ public class MatchPattern {
 
     private final String[] tokenized;
 
-    private MatchPattern(@Nonnull String source, @Nonnull String separator) {
+    private MatchPattern(String source, String separator) {
         regexPattern = SelectorUtils.isRegexPrefixedPattern(source)
                 ? source.substring(
                         SelectorUtils.REGEX_HANDLER_PREFIX.length(),
@@ -88,7 +86,7 @@ public class MatchPattern {
      * @param isCaseSensitive Check case sensitive or not.
      * @return true in case of matching pattern.
      */
-    public boolean matchPatternStart(@Nonnull String str, boolean isCaseSensitive) {
+    public boolean matchPatternStart(String str, boolean isCaseSensitive) {
         if (regexPattern != null) {
             // FIXME: ICK! But we can't do partial matches for regex, so we have to reserve judgment until we have
             // a file to deal with, or we can definitely say this is an exclusion...
@@ -116,7 +114,7 @@ public class MatchPattern {
         return source.startsWith(string);
     }
 
-    static String[] tokenizePathToString(@Nonnull String path, @Nonnull String separator) {
+    static String[] tokenizePathToString(String path, String separator) {
         List<String> ret = new ArrayList<>();
         StringTokenizer st = new StringTokenizer(path, separator);
         while (st.hasMoreTokens()) {

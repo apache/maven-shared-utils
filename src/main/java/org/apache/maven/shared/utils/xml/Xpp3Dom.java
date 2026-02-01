@@ -18,8 +18,6 @@
  */
 package org.apache.maven.shared.utils.xml;
 
-import javax.annotation.Nonnull;
-
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -109,7 +107,7 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
      * @param src The source Dom.
      * @param name The name of the Dom.
      */
-    public Xpp3Dom(@Nonnull Xpp3Dom src, String name) {
+    public Xpp3Dom(Xpp3Dom src, String name) {
         this.name = name;
 
         int size = src.getChildCount();
@@ -137,7 +135,6 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
     /**
      * @return The current value.
      */
-    @Nonnull
     public String getValue() {
         return value;
     }
@@ -145,7 +142,7 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
     /**
      * @param value The value to be set.
      */
-    public void setValue(@Nonnull String value) {
+    public void setValue(String value) {
         this.value = value;
     }
 
@@ -169,7 +166,7 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
      * @param nameParameter The name of the attribute.
      * @param valueParameter The value of the attribute.
      */
-    public void setAttribute(@Nonnull String nameParameter, @Nonnull String valueParameter) {
+    public void setAttribute(String nameParameter, String valueParameter) {
         if (valueParameter == null) {
             throw new NullPointerException("value can not be null");
         }

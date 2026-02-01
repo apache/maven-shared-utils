@@ -18,9 +18,6 @@
  */
 package org.apache.maven.shared.utils.xml;
 
-import javax.annotation.Nonnull;
-import javax.annotation.WillClose;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -48,7 +45,7 @@ public class Xpp3DomBuilder {
      * @return the built DOM
      * @throws XmlPullParserException in case of an error
      */
-    public static Xpp3Dom build(@WillClose @Nonnull Reader reader) throws XmlPullParserException {
+    public static Xpp3Dom build(Reader reader) throws XmlPullParserException {
         return build(reader, false);
     }
 
@@ -58,7 +55,7 @@ public class Xpp3DomBuilder {
      * @return the built DOM
      * @throws XmlPullParserException in case of an error
      */
-    public static Xpp3Dom build(@WillClose InputStream is, @Nonnull String encoding) throws XmlPullParserException {
+    public static Xpp3Dom build(InputStream is, String encoding) throws XmlPullParserException {
         return build(is, encoding, false);
     }
 
@@ -71,8 +68,7 @@ public class Xpp3DomBuilder {
      * @deprecated use the two-arg variant
      */
     @Deprecated
-    public static Xpp3Dom build(@WillClose InputStream is, @Nonnull String encoding, boolean noop)
-            throws XmlPullParserException {
+    public static Xpp3Dom build(InputStream is, String encoding, boolean noop) throws XmlPullParserException {
         try {
             Reader reader = new InputStreamReader(is, encoding);
             return build(reader);
@@ -89,7 +85,7 @@ public class Xpp3DomBuilder {
      * @deprecated use {#build(java.io.Reader)}
      */
     @Deprecated
-    public static Xpp3Dom build(@WillClose Reader in, boolean noop) throws XmlPullParserException {
+    public static Xpp3Dom build(Reader in, boolean noop) throws XmlPullParserException {
         try (Reader reader = in) {
             DocHandler docHandler = parseSax(new InputSource(reader));
             reader.close();
@@ -99,7 +95,7 @@ public class Xpp3DomBuilder {
         }
     }
 
-    private static DocHandler parseSax(@Nonnull InputSource inputSource) throws XmlPullParserException {
+    private static DocHandler parseSax(InputSource inputSource) throws XmlPullParserException {
         try {
             DocHandler ch = new DocHandler();
             XMLReader parser = createXmlReader();

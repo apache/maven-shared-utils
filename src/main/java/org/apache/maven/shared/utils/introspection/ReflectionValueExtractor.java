@@ -18,9 +18,6 @@
  */
 package org.apache.maven.shared.utils.introspection;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -141,7 +138,7 @@ public class ReflectionValueExtractor {
      * @return the object defined by the expression
      * @throws IntrospectionException if any
      */
-    public static Object evaluate(@Nonnull String expression, @Nullable Object root) throws IntrospectionException {
+    public static Object evaluate(String expression, Object root) throws IntrospectionException {
         return evaluate(expression, root, true);
     }
 
@@ -163,8 +160,7 @@ public class ReflectionValueExtractor {
      * @return the object defined by the expression
      * @throws IntrospectionException if any
      */
-    public static Object evaluate(@Nonnull String expression, @Nullable Object root, boolean trimRootToken)
-            throws IntrospectionException {
+    public static Object evaluate(String expression, Object root, boolean trimRootToken) throws IntrospectionException {
         Object value = root;
 
         // ----------------------------------------------------------------------

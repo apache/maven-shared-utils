@@ -18,8 +18,6 @@
  */
 package org.apache.maven.shared.utils;
 
-import javax.annotation.Nonnull;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -115,7 +113,7 @@ public class ReaderFactory {
      * @deprecated use {@code org.apache.commons.io.input.XmlStreamReader} instead
      */
     @Deprecated
-    public static Reader newXmlReader(@Nonnull InputStream in) throws IOException {
+    public static Reader newXmlReader(InputStream in) throws IOException {
         return new XmlStreamReader(in);
     }
 
@@ -128,7 +126,7 @@ public class ReaderFactory {
      * @deprecated use {}@code org.apache.commons.io.input.XmlStreamReader} instead
      */
     @Deprecated
-    public static Reader newXmlReader(@Nonnull File file) throws IOException {
+    public static Reader newXmlReader(File file) throws IOException {
         return new XmlStreamReader(file);
     }
 
@@ -141,7 +139,7 @@ public class ReaderFactory {
      * @deprecated use {@code org.apache.commons.io.input.XmlStreamReader} instead
      */
     @Deprecated
-    public static Reader newXmlReader(@Nonnull URL url) throws IOException {
+    public static Reader newXmlReader(URL url) throws IOException {
         return new XmlStreamReader(url);
     }
 
@@ -155,7 +153,7 @@ public class ReaderFactory {
      * @deprecated always specify an encoding. Do not depend on the default platform character set.
      */
     @Deprecated
-    public static Reader newPlatformReader(@Nonnull File file) throws FileNotFoundException {
+    public static Reader newPlatformReader(File file) throws FileNotFoundException {
         return new FileReader(file);
     }
 
@@ -172,8 +170,7 @@ public class ReaderFactory {
      * @deprecated use {@code new InputStreamReader(in, encoding)} instead
      */
     @Deprecated
-    public static Reader newReader(@Nonnull InputStream in, @Nonnull String encoding)
-            throws UnsupportedEncodingException {
+    public static Reader newReader(InputStream in, String encoding) throws UnsupportedEncodingException {
         return new InputStreamReader(in, encoding);
     }
 
@@ -192,7 +189,7 @@ public class ReaderFactory {
      *    or {@code new Files.newBufferedReader} instead
      */
     @Deprecated
-    public static Reader newReader(@Nonnull File file, @Nonnull String encoding)
+    public static Reader newReader(File file, String encoding)
             throws FileNotFoundException, UnsupportedEncodingException {
         return new InputStreamReader(new FileInputStream(file), encoding);
     }
@@ -211,7 +208,7 @@ public class ReaderFactory {
      * @deprecated This method does not use HTTP headers to detect the resource's encoding.
      */
     @Deprecated
-    public static Reader newReader(@Nonnull URL url, @Nonnull String encoding) throws IOException {
+    public static Reader newReader(URL url, String encoding) throws IOException {
         return new InputStreamReader(url.openStream(), encoding);
     }
 }
