@@ -553,7 +553,9 @@ public class StringUtils {
      *
      * @param array the array of values to concatenate.
      * @return the concatenated string.
+     * @deprecated use <code>java.lang.String.join(</code>) instead
      */
+    @Deprecated
     @Nonnull
     public static String concatenate(@Nonnull Object... array) {
         return join(array, "");
