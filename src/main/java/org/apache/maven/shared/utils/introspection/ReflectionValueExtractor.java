@@ -263,9 +263,8 @@ public class ReflectionValueExtractor {
                 ClassMap classMap = getClassMap(value.getClass());
                 // use get method on List interface
                 Object[] localParams = new Object[] {index};
-                Method method = null;
                 try {
-                    method = classMap.findMethod("get", localParams);
+                    Method method = classMap.findMethod("get", localParams);
                     return method.invoke(value, localParams);
                 } catch (AmbiguousException e) {
                     throw new IntrospectionException(e);
