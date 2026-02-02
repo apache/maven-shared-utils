@@ -554,7 +554,7 @@ public class StringUtils {
      *     <code>Arrays.stream(array).map(Object::toString).collect(Collectors.joining(""))</code> instead
      */
     @Deprecated
-    @Nonnull
+    @NonNull
     public static String concatenate(@NonNull Object... array) {
         return join(array, "");
     }
