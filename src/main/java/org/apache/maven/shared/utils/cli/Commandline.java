@@ -61,7 +61,7 @@ import org.apache.maven.shared.utils.cli.shell.Shell;
  * @author thomas.haas@softwired-inc.com
  * @author <a href="mailto:stefan.bodewig@epost.de">Stefan Bodewig</a>
  */
-public class Commandline implements Cloneable {
+public class Commandline {
     private final List<Arg> arguments = new Vector<>();
 
     private final Map<String, String> envVars = Collections.synchronizedMap(new LinkedHashMap<>());
@@ -300,15 +300,6 @@ public class Commandline implements Cloneable {
      */
     public String toString() {
         return StringUtils.join(getShellCommandline(true), " ");
-    }
-
-    /**
-     * Do not call. Always throws an UnsupportedOperationException.
-     *
-     * @throws UnsupportedOperationException
-     */
-    public Object clone() {
-        throw new UnsupportedOperationException("Do we ever clone a commandline?");
     }
 
     /**

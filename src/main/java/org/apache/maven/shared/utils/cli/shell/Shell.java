@@ -36,7 +36,7 @@ import org.apache.maven.shared.utils.StringUtils;
  *
  * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
  */
-public class Shell implements Cloneable {
+public class Shell {
     private static final char[] DEFAULT_QUOTING_TRIGGER_CHARS = {' '};
 
     private String shellCommand;
@@ -329,18 +329,6 @@ public class Shell implements Cloneable {
 
     String getWorkingDirectoryAsString() {
         return workingDir;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Object clone() {
-        throw new RuntimeException("Do we ever clone this?");
-        /*        Shell shell = new Shell();
-        shell.setExecutable( getExecutable() );
-        shell.setWorkingDirectory( getWorkingDirectory() );
-        shell.setShellArgs( getShellArgs() );
-        return shell;*/
     }
 
     void setSingleQuotedArgumentEscaped(boolean singleQuotedArgumentEscaped) {
