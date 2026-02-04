@@ -221,7 +221,7 @@ public class XmlWriterUtil {
                         line.append("-->").append(CRLF);
                         writer.writeMarkup(line.toString());
                     }
-                    line = new StringBuffer(indentation + "<!-- ");
+                    line = new StringBuilder(indentation + "<!-- ");
                     line.append(word).append(' ');
                 } else {
                     line.append(word).append(' ');
