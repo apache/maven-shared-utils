@@ -1321,7 +1321,7 @@ public class StringUtils {
             if (length == 0) {
                 return "";
             } else {
-                return new StringBuffer(length)
+                return new StringBuilder(length)
                         .append(Character.toLowerCase(str.charAt(0)))
                         .append(str, 1, length)
                         .toString();
@@ -1723,7 +1723,7 @@ public class StringUtils {
         if (str == null) {
             return null;
         }
-        return new StringBuffer(str).reverse().toString();
+        return new StringBuilder(str).reverse().toString();
     }
 
     /**

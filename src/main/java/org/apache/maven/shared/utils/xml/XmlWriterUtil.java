@@ -206,7 +206,7 @@ public class XmlWriterUtil {
         int magicNumber = indentation.length() + columnSize - "-->".length() - 1;
         String[] sentences = StringUtils.split(comment, CRLF);
 
-        StringBuffer line = new StringBuffer(indentation + "<!-- ");
+        StringBuilder line = new StringBuilder(indentation + "<!-- ");
         for (String sentence : sentences) {
             String[] words = StringUtils.split(sentence, " ");
             for (String word : words) {
