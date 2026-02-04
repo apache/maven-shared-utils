@@ -220,7 +220,7 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
 
     private List<Xpp3Dom> getChildrenList() {
         boolean isNothing = childList == null || childList.isEmpty();
-        return isNothing ? Collections.<Xpp3Dom>emptyList() : childList;
+        return isNothing ? Collections.emptyList() : childList;
     }
 
     /**
