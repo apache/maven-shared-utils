@@ -132,11 +132,7 @@ public class Shell {
                 sb.append(preamble);
             }
 
-            if (isQuotedExecutableEnabled()) {
-                sb.append(quoteOneItem(executableParameter, true));
-            } else {
-                sb.append(executableParameter);
-            }
+            sb.append(quoteOneItem(executableParameter, true));
         }
         for (String argument : argumentsParameter) {
             if (sb.length() > 0) {
@@ -213,12 +209,8 @@ public class Shell {
         this.quotedArgumentsEnabled = quotedArgumentsEnabled;
     }
 
-    boolean isQuotedArgumentsEnabled() {
+    private boolean isQuotedArgumentsEnabled() {
         return quotedArgumentsEnabled;
-    }
-
-    boolean isQuotedExecutableEnabled() {
-        return true;
     }
 
     /**

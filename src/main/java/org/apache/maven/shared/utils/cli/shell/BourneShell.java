@@ -39,6 +39,7 @@ public class BourneShell extends Shell {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getExecutable() {
         if (Os.isFamily(Os.FAMILY_WINDOWS)) {
             return super.getExecutable();
@@ -50,6 +51,7 @@ public class BourneShell extends Shell {
     /**
      * {@inheritDoc}
      */
+    @Override
     public List<String> getShellArgsList() {
         List<String> shellArgs = new ArrayList<>();
         List<String> existingShellArgs = super.getShellArgsList();
@@ -66,6 +68,7 @@ public class BourneShell extends Shell {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String[] getShellArgs() {
         String[] shellArgs = super.getShellArgs();
         if (shellArgs == null) {
@@ -87,6 +90,7 @@ public class BourneShell extends Shell {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected String getExecutionPreamble() {
         if (getWorkingDirectoryAsString() == null) {
             return null;
@@ -113,6 +117,7 @@ public class BourneShell extends Shell {
      * @param path not null path
      * @return the path unified correctly for the Bourne shell
      */
+    @Override
     protected String quoteOneItem(String path, boolean isExecutable) {
         if (path == null) {
             return null;
