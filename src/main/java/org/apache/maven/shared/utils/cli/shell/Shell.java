@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.maven.shared.utils.StringUtils;
-
 /**
  * Class that abstracts the Shell functionality,
  * with subclasses for shells that behave particularly, like
@@ -96,14 +94,7 @@ public class Shell {
     }
 
     protected String quoteOneItem(String inputString, boolean isExecutable) {
-        char[] escapeChars = {};
-        return StringUtils.quoteAndEscape(
-                inputString,
-                isExecutable ? '\"' : '\"',
-                escapeChars,
-                getQuotingTriggerChars(),
-                '\\',
-                unconditionalQuoting);
+        return inputString;
     }
 
     /**
