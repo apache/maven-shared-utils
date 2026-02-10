@@ -130,7 +130,7 @@ public class Shell {
                 sb.append(' ');
             }
 
-            if (isQuotedArgumentsEnabled()) {
+            if (quotedArgumentsEnabled) {
                 sb.append(quoteOneItem(argument, false));
             } else {
                 sb.append(argument);
@@ -198,10 +198,6 @@ public class Shell {
      */
     public void setQuotedArgumentsEnabled(boolean quotedArgumentsEnabled) {
         this.quotedArgumentsEnabled = quotedArgumentsEnabled;
-    }
-
-    private boolean isQuotedArgumentsEnabled() {
-        return quotedArgumentsEnabled;
     }
 
     /**
