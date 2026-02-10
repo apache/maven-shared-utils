@@ -32,7 +32,6 @@ public class BourneShell extends Shell {
      * Create instance of BourneShell.
      */
     public BourneShell() {
-        setUnconditionalQuoting(true);
         setShellCommand("/bin/sh");
     }
 
