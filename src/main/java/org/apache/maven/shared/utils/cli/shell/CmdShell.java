@@ -32,7 +32,6 @@ public class CmdShell extends Shell {
      */
     public CmdShell() {
         setShellCommand("cmd.exe");
-        setQuotedExecutableEnabled(true);
         setShellArgs(new String[] {"/X", "/C"});
     }
 

@@ -34,11 +34,6 @@ public class BourneShell extends Shell {
     public BourneShell() {
         setUnconditionalQuoting(true);
         setShellCommand("/bin/sh");
-        setArgumentQuoteDelimiter('\'');
-        setExecutableQuoteDelimiter('\'');
-        setSingleQuotedArgumentEscaped(true);
-        setSingleQuotedExecutableEscaped(false);
-        setQuotedExecutableEnabled(true);
     }
 
     /**
