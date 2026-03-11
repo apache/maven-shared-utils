@@ -18,9 +18,9 @@
  */
 package org.apache.maven.shared.utils.logging;
 
-import org.fusesource.jansi.Ansi;
-import org.fusesource.jansi.AnsiConsole;
-import org.fusesource.jansi.AnsiMode;
+import org.jline.jansi.Ansi;
+import org.jline.jansi.AnsiConsole;
+import org.jline.jansi.AnsiMode;
 
 /**
  * Colored message utils, to manage colors consistently across plugins (only if Maven version is at least 3.5.0).
@@ -44,7 +44,7 @@ public class MessageUtils {
         boolean jansi = true;
         try {
             // Jansi is provided by Maven core since 3.5.0
-            Class.forName("org.fusesource.jansi.Ansi");
+            Class.forName("org.jline.jansi.Ansi");
         } catch (ClassNotFoundException cnfe) {
             jansi = false;
         }

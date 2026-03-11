@@ -20,14 +20,15 @@ package org.apache.maven.shared.utils.logging;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 
-import org.fusesource.jansi.AnsiColors;
-import org.fusesource.jansi.AnsiConsole;
-import org.fusesource.jansi.AnsiMode;
-import org.fusesource.jansi.AnsiPrintStream;
-import org.fusesource.jansi.AnsiType;
-import org.fusesource.jansi.io.AnsiOutputStream;
+import org.jline.jansi.AnsiColors;
+import org.jline.jansi.AnsiConsole;
+import org.jline.jansi.AnsiMode;
+import org.jline.jansi.AnsiPrintStream;
+import org.jline.jansi.AnsiType;
+import org.jline.jansi.io.AnsiOutputStream;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -56,7 +57,6 @@ public class MessageUtilsTest {
     }
 
     @Test
-    @SuppressWarnings("deprecation")
     public void testTerminalWidth() {
         AnsiOutputStream.WidthSupplier width = () -> 33;
         AnsiOutputStream aos = new AnsiOutputStream(
@@ -72,9 +72,11 @@ public class MessageUtilsTest {
                 false);
         try {
             AnsiConsole.systemInstall();
-            AnsiConsole.out = new AnsiPrintStream(aos, true);
+            Field outField = AnsiConsole.class.getDeclaredField("out");
+            outField.setAccessible(true);
+            outField.set(null, new AnsiPrintStream(aos, true));
             assertEquals(33, MessageUtils.getTerminalWidth());
-        } catch (LinkageError e) {
+        } catch (LinkageError | ReflectiveOperationException e) {
             //            assumeNoException("JAnsi not supported for this platform", e);
         } finally {
             try {
