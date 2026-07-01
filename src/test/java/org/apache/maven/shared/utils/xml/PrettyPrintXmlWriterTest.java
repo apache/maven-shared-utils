@@ -94,6 +94,26 @@ public class PrettyPrintXmlWriterTest {
     }
 
     @Test
+    public void testEncodeIllegalControlCharsInText() throws IOException {
+        StringWriter sw = new StringWriter();
+        PrettyPrintXMLWriter w = new PrettyPrintXMLWriter(sw);
+        w.startElement("div");
+        w.writeText("hello\u0001world");
+        w.endElement();
+        assertEquals("<div>hello&#x1;world</div>", sw.toString());
+    }
+
+    @Test
+    public void testEncodeIllegalControlCharsInAttribute() throws IOException {
+        StringWriter sw = new StringWriter();
+        PrettyPrintXMLWriter w = new PrettyPrintXMLWriter(sw);
+        w.startElement("div");
+        w.addAttribute("title", "hello\u0001world");
+        w.endElement();
+        assertEquals("<div title=\"hello&#x1;world\"/>", sw.toString());
+    }
+
+    @Test
     public void testEscapeXmlAttributeWindows() throws IOException {
         // Windows
         writer.startElement(HTML.Tag.DIV.toString());
