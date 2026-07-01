@@ -90,11 +90,7 @@ public class PropertyUtils {
         try {
             Properties result = new Properties();
             if (is != null) {
-                try (InputStream in = is) {
-                    result.load(in);
-                } catch (IOException e) {
-                    // ignore
-                }
+                result.load(is);
             }
             return result;
         } catch (Exception e) {
@@ -168,9 +164,8 @@ public class PropertyUtils {
         Properties properties = new Properties();
 
         if (inputStream != null) {
-            try (InputStream in = inputStream) // reassign inputStream to autoclose
-            {
-                properties.load(in);
+            try {
+                properties.load(inputStream);
             } catch (IllegalArgumentException | IOException ex) {
                 // ignore and return empty properties
             }

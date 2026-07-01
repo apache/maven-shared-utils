@@ -29,6 +29,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Properties;
 
@@ -50,7 +51,6 @@ public class PropertyUtilsTest {
 
     @Test
     @SuppressWarnings("deprecation")
-    // @ReproducesPlexusBug( "Should return null on error like url and file do" )
     public void loadNullInputStream() {
         assertEquals(new Properties(), PropertyUtils.loadProperties((InputStream) null));
     }
@@ -157,6 +157,22 @@ public class PropertyUtilsTest {
             assertEquals(
                     value, PropertyUtils.loadOptionalProperties(valid.toURI().toURL()));
         }
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    public void streamIsNotClosedByLoadProperties() throws IOException {
+        ByteArrayInputStream stream = new ByteArrayInputStream("a=b".getBytes(StandardCharsets.ISO_8859_1));
+        PropertyUtils.loadProperties(stream);
+        assertEquals(0, stream.available());
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    public void streamIsNotClosedByLoadOptionalProperties() throws IOException {
+        ByteArrayInputStream stream = new ByteArrayInputStream("a=b".getBytes(StandardCharsets.ISO_8859_1));
+        PropertyUtils.loadOptionalProperties(stream);
+        assertEquals(0, stream.available());
     }
 
     private static File newFile(File parent, String child) throws IOException {
