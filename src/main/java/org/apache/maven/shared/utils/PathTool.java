@@ -143,12 +143,16 @@ public class PathTool {
         String toPath = new File(newPath).getPath();
 
         // strip any leading slashes if its a windows path
-        if (toPath.length() > 2 && toPath.charAt(0) == '\\'
-                && Character.isLetter(toPath.charAt(1)) && toPath.charAt(2) == ':') {
+        if (toPath.length() > 2
+                && toPath.charAt(0) == '\\'
+                && Character.isLetter(toPath.charAt(1))
+                && toPath.charAt(2) == ':') {
             toPath = toPath.substring(1);
         }
-        if (fromPath.length() > 2 && fromPath.charAt(0) == '\\'
-                && Character.isLetter(fromPath.charAt(1)) && fromPath.charAt(2) == ':') {
+        if (fromPath.length() > 2
+                && fromPath.charAt(0) == '\\'
+                && Character.isLetter(fromPath.charAt(1))
+                && fromPath.charAt(2) == ':') {
             fromPath = fromPath.substring(1);
         }
 
