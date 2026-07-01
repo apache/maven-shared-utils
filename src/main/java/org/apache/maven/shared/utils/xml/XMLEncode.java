@@ -109,7 +109,13 @@ final class XMLEncode {
                     break;
 
                 default:
-                    n.append(c);
+                    if (c < 0x20 && c != 0x09 && c != 0x0A && c != 0x0D) {
+                        n.append("&#x");
+                        n.append(Integer.toHexString(c));
+                        n.append(';');
+                    } else {
+                        n.append(c);
+                    }
                     break;
             }
         }
@@ -143,6 +149,9 @@ final class XMLEncode {
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
             if (c == '&' || c == '<') {
+                return true;
+            }
+            if (c < 0x20 && c != 0x09 && c != 0x0A && c != 0x0D) {
                 return true;
             }
         }
