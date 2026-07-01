@@ -215,6 +215,11 @@ public class StringUtilsTest {
     }
 
     @Test
+    public void testChompLastSepLongerThanStr() {
+        assertEquals("x", StringUtils.chompLast("x", "ab"));
+    }
+
+    @Test
     public void testChopNPE() {
         assertThrows(NullPointerException.class, () -> StringUtils.chop(null));
     }
