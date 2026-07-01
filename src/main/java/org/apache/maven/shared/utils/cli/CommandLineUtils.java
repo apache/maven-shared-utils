@@ -274,33 +274,17 @@ public abstract class CommandLineUtils {
 
                     int returnValue = p.waitFor();
 
-                    // TODO Find out if waitUntilDone needs to be called using a try-finally construct. The method may
-                    // throw an
-                    //      InterruptedException so that calls to waitUntilDone may be skipped.
-                    //                    try
-                    //                    {
-                    //                        if ( inputFeeder != null )
-                    //                        {
-                    //                            inputFeeder.waitUntilDone();
-                    //                        }
-                    //                    }
-                    //                    finally
-                    //                    {
-                    //                        try
-                    //                        {
-                    //                            outputPumper.waitUntilDone();
-                    //                        }
-                    //                        finally
-                    //                        {
-                    //                            errorPumper.waitUntilDone();
-                    //                        }
-                    //                    }
-                    if (inputFeeder != null) {
-                        inputFeeder.waitUntilDone();
+                    try {
+                        if (inputFeeder != null) {
+                            inputFeeder.waitUntilDone();
+                        }
+                    } finally {
+                        try {
+                            outputPumper.waitUntilDone();
+                        } finally {
+                            errorPumper.waitUntilDone();
+                        }
                     }
-
-                    outputPumper.waitUntilDone();
-                    errorPumper.waitUntilDone();
 
                     if (inputFeeder != null && inputFeeder.getException() != null) {
                         throw new CommandLineException("Failure processing stdin.", inputFeeder.getException());
