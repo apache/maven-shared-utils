@@ -21,6 +21,7 @@ package org.apache.maven.shared.utils.xml;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
+import java.util.Objects;
 
 /**
  * @author Brett Porter
@@ -62,6 +63,7 @@ public class Xpp3DomWriter {
      * @throws IOException if writing fails
      */
     public static void write(XMLWriter xmlWriter, Xpp3Dom dom, boolean escape) throws IOException {
+        Objects.requireNonNull(dom, "dom must not be null");
         xmlWriter.startElement(dom.getName());
         String[] attributeNames = dom.getAttributeNames();
         for (String attributeName : attributeNames) {
