@@ -963,6 +963,9 @@ public class StringUtils {
      */
     @NonNull
     public static String chopNewline(@NonNull String str) {
+        if (str.isEmpty()) {
+            return "";
+        }
         int lastIdx = str.length() - 1;
         char last = str.charAt(lastIdx);
         if (last == '\n') {

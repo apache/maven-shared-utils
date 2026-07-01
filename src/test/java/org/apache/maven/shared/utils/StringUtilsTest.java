@@ -251,6 +251,11 @@ public class StringUtilsTest {
     }
 
     @Test
+    public void testChopNewlineEmptyString() {
+        assertEquals("", StringUtils.chopNewline(""));
+    }
+
+    @Test
     public void testClean() {
         assertEquals("", StringUtils.clean(null));
 
