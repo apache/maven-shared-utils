@@ -49,14 +49,12 @@ public class StreamPollFeederTest {
             }
         };
 
-        assertTimeoutPreemptively(
-                Duration.ofSeconds(5),
-                () -> {
-                    StreamPollFeeder feeder = new StreamPollFeeder(continuousInput, new ByteArrayOutputStream());
-                    feeder.start();
-                    feeder.waitUntilDone();
-                    assertNull(feeder.getException());
-                });
+        assertTimeoutPreemptively(Duration.ofSeconds(5), () -> {
+            StreamPollFeeder feeder = new StreamPollFeeder(continuousInput, new ByteArrayOutputStream());
+            feeder.start();
+            feeder.waitUntilDone();
+            assertNull(feeder.getException());
+        });
     }
 
     @Test
