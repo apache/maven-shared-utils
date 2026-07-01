@@ -94,6 +94,13 @@ public class PrettyPrintXmlWriterTest {
     }
 
     @Test
+    public void testPrettyPrintXMLWriterWithNullLineIndent() throws IOException {
+        PrettyPrintXMLWriter writer = new PrettyPrintXMLWriter(new StringWriter(), (String) null);
+        writer.startElement("div");
+        writer.endElement();
+    }
+
+    @Test
     public void testEscapeXmlAttributeWindows() throws IOException {
         // Windows
         writer.startElement(HTML.Tag.DIV.toString());
