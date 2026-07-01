@@ -1111,11 +1111,13 @@ public class StringUtils {
      * @param size  size to pad to
      * @param delim string to pad with
      * @return right padded String
-     * @throws ArithmeticException  if delim is the empty String
      * @throws NullPointerException if str or delim is <code>null</code>
      */
     @NonNull
     public static String rightPad(@NonNull String str, int size, @NonNull String delim) {
+        if (delim.isEmpty()) {
+            return str;
+        }
         size = (size - str.length()) / delim.length();
         if (size > 0) {
             str += repeat(delim, size);
@@ -1145,11 +1147,13 @@ public class StringUtils {
      * @param size  size to pad to
      * @param delim string to pad with
      * @return left padded String
-     * @throws ArithmeticException  if delim is the empty string
      * @throws NullPointerException if str or delim is null
      */
     @NonNull
     public static String leftPad(@NonNull String str, int size, @NonNull String delim) {
+        if (delim.isEmpty()) {
+            return str;
+        }
         size = (size - str.length()) / delim.length();
         if (size > 0) {
             str = repeat(delim, size) + str;

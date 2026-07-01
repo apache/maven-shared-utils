@@ -859,6 +859,11 @@ public class StringUtilsTest {
         assertEquals("*****dings", StringUtils.leftPad("dings", 10, "*"));
     }
 
+    @Test
+    public void testLeftPadEmptyDelim() {
+        assertEquals("dings", StringUtils.leftPad("dings", 10, ""));
+    }
+
     @SuppressWarnings("ConstantValue")
     @Test
     public void testLowerCase() {
@@ -1271,6 +1276,11 @@ public class StringUtilsTest {
         assertEquals("dings", StringUtils.rightPad("dings", 3, "+"));
 
         assertEquals("dings+++++", StringUtils.rightPad("dings", 10, "+"));
+    }
+
+    @Test
+    public void testRightPadEmptyDelim() {
+        assertEquals("dings", StringUtils.rightPad("dings", 10, ""));
     }
 
     @Test
