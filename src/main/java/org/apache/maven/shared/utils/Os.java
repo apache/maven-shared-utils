@@ -365,7 +365,7 @@ public class Os {
                 return fam;
             }
         }
-        return null;
+        return "";
     }
 
     /**
