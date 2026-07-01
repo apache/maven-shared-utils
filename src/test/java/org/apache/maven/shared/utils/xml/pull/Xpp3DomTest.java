@@ -90,7 +90,7 @@ public class Xpp3DomTest {
         Xpp3Dom result = mergeXpp3Dom(t1, t2);
 
         assertEquals(2, result.getAttributeNames().length);
-        assertNull(result.getValue());
+        assertEquals("", result.getValue());
     }
 
     @Test
