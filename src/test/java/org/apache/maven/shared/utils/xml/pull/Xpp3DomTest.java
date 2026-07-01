@@ -43,6 +43,22 @@ public class Xpp3DomTest {
     }
 
     @Test
+    public void removeChildByIndexUpdatesChildMap() {
+        Xpp3Dom parent = new Xpp3Dom("parent");
+        Xpp3Dom first = new Xpp3Dom("child");
+        first.setValue("first");
+        Xpp3Dom second = new Xpp3Dom("child");
+        second.setValue("second");
+        parent.addChild(first);
+        parent.addChild(second);
+
+        parent.removeChild(1);
+
+        assertEquals(1, parent.getChildCount());
+        assertEquals("first", parent.getChild("child").getValue());
+    }
+
+    @Test
     public void mergePrecedenceSelfClosed() throws XmlPullParserException {
         Xpp3Dom parentConfig = build("<configuration><items><item/></items></configuration>");
         Xpp3Dom childConfig = build("<configuration><items><item>ooopise</item></items></configuration>");

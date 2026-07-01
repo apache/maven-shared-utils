@@ -261,8 +261,22 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
      */
     public void removeChild(int i) {
         Xpp3Dom child = childList.remove(i);
-        childMap.values().remove(child);
         child.setParent(null);
+
+        String name = child.getName();
+        if (childMap.get(name) == child) {
+            Xpp3Dom lastWithName = null;
+            for (Xpp3Dom c : childList) {
+                if (name.equals(c.getName())) {
+                    lastWithName = c;
+                }
+            }
+            if (lastWithName != null) {
+                childMap.put(name, lastWithName);
+            } else {
+                childMap.remove(name);
+            }
+        }
     }
 
     /**
