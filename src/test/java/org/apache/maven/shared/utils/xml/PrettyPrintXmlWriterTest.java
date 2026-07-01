@@ -95,9 +95,15 @@ public class PrettyPrintXmlWriterTest {
 
     @Test
     public void testPrettyPrintXMLWriterWithNullLineIndent() throws IOException {
-        PrettyPrintXMLWriter writer = new PrettyPrintXMLWriter(new StringWriter(), (String) null);
-        writer.startElement("div");
-        writer.endElement();
+        StringWriter sw = new StringWriter();
+        PrettyPrintXMLWriter writer = new PrettyPrintXMLWriter(sw, (String) null);
+
+        writer.startElement(HTML.Tag.HTML.toString());
+        writeXhtmlHead(writer);
+        writeXhtmlBody(writer);
+        writer.endElement(); // Tag.HTML
+
+        assertEquals(expectedResult(), sw.toString());
     }
 
     @Test
