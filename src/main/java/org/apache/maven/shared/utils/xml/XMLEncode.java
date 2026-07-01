@@ -109,6 +109,12 @@ final class XMLEncode {
                     break;
 
                 default:
+                    // C0 control characters (except tab, LF, CR) are encoded
+                    // as numeric character references. This produces valid
+                    // XML 1.1 but is not valid XML 1.0 (which forbids these
+                    // characters in any form). Callers that require strict
+                    // XML 1.0 compliance should strip these characters before
+                    // encoding.
                     if (c < 0x20 && c != 0x09 && c != 0x0A && c != 0x0D) {
                         n.append("&#x");
                         n.append(Integer.toHexString(c));
@@ -141,6 +147,12 @@ final class XMLEncode {
 
     /**
      * Checks if this text needs encoding in order to be represented in XML.
+     * Note: C0 control characters (U+0000-U+001F except tab, LF, CR) are
+     * classified as needing encoding, but encoding them as numeric character
+     * references produces output that is not valid XML 1.0 (which forbids
+     * these characters outright in any form). The encoded output is valid
+     * XML 1.1. Callers that require strict XML 1.0 compliance should strip
+     * these characters before encoding.
      */
     private static boolean needsEncoding(String text) {
         if (text == null) {
