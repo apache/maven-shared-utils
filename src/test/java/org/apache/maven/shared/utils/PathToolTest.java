@@ -103,6 +103,15 @@ public class PathToolTest {
     }
 
     @Test
+    public void testGetRelativeFilePathWithDifferentWindowsDrives() {
+        // Tests that the regex fix at line 146 correctly strips a leading backslash
+        // before a Windows drive letter. The old regex "^\\[a-zA-Z]:" matched the
+        // literal string "[a-zA-Z]:" instead of a backslash + drive letter.
+        // Different drives with leading backslash should return null.
+        assertNull(PathTool.getRelativeFilePath("\\C:\\usr\\local", "\\D:\\usr\\local\\java\\bin"));
+    }
+
+    @Test
     public void testUppercaseDrive() {
         assertNull(PathTool.uppercaseDrive(null));
 
