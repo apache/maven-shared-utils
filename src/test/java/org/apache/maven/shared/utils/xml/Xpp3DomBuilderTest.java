@@ -27,6 +27,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.maven.shared.utils.xml.pull.XmlPullParserException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -77,6 +78,14 @@ public class Xpp3DomBuilderTest {
         dom = Xpp3DomBuilder.build(new StringReader(domString), false);
         assertEquals(" element1value\n ", dom.getChild("element1").getValue());
         assertEquals("  preserve space  ", dom.getChild("element6").getValue());
+    }
+
+    @Test
+    public void buildDoesNotModifySaxDriverProperty() {
+        String key = "org.xml.sax.driver";
+        String original = System.getProperty(key);
+        Xpp3DomBuilder.build(new StringReader("<root/>"));
+        assertEquals(original, System.getProperty(key));
     }
 
     @Test
