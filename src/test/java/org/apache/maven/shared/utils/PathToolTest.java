@@ -62,7 +62,7 @@ public class PathToolTest {
     }
 
     @Test
-    // Keep in sync with testGetRelativeFilePathWindows()
+    // Keep in sync with testGetRelativeFilePathNonWindows()
     @EnabledOnOs(OS.WINDOWS)
     public void testGetRelativeFilePathWindows() {
         assertEquals("", PathTool.getRelativeFilePath(null, null));
