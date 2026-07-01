@@ -18,6 +18,7 @@
  */
 package org.apache.maven.shared.utils.cli;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -274,27 +275,26 @@ public abstract class CommandLineUtils {
 
                     int returnValue = p.waitFor();
 
-                    // TODO Find out if waitUntilDone needs to be called using a try-finally construct. The method may
-                    // throw an
-                    //      InterruptedException so that calls to waitUntilDone may be skipped.
-                    //                    try
-                    //                    {
-                    //                        if ( inputFeeder != null )
-                    //                        {
-                    //                            inputFeeder.waitUntilDone();
-                    //                        }
-                    //                    }
-                    //                    finally
-                    //                    {
-                    //                        try
-                    //                        {
-                    //                            outputPumper.waitUntilDone();
-                    //                        }
-                    //                        finally
-                    //                        {
-                    //                            errorPumper.waitUntilDone();
-                    //                        }
-                    //                    }
+                    // Close the process streams to work around JDK-4311711:
+                    // Process.getInputStream().read() can hang indefinitely
+                    // even after the process has terminated. Closing the
+                    // streams causes the pumpers' readLine() calls to return.
+                    try {
+                        p.getOutputStream().close();
+                    } catch (IOException e) {
+                        // ignore
+                    }
+                    try {
+                        p.getInputStream().close();
+                    } catch (IOException e) {
+                        // ignore
+                    }
+                    try {
+                        p.getErrorStream().close();
+                    } catch (IOException e) {
+                        // ignore
+                    }
+
                     if (inputFeeder != null) {
                         inputFeeder.waitUntilDone();
                     }
