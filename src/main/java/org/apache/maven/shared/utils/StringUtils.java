@@ -1113,6 +1113,9 @@ public class StringUtils {
      */
     @NonNull
     public static String rightPad(@NonNull String str, int size, @NonNull String delim) {
+        if (delim.isEmpty()) {
+            return str;
+        }
         size = (size - str.length()) / delim.length();
         if (size > 0) {
             str += repeat(delim, size);
@@ -1147,6 +1150,9 @@ public class StringUtils {
      */
     @NonNull
     public static String leftPad(@NonNull String str, int size, @NonNull String delim) {
+        if (delim.isEmpty()) {
+            return str;
+        }
         size = (size - str.length()) / delim.length();
         if (size > 0) {
             str = repeat(delim, size) + str;
