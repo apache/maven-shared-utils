@@ -18,7 +18,7 @@
  */
 package org.apache.maven.shared.utils.logging;
 
-import org.fusesource.jansi.Ansi;
+import org.jline.jansi.Ansi;
 
 /**
  * Message builder implementation that supports ANSI colors through
