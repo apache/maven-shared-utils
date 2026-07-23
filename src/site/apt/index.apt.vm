@@ -40,7 +40,7 @@ ${project.name}
 
 Why?
 
-   plexus-utils consisted mostly of code that originated in various Apache projects. 
+   plexus-utils consisted mostly of code that originated in various Apache projects.
    maven-shared-utils is based on those original Apache-source implementations.
 
 Why not commons?
