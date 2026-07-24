@@ -30,7 +30,7 @@
 ${project.name}
 
    This project aims to be a functional replacement for
-   {{{http://codehaus-plexus.github.io/plexus-utils/}plexus-utils}} in Maven.
+   {{{https://codehaus-plexus.github.io/plexus-utils/}plexus-utils}} in Maven.
    
    It is not a 100% API compatible replacement though but a replacement <with improvements>:
    lots of methods got cleaned up, generics got added and we dropped a lot of unused code.
@@ -40,13 +40,13 @@ ${project.name}
 
 Why?
 
-   plexus-utils consisted mostly of code that was forked from various Apache projects. 
-   maven-shared-utils is based on the original from the Apache sources.
+   plexus-utils consisted mostly of code that originated in various Apache projects.
+   Maven Shared Utils is based on those original Apache-source implementations.
 
 Why not commons?
 
-    We would prefer code to use commons-* where appropriate, but the plexus-utils became
-    slightly incompatible (different) from the commons over the years, so migrating is not
-    always a 1:1 operation. Migrating to maven-shared-utils is a 1:1 operation in most cases.
+    We would prefer code to use commons-* where appropriate, but plexus-utils became
+    slightly incompatible from the Commons versions over the years, so migrating is not
+    always a 1:1 operation. Migrating to Maven Shared Utils is a 1:1 operation in most cases.
 
   []
