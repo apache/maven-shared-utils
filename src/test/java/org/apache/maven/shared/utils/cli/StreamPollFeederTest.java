@@ -50,7 +50,13 @@ public class StreamPollFeederTest {
         };
 
         assertTimeoutPreemptively(Duration.ofSeconds(5), () -> {
-            StreamPollFeeder feeder = new StreamPollFeeder(continuousInput, new ByteArrayOutputStream());
+            StreamPollFeeder feeder = new StreamPollFeeder(continuousInput, new java.io.OutputStream() {
+                @Override
+                public void write(int b) {
+                    // discard
+                }
+            });
+            feeder.setDaemon(true);
             feeder.start();
             feeder.waitUntilDone();
             assertNull(feeder.getException());
