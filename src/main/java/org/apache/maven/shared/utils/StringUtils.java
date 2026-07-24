@@ -851,7 +851,7 @@ public class StringUtils {
      */
     @NonNull
     public static String chompLast(@NonNull String str, @NonNull String sep) {
-        if (str.length() == 0) {
+        if (str.length() == 0 || sep.length() > str.length()) {
             return str;
         }
         String sub = str.substring(str.length() - sep.length());
