@@ -35,9 +35,9 @@ class StreamPollFeeder extends Thread {
     private final InputStream input;
     private final OutputStream output;
 
-    private Throwable exception;
+    private volatile Throwable exception;
 
-    private boolean done;
+    private volatile boolean done;
     private final Object lock = new Object();
 
     /**

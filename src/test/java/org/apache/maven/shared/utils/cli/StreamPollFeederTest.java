@@ -20,13 +20,49 @@ package org.apache.maven.shared.utils.cli;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.time.Duration;
 
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 
 public class StreamPollFeederTest {
+
+    @Test
+    public void waitUntilFeederDoneWithContinuousData() {
+        // Simulates a stream with continuous data where the feeder thread
+        // never enters the synchronized(lock) wait block, so the done
+        // flag must be visible without relying on lock's happens-before.
+        InputStream continuousInput = new InputStream() {
+            @Override
+            public int available() {
+                return 1;
+            }
+
+            @Override
+            public int read() throws IOException {
+                return 0;
+            }
+        };
+
+        assertTimeoutPreemptively(Duration.ofSeconds(5), () -> {
+            StreamPollFeeder feeder = new StreamPollFeeder(continuousInput, new OutputStream() {
+                @Override
+                public void write(int b) {
+                    // discard
+                }
+            });
+            feeder.setDaemon(true);
+            feeder.start();
+            feeder.waitUntilDone();
+            assertNull(feeder.getException());
+        });
+    }
 
     @Test
     public void waitUntilFeederDoneOnInputStream() throws Exception {
