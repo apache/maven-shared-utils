@@ -103,6 +103,14 @@ public class PathToolTest {
     }
 
     @Test
+    public void testGetRelativeFilePathWithDifferentWindowsDrives() {
+        // Verifies that a leading backslash before a Windows drive letter (e.g. "\C:\\...")
+        // is stripped so the drive-letter comparison logic runs.
+        // Different drives should return null.
+        assertNull(PathTool.getRelativeFilePath("\\C:\\usr\\local", "\\D:\\usr\\local\\java\\bin"));
+    }
+
+    @Test
     public void testUppercaseDrive() {
         assertNull(PathTool.uppercaseDrive(null));
 
