@@ -142,7 +142,7 @@ public class PathTool {
         String fromPath = new File(oldPath).getPath();
         String toPath = new File(newPath).getPath();
 
-        // strip any leading slashes if its a windows path
+        // strip any leading backslash before a Windows drive letter
         if (toPath.length() > 2
                 && toPath.charAt(0) == '\\'
                 && Character.isLetter(toPath.charAt(1))
