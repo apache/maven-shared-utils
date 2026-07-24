@@ -22,6 +22,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.time.Duration;
 
 import org.junit.jupiter.api.Test;
@@ -50,7 +51,7 @@ public class StreamPollFeederTest {
         };
 
         assertTimeoutPreemptively(Duration.ofSeconds(5), () -> {
-            StreamPollFeeder feeder = new StreamPollFeeder(continuousInput, new java.io.OutputStream() {
+            StreamPollFeeder feeder = new StreamPollFeeder(continuousInput, new OutputStream() {
                 @Override
                 public void write(int b) {
                     // discard
