@@ -44,7 +44,8 @@ class AbstractStreamHandler extends Thread {
         disabled = true;
     }
 
-    protected void setDone() {
+    protected synchronized void setDone() {
         done = true;
+        this.notifyAll();
     }
 }
