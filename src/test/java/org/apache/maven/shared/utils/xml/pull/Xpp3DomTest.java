@@ -43,6 +43,23 @@ public class Xpp3DomTest {
     }
 
     @Test
+    public void removeChildByIndexUpdatesChildMap() {
+        Xpp3Dom parent = new Xpp3Dom("parent");
+        Xpp3Dom first = new Xpp3Dom("child");
+        first.setValue("first");
+        Xpp3Dom second = new Xpp3Dom("child");
+        second.setValue("second");
+        parent.addChild(first);
+        parent.addChild(second);
+
+        parent.removeChild(1);
+
+        assertEquals(1, parent.getChildCount());
+        assertEquals("first", parent.getChild("child").getValue());
+    }
+
+
+    @Test
     public void defaultValueIsNotNull() {
         // getValue() is annotated @NonNull but the one-arg constructor
         // did not initialize value, violating the contract.
