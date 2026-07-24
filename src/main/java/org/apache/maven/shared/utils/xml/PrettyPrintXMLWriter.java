@@ -95,7 +95,12 @@ public class PrettyPrintXMLWriter implements XMLWriter {
      * @param doctype can be null
      */
     public PrettyPrintXMLWriter(PrintWriter writer, String lineIndent, String encoding, String doctype) {
-        this(writer, lineIndent.toCharArray(), "\n".toCharArray(), encoding, doctype);
+        this(
+                writer,
+                lineIndent != null ? lineIndent.toCharArray() : DEFAULT_LINE_INDENT,
+                "\n".toCharArray(),
+                encoding,
+                doctype);
     }
 
     /**
@@ -135,7 +140,12 @@ public class PrettyPrintXMLWriter implements XMLWriter {
      */
     public PrettyPrintXMLWriter(
             PrintWriter writer, String lineIndent, String lineSeparator, String encoding, String doctype) {
-        this(writer, lineIndent.toCharArray(), lineSeparator.toCharArray(), encoding, doctype);
+        this(
+                writer,
+                lineIndent != null ? lineIndent.toCharArray() : DEFAULT_LINE_INDENT,
+                lineSeparator != null ? lineSeparator.toCharArray() : "\n".toCharArray(),
+                encoding,
+                doctype);
     }
 
     /**
