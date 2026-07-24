@@ -80,6 +80,14 @@ public class Xpp3DomBuilderTest {
     }
 
     @Test
+    public void buildDoesNotModifySaxDriverProperty() {
+        String key = "org.xml.sax.driver";
+        String original = System.getProperty(key);
+        Xpp3DomBuilder.build(new StringReader("<root/>"));
+        assertEquals(original, System.getProperty(key));
+    }
+
+    @Test
     public void testMalformedXml() {
         try {
             Xpp3DomBuilder.build(new StringReader("<newRoot>" + createDomString()));

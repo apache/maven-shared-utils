@@ -116,17 +116,7 @@ public class Xpp3DomBuilder {
             return comSunXmlReader;
         }
 
-        String key = "org.xml.sax.driver";
-        String oldParser = System.getProperty(key);
-        System.clearProperty(key); // There's a "slight" problem with this an parallel maven: It does not work ;)
-
-        try {
-            return org.xml.sax.helpers.XMLReaderFactory.createXMLReader();
-        } finally {
-            if (oldParser != null) {
-                System.setProperty(key, oldParser);
-            }
-        }
+        return org.xml.sax.helpers.XMLReaderFactory.createXMLReader();
     }
 
     private static XMLReader instantiate(String s) {
