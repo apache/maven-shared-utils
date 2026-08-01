@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.maven.shared.utils.StringUtils;
-
 /**
  * Class that abstracts the Shell functionality,
  * with subclasses for shells that behave particularly, like
@@ -51,15 +49,7 @@ public class Shell {
 
     private String workingDir;
 
-    private boolean quotedExecutableEnabled = true;
-
-    private boolean singleQuotedArgumentEscaped = false;
-
-    private boolean singleQuotedExecutableEscaped = false;
-
-    private char argQuoteDelimiter = '\"';
-
-    private char exeQuoteDelimiter = '\"';
+    private final boolean singleQuotedArgumentEscaped = false;
 
     /**
      * Set the command to execute the shell (e.g. COMMAND.COM, /bin/bash,...).
@@ -104,14 +94,7 @@ public class Shell {
     }
 
     protected String quoteOneItem(String inputString, boolean isExecutable) {
-        char[] escapeChars = getEscapeChars(isSingleQuotedExecutableEscaped(), isDoubleQuotedExecutableEscaped());
-        return StringUtils.quoteAndEscape(
-                inputString,
-                isExecutable ? getExecutableQuoteDelimiter() : getArgumentQuoteDelimiter(),
-                escapeChars,
-                getQuotingTriggerChars(),
-                '\\',
-                unconditionalQuoting);
+        return inputString;
     }
 
     /**
@@ -140,18 +123,14 @@ public class Shell {
                 sb.append(preamble);
             }
 
-            if (isQuotedExecutableEnabled()) {
-                sb.append(quoteOneItem(executableParameter, true));
-            } else {
-                sb.append(executableParameter);
-            }
+            sb.append(quoteOneItem(executableParameter, true));
         }
         for (String argument : argumentsParameter) {
             if (sb.length() > 0) {
                 sb.append(' ');
             }
 
-            if (isQuotedArgumentsEnabled()) {
+            if (quotedArgumentsEnabled) {
                 sb.append(quoteOneItem(argument, false));
             } else {
                 sb.append(argument);
@@ -171,22 +150,6 @@ public class Shell {
         return null;
     }
 
-    char[] getEscapeChars(boolean includeSingleQuote, boolean includeDoubleQuote) {
-        StringBuilder buf = new StringBuilder(2);
-        if (includeSingleQuote) {
-            buf.append('\'');
-        }
-
-        if (includeDoubleQuote) {
-            buf.append('\"');
-        }
-
-        char[] result = new char[buf.length()];
-        buf.getChars(0, buf.length(), result, 0);
-
-        return result;
-    }
-
     /**
      * @return false in all cases
      */
@@ -199,36 +162,6 @@ public class Shell {
      */
     protected boolean isSingleQuotedArgumentEscaped() {
         return singleQuotedArgumentEscaped;
-    }
-
-    boolean isDoubleQuotedExecutableEscaped() {
-        return false;
-    }
-
-    boolean isSingleQuotedExecutableEscaped() {
-        return singleQuotedExecutableEscaped;
-    }
-
-    /**
-     * @param argQuoteDelimiterParameter {@link #argQuoteDelimiter}
-     */
-    void setArgumentQuoteDelimiter(char argQuoteDelimiterParameter) {
-        this.argQuoteDelimiter = argQuoteDelimiterParameter;
-    }
-
-    char getArgumentQuoteDelimiter() {
-        return argQuoteDelimiter;
-    }
-
-    /**
-     * @param exeQuoteDelimiterParameter {@link #exeQuoteDelimiter}
-     */
-    void setExecutableQuoteDelimiter(char exeQuoteDelimiterParameter) {
-        this.exeQuoteDelimiter = exeQuoteDelimiterParameter;
-    }
-
-    char getExecutableQuoteDelimiter() {
-        return exeQuoteDelimiter;
     }
 
     /**
@@ -265,18 +198,6 @@ public class Shell {
      */
     public void setQuotedArgumentsEnabled(boolean quotedArgumentsEnabled) {
         this.quotedArgumentsEnabled = quotedArgumentsEnabled;
-    }
-
-    boolean isQuotedArgumentsEnabled() {
-        return quotedArgumentsEnabled;
-    }
-
-    void setQuotedExecutableEnabled(boolean quotedExecutableEnabled) {
-        this.quotedExecutableEnabled = quotedExecutableEnabled;
-    }
-
-    boolean isQuotedExecutableEnabled() {
-        return quotedExecutableEnabled;
     }
 
     /**
@@ -329,14 +250,6 @@ public class Shell {
 
     String getWorkingDirectoryAsString() {
         return workingDir;
-    }
-
-    void setSingleQuotedArgumentEscaped(boolean singleQuotedArgumentEscaped) {
-        this.singleQuotedArgumentEscaped = singleQuotedArgumentEscaped;
-    }
-
-    void setSingleQuotedExecutableEscaped(boolean singleQuotedExecutableEscaped) {
-        this.singleQuotedExecutableEscaped = singleQuotedExecutableEscaped;
     }
 
     public boolean isUnconditionalQuoting() {
