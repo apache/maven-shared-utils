@@ -29,14 +29,11 @@
 
 ${project.name}
 
-   This project aims to be a functional replacement for
-   {{{https://codehaus-plexus.github.io/plexus-utils/}plexus-utils}} in Maven.
-   
-   It is not a 100% API compatible replacement though but a replacement <with improvements>:
-   lots of methods got cleaned up, generics got added and we dropped a lot of unused code.
+   This project replaces {{{https://codehaus-plexus.github.io/plexus-utils/}plexus-utils}} for Maven.
 
-   Then there are additions, like
-   {{{./apidocs/org/apache/maven/shared/utils/logging/package-summary.html}styled message API}}.
+   It is not a 100% API compatible replacement. We cleaned up methods, added generics, and removed unused code.
+
+   This project adds new features, like {{{./apidocs/org/apache/maven/shared/utils/logging/package-summary.html}styled message API}}.
 
 Why?
 
@@ -45,8 +42,6 @@ Why?
 
 Why not commons?
 
-    We would prefer code to use commons-* where appropriate, but plexus-utils became
-    slightly incompatible from the Commons versions over the years, so migrating is not
-    always a 1:1 operation. Migrating to Maven Shared Utils is a 1:1 operation in most cases.
+    We prefer code to use commons-* where appropriate. The plexus-utils versions became incompatible with the Commons versions over time. Migrating is not always a 1:1 operation. Migrating to Maven Shared Utils works in most cases as a 1:1 operation.
 
   []
