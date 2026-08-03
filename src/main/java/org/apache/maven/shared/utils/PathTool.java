@@ -164,14 +164,14 @@ public class PathTool {
                 && (!toPath.substring(0, 1).equals(fromPath.substring(0, 1)))) {
             // they both have drive path element but they dont match, no
             // relative path
-            return null;
+            return "";
         }
 
         if ((toPath.startsWith(":", 1) && !fromPath.startsWith(":", 1))
                 || (!toPath.startsWith(":", 1) && fromPath.startsWith(":", 1))) {
             // one has a drive path element and the other doesnt, no relative
             // path.
-            return null;
+            return "";
         }
 
         String resultPath = buildRelativePath(toPath, fromPath, File.separatorChar);
