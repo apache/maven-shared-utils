@@ -18,6 +18,8 @@
  */
 package org.apache.maven.shared.utils.cli;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author <a href="mailto:kristian.rosenvold@gmail.com">Kristian Rosenvold</a>
  */
@@ -36,6 +38,33 @@ class AbstractStreamHandler extends Thread {
         }
     }
 
+    /**
+     * Waits until this handler is done or the given timeout elapses.
+     *
+     * @param timeoutInMillis timeout in milliseconds; a value less than or equal to zero waits indefinitely
+     * @return {@code true} if the handler finished within the timeout, {@code false} otherwise
+     * @throws InterruptedException if the current thread is interrupted while waiting
+     */
+    public synchronized boolean waitUntilDone(long timeoutInMillis) throws InterruptedException {
+        if (timeoutInMillis <= 0) {
+            waitUntilDone();
+            return true;
+        }
+
+        long deadline = System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(timeoutInMillis);
+
+        while (!isDone()) {
+            long remainingNanos = deadline - System.nanoTime();
+            if (remainingNanos <= 0) {
+                return false;
+            }
+
+            wait(TimeUnit.NANOSECONDS.toMillis(remainingNanos), (int) (remainingNanos % 1000000L));
+        }
+
+        return true;
+    }
+
     boolean isDisabled() {
         return disabled;
     }
@@ -44,7 +73,8 @@ class AbstractStreamHandler extends Thread {
         disabled = true;
     }
 
-    protected void setDone() {
+    protected synchronized void setDone() {
         done = true;
+        this.notifyAll();
     }
 }

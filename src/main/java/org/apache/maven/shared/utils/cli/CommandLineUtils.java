@@ -40,6 +40,13 @@ import org.jspecify.annotations.Nullable;
 public abstract class CommandLineUtils {
 
     /**
+     * Grace period in milliseconds to wait for the stream pumpers to drain the remaining process output and reach EOF
+     * on their own after the process has exited, before forcing EOF by closing the process streams. See
+     * <a href="https://bugs.java.com/bugdatabase/view_bug.do?bug_id=4311711">JDK-4311711</a>.
+     */
+    private static final long STREAM_EOF_GRACE_PERIOD_MS = 5000;
+
+    /**
      * A {@code StreamConsumer} providing consumed lines as a {@code String}.
      *
      * @see #getOutput()
@@ -275,32 +282,36 @@ public abstract class CommandLineUtils {
 
                     int returnValue = p.waitFor();
 
-                    // Close the process streams to work around JDK-4311711:
-                    // Process.getInputStream().read() can hang indefinitely
-                    // even after the process has terminated. Closing the
-                    // streams causes the pumpers' readLine() calls to return.
+                    // After the process has terminated its output streams may, on some
+                    // JVMs, fail to deliver EOF (JDK-4311711), leaving the pumpers
+                    // blocked in readLine() forever. Normally the pumpers drain the
+                    // remaining buffered output and reach EOF on their own, so first
+                    // wait for them with a grace period; only if they are still stuck
+                    // force EOF by closing the streams. The pumpers are disabled first
+                    // so the IOException caused by our close is treated as EOF instead
+                    // of being reported as a stream failure.
                     try {
-                        p.getOutputStream().close();
-                    } catch (IOException e) {
-                        // ignore
-                    }
-                    try {
-                        p.getInputStream().close();
-                    } catch (IOException e) {
-                        // ignore
-                    }
-                    try {
-                        p.getErrorStream().close();
-                    } catch (IOException e) {
-                        // ignore
-                    }
+                        if (inputFeeder != null) {
+                            inputFeeder.waitUntilDone();
+                        }
 
-                    if (inputFeeder != null) {
-                        inputFeeder.waitUntilDone();
-                    }
+                        if (!outputPumper.waitUntilDone(STREAM_EOF_GRACE_PERIOD_MS)
+                                || !errorPumper.waitUntilDone(STREAM_EOF_GRACE_PERIOD_MS)) {
+                            outputPumper.disable();
+                            errorPumper.disable();
 
-                    outputPumper.waitUntilDone();
-                    errorPumper.waitUntilDone();
+                            closeProcessStreams(p);
+
+                            outputPumper.waitUntilDone();
+                            errorPumper.waitUntilDone();
+                        }
+                    } finally {
+                        try {
+                            outputPumper.waitUntilDone();
+                        } finally {
+                            errorPumper.waitUntilDone();
+                        }
+                    }
 
                     if (inputFeeder != null && inputFeeder.getException() != null) {
                         throw new CommandLineException("Failure processing stdin.", inputFeeder.getException());
@@ -338,6 +349,24 @@ public abstract class CommandLineUtils {
                 }
             }
         };
+    }
+
+    private static void closeProcessStreams(Process p) {
+        try {
+            p.getOutputStream().close();
+        } catch (IOException e) {
+            // ignore
+        }
+        try {
+            p.getInputStream().close();
+        } catch (IOException e) {
+            // ignore
+        }
+        try {
+            p.getErrorStream().close();
+        } catch (IOException e) {
+            // ignore
+        }
     }
 
     /**
