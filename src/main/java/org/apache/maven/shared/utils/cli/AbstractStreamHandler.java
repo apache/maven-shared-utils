@@ -45,7 +45,7 @@ class AbstractStreamHandler extends Thread {
      * @return {@code true} if the handler finished within the timeout, {@code false} otherwise
      * @throws InterruptedException if the current thread is interrupted while waiting
      */
-    public synchronized boolean waitUntilDone(long timeoutInMillis) throws InterruptedException {
+    synchronized boolean waitUntilDone(long timeoutInMillis) throws InterruptedException {
         if (timeoutInMillis <= 0) {
             waitUntilDone();
             return true;
