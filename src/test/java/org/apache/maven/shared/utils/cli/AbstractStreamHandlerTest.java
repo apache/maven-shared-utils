@@ -52,4 +52,39 @@ class AbstractStreamHandlerTest {
         waiter.join(500);
         assertFalse(waiter.isAlive());
     }
+
+    @Test
+    void waitUntilDoneWithTimeoutReturnsFalseWhenNotDone() throws InterruptedException {
+        AbstractStreamHandler handler = new AbstractStreamHandler() {};
+
+        assertFalse(handler.waitUntilDone(100), "must time out while the handler is not done");
+    }
+
+    @Test
+    void waitUntilDoneWithTimeoutReturnsTrueWhenDone() throws InterruptedException {
+        AbstractStreamHandler handler = new AbstractStreamHandler() {};
+        handler.setDone();
+
+        assertTrue(handler.waitUntilDone(1000), "must return once the handler is done");
+    }
+
+    @Test
+    void waitUntilDoneWithTimeoutIsInterruptible() throws InterruptedException {
+        AbstractStreamHandler handler = new AbstractStreamHandler() {};
+
+        Thread waiter = new Thread(() -> {
+            try {
+                handler.waitUntilDone(5000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+        waiter.start();
+
+        Thread.sleep(50);
+        waiter.interrupt();
+
+        waiter.join(500);
+        assertFalse(waiter.isAlive(), "waitUntilDone must be interruptible");
+    }
 }
