@@ -18,8 +18,10 @@
  */
 package org.apache.maven.shared.utils.cli.shell;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+
+import org.apache.maven.shared.utils.StringUtils;
 
 /**
  * Implementation to call the CMD Shell present on Windows NT, 2000, XP, 7, 8, and 10.
@@ -37,7 +39,7 @@ public class CmdShell extends Shell {
 
     /**
      * <p>
-     * Specific implementation that quotes all the command line.
+     * Specific implementation that quotes every command-line item.
      * </p>
      * <p>
      * Workaround for http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6468220
@@ -68,8 +70,11 @@ public class CmdShell extends Shell {
      *      any text after the last quote character.
      * </pre>
      * <p>
-     * Always quoting the entire command line, regardless of these conditions
-     * appears to make Windows processes invoke successfully.
+     * Every item is quoted independently, and embedded double quotes are escaped with
+     * the CMD escape character ({@code ^}). Prefixing the command with {@code @} keeps
+     * the opening quote of the executable from being treated as the first character of
+     * the command string and stripped by CMD. CMD consumes {@code @} as the prefix that
+     * disables echoing for one command.
      * </p>
      *
      * @param executable the executable
@@ -78,11 +83,12 @@ public class CmdShell extends Shell {
      */
     @Override
     public List<String> getCommandLine(String executable, String... arguments) {
-        StringBuilder sb = new StringBuilder();
-        sb.append('"');
-        sb.append(super.getCommandLine(executable, arguments).get(0));
-        sb.append('"');
+        String commandLine = super.getCommandLine(executable, arguments).get(0);
+        return Collections.singletonList('@' + commandLine);
+    }
 
-        return Arrays.asList(sb.toString());
+    @Override
+    protected String quoteOneItem(String inputString, boolean isExecutable) {
+        return StringUtils.quoteAndEscape(inputString, '"', new char[] {'"'}, new char[0], '^', true);
     }
 }

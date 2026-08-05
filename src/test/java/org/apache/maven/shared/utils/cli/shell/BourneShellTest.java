@@ -153,7 +153,7 @@ public class BourneShellTest {
         assertEquals("cmd.exe", lines.get(0));
         assertEquals("/X", lines.get(1));
         assertEquals("/C", lines.get(2));
-        assertEquals("\"--password ;password\"", lines.get(3));
+        assertEquals("@\"--password\" \";password\"", lines.get(3));
     }
 
     @Test
