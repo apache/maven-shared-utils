@@ -58,7 +58,6 @@ public class Xpp3DomTest {
         assertEquals("first", parent.getChild("child").getValue());
     }
 
-
     @Test
     public void defaultValueIsNotNull() {
         // getValue() is annotated @NonNull but the one-arg constructor
