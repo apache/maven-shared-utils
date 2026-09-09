@@ -27,7 +27,10 @@ import org.fusesource.jansi.Ansi.Color;
  * Configurable message styles.
  *
  * @since 3.1.0
+ * @deprecated use {@code org.apache.maven.message.MessageBuilderFactory} (Maven 3.10.0 and later)
+ *             or {@code org.apache.maven.api.services.MessageBuilderFactory} (Maven 4) instead
  */
+@Deprecated
 enum Style {
     DEBUG("bold,cyan"),
     INFO("bold,blue"),

@@ -23,7 +23,10 @@ package org.apache.maven.shared.utils.logging;
  * logger level.
  *
  * @since 3.2.0
+ * @deprecated use {@code org.apache.maven.message.MessageBuilderFactory} (Maven 3.10.0 and later)
+ *             or {@code org.apache.maven.api.services.MessageBuilderFactory} (Maven 4) instead
  */
+@Deprecated
 public interface LoggerLevelRenderer {
     /**
      * Render a message at DEBUG level.
