@@ -27,6 +27,7 @@ import org.apache.maven.shared.utils.StringUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
@@ -98,9 +99,12 @@ public class PrettyPrintXmlWriterTest {
         StringWriter sw = new StringWriter();
         PrettyPrintXMLWriter w = new PrettyPrintXMLWriter(sw);
         w.startElement("div");
-        w.writeText("hello\u0001world");
-        w.endElement();
-        assertEquals("<div>hello&#x1;world</div>", sw.toString());
+        try {
+            w.writeText("hello\u0001world");
+            fail();
+        } catch (IOException expected) {
+            assertNotNull(expected.getMessage());
+        }
     }
 
     @Test
@@ -108,9 +112,12 @@ public class PrettyPrintXmlWriterTest {
         StringWriter sw = new StringWriter();
         PrettyPrintXMLWriter w = new PrettyPrintXMLWriter(sw);
         w.startElement("div");
-        w.addAttribute("title", "hello\u0001world");
-        w.endElement();
-        assertEquals("<div title=\"hello&#x1;world\"/>", sw.toString());
+        try {
+            w.addAttribute("title", "hello\u0001world");
+            fail();
+        } catch (IOException expected) {
+            assertNotNull(expected.getMessage());
+        }
     }
 
     @Test

@@ -41,7 +41,7 @@ final class XMLEncode {
             writer.write(text);
             return;
         } else {
-            // only encode as cdata if is is longer than CDATA block overhead:
+            // only encode as cdata if it is longer than CDATA block overhead:
             if (text.length() > CDATA_BLOCK_THRESHOLD_LENGTH) {
                 String cdata = xmlEncodeTextAsCDATABlock(text);
                 if (cdata != null) {
@@ -51,7 +51,7 @@ final class XMLEncode {
             }
         }
 
-        // if every thing else fails, do it the save way...
+        // if everything else fails, do it the save way...
         xmlEncodeTextAsPCDATA(text, false, DEFAULT_QUOTE_CHAR, writer);
     }
 
@@ -109,16 +109,10 @@ final class XMLEncode {
                     break;
 
                 default:
-                    // C0 control characters (except tab, LF, CR) are encoded
-                    // as numeric character references. This produces valid
-                    // XML 1.1 but is not valid XML 1.0 (which forbids these
-                    // characters in any form). Callers that require strict
-                    // XML 1.0 compliance should strip these characters before
-                    // encoding.
+                    // C0 control characters (except tab, LF, CR) are forbidden in XML 1.0.
+                    // Callers should strip these characters before encoding.
                     if (c < 0x20 && c != 0x09 && c != 0x0A && c != 0x0D) {
-                        n.append("&#x");
-                        n.append(Integer.toHexString(c));
-                        n.append(';');
+                        throw new IOException("C0 controls are not allowed in XML text");
                     } else {
                         n.append(c);
                     }
