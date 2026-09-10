@@ -23,7 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.OutputStream;
 
 /**
- * @deprecated use org.apache.commons.io.input.XmlStreamWriter instead
+ * @deprecated use org.apache.commons.io.output.XmlStreamWriter instead
  */
 @Deprecated
 public class XmlStreamWriter extends org.apache.commons.io.output.XmlStreamWriter {
