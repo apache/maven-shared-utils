@@ -83,8 +83,18 @@ public class Xpp3DomBuilderTest {
     public void buildDoesNotModifySaxDriverProperty() {
         String key = "org.xml.sax.driver";
         String original = System.getProperty(key);
-        Xpp3DomBuilder.build(new StringReader("<root/>"));
-        assertEquals(original, System.getProperty(key));
+        try {
+            Xpp3DomBuilder.build(new StringReader("<root/>"));
+            assertEquals(original, System.getProperty(key));
+        } finally {
+            // build() must not touch this property. Restore it anyway so that a regression
+            // fails this test alone rather than cascading into every later test.
+            if (original == null) {
+                System.clearProperty(key);
+            } else {
+                System.setProperty(key, original);
+            }
+        }
     }
 
     @Test
