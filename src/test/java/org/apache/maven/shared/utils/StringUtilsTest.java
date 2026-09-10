@@ -215,6 +215,11 @@ public class StringUtilsTest {
     }
 
     @Test
+    public void testChompLastSepLongerThanStr() {
+        assertEquals("x", StringUtils.chompLast("x", "ab"));
+    }
+
+    @Test
     public void testChopNPE() {
         assertThrows(NullPointerException.class, () -> StringUtils.chop(null));
     }
@@ -248,6 +253,11 @@ public class StringUtilsTest {
         assertEquals("dings", StringUtils.chopNewline("dings\r\n"));
 
         assertEquals("dings\n\r", StringUtils.chopNewline("dings\n\r"));
+    }
+
+    @Test
+    public void testChopNewlineEmptyString() {
+        assertEquals("", StringUtils.chopNewline(""));
     }
 
     @Test
@@ -854,6 +864,11 @@ public class StringUtilsTest {
         assertEquals("*****dings", StringUtils.leftPad("dings", 10, "*"));
     }
 
+    @Test
+    public void testLeftPadEmptyDelim() {
+        assertEquals("dings", StringUtils.leftPad("dings", 10, ""));
+    }
+
     @SuppressWarnings("ConstantValue")
     @Test
     public void testLowerCase() {
@@ -1266,6 +1281,11 @@ public class StringUtilsTest {
         assertEquals("dings", StringUtils.rightPad("dings", 3, "+"));
 
         assertEquals("dings+++++", StringUtils.rightPad("dings", 10, "+"));
+    }
+
+    @Test
+    public void testRightPadEmptyDelim() {
+        assertEquals("dings", StringUtils.rightPad("dings", 10, ""));
     }
 
     @Test

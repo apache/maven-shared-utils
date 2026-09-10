@@ -27,7 +27,7 @@
   </parent>
 
   <artifactId>maven-shared-utils</artifactId>
-  <version>3.4.3-SNAPSHOT</version>
+  <version>3.5.0-SNAPSHOT</version>
 
   <name>Apache Maven Shared Utils</name>
   <description>Shared utilities for use by Maven core and plugins</description>
@@ -82,7 +82,7 @@
     <dependency>
       <groupId>org.jspecify</groupId>
       <artifactId>jspecify</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.1</version>
     </dependency>
 
     <dependency>

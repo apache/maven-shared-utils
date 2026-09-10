@@ -32,7 +32,6 @@ public class CmdShell extends Shell {
      */
     public CmdShell() {
         setShellCommand("cmd.exe");
-        setQuotedExecutableEnabled(true);
         setShellArgs(new String[] {"/X", "/C"});
     }
 
@@ -77,6 +76,7 @@ public class CmdShell extends Shell {
      * @param arguments the arguments for the executable
      * @return the resulting command line
      */
+    @Override
     public List<String> getCommandLine(String executable, String... arguments) {
         StringBuilder sb = new StringBuilder();
         sb.append('"');

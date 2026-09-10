@@ -142,11 +142,17 @@ public class PathTool {
         String fromPath = new File(oldPath).getPath();
         String toPath = new File(newPath).getPath();
 
-        // strip any leading slashes if its a windows path
-        if (toPath.matches("^\\[a-zA-Z]:")) {
+        // strip any leading backslash before a Windows drive letter
+        if (toPath.length() > 2
+                && toPath.charAt(0) == '\\'
+                && Character.isLetter(toPath.charAt(1))
+                && toPath.charAt(2) == ':') {
             toPath = toPath.substring(1);
         }
-        if (fromPath.matches("^\\[a-zA-Z]:")) {
+        if (fromPath.length() > 2
+                && fromPath.charAt(0) == '\\'
+                && Character.isLetter(fromPath.charAt(1))
+                && fromPath.charAt(2) == ':') {
             fromPath = fromPath.substring(1);
         }
 
@@ -164,14 +170,14 @@ public class PathTool {
                 && (!toPath.substring(0, 1).equals(fromPath.substring(0, 1)))) {
             // they both have drive path element but they dont match, no
             // relative path
-            return null;
+            return "";
         }
 
         if ((toPath.startsWith(":", 1) && !fromPath.startsWith(":", 1))
                 || (!toPath.startsWith(":", 1) && fromPath.startsWith(":", 1))) {
             // one has a drive path element and the other doesnt, no relative
             // path.
-            return null;
+            return "";
         }
 
         String resultPath = buildRelativePath(toPath, fromPath, File.separatorChar);

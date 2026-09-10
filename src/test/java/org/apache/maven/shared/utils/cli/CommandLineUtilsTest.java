@@ -107,6 +107,42 @@ public class CommandLineUtilsTest {
         assertEquals(0, p.exitValue());
     }
 
+    /**
+     * A process that writes more output than fits in the OS pipe buffer is still being drained by the stream pumpers
+     * when {@code waitFor()} returns. Closing the process streams unconditionally at that point (as was attempted to
+     * work around <a href="https://bugs.java.com/bugdatabase/view_bug.do?bug_id=4311711">JDK-4311711</a>) makes an
+     * in-flight {@code readLine()} throw and surfaces as a spurious {@link CommandLineException} on a process that
+     * exited successfully with complete output. The close must therefore only be forced as a fallback after the pumpers
+     * had a grace period to reach EOF on their own. Repeats because the race is timing dependent. Unix-only because it
+     * relies on {@code seq}.
+     */
+    @Test
+    public void executeCommandLineWithLargeStdoutCompletesWithoutFailure() throws Exception {
+        if (!Os.isFamily(Os.FAMILY_UNIX)) {
+            return;
+        }
+
+        int lines = 50000;
+
+        StringBuilder expected = new StringBuilder();
+        for (int i = 1; i <= lines; i++) {
+            expected.append(i).append(System.lineSeparator());
+        }
+
+        for (int i = 0; i < 10; i++) {
+            Commandline cl = new Commandline("seq 1 " + lines);
+
+            CommandLineUtils.StringStreamConsumer stdout = new CommandLineUtils.StringStreamConsumer();
+            CommandLineUtils.StringStreamConsumer stderr = new CommandLineUtils.StringStreamConsumer();
+
+            int exitCode = CommandLineUtils.executeCommandLine(cl, stdout, stderr);
+
+            assertEquals(0, exitCode, "unexpected exit code in iteration " + i);
+            assertEquals(expected.toString(), stdout.getOutput(), "stdout must be complete in iteration " + i);
+            assertEquals("", stderr.getOutput(), "stderr must be empty in iteration " + i);
+        }
+    }
+
     @Test
     public void givenASingleQuoteMarkInArgumentWhenTranslatingToCmdLineArgsThenTheQuotationMarkIsNotEscaped()
             throws Exception {

@@ -57,6 +57,8 @@ public class PathToolTest {
         assertEquals("../../bin", PathTool.getRelativeFilePath("/usr/local/", "/bin"));
 
         assertEquals("../usr/local/", PathTool.getRelativeFilePath("/bin", "/usr/local/"));
+
+        assertEquals("", PathTool.getRelativeFilePath("c:/usr/local", "d:/java/bin"));
     }
 
     @Test
@@ -85,6 +87,8 @@ public class PathToolTest {
         assertEquals("..\\..\\bin", PathTool.getRelativeFilePath("c:\\usr\\local\\", "c:\\bin"));
 
         assertEquals("..\\usr\\local\\", PathTool.getRelativeFilePath("c:\\bin", "c:\\usr\\local\\"));
+
+        assertEquals("", PathTool.getRelativeFilePath("c:\\usr\\local", "d:\\java\\bin"));
     }
 
     @Test
@@ -100,6 +104,14 @@ public class PathToolTest {
         assertEquals("../..", PathTool.getRelativePath("/usr/local/", "/usr/local/java/bin/java.sh"));
 
         assertEquals("", PathTool.getRelativePath("/usr/local/java/bin/java.sh", "/usr/local/"));
+    }
+
+    @Test
+    public void testGetRelativeFilePathWithDifferentWindowsDrives() {
+        // Verifies that a leading backslash before a Windows drive letter (e.g. "\C:\\...")
+        // is stripped so the drive-letter comparison logic runs.
+        // Different drives have no relative path, represented as an empty string.
+        assertEquals("", PathTool.getRelativeFilePath("\\C:\\usr\\local", "\\D:\\usr\\local\\java\\bin"));
     }
 
     @Test

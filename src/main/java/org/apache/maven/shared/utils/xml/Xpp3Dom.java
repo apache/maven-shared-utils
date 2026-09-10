@@ -95,6 +95,10 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
         childMap = new HashMap<>();
     }
 
+    boolean isValueSet() {
+        return value != null;
+    }
+
     /**
      * Create instance.
      *
@@ -140,7 +144,7 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
      */
     @NonNull
     public String getValue() {
-        return value;
+        return value != null ? value : "";
     }
 
     /**

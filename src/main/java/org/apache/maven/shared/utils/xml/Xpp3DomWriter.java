@@ -72,8 +72,8 @@ public class Xpp3DomWriter {
             write(xmlWriter, aChildren, escape);
         }
 
-        String value = dom.getValue();
-        if (value != null) {
+        if (dom.isValueSet()) {
+            String value = dom.getValue();
             if (escape) {
                 xmlWriter.writeText(value);
             } else {

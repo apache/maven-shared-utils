@@ -82,12 +82,14 @@ public class StreamPumper extends AbstractStreamHandler {
                 }
             }
         } catch (IOException e) {
-            exception = e;
+            if (!isDisabled()) {
+                exception = e;
+            }
         } finally {
             try {
                 in.close();
             } catch (final IOException e2) {
-                if (this.exception == null) {
+                if (!isDisabled() && this.exception == null) {
                     this.exception = e2;
                 }
             }
