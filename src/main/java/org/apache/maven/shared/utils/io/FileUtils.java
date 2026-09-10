@@ -231,7 +231,7 @@ public class FileUtils {
      * @param file the file path
      * @return the file content using the platform encoding
      * @throws IOException if any
-     * @deprecated use {@code new String(java.nio.files.Files.readAllBytes(file))}
+     * @deprecated use {@code new String(java.nio.file.Files.readAllBytes(file))}
      */
     @Deprecated
     @NonNull
@@ -244,7 +244,7 @@ public class FileUtils {
      * @param encoding the wanted encoding
      * @return the file content using the specified encoding
      * @throws IOException if any
-     * @deprecated use {@code new String(java.nio.files.Files.readAllBytes(Paths.get(file)), encoding)}
+     * @deprecated use {@code new String(java.nio.file.Files.readAllBytes(Paths.get(file)), encoding)}
      */
     @Deprecated
     @NonNull
@@ -258,7 +258,7 @@ public class FileUtils {
      * @param file the file path
      * @return the file content using the platform encoding
      * @throws IOException if any
-     * @deprecated use {@code new String(java.nio.files.Files.readAllBytes(file.toPath()))}
+     * @deprecated use {@code new String(java.nio.file.Files.readAllBytes(file.toPath()))}
      */
     @Deprecated
     @NonNull
@@ -271,7 +271,7 @@ public class FileUtils {
      * @param encoding the wanted encoding
      * @return the file content using the specified encoding
      * @throws IOException if any
-     * @deprecated use {@code new String(java.nio.files.Files.readAllBytes(file.toPath()), encoding)}
+     * @deprecated use {@code new String(java.nio.file.Files.readAllBytes(file.toPath()), encoding)}
      */
     @Deprecated
     @NonNull
@@ -297,7 +297,7 @@ public class FileUtils {
      * @return the file content lines as String[] using the system default encoding.
      * An empty List if the file doesn't exist.
      * @throws IOException in case of failure
-     * @deprecated use {@code java.nio.files.Files.readAllLines()}
+     * @deprecated use {@code java.nio.file.Files.readAllLines()}
      */
     @Deprecated
     @NonNull
@@ -314,7 +314,7 @@ public class FileUtils {
      * @param fileName the path of the file to write
      * @param data     the content to write to the file
      * @throws IOException if any
-     * @deprecated use {@code java.nio.files.Files.write(filename, data.getBytes(),
+     * @deprecated use {@code java.nio.file.Files.write(filename, data.getBytes(),
      *     StandardOpenOption.APPEND, StandardOpenOption.CREATE)}
      */
     @Deprecated
@@ -329,7 +329,7 @@ public class FileUtils {
      * @param encoding the encoding of the file
      * @param data     the content to write to the file
      * @throws IOException if any
-     * @deprecated use {@code java.nio.files.Files.write(filename, data.getBytes(encoding),
+     * @deprecated use {@code java.nio.file.Files.write(filename, data.getBytes(encoding),
      *     StandardOpenOption.APPEND, StandardOpenOption.CREATE)}
      */
     @Deprecated
@@ -349,7 +349,7 @@ public class FileUtils {
      * @param fileName the path of the file to write
      * @param data     the content to write to the file
      * @throws IOException if any
-     * @deprecated use {@code java.nio.files.Files.write(filename,
+     * @deprecated use {@code java.nio.file.Files.write(filename,
      *     data.getBytes(), StandardOpenOption.CREATE)}
      */
     @Deprecated
@@ -364,7 +364,7 @@ public class FileUtils {
      * @param encoding the encoding of the file
      * @param data     the content to write to the file
      * @throws IOException if any
-     * @deprecated use {@code java.nio.files.Files.write(Paths.get(filename),
+     * @deprecated use {@code java.nio.file.Files.write(Paths.get(filename),
      *     data.getBytes(encoding), StandardOpenOption.CREATE)}
      */
     @Deprecated
@@ -381,7 +381,7 @@ public class FileUtils {
      * @param encoding the encoding of the file
      * @param data     the content to write to the file
      * @throws IOException if any
-     * @deprecated use {@code java.nio.files.Files.write(file.toPath(),
+     * @deprecated use {@code java.nio.file.Files.write(file.toPath(),
      *     data.getBytes(encoding), StandardOpenOption.CREATE)}
      */
     @Deprecated
@@ -401,7 +401,7 @@ public class FileUtils {
      * @param file the path of the file to write
      * @param data the content to write to the file
      * @throws IOException if any
-     * @deprecated use {@code java.nio.files.Files.write(file.toPath(),
+     * @deprecated use {@code java.nio.file.Files.write(file.toPath(),
      *     data.getBytes(encoding), StandardOpenOption.CREATE)}
      */
     @Deprecated
@@ -416,7 +416,7 @@ public class FileUtils {
      * @param encoding the encoding of the file
      * @param data the content to write to the file
      * @throws IOException if any
-     * @deprecated use {@code java.nio.files.Files.write(file.toPath(),
+     * @deprecated use {@code java.nio.file.Files.write(file.toPath(),
      *     data.getBytes(encoding), StandardOpenOption.CREATE)}
      */
     @Deprecated
@@ -727,7 +727,7 @@ public class FileUtils {
      * @throws IOException if <code>source</code> does not exist, <code>destination</code> cannot be
      *                     written to, or an IO error occurs during copying
      * @throws java.io.FileNotFoundException if <code>destination</code> is a directory
-     * @deprecated use {@code java.nio.Files.copy(source.toPath(), destination.toPath(), LinkOption.NOFOLLOW_LINKS,
+     * @deprecated use {@code java.nio.file.Files.copy(source.toPath(), destination.toPath(), LinkOption.NOFOLLOW_LINKS,
      *     StandardCopyOption.REPLACE_EXISTING)}
      */
     @Deprecated
@@ -823,7 +823,7 @@ public class FileUtils {
      *                     <li><code>destination</code> cannot be written to</li>
      *                     <li>an IO error occurs during copying</li>
      *                     </ul>
-     * @deprecated use {@code java.nio.Files.copy(source.openStream(), destination.toPath(),
+     * @deprecated use {@code java.nio.file.Files.copy(source.openStream(), destination.toPath(),
      *     StandardCopyOption.REPLACE_EXISTING)}
      */
     public static void copyURLToFile(@NonNull final URL source, @NonNull final File destination) throws IOException {
@@ -845,7 +845,7 @@ public class FileUtils {
      *                     <li><code>destination</code> cannot be written to</li>
      *                     <li>an I/O error occurs during copying</li>
      *                     </ul>
-     * @deprecated use {@code java.nio.Files.copy(source, destination.toPath(),
+     * @deprecated use {@code java.nio.file.Files.copy(source, destination.toPath(),
      *     StandardCopyOption.REPLACE_EXISTING)}
      */
     @Deprecated
@@ -886,7 +886,7 @@ public class FileUtils {
      *
      * @param path the path to normalize
      * @return the normalized String, or <code>null</code> if too many ..'s
-     * @deprecated use {@code org.apache.commons.io.FileNameUtils.normalize()}
+     * @deprecated use {@code org.apache.commons.io.FilenameUtils.normalize()}
      */
     @Deprecated
     @NonNull
@@ -1036,7 +1036,7 @@ public class FileUtils {
      *
      * @param file the file to delete
      * @throws IOException if the file cannot be deleted
-     * @deprecated use {@code java.nio.files.Files.delete(file.toPath())}
+     * @deprecated use {@code java.nio.file.Files.delete(file.toPath())}
      */
     @Deprecated
     public static void delete(@NonNull File file) throws IOException {
@@ -1046,7 +1046,7 @@ public class FileUtils {
     /**
      * @param file the file
      * @return true / false
-     * @deprecated use {@code java.nio.files.Files.delete(file.toPath())}
+     * @deprecated use {@code java.nio.file.Files.delete(file.toPath())}
      */
     @Deprecated
     public static boolean deleteLegacyStyle(@NonNull File file) {
@@ -1598,7 +1598,7 @@ public class FileUtils {
      * @param to   the new file name
      * @throws IOException if anything bad happens during this process.
      *                     Note that <code>to</code> may have been deleted already when this happens.
-     * @deprecated use {@code java.nio.Files.move()}
+     * @deprecated use {@code java.nio.file.Files.move()}
      */
     @Deprecated
     public static void rename(@NonNull File from, @NonNull File to) throws IOException {
@@ -1639,7 +1639,7 @@ public class FileUtils {
      * @param parentDir directory to create the temporary file in <code>-java.io.tmpdir</code>
      *                  used if not specified
      * @return a File reference to the new temporary file
-     * @deprecated use {@code java.nio.Files.createTempFile()}
+     * @deprecated use {@code java.nio.file.Files.createTempFile()}
      */
     @Deprecated
     public static File createTempFile(@NonNull String prefix, @NonNull String suffix, @Nullable File parentDir) {

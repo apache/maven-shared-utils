@@ -47,7 +47,7 @@ public class ReaderFactory {
      * ISO Latin Alphabet #1, also known as ISO-LATIN-1.
      * Every implementation of the Java platform is required to support this character encoding.
      *
-     * @deprecated use {@code java.nio.charset.StandardCharset.ISO_8859_1}
+     * @deprecated use {@code java.nio.charset.StandardCharsets.ISO_8859_1}
      */
     @Deprecated
     public static final String ISO_8859_1 = "ISO-8859-1";
@@ -56,7 +56,7 @@ public class ReaderFactory {
      * Seven-bit ASCII, also known as ISO646-US, also known as the Basic Latin block of the Unicode character set.
      * Every implementation of the Java platform is required to support this character encoding.
      *
-     * @deprecated use {@code java.nio.charset.StandardCharset.US_ASCII}
+     * @deprecated use {@code java.nio.charset.StandardCharsets.US_ASCII}
      */
     @Deprecated
     public static final String US_ASCII = "US-ASCII";
@@ -66,7 +66,7 @@ public class ReaderFactory {
      * order accepted on input, big-endian used on output).
      * Every implementation of the Java platform is required to support this character encoding.
      *
-     * @deprecated use {@code java.nio.charset.StandardCharset.UTF_16}
+     * @deprecated use {@code java.nio.charset.StandardCharsets.UTF_16}
      */
     @Deprecated
     public static final String UTF_16 = "UTF-16";
@@ -75,7 +75,7 @@ public class ReaderFactory {
      * Sixteen-bit Unicode Transformation Format, big-endian byte order.
      * Every implementation of the Java platform is required to support this character encoding.
      *
-     * @deprecated use {@code java.nio.charset.StandardCharset.UTF_16BE}
+     * @deprecated use {@code java.nio.charset.StandardCharsets.UTF_16BE}
      */
     @Deprecated
     public static final String UTF_16BE = "UTF-16BE";
@@ -84,7 +84,7 @@ public class ReaderFactory {
      * Sixteen-bit Unicode Transformation Format, little-endian byte order.
      * Every implementation of the Java platform is required to support this character encoding.
      *
-     * @deprecated use {@code java.nio.charset.StandardCharset.UTF_16LE}
+     * @deprecated use {@code java.nio.charset.StandardCharsets.UTF_16LE}
      */
     @Deprecated
     public static final String UTF_16LE = "UTF-16LE";
@@ -93,7 +93,7 @@ public class ReaderFactory {
      * Eight-bit Unicode Transformation Format.
      * Every implementation of the Java platform is required to support this character encoding.
      *
-     * @deprecated use {@code java.nio.charset.StandardCharset.UTF_8}
+     * @deprecated use {@code java.nio.charset.StandardCharsets.UTF_8}
      */
     @Deprecated
     public static final String UTF_8 = "UTF-8";
@@ -101,7 +101,7 @@ public class ReaderFactory {
     /**
      * The <code>file.encoding</code> System Property.
      *
-     * @deprecated use {@code java.nio.charset.Charset.getDefaultCharset()}
+     * @deprecated use {@code java.nio.charset.Charset.defaultCharset()}
      */
     @Deprecated
     public static final String FILE_ENCODING = Charset.defaultCharset().displayName();
@@ -125,7 +125,7 @@ public class ReaderFactory {
      * @param file not null file
      * @return an XML reader instance for the input file
      * @throws IOException if any
-     * @deprecated use {}@code org.apache.commons.io.input.XmlStreamReader} instead
+     * @deprecated use {@code org.apache.commons.io.input.XmlStreamReader} instead
      */
     @Deprecated
     public static Reader newXmlReader(@NonNull File file) throws IOException {

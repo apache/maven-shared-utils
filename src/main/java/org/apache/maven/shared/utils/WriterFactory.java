@@ -46,7 +46,7 @@ public class WriterFactory {
      * ISO Latin Alphabet #1, also known as ISO-LATIN-1.
      * Every implementation of the Java platform is required to support this character encoding.
      *
-     * @deprecated use {@code java.nio.charset.StandardCharset.ISO_8859_1}
+     * @deprecated use {@code java.nio.charset.StandardCharsets.ISO_8859_1}
      */
     @Deprecated
     public static final String ISO_8859_1 = "ISO-8859-1";
@@ -55,7 +55,7 @@ public class WriterFactory {
      * Seven-bit ASCII, also known as ISO646-US, also known as the Basic Latin block of the Unicode character set.
      * Every implementation of the Java platform is required to support this character encoding.
      *
-     * @deprecated use {@code java.nio.charset.StandardCharset.US_ASCII}
+     * @deprecated use {@code java.nio.charset.StandardCharsets.US_ASCII}
      */
     @Deprecated
     public static final String US_ASCII = "US-ASCII";
@@ -65,7 +65,7 @@ public class WriterFactory {
      * order accepted on input, big-endian used on output).
      * Every implementation of the Java platform is required to support this character encoding.
      *
-     * @deprecated use {@code java.nio.charset.StandardCharset.UTF_16}
+     * @deprecated use {@code java.nio.charset.StandardCharsets.UTF_16}
      */
     @Deprecated
     public static final String UTF_16 = "UTF-16";
@@ -74,7 +74,7 @@ public class WriterFactory {
      * Sixteen-bit Unicode Transformation Format, big-endian byte order.
      * Every implementation of the Java platform is required to support this character encoding.
      *
-     * @deprecated use {@code java.nio.charset.StandardCharset.UTF_16BE}
+     * @deprecated use {@code java.nio.charset.StandardCharsets.UTF_16BE}
      */
     @Deprecated
     public static final String UTF_16BE = "UTF-16BE";
@@ -83,7 +83,7 @@ public class WriterFactory {
      * Sixteen-bit Unicode Transformation Format, little-endian byte order.
      * Every implementation of the Java platform is required to support this character encoding.
      *
-     * @deprecated use {@code java.nio.charset.StandardCharset.UTF_16LE}
+     * @deprecated use {@code java.nio.charset.StandardCharsets.UTF_16LE}
      */
     @Deprecated
     public static final String UTF_16LE = "UTF-16LE";
@@ -92,7 +92,7 @@ public class WriterFactory {
      * Eight-bit Unicode Transformation Format.
      * Every implementation of the Java platform is required to support this character encoding.
      *
-     * @deprecated use {@code java.nio.charset.StandardCharset.UTF_8}
+     * @deprecated use {@code java.nio.charset.StandardCharsets.UTF_8}
      */
     @Deprecated
     public static final String UTF_8 = "UTF-8";
@@ -100,7 +100,7 @@ public class WriterFactory {
     /**
      * The <code>file.encoding</code> System Property.
      *
-     * @deprecated use {@code java.nio.charset.Charset.getDefaultCharset()}
+     * @deprecated use {@code java.nio.charset.Charset.defaultCharset()}
      */
     @Deprecated
     public static final String FILE_ENCODING = Charset.defaultCharset().displayName();
@@ -112,7 +112,7 @@ public class WriterFactory {
      * @return an XML writer instance for the output stream
      * @throws IOException if any
      * @see XmlStreamWriter
-     * @deprecated use {@code org.apache.commons.io.input.XmlStreamWriter} instead
+     * @deprecated use {@code org.apache.commons.io.output.XmlStreamWriter} instead
      */
     @Deprecated
     public static XmlStreamWriter newXmlWriter(@NonNull OutputStream out) throws IOException {
@@ -126,7 +126,7 @@ public class WriterFactory {
      * @return an XML writer instance for the output file
      * @throws IOException if any
      * @see XmlStreamWriter
-     * @deprecated use {@code org.apache.commons.io.input.XmlStreamWriter} instead
+     * @deprecated use {@code org.apache.commons.io.output.XmlStreamWriter} instead
      */
     @Deprecated
     public static XmlStreamWriter newXmlWriter(@NonNull File file) throws IOException {

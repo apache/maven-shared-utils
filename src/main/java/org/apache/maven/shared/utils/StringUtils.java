@@ -204,7 +204,7 @@ public class StringUtils {
      * @return <code>true</code> if the Strings are equal, case-sensitive, or
      *         both <code>null</code>
      * @see java.lang.String#equals(Object)
-     * @deprecated use {@code java.lang.Objects.equals()}
+     * @deprecated use {@code java.util.Objects.equals()}
      */
     @Deprecated
     public static boolean equals(@Nullable String str1, @Nullable String str2) {
@@ -1689,7 +1689,7 @@ public class StringUtils {
      * @param obj the Object to check
      * @return the passed in Object's toString, or blank if it was
      *         <code>null</code>
-     * @deprecated use {@code java.lang.Objects.toString()}
+     * @deprecated use {@code java.util.Objects.toString()}
      */
     @Deprecated
     @NonNull
@@ -1707,7 +1707,7 @@ public class StringUtils {
      *                      <code>null</code>
      * @return the passed in string, or the default if it was
      *         <code>null</code>
-     * @deprecated use {@code java.lang.Objects.toString()}
+     * @deprecated use {@code java.util.Objects.toString()}
      */
     @Deprecated
     @NonNull
