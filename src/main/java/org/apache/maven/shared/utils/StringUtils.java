@@ -647,7 +647,11 @@ public class StringUtils {
      * @param with char to replace with
      * @return the text with any replacements processed
      * @see #replace(String text, char repl, char with, int max)
+     * @deprecated use {@link String#replace(char, char)} instead. Note that the JDK method throws
+     *             {@link NullPointerException} when {@code text} is <code>null</code>, where this
+     *             method returns <code>null</code>.
      */
+    @Deprecated
     public static String replace(@Nullable String text, char repl, char with) {
         return replace(text, repl, with, -1);
     }
@@ -693,7 +697,12 @@ public class StringUtils {
      * @param with string to replace with
      * @return the text with any replacements processed
      * @see #replace(String text, String repl, String with, int max)
+     * @deprecated use {@link String#replace(CharSequence, CharSequence)} instead. Note two differences:
+     *             the JDK method throws {@link NullPointerException} on <code>null</code> arguments,
+     *             and it replaces an empty <code>repl</code> at every position, where this method
+     *             returns <code>text</code> unchanged.
      */
+    @Deprecated
     public static String replace(@Nullable String text, @Nullable String repl, @Nullable String with) {
         return replace(text, repl, with, -1);
     }
@@ -1900,10 +1909,10 @@ public class StringUtils {
 
             String value = obj.toString();
 
-            text = replace(text, "${" + key + "}", value);
+            text = replace(text, "${" + key + "}", value, -1);
 
             if (!key.contains(" ")) {
-                text = replace(text, "$" + key, value);
+                text = replace(text, "$" + key, value, -1);
             }
         }
         return text;
@@ -2232,7 +2241,11 @@ public class StringUtils {
      * @param searchChar the character to find
      * @return true if the String contains the search character,
      *         false if not or <code>null</code> string input
+     * @deprecated use {@link String#indexOf(int)} and test for <code>&gt;= 0</code> instead. Note that
+     *             the JDK method throws {@link NullPointerException} when <code>str</code> is
+     *             <code>null</code>, where this method returns <code>false</code>.
      */
+    @Deprecated
     public static boolean contains(@Nullable String str, char searchChar) {
         return !isEmpty(str) && str.indexOf(searchChar) >= 0;
     }
@@ -2256,7 +2269,11 @@ public class StringUtils {
      * @param searchStr the String to find, may be null
      * @return true if the String contains the search String,
      *         false if not or <code>null</code> string input
+     * @deprecated use {@link String#contains(CharSequence)} instead. Note that the JDK method throws
+     *             {@link NullPointerException} on <code>null</code> arguments, where this method
+     *             returns <code>false</code>.
      */
+    @Deprecated
     public static boolean contains(@Nullable String str, @Nullable String searchStr) {
         return !(str == null || searchStr == null) && str.contains(searchStr);
     }
