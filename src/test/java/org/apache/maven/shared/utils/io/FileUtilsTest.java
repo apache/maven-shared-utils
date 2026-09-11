@@ -34,6 +34,7 @@ import java.io.Writer;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -343,6 +344,34 @@ public class FileUtilsTest {
         /* disabled: Thread.sleep doesn't work reliantly for this case
         assertTrue("Check last modified date preserved",
             testFile1.lastModified() == destination.lastModified());*/
+    }
+
+    @Test
+    public void copyFileCopiesDanglingSymbolicLink() throws Exception {
+        assumeFalse(Os.isFamily(Os.FAMILY_WINDOWS));
+        File link = new File(tempFolder, "dangling");
+        Files.createSymbolicLink(link.toPath(), Paths.get("non-existing.txt"));
+        File destination = new File(new File(tempFolder, "dest"), "dangling");
+
+        FileUtils.copyFile(link, destination);
+
+        assertTrue(Files.isSymbolicLink(destination.toPath()), "destination is a symbolic link");
+        assertEquals(Paths.get("non-existing.txt"), Files.readSymbolicLink(destination.toPath()));
+    }
+
+    @Test
+    public void copyFileCopiesRelativeSymbolicLinkIntoAnotherDirectory() throws Exception {
+        assumeFalse(Os.isFamily(Os.FAMILY_WINDOWS));
+        Files.write(new File(tempFolder, "target.txt").toPath(), "Hello World!".getBytes(StandardCharsets.UTF_8));
+        File link = new File(tempFolder, "link");
+        Files.createSymbolicLink(link.toPath(), Paths.get("target.txt"));
+        File destination = new File(new File(tempFolder, "dest"), "link");
+
+        // the relative target does not resolve from the destination directory; the link is copied as is
+        FileUtils.copyFile(link, destination, null, (FileUtils.FilterWrapper[]) null);
+
+        assertTrue(Files.isSymbolicLink(destination.toPath()), "destination is a symbolic link");
+        assertEquals(Paths.get("target.txt"), Files.readSymbolicLink(destination.toPath()));
     }
 
     /** A time today, rounded down to the previous minute */
