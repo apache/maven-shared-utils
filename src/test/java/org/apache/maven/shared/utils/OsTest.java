@@ -26,7 +26,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -114,8 +113,8 @@ public class OsTest {
     }
 
     @Test
-    public void testOsFamilyNotNull() {
-        assertNotNull(Os.OS_FAMILY);
+    public void testOsFamilyIsValidFamily() {
+        assertTrue(Os.isValidFamily(Os.OS_FAMILY));
     }
 
     @Test
