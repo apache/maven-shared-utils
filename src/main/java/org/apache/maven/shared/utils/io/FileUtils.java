@@ -709,15 +709,18 @@ public class FileUtils {
      */
     @Deprecated
     public static void copyFile(final File source, final File destination) throws IOException {
+        // a symbolic link is copied as a link, whether or not its target exists
+        if (Files.isSymbolicLink(source.toPath())) {
+            File target = Files.readSymbolicLink(source.toPath()).toFile();
+            mkdirsFor(destination);
+            createSymbolicLink(destination, target);
+            return;
+        }
+
         // check source exists
         if (!source.exists()) {
             final String message = "File " + source + " does not exist";
             throw new IOException(message);
-        }
-        if (Files.isSymbolicLink(source.toPath())) {
-            File target = Files.readSymbolicLink(source.toPath()).toFile();
-            createSymbolicLink(destination, target);
-            return;
         }
 
         // check source != destination, see PLXUTILS-10
@@ -1747,6 +1750,10 @@ public class FileUtils {
      * @param destination the file to copy permissions to
      */
     private static void copyFilePermissions(File source, File destination) throws IOException {
+        if (Files.isSymbolicLink(destination.toPath())) {
+            // a link copied as a link has no permissions of its own, and its target may not exist
+            return;
+        }
         try {
             // attempt to copy posix file permissions
             Files.setPosixFilePermissions(destination.toPath(), Files.getPosixFilePermissions(source.toPath()));
