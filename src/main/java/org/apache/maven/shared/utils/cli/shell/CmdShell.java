@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Implementation to call the CMD Shell present on Windows NT, 2000, XP, 7, 8, and 10.
+ * Implementation to call the CMD Shell present on Windows.
  *
  * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
  */
