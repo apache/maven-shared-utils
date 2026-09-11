@@ -18,7 +18,9 @@
  */
 package org.apache.maven.shared.utils.cli;
 
+import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
@@ -27,6 +29,7 @@ import java.util.Properties;
 
 import org.apache.maven.shared.utils.Os;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -142,6 +145,51 @@ public class CommandLineUtilsTest {
             assertEquals(expected.toString(), stdout.getOutput(), "stdout must be complete in iteration " + i);
             assertEquals("", stderr.getOutput(), "stderr must be empty in iteration " + i);
         }
+    }
+
+    @TempDir
+    File tempDir;
+
+    @Test
+    public void executeCommandLineOnWindowsPassesCmdSpecialCharactersThrough() throws Exception {
+        if (!Os.isFamily(Os.FAMILY_WINDOWS)) {
+            return;
+        }
+
+        // MSHARED-765: unquoted, cmd.exe runs "echo a" and then tries to run "b"
+        Commandline cl = new Commandline();
+        cl.setExecutable("echo");
+        cl.createArg().setValue("a&b");
+
+        CommandLineUtils.StringStreamConsumer stdout = new CommandLineUtils.StringStreamConsumer();
+        CommandLineUtils.StringStreamConsumer stderr = new CommandLineUtils.StringStreamConsumer();
+        int exitCode = CommandLineUtils.executeCommandLine(cl, stdout, stderr);
+
+        assertEquals(0, exitCode, stderr.getOutput());
+        assertEquals("\"a&b\"" + System.lineSeparator(), stdout.getOutput());
+    }
+
+    @Test
+    public void executeCommandLineOnWindowsRunsExecutableFromPathWithParentheses() throws Exception {
+        if (!Os.isFamily(Os.FAMILY_WINDOWS)) {
+            return;
+        }
+
+        // MSHARED-832: C:\work\lol(1)\maven\bin\mvn.cmd
+        File dir = new File(tempDir, "lol(1)");
+        assertTrue(dir.mkdirs());
+        File script = new File(dir, "x.cmd");
+        Files.write(script.toPath(), "@echo ok".getBytes(StandardCharsets.US_ASCII));
+
+        Commandline cl = new Commandline();
+        cl.setExecutable(script.getAbsolutePath());
+
+        CommandLineUtils.StringStreamConsumer stdout = new CommandLineUtils.StringStreamConsumer();
+        CommandLineUtils.StringStreamConsumer stderr = new CommandLineUtils.StringStreamConsumer();
+        int exitCode = CommandLineUtils.executeCommandLine(cl, stdout, stderr);
+
+        assertEquals(0, exitCode, stderr.getOutput());
+        assertEquals("ok" + System.lineSeparator(), stdout.getOutput());
     }
 
     @Test
