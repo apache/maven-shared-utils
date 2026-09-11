@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.maven.shared.utils.xml.pull.XmlPullParserException;
-import org.jspecify.annotations.NonNull;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -46,7 +45,7 @@ public class Xpp3DomBuilder {
      * @return the built DOM
      * @throws XmlPullParserException in case of an error
      */
-    public static Xpp3Dom build(@NonNull Reader reader) throws XmlPullParserException {
+    public static Xpp3Dom build(Reader reader) throws XmlPullParserException {
         return build(reader, false);
     }
 
@@ -56,7 +55,7 @@ public class Xpp3DomBuilder {
      * @return the built DOM
      * @throws XmlPullParserException in case of an error
      */
-    public static Xpp3Dom build(InputStream is, @NonNull String encoding) throws XmlPullParserException {
+    public static Xpp3Dom build(InputStream is, String encoding) throws XmlPullParserException {
         return build(is, encoding, false);
     }
 
@@ -69,7 +68,7 @@ public class Xpp3DomBuilder {
      * @deprecated use the two-arg variant
      */
     @Deprecated
-    public static Xpp3Dom build(InputStream is, @NonNull String encoding, boolean noop) throws XmlPullParserException {
+    public static Xpp3Dom build(InputStream is, String encoding, boolean noop) throws XmlPullParserException {
         try {
             Reader reader = new InputStreamReader(is, encoding);
             return build(reader);
@@ -96,7 +95,7 @@ public class Xpp3DomBuilder {
         }
     }
 
-    private static DocHandler parseSax(@NonNull InputSource inputSource) throws XmlPullParserException {
+    private static DocHandler parseSax(InputSource inputSource) throws XmlPullParserException {
         try {
             DocHandler ch = new DocHandler();
             XMLReader parser = createXmlReader();

@@ -25,8 +25,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.Charset;
 
-import org.jspecify.annotations.Nullable;
-
 /**
  * Class to pump the error stream during Process's runtime. Copied from the Ant built-in task.
  *
@@ -55,7 +53,7 @@ public class StreamPumper extends AbstractStreamHandler {
      * @param consumer {@link StreamConsumer}
      * @param charset {@link Charset}
      */
-    public StreamPumper(InputStream in, StreamConsumer consumer, @Nullable Charset charset) {
+    public StreamPumper(InputStream in, StreamConsumer consumer, Charset charset) {
         this(null == charset ? new InputStreamReader(in) : new InputStreamReader(in, charset), consumer);
     }
 

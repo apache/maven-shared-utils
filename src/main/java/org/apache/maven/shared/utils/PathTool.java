@@ -21,9 +21,6 @@ package org.apache.maven.shared.utils;
 import java.io.File;
 import java.util.StringTokenizer;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 /**
  * <p>Path tool contains static methods to assist in determining path-related
  * information such as relative paths.</p>
@@ -76,7 +73,7 @@ public class PathTool {
      * @deprecated use java.nio.file.Path.relativize() instead
      */
     @Deprecated
-    public static String getRelativePath(@Nullable String basedir, @Nullable String filename) {
+    public static String getRelativePath(String basedir, String filename) {
         basedir = uppercaseDrive(basedir);
         filename = uppercaseDrive(filename);
 
@@ -204,8 +201,7 @@ public class PathTool {
      *         terminated with a forward slash.  A zero-length string is
      *         returned if: the filename is zero-length.
      */
-    @NonNull
-    private static String determineRelativePath(@NonNull String filename, @NonNull String separator) {
+    private static String determineRelativePath(String filename, String separator) {
         if (filename.length() == 0) {
             return "";
         }
@@ -260,7 +256,7 @@ public class PathTool {
      * @param path old path
      * @return string
      */
-    static String uppercaseDrive(@Nullable String path) {
+    static String uppercaseDrive(String path) {
         if (path == null) {
             return null;
         }
@@ -270,9 +266,7 @@ public class PathTool {
         return path;
     }
 
-    @NonNull
-    private static String buildRelativePath(
-            @NonNull String toPath, @NonNull String fromPath, final char separatorChar) {
+    private static String buildRelativePath(String toPath, String fromPath, final char separatorChar) {
         // use tokeniser to traverse paths and for lazy checking
         StringTokenizer toTokeniser = new StringTokenizer(toPath, String.valueOf(separatorChar));
         StringTokenizer fromTokeniser = new StringTokenizer(fromPath, String.valueOf(separatorChar));

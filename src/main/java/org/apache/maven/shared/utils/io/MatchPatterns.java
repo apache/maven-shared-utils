@@ -20,8 +20,6 @@ package org.apache.maven.shared.utils.io;
 
 import java.io.File;
 
-import org.jspecify.annotations.NonNull;
-
 /**
  * A list of patterns to be matched.
  *
@@ -32,7 +30,7 @@ import org.jspecify.annotations.NonNull;
 public class MatchPatterns {
     private final MatchPattern[] patterns;
 
-    private MatchPatterns(@NonNull MatchPattern... patterns) {
+    private MatchPatterns(MatchPattern... patterns) {
         this.patterns = patterns;
     }
 
@@ -44,7 +42,7 @@ public class MatchPatterns {
      * @param isCaseSensitive if the comparison is case sensitive
      * @return true if any of the supplied patterns match
      */
-    public boolean matches(@NonNull String name, boolean isCaseSensitive) {
+    public boolean matches(String name, boolean isCaseSensitive) {
         String[] tokenized = MatchPattern.tokenizePathToString(name, File.separator);
         for (MatchPattern pattern : patterns) {
             if (pattern.matchPath(name, tokenized, isCaseSensitive)) {
@@ -59,7 +57,7 @@ public class MatchPatterns {
      * @param isCaseSensitive being case sensetive
      * @return true if any of the supplied patterns match start
      */
-    public boolean matchesPatternStart(@NonNull String name, boolean isCaseSensitive) {
+    public boolean matchesPatternStart(String name, boolean isCaseSensitive) {
         for (MatchPattern includesPattern : patterns) {
             if (includesPattern.matchPatternStart(name, isCaseSensitive)) {
                 return true;
@@ -72,7 +70,7 @@ public class MatchPatterns {
      * @param sources the sources
      * @return converted match patterns
      */
-    public static MatchPatterns from(@NonNull String... sources) {
+    public static MatchPatterns from(String... sources) {
         final int length = sources.length;
         MatchPattern[] result = new MatchPattern[length];
         for (int i = 0; i < length; i++) {

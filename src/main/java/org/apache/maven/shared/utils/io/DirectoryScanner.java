@@ -26,9 +26,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 /**
  * <p>Class for scanning a directory for files/directories which match certain criteria.</p>
  * <p>
@@ -277,7 +274,7 @@ public class DirectoryScanner {
      *
      * @param basedir the base directory for scanning. Should not be <code>null</code>.
      */
-    public void setBasedir(@NonNull final File basedir) {
+    public void setBasedir(final File basedir) {
         this.basedir = basedir;
     }
 
@@ -460,7 +457,7 @@ public class DirectoryScanner {
      * @param newFiles array of new files
      * @return calculated difference
      */
-    public static DirectoryScanResult diffFiles(@Nullable String[] oldFiles, @Nullable String[] newFiles) {
+    public static DirectoryScanResult diffFiles(String[] oldFiles, String[] newFiles) {
         Set<String> oldFileSet = arrayAsHashSet(oldFiles);
         Set<String> newFileSet = arrayAsHashSet(newFiles);
 
@@ -492,7 +489,7 @@ public class DirectoryScanner {
      * @param array  the array
      * @return the filled HashSet of type T
      */
-    private static <T> Set<T> arrayAsHashSet(@Nullable T[] array) {
+    private static <T> Set<T> arrayAsHashSet(T[] array) {
         if (array == null || array.length == 0) {
             return Collections.emptySet();
         }
@@ -551,7 +548,7 @@ public class DirectoryScanner {
      * @see #dirsExcluded
      * @see #slowScan
      */
-    private void scandir(@NonNull final File dir, @NonNull final String vpath, final boolean fast) {
+    private void scandir(final File dir, final String vpath, final boolean fast) {
         String[] newfiles = dir.list();
 
         if (newfiles == null) {
@@ -696,7 +693,7 @@ public class DirectoryScanner {
      * @return <code>true</code> when the name matches against the start of at least one include pattern, or
      *         <code>false</code> otherwise
      */
-    private boolean couldHoldIncluded(@NonNull final String name) {
+    private boolean couldHoldIncluded(final String name) {
         return includesPatterns.matchesPatternStart(name, isCaseSensitive);
     }
 
@@ -707,7 +704,7 @@ public class DirectoryScanner {
      * @return <code>true</code> when the name matches against at least one exclude pattern, or <code>false</code>
      *         otherwise
      */
-    private boolean isExcluded(@NonNull final String name) {
+    private boolean isExcluded(final String name) {
         return excludesPatterns.matches(name, isCaseSensitive);
     }
 

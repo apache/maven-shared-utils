@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.jspecify.annotations.NonNull;
-
 /**
  * <p>This is a utility class used by selectors and DirectoryScanner. The
  * functionality more properly belongs just to selectors, but unfortunately
@@ -512,12 +510,12 @@ public final class SelectorUtils {
     }
 
     static boolean matchAntPathPatternStart(
-            @NonNull MatchPattern pattern, @NonNull String str, @NonNull String separator, boolean isCaseSensitive) {
+            MatchPattern pattern, String str, String separator, boolean isCaseSensitive) {
         return !separatorPatternStartSlashMismatch(pattern, str, separator)
                 && matchAntPathPatternStart(pattern.getTokenizedPathString(), str, separator, isCaseSensitive);
     }
 
-    private static String[] tokenizePathToString(@NonNull String path, @NonNull String separator) {
+    private static String[] tokenizePathToString(String path, String separator) {
         List<String> ret = new ArrayList<>();
         StringTokenizer st = new StringTokenizer(path, separator);
         while (st.hasMoreTokens()) {
@@ -527,13 +525,13 @@ public final class SelectorUtils {
     }
 
     private static boolean matchAntPathPatternStart(
-            @NonNull String[] patDirs, @NonNull String str, @NonNull String separator, boolean isCaseSensitive) {
+            String[] patDirs, String str, String separator, boolean isCaseSensitive) {
         String[] strDirs = tokenizePathToString(str, separator);
         return matchAntPathPatternStart(patDirs, strDirs, isCaseSensitive);
     }
 
     private static boolean matchAntPathPatternStart(
-            @NonNull String[] patDirs, @NonNull String[] tokenizedFileName, boolean isCaseSensitive) {
+            String[] patDirs, String[] tokenizedFileName, boolean isCaseSensitive) {
 
         int patIdxStart = 0;
         int patIdxEnd = patDirs.length - 1;
@@ -556,8 +554,7 @@ public final class SelectorUtils {
         return strIdxStart > strIdxEnd || patIdxStart <= patIdxEnd;
     }
 
-    private static boolean separatorPatternStartSlashMismatch(
-            @NonNull MatchPattern matchPattern, @NonNull String str, @NonNull String separator) {
+    private static boolean separatorPatternStartSlashMismatch(MatchPattern matchPattern, String str, String separator) {
         return str.startsWith(separator) != matchPattern.startsWith(separator);
     }
 
@@ -682,10 +679,7 @@ public final class SelectorUtils {
     }
 
     static boolean matchAntPathPattern(
-            @NonNull MatchPattern matchPattern,
-            @NonNull String str,
-            @NonNull String separator,
-            boolean isCaseSensitive) {
+            MatchPattern matchPattern, String str, String separator, boolean isCaseSensitive) {
         if (separatorPatternStartSlashMismatch(matchPattern, str, separator)) {
             return false;
         }

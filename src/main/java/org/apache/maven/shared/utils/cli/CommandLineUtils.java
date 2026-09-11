@@ -31,8 +31,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.maven.shared.utils.Os;
 import org.apache.maven.shared.utils.StringUtils;
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l </a>
@@ -80,7 +78,7 @@ public abstract class CommandLineUtils {
      * @return code
      * @throws CommandLineException in case of a problem
      */
-    public static int executeCommandLine(@NonNull Commandline cl, StreamConsumer systemOut, StreamConsumer systemErr)
+    public static int executeCommandLine(Commandline cl, StreamConsumer systemOut, StreamConsumer systemErr)
             throws CommandLineException {
         return executeCommandLine(cl, null, systemOut, systemErr, 0);
     }
@@ -94,7 +92,7 @@ public abstract class CommandLineUtils {
      * @throws CommandLineException in case of a problem
      */
     public static int executeCommandLine(
-            @NonNull Commandline cl, StreamConsumer systemOut, StreamConsumer systemErr, int timeoutInSeconds)
+            Commandline cl, StreamConsumer systemOut, StreamConsumer systemErr, int timeoutInSeconds)
             throws CommandLineException {
         return executeCommandLine(cl, null, systemOut, systemErr, timeoutInSeconds);
     }
@@ -108,7 +106,7 @@ public abstract class CommandLineUtils {
      * @throws CommandLineException in case of a problem
      */
     public static int executeCommandLine(
-            @NonNull Commandline cl, InputStream systemIn, StreamConsumer systemOut, StreamConsumer systemErr)
+            Commandline cl, InputStream systemIn, StreamConsumer systemOut, StreamConsumer systemErr)
             throws CommandLineException {
         return executeCommandLine(cl, systemIn, systemOut, systemErr, 0);
     }
@@ -123,7 +121,7 @@ public abstract class CommandLineUtils {
      * @throws CommandLineException or CommandLineTimeOutException if time out occurs
      */
     public static int executeCommandLine(
-            @NonNull Commandline cl,
+            Commandline cl,
             InputStream systemIn,
             StreamConsumer systemOut,
             StreamConsumer systemErr,
@@ -144,12 +142,12 @@ public abstract class CommandLineUtils {
      * @throws CommandLineException or CommandLineTimeOutException if time out occurs
      */
     public static int executeCommandLine(
-            @NonNull Commandline cl,
+            Commandline cl,
             InputStream systemIn,
             StreamConsumer systemOut,
             StreamConsumer systemErr,
             int timeoutInSeconds,
-            @Nullable Runnable runAfterProcessTermination)
+            Runnable runAfterProcessTermination)
             throws CommandLineException {
         return executeCommandLine(
                 cl, systemIn, systemOut, systemErr, timeoutInSeconds, runAfterProcessTermination, null);
@@ -168,13 +166,13 @@ public abstract class CommandLineUtils {
      * @throws CommandLineException or CommandLineTimeOutException if time out occurs
      */
     public static int executeCommandLine(
-            @NonNull Commandline cl,
+            Commandline cl,
             InputStream systemIn,
             StreamConsumer systemOut,
             StreamConsumer systemErr,
             int timeoutInSeconds,
-            @Nullable Runnable runAfterProcessTermination,
-            @Nullable final Charset streamCharset)
+            Runnable runAfterProcessTermination,
+            final Charset streamCharset)
             throws CommandLineException {
         final CommandLineCallable future = executeCommandLineAsCallable(
                 cl, systemIn, systemOut, systemErr, timeoutInSeconds, runAfterProcessTermination, streamCharset);
@@ -196,12 +194,12 @@ public abstract class CommandLineUtils {
      * @throws CommandLineException or CommandLineTimeOutException if time out occurs
      */
     public static CommandLineCallable executeCommandLineAsCallable(
-            @NonNull final Commandline cl,
-            @Nullable final InputStream systemIn,
+            final Commandline cl,
+            final InputStream systemIn,
             final StreamConsumer systemOut,
             final StreamConsumer systemErr,
             final int timeoutInSeconds,
-            @Nullable final Runnable runAfterProcessTermination)
+            final Runnable runAfterProcessTermination)
             throws CommandLineException {
         return executeCommandLineAsCallable(
                 cl, systemIn, systemOut, systemErr, timeoutInSeconds, runAfterProcessTermination, null);
@@ -223,13 +221,13 @@ public abstract class CommandLineUtils {
      * @throws CommandLineException or CommandLineTimeOutException if time out occurs
      */
     public static CommandLineCallable executeCommandLineAsCallable(
-            @NonNull final Commandline cl,
-            @Nullable final InputStream systemIn,
+            final Commandline cl,
+            final InputStream systemIn,
             final StreamConsumer systemOut,
             final StreamConsumer systemErr,
             final int timeoutInSeconds,
-            @Nullable final Runnable runAfterProcessTermination,
-            @Nullable final Charset streamCharset)
+            final Runnable runAfterProcessTermination,
+            final Charset streamCharset)
             throws CommandLineException {
         //noinspection ConstantConditions
         if (cl == null) {
