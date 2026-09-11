@@ -35,8 +35,6 @@ import java.util.List;
  * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
  */
 public class Shell {
-    private static final char[] DEFAULT_QUOTING_TRIGGER_CHARS = {' '};
-
     private String shellCommand;
 
     private final List<String> shellArgs = new ArrayList<>();
@@ -140,10 +138,6 @@ public class Shell {
         commandLine.add(sb.toString());
 
         return commandLine;
-    }
-
-    char[] getQuotingTriggerChars() {
-        return DEFAULT_QUOTING_TRIGGER_CHARS;
     }
 
     String getExecutionPreamble() {
