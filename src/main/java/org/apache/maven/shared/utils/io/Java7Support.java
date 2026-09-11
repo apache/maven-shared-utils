@@ -22,8 +22,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-import org.jspecify.annotations.NonNull;
-
 /**
  * Java7 feature detection.
  *
@@ -36,7 +34,7 @@ public class Java7Support {
      * @param file the file to check for being a symbolic link
      * @return true if the file is a symlink false otherwise
      */
-    public static boolean isSymLink(@NonNull File file) {
+    public static boolean isSymLink(File file) {
         return Files.isSymbolicLink(file.toPath());
     }
 
@@ -45,8 +43,7 @@ public class Java7Support {
      * @return the file
      * @throws IOException in case of error
      */
-    @NonNull
-    public static File readSymbolicLink(@NonNull File symlink) throws IOException {
+    public static File readSymbolicLink(File symlink) throws IOException {
         return Files.readSymbolicLink(symlink.toPath()).toFile();
     }
 
@@ -55,7 +52,7 @@ public class Java7Support {
      * @return true if exist false otherwise
      * @throws IOException in case of failure
      */
-    public static boolean exists(@NonNull File file) throws IOException {
+    public static boolean exists(File file) throws IOException {
         return Files.exists(file.toPath());
     }
 
@@ -65,8 +62,7 @@ public class Java7Support {
      * @return the linked file
      * @throws IOException in case of an error
      */
-    @NonNull
-    public static File createSymbolicLink(@NonNull File symlink, @NonNull File target) throws IOException {
+    public static File createSymbolicLink(File symlink, File target) throws IOException {
         return FileUtils.createSymbolicLink(symlink, target);
     }
 
@@ -76,7 +72,7 @@ public class Java7Support {
      * @param file the file to delete
      * @throws IOException in case of error
      */
-    public static void delete(@NonNull File file) throws IOException {
+    public static void delete(File file) throws IOException {
         Files.delete(file.toPath());
     }
 

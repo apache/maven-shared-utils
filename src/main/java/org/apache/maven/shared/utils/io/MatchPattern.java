@@ -24,8 +24,6 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
-import org.jspecify.annotations.NonNull;
-
 /**
  * <p>Describes a match target for SelectorUtils.</p>
  * <p>
@@ -46,7 +44,7 @@ public class MatchPattern {
 
     private final String[] tokenized;
 
-    private MatchPattern(@NonNull String source, @NonNull String separator) {
+    private MatchPattern(String source, String separator) {
         regexPattern = SelectorUtils.isRegexPrefixedPattern(source)
                 ? source.substring(
                         SelectorUtils.REGEX_HANDLER_PREFIX.length(),
@@ -88,7 +86,7 @@ public class MatchPattern {
      * @param isCaseSensitive check case sensitive or not
      * @return true in case of matching pattern
      */
-    public boolean matchPatternStart(@NonNull String str, boolean isCaseSensitive) {
+    public boolean matchPatternStart(String str, boolean isCaseSensitive) {
         if (regexPattern != null) {
             // FIXME: ICK! But we can't do partial matches for regex, so we have to reserve judgment until we have
             // a file to deal with, or we can definitely say this is an exclusion...
@@ -116,7 +114,7 @@ public class MatchPattern {
         return source.startsWith(string);
     }
 
-    static String[] tokenizePathToString(@NonNull String path, @NonNull String separator) {
+    static String[] tokenizePathToString(String path, String separator) {
         List<String> ret = new ArrayList<>();
         StringTokenizer st = new StringTokenizer(path, separator);
         while (st.hasMoreTokens()) {

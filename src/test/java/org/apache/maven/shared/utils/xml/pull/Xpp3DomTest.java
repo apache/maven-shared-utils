@@ -44,8 +44,7 @@ public class Xpp3DomTest {
 
     @Test
     public void defaultValueIsNotNull() {
-        // getValue() is annotated @NonNull but the one-arg constructor
-        // did not initialize value, violating the contract.
+        // The one-arg constructor did not initialize value.
         assertNotNull(new Xpp3Dom("test").getValue());
     }
 
