@@ -18,6 +18,7 @@
  */
 package org.apache.maven.shared.utils.cli;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
@@ -141,6 +142,38 @@ public class CommandLineUtilsTest {
             assertEquals(expected.toString(), stdout.getOutput(), "stdout must be complete in iteration " + i);
             assertEquals("", stderr.getOutput(), "stderr must be empty in iteration " + i);
         }
+    }
+
+    @Test
+    public void executeCommandLineDecodesOutputWithTheGivenCharset() throws Exception {
+        if (!Os.isFamily(Os.FAMILY_UNIX)) {
+            return;
+        }
+
+        // the shell emits the UTF-8 bytes of "caf\u00e9" regardless of the JVM default charset
+        String printfUtf8Cafe = "printf 'caf\\303\\251'";
+
+        CommandLineUtils.StringStreamConsumer utf8 = new CommandLineUtils.StringStreamConsumer();
+        CommandLineUtils.executeCommandLine(
+                new Commandline(printfUtf8Cafe),
+                null,
+                utf8,
+                new CommandLineUtils.StringStreamConsumer(),
+                0,
+                null,
+                StandardCharsets.UTF_8);
+        assertEquals("caf\u00e9" + System.lineSeparator(), utf8.getOutput());
+
+        CommandLineUtils.StringStreamConsumer latin1 = new CommandLineUtils.StringStreamConsumer();
+        CommandLineUtils.executeCommandLine(
+                new Commandline(printfUtf8Cafe),
+                null,
+                latin1,
+                new CommandLineUtils.StringStreamConsumer(),
+                0,
+                null,
+                StandardCharsets.ISO_8859_1);
+        assertEquals("caf\u00c3\u00a9" + System.lineSeparator(), latin1.getOutput());
     }
 
     @Test
