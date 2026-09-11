@@ -41,7 +41,7 @@ final class XMLEncode {
             writer.write(text);
             return;
         } else {
-            // only encode as cdata if is is longer than CDATA block overhead:
+            // only encode as cdata if it is longer than CDATA block overhead:
             if (text.length() > CDATA_BLOCK_THRESHOLD_LENGTH) {
                 String cdata = xmlEncodeTextAsCDATABlock(text);
                 if (cdata != null) {
@@ -51,7 +51,7 @@ final class XMLEncode {
             }
         }
 
-        // if every thing else fails, do it the save way...
+        // if everything else fails, do it the save way...
         xmlEncodeTextAsPCDATA(text, false, DEFAULT_QUOTE_CHAR, writer);
     }
 
@@ -109,7 +109,13 @@ final class XMLEncode {
                     break;
 
                 default:
-                    n.append(c);
+                    // C0 control characters (except tab, LF, CR) are forbidden in XML 1.0.
+                    // Callers should strip these characters before encoding.
+                    if (c < 0x20 && c != 0x09 && c != 0x0A && c != 0x0D) {
+                        throw new IOException("C0 controls are not allowed in XML text");
+                    } else {
+                        n.append(c);
+                    }
                     break;
             }
         }
@@ -135,6 +141,12 @@ final class XMLEncode {
 
     /**
      * Checks if this text needs encoding in order to be represented in XML.
+     * Note: C0 control characters (U+0000-U+001F except tab, LF, CR) are
+     * classified as needing encoding, but encoding them as numeric character
+     * references produces output that is not valid XML 1.0 (which forbids
+     * these characters outright in any form). The encoded output is valid
+     * XML 1.1. Callers that require strict XML 1.0 compliance should strip
+     * these characters before encoding.
      */
     private static boolean needsEncoding(String text) {
         if (text == null) {
@@ -143,6 +155,9 @@ final class XMLEncode {
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
             if (c == '&' || c == '<') {
+                return true;
+            }
+            if (c < 0x20 && c != 0x09 && c != 0x0A && c != 0x0D) {
                 return true;
             }
         }
