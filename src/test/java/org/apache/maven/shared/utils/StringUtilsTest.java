@@ -562,7 +562,7 @@ public class StringUtilsTest {
     @Test
     public void testIndexOfAny() {
         assertEquals(-1, StringUtils.indexOfAny(null, (String[]) null));
-        
+
         assertEquals(-1, StringUtils.indexOfAny("dings", (String[]) null));
 
         assertEquals(-1, StringUtils.indexOfAny(null, new String[] {}));
@@ -802,11 +802,11 @@ public class StringUtilsTest {
     @Test
     public void testLastIndexOfAny() {
         assertEquals(-1, StringUtils.lastIndexOfAny(null, (String[]) null));
-        
+
         assertEquals(-1, StringUtils.lastIndexOfAny("dings", (String[]) null));
-        
+
         assertEquals(13, StringUtils.lastIndexOfAny("dings bums boms", new String[] {"ms", " b"}));
-        
+
         assertEquals(-1, StringUtils.lastIndexOfAny("dings bums boms", new String[] {"nix", "da"}));
     }
 
@@ -1371,12 +1371,13 @@ public class StringUtilsTest {
     @Test
     public void testStripAll1() {
         assertNull(StringUtils.stripAll((String[]) null));
-        
+
         assertArrayEquals(new String[] {}, StringUtils.stripAll());
-        
+
         assertArrayEquals(new String[] {"dings"}, StringUtils.stripAll(new String[] {"dings"}));
-        
-        assertArrayEquals(new String[] {"dings", "bums"}, StringUtils.stripAll(new String[] {" dings ", "  bums \t  "}));
+
+        assertArrayEquals(
+                new String[] {"dings", "bums"}, StringUtils.stripAll(new String[] {" dings ", "  bums \t  "}));
     }
 
     @Test
