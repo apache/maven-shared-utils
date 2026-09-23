@@ -37,6 +37,7 @@ import org.junit.jupiter.api.io.TempDir;
 
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class PropertyUtilsTest {
@@ -131,6 +132,19 @@ public class PropertyUtilsTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
+    public void loadInputStreamDoesNotCloseCallerStream() {
+        TrackingInputStream legacy = new TrackingInputStream("a=b".getBytes(ISO_8859_1));
+        TrackingInputStream optional = new TrackingInputStream("a=b".getBytes(ISO_8859_1));
+
+        PropertyUtils.loadProperties(legacy);
+        PropertyUtils.loadOptionalProperties(optional);
+
+        assertFalse(legacy.closed);
+        assertFalse(optional.closed);
+    }
+
+    @Test
     @NeedsTemporaryFolder
     @SuppressWarnings("deprecation")
     public void loadValidFile() throws IOException {
@@ -163,5 +177,18 @@ public class PropertyUtilsTest {
         File result = new File(parent, child);
         result.createNewFile();
         return result;
+    }
+
+    private static final class TrackingInputStream extends ByteArrayInputStream {
+        private boolean closed;
+
+        private TrackingInputStream(byte[] data) {
+            super(data);
+        }
+
+        @Override
+        public void close() {
+            closed = true;
+        }
     }
 }

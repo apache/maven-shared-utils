@@ -73,9 +73,7 @@ public class PropertyUtils {
     }
 
     /**
-     * Loads {@code Properties} from an {@code InputStream} and closes the stream.
-     * In a future release, this will no longer close the stream, so callers
-     * should close the stream themselves.
+     * Loads {@code Properties} from an {@code InputStream} without closing the stream.
      *
      * @param is {@link InputStream}
      * @return the loaded properties
@@ -87,8 +85,8 @@ public class PropertyUtils {
         try {
             Properties result = new Properties();
             if (is != null) {
-                try (InputStream in = is) {
-                    result.load(in);
+                try {
+                    result.load(is);
                 } catch (IOException e) {
                     // ignore
                 }
@@ -148,10 +146,9 @@ public class PropertyUtils {
     }
 
     /**
-     * Loads {@code Properties} from an {@code InputStream} and closes the stream.
+     * Loads {@code Properties} from an {@code InputStream} without closing the stream.
      * If the given {@code InputStream} is {@code null} or the properties can't be read, an empty properties object is
-     * returned. In a future release, this will no longer close the stream, so callers
-     * should close the stream themselves.
+     * returned. Callers are responsible for closing the stream.
      *
      * @param inputStream the properties resource to load or {@code null}
      * @return the loaded properties or an empty {@code Properties} instance if properties fail to load
@@ -162,9 +159,8 @@ public class PropertyUtils {
         Properties properties = new Properties();
 
         if (inputStream != null) {
-            try (InputStream in = inputStream) // reassign inputStream to autoclose
-            {
-                properties.load(in);
+            try {
+                properties.load(inputStream);
             } catch (IllegalArgumentException | IOException ex) {
                 // ignore and return empty properties
             }
