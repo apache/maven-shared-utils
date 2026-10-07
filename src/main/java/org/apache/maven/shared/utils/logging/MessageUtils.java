@@ -30,8 +30,10 @@ import org.fusesource.jansi.AnsiMode;
  * <a href="https://en.wikipedia.org/wiki/ANSI_escape_code#Colors">ANSI colors</a> on any platform.
  *
  * @since 3.1.0
- * @deprecated use {@code org.apache.maven.message.MessageBuilderFactory} (Maven 3.10.0 and later)
- *             or {@code org.apache.maven.api.services.MessageBuilderFactory} (Maven 4) instead
+ * @deprecated migrate to {@code org.apache.maven.message.MessageBuilderFactory} (Maven 3.10.0 and later)
+ *             or {@code org.apache.maven.api.services.MessageBuilderFactory} (Maven 4) once your
+ *             plugin or extension requires one of those Maven versions. Until then, keep using
+ *             this API; it remains supported.
  */
 @Deprecated
 public class MessageUtils {

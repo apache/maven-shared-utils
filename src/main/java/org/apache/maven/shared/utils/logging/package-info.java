@@ -30,6 +30,11 @@
  * Plugins can use this API with any Maven version: color
  * just won't be activated when run with Maven versions older than 3.5.0.
  * <p>
+ * This package is deprecated in favor of {@code org.apache.maven.message.MessageBuilderFactory}
+ * (Maven 3.10.0 and later) and {@code org.apache.maven.api.services.MessageBuilderFactory} (Maven 4).
+ * The deprecation only applies once a plugin or extension requires one of those Maven versions:
+ * code that still supports older Maven versions should keep using this package.
+ * <p>
  * Styles are:<ul>
  * <li><code>debug</code>, <code>info</code>, <code>warning</code> and <code>error</code> for
  * logger level rendering,</li>

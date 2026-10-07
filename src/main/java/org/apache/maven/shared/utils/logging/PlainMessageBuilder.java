@@ -21,8 +21,10 @@ package org.apache.maven.shared.utils.logging;
 /**
  * Message builder implementation that just ignores styling, for Maven version earlier than 3.5.0.
  *
- * @deprecated use {@code org.apache.maven.message.MessageBuilderFactory} (Maven 3.10.0 and later)
- *             or {@code org.apache.maven.api.services.MessageBuilderFactory} (Maven 4) instead
+ * @deprecated migrate to {@code org.apache.maven.message.MessageBuilderFactory} (Maven 3.10.0 and later)
+ *             or {@code org.apache.maven.api.services.MessageBuilderFactory} (Maven 4) once your
+ *             plugin or extension requires one of those Maven versions. Until then, keep using
+ *             this API; it remains supported.
  */
 @Deprecated
 class PlainMessageBuilder implements MessageBuilder, LoggerLevelRenderer {
