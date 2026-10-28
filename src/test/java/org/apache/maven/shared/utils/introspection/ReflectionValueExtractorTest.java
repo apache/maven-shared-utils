@@ -29,6 +29,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -224,20 +225,18 @@ public class ReflectionValueExtractorTest {
 
     @Test
     public void testIllegalIndexedType() {
-        try {
-            ReflectionValueExtractor.evaluate("h.value[1]", new ValueHolder("string"));
-        } catch (IntrospectionException e) {
-            assertNotNull(e.getMessage());
-        }
+        IntrospectionException e = assertThrows(
+                IntrospectionException.class,
+                () -> ReflectionValueExtractor.evaluate("h.value[1]", new ValueHolder("string")));
+        assertNotNull(e.getMessage());
     }
 
     @Test
     public void testIllegalMappedType() {
-        try {
-            ReflectionValueExtractor.evaluate("h.value(key)", new ValueHolder("string"));
-        } catch (IntrospectionException e) {
-            assertNotNull(e.getMessage());
-        }
+        IntrospectionException e = assertThrows(
+                IntrospectionException.class,
+                () -> ReflectionValueExtractor.evaluate("h.value(key)", new ValueHolder("string")));
+        assertNotNull(e.getMessage());
     }
 
     @Test
