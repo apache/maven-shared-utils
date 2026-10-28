@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  *
@@ -164,13 +164,9 @@ public class XmlStreamReaderTest {
     }
 
     @Test
-    public void testInappropriateEncoding() throws IOException {
-        try {
-            checkXmlStreamReader(TEXT_UNICODE, "ISO-8859-2");
-            fail("Check should have failed, since some characters are not available in the specified encoding");
-        } catch (AssertionFailedError cf) {
-            // expected failure, since the encoding does not contain some characters
-        }
+    public void testInappropriateEncoding() {
+        // expected failure, since the encoding does not contain some characters
+        assertThrows(AssertionFailedError.class, () -> checkXmlStreamReader(TEXT_UNICODE, "ISO-8859-2"));
     }
 
     @Test
