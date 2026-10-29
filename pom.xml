@@ -63,7 +63,7 @@
     <checkstyle.violation.ignore>RedundantThrows,NewlineAtEndOfFile,ParameterNumber,MethodLength,FileLength,ModifierOrder</checkstyle.violation.ignore>
     <project.build.outputTimestamp>2026-09-19T13:29:29Z</project.build.outputTimestamp>
     <javaVersion>8</javaVersion>
-    <mavenVersion>3.2.5</mavenVersion>
+    <mavenVersion>3.9.16</mavenVersion>
   </properties>
 
   <dependencies>
