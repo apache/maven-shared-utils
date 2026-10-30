@@ -62,7 +62,6 @@
   <properties>
     <checkstyle.violation.ignore>RedundantThrows,NewlineAtEndOfFile,ParameterNumber,MethodLength,FileLength,ModifierOrder</checkstyle.violation.ignore>
     <project.build.outputTimestamp>2026-09-19T13:29:29Z</project.build.outputTimestamp>
-    <javaVersion>8</javaVersion>
     <mavenVersion>3.9.16</mavenVersion>
   </properties>
 
@@ -107,16 +106,6 @@
 
             </inputExcludes>
           </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-resources-plugin</artifactId>
-          <version>3.5.0</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-assembly-plugin</artifactId>
-          <version>3.8.0</version>
         </plugin>
       </plugins>
     </pluginManagement>
