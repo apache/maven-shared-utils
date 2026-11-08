@@ -18,11 +18,13 @@
  */
 package org.apache.maven.shared.utils.logging;
 
-import org.fusesource.jansi.Ansi;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Message builder implementation that supports ANSI colors through
- * <a href="http://fusesource.github.io/jansi/">Jansi</a> with configurable styles through {@link Style}.
+ * Message builder implementation that supports ANSI colors with configurable styles through {@link Style}.
+ * Colors are written as SGR escape sequences, and only when {@link MessageUtils#isColorEnabled()} was true
+ * when the builder was created.
  *
  * @deprecated migrate to {@code org.apache.maven.message.MessageBuilderFactory} (Maven 3.10.0 and later)
  *             or {@code org.apache.maven.api.services.MessageBuilderFactory} (Maven 4) once your
@@ -31,102 +33,110 @@ import org.fusesource.jansi.Ansi;
  */
 @Deprecated
 class AnsiMessageBuilder implements MessageBuilder, LoggerLevelRenderer {
-    private Ansi ansi;
+    private static final String ESC = "\u001B[";
 
+    private final StringBuilder builder;
+
+    private final boolean enabled;
+
+    /** SGR parameters waiting to be written before the next text, so consecutive ones share one sequence. */
+    private final List<Integer> attributes = new ArrayList<>(5);
+
+    @SuppressWarnings("checkstyle:magicnumber")
     AnsiMessageBuilder() {
-        this(Ansi.ansi());
+        this(new StringBuilder(80));
     }
 
     AnsiMessageBuilder(StringBuilder builder) {
-        this(Ansi.ansi(builder));
+        this(builder, MessageUtils.isColorEnabled());
     }
 
     AnsiMessageBuilder(int size) {
-        this(Ansi.ansi(size));
+        this(new StringBuilder(size));
     }
 
-    AnsiMessageBuilder(Ansi ansi) {
-        this.ansi = ansi;
+    AnsiMessageBuilder(StringBuilder builder, boolean enabled) {
+        this.builder = builder;
+        this.enabled = enabled;
     }
 
     public String debug(String message) {
-        return Style.DEBUG.apply(ansi).a(message).reset().toString();
+        return Style.DEBUG.apply(this).text(message).reset().toString();
     }
 
     public String info(String message) {
-        return Style.INFO.apply(ansi).a(message).reset().toString();
+        return Style.INFO.apply(this).text(message).reset().toString();
     }
 
     public String warning(String message) {
-        return Style.WARNING.apply(ansi).a(message).reset().toString();
+        return Style.WARNING.apply(this).text(message).reset().toString();
     }
 
     public String error(String message) {
-        return Style.ERROR.apply(ansi).a(message).reset().toString();
+        return Style.ERROR.apply(this).text(message).reset().toString();
     }
 
     public AnsiMessageBuilder success(Object message) {
-        Style.SUCCESS.apply(ansi).a(message).reset();
-        return this;
+        return Style.SUCCESS.apply(this).text(message).reset();
     }
 
     public AnsiMessageBuilder warning(Object message) {
-        Style.WARNING.apply(ansi).a(message).reset();
-        return this;
+        return Style.WARNING.apply(this).text(message).reset();
     }
 
     public AnsiMessageBuilder failure(Object message) {
-        Style.FAILURE.apply(ansi).a(message).reset();
-        return this;
+        return Style.FAILURE.apply(this).text(message).reset();
     }
 
     public AnsiMessageBuilder strong(Object message) {
-        Style.STRONG.apply(ansi).a(message).reset();
-        return this;
+        return Style.STRONG.apply(this).text(message).reset();
     }
 
     public AnsiMessageBuilder mojo(Object message) {
-        Style.MOJO.apply(ansi).a(message).reset();
-        return this;
+        return Style.MOJO.apply(this).text(message).reset();
     }
 
     public AnsiMessageBuilder project(Object message) {
-        Style.PROJECT.apply(ansi).a(message).reset();
-        return this;
+        return Style.PROJECT.apply(this).text(message).reset();
     }
 
     public AnsiMessageBuilder a(char[] value, int offset, int len) {
-        ansi.a(value, offset, len);
+        flushAttributes();
+        builder.append(value, offset, len);
         return this;
     }
 
     public AnsiMessageBuilder a(char[] value) {
-        ansi.a(value);
+        flushAttributes();
+        builder.append(value);
         return this;
     }
 
     public AnsiMessageBuilder a(CharSequence value, int start, int end) {
-        ansi.a(value, start, end);
+        flushAttributes();
+        builder.append(value, start, end);
         return this;
     }
 
     public AnsiMessageBuilder a(CharSequence value) {
-        ansi.a(value);
+        flushAttributes();
+        builder.append(value);
         return this;
     }
 
     public AnsiMessageBuilder a(Object value) {
-        ansi.a(value);
-        return this;
+        return text(value);
     }
 
     public AnsiMessageBuilder newline() {
-        ansi.newline();
+        flushAttributes();
+        builder.append(System.lineSeparator());
         return this;
     }
 
     public AnsiMessageBuilder format(String pattern, Object... args) {
-        ansi.format(pattern, args);
+        flushAttributes();
+        builder.append(String.format(pattern, args));
         return this;
     }
 
@@ -137,6 +147,42 @@ class AnsiMessageBuilder implements MessageBuilder, LoggerLevelRenderer {
 
     @Override
     public String build() {
-        return ansi.toString();
+        flushAttributes();
+        return builder.toString();
+    }
+
+    void sgr(int attribute) {
+        if (enabled) {
+            attributes.add(attribute);
+        }
+    }
+
+    private AnsiMessageBuilder text(Object value) {
+        flushAttributes();
+        builder.append(value);
+        return this;
+    }
+
+    private AnsiMessageBuilder reset() {
+        sgr(0);
+        return this;
+    }
+
+    private void flushAttributes() {
+        if (attributes.isEmpty()) {
+            return;
+        }
+        builder.append(ESC);
+        // a lone reset is written as ESC[m, as Jansi does
+        if (attributes.size() > 1 || attributes.get(0) != 0) {
+            for (int i = 0; i < attributes.size(); i++) {
+                if (i > 0) {
+                    builder.append(';');
+                }
+                builder.append(attributes.get(i));
+            }
+        }
+        builder.append('m');
+        attributes.clear();
     }
 }

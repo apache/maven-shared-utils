@@ -20,8 +20,12 @@ package org.apache.maven.shared.utils.logging;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
 
+import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiColors;
 import org.fusesource.jansi.AnsiConsole;
 import org.fusesource.jansi.AnsiMode;
@@ -31,8 +35,10 @@ import org.fusesource.jansi.io.AnsiOutputStream;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MessageUtilsTest {
     @Test
@@ -84,6 +90,62 @@ public class MessageUtilsTest {
             } catch (Throwable t) {
                 // ignore any thrown exception like NPE here
             }
+        }
+    }
+
+    @Test
+    public void testSameOutputAsJansi() {
+        assertTrue(MessageUtils.isColorEnabled());
+        assertEquals(
+                Ansi.ansi()
+                        .bold()
+                        .a("a")
+                        .reset()
+                        .a("b")
+                        .fg(Ansi.Color.GREEN)
+                        .a("c")
+                        .reset()
+                        .newline()
+                        .format("%d", 1)
+                        .bold()
+                        .fg(Ansi.Color.RED)
+                        .a("d")
+                        .reset()
+                        .toString(),
+                MessageUtils.buffer()
+                        .strong("a")
+                        .a("b")
+                        .mojo("c")
+                        .newline()
+                        .format("%d", 1)
+                        .failure("d")
+                        .build());
+    }
+
+    @Test
+    public void testFollowsJansiEnabled() {
+        boolean enabled = Ansi.isEnabled();
+        try {
+            Ansi.setEnabled(false);
+            assertFalse(MessageUtils.isColorEnabled());
+            assertEquals(
+                    "a b", MessageUtils.buffer().strong("a").a(' ').mojo("b").build());
+        } finally {
+            Ansi.setEnabled(enabled);
+        }
+    }
+
+    @Test
+    public void testWithoutJansi() throws Exception {
+        URL classes = MessageUtils.class.getProtectionDomain().getCodeSource().getLocation();
+        try (URLClassLoader loader = new URLClassLoader(new URL[] {classes}, null)) {
+            Class<?> utils = loader.loadClass(MessageUtils.class.getName());
+            assertFalse((Boolean) utils.getMethod("isColorEnabled").invoke(null));
+            assertEquals(-1, utils.getMethod("getTerminalWidth").invoke(null));
+            Object buffer = utils.getMethod("buffer").invoke(null);
+            Method strong = buffer.getClass().getMethod("strong", Object.class);
+            strong.setAccessible(true);
+            assertEquals("a", strong.invoke(buffer, "a").toString());
         }
     }
 }
