@@ -92,7 +92,7 @@ public class MatchPattern {
             // a file to deal with, or we can definitely say this is an exclusion...
             return true;
         } else {
-            String altStr = source.replace('\\', '/');
+            String altStr = str.replace('\\', '/');
 
             return SelectorUtils.matchAntPathPatternStart(this, str, File.separator, isCaseSensitive)
                     || SelectorUtils.matchAntPathPatternStart(this, altStr, "/", isCaseSensitive);
