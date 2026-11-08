@@ -18,6 +18,8 @@
  */
 package org.apache.maven.shared.utils.io;
 
+import java.io.File;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -30,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class MatchPatternsTest {
     @Test
     public void matchesPatternStart() {
-        MatchPatterns from = MatchPatterns.from("ABC/**");
+        MatchPatterns from = MatchPatterns.from("ABC" + File.separator + "**");
         assertTrue(from.matchesPatternStart("ABC", true));
         assertFalse(from.matchesPatternStart("XYZ", true));
     }
