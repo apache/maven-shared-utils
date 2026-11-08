@@ -27,7 +27,11 @@ import java.util.Properties;
 
 /**
  * Static utility methods for loading properties.
+ *
+ * @deprecated use {@code org.codehaus.plexus.util.PropertyUtils} (plexus-utils) or
+ *             {@link java.util.Properties#load(java.io.InputStream)} directly.
  */
+@Deprecated
 public class PropertyUtils {
 
     /**

@@ -32,7 +32,10 @@ import java.util.Map;
  * @author <a href="mailto:bob@werken.com">Bob McWhirter</a>
  * @author <a href="mailto:szegedia@freemail.hu">Attila Szegedi</a>
  * @author <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
+ *
+ * @deprecated only used by {@link ReflectionValueExtractor}, which is deprecated.
  */
+@Deprecated
 public class ClassMap {
     private static final class CacheMiss {}
 
