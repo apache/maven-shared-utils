@@ -39,7 +39,8 @@ import org.apache.maven.shared.utils.introspection.MethodMap.AmbiguousException;
  * http://struts.apache.org/1.x/struts-taglib/indexedprops.html</a>
  *
  * @deprecated use {@code org.codehaus.plexus.util.introspection.ReflectionValueExtractor}
- *             (plexus-utils), which has the same API.
+ *             (plexus-utils), which has the same {@code evaluate} methods but declares
+ *             {@code throws Exception} instead of {@code IntrospectionException}.
  */
 @Deprecated
 public class ReflectionValueExtractor {

@@ -28,8 +28,11 @@ import java.util.Properties;
 /**
  * Static utility methods for loading properties.
  *
- * @deprecated use {@code org.codehaus.plexus.util.PropertyUtils} (plexus-utils) or
- *             {@link java.util.Properties#load(java.io.InputStream)} directly.
+ * @deprecated use {@code org.codehaus.plexus.util.PropertyUtils#loadProperties} (plexus-utils), which
+ *             throws {@code IOException} instead of returning {@code null}, or
+ *             {@link java.util.Properties#load(java.io.InputStream)} directly. For the
+ *             {@code loadOptionalProperties} methods, catch the {@code IOException} yourself; plexus-utils
+ *             has no optional variant.
  */
 @Deprecated
 public class PropertyUtils {
