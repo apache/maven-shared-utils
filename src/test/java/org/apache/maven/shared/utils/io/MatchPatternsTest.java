@@ -29,6 +29,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SuppressWarnings("deprecation")
 public class MatchPatternsTest {
     @Test
+    public void matchesPatternStart() {
+        MatchPatterns from = MatchPatterns.from("ABC/**");
+        assertTrue(from.matchesPatternStart("ABC", true));
+        assertFalse(from.matchesPatternStart("XYZ", true));
+    }
+
+    @Test
     public void matches() {
         MatchPatterns from = MatchPatterns.from("ABC**", "CDE**");
         assertTrue(from.matches("ABCDE", true));
