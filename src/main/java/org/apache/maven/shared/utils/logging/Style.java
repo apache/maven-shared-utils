@@ -20,9 +20,6 @@ package org.apache.maven.shared.utils.logging;
 
 import java.util.Locale;
 
-import org.fusesource.jansi.Ansi;
-import org.fusesource.jansi.Ansi.Color;
-
 /**
  * Configurable message styles.
  *
@@ -99,25 +96,17 @@ enum Style {
         return null;
     }
 
-    Ansi apply(Ansi ansi) {
+    AnsiMessageBuilder apply(AnsiMessageBuilder builder) {
         if (bold) {
-            ansi.bold();
+            builder.sgr(1);
         }
         if (color != null) {
-            if (bright) {
-                ansi.fgBright(color);
-            } else {
-                ansi.fg(color);
-            }
+            builder.sgr(color.value + (bright ? 90 : 30));
         }
         if (bgColor != null) {
-            if (bgBright) {
-                ansi.bgBright(bgColor);
-            } else {
-                ansi.bg(bgColor);
-            }
+            builder.sgr(bgColor.value + (bgBright ? 100 : 40));
         }
-        return ansi;
+        return builder;
     }
 
     @Override
@@ -149,5 +138,26 @@ enum Style {
             sb.append(bgColor.name());
         }
         return sb.toString();
+    }
+
+    /**
+     * The 8 standard ANSI colors, with the SGR offset of each.
+     */
+    enum Color {
+        BLACK(0),
+        RED(1),
+        GREEN(2),
+        YELLOW(3),
+        BLUE(4),
+        MAGENTA(5),
+        CYAN(6),
+        WHITE(7),
+        DEFAULT(9);
+
+        final int value;
+
+        Color(int value) {
+            this.value = value;
+        }
     }
 }
