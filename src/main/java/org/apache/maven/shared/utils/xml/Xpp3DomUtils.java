@@ -102,7 +102,7 @@ public class Xpp3DomUtils {
 
         for (String childName : recessive.childMap.keySet()) {
             List<Xpp3Dom> dominantChildren = dominant.getChildrenList(childName);
-            if (dominantChildren.size() > 0) {
+            if (!dominantChildren.isEmpty()) {
                 commonChildren.put(childName, dominantChildren.iterator());
             }
         }

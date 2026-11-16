@@ -110,7 +110,7 @@ public class XmlStreamReader extends Reader {
     public XmlStreamReader(InputStream is, String httpContentType, boolean lenient, String defaultEncoding)
             throws IOException {
         reader = new org.apache.commons.io.input.XmlStreamReader(
-                is, httpContentType, lenient, (defaultEncoding == null) ? staticDefaultEncoding : defaultEncoding);
+                is, httpContentType, lenient, defaultEncoding == null ? staticDefaultEncoding : defaultEncoding);
     }
 
     /**

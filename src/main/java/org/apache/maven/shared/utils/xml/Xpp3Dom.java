@@ -327,10 +327,10 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
 
         Xpp3Dom dom = (Xpp3Dom) obj;
 
-        return !(name == null ? dom.name != null : !name.equals(dom.name))
-                && !(value == null ? dom.value != null : !value.equals(dom.value))
-                && !(attributes == null ? dom.attributes != null : !attributes.equals(dom.attributes))
-                && !(childList == null ? dom.childList != null : !childList.equals(dom.childList));
+        return (name == null ? dom.name == null : name.equals(dom.name))
+                && (value == null ? dom.value == null : value.equals(dom.value))
+                && (attributes == null ? dom.attributes == null : attributes.equals(dom.attributes))
+                && (childList == null ? dom.childList == null : childList.equals(dom.childList));
     }
 
     /**
@@ -341,8 +341,7 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
         result = 37 * result + (name != null ? name.hashCode() : 0);
         result = 37 * result + (value != null ? value.hashCode() : 0);
         result = 37 * result + (attributes != null ? attributes.hashCode() : 0);
-        result = 37 * result + (childList != null ? childList.hashCode() : 0);
-        return result;
+        return 37 * result + (childList != null ? childList.hashCode() : 0);
     }
 
     /**

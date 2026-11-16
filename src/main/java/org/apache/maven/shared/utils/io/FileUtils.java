@@ -159,7 +159,7 @@ public class FileUtils {
     @Deprecated
     public static String dirname(String path) {
         int i = path.lastIndexOf(File.separator);
-        return (i >= 0 ? path.substring(0, i) : "");
+        return i >= 0 ? path.substring(0, i) : "";
     }
 
     /**
@@ -172,7 +172,7 @@ public class FileUtils {
     @Deprecated
     public static String filename(String path) {
         int i = path.lastIndexOf(File.separator);
-        return (i >= 0 ? path.substring(i + 1) : path);
+        return i >= 0 ? path.substring(i + 1) : path;
     }
 
     /**
@@ -924,7 +924,7 @@ public class FileUtils {
         }
 
         // deal with absolute files
-        if (filenm.startsWith(File.separator) || (Os.isFamily(Os.FAMILY_WINDOWS) && filenm.indexOf(":") > 0)) {
+        if (filenm.startsWith(File.separator) || (Os.isFamily(Os.FAMILY_WINDOWS) && filenm.indexOf(":") >= 1)) {
             File file = new File(filenm);
 
             try {
@@ -960,7 +960,7 @@ public class FileUtils {
         filenm = sb.toString();
 
         // must be relative
-        File file = (new File(baseFile, filenm)).getAbsoluteFile();
+        File file = new File(baseFile, filenm).getAbsoluteFile();
 
         try {
             file = file.getCanonicalFile();

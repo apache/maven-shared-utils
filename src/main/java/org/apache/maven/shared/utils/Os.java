@@ -300,12 +300,12 @@ public class Os {
                 boolean isNT = false;
                 if (isWindows) {
                     // there are only four 9x platforms that we look for
-                    is9x = (OS_NAME.contains("95")
+                    is9x = OS_NAME.contains("95")
                             || OS_NAME.contains("98")
                             || OS_NAME.contains("me")
                             // wince isn't really 9x, but crippled enough to
                             // be a muchness. Ant doesnt run on CE, anyway.
-                            || OS_NAME.contains("ce"));
+                            || OS_NAME.contains("ce");
                     isNT = !is9x;
                 }
                 if (family.equals(FAMILY_WINDOWS)) {

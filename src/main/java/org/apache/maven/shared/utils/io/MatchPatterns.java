@@ -27,7 +27,7 @@ import java.io.File;
  * @deprecated use {@code java.nio.file.DirectoryStream.Filter<T>} and related classes
  */
 @Deprecated
-public class MatchPatterns {
+public final class MatchPatterns {
     private final MatchPattern[] patterns;
 
     private MatchPatterns(MatchPattern... patterns) {

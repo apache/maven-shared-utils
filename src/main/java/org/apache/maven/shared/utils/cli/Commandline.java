@@ -90,7 +90,7 @@ public class Commandline {
     public Commandline(String toProcess) throws CommandLineException {
         setDefaultShell();
         String[] tmp = CommandLineUtils.translateCommandline(toProcess);
-        if ((tmp.length > 0)) {
+        if (tmp.length > 0) {
             setExecutable(tmp[0]);
             for (int i = 1; i < tmp.length; i++) {
                 createArg().setValue(tmp[i]);
