@@ -43,7 +43,7 @@ import org.apache.maven.shared.utils.introspection.MethodMap.AmbiguousException;
  *             {@code throws Exception} instead of {@code IntrospectionException}.
  */
 @Deprecated
-public class ReflectionValueExtractor {
+public final class ReflectionValueExtractor {
     private static final Class<?>[] CLASS_ARGS = new Class[0];
 
     private static final Object[] OBJECT_ARGS = new Object[0];

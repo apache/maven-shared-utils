@@ -71,7 +71,7 @@ public class StringUtils {
      */
     @Deprecated
     public static String clean(String str) {
-        return (str == null ? "" : str.trim());
+        return str == null ? "" : str.trim();
     }
 
     /**
@@ -84,7 +84,7 @@ public class StringUtils {
      * @see java.lang.String#trim()
      */
     public static String trim(String str) {
-        return (str == null ? null : str.trim());
+        return str == null ? null : str.trim();
     }
 
     /**
@@ -115,7 +115,7 @@ public class StringUtils {
      * @return true if the String is non-null, and not length zero
      */
     public static boolean isNotEmpty(String str) {
-        return ((str != null) && (str.length() > 0));
+        return (str != null) && (str.length() > 0);
     }
 
     /**
@@ -130,7 +130,7 @@ public class StringUtils {
      *         length zero once trimmed
      */
     public static boolean isEmpty(String str) {
-        return ((str == null) || (str.trim().length() == 0));
+        return (str == null) || (str.trim().length() == 0);
     }
 
     /**
@@ -203,7 +203,7 @@ public class StringUtils {
      */
     @Deprecated
     public static boolean equals(String str1, String str2) {
-        return (str1 == null ? str2 == null : str1.equals(str2));
+        return str1 == null ? str2 == null : str1.equals(str2);
     }
 
     /**
@@ -220,7 +220,7 @@ public class StringUtils {
      * @see java.lang.String#equalsIgnoreCase(String)
      */
     public static boolean equalsIgnoreCase(String str1, String str2) {
-        return (str1 == null ? str2 == null : str1.equalsIgnoreCase(str2));
+        return str1 == null ? str2 == null : str1.equalsIgnoreCase(str2);
     }
 
     /**
@@ -252,7 +252,7 @@ public class StringUtils {
             }
         }
 
-        return (ret == Integer.MAX_VALUE) ? -1 : ret;
+        return ret == Integer.MAX_VALUE ? -1 : ret;
     }
 
     /**
@@ -569,7 +569,7 @@ public class StringUtils {
             separator = "";
         }
         int arraySize = array.length;
-        int bufSize = (arraySize == 0 ? 0 : (array[0].toString().length() + separator.length()) * arraySize);
+        int bufSize = arraySize == 0 ? 0 : (array[0].toString().length() + separator.length()) * arraySize;
         StringBuilder buf = new StringBuilder(bufSize);
 
         for (int i = 0; i < arraySize; i++) {
@@ -714,7 +714,8 @@ public class StringUtils {
         }
 
         StringBuilder buf = new StringBuilder(text.length());
-        int start = 0, end;
+        int start = 0;
+        int end;
         while ((end = text.indexOf(repl, start)) != -1) {
             buf.append(text, start, end).append(with);
             start = end + repl.length();
@@ -785,8 +786,7 @@ public class StringUtils {
             return str;
         }
         str = leftPad(str, sz + p / 2, delim);
-        str = rightPad(str, size, delim);
-        return str;
+        return rightPad(str, size, delim);
     }
 
     // Chomping
@@ -1558,7 +1558,7 @@ public class StringUtils {
         }
         int sz = str.length();
         for (int i = 0; i < sz; i++) {
-            if ((!Character.isWhitespace(str.charAt(i)))) {
+            if (!Character.isWhitespace(str.charAt(i))) {
                 return false;
             }
         }
@@ -1690,7 +1690,7 @@ public class StringUtils {
      */
     @Deprecated
     public static String defaultString(Object obj, String defaultString) {
-        return (obj == null) ? defaultString : obj.toString();
+        return obj == null ? defaultString : obj.toString();
     }
 
     // Reversing

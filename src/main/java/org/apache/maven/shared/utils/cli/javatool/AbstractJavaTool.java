@@ -114,17 +114,15 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest> implemen
         Commandline cli = createCommandLine(request, javaToolFile);
 
         // execute it
-        JavaToolResult result = executeCommandLine(cli, request);
-
         // return result
-        return result;
+        return executeCommandLine(cli, request);
     }
 
     /**
      * @return {@link InputStream}
      */
     protected InputStream createSystemInputStream() {
-        InputStream systemIn = new InputStream() {
+        return new InputStream() {
 
             /**
              * {@inheritDoc}
@@ -133,7 +131,6 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest> implemen
                 return -1;
             }
         };
-        return systemIn;
     }
 
     /**

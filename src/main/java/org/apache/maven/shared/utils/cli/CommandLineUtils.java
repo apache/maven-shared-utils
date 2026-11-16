@@ -508,7 +508,7 @@ public abstract class CommandLineUtils {
         Properties envVars = new Properties();
         for (Map.Entry<String, String> entry : envs.entrySet()) {
             envVars.put(
-                    !preserveKeyCase ? entry.getKey().toUpperCase(Locale.ENGLISH) : entry.getKey(), entry.getValue());
+                    preserveKeyCase ? entry.getKey() : entry.getKey().toUpperCase(Locale.ENGLISH), entry.getValue());
         }
         return envVars;
     }

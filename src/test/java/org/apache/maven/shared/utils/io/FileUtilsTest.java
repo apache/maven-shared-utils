@@ -125,7 +125,8 @@ public class FileUtilsTest {
      * Assert that the content of a file is equal to that in a byte[].
      */
     private void assertEqualContent(byte[] b0, File file) throws IOException {
-        int count = 0, numRead = 0;
+        int count = 0;
+        int numRead = 0;
         byte[] b1 = new byte[b0.length];
         try (InputStream is = Files.newInputStream(file.toPath())) {
             while (count < b0.length && numRead >= 0) {

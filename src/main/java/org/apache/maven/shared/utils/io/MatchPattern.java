@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
  * @deprecated use {@code java.nio.file.DirectoryStream.Filter<T>} and related classes
  */
 @Deprecated
-public class MatchPattern {
+public final class MatchPattern {
     private final String source;
 
     private final String regexPattern;
