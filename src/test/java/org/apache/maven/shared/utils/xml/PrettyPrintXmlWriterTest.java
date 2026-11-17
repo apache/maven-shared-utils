@@ -40,7 +40,7 @@ public class PrettyPrintXmlWriterTest {
     private final PrettyPrintXMLWriter writer = new PrettyPrintXMLWriter(w);
 
     @Test
-    public void testNoStartTag() throws IOException {
+    public void testNoStartTag() throws Exception {
 
         try {
             writer.startElement("");
@@ -51,7 +51,7 @@ public class PrettyPrintXmlWriterTest {
     }
 
     @Test
-    public void testDefaultPrettyPrintXMLWriter() throws IOException {
+    public void testDefaultPrettyPrintXMLWriter() throws Exception {
         writer.startElement(HTML.Tag.HTML.toString());
 
         writeXhtmlHead(writer);
@@ -64,7 +64,7 @@ public class PrettyPrintXmlWriterTest {
     }
 
     @Test
-    public void testPrettyPrintXMLWriterWithGivenLineSeparator() throws IOException {
+    public void testPrettyPrintXMLWriterWithGivenLineSeparator() throws Exception {
         writer.setLineSeparator("\n");
 
         writer.startElement(HTML.Tag.HTML.toString());
@@ -79,7 +79,7 @@ public class PrettyPrintXmlWriterTest {
     }
 
     @Test
-    public void testPrettyPrintXMLWriterWithGivenLineIndenter() throws IOException {
+    public void testPrettyPrintXMLWriterWithGivenLineIndenter() throws Exception {
         writer.setLineIndenter("    ");
 
         writer.startElement(HTML.Tag.HTML.toString());
@@ -94,7 +94,7 @@ public class PrettyPrintXmlWriterTest {
     }
 
     @Test
-    public void testPrettyPrintXMLWriterWithNullLineIndent() throws IOException {
+    public void testPrettyPrintXMLWriterWithNullLineIndent() throws Exception {
         StringWriter sw = new StringWriter();
         PrettyPrintXMLWriter writer = new PrettyPrintXMLWriter(sw, (String) null);
 
@@ -107,7 +107,7 @@ public class PrettyPrintXmlWriterTest {
     }
 
     @Test
-    public void testEscapeXmlAttributeWindows() throws IOException {
+    public void testEscapeXmlAttributeWindows() throws Exception {
         // Windows
         writer.startElement(HTML.Tag.DIV.toString());
         writer.addAttribute("class", "sect\r\nion");
@@ -116,7 +116,7 @@ public class PrettyPrintXmlWriterTest {
     }
 
     @Test
-    public void testEscapeXmlAttributeMac() throws IOException {
+    public void testEscapeXmlAttributeMac() throws Exception {
         // Mac
         writer.startElement(HTML.Tag.DIV.toString());
         writer.addAttribute("class", "sect\rion");
@@ -125,7 +125,7 @@ public class PrettyPrintXmlWriterTest {
     }
 
     @Test
-    public void testEscapeXmlAttributeTrailingCR() throws IOException {
+    public void testEscapeXmlAttributeTrailingCR() throws Exception {
         // Mac
         writer.startElement(HTML.Tag.DIV.toString());
         writer.addAttribute("class", "section\r");
@@ -134,7 +134,7 @@ public class PrettyPrintXmlWriterTest {
     }
 
     @Test
-    public void testEscapeXmlAttributeUnix() throws IOException {
+    public void testEscapeXmlAttributeUnix() throws Exception {
         // Unix
         writer.startElement(HTML.Tag.DIV.toString());
         writer.addAttribute("class", "sect\nion");

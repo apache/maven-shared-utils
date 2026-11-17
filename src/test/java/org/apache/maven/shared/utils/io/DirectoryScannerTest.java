@@ -182,7 +182,7 @@ public class DirectoryScannerTest {
     }
 
     @Test
-    public void followSymlinksFalse() throws IOException {
+    public void followSymlinksFalse() throws Exception {
         assumeFalse(Os.isFamily(Os.FAMILY_WINDOWS));
 
         File testDir = SymlinkTestSetup.createStandardSymlinkTestDir(new File("target/test/symlinkTestCase"));
@@ -216,7 +216,7 @@ public class DirectoryScannerTest {
     }
 
     @Test
-    public void followSymlinks() throws IOException {
+    public void followSymlinks() throws Exception {
         assumeFalse(Os.isFamily(Os.FAMILY_WINDOWS));
 
         DirectoryScanner ds = new DirectoryScanner();

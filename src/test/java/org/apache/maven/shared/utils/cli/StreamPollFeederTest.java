@@ -82,7 +82,7 @@ public class StreamPollFeederTest {
     }
 
     @Test
-    public void dataShouldBeCopied() throws InterruptedException {
+    public void dataShouldBeCopied() throws Exception {
 
         StringBuilder testData = new StringBuilder();
         for (int i = 0; i < 100; i++) {

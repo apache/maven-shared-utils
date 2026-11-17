@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AbstractStreamHandlerTest {
     @Test
-    void setDoneNotifiesWaitUntilDone() throws InterruptedException {
+    void setDoneNotifiesWaitUntilDone() throws Exception {
         AbstractStreamHandler handler = new AbstractStreamHandler() {};
         CountDownLatch waiting = new CountDownLatch(1);
 
@@ -54,14 +54,14 @@ class AbstractStreamHandlerTest {
     }
 
     @Test
-    void waitUntilDoneWithTimeoutReturnsFalseWhenNotDone() throws InterruptedException {
+    void waitUntilDoneWithTimeoutReturnsFalseWhenNotDone() throws Exception {
         AbstractStreamHandler handler = new AbstractStreamHandler() {};
 
         assertFalse(handler.waitUntilDone(100), "must time out while the handler is not done");
     }
 
     @Test
-    void waitUntilDoneWithTimeoutReturnsTrueWhenDone() throws InterruptedException {
+    void waitUntilDoneWithTimeoutReturnsTrueWhenDone() throws Exception {
         AbstractStreamHandler handler = new AbstractStreamHandler() {};
         handler.setDone();
 
@@ -69,7 +69,7 @@ class AbstractStreamHandlerTest {
     }
 
     @Test
-    void waitUntilDoneWithTimeoutIsInterruptible() throws InterruptedException {
+    void waitUntilDoneWithTimeoutIsInterruptible() throws Exception {
         AbstractStreamHandler handler = new AbstractStreamHandler() {};
 
         Thread waiter = new Thread(() -> {

@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -121,7 +120,7 @@ public class PropertyUtilsTest {
 
     @Test
     @SuppressWarnings("deprecation")
-    public void loadValidInputStream() throws UnsupportedEncodingException {
+    public void loadValidInputStream() throws Exception {
         Properties value = new Properties();
         value.setProperty("a", "b");
 
@@ -133,7 +132,7 @@ public class PropertyUtilsTest {
     @Test
     @NeedsTemporaryFolder
     @SuppressWarnings("deprecation")
-    public void loadValidFile() throws IOException {
+    public void loadValidFile() throws Exception {
         File valid = newFile(tempFolder, "valid");
         Properties value = new Properties();
         value.setProperty("a", "b");
@@ -147,7 +146,7 @@ public class PropertyUtilsTest {
     @Test
     @NeedsTemporaryFolder
     @SuppressWarnings("deprecation")
-    public void loadValidURL() throws IOException {
+    public void loadValidURL() throws Exception {
         File valid = newFile(tempFolder, "valid");
         Properties value = new Properties();
         value.setProperty("a", "b");
