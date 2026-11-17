@@ -65,7 +65,7 @@ public class Xpp3DomTest {
     }
 
     @Test
-    public void mergePrecedenceSelfClosed() throws XmlPullParserException {
+    public void mergePrecedenceSelfClosed() throws Exception {
         Xpp3Dom parentConfig = build("<configuration><items><item/></items></configuration>");
         Xpp3Dom childConfig = build("<configuration><items><item>ooopise</item></items></configuration>");
 
@@ -78,7 +78,7 @@ public class Xpp3DomTest {
     }
 
     @Test
-    public void mergePrecedenceOpenClose() throws XmlPullParserException {
+    public void mergePrecedenceOpenClose() throws Exception {
         Xpp3Dom parentConfig = build("<configuration><items><item></item></items></configuration>");
         Xpp3Dom childConfig = build("<configuration><items><item>ooopise</item></items></configuration>");
 
@@ -180,7 +180,7 @@ public class Xpp3DomTest {
     }
 
     @Test
-    public void dominantWinsCollections() throws XmlPullParserException {
+    public void dominantWinsCollections() throws Exception {
         Xpp3Dom parent = build("<root><entries><entry>uno</entry><entry>dos</entry></entries></root>");
         Xpp3Dom dominant = build("<root><entries><entry>tres</entry></entries></root>");
 
@@ -193,7 +193,7 @@ public class Xpp3DomTest {
     }
 
     @Test
-    public void combineChildrenAppendTest() throws XmlPullParserException {
+    public void combineChildrenAppendTest() throws Exception {
         Xpp3Dom parent =
                 build("<root><entries><entry>uno</entry><entry>dos</entry><entry>tres</entry></entries></root>");
         Xpp3Dom child = build("<root><entries combine.children=\"append\"><entry>quatro</entry></entries></root>");
@@ -255,7 +255,7 @@ public class Xpp3DomTest {
     }
 
     @Test
-    public void duplicatedChildren() throws XmlPullParserException {
+    public void duplicatedChildren() throws Exception {
         String dupes = "<root><baz>x</baz><baz>y</baz></root>";
         assertEquals("y", build(dupes).getChild("baz").getValue());
     }

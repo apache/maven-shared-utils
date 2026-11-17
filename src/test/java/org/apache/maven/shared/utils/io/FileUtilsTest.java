@@ -614,7 +614,7 @@ public class FileUtilsTest {
     }
 
     @Test
-    public void copyToSelf() throws IOException {
+    public void copyToSelf() throws Exception {
         File destination = new File(tempFolder, "copy3.txt");
         // Prepare a test file
         FileUtils.copyFile(testFile1, destination);
@@ -643,7 +643,7 @@ public class FileUtilsTest {
     }
 
     @Test
-    public void copyDirectoryToExistingDest() throws IOException {
+    public void copyDirectoryToExistingDest() throws Exception {
         createFile(testFile1, 1234);
         createFile(testFile2, 4321);
         File srcDir = tempFolder;
@@ -946,7 +946,7 @@ public class FileUtilsTest {
     }
 
     @Test
-    public void deleteQuietlyDir() throws IOException {
+    public void deleteQuietlyDir() throws Exception {
         File testDirectory = new File(tempFolder, "testDeleteQuietlyDir");
         File testFile = new File(testDirectory, "testDeleteQuietlyFile");
         testDirectory.mkdirs();
@@ -960,7 +960,7 @@ public class FileUtilsTest {
     }
 
     @Test
-    public void deleteQuietlyFile() throws IOException {
+    public void deleteQuietlyFile() throws Exception {
         File testFile = new File(tempFolder, "testDeleteQuietlyFile");
         createFile(testFile, 0);
 
@@ -970,7 +970,7 @@ public class FileUtilsTest {
     }
 
     @Test
-    public void deleteQuietlyNonExistent() throws IOException {
+    public void deleteQuietlyNonExistent() throws Exception {
         File testFile = new File(tempFolder, "testDeleteQuietlyNonExistent");
         assertFalse(testFile.exists());
 
@@ -1206,7 +1206,7 @@ public class FileUtilsTest {
     @Test
     @Disabled("Wait until we can run with assembly 2.5 which will support symlinks properly")
     @DisabledOnOs(OS.WINDOWS)
-    public void isASymbolicLink() throws IOException {
+    public void isASymbolicLink() throws Exception {
         // This testcase will pass when running under java7 or higher
         File file = new File("src/test/resources/symlinks/src/symDir");
         assertTrue(FileUtils.isSymbolicLink(file));
@@ -1214,7 +1214,7 @@ public class FileUtilsTest {
 
     @Test
     @Disabled("Wait until we can run with assembly 2.5 which will support symlinks properly")
-    public void notASymbolicLink() throws IOException {
+    public void notASymbolicLink() throws Exception {
         File file = new File("src/test/resources/symlinks/src/");
         assertFalse(FileUtils.isSymbolicLink(file));
     }

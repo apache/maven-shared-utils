@@ -98,7 +98,6 @@ public class CommandLineUtilsTest {
         try {
             new Commandline("echo \"let\"s go\"").execute();
         } catch (CommandLineException e) {
-            assertTrue(true);
             return;
         }
         fail("Exception was not thrown when given invalid (3 unescaped double quote) input");

@@ -19,7 +19,6 @@
 package org.apache.maven.shared.utils.xml;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -108,7 +107,7 @@ public class Xpp3DomBuilderTest {
     }
 
     @Test
-    public void attributeEscaping() throws IOException, XmlPullParserException {
+    public void attributeEscaping() throws Exception {
         String s = getAttributeEncodedString();
         Xpp3Dom dom = Xpp3DomBuilder.build(new StringReader(s));
 
@@ -120,7 +119,7 @@ public class Xpp3DomBuilderTest {
     }
 
     @Test
-    public void contentEscaping() throws IOException, XmlPullParserException {
+    public void contentEscaping() throws Exception {
         Xpp3Dom dom = Xpp3DomBuilder.build(new StringReader(getEncodedString()));
 
         assertEquals("\"msg\"", dom.getChild("a1").getValue());

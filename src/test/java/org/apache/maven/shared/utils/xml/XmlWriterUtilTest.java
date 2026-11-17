@@ -19,7 +19,6 @@
 package org.apache.maven.shared.utils.xml;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
 
@@ -133,7 +132,7 @@ public class XmlWriterUtilTest {
     }
 
     @Test
-    public void testWriteCommentLineBreak() throws IOException {
+    public void testWriteCommentLineBreak() throws Exception {
         XmlWriterUtil.writeCommentLineBreak(xmlWriter, 10);
         writer.close();
         assertEquals("<!--  -->" + "\r\n", output.toString());
@@ -155,7 +154,7 @@ public class XmlWriterUtilTest {
     }
 
     @Test
-    public void testWriteComment() throws IOException {
+    public void testWriteComment() throws Exception {
         XmlWriterUtil.writeComment(
                 xmlWriter, "hellooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
         writer.close();
@@ -166,7 +165,7 @@ public class XmlWriterUtilTest {
     }
 
     @Test
-    public void testWriteComment2() throws IOException {
+    public void testWriteComment2() throws Exception {
         XmlWriterUtil.writeComment(xmlWriter, "hello\nworld");
         writer.close();
         String sb = "<!-- hello                                                                  -->\r\n"
@@ -194,7 +193,7 @@ public class XmlWriterUtilTest {
     }
 
     @Test
-    public void testWriteComment3() throws IOException {
+    public void testWriteComment3() throws Exception {
         String indent = StringUtils.repeat(" ", 2 * XmlWriterUtil.DEFAULT_INDENTATION_SIZE);
         XmlWriterUtil.writeComment(xmlWriter, "hello\nworld", 2);
         writer.close();
@@ -224,7 +223,7 @@ public class XmlWriterUtilTest {
     }
 
     @Test
-    public void testWriteCommentXMLWriterStringIntInt2() throws IOException {
+    public void testWriteCommentXMLWriterStringIntInt2() throws Exception {
         String repeat = StringUtils.repeat(" ", 2 * 4);
         XmlWriterUtil.writeComment(xmlWriter, "hello\nworld", 2, 4);
         writer.close();
@@ -254,7 +253,7 @@ public class XmlWriterUtilTest {
     }
 
     @Test
-    public void testWriteCommentXMLWriterStringIntIntInt2() throws IOException {
+    public void testWriteCommentXMLWriterStringIntIntInt2() throws Exception {
         String indent = StringUtils.repeat(" ", 2 * 4);
         XmlWriterUtil.writeComment(xmlWriter, "hello", 2, 4, 10);
         writer.close();
@@ -279,7 +278,7 @@ public class XmlWriterUtilTest {
     }
 
     @Test
-    public void testWriteCommentTextXMLWriterStringInt2() throws IOException {
+    public void testWriteCommentTextXMLWriterStringInt2() throws Exception {
         String indent = StringUtils.repeat(" ", 2 * 2);
 
         XmlWriterUtil.writeCommentText(
