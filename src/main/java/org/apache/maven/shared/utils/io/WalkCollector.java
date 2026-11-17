@@ -53,6 +53,7 @@ public class WalkCollector implements DirectoryWalkListener {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void debug(String message) {
         // can be used to set some message
     }
@@ -60,6 +61,7 @@ public class WalkCollector implements DirectoryWalkListener {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void directoryWalkStarting(File basedir) {
         startingDir = basedir;
         startCount++;
@@ -68,6 +70,7 @@ public class WalkCollector implements DirectoryWalkListener {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void directoryWalkStep(int percentage, File file) {
         steps.add(file);
         percentageLow = Math.min(percentageLow, percentage);
@@ -77,6 +80,7 @@ public class WalkCollector implements DirectoryWalkListener {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void directoryWalkFinished() {
         finishCount++;
     }

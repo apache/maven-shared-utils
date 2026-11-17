@@ -41,6 +41,7 @@ public class AbstractJavaToolRequest implements JavaToolRequest {
     /**
      * {@inheritDoc}
      */
+    @Override
     public StreamConsumer getSystemOutStreamConsumer() {
         return systemOutStreamConsumer;
     }
@@ -48,6 +49,7 @@ public class AbstractJavaToolRequest implements JavaToolRequest {
     /**
      * {@inheritDoc}
      */
+    @Override
     public StreamConsumer getSystemErrorStreamConsumer() {
         return systemErrorStreamConsumer;
     }
@@ -55,6 +57,7 @@ public class AbstractJavaToolRequest implements JavaToolRequest {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setSystemOutStreamConsumer(StreamConsumer systemOutStreamConsumer) {
         this.systemOutStreamConsumer = systemOutStreamConsumer;
     }
@@ -62,6 +65,7 @@ public class AbstractJavaToolRequest implements JavaToolRequest {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setSystemErrorStreamConsumer(StreamConsumer systemErrorStreamConsumer) {
         this.systemErrorStreamConsumer = systemErrorStreamConsumer;
     }

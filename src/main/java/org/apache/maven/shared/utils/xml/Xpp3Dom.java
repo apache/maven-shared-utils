@@ -316,6 +316,7 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean equals(Object obj) {
         if (obj == this) {
             return true;
@@ -336,6 +337,7 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int hashCode() {
         int result = 17;
         result = 37 * result + (name != null ? name.hashCode() : 0);
@@ -347,6 +349,7 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String toString() {
         try {
             StringWriter writer = new StringWriter();
@@ -405,6 +408,7 @@ public class Xpp3Dom implements Iterable<Xpp3Dom> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Iterator<Xpp3Dom> iterator() {
         return getChildrenList().iterator();
     }

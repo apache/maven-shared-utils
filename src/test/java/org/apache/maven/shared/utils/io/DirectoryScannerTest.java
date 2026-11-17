@@ -348,6 +348,7 @@ public class DirectoryScannerTest {
     private static class TestScanConductor implements ScanConductor {
         final List<String> visitedFiles = new ArrayList<>();
 
+        @Override
         public ScanConductor.ScanAction visitDirectory(String name, File directory) {
             assertTrue(directory.isDirectory());
 
@@ -358,6 +359,7 @@ public class DirectoryScannerTest {
             return ScanAction.CONTINUE;
         }
 
+        @Override
         public ScanConductor.ScanAction visitFile(String name, File file) {
             assertTrue(file.isFile());
             visitedFiles.add(name);
