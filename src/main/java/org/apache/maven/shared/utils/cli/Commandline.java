@@ -298,6 +298,7 @@ public class Commandline {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String toString() {
         return StringUtils.join(getShellCommandline(true), " ");
     }
@@ -418,6 +419,7 @@ public class Commandline {
         /**
          * {@inheritDoc}
          */
+        @Override
         public void setValue(String value) {
             if (value != null) {
                 parts = new String[] {value};
@@ -427,6 +429,7 @@ public class Commandline {
         /**
          * {@inheritDoc}
          */
+        @Override
         public void setLine(String line) throws CommandLineException {
             if (line == null) {
                 return;
@@ -437,6 +440,7 @@ public class Commandline {
         /**
          * {@inheritDoc}
          */
+        @Override
         public void setFile(File value) {
             parts = new String[] {value.getAbsolutePath()};
         }
@@ -444,6 +448,7 @@ public class Commandline {
         /**
          * {@inheritDoc}
          */
+        @Override
         public void setMask(boolean mask) {
             this.mask = mask;
         }

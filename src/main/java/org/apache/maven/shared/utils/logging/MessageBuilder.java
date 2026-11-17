@@ -169,5 +169,6 @@ public interface MessageBuilder {
      * @deprecated Rather use {@link MessageBuilder#build()}
      */
     @Deprecated
+    @Override
     String toString();
 }

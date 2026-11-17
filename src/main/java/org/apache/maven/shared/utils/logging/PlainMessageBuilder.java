@@ -42,76 +42,93 @@ class PlainMessageBuilder implements MessageBuilder, LoggerLevelRenderer {
         buffer = new StringBuilder(size);
     }
 
+    @Override
     public String debug(String message) {
         return a(message).toString();
     }
 
+    @Override
     public String info(String message) {
         return a(message).toString();
     }
 
+    @Override
     public String warning(String message) {
         return a(message).toString();
     }
 
+    @Override
     public String error(String message) {
         return a(message).toString();
     }
 
+    @Override
     public PlainMessageBuilder success(Object message) {
         return a(message);
     }
 
+    @Override
     public PlainMessageBuilder warning(Object message) {
         return a(message);
     }
 
+    @Override
     public PlainMessageBuilder failure(Object message) {
         return a(message);
     }
 
+    @Override
     public PlainMessageBuilder strong(Object message) {
         return a(message);
     }
 
+    @Override
     public PlainMessageBuilder mojo(Object message) {
         return a(message);
     }
 
+    @Override
     public PlainMessageBuilder project(Object message) {
         return a(message);
     }
 
+    @Override
     public PlainMessageBuilder a(char[] value, int offset, int len) {
         buffer.append(value, offset, len);
         return this;
     }
 
+    @Override
     public PlainMessageBuilder a(char[] value) {
         buffer.append(value);
         return this;
     }
 
+    @Override
     public PlainMessageBuilder a(CharSequence value, int start, int end) {
         buffer.append(value, start, end);
         return this;
     }
 
+    @Override
     public PlainMessageBuilder a(CharSequence value) {
         buffer.append(value);
         return this;
     }
 
+    @Override
     public PlainMessageBuilder a(Object value) {
         buffer.append(value);
         return this;
     }
 
+    @Override
     public PlainMessageBuilder newline() {
         buffer.append(System.lineSeparator());
         return this;
     }
 
+    @Override
     public PlainMessageBuilder format(String pattern, Object... args) {
         buffer.append(String.format(pattern, args));
         return this;

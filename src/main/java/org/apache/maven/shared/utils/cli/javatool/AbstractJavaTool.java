@@ -83,6 +83,7 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getJavaToolName() {
         return javaToolName;
     }
@@ -90,6 +91,7 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setToolchain(Object toolchain) {
         this.toolchain = toolchain;
     }
@@ -97,6 +99,7 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest> implemen
     /**
      * {@inheritDoc}
      */
+    @Override
     public JavaToolResult execute(Request request) throws JavaToolException {
 
         if (javaToolFile == null) {
@@ -127,6 +130,7 @@ public abstract class AbstractJavaTool<Request extends JavaToolRequest> implemen
             /**
              * {@inheritDoc}
              */
+            @Override
             public int read() {
                 return -1;
             }
