@@ -59,7 +59,7 @@ There are some guidelines which will make applying PRs easier for us:
     If you feel the source code should be reformatted, create a separate PR for this change.
   + Check for unnecessary whitespace with `git diff --check` before committing.
 + Make sure you have added the necessary tests (JUnit/IT) for your changes.
-+ Run all the tests with `mvn -Prun-its verify` to assure nothing else was accidentally broken.
++ Run all the tests with `mvn verify` to assure nothing else was accidentally broken.
 + Submit a pull request to the repository in the Apache organization.
 
 If you plan to contribute on a regular basis, please consider filing a [contributor license agreement][cla].
@@ -70,7 +70,7 @@ Additional Resources
 + [Contributing patches](https://maven.apache.org/guides/development/guide-maven-development.html#Creating_and_submitting_a_patch)
 + [Contributor License Agreement][cla]
 + [General GitHub documentation](https://help.github.com/)
-+ [GitHub pull request documentation](https://help.github.com/send-pull-requests/)
++ [GitHub pull request documentation](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request)
 + [Apache Maven X Account](https://x.com/ASFMavenProject)
 + [Apache Maven Bluesky Account](https://bsky.app/profile/maven.apache.org)
 + [Apache Maven Mastodon Account](https://mastodon.social/deck/@ASFMavenProject@fosstodon.org)
@@ -79,6 +79,5 @@ Additional Resources
 [ml-list]: https://maven.apache.org/mailing-lists.html
 [code-style]: https://maven.apache.org/developers/conventions/code.html
 [cla]: https://www.apache.org/licenses/#clas
-[maven-wiki]: https://cwiki.apache.org/confluence/display/MAVEN/Index
 [test-results]: https://ci-maven.apache.org/job/Maven/job/maven-box/job/maven-shared-utils/job/master/lastCompletedBuild/testReport/
 [build]: https://ci-maven.apache.org/job/Maven/job/maven-box/job/maven-shared-utils/job/master/
