@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * @author Kristian Rosenvold
  */
 @SuppressWarnings({"deprecation", "DataFlowIssue"})
-public class Xpp3DomTest {
+class Xpp3DomTest {
 
     private Xpp3Dom createElement(String element, String value) {
         Xpp3Dom t1s1 = new Xpp3Dom(element);
@@ -164,7 +164,7 @@ public class Xpp3DomTest {
     }
 
     @Test
-    public void testEquals() {
+    void equals() {
         Xpp3Dom dom = new Xpp3Dom("single");
         dom.addChild(new Xpp3Dom("kid"));
 

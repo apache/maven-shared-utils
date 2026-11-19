@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Hervé Boutemy
  * @see <a href="http://sim.ivi.co/2011/07/trap-of-case-insensitive-string.html">Simple Smiles - Xuelei Fan's Blog</a>
  */
-public class CaseTest {
+class CaseTest {
     private static final Locale LOCALE_TURKISH = new Locale("tr");
 
     /** common ASCII 'i' */
@@ -68,7 +68,7 @@ public class CaseTest {
      * @see <a href="http://mattryall.net/blog/2009/02/the-infamous-turkish-locale-bug">The infamous Turkish locale bug</a>
      */
     @Test
-    public void testTurkishI() {
+    void turkishI() {
         // check common i and I
         assertEquals('i', DOTTED_i, "common lowercase i should have a dot");
         assertEquals('I', DOTLESS_I, "common uppercase I should not have a dot");
@@ -116,7 +116,7 @@ public class CaseTest {
      * exception on these characters.
      */
     @Test
-    public void testAsciiAvailableLocales() {
+    void asciiAvailableLocales() {
         final String lower = "abcdefghijklmnopqrstuvwxyz";
         final String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 

@@ -38,37 +38,37 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
 @SuppressWarnings({"deprecation", "DataFlowIssue"})
-public class StringUtilsTest {
+class StringUtilsTest {
 
     @Test
-    public void testAbbreviateNPE() {
+    void abbreviateNPE() {
         assertThrows(NullPointerException.class, () -> StringUtils.abbreviate(null, 10));
     }
 
     @Test
-    public void testAbbreviateMinLength() {
+    void abbreviateMinLength() {
         assertThrows(IllegalArgumentException.class, () -> StringUtils.abbreviate("This is a longtext", 3));
     }
 
     @Test
-    public void testAbbreviate() {
+    void abbreviate() {
         assertEquals("This is...", StringUtils.abbreviate("This is a longtext", 10));
 
         assertEquals("This is a longtext", StringUtils.abbreviate("This is a longtext", 50));
     }
 
     @Test
-    public void testAbbreviateOffsetNPE() {
+    void abbreviateOffsetNPE() {
         assertThrows(NullPointerException.class, () -> StringUtils.abbreviate(null, 10, 20));
     }
 
     @Test
-    public void testAbbreviateOffsetMinLength() {
+    void abbreviateOffsetMinLength() {
         assertThrows(IllegalArgumentException.class, () -> StringUtils.abbreviate("This is a longtext", 10, 3));
     }
 
     @Test
-    public void testAbbreviateOffset() {
+    void abbreviateOffset() {
         assertEquals("...is a...", StringUtils.abbreviate("This is a longtext", 5, 10));
 
         assertEquals("This is a longtext", StringUtils.abbreviate("This is a longtext", 10, 20));
@@ -77,12 +77,12 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testAddAndDeHumpNPE() {
+    void addAndDeHumpNPE() {
         assertThrows(NullPointerException.class, () -> StringUtils.addAndDeHump(null));
     }
 
     @Test
-    public void testAddAndDeHump() {
+    void addAndDeHump() {
         assertEquals("lalala", StringUtils.addAndDeHump("lalala"));
 
         assertEquals("la-la-la", StringUtils.addAndDeHump("LaLaLa"));
@@ -91,26 +91,26 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testCapitalise() {
+    void capitalise() {
         assertNull(StringUtils.capitalise(null));
 
         assertEquals("StartBig", StringUtils.capitalise("startBig"));
     }
 
     @Test
-    public void testCapitaliseAllWords() {
+    void capitaliseAllWords() {
         assertNull(StringUtils.capitaliseAllWords(null));
 
         assertEquals("Start All Big", StringUtils.capitaliseAllWords("start all big"));
     }
 
     @Test
-    public void testCapitalizeFirstLetterNPE() {
+    void capitalizeFirstLetterNPE() {
         assertThrows(NullPointerException.class, () -> assertNull(StringUtils.capitalizeFirstLetter(null)));
     }
 
     @Test
-    public void testCapitalizeFirstLetter() {
+    void capitalizeFirstLetter() {
         assertEquals("Dings", StringUtils.capitalizeFirstLetter("Dings"));
 
         assertEquals("  dings", StringUtils.capitalizeFirstLetter("  dings"));
@@ -119,12 +119,12 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testCenterNPE() {
+    void centerNPE() {
         assertThrows(NullPointerException.class, () -> StringUtils.center(null, 20));
     }
 
     @Test
-    public void testCenter() {
+    void center() {
         assertEquals("      centerMe      ", StringUtils.center("centerMe", 20));
 
         assertEquals("centerMe", StringUtils.center("centerMe", 4));
@@ -133,12 +133,12 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testCenterDelimNPE() {
+    void centerDelimNPE() {
         assertThrows(NullPointerException.class, () -> StringUtils.center(null, 20, "*"));
     }
 
     @Test
-    public void testCenterDelim() {
+    void centerDelim() {
         assertEquals("******centerMe******", StringUtils.center("centerMe", 20, "*"));
 
         assertEquals("centerMe", StringUtils.center("centerMe", 4, "*"));
@@ -147,12 +147,12 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testChompNPE() {
+    void chompNPE() {
         assertThrows(NullPointerException.class, () -> StringUtils.chomp(null));
     }
 
     @Test
-    public void testChomp() {
+    void chomp() {
         assertEquals("dings", StringUtils.chomp("dings"));
 
         assertEquals("dings", StringUtils.chomp("dings\n"));
@@ -163,12 +163,12 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testChompDelimNPE() {
+    void chompDelimNPE() {
         assertThrows(NullPointerException.class, () -> StringUtils.chomp(null, "+"));
     }
 
     @Test
-    public void testChompDelim() {
+    void chompDelim() {
         assertEquals("dings", StringUtils.chomp("dings", "+"));
 
         assertEquals("dings", StringUtils.chomp("dings+", "+"));
@@ -179,12 +179,12 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testChompLastNPE() {
+    void chompLastNPE() {
         assertThrows(NullPointerException.class, () -> StringUtils.chompLast(null));
     }
 
     @Test
-    public void testChompLast() {
+    void chompLast() {
         assertEquals("dings", StringUtils.chompLast("dings"));
 
         assertEquals("", StringUtils.chompLast("\n"));
@@ -197,12 +197,12 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testChompLastDelimNPE() {
+    void chompLastDelimNPE() {
         assertThrows(NullPointerException.class, () -> StringUtils.chompLast(null, "+"));
     }
 
     @Test
-    public void testChompLastDelim() {
+    void chompLastDelim() {
         assertEquals("dings", StringUtils.chompLast("dings", "+"));
 
         assertEquals("", StringUtils.chompLast("+", "+"));
@@ -215,17 +215,17 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testChompLastSepLongerThanStr() {
+    void chompLastSepLongerThanStr() {
         assertEquals("x", StringUtils.chompLast("x", "ab"));
     }
 
     @Test
-    public void testChopNPE() {
+    void chopNPE() {
         assertThrows(NullPointerException.class, () -> StringUtils.chop(null));
     }
 
     @Test
-    public void testChop() {
+    void chop() {
         assertEquals("ding", StringUtils.chop("dings"));
 
         assertEquals("", StringUtils.chop("x"));
@@ -238,12 +238,12 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testChopNewlineNPE() {
+    void chopNewlineNPE() {
         assertThrows(NullPointerException.class, () -> StringUtils.chopNewline(null));
     }
 
     @Test
-    public void testChopNewline() {
+    void chopNewline() {
         assertEquals("dings", StringUtils.chopNewline("dings"));
 
         assertEquals("x", StringUtils.chopNewline("x"));
@@ -256,12 +256,12 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testChopNewlineEmptyString() {
+    void chopNewlineEmptyString() {
         assertEquals("", StringUtils.chopNewline(""));
     }
 
     @Test
-    public void testClean() {
+    void clean() {
         assertEquals("", StringUtils.clean(null));
 
         assertEquals("", StringUtils.clean("   "));
@@ -272,12 +272,12 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testConcatenateNPE() {
+    void concatenateNPE() {
         assertThrows(NullPointerException.class, () -> StringUtils.concatenate((Object) null));
     }
 
     @Test
-    public void testConcatenate() {
+    void concatenate() {
         assertEquals("", StringUtils.concatenate());
 
         assertEquals("x", StringUtils.concatenate("x"));
@@ -287,7 +287,7 @@ public class StringUtilsTest {
 
     @SuppressWarnings("ConstantValue")
     @Test
-    public void testContainsString() {
+    void containsString() {
         assertFalse(StringUtils.contains(null, null));
 
         assertFalse(StringUtils.contains(null, "string"));
@@ -302,7 +302,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testContainsChar() {
+    void containsChar() {
         assertFalse(StringUtils.contains(null, 'c'));
 
         assertFalse(StringUtils.contains("string", "c"));
@@ -315,17 +315,17 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testCountMatchesNPE() {
+    void countMatchesNPE() {
         assertThrows(NullPointerException.class, () -> StringUtils.countMatches(null, null));
     }
 
     @Test
-    public void testCountMatchesNPE2() {
+    void countMatchesNPE2() {
         assertThrows(NullPointerException.class, () -> StringUtils.countMatches("this is it", null));
     }
 
     @Test
-    public void testCountMatches() {
+    void countMatches() {
         assertEquals(0, StringUtils.countMatches(null, "is"));
 
         assertEquals(2, StringUtils.countMatches("this is it", "is"));
@@ -334,26 +334,26 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testDefaultString() {
+    void defaultString() {
         assertEquals("", StringUtils.defaultString(null));
 
         assertEquals("dings", StringUtils.defaultString("dings"));
     }
 
     @Test
-    public void testDefaultStringDefaultValue() {
+    void defaultStringDefaultValue() {
         assertEquals("defaultValue", StringUtils.defaultString(null, "defaultValue"));
 
         assertEquals("dings", StringUtils.defaultString("dings", "defaultValue"));
     }
 
     @Test
-    public void testDeleteWhitespaceNPE() {
+    void deleteWhitespaceNPE() {
         assertThrows(NullPointerException.class, () -> StringUtils.deleteWhitespace(null));
     }
 
     @Test
-    public void testDeleteWhitespace() {
+    void deleteWhitespace() {
         assertEquals("", StringUtils.deleteWhitespace(" \t  \n"));
 
         assertEquals("\b", StringUtils.deleteWhitespace(" \t  \b \n"));
@@ -364,22 +364,22 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testDifferenceNPE() {
+    void differenceNPE() {
         assertThrows(NullPointerException.class, () -> StringUtils.difference(null, null));
     }
 
     @Test
-    public void testDifferenceNPE2() {
+    void differenceNPE2() {
         assertThrows(NullPointerException.class, () -> StringUtils.difference(null, "another"));
     }
 
     @Test
-    public void testDifferenceNPE3() {
+    void differenceNPE3() {
         assertThrows(NullPointerException.class, () -> StringUtils.difference("this", null));
     }
 
     @Test
-    public void testDifference() {
+    void difference() {
         assertEquals("another", StringUtils.difference("this", "another"));
 
         assertEquals("a robot", StringUtils.difference("I am human", "I am a robot"));
@@ -388,22 +388,22 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testDifferenceAtNPE() {
+    void differenceAtNPE() {
         assertThrows(NullPointerException.class, () -> StringUtils.differenceAt(null, null));
     }
 
     @Test
-    public void testDifferenceAtNPE2() {
+    void differenceAtNPE2() {
         assertThrows(NullPointerException.class, () -> StringUtils.differenceAt("test", null));
     }
 
     @Test
-    public void testDifferenceAtNPE3() {
+    void differenceAtNPE3() {
         assertThrows(NullPointerException.class, () -> StringUtils.differenceAt(null, "test"));
     }
 
     @Test
-    public void testDifferenceAt() {
+    void differenceAt() {
         assertEquals(0, StringUtils.differenceAt("this", "another"));
 
         assertEquals(5, StringUtils.differenceAt("I am human", "I am a robot"));
@@ -412,7 +412,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testEndsWithIgnoreCase() {
+    void endsWithIgnoreCase() {
         assertFalse(StringUtils.endsWithIgnoreCase(null, null));
 
         assertFalse(StringUtils.endsWithIgnoreCase(null, "string"));
@@ -428,7 +428,7 @@ public class StringUtilsTest {
 
     @SuppressWarnings("ConstantValue")
     @Test
-    public void testEquals() {
+    void equals() {
         assertTrue(StringUtils.equals(null, null));
 
         assertFalse(StringUtils.equals("x", null));
@@ -442,7 +442,7 @@ public class StringUtilsTest {
 
     @SuppressWarnings("ConstantValue")
     @Test
-    public void testEqualsIgnoreCase() {
+    void equalsIgnoreCase() {
         assertTrue(StringUtils.equalsIgnoreCase(null, null));
 
         assertFalse(StringUtils.equalsIgnoreCase("x", null));
@@ -457,12 +457,12 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testEscapeNPE() {
+    void escapeNPE() {
         assertThrows(NullPointerException.class, () -> StringUtils.escape(null));
     }
 
     @Test
-    public void testEscape() {
+    void escape() {
         assertEquals("dings", StringUtils.escape("dings"));
 
         assertEquals("dings\\tbums", StringUtils.escape("dings\tbums"));
@@ -471,7 +471,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testEscape2() {
+    void escape2() {
         assertNull(StringUtils.escape(null, null, '#'));
 
         assertEquals("dings", StringUtils.escape("dings", new char[] {'\t', '\b'}, '+'));
@@ -483,22 +483,22 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testGetChompNPE1() {
+    void getChompNPE1() {
         assertThrows(NullPointerException.class, () -> StringUtils.getChomp(null, null));
     }
 
     @Test
-    public void testGetChompNPE2() {
+    void getChompNPE2() {
         assertThrows(NullPointerException.class, () -> StringUtils.getChomp("dings", null));
     }
 
     @Test
-    public void testGetChompNPE3() {
+    void getChompNPE3() {
         assertThrows(NullPointerException.class, () -> StringUtils.getChomp(null, "dings"));
     }
 
     @Test
-    public void testGetChomp() {
+    void getChomp() {
         assertEquals("-bums", StringUtils.getChomp("dings-bums", "-"));
 
         assertEquals("-", StringUtils.getChomp("dings-", "-"));
@@ -507,12 +507,12 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testGetNestedStringNPE() {
+    void getNestedStringNPE() {
         assertThrows(NullPointerException.class, () -> StringUtils.getNestedString("  +dings+ ", null));
     }
 
     @Test
-    public void testGetNestedString() {
+    void getNestedString() {
         assertNull(StringUtils.getNestedString(null, null));
 
         assertEquals("dings", StringUtils.getNestedString("  +dings+ ", "+"));
@@ -521,17 +521,17 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testGetNestedString2NPE1() {
+    void getNestedString2NPE1() {
         assertThrows(NullPointerException.class, () -> StringUtils.getNestedString("  +dings+ ", null, null));
     }
 
     @Test
-    public void testGetNestedString2NPE2() {
+    void getNestedString2NPE2() {
         assertThrows(NullPointerException.class, () -> StringUtils.getNestedString("  +dings+ ", null, "neither"));
     }
 
     @Test
-    public void testGetNestedString2() {
+    void getNestedString2() {
         assertNull(StringUtils.getNestedString(null, null, null));
 
         assertNull(StringUtils.getNestedString("  +dings+ ", "not", null));
@@ -542,17 +542,17 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testGetPrechompNPE1() {
+    void getPrechompNPE1() {
         assertThrows(NullPointerException.class, () -> StringUtils.getPrechomp(null, null));
     }
 
     @Test
-    public void testGetPrechompNPE2() {
+    void getPrechompNPE2() {
         assertThrows(NullPointerException.class, () -> StringUtils.getPrechomp(null, "bums"));
     }
 
     @Test
-    public void testGetPrechomp() {
+    void getPrechomp() {
         assertEquals("dings bums", StringUtils.getPrechomp("dings bums dongs", "bums"));
 
         assertEquals("", StringUtils.getPrechomp("dings bums dongs", "non"));
@@ -560,7 +560,7 @@ public class StringUtilsTest {
 
     @SuppressWarnings("RedundantArrayCreation")
     @Test
-    public void testIndexOfAny() {
+    void indexOfAny() {
         assertEquals(-1, StringUtils.indexOfAny(null, (String[]) null));
 
         assertEquals(-1, StringUtils.indexOfAny("dings", (String[]) null));
@@ -571,17 +571,17 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testInterpolateNPE() {
+    void interpolateNPE() {
         assertThrows(NullPointerException.class, () -> StringUtils.interpolate(null, null));
     }
 
     @Test
-    public void testInterpolateNPE2() {
+    void interpolateNPE2() {
         assertThrows(NullPointerException.class, () -> StringUtils.interpolate("This ${text} will get replaced", null));
     }
 
     @Test
-    public void testInterpolate() {
+    void interpolate() {
         Map<String, String> variables = new HashMap<>();
         assertEquals(
                 "This ${text} will get replaced", StringUtils.interpolate("This ${text} will get replaced", variables));
@@ -594,7 +594,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testIsAlpha() {
+    void isAlpha() {
         assertFalse(StringUtils.isAlpha(null));
 
         assertFalse(StringUtils.isAlpha("2"));
@@ -607,7 +607,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testIsAlphaSpace() {
+    void isAlphaSpace() {
         assertFalse(StringUtils.isAlphaSpace(null));
 
         assertFalse(StringUtils.isAlphaSpace("2"));
@@ -622,7 +622,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testIsAlphanumeric() {
+    void isAlphanumeric() {
         assertFalse(StringUtils.isAlphanumeric(null));
 
         assertTrue(StringUtils.isAlphanumeric("2"));
@@ -643,7 +643,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testIsAlphanumericSpace() {
+    void isAlphanumericSpace() {
         assertFalse(StringUtils.isAlphanumericSpace(null));
 
         assertTrue(StringUtils.isAlphanumericSpace("2"));
@@ -664,7 +664,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testIsBlank() {
+    void isBlank() {
         assertTrue(StringUtils.isBlank(null));
 
         assertFalse(StringUtils.isBlank("xx"));
@@ -679,7 +679,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testEmpty() {
+    void empty() {
         assertTrue(StringUtils.isEmpty(null));
 
         assertFalse(StringUtils.isEmpty("xx"));
@@ -694,7 +694,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testNotBlank() {
+    void notBlank() {
         assertFalse(StringUtils.isNotBlank(null));
 
         assertTrue(StringUtils.isNotBlank("xx"));
@@ -710,7 +710,7 @@ public class StringUtilsTest {
 
     @SuppressWarnings("ConstantValue")
     @Test
-    public void testNotEmpty() {
+    void notEmpty() {
         assertFalse(StringUtils.isNotEmpty(null));
 
         assertTrue(StringUtils.isNotEmpty("xx"));
@@ -727,7 +727,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testIsNumeric() {
+    void isNumeric() {
         assertFalse(StringUtils.isNumeric(null));
 
         assertTrue(StringUtils.isNumeric("2"));
@@ -748,7 +748,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testIsWhitespace() {
+    void isWhitespace() {
         assertFalse(StringUtils.isWhitespace(null));
 
         assertFalse(StringUtils.isWhitespace("xx"));
@@ -765,12 +765,12 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testJoinArrayNPE() {
+    void joinArrayNPE() {
         assertThrows(NullPointerException.class, () -> StringUtils.join((Object[]) null, null));
     }
 
     @Test
-    public void testJoinArray() {
+    void joinArray() {
         assertEquals("", StringUtils.join(new Object[0], null));
 
         assertEquals("abc", StringUtils.join(new Object[] {"a", "b", "c"}, null));
@@ -779,12 +779,12 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testJoinIteratorNPE() {
+    void joinIteratorNPE() {
         assertThrows(NullPointerException.class, () -> StringUtils.join((Iterator<?>) null, null));
     }
 
     @Test
-    public void testJoinIterator() {
+    void joinIterator() {
         ArrayList<String> list = new ArrayList<>();
 
         //noinspection RedundantOperationOnEmptyContainer
@@ -800,7 +800,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testLastIndexOfAny() {
+    void lastIndexOfAny() {
         assertEquals(-1, StringUtils.lastIndexOfAny(null, (String[]) null));
 
         assertEquals(-1, StringUtils.lastIndexOfAny("dings", (String[]) null));
@@ -811,12 +811,12 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testLeftIAE() {
+    void leftIAE() {
         assertThrows(IllegalArgumentException.class, () -> StringUtils.left(null, -1));
     }
 
     @Test
-    public void testLeft() {
+    void left() {
         assertNull(StringUtils.left(null, 4));
 
         assertEquals("ding", StringUtils.left("dingsbums", 4));
@@ -827,12 +827,12 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testLeftPad1NPE() {
+    void leftPad1NPE() {
         assertThrows(NullPointerException.class, () -> StringUtils.leftPad(null, 0));
     }
 
     @Test
-    public void testLeftPad1() {
+    void leftPad1() {
         assertEquals("dings", StringUtils.leftPad("dings", 0));
 
         assertEquals("dings", StringUtils.leftPad("dings", 2));
@@ -841,22 +841,22 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testLeftPad2NPE1() {
+    void leftPad2NPE1() {
         assertThrows(NullPointerException.class, () -> StringUtils.leftPad(null, 0, null));
     }
 
     @Test
-    public void testLeftPad2NPE2() {
+    void leftPad2NPE2() {
         assertThrows(NullPointerException.class, () -> StringUtils.leftPad("dings", 0, null));
     }
 
     @Test
-    public void testLeftPad2NPE3() {
+    void leftPad2NPE3() {
         assertThrows(NullPointerException.class, () -> StringUtils.leftPad(null, 0, "*"));
     }
 
     @Test
-    public void testLeftPad2() {
+    void leftPad2() {
         assertEquals("dings", StringUtils.leftPad("dings", 0, "*"));
 
         assertEquals("dings", StringUtils.leftPad("dings", 2, "*"));
@@ -865,13 +865,13 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testLeftPadEmptyDelim() {
+    void leftPadEmptyDelim() {
         assertEquals("dings", StringUtils.leftPad("dings", 10, ""));
     }
 
     @SuppressWarnings("ConstantValue")
     @Test
-    public void testLowerCase() {
+    void lowerCase() {
         assertNull(StringUtils.lowerCase(null));
 
         assertEquals("dingsbums", StringUtils.lowerCase("dinGSbuMS"));
@@ -880,27 +880,27 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testLowerCaseFirstLetterNPE() {
+    void lowerCaseFirstLetterNPE() {
         assertThrows(NullPointerException.class, () -> StringUtils.lowercaseFirstLetter(null));
     }
 
     @Test
-    public void testLowerCaseFirstLetter() {
+    void lowerCaseFirstLetter() {
         assertEquals("dings Bums", StringUtils.lowercaseFirstLetter("Dings Bums"));
     }
 
     @Test
-    public void testMidNegativeLen() {
+    void midNegativeLen() {
         assertThrows(IllegalArgumentException.class, () -> StringUtils.mid(null, 0, -2));
     }
 
     @Test
-    public void testMidWrongPos() {
+    void midWrongPos() {
         assertThrows(IndexOutOfBoundsException.class, () -> StringUtils.mid(null, -2, 3));
     }
 
     @Test
-    public void testMid() {
+    void mid() {
         assertNull(StringUtils.mid(null, 0, 0));
 
         assertEquals("", StringUtils.mid("dings bums", 0, 0));
@@ -909,51 +909,51 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testOverlayStringNPE1() {
+    void overlayStringNPE1() {
         assertThrows(NullPointerException.class, () -> StringUtils.overlayString(null, null, 0, 0));
     }
 
     @Test
-    public void testOverlayStringNPE2() {
+    void overlayStringNPE2() {
         assertThrows(NullPointerException.class, () -> StringUtils.overlayString("dings", null, 0, 0));
     }
 
     @Test
-    public void testOverlayStringNPE3() {
+    void overlayStringNPE3() {
         assertThrows(NullPointerException.class, () -> StringUtils.overlayString(null, "bums", 0, 0));
     }
 
     @Test
-    public void testOverlayString() {
+    void overlayString() {
         assertEquals("bumsdings", StringUtils.overlayString("dings", "bums", 0, 0));
 
         assertEquals("dibumss", StringUtils.overlayString("dings", "bums", 2, 4));
     }
 
     @Test
-    public void testPrechompNPE1() {
+    void prechompNPE1() {
         assertThrows(NullPointerException.class, () -> StringUtils.prechomp(null, null));
     }
 
     @Test
-    public void testPrechompNPE2() {
+    void prechompNPE2() {
         assertThrows(NullPointerException.class, () -> StringUtils.prechomp("dings", null));
     }
 
     @Test
-    public void testPrechompNPE3() {
+    void prechompNPE3() {
         assertThrows(NullPointerException.class, () -> StringUtils.prechomp(null, "bums"));
     }
 
     @Test
-    public void testPrechomp() {
+    void prechomp() {
         assertEquals("bums", StringUtils.prechomp("dings bums", " "));
 
         assertEquals("dings bums", StringUtils.prechomp("dings bums", "nix"));
     }
 
     @Test
-    public void testQuoteAndEscape1() {
+    void quoteAndEscape1() {
         assertNull(StringUtils.quoteAndEscape(null, '+'));
 
         assertEquals("", StringUtils.quoteAndEscape("", '+'));
@@ -968,7 +968,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testQuoteAndEscape2() {
+    void quoteAndEscape2() {
         assertNull(StringUtils.quoteAndEscape(null, '+', new char[] {'"'}));
 
         assertEquals("", StringUtils.quoteAndEscape("", '+', new char[] {'"'}));
@@ -985,7 +985,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testQuoteAndEscape3() {
+    void quoteAndEscape3() {
         assertNull(StringUtils.quoteAndEscape(null, '+', new char[] {'"'}, '\\', false));
 
         assertEquals("", StringUtils.quoteAndEscape("", '+', new char[] {'"'}, '\\', false));
@@ -1017,7 +1017,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testQuoteAndEscape4() {
+    void quoteAndEscape4() {
         assertNull(StringUtils.quoteAndEscape(null, '+', new char[] {'"'}, new char[] {'"'}, '\\', false));
 
         assertEquals("", StringUtils.quoteAndEscape("", '+', new char[] {'"'}, new char[] {'"'}, '\\', false));
@@ -1060,22 +1060,22 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testRemoveAndHumpNPE1() {
+    void removeAndHumpNPE1() {
         assertThrows(NullPointerException.class, () -> StringUtils.removeAndHump(null, null));
     }
 
     @Test
-    public void testRemoveAndHumpNPE2() {
+    void removeAndHumpNPE2() {
         assertThrows(NullPointerException.class, () -> StringUtils.removeAndHump("dings", null));
     }
 
     @Test
-    public void testRemoveAndHumpNPE3() {
+    void removeAndHumpNPE3() {
         assertThrows(NullPointerException.class, () -> StringUtils.removeAndHump(null, "bums"));
     }
 
     @Test
-    public void testRemoveAndHump() {
+    void removeAndHump() {
         assertEquals("Ding", StringUtils.removeAndHump("dings", "bums"));
 
         assertEquals("ThisIsIt", StringUtils.removeAndHump("this-is-it", "-"));
@@ -1084,12 +1084,12 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testRemoveDuplicateWhitespaceNPE() {
+    void removeDuplicateWhitespaceNPE() {
         assertThrows(NullPointerException.class, () -> StringUtils.removeDuplicateWhitespace(null));
     }
 
     @Test
-    public void testRemoveDuplicateWhitespace() {
+    void removeDuplicateWhitespace() {
         assertEquals("dings", StringUtils.removeDuplicateWhitespace("dings"));
 
         assertEquals("dings bums", StringUtils.removeDuplicateWhitespace("dings bums"));
@@ -1100,17 +1100,17 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testRepeatNPE() {
+    void repeatNPE() {
         assertThrows(NullPointerException.class, () -> StringUtils.repeat(null, 0));
     }
 
     @Test
-    public void testRepeatNegativeAmount() {
+    void repeatNegativeAmount() {
         assertThrows(NegativeArraySizeException.class, () -> StringUtils.repeat("dings", -1));
     }
 
     @Test
-    public void testRepeat() {
+    void repeat() {
         assertEquals("", StringUtils.repeat("dings", 0));
 
         assertEquals("dings", StringUtils.repeat("dings", 1));
@@ -1119,7 +1119,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testReplaceChar() {
+    void replaceChar() {
         assertNull(StringUtils.replace(null, 'i', 'o'));
 
         assertEquals("dongs", StringUtils.replace("dings", 'i', 'o'));
@@ -1130,7 +1130,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testReplace2CharMax() {
+    void replace2CharMax() {
         assertNull(StringUtils.replace(null, 'i', 'o', 0));
 
         assertEquals("dongsobumso", StringUtils.replace("dingsibumsi", 'i', 'o', 3));
@@ -1145,7 +1145,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testReplaceString() {
+    void replaceString() {
         assertNull(StringUtils.replace(null, "in", "ox"));
 
         assertEquals("doxgs", StringUtils.replace("dings", "in", "ox"));
@@ -1156,7 +1156,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testReplace2StringMax() {
+    void replace2StringMax() {
         assertNull(StringUtils.replace(null, "in", "ox", 0));
 
         assertEquals("dingxobumxo", StringUtils.replace("dingsibumsi", "si", "xo", 3));
@@ -1173,7 +1173,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testReplaceOnceChar() {
+    void replaceOnceChar() {
         assertNull(StringUtils.replaceOnce(null, 'i', 'o'));
 
         assertEquals("dongsibumsi", StringUtils.replaceOnce("dingsibumsi", 'i', 'o'));
@@ -1182,7 +1182,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testReplaceOnceString() {
+    void replaceOnceString() {
         assertNull(StringUtils.replaceOnce(null, "in", "ox"));
 
         assertEquals("dingxobumsi", StringUtils.replaceOnce("dingsibumsi", "si", "xo"));
@@ -1191,7 +1191,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testReverse() {
+    void reverse() {
         assertNull(StringUtils.reverse(null));
 
         assertEquals("", StringUtils.reverse(""));
@@ -1202,17 +1202,17 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testReverseDelimitedStringNPE1() {
+    void reverseDelimitedStringNPE1() {
         assertThrows(NullPointerException.class, () -> StringUtils.reverseDelimitedString(null, null));
     }
 
     @Test
-    public void testReverseDelimitedStringNPE2() {
+    void reverseDelimitedStringNPE2() {
         assertThrows(NullPointerException.class, () -> StringUtils.reverseDelimitedString(null, " "));
     }
 
     @Test
-    public void testReverseDelimitedString() {
+    void reverseDelimitedString() {
         assertEquals("dings", StringUtils.reverseDelimitedString("dings", null));
 
         assertEquals("", StringUtils.reverseDelimitedString("", " "));
@@ -1225,17 +1225,17 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testRightIAE1() {
+    void rightIAE1() {
         assertThrows(IllegalArgumentException.class, () -> StringUtils.right(null, -1));
     }
 
     @Test
-    public void testRightIAE2() {
+    void rightIAE2() {
         assertThrows(IllegalArgumentException.class, () -> StringUtils.right("dings", -1));
     }
 
     @Test
-    public void testRight() {
+    void right() {
         assertNull(StringUtils.right(null, 0));
 
         assertEquals("", StringUtils.right("dings", 0));
@@ -1246,12 +1246,12 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testRightPad1NPE() {
+    void rightPad1NPE() {
         assertThrows(NullPointerException.class, () -> StringUtils.rightPad(null, 0));
     }
 
     @Test
-    public void testRightPad1() {
+    void rightPad1() {
         assertEquals("dings", StringUtils.rightPad("dings", 0));
 
         assertEquals("dings", StringUtils.rightPad("dings", 3));
@@ -1260,22 +1260,22 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testRightPad2NPE1() {
+    void rightPad2NPE1() {
         assertThrows(NullPointerException.class, () -> StringUtils.rightPad(null, 0, null));
     }
 
     @Test
-    public void testRightPad2NPE2() {
+    void rightPad2NPE2() {
         assertThrows(NullPointerException.class, () -> StringUtils.rightPad("dings", 0, null));
     }
 
     @Test
-    public void testRightPad2NPE23() {
+    void rightPad2NPE23() {
         assertThrows(NullPointerException.class, () -> StringUtils.rightPad(null, 0, "+"));
     }
 
     @Test
-    public void testRightPad2() {
+    void rightPad2() {
         assertEquals("dings", StringUtils.rightPad("dings", 0, "+"));
 
         assertEquals("dings", StringUtils.rightPad("dings", 3, "+"));
@@ -1284,34 +1284,34 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testRightPadEmptyDelim() {
+    void rightPadEmptyDelim() {
         assertEquals("dings", StringUtils.rightPad("dings", 10, ""));
     }
 
     @Test
-    public void testSplit1NPE() {
+    void split1NPE() {
         assertThrows(NullPointerException.class, () -> StringUtils.split(null));
     }
 
     @Test
-    public void testSplit1() {
+    void split1() {
         assertArrayEquals(new String[] {"dings"}, StringUtils.split("dings"));
 
         assertArrayEquals(new String[] {"dings", "bums"}, StringUtils.split("dings bums"));
     }
 
     @Test
-    public void testSplit2NPE1() {
+    void split2NPE1() {
         assertThrows(NullPointerException.class, () -> StringUtils.split(null, null));
     }
 
     @Test
-    public void testSplit2NPE2() {
+    void split2NPE2() {
         assertThrows(NullPointerException.class, () -> StringUtils.split(null, " "));
     }
 
     @Test
-    public void testSplit2() {
+    void split2() {
         assertArrayEquals(new String[] {"dings"}, StringUtils.split("dings", null));
 
         assertArrayEquals(new String[] {"dings", "bums"}, StringUtils.split("dings bums", null));
@@ -1322,17 +1322,17 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testSplit3NPE1() {
+    void split3NPE1() {
         assertThrows(NullPointerException.class, () -> StringUtils.split(null, null, 1));
     }
 
     @Test
-    public void testSplit3NPE2() {
+    void split3NPE2() {
         assertThrows(NullPointerException.class, () -> StringUtils.split(null, " ", 1));
     }
 
     @Test
-    public void testSplit3() {
+    void split3() {
         assertArrayEquals(new String[] {"dings"}, StringUtils.split("dings", null, 3));
 
         assertArrayEquals(new String[] {"dings", "bums"}, StringUtils.split("dings bums", null, 3));
@@ -1349,7 +1349,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testStrip1() {
+    void strip1() {
         assertNull(StringUtils.strip(null));
 
         assertEquals("dings", StringUtils.strip("dings"));
@@ -1358,7 +1358,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testStrip2() {
+    void strip2() {
         assertNull(StringUtils.strip(null, " "));
 
         assertNull(StringUtils.strip(null, null));
@@ -1369,7 +1369,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testStripAll1() {
+    void stripAll1() {
         assertNull(StringUtils.stripAll((String[]) null));
 
         assertArrayEquals(new String[] {}, StringUtils.stripAll());
@@ -1381,7 +1381,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testStripAll2() {
+    void stripAll2() {
         assertNull(StringUtils.stripAll(null, " "));
 
         assertArrayEquals(new String[] {}, StringUtils.stripAll(new String[] {}, " "));
@@ -1393,7 +1393,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testStripEnd() {
+    void stripEnd() {
         assertNull(StringUtils.stripEnd(null, null));
 
         assertEquals("dings", StringUtils.stripEnd("dings", null));
@@ -1408,7 +1408,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testStripStart() {
+    void stripStart() {
         assertNull(StringUtils.stripStart(null, null));
 
         assertEquals("dings", StringUtils.stripStart("dings", null));
@@ -1423,7 +1423,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testSubstring1() {
+    void substring1() {
         assertNull(StringUtils.substring(null, 0));
         assertNull(StringUtils.substring(null, -3));
 
@@ -1435,7 +1435,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testSubstring2() {
+    void substring2() {
         assertNull(StringUtils.substring(null, 0, 2));
 
         assertNull(StringUtils.substring(null, -3, 0));
@@ -1450,7 +1450,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testSwapCase() {
+    void swapCase() {
         assertNull(StringUtils.swapCase(null));
 
         assertEquals("DINGS", StringUtils.swapCase("dings"));
@@ -1460,7 +1460,7 @@ public class StringUtilsTest {
 
     @SuppressWarnings("ConstantValue")
     @Test
-    public void testTrim() {
+    void trim() {
         assertNull(StringUtils.trim(null));
 
         assertEquals("", StringUtils.trim("   "));
@@ -1471,7 +1471,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testUncapitalise() {
+    void uncapitalise() {
         assertNull(StringUtils.uncapitalise(null));
 
         assertEquals("   ", StringUtils.uncapitalise("   "));
@@ -1484,7 +1484,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testUncapitaliseAllWords() {
+    void uncapitaliseAllWords() {
         assertNull(StringUtils.uncapitaliseAllWords(null));
 
         assertEquals("   ", StringUtils.uncapitaliseAllWords("   "));
@@ -1497,7 +1497,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testUnifyLineSeparators1() {
+    void unifyLineSeparators1() {
         String sls = System.lineSeparator();
 
         assertNull(StringUtils.unifyLineSeparators(null));
@@ -1508,7 +1508,7 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void testUnifyLineSeparators2() {
+    void unifyLineSeparators2() {
         assertNull(StringUtils.unifyLineSeparators(null, "\n"));
 
         assertEquals("   ", StringUtils.unifyLineSeparators("   ", "\n"));
@@ -1523,7 +1523,7 @@ public class StringUtilsTest {
 
     @SuppressWarnings("ConstantValue")
     @Test
-    public void testUppercase() {
+    void uppercase() {
         assertNull(StringUtils.upperCase(null));
 
         assertEquals("   ", StringUtils.upperCase("   "));

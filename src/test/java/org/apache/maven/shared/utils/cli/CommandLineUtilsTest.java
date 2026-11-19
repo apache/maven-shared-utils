@@ -38,13 +38,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @SuppressWarnings("deprecation")
-public class CommandLineUtilsTest {
+class CommandLineUtilsTest {
 
     /**
      * Tests that case-insensitive environment variables are normalized to upper case.
      */
     @Test
-    public void testGetSystemEnvVarsCaseInsensitive() {
+    void getSystemEnvVarsCaseInsensitive() {
         Properties vars = CommandLineUtils.getSystemEnvVars(false);
         for (Object o : vars.keySet()) {
             String variable = (String) o;
@@ -53,7 +53,7 @@ public class CommandLineUtilsTest {
     }
 
     @Test
-    public void testEnsureCaseSensitivity() {
+    void ensureCaseSensitivity() {
         Map<String, String> data = new HashMap<>();
         data.put("abz", "cool");
         assertTrue(CommandLineUtils.ensureCaseSensitivity(data, false).containsKey("ABZ"));
@@ -64,7 +64,7 @@ public class CommandLineUtilsTest {
      * Tests that environment variables on Windows are normalized to upper case. Does nothing on Unix platforms.
      */
     @Test
-    public void testGetSystemEnvVarsWindows() {
+    void getSystemEnvVarsWindows() {
         if (!Os.isFamily(Os.FAMILY_WINDOWS)) {
             return;
         }
@@ -79,7 +79,7 @@ public class CommandLineUtilsTest {
      * Tests the splitting of a command line into distinct arguments.
      */
     @Test
-    public void testTranslateCommandline() throws Exception {
+    void translateCommandline() throws Exception {
         assertCmdLineArgs(new String[] {}, null);
         assertCmdLineArgs(new String[] {}, "");
 

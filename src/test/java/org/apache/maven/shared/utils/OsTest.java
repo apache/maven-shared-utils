@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
 @SuppressWarnings("deprecation")
-public class OsTest {
+class OsTest {
     private String origOsName;
     private String origOsArch;
     private String origOsVersion;
@@ -60,7 +60,7 @@ public class OsTest {
     }
 
     @Test
-    public void testConstructor() {
+    void constructor() {
         Os os = new Os();
         os.eval();
 
@@ -79,7 +79,7 @@ public class OsTest {
     }
 
     @Test
-    public void testFamilyNames() {
+    void familyNames() {
         assertEquals(Os.FAMILY_DOS, "dos");
         assertEquals(Os.FAMILY_MAC, "mac");
         assertEquals(Os.FAMILY_NETWARE, "netware");
@@ -94,7 +94,7 @@ public class OsTest {
     }
 
     @Test
-    public void testGetValidFamilies() {
+    void getValidFamilies() {
         Set<String> osFamilies = Os.getValidFamilies();
 
         assertTrue(osFamilies.size() >= 11, "OsFamilies Set size");
@@ -113,40 +113,40 @@ public class OsTest {
     }
 
     @Test
-    public void testOsFamilyIsValidFamily() {
+    void osFamilyIsValidFamily() {
         assertTrue(Os.isValidFamily(Os.OS_FAMILY));
     }
 
     @Test
-    public void testIsArch() {
+    void isArch() {
         assertTrue(Os.isArch("i386"), "Arch is i386");
 
         assertFalse(Os.isArch("x86_64"), "Os is not Mac");
     }
 
     @Test
-    public void testIsFamily() {
+    void isFamily() {
         assertTrue(Os.isFamily(Os.FAMILY_OS2), "Family is os/2");
 
         assertFalse(Os.isFamily(Os.FAMILY_MAC), "Family is not mac");
     }
 
     @Test
-    public void testIsName() {
+    void isName() {
         assertTrue(Os.isName("os/2"), "Name is os/2");
 
         assertFalse(Os.isName("Mac OS X"), "Name is not Mac OS X");
     }
 
     @Test
-    public void testIsValidFamily() {
+    void isValidFamily() {
         assertTrue(Os.isValidFamily(Os.FAMILY_OS2), "os/2 isValidFamily");
 
         assertFalse(Os.isValidFamily("iPhone"), "iPone != isValidFamily");
     }
 
     @Test
-    public void testIsVersion() {
+    void isVersion() {
         assertTrue(Os.isVersion("2.1.32"), "isVersion");
 
         assertFalse(Os.isVersion("2.1"), "isVersion");
