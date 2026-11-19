@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * @author <a href="mailto:hboutemy@apache.org">Hervé Boutemy</a>
  */
 @SuppressWarnings("deprecation")
-public class XmlStreamReaderTest {
+class XmlStreamReaderTest {
     /**
      * french
      */
@@ -103,74 +103,74 @@ public class XmlStreamReaderTest {
     }
 
     @Test
-    public void testNoXmlHeader() throws Exception {
+    void noXmlHeader() throws Exception {
         String xml = "<text>text with no XML header</text>";
         checkXmlContent(xml, "UTF-8");
         checkXmlContent(xml, "UTF-8", BOM_UTF8);
     }
 
     @Test
-    public void testDefaultEncoding() throws Exception {
+    void defaultEncoding() throws Exception {
         checkXmlStreamReader(TEXT_UNICODE, (String) null, "UTF-8", null);
         checkXmlStreamReader(TEXT_UNICODE, null, "UTF-8", BOM_UTF8);
     }
 
     @Test
-    public void testUTF8Encoding() throws Exception {
+    void utf8Encoding() throws Exception {
         checkXmlStreamReader(TEXT_UNICODE, "UTF-8");
         checkXmlStreamReader(TEXT_UNICODE, "UTF-8", "UTF-8", BOM_UTF8);
     }
 
     @Test
-    public void testUTF16Encoding() throws Exception {
+    void utf16Encoding() throws Exception {
         checkXmlStreamReader(TEXT_UNICODE, "UTF-16", "UTF-16BE", null);
         checkXmlStreamReader(TEXT_UNICODE, "UTF-16", "UTF-16LE", BOM_UTF16LE);
         checkXmlStreamReader(TEXT_UNICODE, "UTF-16", "UTF-16BE", BOM_UTF16BE);
     }
 
     @Test
-    public void testUTF16BEEncoding() throws Exception {
+    void utf16BEEncoding() throws Exception {
         checkXmlStreamReader(TEXT_UNICODE, "UTF-16BE");
     }
 
     @Test
-    public void testUTF16LEEncoding() throws Exception {
+    void utf16LEEncoding() throws Exception {
         checkXmlStreamReader(TEXT_UNICODE, "UTF-16LE");
     }
 
     @Test
-    public void testLatin1Encoding() throws Exception {
+    void latin1Encoding() throws Exception {
         checkXmlStreamReader(TEXT_LATIN1, "ISO-8859-1");
     }
 
     @Test
-    public void testLatin7Encoding() throws Exception {
+    void latin7Encoding() throws Exception {
         checkXmlStreamReader(TEXT_LATIN7, "ISO-8859-7");
     }
 
     @Test
-    public void testLatin15Encoding() throws Exception {
+    void latin15Encoding() throws Exception {
         checkXmlStreamReader(TEXT_LATIN15, "ISO-8859-15");
     }
 
     @Test
-    public void testEUCJPEncoding() throws Exception {
+    void eucjpEncoding() throws Exception {
         checkXmlStreamReader(TEXT_EUC_JP, "EUC-JP");
     }
 
     @Test
-    public void testEBCDICEncoding() throws Exception {
+    void ebcdicEncoding() throws Exception {
         checkXmlStreamReader("simple text in EBCDIC", "CP1047");
     }
 
     @Test
-    public void testInappropriateEncoding() {
+    void inappropriateEncoding() {
         // expected failure, since the encoding does not contain some characters
         assertThrows(AssertionFailedError.class, () -> checkXmlStreamReader(TEXT_UNICODE, "ISO-8859-2"));
     }
 
     @Test
-    public void testEncodingAttribute() throws Exception {
+    void encodingAttribute() throws Exception {
         checkXmlContent("<?xml version='1.0' encoding='US-ASCII'?><element encoding='attribute value'/>", "US-ASCII");
         checkXmlContent(
                 "<?xml version='1.0' encoding  =  'US-ASCII'  ?><element encoding='attribute value'/>", "US-ASCII");

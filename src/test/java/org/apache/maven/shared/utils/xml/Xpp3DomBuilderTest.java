@@ -37,7 +37,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author Kristian Rosenvold
  */
 @SuppressWarnings("deprecation")
-public class Xpp3DomBuilderTest {
+class Xpp3DomBuilderTest {
 
     private static final String XML_DECLARATION = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 
@@ -54,7 +54,7 @@ public class Xpp3DomBuilderTest {
     }
 
     @Test
-    public void testUnrecognizedEncoding() {
+    void unrecognizedEncoding() {
 
         byte[] data = "<foo/>".getBytes(StandardCharsets.UTF_8);
         InputStream in = new ByteArrayInputStream(data);
@@ -97,7 +97,7 @@ public class Xpp3DomBuilderTest {
     }
 
     @Test
-    public void testMalformedXml() {
+    void malformedXml() {
         try {
             Xpp3DomBuilder.build(new StringReader("<newRoot>" + createDomString()));
             fail("We're supposed to fail");

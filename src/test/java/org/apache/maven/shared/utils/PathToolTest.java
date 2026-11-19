@@ -32,12 +32,12 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  * @author <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
 @SuppressWarnings("deprecation")
-public class PathToolTest {
+class PathToolTest {
 
     @Test
-    // Keep in sync with testGetRelativeFilePathWindows()
+    // Keep in sync with getRelativeFilePathWindows()
     @DisabledOnOs(OS.WINDOWS)
-    public void testGetRelativeFilePathNonWindows() {
+    void getRelativeFilePathNonWindows() {
         assertEquals("", PathTool.getRelativeFilePath(null, null));
 
         assertEquals("", PathTool.getRelativeFilePath(null, "/usr/local/java/bin"));
@@ -62,9 +62,9 @@ public class PathToolTest {
     }
 
     @Test
-    // Keep in sync with testGetRelativeFilePathNonWindows()
+    // Keep in sync with getRelativeFilePathNonWindows()
     @EnabledOnOs(OS.WINDOWS)
-    public void testGetRelativeFilePathWindows() {
+    void getRelativeFilePathWindows() {
         assertEquals("", PathTool.getRelativeFilePath(null, null));
 
         assertEquals("", PathTool.getRelativeFilePath(null, "c:\\usr\\local\\java\\bin"));
@@ -92,7 +92,7 @@ public class PathToolTest {
     }
 
     @Test
-    public void testGetRelativePath2Parm() {
+    void getRelativePath2Parm() {
         assertEquals("", PathTool.getRelativePath(null, null));
 
         assertEquals("", PathTool.getRelativePath(null, "/usr/local/java/bin"));
@@ -107,7 +107,7 @@ public class PathToolTest {
     }
 
     @Test
-    public void testGetRelativeFilePathWithDifferentWindowsDrives() {
+    void getRelativeFilePathWithDifferentWindowsDrives() {
         // Verifies that a leading backslash before a Windows drive letter (e.g. "\C:\\...")
         // is stripped so the drive-letter comparison logic runs.
         // Different drives have no relative path, represented as an empty string.
@@ -115,7 +115,7 @@ public class PathToolTest {
     }
 
     @Test
-    public void testUppercaseDrive() {
+    void uppercaseDrive() {
         assertNull(PathTool.uppercaseDrive(null));
 
         assertEquals("D:", PathTool.uppercaseDrive("d:"));

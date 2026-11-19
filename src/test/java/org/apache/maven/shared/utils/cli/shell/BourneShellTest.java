@@ -28,14 +28,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SuppressWarnings("deprecation")
-public class BourneShellTest {
+class BourneShellTest {
 
     Shell newShell() {
         return new BourneShell();
     }
 
     @Test
-    public void testQuoteWorkingDirectoryAndExecutable() {
+    void quoteWorkingDirectoryAndExecutable() {
         Shell sh = newShell();
 
         sh.setWorkingDirectory("/usr/local/bin");
@@ -47,7 +47,7 @@ public class BourneShellTest {
     }
 
     @Test
-    public void testQuoteWorkingDirectoryAndExecutableWDPathWithSingleQuotes() {
+    void quoteWorkingDirectoryAndExecutableWDPathWithSingleQuotes() {
         Shell sh = newShell();
 
         sh.setWorkingDirectory("/usr/local/'something else'");
@@ -59,7 +59,7 @@ public class BourneShellTest {
     }
 
     @Test
-    public void testQuoteWorkingDirectoryAndExecutableWDPathWithSingleQuotesBackslashFileSep() {
+    void quoteWorkingDirectoryAndExecutableWDPathWithSingleQuotesBackslashFileSep() {
         Shell sh = newShell();
 
         sh.setWorkingDirectory("\\usr\\local\\'something else'");
@@ -71,7 +71,7 @@ public class BourneShellTest {
     }
 
     @Test
-    public void testPreserveSingleQuotesOnArgument() {
+    void preserveSingleQuotesOnArgument() {
         Shell sh = newShell();
 
         sh.setWorkingDirectory("/usr/bin");
@@ -84,7 +84,7 @@ public class BourneShellTest {
     }
 
     @Test
-    public void testAddSingleQuotesOnArgumentWithSpaces() {
+    void addSingleQuotesOnArgumentWithSpaces() {
         Shell sh = newShell();
 
         sh.setWorkingDirectory("/usr/bin");
@@ -97,7 +97,7 @@ public class BourneShellTest {
     }
 
     @Test
-    public void testAddArgumentWithSingleQuote() {
+    void addArgumentWithSingleQuote() {
         Shell sh = newShell();
 
         sh.setWorkingDirectory("/usr/bin");
@@ -110,7 +110,7 @@ public class BourneShellTest {
     }
 
     @Test
-    public void testArgumentsWithSemicolon() {
+    void argumentsWithSemicolon() {
         Shell sh = newShell();
 
         sh.setWorkingDirectory("/usr/bin");
@@ -157,7 +157,7 @@ public class BourneShellTest {
     }
 
     @Test
-    public void testBourneShellQuotingCharacters() {
+    void bourneShellQuotingCharacters() {
         // { ' ', '$', ';', '&', '|', '<', '>', '*', '?', '(', ')' };
         // test with values https://steve-parker.org/sh/bourne.shtml Appendix B - Meta-characters and Reserved Words
         Commandline commandline = new Commandline(newShell());

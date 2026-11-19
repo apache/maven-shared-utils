@@ -30,27 +30,27 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Test the {@link SelectorUtils} class.
  */
 @SuppressWarnings("deprecation")
-public class SelectorUtilsTest {
+class SelectorUtilsTest {
 
     @Test
-    public void testMatchPatternStart() {
+    void matchPatternStart() {
         assertThrows(NullPointerException.class, () -> SelectorUtils.matchPatternStart(null, null));
     }
 
     @Test
-    public void testEmptyStrings() {
+    void emptyStrings() {
         assertTrue(SelectorUtils.matchPatternStart("", ""));
     }
 
     @Test
-    public void testRegexPrefix() {
+    void regexPrefix() {
         assertTrue(SelectorUtils.matchPatternStart(
                 SelectorUtils.REGEX_HANDLER_PREFIX + File.separator + "aaa" + SelectorUtils.PATTERN_HANDLER_SUFFIX,
                 ""));
     }
 
     @Test
-    public void testAntPatternStrings() {
+    void antPatternStrings() {
         assertAntDoesNotMatch("/aaa", "");
         assertAntDoesNotMatch("\\aaa", "");
         assertAntMatch("aaa", "");

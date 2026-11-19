@@ -38,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 @SuppressWarnings("deprecation")
-public class DirectoryScannerTest {
+class DirectoryScannerTest {
     private static final String[] NONE = new String[0];
 
     @TempDir
@@ -66,7 +66,7 @@ public class DirectoryScannerTest {
     }
 
     @Test
-    public void testSimpleScan() throws Exception {
+    void simpleScan() throws Exception {
         createTestData();
 
         fitScanTest(
@@ -100,7 +100,7 @@ public class DirectoryScannerTest {
     }
 
     @Test
-    public void testSimpleIncludes() throws Exception {
+    void simpleIncludes() throws Exception {
         createTestData();
 
         fitScanTest(
@@ -132,12 +132,12 @@ public class DirectoryScannerTest {
     }
 
     @Test
-    public void testIncludesWithNull() throws Exception {
+    void includesWithNull() throws Exception {
         testXcludesWithNull(new String[] {null}, null, "includes");
     }
 
     @Test
-    public void testExcludesWithNull() throws Exception {
+    void excludesWithNull() throws Exception {
         testXcludesWithNull(null, new String[] {null}, "excludes");
     }
 
@@ -244,7 +244,7 @@ public class DirectoryScannerTest {
        Creates a standard directory layout with symlinks and files.
     */
     @Test
-    public void testSimpleExcludes() throws Exception {
+    void simpleExcludes() throws Exception {
         createTestData();
 
         fitScanTest(
@@ -379,7 +379,7 @@ public class DirectoryScannerTest {
     }
 
     @Test
-    public void testScanDiff() throws Exception {
+    void scanDiff() throws Exception {
         createTestData();
 
         DirectoryScanner dss = new DirectoryScanner();
